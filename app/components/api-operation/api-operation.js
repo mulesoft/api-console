@@ -1,10 +1,12 @@
 
 Polymer.register(this, {
+    klass: '',
     ready: function () {
-        this.klass = '';
-
-        if (this.active) {
-            this.klass = "active";
-        }
+    },
+    click: function () {
+        this.active = !this.active;
+    },
+    activeChanged: function() {
+        this.klass = this.active ? 'active' : '';
     }
 });
