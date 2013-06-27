@@ -319,6 +319,10 @@ section[role=api-operation].active > header > hgroup,
 section[role=api-operation].active:hover > header > hgroup {
   padding: 15px 20px 0px 20px;
 }
+section[role=api-operation] > api-operation-details,
+section[role=api-operation]:hover > api-operation-details {
+  display: none;
+}
 section[role=api-operation].active > api-operation-details,
 section[role=api-operation].active:hover > api-operation-details {
   display: block;
