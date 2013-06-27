@@ -1,0 +1,127 @@
+{
+    "title": "Instagram API",
+    "version": "v1",
+    "baseUri": "https://api.instagram.com/{version}/",
+    "resources": [{
+            "relativeUri": "/media",
+            "name": "Media",
+            "resources": [{
+                    "relativeUri": "/popular",
+                    "name": "Most Popular Media",
+                    "traits": ["unsecured", "rateLimited", "paged", "jsonp"],
+                    "operations": {
+                        "get": {
+                            "description": "Get a list of what media is most popular at the moment. ",
+                            "responses": {
+                                "200": {
+                                    "body": {
+                                        "application/json": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    "relativeUri": "/search",
+                    "name": "Search Media",
+                    "traits": ["secured", "rateLimited", "jsonp"],
+                    "operations": {
+                        "get": {
+                            "description": "Search for media in a given area. The default time span is set to 5 days. The time span must not exceed 7 days. Defaults time stamps cover the last 5 days.",
+                            "responses": {
+                                "200": {
+                                    "body": {
+                                        "application/json": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    "relativeUri": "/{mediaId}",
+                    "name": "Media",
+                    "traits": ["secured"],
+                    "uriParameters": {
+                        "mediaId": {
+                            "name": "Media ID",
+                            "type": "integer"
+                        }
+                    },
+                    "operations": {
+                        "get": {
+                            "description": "Get information about a media object.",
+                            "responses": {
+                                "200": {
+                                    "body": {
+                                        "application/json": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    "relativeUri": "/{mediaId}/comments",
+                    "name": "Comments",
+                    "traits": ["secured", "paged", "rateLimited"],
+                    "operations": {
+                        "get": {
+                            "description": "Get a full list of comments on a media.",
+                            "responses": {
+                                "200": {
+                                    "body": {
+                                        "application/json": {}
+                                    }
+                                }
+                            }
+                        },
+                        "post": {
+                            "query": {
+                                "text": {
+                                    "description": "Text to post as a comment on the media as specified in {mediaId}.",
+                                    "required": "yes",
+                                    "type": "string"
+                                }
+                            },
+                            "summary": "Create a comment on a media. Please email apidevelopers[at]instagram.com for access."
+                        }
+                    }
+                }, {
+                    "relativeUri": "/{mediaId}/comments/{commentId}",
+                    "name": "Comment",
+                    "traits": ["secured", "rateLimited"],
+                    "uriParameters": {
+                        "commentId": {
+                            "description": "Idenifier of the comment",
+                            "type": "integer"
+                        }
+                    },
+                    "operations": {
+                        "delete": {
+                            "summary": "Remove a comment either on the authenticated user's media or authored by the authenticated user. "
+                        }
+                    }
+                }
+            ]
+        }, {
+            "relativeUri": "/tags",
+            "name": "Tags",
+            "resources": [{
+                    "relativeUri": "/search",
+                    "name": "Tag Search",
+                    "operations": {
+                        "get": {
+                            "description": "Search for tags by name. Results are ordered first as an exact match, then by popularity. Short tags will be treated as exact matches.",
+                            "responses": {
+                                "200": {
+                                    "body": {
+                                        "application/json ": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

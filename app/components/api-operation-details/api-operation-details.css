@@ -1,0 +1,75 @@
+section {
+  font-family: 'Ubuntu', sans-serif;
+}
+a,
+a:visited {
+  color: #07c;
+  text-decoration: none;
+  outline: 0;
+}
+a:hover,
+a:focus {
+  color: #000;
+}
+p a,
+p a:visited {
+  line-height: inherit;
+}
+section[role=api-operation-details] {
+  background: white;
+}
+section[role=api-operation-details] > header {
+  padding: 15px 20px;
+}
+section[role=api-operation-details] > header > h1 {
+  margin: 5px 0px;
+  font-size: 16px;
+  font-weight: normal;
+  color: #6399d6;
+}
+section[role=api-operation-details] > header > p {
+  margin: 10px 0px;
+  font-size: 13px;
+  font-weight: normal;
+  color: black;
+}
+section[role=api-operation-details] > ul[role=details-sections] {
+  display: block;
+  width: 100%;
+  background: #f4f6f8;
+  border-top: 1px solid #dfe3e7;
+  border-bottom: 1px solid #dfe3e7;
+  padding: 0px;
+  margin: 0px;
+  font-size: 0px;
+  height: 60px;
+  box-shadow: inset 1px -1px 1px #eeeeee;
+}
+section[role=api-operation-details] > ul[role=details-sections] > li {
+  display: inline-block;
+  list-style: none;
+  text-align: left;
+  vertical-align: middle;
+  line-height: 60px;
+  font-size: 13px;
+  font-weight: bold;
+}
+section[role=api-operation-details] > ul[role=details-sections] > li > a {
+  padding: 0px 20px;
+  color: black;
+  border-right: 1px solid #dfe3e7;
+}
+section[role=api-operation-details] > ul[role=details-sections] > li.active {
+  background-color: white;
+  border-top: 1px solid #0078ca;
+  border-bottom: 1px solid white;
+  border-right: 1px solid #dfe3e7;
+  border-left: 1px solid #dfe3e7;
+  margin-top: -1px;
+  margin-left: -1px;
+  box-shadow: 1px -1px 1px #eeeeee;
+}
+section[role=api-operation-details] > ul[role=details-sections] > li.active > a {
+  border-right: none;
+  color: #0078ca;
+}

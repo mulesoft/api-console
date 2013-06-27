@@ -1,0 +1,60 @@
+<element name="api-operation-details-section-try-it">
+  <template>
+    <style></style>
+    <section role="api-operation-details-section-try-it" id="get:/consumers/versions@try-it">
+      <section role="request">
+          <header>
+              <h1>Request</h1>
+              <ul role="type">
+                  <li>JSON</li>
+                  <li>XML</li>
+                  <li>JSONP</li>
+              </ul>
+          </header>
+          <div role="basic-params">
+              <h2>Basic parameters</h2>
+              <div role="uri">
+                  <span>/consumers/</span><input type="text" placeholder="{consumerId}"></input><span>/taxonomies/</span>
+              </div>
+          </div>
+          <div role="additional-params">
+              <h2>Additional parameters</h2>
+              <div role="query-params"></div>
+              <div role="request-body"><textarea></textarea></div>
+          </div>
+      </section>
+      <section role="response">
+          <header>
+              <h1>Response</h1>
+          </header>
+          <div role="request-uri">
+              <h2>Request URL</h2>
+              <span>http://www.api.com/consumers?this=is&a=test</span>
+          </div>
+          <div role="response-code">
+              <h2>Response code</h2>
+              <span>200</span>
+          </div>
+          <div role="response-headers">
+              <h2>Response headers</h2>
+              <span>Date: Thu, 16 Dic 1976 09:00:00 GMT-03:00</span><br>
+              <span>Via: 1.1 varnish</span><br>
+              <span>Age: 0</span><br>
+          </div>
+          <div role="response-body">
+              <h2>Response body</h2>
+              <code>
+              {
+                  consumers: [
+                      {
+                          name: 'test'
+                      }
+                  ]
+              }
+              </code>
+          </div>
+      </section>
+    </section>
+  </template>
+  <script></script>
+</element>
