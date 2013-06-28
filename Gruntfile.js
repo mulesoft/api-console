@@ -49,6 +49,9 @@ module.exports = function (grunt) {
         clean: {
             development: {
                 src: ['dist/**/*.*']
+            },
+            postCompilation: {
+                src: ['dist/compiled/**']
             }
         },
 
@@ -97,6 +100,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.task.loadTasks('plugins/grunt-contrib-polymer/tasks');
 
-    grunt.registerTask('build', ['clean:development', 'copy:development', 'concat:development', 'less:development', 'polymer:development']);
+    grunt.registerTask('build', ['clean:development', 'copy:development', 'concat:development', 'less:development', 'polymer:development', 'clean:postCompilation']);
     grunt.registerTask('heaven', ['build', 'connect:website', 'watch']);
 };
