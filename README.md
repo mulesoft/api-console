@@ -1,4 +1,4 @@
-heaven console
+raml console
 ==============
 
 Setup
@@ -6,6 +6,6 @@ Setup
 
 ```
 npm install .
-grunt heaven
+grunt raml
 open http://localhost:9001
 ```

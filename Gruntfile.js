@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         polymer: {
             development: {
                 src: 'dist/compiled/app/components/**/*.html',
-                dest: 'dist/heaven.html'
+                dest: 'dist/raml.html'
             }
         },
 
