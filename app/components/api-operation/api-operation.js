@@ -1,4 +1,3 @@
-
 Polymer.register(this, {
     klass: '',
     ready: function () {

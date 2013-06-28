@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 
         polymer: {
             development: {
-                src: 'app/components/**/*.html',
+                src: 'dist/compiled/app/components/**/*.html',
                 dest: 'dist/heaven.html'
             }
         },
@@ -18,12 +18,13 @@ module.exports = function (grunt) {
         concat: {
             development: {
                 files: {
-                    'app/components/api-operation/api-operation.js': ['<%= dirs.libs %>', 'app/scripts/components/api-operation.js'],
-                    'app/components/api-operation-details/api-operation-details.js': ['<%= dirs.libs %>', 'app/scripts/components/api-operation-details.js'],
-                    'app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js': ['<%= dirs.libs %>', 'app/scripts/components/api-operation-details-section-parameters.js'],
-                    'app/components/api-operation-details-section-request/api-operation-details-section-request.js': ['<%= dirs.libs %>', 'app/scripts/components/api-operation-details-section-request.js'],
-                    'app/components/api-operation-details-section-response/api-operation-details-section-response.js': ['<%= dirs.libs %>', 'app/scripts/components/api-operation-details-section-response.js'],
-                    'app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.js': ['<%= dirs.libs %>', 'app/scripts/components/api-operation-details-section-try-it.js']
+                    'dist/compiled/app/components/api-console/api-console.js': ['<%= dirs.libs %>', 'app/components/api-console/api-console.js'],
+                    'dist/compiled/app/components/api-operation/api-operation.js': ['<%= dirs.libs %>', 'app/components/api-operation/api-operation.js'],
+                    'dist/compiled/app/components/api-operation-details/api-operation-details.js': ['<%= dirs.libs %>', 'app/components/api-operation-details/api-operation-details.js'],
+                    'dist/compiled/app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js'],
+                    'dist/compiled/app/components/api-operation-details-section-request/api-operation-details-section-request.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-request/api-operation-details-section-request.js'],
+                    'dist/compiled/app/components/api-operation-details-section-response/api-operation-details-section-response.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-response/api-operation-details-section-response.js'],
+                    'dist/compiled/app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.js']
                 }
             }
         },
@@ -34,19 +35,20 @@ module.exports = function (grunt) {
                     paths: ["app/styles"]
                 },
                 files: {
-                    "app/components/api-operation/api-operation.css": "app/styles/api-operation.less",
-                    "app/components/api-operation-details/api-operation-details.css": "app/styles/api-operation-details.less",
-                    "app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.css": "app/styles/api-operation-details-section-parameters.less",
-                    "app/components/api-operation-details-section-request/api-operation-details-section-request.css": "app/styles/api-operation-details-section-request.less",
-                    "app/components/api-operation-details-section-response/api-operation-details-section-response.css": "app/styles/api-operation-details-section-response.less",
-                    "app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.css": "app/styles/api-operation-details-section-try-it.less"
+                    "dist/compiled/app/components/api-console/api-console.css": "app/components/api-console/api-console.less",
+                    "dist/compiled/app/components/api-operation/api-operation.css": "app/components/api-operation/api-operation.less",
+                    "dist/compiled/app/components/api-operation-details/api-operation-details.css": "app/components/api-operation-details/api-operation-details.less",
+                    "dist/compiled/app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.css": "app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.less",
+                    "dist/compiled/app/components/api-operation-details-section-request/api-operation-details-section-request.css": "app/components/api-operation-details-section-request/api-operation-details-section-request.less",
+                    "dist/compiled/app/components/api-operation-details-section-response/api-operation-details-section-response.css": "app/components/api-operation-details-section-response/api-operation-details-section-response.less",
+                    "dist/compiled/app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.css": "app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.less"
                 }
             }
         },
 
         clean: {
             development: {
-                src: ['dist/*.*', 'app/components/**/*.js', 'app/components/**/*.css']
+                src: ['dist/**/*.*']
             }
         },
 
@@ -56,8 +58,11 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
-                        src: ['app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/index.html'],
+                        src: ['app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/index.html', 'app/sandbox/instagram.json'],
                         dest: 'dist/'
+                    }, {
+                        src: ['app/components/**/*.html'],
+                        dest: 'dist/compiled/'
                     }
                 ]
             }
