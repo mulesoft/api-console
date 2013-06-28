@@ -18,7 +18,10 @@ module.exports = function (grunt) {
         concat: {
             development: {
                 files: {
+                    'dist/compiled/app/components/api-definition/api-definition.js': ['<%= dirs.libs %>', 'app/components/api-definition/api-definition.js'],
                     'dist/compiled/app/components/api-console/api-console.js': ['<%= dirs.libs %>', 'app/components/api-console/api-console.js'],
+                    'dist/compiled/app/components/api-console-navbar/api-console-navbar.js': ['<%= dirs.libs %>', 'app/components/api-console-navbar/api-console-navbar.js'],
+                    'dist/compiled/app/components/api-console-sidebar/api-console-sidebar.js': ['<%= dirs.libs %>', 'app/components/api-console-sidebar/api-console-sidebar.js'],
                     'dist/compiled/app/components/api-operation/api-operation.js': ['<%= dirs.libs %>', 'app/components/api-operation/api-operation.js'],
                     'dist/compiled/app/components/api-operation-details/api-operation-details.js': ['<%= dirs.libs %>', 'app/components/api-operation-details/api-operation-details.js'],
                     'dist/compiled/app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js'],
@@ -36,6 +39,8 @@ module.exports = function (grunt) {
                 },
                 files: {
                     "dist/compiled/app/components/api-console/api-console.css": "app/components/api-console/api-console.less",
+                    "dist/compiled/app/components/api-console-navbar/api-console-navbar.css": "app/components/api-console-navbar/api-console-navbar.less",
+                    "dist/compiled/app/components/api-console-sidebar/api-console-sidebar.css": "app/components/api-console-sidebar/api-console-sidebar.less",
                     "dist/compiled/app/components/api-operation/api-operation.css": "app/components/api-operation/api-operation.less",
                     "dist/compiled/app/components/api-operation-details/api-operation-details.css": "app/components/api-operation-details/api-operation-details.less",
                     "dist/compiled/app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.css": "app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.less",
@@ -64,7 +69,7 @@ module.exports = function (grunt) {
                         src: ['app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/index.html', 'app/sandbox/instagram.json'],
                         dest: 'dist/'
                     }, {
-                        src: ['app/components/**/*.html'],
+                        src: ['app/components/**/*.html', 'app/components/**/*.css'],
                         dest: 'dist/compiled/'
                     }
                 ]
@@ -76,7 +81,7 @@ module.exports = function (grunt) {
                 livereload: 35729
             },
             javascript: {
-                files: ['app/scripts/**/*.js', 'app/styles/**/*.less', 'app/components/**/*.html'],
+                files: ['app/scripts/**/*.js', 'app/styles/**/*.less', 'app/components/**/*.*'],
                 tasks: ['build']
             }
         },
@@ -101,5 +106,5 @@ module.exports = function (grunt) {
     grunt.task.loadTasks('plugins/grunt-contrib-polymer/tasks');
 
     grunt.registerTask('build', ['clean:development', 'copy:development', 'concat:development', 'less:development', 'polymer:development', 'clean:postCompilation']);
-    grunt.registerTask('heaven', ['build', 'connect:website', 'watch']);
+    grunt.registerTask('raml', ['build', 'connect:website', 'watch']);
 };

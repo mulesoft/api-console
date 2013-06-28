@@ -9,8 +9,8 @@
                     "relativeUri": "/popular",
                     "name": "Most Popular Media",
                     "traits": ["unsecured", "rateLimited", "paged", "jsonp"],
-                    "operations": {
-                        "get": {
+                    "operations": [{
+                            "method": "get",
                             "description": "Get a list of what media is most popular at the moment. ",
                             "responses": {
                                 "200": {
@@ -20,13 +20,13 @@
                                 }
                             }
                         }
-                    }
+                    ]
                 }, {
                     "relativeUri": "/search",
                     "name": "Search Media",
                     "traits": ["secured", "rateLimited", "jsonp"],
-                    "operations": {
-                        "get": {
+                    "operations": [{
+                            "method": "get",
                             "description": "Search for media in a given area. The default time span is set to 5 days. The time span must not exceed 7 days. Defaults time stamps cover the last 5 days.",
                             "responses": {
                                 "200": {
@@ -36,7 +36,7 @@
                                 }
                             }
                         }
-                    }
+                    ]
                 }, {
                     "relativeUri": "/{mediaId}",
                     "name": "Media",
@@ -47,8 +47,8 @@
                             "type": "integer"
                         }
                     },
-                    "operations": {
-                        "get": {
+                    "operations": [{
+                            "method": "get",
                             "description": "Get information about a media object.",
                             "responses": {
                                 "200": {
@@ -58,13 +58,13 @@
                                 }
                             }
                         }
-                    }
+                    ]
                 }, {
                     "relativeUri": "/{mediaId}/comments",
                     "name": "Comments",
                     "traits": ["secured", "paged", "rateLimited"],
-                    "operations": {
-                        "get": {
+                    "operations": [{
+                            "method": "get",
                             "description": "Get a full list of comments on a media.",
                             "responses": {
                                 "200": {
@@ -73,8 +73,8 @@
                                     }
                                 }
                             }
-                        },
-                        "post": {
+                        }, {
+                            "method": "post",
                             "query": {
                                 "text": {
                                     "description": "Text to post as a comment on the media as specified in {mediaId}.",
@@ -84,7 +84,8 @@
                             },
                             "summary": "Create a comment on a media. Please email apidevelopers[at]instagram.com for access."
                         }
-                    }
+                    ]
+
                 }, {
                     "relativeUri": "/{mediaId}/comments/{commentId}",
                     "name": "Comment",
@@ -95,11 +96,11 @@
                             "type": "integer"
                         }
                     },
-                    "operations": {
-                        "delete": {
+                    "operations": [{
+                            "method": "delete",
                             "summary": "Remove a comment either on the authenticated user's media or authored by the authenticated user. "
                         }
-                    }
+                    ]
                 }
             ]
         }, {
@@ -108,8 +109,8 @@
             "resources": [{
                     "relativeUri": "/search",
                     "name": "Tag Search",
-                    "operations": {
-                        "get": {
+                    "operations": [{
+                            "method": "get",
                             "description": "Search for tags by name. Results are ordered first as an exact match, then by popularity. Short tags will be treated as exact matches.",
                             "responses": {
                                 "200": {
@@ -119,7 +120,7 @@
                                 }
                             }
                         }
-                    }
+                    ]
                 }
             ]
         }
