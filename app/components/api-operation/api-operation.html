@@ -1,14 +1,14 @@
 <element name="api-operation" attributes="active operation">
   <template>
     <style></style>
-    <section role="api-operation" class="{{klass}}" on-click="click">
+    <section role="api-operation" class="{{active:active}}" on-click="click">
       <header>
         <hgroup>
           <h1>Consumer versions</h1>
           <h2>/consumers/{consumerId}/versions/</h2>
         </hgroup>
         <div role="summary">
-            <ul role="traits">
+          <ul role="traits">
             <li>Secure</li>
             <li>Errors</li>
             <li>Another</li>
