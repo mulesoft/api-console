@@ -1,0 +1,31 @@
+%TAG ! tag:heaven-lang.org,1.0:
+---
+title: Twitter API
+version: v1.1
+baseUri: https://api.twitter.com/{version}/
+/trends:
+  name: Trends
+  /place:
+    name: Trending topics by WOEID
+    get:
+      summary: Returns the top 10 trending topics for a specific WOEID, if trending information is available for it.
+      responses:
+        200:
+          body:
+            application/json:
+  /available:
+    name: Available locations
+    get:
+      summary: Returns the locations that Twitter has trending topic information for.
+      responses:
+        200:
+          body:
+            application/json:
+  /closest:
+    name: Closest locations
+    get:
+      summary: Returns the locations that Twitter has trending topic information for, closest to a specified location.
+      responses:
+        200:
+          body:
+            application/json:

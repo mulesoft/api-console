@@ -18,7 +18,7 @@ module.exports = function (grunt) {
         concat: {
             development: {
                 files: {
-                    'dist/compiled/app/components/api-definition/api-definition.js': ['<%= dirs.libs %>', 'app/components/api-definition/api-definition.js'],
+                    'dist/compiled/app/components/api-definition/api-definition.js': ['app/components/api-definition/api-definition.js'],
                     'dist/compiled/app/components/api-console/api-console.js': ['<%= dirs.libs %>', 'app/components/api-console/api-console.js'],
                     'dist/compiled/app/components/api-console-navbar/api-console-navbar.js': ['<%= dirs.libs %>', 'app/components/api-console-navbar/api-console-navbar.js'],
                     'dist/compiled/app/components/api-console-sidebar/api-console-sidebar.js': ['<%= dirs.libs %>', 'app/components/api-console-sidebar/api-console-sidebar.js'],
@@ -68,7 +68,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
-                        src: ['app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/index.html', 'app/sandbox/instagram.json'],
+                        src: ['app/vendor/raml-parser.js', 'app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/index.html', 'app/sandbox/instagram.yml', 'app/sandbox/twitter.yml'],
                         dest: 'dist/'
                     }, {
                         src: ['app/components/**/*.html', 'app/components/**/*.css'],
@@ -83,7 +83,7 @@ module.exports = function (grunt) {
                 livereload: 35729
             },
             javascript: {
-                files: ['app/scripts/**/*.js', 'app/styles/**/*.less', 'app/components/**/*.*'],
+                files: ['app/scripts/**/*.js', 'app/styles/**/*.less', 'app/components/**/*.*', 'app/sandbox/instagram.yml'],
                 tasks: ['build']
             }
         },

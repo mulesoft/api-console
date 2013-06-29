@@ -9,18 +9,18 @@
         </hgroup>
         <div role="summary">
           <ul role="traits">
-            <template repeat="{{trait in resource.traits}}">
+            <template repeat="{{trait in resource.use}}">
               <li>{{trait}}</li>
             </template>
           </ul>
           <ul role="operations">
-            <template repeat="{{operation in resource.operations}}">
+            <template repeat="{{operation in resource.methods}}">
               <li role="{{operation.method}}">{{operation.method}}</li>
             </template>
           </ul>
         </div>
       </header>
-      <api-operation-details></api-operation-details>
+      <api-operation-details resource="{{resource}}"></api-operation-details>
     </scection>
   </template>
   <script></script>

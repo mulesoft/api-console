@@ -3,19 +3,19 @@ Polymer.register(this, {
 });
 
 Polymer.register(this, {
-    ready: function () {},
-    addListener: function (readyCallback, errorCallback) {
+    callbacks: [],
+    srcChanged: function () {
         var that = this;
 
         this.request({
             url: this.src,
             callback: function (responseText, xhr) {
-                var definition = JSON.parse(responseText);
+                var definition = responseText;
 
-                ////TODO: Add parser!
-
-                readyCallback(definition);
-                that.definition = definition;
+                //// TODO: Check errors!
+                RAML.Parser.load(definition).done(function (result) {
+                    that.fire('api-definition-loaded', result);
+                });
             }
         });
     },

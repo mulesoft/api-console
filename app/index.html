@@ -6,6 +6,7 @@
   <title>Api Console</title>
   <!-- Load Polymer -->
   <script src="polymer.min.js"></script>
+  <script src="raml-parser.js"></script>
   <!-- Import Api Console elements -->
   <link rel="import" href="raml.html">
   <style>
@@ -21,7 +22,7 @@
     <h1>Api Console</h1>
   </header>
 
-  <api-definition id="instagramApi" src="instagram.json"></api-definition>
+  <api-definition id="instagramApi" src="instagram.yml"></api-definition>
   <api-console id="console" definition="#instagramApi"></api-console>
 </body>
 </html>

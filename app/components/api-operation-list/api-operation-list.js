@@ -2,13 +2,13 @@ Polymer.register(this, {
     ready: function () {
         window.addEventListener('WebComponentsReady', function () {
             var definition = document.querySelector(this.definition);
-            this.resources = [];
 
-            definition.addListener(this.onDefinitionReady.bind(this));
+            definition.addEventListener('api-definition-loaded', this.onDefinitionReady.bind(this));
         }.bind(this));
     },
-    onDefinitionReady: function (definition) {
-        this.definition = definition;
+    onDefinitionReady: function (event) {
+        this.resources = [];
+        this.definition = event.detail;
     },
     resourcePathChanged: function () {
         //// TODO: Check errors
