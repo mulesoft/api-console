@@ -1,12 +1,9 @@
 <element name="api-console" attributes="definition">
   <template>
     <style></style>
-    <api-operation></api-operation>
-    <api-operation></api-operation>
-    <api-operation></api-operation>
-    <api-operation></api-operation>
-
-    <api-console-sidebar resources="{{resources}}"></api-console-sidebar>
+    <api-console-sidebar resources="{{resources}}" on-sidebar-element-clicked="sidebarClicked"></api-console-sidebar>
+   	
+   	<api-operation-list id="operationList" definition="{{definition}}"></api-operation-list>
   </template>
   <script></script>
 </element>

@@ -1,23 +1,22 @@
-<element name="api-operation" attributes="active operation">
+<element name="api-operation" attributes="active resource">
   <template>
     <style></style>
     <section role="api-operation" class="{{active:active}}" on-click="click">
       <header>
         <hgroup>
-          <h1>Consumer versions</h1>
-          <h2>/consumers/{consumerId}/versions/</h2>
+          <h1>{{resource.name}}</h1>
+          <h2>{{resource.relativeUri}}</h2>
         </hgroup>
         <div role="summary">
           <ul role="traits">
-            <li>Secure</li>
-            <li>Errors</li>
-            <li>Another</li>
+            <template repeat="{{trait in resource.traits}}">
+              <li>{{trait}}</li>
+            </template>
           </ul>
           <ul role="operations">
-            <li role="get" class="active"><a href="#">get</a></li>
-            <li role="post"><a href="#">post</a></li>
-            <li role="put"><a href="#">put</a></li>
-            <li role="delete"><a href="#">delete</a></li>
+            <template repeat="{{operation in resource.operations}}">
+              <li role="{{operation.method}}">{{operation.method}}</li>
+            </template>
           </ul>
         </div>
       </header>

@@ -1,9 +1,13 @@
 <element name="api-console-sidebar" attributes="resources">
   <template>
     <style></style>
-    <template repeat="{{resources}}">
-    	{{name}}
-    </template>
+    <ul>
+        <template repeat="{{resources}}">
+            <li>
+                <a href="#" on-click="elementClicked">{{name}}</a>
+            </li>
+        </template>
+    </ul>
   </template>
   <script></script>
 </element>
