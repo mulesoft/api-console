@@ -9,11 +9,19 @@ Polymer.register(this, {
     onDefinitionReady: function (event) {
         this.resources = [];
         this.definition = event.detail;
+        console.log(event.detail);
     },
     resourcePathChanged: function () {
         //// TODO: Check errors
-        this.resources = this.definition.resources.filter(function (p) {
+        var filterdList = this.definition.resources.filter(function (p) {
             return p.name == this.resourcePath;
-        }.bind(this)).pop().resources;
+        }.bind(this)).pop();
+
+        filterdList.resources.forEach(function (resource) {
+            resource.baseUri = this.definition.baseUri.replace('{version}', this.definition.version);
+            resource.relativeUri = filterdList.relativeUri + resource.relativeUri;
+        }.bind(this));
+
+        this.resources = filterdList.resources;
     }
 });

@@ -5,7 +5,8 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         dirs: {
-            libs: ['app/scripts/libs/*.js']
+            libs: ['app/scripts/libs/*.js'],
+            helpers: ['app/scripts/libs/helpers.js']
         },
 
         polymer: {
@@ -18,17 +19,17 @@ module.exports = function (grunt) {
         concat: {
             development: {
                 files: {
-                    'dist/compiled/app/components/api-definition/api-definition.js': ['app/components/api-definition/api-definition.js'],
-                    'dist/compiled/app/components/api-console/api-console.js': ['<%= dirs.libs %>', 'app/components/api-console/api-console.js'],
-                    'dist/compiled/app/components/api-console-navbar/api-console-navbar.js': ['<%= dirs.libs %>', 'app/components/api-console-navbar/api-console-navbar.js'],
-                    'dist/compiled/app/components/api-console-sidebar/api-console-sidebar.js': ['<%= dirs.libs %>', 'app/components/api-console-sidebar/api-console-sidebar.js'],
-                    'dist/compiled/app/components/api-operation/api-operation.js': ['<%= dirs.libs %>', 'app/components/api-operation/api-operation.js'],
-                    'dist/compiled/app/components/api-operation-list/api-operation-list.js': ['<%= dirs.libs %>', 'app/components/api-operation-list/api-operation-list.js'],
-                    'dist/compiled/app/components/api-operation-details/api-operation-details.js': ['<%= dirs.libs %>', 'app/components/api-operation-details/api-operation-details.js'],
-                    'dist/compiled/app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js'],
-                    'dist/compiled/app/components/api-operation-details-section-request/api-operation-details-section-request.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-request/api-operation-details-section-request.js'],
-                    'dist/compiled/app/components/api-operation-details-section-response/api-operation-details-section-response.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-response/api-operation-details-section-response.js'],
-                    'dist/compiled/app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.js': ['<%= dirs.libs %>', 'app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.js']
+                    'dist/compiled/app/components/api-definition/api-definition.js': ['<%= dirs.helpers %>', 'app/components/api-definition/api-definition.js'],
+                    'dist/compiled/app/components/api-console/api-console.js': ['app/components/api-console/api-console.js'],
+                    'dist/compiled/app/components/api-console-navbar/api-console-navbar.js': ['app/components/api-console-navbar/api-console-navbar.js'],
+                    'dist/compiled/app/components/api-console-sidebar/api-console-sidebar.js': ['app/components/api-console-sidebar/api-console-sidebar.js'],
+                    'dist/compiled/app/components/api-operation/api-operation.js': ['app/components/api-operation/api-operation.js'],
+                    'dist/compiled/app/components/api-operation-list/api-operation-list.js': ['app/components/api-operation-list/api-operation-list.js'],
+                    'dist/compiled/app/components/api-operation-details/api-operation-details.js': ['app/components/api-operation-details/api-operation-details.js'],
+                    'dist/compiled/app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js': ['app/components/api-operation-details-section-parameters/api-operation-details-section-parameters.js'],
+                    'dist/compiled/app/components/api-operation-details-section-request/api-operation-details-section-request.js': ['app/components/api-operation-details-section-request/api-operation-details-section-request.js'],
+                    'dist/compiled/app/components/api-operation-details-section-response/api-operation-details-section-response.js': ['app/components/api-operation-details-section-response/api-operation-details-section-response.js'],
+                    'dist/compiled/app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.js': ['<%= dirs.helpers %>', 'app/components/api-operation-details-section-try-it/api-operation-details-section-try-it.js']
                 }
             }
         },

@@ -1,8 +1,8 @@
 <element name="api-operation" attributes="active resource">
   <template>
     <style></style>
-    <section role="api-operation" class="{{active:active}}" on-click="click">
-      <header>
+    <section role="api-operation" class="{{active:active}}">
+      <header on-click="headerClick">
         <hgroup>
           <h1>{{resource.name}}</h1>
           <h2>{{resource.relativeUri}}</h2>
