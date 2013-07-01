@@ -1,3 +1,7 @@
 Polymer.register(this, {
-    ready: function () {}
+    ready: function () {},
+
+    preventDefault: function (event) {
+        event.stopPropagation();
+    }
 });
