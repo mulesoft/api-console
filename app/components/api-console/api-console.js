@@ -9,9 +9,17 @@ Polymer.register(this, {
 		this.resources = [];
 		this.api = event.detail.api;
 		this.resources = event.detail.resources;
+		this.documentation = event.detail.documentation;
 	},
-	sidebarClicked: function(event, detail, sender) {
+	resourceElementClicked: function(event, detail, sender) {
 		this.$.operationList.resourcePath = detail.name;
+		this.$.documentation.hidden = true;
+		this.$.operationList.hidden = false;
+	},
+	documentationElementClicked: function(event, detail, sender) {
+		this.$.documentation.hidden = false;
+		this.$.operationList.hidden = true;
+		this.$.documentation.resourcePath = detail.title;
 	},
 	apiChanged: function (event, detail, sender) {
 		this.apiDefinition.src = this.$.apiSelector.value;

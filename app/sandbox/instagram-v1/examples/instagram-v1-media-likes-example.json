@@ -1,0 +1,16 @@
+{
+    "data": [{
+        "username": "jack",
+        "first_name": "Jack",
+        "last_name": "Dorsey",
+        "type": "user",
+        "id": "66"
+    },
+    {
+        "username": "sammyjack",
+        "first_name": "Sammy",
+        "last_name": "Jack",
+        "type": "user",
+        "id": "29648"
+    }]
+}

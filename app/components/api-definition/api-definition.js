@@ -10,9 +10,9 @@ Polymer.register(this, {
 
                 //// TODO: Check errors!
                 RAML.Parser.load(definition).done(function (result) {
-                    result.resources.forEach(function (resource) {
-                        that.massage(resource);
-                    });
+                    // result.resources.forEach(function (resource) {
+                    //     that.massage(resource);
+                    // });
                     console.log(result);
                     that.fire('api-definition-loaded', result);
                 });

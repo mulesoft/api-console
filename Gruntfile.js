@@ -6,6 +6,7 @@ module.exports = function (grunt) {
 
         dirs: {
             libs: ['app/scripts/libs/*.js'],
+            showdown: ['app/vendor/showdown.min.js'],
             helpers: ['app/scripts/libs/helpers.js']
         },
 
@@ -21,6 +22,7 @@ module.exports = function (grunt) {
                 files: {
                     'dist/compiled/app/components/api-definition/api-definition.js': ['<%= dirs.helpers %>', 'app/components/api-definition/api-definition.js'],
                     'dist/compiled/app/components/api-console/api-console.js': ['app/components/api-console/api-console.js'],
+                    'dist/compiled/app/components/api-documentation/api-documentation.js': ['<%= dirs.showdown %>', 'app/components/api-documentation/api-documentation.js'],
                     'dist/compiled/app/components/api-console-navbar/api-console-navbar.js': ['app/components/api-console-navbar/api-console-navbar.js'],
                     'dist/compiled/app/components/api-console-sidebar/api-console-sidebar.js': ['app/components/api-console-sidebar/api-console-sidebar.js'],
                     'dist/compiled/app/components/api-operation/api-operation.js': ['app/components/api-operation/api-operation.js'],
@@ -41,6 +43,7 @@ module.exports = function (grunt) {
                 },
                 files: {
                     "dist/compiled/app/components/api-console/api-console.css": "app/components/api-console/api-console.less",
+                    "dist/compiled/app/components/api-documentation/api-documentation.css": "app/components/api-documentation/api-documentation.less",
                     "dist/compiled/app/components/api-console-navbar/api-console-navbar.css": "app/components/api-console-navbar/api-console-navbar.less",
                     "dist/compiled/app/components/api-console-sidebar/api-console-sidebar.css": "app/components/api-console-sidebar/api-console-sidebar.less",
                     "dist/compiled/app/components/api-operation/api-operation.css": "app/components/api-operation/api-operation.less",
@@ -74,6 +77,9 @@ module.exports = function (grunt) {
                     }, {
                         src: ['app/components/**/*.html', 'app/components/**/*.css'],
                         dest: 'dist/compiled/'
+                    }, {
+                        src: ['app/sandbox/instagram-v1/**/*.*'],
+                        dest: 'dist/'
                     }
                 ]
             }

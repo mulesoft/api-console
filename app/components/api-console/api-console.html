@@ -7,8 +7,14 @@
       <option value="twitter.yml">Twitter</option>
     </select>
 
-    <api-console-sidebar resources="{{resources}}" on-sidebar-element-clicked="sidebarClicked"></api-console-sidebar>
+    <api-console-sidebar resources="{{resources}}" 
+                         documentation="{{documentation}}" 
+                         on-sidebar-documentation-element-clicked="documentationElementClicked"
+                         on-sidebar-resource-element-clicked="resourceElementClicked"></api-console-sidebar>
+
     <api-operation-list id="operationList" definition="{{definition}}"></api-operation-list>
+
+    <api-documentation id="documentation" definition="{{definition}}"></api-documentation>
   </template>
   <script></script>
 </element>

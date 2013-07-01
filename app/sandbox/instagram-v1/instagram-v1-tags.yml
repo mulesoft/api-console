@@ -1,0 +1,36 @@
+%TAG ! tag:raml.org,0.1:
+---
+name: Tags
+use: [ secured: { method: get } ]
+get:
+  summary: Get information about a tag object.
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include http://localhost:9001/app/sandbox/instagram-v1/examples/instagram-v1-tag-example.json
+/media/recent:
+  name: Recent Tagged Media
+  get:
+    description: |
+      Get a list of recently tagged media. Note that this media is ordered by when the media was tagged 
+      with this tag, rather than the order it was posted. Use the max_tag_id and min_tag_id parameters 
+      in the pagination response to paginate through these objects.
+    query:
+      min_id:
+        description: |
+          Return media before this min_id.
+        type: string
+        required: false
+      max_id:
+        description: |
+          Return media after this max_id.
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include http://localhost:9001/app/sandbox/instagram-v1/examples/instagram-v1-tags-recent-media-example.json
+        
+  

@@ -1,9 +1,8 @@
 Polymer.register(this, {
-    elementClicked: function (event, detail, sender) {
-        // var value = sender.getAttribute('data-value');
-        // var value = sender.dataset.value
-        // var value = sender.templateInstance.model.name;
-
-        this.fire('sidebar-element-clicked', sender.templateInstance.model);
+    resourceClicked: function (event, detail, sender) {
+        this.fire('sidebar-resource-element-clicked', sender.templateInstance.model);
+    },
+    documentationClicked: function (event, detail, sender) {
+        this.fire('sidebar-documentation-element-clicked', sender.templateInstance.model);
     }
 });

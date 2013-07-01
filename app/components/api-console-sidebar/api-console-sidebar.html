@@ -1,10 +1,18 @@
-<element name="api-console-sidebar" attributes="resources">
+<element name="api-console-sidebar" attributes="resources documentation">
   <template>
     <style></style>
     <ul>
+        <template repeat="{{documentation}}">
+            <li>
+                <a href="#" on-click="documentationClicked">{{title}}</a>
+            </li>
+        </template>
+    </ul>
+    <hr>
+    <ul>
         <template repeat="{{resources}}">
             <li>
-                <a href="#" on-click="elementClicked">{{name}}</a>
+                <a href="#" on-click="resourceClicked">{{name}}</a>
             </li>
         </template>
     </ul>

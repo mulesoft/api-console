@@ -1,0 +1,17 @@
+%TAG ! tag:raml.org,0.1:
+---
+name: Media
+use: [ secured: { method: get } ]
+uriParameters:
+  mediaId:
+    name: Media ID
+    type: integer
+get:
+  summary: Get information about a media object.
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include http://localhost:9001/app/sandbox/instagram-v1/examples/instagram-v1-media-example.json
+/comments: !include http://localhost:9001/app/sandbox/instagram-v1/instagram-v1-media-comments.yml
+/likes: !include http://localhost:9001/app/sandbox/instagram-v1/instagram-v1-media-likes.yml
