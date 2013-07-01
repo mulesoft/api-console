@@ -42,13 +42,17 @@ Polymer.register(this, {
 
         if (usages) {
             usages.forEach(function (use) {
-                if (typeof use === 'string') {
+                if (typeof use === 'string' && temp.indexOf(use) === -1) {
                     temp.push(use);
                 } else if (typeof use === 'object') {
                     var keys = Object.keys(use);
 
                     if (keys.length) {
-                        temp.push(Object.keys(use)[0]);
+                        var key = Object.keys(use)[0];
+
+                        if (temp.indexOf(key) === -1) {
+                            temp.push(key);
+                        }
                     }
                 }
             });
