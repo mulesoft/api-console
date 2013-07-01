@@ -12,13 +12,14 @@ section[role=api-operation] {
     margin-top: -1px;
 }
 
-section[role=api-operation]:nth-of-type(1) {
-    border-radius: 4px 4px 0px 0px;
-}
+/*TODO: Add an alternative solution for rounded corners!*/
+// section[role=api-operation]:nth-of-type(1) {
+//     border-radius: 4px 4px 0px 0px;
+// }
 
-section[role=api-operation]:last-of-type {
-    border-radius: 0px 0px 4px 4px;
-}
+// section[role=api-operation]:last-of-type {
+//     border-radius: 0px 0px 4px 4px;
+// }
 
 section[role=api-operation] > header {
     height: 73px;
@@ -143,8 +144,11 @@ section[role=api-operation] > header > div[role=summary] > ul[role=operations] >
     width: 10px;
 }
 
-section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=get] {
+section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li {
     color: white;
+}
+
+section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=get] {
     width: 30px;
 }
 
@@ -161,7 +165,6 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
 }
 
 section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=post] {
-    color: white;
     width: 40px;
 }
 
@@ -178,7 +181,6 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
 }
 
 section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=put] {
-    color: white;
     width: 30px;
 }
 
@@ -195,7 +197,6 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
 }
 
 section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=delete] {
-    color: white;
     width: 50px;
 }
 
@@ -367,7 +368,7 @@ section[role=api-operation].active:hover > api-operation-details {
     display: block;
 }
 
-/*TODO: Fix this!*/
-section[role=api-operation]:last-of-type > section[role=api-operation-details] {
-    border-radius: 0px 0px 3px 3px;
-}
+/*TODO: Add an alternative solution for rounded corners!*/
+// section[role=api-operation]:last-of-type > section[role=api-operation-details] {
+//     border-radius: 0px 0px 3px 3px;
+// }
