@@ -4,7 +4,7 @@ name: Comments
 use: 
   - paged
   - secured: { method: post }
-  - rateLimited: { method: get } 
+  - rateLimited: { method: get }
   - rateLimited: { method: post }
 get:
   summary: Get a full list of comments on a media.
