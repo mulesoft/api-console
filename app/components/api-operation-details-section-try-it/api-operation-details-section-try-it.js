@@ -13,8 +13,16 @@ Polymer.register(this, {
 
         var temp = [];
 
+        this.methodInfo = JSON.parse(JSON.stringify(this.methodInfo));
+
         for (prop in this.methodInfo.query) {
-            temp.push(this.methodInfo.query[prop]);
+            var queryParam = this.methodInfo.query[prop];
+
+            // console.log(prop);
+
+            queryParam.name = prop;
+
+            temp.push(queryParam);
         }
 
         this.methodInfo.query = temp;

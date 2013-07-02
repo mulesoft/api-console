@@ -31,7 +31,7 @@
               <h2>Additional parameters</h2>
               <div role="query-params"></div>
               <template repeat="{{queryParam in methodInfo.query}}">
-                  <span>{{queryParam.description}}</span>
+                  <span>{{queryParam.name}}</span>
                   <input type="text" placeholder="{{queryParam.example}}">
               </template>
 
