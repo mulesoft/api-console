@@ -20,7 +20,7 @@ module.exports = function (grunt) {
         concat: {
             development: {
                 files: {
-                    'dist/compiled/app/components/api-definition/api-definition.js': ['<%= dirs.helpers %>', 'app/components/api-definition/api-definition.js'],
+                    'dist/compiled/app/components/api-definition/api-definition.js': ['app/components/api-definition/api-definition.js'],
                     'dist/compiled/app/components/api-console/api-console.js': ['app/components/api-console/api-console.js'],
                     'dist/compiled/app/components/api-documentation/api-documentation.js': ['<%= dirs.showdown %>', 'app/components/api-documentation/api-documentation.js'],
                     'dist/compiled/app/components/api-console-navbar/api-console-navbar.js': ['app/components/api-console-navbar/api-console-navbar.js'],

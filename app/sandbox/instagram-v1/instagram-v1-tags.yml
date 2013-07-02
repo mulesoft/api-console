@@ -1,14 +1,14 @@
 %TAG ! tag:raml.org,0.1:
 ---
 name: Tags
-use: [ secured: { method: get } ]
+use: [ secured ]
 get:
   summary: Get information about a tag object.
   responses:
     200:
       body:
         application/json:
-          example: !include http://localhost:9001/app/sandbox/instagram-v1/examples/instagram-v1-tag-example.json
+          example: !include examples/instagram-v1-tag-example.json
 /media/recent:
   name: Recent Tagged Media
   get:
@@ -31,6 +31,6 @@ get:
       200:
         body:
           application/json:
-            example: !include http://localhost:9001/app/sandbox/instagram-v1/examples/instagram-v1-tags-recent-media-example.json
+            example: !include examples/instagram-v1-tags-recent-media-example.json
         
   

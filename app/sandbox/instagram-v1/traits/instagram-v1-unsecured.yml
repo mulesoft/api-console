@@ -6,7 +6,7 @@ description: |
   client_id simply associates your server, script, or program with a 
   specific application.
 provides:
-  get?:
+  get?: &clientId
     query:
       client_id:
         description: |
@@ -14,3 +14,5 @@ provides:
         type: string
         example: CLIENT_ID
         required: true    
+  post?: *clientId
+  delete?: *clientId

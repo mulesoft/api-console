@@ -4,7 +4,7 @@ name: Comments
 use: 
   - paged
   - secured: { method: post }
-  - rateLimited: { method: get }
+  - rateLimited: { method: get } 
   - rateLimited: { method: post }
 get:
   summary: Get a full list of comments on a media.
@@ -12,7 +12,7 @@ get:
     200:
       body:
         application/json:
-          example: !include http://localhost:9001/app/sandbox/instagram-v1/examples/instagram-v1-media-comment-example.json
+          example: !include examples/instagram-v1-media-comment-example.json
 post:
   summary: Create a comment on a media. Please email apidevelopers[at]instagram.com for access.
   query:

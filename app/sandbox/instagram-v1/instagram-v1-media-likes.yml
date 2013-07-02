@@ -2,20 +2,16 @@
 ---
 name: Likes
 use: 
-  - secured: { method: get }
+  - secured
   - paged
-  - secured: { method: post }
-  - secured: { method: delete }
-  - rateLimited: { method: get }
-  - rateLimited: { method: post }
-  - rateLimited: { method: delete }
+  - rateLimited
 get:
   summary: Get a list of users who have liked this media.
   responses:
     200:
       body:
         application/json:
-          example: !include http://localhost:9001/app/sandbox/instagram-v1/examples/instagram-v1-media-likes-example.json
+          example: !include examples/instagram-v1-media-likes-example.json
 post:
   summary: Set a like on this media by the currently authenticated user.
   responses:

@@ -7,7 +7,7 @@ description: |
   tokens are unique to a user and should be stored securely. Access tokens 
   may expire at any time in the future.
 provides:
-  get?:
+  get?: &accessToken
     query:
       access_token:
         description: |
@@ -15,3 +15,6 @@ provides:
         type: string
         example: ACCESS_TOKEN
         required: true    
+  post?: *accessToken
+  delete?: *accessToken
+  

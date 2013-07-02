@@ -3,20 +3,13 @@ Polymer.register(this, {
     srcChanged: function () {
         var that = this;
 
-        Helpers.request({
-            url: this.src,
-            callback: function (responseText, xhr) {
-                var definition = responseText;
+        RAML.Parser.loadFile(this.src).done(function (result) {
+            result.resources.forEach(function (resource) {
+                that.massage(resource);
+            });
+            console.log(result);
 
-                //// TODO: Check errors!
-                RAML.Parser.load(definition).done(function (result) {
-                    result.resources.forEach(function (resource) {
-                        that.massage(resource);
-                    });
-                    console.log(result);
-                    that.fire('api-definition-loaded', result);
-                });
-            }
+            that.fire('api-definition-loaded', result);
         });
     },
     massage: function (resource, parent) {
