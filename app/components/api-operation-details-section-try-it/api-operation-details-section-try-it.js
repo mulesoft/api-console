@@ -5,6 +5,20 @@ Polymer.register(this, {
 
         this.urlParts = [];
 
+        this.method = this.method || 'GET';
+
+        this.methodInfo = this.resource.methods.filter(function (p) {
+            return p.method.toUpperCase() == this.method;
+        }.bind(this)).pop();
+
+        var temp = [];
+
+        for (prop in this.methodInfo.query) {
+            temp.push(this.methodInfo.query[prop]);
+        }
+
+        this.methodInfo.query = temp;
+
         paths.forEach(function (path) {
             template = path.match(/{(.*?)}/ig);
 

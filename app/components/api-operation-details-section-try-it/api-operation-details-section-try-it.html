@@ -30,6 +30,11 @@
           <div role="additional-params">
               <h2>Additional parameters</h2>
               <div role="query-params"></div>
+              <template repeat="{{queryParam in methodInfo.query}}">
+                  <span>{{queryParam.description}}</span>
+                  <input type="text" placeholder="{{queryParam.example}}">
+              </template>
+
               <div role="request-body"><textarea></textarea></div>
           </div>
       </section>
