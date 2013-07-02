@@ -1,0 +1,49 @@
+@import 'commons';
+
+section[role=api-operation-details-section-try-it] > section[role=request] {
+    background: white;
+    border-bottom: 1px solid rgb(223,227,231);
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > header {
+    display: block;
+    background: rgb(251,251,251);
+    height: 60px;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > header > h1 {
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 60px;
+    margin: 0px;
+    padding: 0px 20px;
+    color: black;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > header > ul {
+    display: none;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params],
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] {
+    border-top: 1px solid rgb(223,227,231);
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params] > h2,
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > h2 {
+    font-size: 15px;
+    font-weight: 100;
+    color: rgb(51,55,59);
+    line-height: 30px;
+    margin: 0px;
+    padding: 10px 20px 0px 20px;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params] > div[role=uri] {
+    font-size: 16px;
+    font-weight: normal;
+    color: black;
+    line-height: 22px;
+    margin: 0px;
+    padding: 5px 20px 15px 20px;
+}
