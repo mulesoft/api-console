@@ -13,7 +13,7 @@ Polymer.register(this, {
                     result.resources.forEach(function (resource) {
                         that.massage(resource);
                     });
-
+                    
                     that.fire('api-definition-loaded', result);
                 });
             }

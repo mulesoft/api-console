@@ -11,6 +11,17 @@ var Helpers = (function () {
 
 			return url1 + url2;
 		},
+		resolveParams: function (urlTemplate, params) {
+			if (params) {
+				params.forEach(function (p) {
+					if (p.value) {
+						urlTemplate = urlTemplate.replace(p.name, p.value);
+					}
+				});
+			}
+
+			return urlTemplate;
+		},
 		makeReadyStateHandler: function (xhr, callback) {
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState == 4) {

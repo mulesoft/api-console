@@ -1,6 +1,6 @@
 %TAG ! tag:raml.org,0.1:
 ---
-name: Media2
+name: Media
 use: [ secured: { method: get } ]
 uriParameters:
   mediaId:

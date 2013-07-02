@@ -17,7 +17,14 @@
           <div role="basic-params">
               <h2>Basic parameters</h2>
               <div role="uri">
-                  <span>/consumers/</span><input type="text" placeholder="{consumerId}"></input><span>/taxonomies/</span>
+                <template repeat="{{part in urlParts}}">
+                  <template if="{{part.isTemplate}}">
+                    /<input type="text" placeholder="{{part.name}}" value="{{ part.value }}">
+                  </template>
+                  <template if="{{!part.isTemplate}}">
+                    /<span>{{part.name}}</span>
+                  </template>
+                </template>
               </div>
           </div>
           <div role="additional-params">
