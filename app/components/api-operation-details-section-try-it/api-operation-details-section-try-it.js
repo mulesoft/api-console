@@ -2,11 +2,17 @@ Polymer.register(this, {
     ready: function () {
         this.$.response.hidden = true;
         this.model = {
-            response: {}
+            response: {},
+            request: {}
         };
     },
     methodChanged: function () {
         this.build();
+        this.model.request = {};
+        this.model.response.body = '';
+        this.model.response = {};
+
+        //// TOOD: clean codemirror
     },
     resourceChanged: function () {
         this.build();
@@ -71,8 +77,8 @@ Polymer.register(this, {
             }.bind(this)
         };
 
-        if (this.$.aditionalParams) {
-            options.body = this.$.aditionalParams.querySelector('#requestBody textarea');
+        if (this.model.request.body) {
+            options.body = this.model.request.body;
             options.headers = {
                 'content-type': 'application/json'
             };

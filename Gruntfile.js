@@ -20,6 +20,7 @@ module.exports = function (grunt) {
         concat: {
             development: {
                 files: {
+                    'dist/compiled/app/components/codemirror/codemirror.js': ['app/components/codemirror/codemirror.js'],
                     'dist/compiled/app/components/api-definition/api-definition.js': ['app/components/api-definition/api-definition.js'],
                     'dist/compiled/app/components/api-console/api-console.js': ['app/components/api-console/api-console.js'],
                     'dist/compiled/app/components/api-documentation/api-documentation.js': ['<%= dirs.showdown %>', 'app/components/api-documentation/api-documentation.js'],
@@ -72,7 +73,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
-                        src: ['app/vendor/raml-parser.js', 'app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/index.html', 'app/sandbox/instagram.yml', 'app/sandbox/twitter.yml', 'app/sandbox/shaka.yml'],
+                        src: ['app/vendor/raml-parser.js', 'app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/vendor/codemirror.js', 'app/vendor/codemirror.runmode.js', 'app/vendor/codemirror.javascript.js', 'app/index.html', 'app/sandbox/instagram.yml', 'app/sandbox/twitter.yml', 'app/sandbox/shaka.yml'],
                         dest: 'dist/'
                     }, {
                         src: ['app/components/**/*.html', 'app/components/**/*.css'],
