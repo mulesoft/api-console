@@ -24,8 +24,8 @@
             </template>
           </div>
         </div>
-        <template if="{{methodInfo.query.length || method == 'POST' || method == 'PUT'}}">
-          <div id="aditionalParams" role="additional-params">
+        <template id="additionalParams" if="{{methodInfo.query.length || method == 'POST' || method == 'PUT'}}">
+          <div role="additional-params">
             <div role="query-params">
               <h2>Additional parameters</h2>
               <template if="{{methodInfo.query.length}}">
@@ -38,10 +38,10 @@
                 </div>
               </template>
             </div>
-            <template if="{{method == 'POST' || method == 'PUT'}}">
+            <template id="requestBody" if="{{method == 'POST' || method == 'PUT'}}">
               <div role="request-body">
                 <label>Body
-                  <textarea></textarea>
+                  <textarea value="{{model.request.body}}"></textarea>
                 </label>
               </div>
             </template>

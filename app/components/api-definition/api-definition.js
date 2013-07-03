@@ -16,16 +16,28 @@ Polymer.register(this, {
         resource.use = this.readTraits(resource.use);
 
         if (resource.resources) {
+            var temp = JSON.parse(JSON.stringify(resource));
+
+            delete temp.resources;
+
+            temp.relativeUri = '';
+            resource.resources.unshift(temp);
+
             resource.resources.forEach(function (r) {
                 r.relativeUri = resource.relativeUri + r.relativeUri;
 
                 if (parent) {
                     parent.resources.push(r);
                 }
+                
                 this.massage(r, resource);
             }.bind(this));
         } else {
-            if (parent) {
+            var exists = parent.resources.filter(function (p) {
+                return p.name == p.name;
+            }.bind(this)).pop();
+
+            if (parent && !exists) {
                 parent.resources.push(resource);
             }
         }
