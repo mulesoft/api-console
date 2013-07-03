@@ -16,24 +16,31 @@
               <div role="uri">
                 <template repeat="{{part in urlParts}}">
                   <template if="{{part.isTemplate}}">
-                    /<input type="text" placeholder="{{part.name}}" value="{{ part.value }}">
+                    /&nbsp;<input type="text" placeholder="{{part.name}}" value="{{ part.value }}">&nbsp;
                   </template>
                   <template if="{{!part.isTemplate}}">
-                    /<span>{{part.name}}</span>
+                    /&nbsp;<span>{{part.name}}</span>
                   </template>
                 </template>
               </div>
           </div>
           <div id="aditionalParams" role="additional-params">
-              <h2>Additional parameters</h2>
-              <div role="query-params"></div>
-              <template repeat="{{queryParam in methodInfo.query}}">
-                  <span>{{queryParam.name}}</span>
-                  <input type="text" placeholder="{{queryParam.example}}">
-              </template>
-
+              <div role="query-params">
+                <h2>Additional parameters</h2>
+                <div role="params">
+                  <template repeat="{{queryParam in methodInfo.query}}">
+                    <label>{{queryParam.name}}
+                      <input type="text" placeholder="{{queryParam.example}}">
+                    </label>
+                  </template>
+                </div>
+              </div>
               <template if="{{method == 'POST'}}">
-                <div id="requestBody" role="request-body"><textarea></textarea></div>
+                <div role="request-body">
+                  <label>Body
+                    <textarea></textarea>
+                  </label>
+                </div>
               </template>
           </div>
           <div role="try-it">

@@ -49,27 +49,82 @@ section[role=api-operation-details-section-try-it] > section[role=request] > div
     padding: 5px 20px 15px 20px;
 }
 
-section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label {
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params] > div[role=uri] > input {
+    border: 0;
+    border-bottom: 1px solid lightgrey;
+    font-size: 14px;
+    max-width: 80px;
+    text-align:center;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params] > div[role=uri] > input:focus {
+    outline: 0;
+}
+
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] {
+    padding-bottom: 10px;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label,
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] > label {
     display: inline-block;
     margin: 0px 10px 10px 0px;
     color: rgb(158,163,166);
     font-size: 13px;
 }
 
-section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label > input {
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label > input,
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] > label > textarea {
     display: block;
     border: 1px solid rgb(223,227,231);
     height: 35px;
     line-height: auto;
     font-size: 13px;
-    padding: 0px 4px;
+    padding: 0px 10px;
     margin-left: -1px;
     border-radius: 3px;
 }
 
-section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label > input:focus {
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label > input:focus,
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] > label > textarea:focus {
     outline: 0;
     border: 1px solid lightgrey;
+    box-shadow: 0px 0px 4px lightgrey;
+}
+
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] {
+    padding: 0px 20px 15px 20px;
+    display: block;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] > label {
+    display: block;
+    width: 100%;
+    line-height: 22px;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] > label textarea {
+    display: block;
+    box-sizing: border-box;
+    height: 120px;
+    width: 100%;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=try-it] {
+    text-align: right;
+    padding: 0px 20px 40px 0px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=try-it] > a {
+    color: white;
+    background: rgb(123,209,92);
+    border-radius: 3px;
+    border: 1px solid rgb(108,183,80);
+    padding: 10px 40px;
     box-shadow: 0px 0px 4px lightgrey;
 }
 
