@@ -55,24 +55,22 @@
           <header>
               <h1>Response</h1>
           </header>
-          <div role="request-uri">
-              <h2>Request URL</h2>
-              <span>{{model.response.url}}</span>
-          </div>
-          <div role="response-code">
-              <h2>Response code</h2>
-              <span>{{model.response.statusCode}}</span>
-          </div>
-          <div role="response-headers">
-              <h2>Response headers</h2>
-              {{model.response.headers}}
-          </div>
-          <div role="response-body">
-              <h2>Response body</h2>
-              <code>
-              {{model.response.body}}
-              </code>
-          </div>
+          <section role="request-uri">
+              <h1>Request URL</h1>
+              <p>{{model.response.url}}</p>
+          </section>
+          <section role="response-code">
+              <h1>Response code</h1>
+              <p>{{model.response.statusCode}}</p>
+          </section>
+          <section role="response-headers">
+              <h1>Response headers</h1>
+              <p>{{model.response.headers}}</p>
+          </section>
+          <section role="response-body">
+              <h1>Response body</h1>
+              <p>{{model.response.body}}</p>
+          </section>
       </section>
     </section>
   </template>
