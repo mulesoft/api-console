@@ -67,10 +67,20 @@ Polymer.register(this, {
         this.model.response.url = Helpers.resolveParams(template, this.urlParts);
         this.$.response.hidden = false;
 
+        var parameters = {};
+
+        this.methodInfo.query.forEach(function (q) {
+            if (q.value) {
+                parameters[q.name] = q.value;
+            }
+        });
+
         var options = {
+            params: parameters,
             method: this.method || 'GET',
             url: Helpers.resolveParams(template, this.urlParts),
             callback: function (responseText, xhr) {
+                this.model.response.url += (this.model.response.url.indexOf('?') > 0 ? '&' : '?') + this.toQueryString(parameters);
                 this.model.response.body = responseText;
                 this.model.response.statusCode = xhr.status;
                 this.model.response.headers = xhr.getAllResponseHeaders();
@@ -87,5 +97,14 @@ Polymer.register(this, {
         Helpers.request(options);
 
         event.stopPropagation();
+    },
+    toQueryString: function (params) {
+        var r = [];
+        for (var n in params) {
+            var v = params[n];
+            n = encodeURIComponent(n);
+            r.push(v == null ? n : (n + '=' + encodeURIComponent(v)));
+        }
+        return r.join('&');
     }
 });

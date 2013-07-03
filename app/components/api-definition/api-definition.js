@@ -21,7 +21,10 @@ Polymer.register(this, {
             delete temp.resources;
 
             temp.relativeUri = '';
-            resource.resources.unshift(temp);
+
+            if (temp.methods) {
+                resource.resources.unshift(temp);
+            }
 
             resource.resources.forEach(function (r) {
                 r.relativeUri = resource.relativeUri + r.relativeUri;
@@ -29,7 +32,7 @@ Polymer.register(this, {
                 if (parent) {
                     parent.resources.push(r);
                 }
-                
+
                 this.massage(r, resource);
             }.bind(this));
         } else {

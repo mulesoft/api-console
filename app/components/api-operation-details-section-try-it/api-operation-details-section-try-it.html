@@ -32,7 +32,7 @@
                 <div role="params">
                   <template repeat="{{queryParam in methodInfo.query}}">
                     <label>{{queryParam.name}}
-                      <input type="text" placeholder="{{queryParam.example}}">
+                      <input type="text" placeholder="{{queryParam.example}}" value="{{queryParam.value}}">
                     </label>
                   </template>
                 </div>
