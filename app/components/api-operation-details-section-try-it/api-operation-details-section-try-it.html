@@ -2,9 +2,6 @@
   <template>
     <style></style>
     <section role="api-operation-details-section-try-it">
-      <section>
-        <a href="#" on-click="tryIt">Try It!</a>
-      </section>
       <section role="request">
           <header>
               <h1>Request</h1>
@@ -14,8 +11,8 @@
                   <li>JSONP</li>
               </ul>
           </header>
-          <div role="basic-params">
-              <h2>Basic parameters</h2>
+          <div role="uri-params">
+              <h2>Resource Uri</h2>
               <div role="uri">
                 <template repeat="{{part in urlParts}}">
                   <template if="{{part.isTemplate}}">
@@ -38,6 +35,9 @@
               <template if="{{method == 'POST'}}">
                 <div id="requestBody" role="request-body"><textarea></textarea></div>
               </template>
+          </div>
+          <div role="try-it">
+            <a href="#" on-click="tryIt">Try It!</a>
           </div>
       </section>
       <section role="response">

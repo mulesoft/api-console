@@ -3,13 +3,14 @@
 section[role=api-operation] {
     display: block;
     border: 1px solid rgb(218,220,221);
-    height: 45px;
+    max-height: 45px;
     color: black;
     background: white;
     padding: 15px 20px;
     position: relative;
     margin: 0px;
     margin-top: -1px;
+    transition: max-height 0.05s;
 }
 
 /*TODO: Add an alternative solution for rounded corners!*/
@@ -88,11 +89,11 @@ section[role=api-operation] > header > div[role=summary] > ul[role=operations] >
     line-height: 13px;
     vertical-align: middle;
     text-align: center;
-    padding: 0px 0px 0px 0px;
+    padding: 1px 2px 0px 2px;
     border-radius: 2px;
     width: auto;
     height: auto;
-    transition: width 0.3s ease-in-out;
+    transition: max-width 0.4s ease-in;
     position: relative;
 }
 
@@ -139,17 +140,14 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
     background: rgb(0,120,202);
 }
 
-section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li {
+section[role=api-operation]:not(.active) > header > div[role=summary] > ul[role=operations] > li {
     color: transparent;
-    width: 10px;
+    max-width: 8px;
 }
 
-section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li {
+section[role=api-operation]:not(.active):hover > header > div[role=summary] > ul[role=operations] > li {
     color: white;
-}
-
-section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=get] {
-    width: 30px;
+    max-width: 80px;
 }
 
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=post],
@@ -164,10 +162,6 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
     background: rgb(65,210,92);
 }
 
-section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=post] {
-    width: 40px;
-}
-
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=put],
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=put]:after,
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=put]:before {
@@ -180,10 +174,6 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
     background: rgb(219,181,29);
 }
 
-section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=put] {
-    width: 30px;
-}
-
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=delete],
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=delete]:after,
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=delete]:before {
@@ -194,10 +184,6 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
 section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=delete]:after,
 section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=delete]:before {
     background: rgb(234,0,47);
-}
-
-section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=delete] {
-    width: 50px;
 }
 
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li:nth-of-type(1):before,
@@ -232,9 +218,15 @@ section[role=api-operation]:hover > header h2 {
 
 section[role=api-operation].active,
 section[role=api-operation].active:hover {
-    background: rgb(62,80,90);
     border: 1px solid rgb(218,220,221);
-    height: auto;
+    transition: max-height 0.5s;
+    max-height: 1000px;
+}
+
+section[role=api-operation].active > header,
+section[role=api-operation].active:hover > header {
+    background: rgb(62,80,90);
+    transition: background 0.1s;
 }
 
 section[role=api-operation].active > header h1,
