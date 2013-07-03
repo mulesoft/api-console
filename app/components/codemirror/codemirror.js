@@ -1,7 +1,7 @@
 Polymer.register(this, {
     sourceChanged: function () {
         if (CodeMirror && this.source) {
-            CodeMirror.runMode(this.source, "application/json", this.$.output);
+            CodeMirror.runMode(JSON.stringify(JSON.parse(this.source), null, 2), "application/json", this.$.output);
         }
 
         if (!this.source) {

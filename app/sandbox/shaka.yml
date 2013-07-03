@@ -3,6 +3,11 @@
 title: Shaka API
 version: v1.1
 baseUri: http://localhost:3000/api
+documentation:
+  - title: Authentication
+    content: Instagram’s API uses the [OAuth 2.0 protocol](http://tools.ietf.org/html/draft-ietf-oauth-v2-12) for simple, but effective authentication and 
+      authorization. OAuth 2.0 is much easier to use than previous schemes; developers can start using the Instagram API almost immediately. The one thing 
+      to keep in mind is that all requests to the API must be made over SSL (https:// not http://)
 /projects:
   name: Projects
   get:
