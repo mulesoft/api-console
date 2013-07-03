@@ -1,0 +1,41 @@
+%TAG ! tag:heaven-lang.org,1.0:
+---
+title: Shaka API
+version: v1.1
+baseUri: http://localhost:3000/api/
+/projects:
+  name: Projects
+  /:
+    name: Projects
+    get:
+      summary: Get a list of projects
+      responses:
+        200:
+          body:
+            application/json:
+    post:
+      summary: Set a Project on this media by the currently authenticated user.
+      responses:
+        201:
+          description: |
+             Successfully liked a media object
+  /{projectId}:
+    name: Project
+    get:
+      summary: Get a list of projects
+      responses:
+        200:
+          body:
+            application/json:
+    delete:
+      summary: Remove a like on this media by the currently authenticated user.
+      responses:
+        204:
+          description: |
+            Project removed succesfully
+    put:
+      summary: Remove a like on this media by the currently authenticated user.
+      responses:
+        201:
+          description: |
+            Project updated succesfully

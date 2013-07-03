@@ -27,7 +27,7 @@
                 </template>
               </div>
           </div>
-          <div role="additional-params">
+          <div id="aditionalParams" role="additional-params">
               <h2>Additional parameters</h2>
               <div role="query-params"></div>
               <template repeat="{{queryParam in methodInfo.query}}">
@@ -35,7 +35,9 @@
                   <input type="text" placeholder="{{queryParam.example}}">
               </template>
 
-              <div role="request-body"><textarea></textarea></div>
+              <template if="{{method == 'POST'}}">
+                <div id="requestBody" role="request-body"><textarea></textarea></div>
+              </template>
           </div>
       </section>
       <section role="response">
@@ -44,28 +46,20 @@
           </header>
           <div role="request-uri">
               <h2>Request URL</h2>
-              <span>http://www.api.com/consumers?this=is&a=test</span>
+              <span>{{model.response.url}}</span>
           </div>
           <div role="response-code">
               <h2>Response code</h2>
-              <span>200</span>
+              <span>{{model.response.statusCode}}</span>
           </div>
           <div role="response-headers">
               <h2>Response headers</h2>
-              <span>Date: Thu, 16 Dic 1976 09:00:00 GMT-03:00</span><br>
-              <span>Via: 1.1 varnish</span><br>
-              <span>Age: 0</span><br>
+              {{model.response.headers}}
           </div>
           <div role="response-body">
               <h2>Response body</h2>
               <code>
-              {
-                  consumers: [
-                      {
-                          name: 'test'
-                      }
-                  ]
-              }
+              {{model.response.body}}
               </code>
           </div>
       </section>

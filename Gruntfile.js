@@ -72,7 +72,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
-                        src: ['app/vendor/raml-parser.js', 'app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/index.html', 'app/sandbox/instagram.yml', 'app/sandbox/twitter.yml'],
+                        src: ['app/vendor/raml-parser.js', 'app/vendor/polymer.min.js', 'app/vendor/polymer.min.js.map', 'app/index.html', 'app/sandbox/instagram.yml', 'app/sandbox/twitter.yml', 'app/sandbox/shaka.yml'],
                         dest: 'dist/'
                     }, {
                         src: ['app/components/**/*.html', 'app/components/**/*.css'],

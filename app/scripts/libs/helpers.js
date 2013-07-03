@@ -71,7 +71,8 @@ var Helpers = (function () {
 			}
 			xhr.open(method, url, async);
 			this.makeReadyStateHandler(xhr, options.callback);
-			this.setRequestHeaders(options.headers);
+
+			this.setRequestHeaders(xhr, options.headers);
 			xhr.send(method == 'POST' ? (options.body || params) : null);
 			if (!async) {
 				xhr.onreadystatechange(xhr);

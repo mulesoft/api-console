@@ -3,8 +3,9 @@
     <style></style>
     
     <select id="apiSelector" on-change="apiChanged">
-      <option value="instagram.yml">Instagram</option>
-      <option value="twitter.yml">Twitter</option>
+      <option value="http://localhost:9001/app/sandbox/instagram-v1/instagram-v1.yml">Instagram</option>
+      <option value="http://localhost:9001/twitter.yml">Twitter</option>
+      <option value="http://localhost:9001/shaka.yml">Shaka</option>
     </select>
 
     <api-console-sidebar resources="{{resources}}" 

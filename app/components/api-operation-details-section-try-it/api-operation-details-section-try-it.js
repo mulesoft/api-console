@@ -1,5 +1,16 @@
 Polymer.register(this, {
+    ready: function () {
+        this.model = {
+            response: {}
+        };
+    },
+    methodChanged: function () {
+        this.build();
+    },
     resourceChanged: function () {
+        this.build();
+    },
+    build: function () {
         var paths = this.resource.relativeUri.split('/'),
             template;
 
@@ -15,10 +26,8 @@ Polymer.register(this, {
 
         this.methodInfo = JSON.parse(JSON.stringify(this.methodInfo));
 
-        for (prop in this.methodInfo.query) {
+        for (var prop in this.methodInfo.query) {
             var queryParam = this.methodInfo.query[prop];
-
-            // console.log(prop);
 
             queryParam.name = prop;
 
@@ -45,15 +54,29 @@ Polymer.register(this, {
             }
         }.bind(this));
     },
-    tryIt: function () {
-        var template = Helpers.joinUrl(this.resource.baseUri, this.resource.relativeUri);
+    tryIt: function (event, detail, sender) {
+        var template = Helpers.joinUrl(this.resource.baseUri, this.resource.relativeUri),
+            body = this.$.aditionalParams.querySelector('#requestBody textarea');
 
-        Helpers.request({
+        this.model.response.url = Helpers.resolveParams(template, this.urlParts);
+
+        var options = {
             method: this.method || 'GET',
             url: Helpers.resolveParams(template, this.urlParts),
             callback: function (responseText, xhr) {
-                console.log(responseText);
-            }
-        });
+                this.model.response.body = responseText;
+                this.model.response.statusCode = xhr.status;
+                this.model.response.headers = xhr.getAllResponseHeaders();
+            }.bind(this)
+        };
+
+        if (body) {
+            options.body = body.value;
+            options.headers = {
+                'content-type': 'application/json'
+            };
+        }
+
+        Helpers.request(options);
     }
 });

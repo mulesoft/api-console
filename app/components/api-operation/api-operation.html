@@ -2,8 +2,8 @@
   <template>
     <style></style>
     <section role="api-operation" class="{{active:active}}">
-      <header on-click="headerClick">
-        <hgroup>
+      <header id="operationHeader">
+        <hgroup on-click="headerClick">
           <h1>{{resource.name}}</h1>
           <h2>{{resource.relativeUri}}</h2>
         </hgroup>
@@ -15,12 +15,18 @@
           </ul>
           <ul role="operations">
             <template repeat="{{operation in resource.methods}}">
-              <li role="{{operation.method}}">{{operation.method}}</li>
+              <template if="{{operation.method == 'get'}}">
+                <li class="active" role="{{operation.method}}" on-click="operationClicked">{{operation.method}}</li>
+              </template>
+
+              <template if="{{operation.method != 'get'}}">
+                <li role="{{operation.method}}" on-click="operationClicked">{{operation.method}}</li>
+              </template>
             </template>
           </ul>
         </div>
       </header>
-      <api-operation-details resource="{{resource}}"></api-operation-details>
+      <api-operation-details id="operationDetails" resource="{{resource}}"></api-operation-details>
     </scection>
   </template>
   <script></script>
