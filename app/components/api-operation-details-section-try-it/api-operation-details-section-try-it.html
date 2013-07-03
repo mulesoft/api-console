@@ -3,30 +3,32 @@
     <style></style>
     <section role="api-operation-details-section-try-it">
       <section role="request">
-          <header>
-              <h1>Request</h1>
-              <ul role="type">
-                  <li>JSON</li>
-                  <li>XML</li>
-                  <li>JSONP</li>
-              </ul>
-          </header>
-          <div role="uri-params">
-              <h2>Resource Uri</h2>
-              <div role="uri">
-                <template repeat="{{part in urlParts}}">
-                  <template if="{{part.isTemplate}}">
-                    /&nbsp;<input type="text" placeholder="{{part.name}}" value="{{ part.value }}">&nbsp;
-                  </template>
-                  <template if="{{!part.isTemplate}}">
-                    /&nbsp;<span>{{part.name}}</span>
-                  </template>
-                </template>
-              </div>
+        <header>
+            <h1>Request</h1>
+            <ul role="type">
+                <li>JSON</li>
+                <li>XML</li>
+                <li>JSONP</li>
+            </ul>
+        </header>
+        <div role="uri-params">
+          <h2>Resource Uri</h2>
+          <div role="uri">
+            <template repeat="{{part in urlParts}}">
+              <template if="{{part.isTemplate}}">
+                /&nbsp;<input type="text" placeholder="{{part.name}}" value="{{ part.value }}">&nbsp;
+              </template>
+              <template if="{{!part.isTemplate}}">
+                /&nbsp;<span>{{part.name}}</span>
+              </template>
+            </template>
           </div>
+        </div>
+        <template if="{{methodInfo.query.length || method == 'POST' || method == 'PUT'}}">
           <div id="aditionalParams" role="additional-params">
-              <div role="query-params">
-                <h2>Additional parameters</h2>
+            <div role="query-params">
+              <h2>Additional parameters</h2>
+              <template if="{{methodInfo.query.length}}">
                 <div role="params">
                   <template repeat="{{queryParam in methodInfo.query}}">
                     <label>{{queryParam.name}}
@@ -34,18 +36,20 @@
                     </label>
                   </template>
                 </div>
-              </div>
-              <template if="{{method == 'POST'}}">
-                <div role="request-body">
-                  <label>Body
-                    <textarea></textarea>
-                  </label>
-                </div>
               </template>
+            </div>
+            <template if="{{method == 'POST' || method == 'PUT'}}">
+              <div role="request-body">
+                <label>Body
+                  <textarea></textarea>
+                </label>
+              </div>
+            </template>
           </div>
-          <div role="try-it">
-            <a href="#" on-click="tryIt">Try It!</a>
-          </div>
+        </template>
+        <div role="try-it">
+          <a href="#" on-click="tryIt">Try It!</a>
+        </div>
       </section>
       <section role="response">
           <header>

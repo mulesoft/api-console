@@ -1,18 +1,20 @@
 Polymer.register(this, {
-	klass: '',
-	active: false,
-	ready: function () {},
-	headerClick: function () {
-		this.active = !this.active;
-	},
-	operationClicked: function (event, detail, sender) {
-		var selector = sender.parentElement.querySelectorAll('li');
-
-		for (var i = 0; i < selector.length; i++) {
-			selector[i].className = "";
-		}
-
-		sender.className = "active";
-		this.$.operationDetails.$.tryIt.method = sender.templateInstance.model.operation.method.toUpperCase();
-	}
+    klass: '',
+    active: false,
+    selectedMethod: '',
+    ready: function () {},
+    headerClick: function () {
+        this.active = !this.active;
+        if (this.resource.methods.length && this.active) {
+            this.selectOperation(this.resource.methods[0]);
+        }
+    },
+    operationClicked: function (event, detail, sender) {
+        this.selectOperation(sender.templateInstance.model.operation);
+    },
+    selectOperation: function (operation) {
+        this.$.operationDetails.operation = operation;
+        this.$.operationDetails.$.tryIt.method = operation.method.toUpperCase();
+        this.selectedMethod = operation.method;
+    }
 });

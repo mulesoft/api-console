@@ -1,21 +1,33 @@
 <element name="api-console" attributes="definition">
   <template>
     <style></style>
-    
-    <select id="apiSelector" on-change="apiChanged">
-      <option value="http://localhost:9001/app/sandbox/instagram-v1/instagram-v1.yml">Instagram</option>
-      <option value="http://localhost:9001/twitter.yml">Twitter</option>
-      <option value="http://localhost:9001/shaka.yml">Shaka</option>
-    </select>
 
-    <api-console-sidebar resources="{{resources}}" 
-                         documentation="{{documentation}}" 
-                         on-sidebar-documentation-element-clicked="documentationElementClicked"
-                         on-sidebar-resource-element-clicked="resourceElementClicked"></api-console-sidebar>
+    <section role="api-console">
+      <header>
+        <api-console-navbar id="navbar" definition="{{definition}}"></api-console-navbar>
+      </header>
 
-    <api-operation-list id="operationList" definition="{{definition}}"></api-operation-list>
+      <aside role="sidebar">
+        <!-- select id="apiSelector" on-change="apiChanged">
+          <option value="http://localhost:9001/app/sandbox/instagram-v1/instagram-v1.yml">Instagram</option>
+          <option value="http://localhost:9001/twitter.yml">Twitter</option>
+          <option value="http://localhost:9001/shaka.yml">Shaka</option>
+        </select -->
 
-    <api-documentation id="documentation" definition="{{definition}}"></api-documentation>
+        <api-console-sidebar id="sidebar"
+          resources="{{resources}}"
+          documentation="{{documentation}}"
+          on-sidebar-documentation-element-clicked="documentationElementClicked"
+          on-sidebar-resource-element-clicked="resourceElementClicked">
+        </api-console-sidebar>
+      </aside>
+
+      <section role="main">
+        <api-operation-list id="operationList" definition="{{definition}}"></api-operation-list>
+        <api-documentation id="documentation" definition="{{definition}}"></api-documentation>
+      </section>
+    </section>
+
   </template>
   <script></script>
 </element>

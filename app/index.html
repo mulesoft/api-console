@@ -11,18 +11,23 @@
   <link rel="import" href="raml.html">
   <style>
     body {
-        margin: 30px;
-        font-family: 'Ubuntu', sans-serif;
+      margin: 0px;
+      font-family: 'Ubuntu', sans-serif;
+      text-align: center;
+      background: rgb(248,248,248);
+    }
+
+    #content {
+      width: 960px;
+      margin: 0px auto;
+      text-align:left;
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>Api Console</h1>
-  </header>
-
-  <api-definition id="instagramApi" src="http://localhost:9001/shaka.yml"></api-definition>
-  <api-console id="console" definition="#instagramApi"></api-console>
+  <div id="content">
+    <api-definition id="instagramApi" src="http://localhost:9001/app/sandbox/instagram-v1/instagram-v1.yml"></api-definition>
+    <api-console id="console" definition="#instagramApi"></api-console>
+  </div>
 </body>
 </html>

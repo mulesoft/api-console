@@ -15,12 +15,11 @@
           </ul>
           <ul role="operations">
             <template repeat="{{operation in resource.methods}}">
-              <template if="{{operation.method == 'get'}}">
-                <li class="active" role="{{operation.method}}" on-click="operationClicked">{{operation.method}}</li>
+              <template if="{{operation.method == selectedMethod}}">
+                <li role="{{operation.method}}" class="active" on-click="operationClicked"><span>{{operation.method}}</span></li>
               </template>
-
-              <template if="{{operation.method != 'get'}}">
-                <li role="{{operation.method}}" on-click="operationClicked">{{operation.method}}</li>
+              <template if="{{operation.method != selectedMethod}}">
+                <li role="{{operation.method}}" on-click="operationClicked"><span>{{operation.method}}</span></li>
               </template>
             </template>
           </ul>

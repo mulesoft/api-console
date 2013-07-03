@@ -1,5 +1,7 @@
 Polymer.register(this, {
+    topResource: null,
     ready: function () {
+        this.hidden = true;
         window.addEventListener('WebComponentsReady', function () {
             var definition = document.querySelector(this.definition);
 
@@ -12,6 +14,14 @@ Polymer.register(this, {
     },
     resourcePathChanged: function () {
         //// TODO: Check errors
+        if (!this.resourcePath) {
+            this.hidden = true;
+            this.resources = null;
+            this.topResource
+             = null;
+            return;
+        }
+
         var filterdList = this.definition.resources.filter(function (p) {
             return p.name == this.resourcePath;
         }.bind(this)).pop();
@@ -21,5 +31,8 @@ Polymer.register(this, {
         }.bind(this));
 
         this.resources = filterdList.resources;
+        this.topResource = filterdList.resources[0];
+
+        this.hidden = false;
     }
 });

@@ -1,3 +1,4 @@
 Polymer.register(this, {
-    ready: function () {}
+    ready: function () {
+    }
 });
