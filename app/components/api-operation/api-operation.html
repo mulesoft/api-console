@@ -2,12 +2,12 @@
   <template>
     <style></style>
     <section role="api-operation" class="{{active:active}}">
-      <header id="operationHeader">
-        <hgroup on-click="headerClick">
+      <header id="operationHeader" on-click="headerClick">
+        <hgroup>
           <h1>{{resource.name}}</h1>
           <h2>{{resource.relativeUri}}</h2>
         </hgroup>
-        <div role="summary">
+        <div role="summary" on-click="preventDefault">
           <ul role="traits">
             <template repeat="{{trait in resource.use}}">
               <li>{{trait}}</li>

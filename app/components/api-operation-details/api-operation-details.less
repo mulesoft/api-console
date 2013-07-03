@@ -45,7 +45,9 @@ section[role=api-operation-details] > ul[role=details-sections] > li {
     font-weight: bold;
 }
 
-section[role=api-operation-details] > ul[role=details-sections] > li > a {
+section[role=api-operation-details] > ul[role=details-sections] > li > a,
+section[role=api-operation-details] > ul[role=details-sections] > li > span {
+    cursor: pointer;
     padding: 0px 20px;
     color: black;
     border-right: 1px solid rgb(223,227,231);
@@ -62,7 +64,8 @@ section[role=api-operation-details] > ul[role=details-sections] > li.active {
     box-shadow: 1px -1px 1px #eee;
 }
 
-section[role=api-operation-details] > ul[role=details-sections] > li.active > a {
+section[role=api-operation-details] > ul[role=details-sections] > li.active > a,
+section[role=api-operation-details] > ul[role=details-sections] > li.active > span {
     border-right: none;
     color: rgb(0,120,202);
 }
