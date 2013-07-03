@@ -1,5 +1,6 @@
 Polymer.register(this, {
     ready: function () {
+        this.$.response.hidden = true;
         this.model = {
             response: {}
         };

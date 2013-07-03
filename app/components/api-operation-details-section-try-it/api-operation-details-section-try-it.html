@@ -2,7 +2,7 @@
   <template>
     <style></style>
     <section role="api-operation-details-section-try-it">
-      <section role="request">
+      <section role="request" id="request">
         <header>
             <h1>Request</h1>
             <ul role="type">
@@ -48,10 +48,10 @@
           </div>
         </template>
         <div role="try-it">
-          <a href="#" on-click="tryIt">Try It!</a>
+          <span on-click="tryIt">Try It!</span>
         </div>
       </section>
-      <section role="response">
+      <section role="response" id="response">
           <header>
               <h1>Response</h1>
           </header>
