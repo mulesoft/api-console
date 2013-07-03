@@ -90,7 +90,7 @@ module.exports = function (grunt) {
                 livereload: 35729
             },
             javascript: {
-                files: ['app/scripts/**/*.js', 'app/styles/**/*.less', 'app/components/**/*.*', 'app/sandbox/instagram.yml'],
+                files: ['app/scripts/**/*.js', 'app/styles/**/*.less', 'app/components/**/*.*', 'app/sandbox/instagram.yml', 'app/index.html'],
                 tasks: ['build']
             }
         },

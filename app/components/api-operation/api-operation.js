@@ -8,9 +8,11 @@ Polymer.register(this, {
         if (this.resource.methods.length && this.active) {
             this.selectOperation(this.resource.methods[0]);
         }
+        event.stopPropagation();
     },
     operationClicked: function (event, detail, sender) {
         this.selectOperation(sender.templateInstance.model.operation);
+        event.stopPropagation();
     },
     selectOperation: function (operation) {
         this.$.operationDetails.operation = operation;

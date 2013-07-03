@@ -55,10 +55,10 @@ Polymer.register(this, {
         }.bind(this));
     },
     tryIt: function (event, detail, sender) {
-        var template = Helpers.joinUrl(this.resource.baseUri, this.resource.relativeUri),
-            body = this.$.aditionalParams.querySelector('#requestBody textarea');
+        var template = Helpers.joinUrl(this.resource.baseUri, this.resource.relativeUri);
 
         this.model.response.url = Helpers.resolveParams(template, this.urlParts);
+        this.$.response.hidden = false;
 
         var options = {
             method: this.method || 'GET',
@@ -70,13 +70,15 @@ Polymer.register(this, {
             }.bind(this)
         };
 
-        if (body) {
-            options.body = body.value;
+        if (this.$.aditionalParams) {
+            options.body = this.$.aditionalParams.querySelector('#requestBody textarea');
             options.headers = {
                 'content-type': 'application/json'
             };
         }
 
         Helpers.request(options);
+
+        event.stopPropagation();
     }
 });
