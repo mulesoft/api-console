@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <title>api:Console</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="api-definition.js"></script>
+    <script src="api-console.js"></script>
+    <script src="vendor/raml-parser.js"></script>
+  </head>
+  <body>
+    <div ng-app="raml-console">
+      <definition src="http://localhost:8080/example/instagram-v1.yml">
+        <console/>
+      </definition>
+    </div>
+  </body>
+</html>
