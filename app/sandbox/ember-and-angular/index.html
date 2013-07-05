@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- <html ng-app='apiconsoletest'>
+<head>
+<meta charset="utf-8">
+<title>Ember Starter Kit</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <script type="text/x-handlebars">
+    <h2>Welcome to Ember.js</h2>
+
+    {{outlet}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="index">
+    <ul>
+    {{#each item in model}}
+      <li>{{item}}</li>
+    {{/each}}
+    </ul>
+  </script>
+
+  <script type="text/ng-template" id="/api-console.html">
+    <div>
+      <h1>{{ title }}</h1>
+      <div class="content" ng-transclude></div>
+    </div>
+  </script>
+
+  <api-console title="Test Api Console">
+    <p>Some content</p>
+  </api-console>
+
+  <script src="js/libs/jquery-1.9.1.js"></script>
+  <script src="js/libs/handlebars-1.0.0-rc.4.js"></script>
+  <script src="js/libs/ember-1.0.0-rc.6.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"></script>
+  <script>
+    angular.module('apiconsoletest', [])
+      .directive(
+        'api-console', function () {
+          return {
+            restrict: 'E',
+            templateUrl: '/api-console.html',
+            replace: true,
+            transclude: true,
+            scope: { 'title': '@' }
+          }});
+  </script>
+
+</body>
+</html>
+ -->
+
+<html>
+  <head>
+    <style>
+      .content { background:lightsteelblue; }
+    </style>
+  </head>
+  <body>
+
+  <script type="text/ng-template" id="/apiconsole.html">
+    <div>
+      <h1>{{ title }}</h1>
+      <div class="content">{{ src }}</div>
+    </div>
+  </script>
+
+  <script type="text/x-handlebars">
+    <h2>Welcome to Ember.js</h2>
+
+    {{outlet}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="index">
+    <ul>
+    {{#each item in model}}
+      <li>{{item}}</li>
+    {{/each}}
+    </ul>
+
+    <apiconsole title="My Api Console" src="test/test.yml"></apiconsole>
+  </script>
+
+  <script src="js/libs/jquery-1.9.1.js"></script>
+  <script src="js/libs/handlebars-1.0.0-rc.4.js"></script>
+  <script src="js/libs/ember-1.0.0-rc.6.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"></script>
+  <script src="js/emberApp.js"></script>
+  <script src="js/angularApp.js"></script>
+
+  </body>
+</html>
