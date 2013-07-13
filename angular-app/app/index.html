@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
 </head>
-  <body ng-app="angularAppApp">
+  <body ng-app="ramlConsoleApp">
     <!--[if lt IE 7]>
       <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
     <![endif]-->
@@ -25,28 +25,36 @@
       <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
-    <div class="container" ng-view=""></div>
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
-      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.src='//www.google-analytics.com/ga.js';
-      s.parentNode.insertBefore(g,s)}(document,'script'));
+    <script type="text/ng-template" id="/raml-definition.tmpl.html">
+      <div>
+        <h1>Definition</h1>
+        <div class="content">{{ src }}</div>
+      </div>
     </script>
+    <script type="text/ng-template" id="/raml-console.tmpl.html">
+      <div>
+        <h1>Console</h1>
+        <div><ul><li ng-repeat="resource in resources">{{resource.name}}</li></ul></div>
+      </div>
+    </script>
+
+    <!-- Add your site or application content here -->
+    <raml-console id="console" definition="#instagramApi"></raml-console>
+    <raml-definition id="instagramApi" src="/def/instagram-v1/instagram-v1.yml"></raml-definition>
 
     <script src="bower_components/angular/angular.js"></script>
 
+    <script src="vendor/raml-parser.js"></script>
+    <script src="scripts/common/ramlParserHelper.js"></script>
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/directives/raml-console.js"></script>
     <!-- endbuild -->
 
-        <!-- build:js scripts/modules.js -->
-        <script src="bower_components/angular-resource/angular-resource.js"></script>
-        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-        <!-- endbuild -->
+    <!-- build:js scripts/modules.js -->
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <!-- endbuild -->
 </body>
 </html>

@@ -1,0 +1,20 @@
+%TAG ! tag:raml.org,0.1:
+---
+name: Secured
+description: |
+  Some requests require authentication - specifically requests made on 
+  behalf of a user. Authenticated requests require an access_token. These 
+  tokens are unique to a user and should be stored securely. Access tokens 
+  may expire at any time in the future.
+provides:
+  get?: &accessToken
+    query:
+      access_token:
+        description: |
+          Access Token
+        type: string
+        example: ACCESS_TOKEN
+        required: true    
+  post?: *accessToken
+  delete?: *accessToken
+  
