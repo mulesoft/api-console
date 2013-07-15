@@ -1,4 +1,6 @@
-angular.module('helpers', []).factory('ramlHelper', function () {
+angular.module('helpers', []).factory('ramlPaser', function () {
+  return RAML.Parser;
+}).factory('ramlHelper', function () {
   return {
     massage: function (resource, parent) {
       resource.use = this.readTraits(resource.use);

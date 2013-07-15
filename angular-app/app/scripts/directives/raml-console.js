@@ -31,10 +31,10 @@ angular.module('ramlConsoleApp')
         'id': '@',
         'src': '@'
       },
-      controller: function ($scope, $element, $attrs, ramlHelper) {
+      controller: function ($scope, $element, $attrs, ramlHelper, ramlPaser) {
         // var helper = new RamlParserHelper();
 
-        RAML.Parser.loadFile($attrs.src)
+        ramlPaser.loadFile($attrs.src)
           .done(function (result) {
             angular.forEach(result.resources, function (resource) {
               ramlHelper.massage(resource);
