@@ -25,19 +25,6 @@
       <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-    <script type="text/ng-template" id="/raml-definition.tmpl.html">
-      <div>
-        <h1>Definition</h1>
-        <div class="content">{{ src }}</div>
-      </div>
-    </script>
-    <script type="text/ng-template" id="/raml-console.tmpl.html">
-      <div>
-        <h1>Console</h1>
-        <div><ul><li ng-repeat="resource in resources">{{resource.name}}</li></ul></div>
-      </div>
-    </script>
-
     <!-- Add your site or application content here -->
     <raml-console id="console" definition="#instagramApi"></raml-console>
     <raml-definition id="instagramApi" src="/def/instagram-v1/instagram-v1.yml"></raml-definition>

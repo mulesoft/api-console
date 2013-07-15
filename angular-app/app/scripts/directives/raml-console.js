@@ -2,7 +2,7 @@ angular.module('ramlConsoleApp')
   .directive('ramlConsole', function ($rootScope) {
     return {
       restrict: 'E',
-      templateUrl: '/raml-console.tmpl.html',
+      templateUrl: '/views/raml-console.tmpl.html',
       replace: true,
       transclude: false,
       scope: { 'id': '@', 'definition': '@' },
@@ -21,7 +21,7 @@ angular.module('ramlConsoleApp')
   .directive('ramlDefinition', function ($rootScope) {
     return {
       restrict: 'E',
-      templateUrl: '/raml-definition.tmpl.html',
+      templateUrl: '/views/raml-definition.tmpl.html',
       replace: true,
       transclude: false,
       scope: { 'id': '@', 'src': '@' },
