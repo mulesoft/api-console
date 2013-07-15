@@ -286,7 +286,7 @@ module.exports = function (grunt) {
 
             },
             files: {
-                "app/styles/main.css": "app/styles/console.less"
+                "app/styles/main.css": "app/styles/main.less"
             }
         }
     }
