@@ -37,6 +37,10 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.coffee'],
         tasks: ['coffee:test']
       },
+      less: {
+        files: ['app/styles/*.less'],
+        tasks: ['less']
+      },
       livereload: {
         options: {
           livereload: LIVERELOAD_PORT
@@ -274,7 +278,19 @@ module.exports = function (grunt) {
           ]
         }
       }
+    },
+    less: {
+        development: {
+            options: {
+                paths: ['app/styles']
+
+            },
+            files: {
+                "app/styles/main.css": "app/styles/console.less"
+            }
+        }
     }
+
   });
 
   grunt.registerTask('server', function (target) {
@@ -309,7 +325,8 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'rev',
-    'usemin'
+    'usemin',
+    'less'
   ]);
 
   grunt.registerTask('default', [
