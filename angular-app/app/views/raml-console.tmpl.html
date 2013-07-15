@@ -1,4 +1,5 @@
-<div>
-    <h1>Console</h1>
-    <div><ul><li ng-repeat="resource in resources">{{resource.name}}</li></ul></div>
-</div>
+<section role="api-console">
+  <section role="main" ng-repeat="resource in resources">
+    <ng-include src="'/views/raml-operation-list.tmpl.html'"></ng-include>
+  </section>
+</section>

@@ -1,0 +1,18 @@
+<section role="api-operation" ng-class="{active:active}">
+  <header id="operationHeader" on-click="headerClick">
+    <hgroup>
+      <h1>{{resource.name}}</h1>
+      <h2>{{resource.relativeUri}}</h2>
+    </hgroup>
+    <div role="summary">
+      <ul role="traits">
+        <li ng-repeat="trait in resource.use">{{trait}}</li>
+      </ul>
+      <ul role="operations">
+        <li role="{{operation.method}}" ng-repeat="operation in resource.methods" ng-class="{active: operation.method==$scope.selectedMethod}">
+          <span>{{operation.method}}</span>
+        </li>
+      </ul>
+    </div>
+  </header>
+</scection>
