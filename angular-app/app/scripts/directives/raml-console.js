@@ -1,11 +1,14 @@
-angular.module('ramlConsoleApp')
+angular.module('ramlConsoleApp', ['helpers'])
   .directive('ramlConsole', function ($rootScope) {
     return {
       restrict: 'E',
       templateUrl: '/raml-console.tmpl.html',
       replace: true,
       transclude: false,
-      scope: { 'id': '@', 'definition': '@' },
+      scope: {
+        'id': '@',
+        'definition': '@'
+      },
       link: function ($scope, $element, $attributes) {
         $scope.resources = [];
 
@@ -24,14 +27,17 @@ angular.module('ramlConsoleApp')
       templateUrl: '/raml-definition.tmpl.html',
       replace: true,
       transclude: false,
-      scope: { 'id': '@', 'src': '@' },
-      controller: function ($scope, $element, $attrs) {
-        var helper = new RamlParserHelper();
+      scope: {
+        'id': '@',
+        'src': '@'
+      },
+      controller: function ($scope, $element, $attrs, ramlHelper) {
+        // var helper = new RamlParserHelper();
 
         RAML.Parser.loadFile($attrs.src)
           .done(function (result) {
             angular.forEach(result.resources, function (resource) {
-              helper.massage(resource);
+              ramlHelper.massage(resource);
             });
 
             $rootScope.$emit('event:raml-parsed', result);
@@ -39,4 +45,3 @@ angular.module('ramlConsoleApp')
       }
     };
   });
-
