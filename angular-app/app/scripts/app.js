@@ -1,1 +1,1 @@
-angular.module('ramlConsoleApp', []);
+angular.module('ramlConsoleApp', ['helpers']);
