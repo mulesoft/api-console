@@ -9,7 +9,7 @@
         <li ng-repeat="trait in resource.use">{{trait}}</li>
       </ul>
       <ul role="operations">
-        <li role="{{operation.method}}" ng-repeat="operation in resource.methods" ng-class="{active: operation.method==$scope.selectedMethod}">
+        <li role="{{operation.method}}" ng-repeat="operation in resource.methods" ng-class="{active: operation.method==selectedOperation.method}">
           <span>{{operation.method}}</span>
         </li>
       </ul>

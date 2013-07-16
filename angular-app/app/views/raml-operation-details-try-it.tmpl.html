@@ -1,4 +1,4 @@
-<section role="api-operation-details-section-try-it">
+<section role="api-operation-details-section-try-it" ng-controller="ramlOperationDetailsTryIt">
   <section role="request" id="request">
     <header>
         <h1>Request</h1>
@@ -11,6 +11,7 @@
     <div role="uri-params">
       <h2>Resource Uri</h2>
       <div role="uri">
+        <ng-include src="'/views/raml-uri-part.tmpl.html'" ng-repeat="uriPart in urlParams"></ng-include>
       </div>
     </div>
     <div role="additional-params">
