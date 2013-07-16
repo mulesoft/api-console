@@ -1,0 +1,24 @@
+%TAG ! tag:raml.org,0.1:
+---
+name: Common Responses
+description: |
+  Common Response for GETing resources
+provides:
+  get?:
+    responses:
+      200?:
+        description: The request was successful and the response body contains the representation requested.
+      302:
+        description: A common redirect response; you can GET the representation at the URI in the Location response header.
+      304:
+        description: Your client's cached version of the representation is still up to date.
+      401:
+        description: The supplied credentials, if any, are not sufficient to access the resource.
+      404:
+        description: You know this one.
+      429:
+        description: Your application is sending too many simultaneous requests.
+      500:
+        description: We couldn't return the representation due to an internal server error.
+      503:
+        description: We are temporarily unable to return the representation. Please wait for a bit and try again.

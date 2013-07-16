@@ -1,0 +1,17 @@
+%TAG ! tag:raml.org,0.1:
+---
+name: SMS Message
+uriParameters:
+  SMSMessageSid:
+    type: string
+    description: |
+      A 34 character string that uniquely identifies the SMS message.
+get:
+  summary: |
+    Returns a single SMS message specified by the provided {SMSMessageSid}.
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include examples/twilio-2010-04-01-sms-message.json
+          schema: !include schemas/twilio-2010-04-01-sms-message.schema.json

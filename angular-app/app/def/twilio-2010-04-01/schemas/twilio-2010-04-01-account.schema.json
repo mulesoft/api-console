@@ -1,0 +1,36 @@
+{
+    "properties": {
+        "date_created": {
+            "description": "The date that this account was created, in GMT in RFC 2822 format",
+            "required": false, 
+            "type": "string"
+        }, 
+        "date_updated": {
+            "description": "The date that this account was last updated, in GMT in RFC 2822 format.",
+            "required": false, 
+            "type": "string"
+        }, 
+        "friendly_name": {
+            "description": "A human readable description of this account, up to 64 characters long. By default the FriendlyName is your email address.",
+            "required": false, 
+            "type": "string"
+        }, 
+        "sid": {
+            "description": "A 34 character string that uniquely identifies this account.",
+            "required": false, 
+            "type": "string"
+        }, 
+        "status": {
+            "description": "The status of this account. Usually active, but can be suspended or closed.",
+            "required": false, 
+            "type": "string"
+        }, 
+        "type": {
+            "description": "The type of this account. Either Trial or Full if you've upgraded.",
+            "required": false, 
+            "type": "string"
+        }
+    }, 
+    "required": false, 
+    "type": "object"
+}

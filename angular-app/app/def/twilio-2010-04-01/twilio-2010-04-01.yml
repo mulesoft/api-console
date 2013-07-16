@@ -1,0 +1,11 @@
+%TAG ! tag:raml.org,0.1:
+---
+title: Twilio API
+version: 2010-04-01
+baseUri: https://api.twilio.com/{version}
+documentation:
+  - title: Request Formats
+    content: !include documentation/request-formats.md
+traits:
+  commonResponses: !include traits/twilio-2010-04-01-common-responses.yml
+/Accounts: !include twilio-2010-04-01-accounts.yml

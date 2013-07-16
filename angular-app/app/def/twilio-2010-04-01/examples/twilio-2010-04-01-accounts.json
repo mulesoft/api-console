@@ -1,0 +1,35 @@
+{
+  "page": 0,
+  "num_pages": 1,
+  "page_size": 50,
+  "total": 1,
+  "start": 0,
+  "end": 1,
+  "uri": "\/2010-04-01\/Accounts.json",
+  "first_page_uri": "\/2010-04-01\/Accounts.json?Page=0&PageSize=50",
+  "previous_page_uri": null,
+  "next_page_uri": null,
+  "last_page_uri": "\/2010-04-01\/Accounts.json?Page=0&PageSize=50",
+  "accounts": [{
+    "sid":"AC39b8702b46fbbbf3f2956a63ee851a01",
+    "friendly_name": "Chieftain",
+    "status": "active",
+    "auth_token": "redacted",
+    "date_created": "Tue, 12 Jan 2010 04:41:09 +0000",
+    "date_updated": "Tue, 25 Jan 2011 07:24:36 +0000",
+    "type": "Full",
+    "uri": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01.json",
+    "subresource_uris": {
+      "available_phone_numbers": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/AvailablePhoneNumbers.json",
+      "calls": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/Calls.json",
+      "conferences": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/Conferences.json",
+      "incoming_phone_numbers": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/IncomingPhoneNumbers.json",
+      "notifications": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/Notifications.json",
+      "outgoing_caller_ids": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/OutgoingCallerIds.json",
+      "recordings": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/Recordings.json",
+      "sandbox": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/Sandbox.json",
+      "sms_messages": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/SMS\/Messages.json",
+      "transcriptions": "\/2010-04-01\/Accounts\/AC39b8702b46fbbbf3f2956a63ee851a01\/Transcriptions.json"}
+    }
+  }]
+}
