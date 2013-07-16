@@ -1,0 +1,16 @@
+<section role="api-operation-details">
+  <header>
+      <h1>Summary</h1>
+      <p>{{operation.summary}}</p>
+  </header>
+  <ul role="details-sections">
+      <li role="try-it" class="active"><span>Try it</span></li>
+      <li role="parameters"><span>Parameters</span></li>
+      <li role="requests"><span>Request</span></li>
+      <li role="response"><span>Response</span></li>
+  </ul>
+  <ng-include src="'/views/raml-operation-details-try-it.tmpl.html'"></include>
+  <ng-include src="'/views/raml-operation-details-parameters.tmpl.html'"></include>
+  <ng-include src="'/views/raml-operation-details-request.tmpl.html'"></include>
+  <ng-include src="'/views/raml-operation-details-responce.tmpl.html'"></include>
+</section>
