@@ -1,7 +1,7 @@
 angular.module('ramlConsoleApp')
     .controller('ramlOperation', function ($scope) {
         if ($scope.resource.methods.length) {
-            $scope.selectedOperation = $scope.resource.methods[0];
+            $scope.operation = $scope.resource.methods[0];
         }
         $scope.headerClick = function () {
             this.toggle('active');

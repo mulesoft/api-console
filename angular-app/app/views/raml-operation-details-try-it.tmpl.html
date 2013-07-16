@@ -14,7 +14,7 @@
         <ng-include src="'/views/raml-uri-part.tmpl.html'" ng-repeat="uriPart in urlParams"></ng-include>
       </div>
     </div>
-    <div role="additional-params">
+    <div role="additional-params" ng-show="hasParams(operation)">
       <div role="query-params">
         <h2>Additional parameters</h2>
       </div>
