@@ -1,3 +1,9 @@
+/*!
+ * Preboot v2
+ *
+ * Open sourced under MIT license by @mdo.
+ * Some variables and mixins from Bootstrap (Apache 2 license).
+ */
 section,
 aside {
   font-family: 'Ubuntu', sans-serif;
@@ -16,40 +22,36 @@ p a,
 p a:visited {
   line-height: inherit;
 }
-/*
-header {
-    height: 60px;
-    display: block;
-    color: white;
-    background: rgb(54,70,85);
-    width: 960px;
+section[role=api-console] > header > ng-include > header {
+  height: 60px;
+  display: block;
+  color: white;
+  background: #364655;
+  width: 960px;
 }
-
-header > h1 {
-    display: inline-block;
-    margin: 0px;
-    height: 100%;
-    width: 150px;
-    font-weight: 200;
-    vertical-align: middle;
-    line-height: 60px;
-    font-size: 22px;
-    background: rgb(39,55,70);
-    padding: 0px 20px;
-    border-right: 1px solid rgb(41,49,55);
+section[role=api-console] > header > ng-include > header > h1 {
+  display: inline-block;
+  margin: 0px;
+  height: 100%;
+  width: 150px;
+  font-weight: 200;
+  vertical-align: middle;
+  line-height: 60px;
+  font-size: 22px;
+  background: #273746;
+  padding: 0px 20px;
+  border-right: 1px solid #293137;
 }
-
-header > h1 > em {
-    font-style: normal;
-    font-weight: bold;
+section[role=api-console] > header > ng-include > header > h1 > em {
+  font-style: normal;
+  font-weight: bold;
 }
-
-header > span {
-    padding-left: 20px;
-    font-size: 19px;
-    vertical-align: middle;
-}*/
-h1 {
+section[role=api-console] > header > ng-include > header > span {
+  padding-left: 20px;
+  font-size: 19px;
+  vertical-align: middle;
+}
+aside[role=sidebar] h1 {
   color: #9fa3a6;
   font-size: 10px;
   text-transform: uppercase;
@@ -58,28 +60,28 @@ h1 {
   margin: 0px;
   padding: 25px 20px 10px 20px;
 }
-ul {
+aside[role=sidebar] ul {
   margin: 0px;
   padding-left: 0px;
 }
-ul > li {
+aside[role=sidebar] ul > li {
   list-style: none;
   font-size: 14px;
   padding: 10px 20px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
 }
-ul > li > a,
-ul > li > a:visited {
+aside[role=sidebar] ul > li > a,
+aside[role=sidebar] ul > li > a:visited {
   color: black;
 }
-ul > li.active {
+aside[role=sidebar] ul > li.active {
   background: #fbfbfc;
   border-top: 1px solid #dadcdd;
   border-bottom: 1px solid #dadcdd;
 }
-ul > li.active > a,
-ul > li.active > a:visited {
+aside[role=sidebar] ul > li.active > a,
+aside[role=sidebar] ul > li.active > a:visited {
   color: #4e89ca;
 }
 section[role=api-console] {
@@ -243,9 +245,6 @@ section[role=api-operation-details-section-try-it] > section[role=request] > div
 section[role=api-operation-details-section-try-it] > section[role=response] {
   border-top: 1px solid #dfe3e7;
 }
-section[role=api-operation-details-section-try-it] > section[role=response] {
-  border-top: 1px solid #dfe3e7;
-}
 section[role=api-operation-details-section-try-it] > section[role=response] > header {
   display: block;
   background: #fbfbfb;
@@ -392,8 +391,11 @@ section[role=api-operation] {
   margin: 0px;
   margin-top: -1px;
   transition: max-height 0.05s;
+  /* api-operation hover */
+
+  /* api-operation active */
+
 }
-/*TODO: Add an alternative solution for rounded corners!*/
 section[role=api-operation] > header {
   height: 73px;
 }
@@ -548,7 +550,6 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
 section[role=api-operation] > section[role=api-operation-details] {
   display: none;
 }
-/* api-operation hover */
 section[role=api-operation]:hover {
   border-left: 1px solid #40cd5d;
 }
@@ -558,7 +559,6 @@ section[role=api-operation]:hover > header h1 {
 section[role=api-operation]:hover > header h2 {
   color: #33373b;
 }
-/* api-operation active */
 section[role=api-operation].active,
 section[role=api-operation].active:hover {
   border: 1px solid #dadcdd;
@@ -685,10 +685,3 @@ section[role=api-operation].active > api-operation-details,
 section[role=api-operation].active:hover > api-operation-details {
   display: block;
 }
-/*TODO: Add an alternative solution for rounded corners!*/
-/*!
- * Preboot v2
- *
- * Open sourced under MIT license by @mdo.
- * Some variables and mixins from Bootstrap (Apache 2 license).
- */
