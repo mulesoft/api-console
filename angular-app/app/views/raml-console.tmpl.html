@@ -5,7 +5,8 @@
     <aside role="sidebar">
         <ng-include src="'/views/raml-console-sidebar.tmpl.html'"></ng-include>
     </aside>
-    <section role="main" ng-repeat="resource in resources">
-        <ng-include src="'/views/raml-operation-list.tmpl.html'"></ng-include>
+    <section role="main">
+    	<ng-include src="'/views/raml-documentation.tmpl.html'"></ng-include>
+        <ng-include src="'/views/raml-operation-list.tmpl.html'" ng-repeat="resource in resources"></ng-include>
     </section>
 </section>
