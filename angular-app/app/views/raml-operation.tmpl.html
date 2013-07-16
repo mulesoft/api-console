@@ -1,5 +1,5 @@
-<section role="api-operation" ng-class"{active: active}">
-  <header id="operationHeader" on-click="headerClick">
+<section role="api-operation" ng-class="{active: active}" ng-controller="ramlOperation">
+  <header id="operationHeader" ng-click="headerClick()">
     <hgroup>
       <h1>{{resource.name}}</h1>
       <h2>{{resource.relativeUri}}</h2>
