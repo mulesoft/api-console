@@ -1,0 +1,79 @@
+@import 'commons';
+
+section[role=api-operation].active section[role=api-operation-details] {
+    display: block;
+}
+
+section[role=api-operation]:not(.active) section[role=api-operation-details] {
+    display: none;
+}
+
+section[role=api-operation-details] {
+    background: white;
+  
+  > header {
+      padding: 15px 20px;
+  
+      > h1 {
+          margin: 5px 0px;
+          font-size: 16px;
+          font-weight: normal;
+          color: rgb(99,153,214);
+      }
+      
+      > p {
+          margin: 10px 0px;
+          font-size: 13px;
+          font-weight: normal;
+          color: black;
+      }
+  }
+  
+  > ul[role=details-sections] {
+      display: block;
+      width: 100%;
+      background: rgb(244,246,248);
+      border-top: 1px solid rgb(223,227,231);
+      border-bottom: 1px solid rgb(223,227,231);
+      padding: 0px;
+      margin: 0px;
+      font-size: 0px;
+      height: 60px;
+      box-shadow: inset 1px -1px 1px #eee;
+  
+    > li {
+        display: inline-block;
+        list-style: none;
+        text-align: left;
+        vertical-align: middle;
+        line-height: 60px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    
+    > li > a,
+    > li > span {
+        cursor: pointer;
+        padding: 0px 20px;
+        color: black;
+        border-right: 1px solid rgb(223,227,231);
+    }
+    
+    > li.active {
+        background-color: rgb(251,251,251);
+        border-top: 1px solid rgb(0,120,202);
+        border-bottom: 1px solid white;
+        border-right: 1px solid rgb(223,227,231);
+        border-left: 1px solid rgb(223,227,231);
+        margin-top: -1px;
+        margin-left: -1px;
+        box-shadow: 1px -1px 1px #eee;
+    }
+    
+    > li.active > a,
+    > li.active > span {
+        border-right: none;
+        color: rgb(0,120,202);
+    }
+  }
+}

@@ -38,7 +38,7 @@ module.exports = function (grunt) {
         tasks: ['coffee:test']
       },
       less: {
-        files: ['app/styles/*.less'],
+        files: ['app/styles/less/**/*.less'],
         tasks: ['less']
       },
       livereload: {
@@ -282,11 +282,11 @@ module.exports = function (grunt) {
     less: {
         development: {
             options: {
-                paths: ['app/styles']
+                paths: ['app/styles/less']
 
             },
             files: {
-                "app/styles/main.css": "app/styles/main.less"
+                'app/styles/main.css': 'app/styles/less/main.less'
             }
         }
     }
