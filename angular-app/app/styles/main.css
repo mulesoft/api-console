@@ -105,7 +105,6 @@ section[role=main] {
   float: right;
   box-sizing: border-box;
   width: 770px;
-  min-height: 3000px;
   border-right: 1px solid #dadcdd;
   background: white;
   overflow: scroll;
@@ -299,6 +298,12 @@ section[role=api-operation-details-section-try-it] > section[role=response] > se
   max-height: 300px;
   max-width: 723px;
   overflow: scroll;
+}
+section[role=api-operation].active section[role=api-operation-details] {
+  display: block;
+}
+section[role=api-operation]:not(.active) section[role=api-operation-details] {
+  display: none;
 }
 section[role=api-operation-details] {
   background: white;

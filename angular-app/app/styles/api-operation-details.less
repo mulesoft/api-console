@@ -1,5 +1,13 @@
 @import 'commons';
 
+section[role=api-operation].active section[role=api-operation-details] {
+    display: block;
+}
+
+section[role=api-operation]:not(.active) section[role=api-operation-details] {
+    display: none;
+}
+
 section[role=api-operation-details] {
     background: white;
 }
