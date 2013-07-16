@@ -14,6 +14,7 @@ angular.module('ramlConsoleApp')
 
         $rootScope.$on('event:raml-parsed', function (e, args) {
           $scope.resources = args.resources;
+          $scope.documentation = args.documentation;
           $scope.$apply();
         });
       }

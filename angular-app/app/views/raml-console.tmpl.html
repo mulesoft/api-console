@@ -1,5 +1,11 @@
 <section role="api-console">
-  <section role="main" ng-repeat="resource in resources">
-    <ng-include src="'/views/raml-operation-list.tmpl.html'"></ng-include>
-  </section>
+	<header>
+		<ng-include src="'/views/raml-console-navbar.tmpl.html'"></ng-include>
+	</header>
+    <aside role="sidebar">
+        <ng-include src="'/views/raml-console-sidebar.tmpl.html'"></ng-include>
+    </aside>
+    <section role="main" ng-repeat="resource in resources">
+        <ng-include src="'/views/raml-operation-list.tmpl.html'"></ng-include>
+    </section>
 </section>

@@ -18,6 +18,7 @@ angular.module('ramlConsoleApp')
               ramlHelper.massage(resource);
             });
 
+            console.log(result);
             $rootScope.$emit('event:raml-parsed', result);
           });
       }
