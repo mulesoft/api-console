@@ -1,54 +1,57 @@
 <section role="api-operation-details-section-try-it" ng-controller="ramlOperationDetailsTryIt">
-  <section role="request" id="request">
-    <header>
-        <h1>Request</h1>
-        <ul role="type">
-            <li>JSON</li>
-            <li>XML</li>
-            <li>JSONP</li>
-        </ul>
-    </header>
-    <div role="uri-params">
-      <h2>Resource Uri</h2>
-      <div role="uri">
-        <ng-include src="'/views/raml-uri-part.tmpl.html'" ng-repeat="uriPart in urlParams"></ng-include>
-      </div>
-    </div>
-    <div role="additional-params" ng-show="hasAdditionalParams(operation)">
-      <div role="query-params">
-        <h2>Additional parameters</h2>
-      </div>
-      <div role="request-body">
-        <label>Body
-          <textarea value="{{model.request.body}}"></textarea>
-        </label>
-      </div>
-    </div>
-    <div role="try-it">
-      <span on-click="tryIt">Try It!</span>
-    </div>
-  </section>
-  <section role="response" id="response">
-      <header>
-          <h1>Response</h1>
-      </header>
-      <section role="request-uri">
-          <h1>Request URL</h1>
-          <p>{{model.response.url}}</p>
-      </section>
-      <section role="response-code">
-          <h1>Response code</h1>
-          <p>{{model.response.statusCode}}</p>
-      </section>
-      <section role="response-headers">
-          <h1>Response headers</h1>
-          <p>{{model.response.headers}}</p>
-      </section>
-      <section role="response-body">
-          <h1>Response body</h1>
-          <p>
-            <codemirror source="{{model.response.body}}"></codemirror>
-          </p>
-      </section>
-  </section>
+    <section role="request" id="request">
+        <header>
+            <h1>Request</h1>
+            <ul role="type">
+                <li>JSON</li>
+                <li>XML</li>
+                <li>JSONP</li>
+            </ul>
+        </header>
+        <div role="uri-params">
+            <h2>Resource Uri</h2>
+            <div role="uri">
+                <ng-include src="'/views/raml-uri-part.tmpl.html'" ng-repeat="uriPart in urlParams"></ng-include>
+            </div>
+        </div>
+        <div role="additional-params" ng-show="hasAdditionalParams(operation)">
+            <div role="query-params">
+                <h2>Additional parameters</h2>
+                <div role="params">
+                    <ng-include src="'/views/raml-query-param.tmpl.html'" ng-repeat="queryParam in queryParams"></ng-include>
+                </div>
+            </div>
+            <div role="request-body" ng-show="hasRequestBody(operation)">
+                <label>Body
+                    <textarea value="{{model.request.body}}"></textarea>
+                </label>
+            </div>
+        </div>
+        <div role="try-it">
+            <span on-click="tryIt">Try It!</span>
+        </div>
+    </section>
+    <section role="response" ng-show="showResponse()">
+        <header>
+            <h1>Response</h1>
+        </header>
+        <section role="request-uri">
+            <h1>Request URL</h1>
+            <p>{{model.response.url}}</p>
+        </section>
+        <section role="response-code">
+            <h1>Response code</h1>
+            <p>{{model.response.statusCode}}</p>
+        </section>
+        <section role="response-headers">
+            <h1>Response headers</h1>
+            <p>{{model.response.headers}}</p>
+        </section>
+        <section role="response-body">
+            <h1>Response body</h1>
+            <p>
+                <codemirror source="{{model.response.body}}"></codemirror>
+            </p>
+        </section>
+    </section>
 </section>
