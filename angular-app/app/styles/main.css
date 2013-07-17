@@ -187,14 +187,14 @@ section[role=api-operation-details-section-try-it] > section[role=request] > div
 section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] {
   padding-bottom: 10px;
 }
-section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label,
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] label,
 section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] > label {
   display: inline-block;
   margin: 0px 10px 10px 0px;
   color: #9ea3a6;
   font-size: 13px;
 }
-section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label > input,
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] label > input,
 section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] > label > textarea {
   display: block;
   border: 1px solid #dfe3e7;
@@ -206,7 +206,7 @@ section[role=api-operation-details-section-try-it] > section[role=request] > div
   border-radius: 3px;
   width: 110px;
 }
-section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] > label > input:focus,
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] label > input:focus,
 section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=request-body] > label > textarea:focus {
   outline: 0;
   border: 1px solid lightgrey;
