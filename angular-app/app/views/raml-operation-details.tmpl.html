@@ -1,16 +1,24 @@
-<section role="api-operation-details">
+<section role="api-operation-details" ng-show="operation" ng-controller="ramlOperationDetails">
   <header>
       <h1>Summary</h1>
       <p>{{operation.summary}}</p>
   </header>
   <ul role="details-sections">
-      <li role="try-it" class="active"><span>Try it</span></li>
-      <li role="parameters"><span>Parameters</span></li>
-      <li role="requests"><span>Request</span></li>
-      <li role="response"><span>Response</span></li>
+      <li role="try-it" ng-class="{active:isTabActive('try-it')}" ng-click="changeTab('try-it')">
+        <span>Try it</span>
+      </li>
+      <li role="parameters" ng-class="{active:isTabActive('parameters')}" ng-click="changeTab('parameters')">
+        <span>Parameters</span>
+      </li>
+      <li role="requests" ng-class="{active:isTabActive('requests')}" ng-click="changeTab('requests')">
+        <span>Request</span>
+      </li>
+      <li role="response" ng-class="{active:isTabActive('response')}" ng-click="changeTab('response')">
+        <span>Response</span>
+      </li>
   </ul>
-  <ng-include src="'/views/raml-operation-details-try-it.tmpl.html'"></include>
-  <ng-include src="'/views/raml-operation-details-parameters.tmpl.html'"></include>
-  <ng-include src="'/views/raml-operation-details-request.tmpl.html'"></include>
-  <ng-include src="'/views/raml-operation-details-responce.tmpl.html'"></include>
+  <ng-include ng-show="isTabActive('try-it')" src="'/views/raml-operation-details-try-it.tmpl.html'"></include>
+  <ng-include ng-show="isTabActive('parameters')" src="'/views/raml-operation-details-parameters.tmpl.html'"></include>
+  <ng-include ng-show="isTabActive('requests')" src="'/views/raml-operation-details-request.tmpl.html'"></include>
+  <ng-include ng-show="isTabActive('response')" src="'/views/raml-operation-details-responce.tmpl.html'"></include>
 </section>

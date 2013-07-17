@@ -1,4 +1,4 @@
-<section role="api-operation" ng-class="{active: active}" ng-controller="ramlOperation">
+<section role="api-operation" ng-class="{active:active}" ng-controller="ramlOperation">
   <header id="operationHeader" ng-click="headerClick()">
     <hgroup>
       <h1>{{resource.name}}</h1>
@@ -9,8 +9,8 @@
         <li ng-repeat="trait in resource.use">{{trait}}</li>
       </ul>
       <ul role="operations">
-        <li role="{{operation.method}}" ng-repeat="operation in resource.methods" ng-class="{active: operation.method==$scope.selectedMethod}">
-          <span>{{operation.method}}</span>
+        <li role="{{op.method}}" ng-repeat="op in resource.methods" ng-class="{active:isMethodActive(op.method)}" ng-click="changeMethod(op.method)" prevent-default>
+          <span>{{op.method}}</span>
         </li>
       </ul>
     </div>
