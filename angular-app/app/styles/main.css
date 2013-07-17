@@ -174,14 +174,14 @@ section[role=api-operation-details-section-try-it] > section[role=request] > div
   margin: 0px;
   padding: 5px 20px 15px 20px;
 }
-section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params] > div[role=uri] > input {
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params] > div[role=uri] input {
   border: 0;
   border-bottom: 1px solid lightgrey;
   font-size: 14px;
-  max-width: 80px;
+  max-width: 100px;
   text-align: center;
 }
-section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params] > div[role=uri] > input:focus {
+section[role=api-operation-details-section-try-it] > section[role=request] > div[role=uri-params] > div[role=uri] input:focus {
   outline: 0;
 }
 section[role=api-operation-details-section-try-it] > section[role=request] > div[role=additional-params] > div[role=query-params] > div[role=params] {

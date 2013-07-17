@@ -15,15 +15,9 @@ angular.module('helpers', [])
                     }
                     template = path.match(/{(.*?)}/ig);
                     if (template) {
-                        urlParts.push({
-                            name: template[0],
-                            editable: true
-                        });
+                        urlParts.push({ name: template[0], editable: true, memberName: template[0].replace('{', '').replace('}', '') });
                     } else {
-                        urlParts.push({
-                            name: path,
-                            editable: false
-                        });
+                        urlParts.push({ name: path, editable: false });
                     }
                 });
 
@@ -86,7 +80,8 @@ angular.module('helpers', [])
                 return temp;
             }
         };
-    }).factory('commons', function () {
+    })
+    .factory('commons', function () {
         return {
             joinUrl: function (url1, url2) {
                 if (url1.lastIndexOf('/') === url1.length - 1) {
