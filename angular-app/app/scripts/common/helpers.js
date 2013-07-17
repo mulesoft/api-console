@@ -15,9 +15,15 @@ angular.module('helpers', [])
                     }
                     template = path.match(/{(.*?)}/ig);
                     if (template) {
-                        urlParts.push({ name: template[0], editable: true });
+                        urlParts.push({
+                            name: template[0],
+                            editable: true
+                        });
                     } else {
-                        urlParts.push({ name: path, editable: false });
+                        urlParts.push({
+                            name: path,
+                            editable: false
+                        });
                     }
                 });
 

@@ -1,10 +1,10 @@
 angular.module('ramlConsoleApp')
-    .controller('ramlDocumentation', function ($scope, $filter) {
+    .controller('ramlOperationList', function ($scope, $filter) {
         $scope.model = {};
 
         $scope.$on('event:raml-sidebar-clicked', function (e, eventData) {
-            if (eventData.isDocumentation) {
-                $scope.model = eventData.data[0];
+            if (eventData.isResource) {
+                $scope.model = eventData.data;
             } else {
                 $scope.model = {};
             }
