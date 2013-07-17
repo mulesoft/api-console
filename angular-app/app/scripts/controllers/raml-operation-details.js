@@ -1,8 +1,6 @@
 angular.module('ramlConsoleApp')
-    .controller('ramlOperationDetails', function ($scope, ramlHelper) {
+    .controller('ramlOperationDetails', function ($scope) {
         $scope.tabName = 'try-it';
-        $scope.urlParams = ramlHelper.processUrlParts($scope.resource.relativeUri);
-        $scope.queryParams = ramlHelper.processQueryParts($scope.operation.query);
 
         $scope.isTabActive = function (tabName) {
             return tabName === this.tabName;
