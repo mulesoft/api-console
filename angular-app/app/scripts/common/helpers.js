@@ -4,6 +4,18 @@ angular.module('helpers', [])
     })
     .factory('ramlHelper', function () {
         return {
+            processQueryParts: function (query) {
+                var queryParams = [];
+                var param;
+
+                for (var prop in query) {
+                    param = query[prop];
+                    param.name = prop;
+                    queryParams.push(param);
+                }
+
+                return queryParams;
+            },
             processUrlParts: function (url) {
                 var urlParts = [];
                 var paths = url.split('/');
