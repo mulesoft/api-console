@@ -1,1 +1,1 @@
-angular.module('ramlConsoleApp', ['helpers']);
+angular.module('ramlConsoleApp', ['helpers', 'ngResource']);

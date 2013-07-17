@@ -23,12 +23,12 @@
             </div>
             <div role="request-body" ng-show="hasRequestBody(operation)">
                 <label>Body
-                    <textarea value="{{model.request.body}}"></textarea>
+                    <textarea ng-model="requestBody"></textarea>
                 </label>
             </div>
         </div>
         <div role="try-it">
-            <span on-click="tryIt">Try It!</span>
+            <span ng-click="tryIt()">Try It!</span>
         </div>
     </section>
     <section role="response" ng-show="showResponse()">

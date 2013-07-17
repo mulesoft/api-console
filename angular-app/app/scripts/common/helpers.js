@@ -103,6 +103,15 @@ angular.module('helpers', [])
     })
     .factory('commons', function () {
         return {
+            extend: function (destination, source) {
+                for (var elem in source) {
+                    if (source.hasOwnProperty(elem)) {
+                        destination[elem] = source[elem];
+                    }
+                }
+
+                return destination;
+            },
             joinUrl: function (url1, url2) {
                 if (url1.lastIndexOf('/') === url1.length - 1) {
                     url1 = url1.substring(0, url1.lastIndexOf('/'));
