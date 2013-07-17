@@ -11,7 +11,7 @@ angular.module('helpers', [])
                 angular.forEach(paths, function (path) {
                     var template;
                     if (!path) {
-                        return
+                        return;
                     }
                     template = path.match(/{(.*?)}/ig);
                     if (template) {
@@ -46,7 +46,15 @@ angular.module('helpers', [])
                     angular.forEach(resource.resources, function (r) {
                         r.relativeUri = resource.relativeUri + r.relativeUri;
 
-                        if (parent) {
+                        var exists = null;
+
+                        if (parent && parent.resources) {
+                            exists = parent.resources.filter(function (p) {
+                                return p.name === r.name;
+                            }.bind(this)).pop();
+                        }
+
+                        if (parent && !exists) {
                             parent.resources.push(r);
                         }
 
@@ -154,14 +162,14 @@ angular.module('helpers', [])
                 var method = options.method || 'GET';
                 var async = !options.sync;
                 var params = this.toQueryString(options.params);
-                if (params && method == 'GET') {
+                if (params && method === 'GET') {
                     url += (url.indexOf('?') > 0 ? '&' : '?') + params;
                 }
                 xhr.open(method, url, async);
                 this.makeReadyStateHandler(xhr, options.callback);
 
                 this.setRequestHeaders(xhr, options.headers);
-                xhr.send(method == 'POST' || method == 'PUT' ? (options.body || params) : null);
+                xhr.send(method === 'POST' || method === 'PUT' ? (options.body || params) : null);
                 if (!async) {
                     xhr.onreadystatechange(xhr);
                 }

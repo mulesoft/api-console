@@ -2,6 +2,10 @@ angular.module('ramlConsoleApp')
     .controller('ramlConsoleSidebar', function ($scope, $filter, eventService) {
         $scope.elementName = '';
 
+        $scope.$on('event:raml-parsed', function (e, args) {
+            console.log('test');
+        });
+
         $scope.elementClick = function (id) {
             var data = this.resource || this.documentation;
 

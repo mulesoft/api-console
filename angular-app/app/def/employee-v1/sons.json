@@ -1,0 +1,26 @@
+{ "$schema" : "http://json-schema.org/draft-03/schema",
+  "id" : "http://jsonschema.net",
+  "properties" : { "son" : { "id" : "http://jsonschema.net/son",
+          "properties" : { "parentId" : { "id" : "http://jsonschema.net/son/parentId",
+                  "required" : false,
+                  "type" : "number"
+                },
+              "sonAge" : { "id" : "http://jsonschema.net/son/sonAge",
+                  "required" : false,
+                  "type" : "number"
+                },
+              "sonId" : { "id" : "http://jsonschema.net/son/sonId",
+                  "required" : false,
+                  "type" : "number"
+                },
+              "sonName" : { "id" : "http://jsonschema.net/son/sonName",
+                  "required" : false,
+                  "type" : "string"
+                }
+            },
+          "required" : false,
+          "type" : "object"
+        } },
+  "required" : false,
+  "type" : "object"
+}
