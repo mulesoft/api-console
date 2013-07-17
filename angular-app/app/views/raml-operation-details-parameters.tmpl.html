@@ -1,1 +1,74 @@
-<section role="api-operation-details-section-parameters"></section>
+<section ng-controller="ramlOperationDetailsParameters" role="api-operation-details-section-parameters">
+  <section role="parameter-list">
+    <header>
+      <h1>Url Parameters</h1>
+    </header>
+    <table>
+      <thead>
+        <tr>
+          <th>Param</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-include src="'/views/raml-parameter-row-part.tmpl.html'" ng-repeat="urlParam in urlParams"></ng-include>
+        <tr>
+          <td>id</td>
+          <td>string</td>
+          <td>Unique identifier of the account</td>
+          <td><pre>0123456</pre></td>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>string</td>
+          <td>Unique identifier of the account</td>
+          <td><pre>0123456</pre></td>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>string</td>
+          <td>Unique identifier of the account</td>
+          <td><pre>0123456</pre></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section role="parameter-list">
+    <header>
+      <h1>Query Parameters</h1>
+    </header>
+    <table>
+      <thead>
+        <tr>
+          <th>Param</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-include src="'/views/raml-parameter-row-part.tmpl.html'" ng-repeat="urlParam in urlParams"></ng-include>
+        <tr>
+          <td>id</td>
+          <td>string</td>
+          <td>Unique identifier of the account</td>
+          <td><pre>0123456</pre></td>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>string</td>
+          <td>Unique identifier of the account</td>
+          <td><pre>0123456</pre></td>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>string</td>
+          <td>Unique identifier of the account</td>
+          <td><pre>0123456</pre></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

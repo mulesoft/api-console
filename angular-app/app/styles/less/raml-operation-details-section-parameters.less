@@ -1,0 +1,92 @@
+@import 'commons';
+
+@table-font-color: rgb(96, 100, 104);
+
+section[role=api-operation-details-section-parameters] {
+
+  * {
+    font-size: 13px;
+    color: @table-font-color;
+  }
+
+  .padded-table-cell {
+    padding: 7px 20px;
+  }
+  > section[role=parameter-list] {
+    > header {
+      display: block;
+      background: rgb(251,251,251);
+      height: 60px;
+      > h1 {
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 60px;
+        margin: 0px;
+        padding: 0px 20px;
+        color: black;
+      }
+    }
+    > table {
+      border: 1px solid @border-color-gray;
+      width: 100%;
+      border-spacing: 0px;
+      border-collapse: collapse;
+      border-right: 0px;
+      border-left: 0px;
+      > thead {
+        > tr {
+          > th:first-of-type {
+            border-left: 0px;
+            margin-left: -1px;
+          }
+          > th {
+            .padded-table-cell;
+            color: #9fa3a6;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin: 0px;
+            border: 1px solid @border-color-gray;
+            background-color: @fill-color-dark-gray;
+            border-right: 0px;
+            font-weight: lighter;
+            text-align: left;
+          }
+        }
+      }
+      > tbody {
+        > tr {
+          border-bottom: 1px solid @border-color-gray;
+          > td {
+            .padded-table-cell;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            line-height: 23px;
+          }
+          // Param
+          > td:nth-child(1) {
+            color: black;
+            font-style: italic;
+            font-weight: bolder;
+          }
+          // Type
+          > td:nth-child(2) {
+            font-style: italic;
+          }
+          // Description
+          > td:nth-child(3) {
+          }
+          // Example
+          > td:nth-child(4) {
+            > pre {
+              background-color: rgb(255, 253, 244);
+              border: 1px solid rgb(227, 214, 177);
+              display: inline;
+              padding: 3px 5px;
+              font-size: 11px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
