@@ -15,18 +15,20 @@ angular.module('ramlConsoleApp')
         $scope.tryIt = function () {
             var params = {};
             var tester = new this.testerResource();
+            var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.method] : null;
 
             commons.extend(params, this.url);
             commons.extend(params, this.query[this.operation.method]);
+            tester.body = body || null;
 
             this.response = null;
-            this['$' + this.operation.method](tester, params);
+            this.$request(tester, params, this.operation.method);
         };
 
-        $scope.$get = function (tester, params) {
+        $scope.$request = function (tester, params, method) {
             var that = this;
 
-            tester.$get(params, function (data, headers, status, url) {
+            tester['$' + method](params, function (data, headers, status, url) {
                 that.response = {
                     data: data.data,
                     headers: data.headers,
@@ -41,27 +43,7 @@ angular.module('ramlConsoleApp')
                     url: error.config.url
                 };
             });
-        }
-
-        $scope.$post = function (tester, params) {
-            var that = this;
-
-            tester.$post(params, function (data, headers, status, url) {
-                that.response = {
-                    data: data.data,
-                    headers: data.headers,
-                    statusCode: status,
-                    url: url
-                };
-            }, function (error) {
-                that.response = {
-                    data: error.data.data,
-                    headers: error.data.headers,
-                    statusCode: error.status,
-                    url: error.config.url
-                };
-            });
-        }
+        };
 
         $scope.transformResponse = function (data, headers) {
             try {
@@ -74,7 +56,7 @@ angular.module('ramlConsoleApp')
         };
 
         $scope.transformRequest = function (data, headers) {
-            return data;
+            return (data && data.body) ? data.body : null;
         };
 
         $scope.buildTester = function () {
@@ -82,13 +64,24 @@ angular.module('ramlConsoleApp')
             this.testerResource = $resource(resourceUri, null, {
                 'get': {
                     method:'GET',
-                    isArray: false,
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 },
-                'post': { method:'POST' },
-                'put': { method:'PUT' },
-                'delete': { method:'DELETE' }
+                'post': {
+                    method:'POST',
+                    transformResponse: this.transformResponse,
+                    transformRequest: this.transformRequest
+                },
+                'put': {
+                    method:'PUT',
+                    transformResponse: this.transformResponse,
+                    transformRequest: this.transformRequest
+                },
+                'delete': {
+                    method:'DELETE',
+                    transformResponse: this.transformResponse,
+                    transformRequest: this.transformRequest
+                }
             });
         };
 
