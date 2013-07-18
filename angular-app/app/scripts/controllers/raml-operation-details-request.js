@@ -5,7 +5,7 @@ angular.module('ramlConsoleApp')
         });
 
         $scope.init = function () {
-            var description = {},
+            var description = null,
                 methodDescriptor = $filter('filter')($scope.resource.methods, {
                     method: $scope.operation.method
                 })[0];
