@@ -20,7 +20,7 @@ documentation:
       content: |
         If you need support, please contact asr@mulesoft.com.
     - title: More info
-      content: |
+      content: 
         !include more_info.txt
 /employees.json:
     name: Employees
