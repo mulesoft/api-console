@@ -4,6 +4,44 @@ angular.module('helpers', [])
     })
     .factory('ramlHelper', function () {
         return {
+            getRequestData: function (descriptor) {
+                var arr = [];
+
+                if (descriptor.body) {
+                    for (var contentType in descriptor.body) {
+                        var temp = {
+                            name: contentType,
+                            schema: descriptor.body[contentType].schema || '',
+                            example: descriptor.body[contentType].example || ''
+                        };
+
+                        if (descriptor.body[contentType].formParameters) {
+                            var params = [];
+
+                            for (var param in descriptor.body[contentType].formParameters) {
+                                var t1 = descriptor.body[contentType].formParameters[param];
+
+                                t1.name = param;
+
+                                params.push(t1);
+                            }
+
+                            temp.params = params;
+                        }
+
+                        arr.push(temp);
+                    }
+                } else {
+                    arr.push({
+                        name: 'application/json',
+                        schema: '',
+                        example: '',
+                        params: []
+                    });
+                }
+
+                return arr;
+            },
             processQueryParts: function (query) {
                 var queryParams = [];
                 var param;
@@ -27,9 +65,16 @@ angular.module('helpers', [])
                     }
                     template = path.match(/{(.*?)}/ig);
                     if (template) {
-                        urlParts.push({ name: template[0], editable: true, memberName: template[0].replace('{', '').replace('}', '') });
+                        urlParts.push({
+                            name: template[0],
+                            editable: true,
+                            memberName: template[0].replace('{', '').replace('}', '')
+                        });
                     } else {
-                        urlParts.push({ name: path, editable: false });
+                        urlParts.push({
+                            name: path,
+                            editable: false
+                        });
                     }
                 });
 

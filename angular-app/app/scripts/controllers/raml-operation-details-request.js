@@ -1,5 +1,5 @@
 angular.module('ramlConsoleApp')
-    .controller('ramlOperationDetailsRequest', function ($scope, $filter) {
+    .controller('ramlOperationDetailsRequest', function ($scope, $filter, ramlHelper) {
         $scope.$on('event:raml-method-changed', function () {
             $scope.init();
         });
@@ -16,6 +16,8 @@ angular.module('ramlConsoleApp')
                     schema: methodDescriptor.body['application/json'].schema
                 };
             }
+
+            // console.log(ramlHelper.getRequestData(methodDescriptor));
 
             $scope.description = description;
         };
