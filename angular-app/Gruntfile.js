@@ -41,6 +41,11 @@ module.exports = function (grunt) {
         },
 
         concat: {
+            embeddedMin: {
+                files: {
+                    'dist/index.html': ['app/index.embedded.html']
+                }
+            },
             embedded: {
                 files: {
                     'dist/app.js': [
@@ -71,6 +76,7 @@ module.exports = function (grunt) {
                 }
             }
         },
+
         yeoman: yeomanConfig,
         watch: {
             coffee: {
@@ -328,6 +334,37 @@ module.exports = function (grunt) {
                         '<%= yeoman.dist %>/scripts/scripts.js'
                     ]
                 }
+            },
+            options: {
+                mangle: false
+            },
+            embedded: {
+                files: {
+                    'dist/vendor.js': ['app/vendor/angular.js',
+                        'app/vendor/angular-resource.js',
+                        'app/vendor/raml-parser.js',
+                        'app/vendor/showdown.min.js'
+                    ],
+                    'dist/app.js': [
+                        'app/scripts/common/helpers.js',
+                        'app/scripts/common/showdown.js',
+                        'app/scripts/common/eventService.js',
+                        'app/scripts/app.js',
+                        'app/scripts/directives/prevent-default.js',
+                        'app/scripts/directives/raml-console.js',
+                        'app/scripts/directives/raml-definition.js',
+                        'app/scripts/directives/markdown.js',
+                        'app/scripts/controllers/raml-operation.js',
+                        'app/scripts/controllers/raml-operation-list.js',
+                        'app/scripts/controllers/raml-documentation.js',
+                        'app/scripts/controllers/raml-console-sidebar.js',
+                        'app/scripts/controllers/raml-operation-details.js',
+                        'app/scripts/controllers/raml-operation-details-try-it.js',
+                        'app/scripts/controllers/raml-operation-details-response.js',
+                        'app/scripts/controllers/raml-operation-details-request.js',
+                        'dist/templates.js'
+                    ]
+                }
             }
         },
         less: {
@@ -356,7 +393,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-contrib-concat');
 
-    grunt.registerTask('raml-console-embedded', ['clean:embedded', 'ngtemplates:consoleEmbedded', 'concat:embedded', 'copy:embedded', 'less:embedded', 'clean:postCompilation']);
+    grunt.registerTask('raml-console-embedded-debug', ['clean:embedded', 'ngtemplates:consoleEmbedded', 'concat:embedded', 'copy:embedded', 'less:embedded', 'clean:postCompilation']);
+    grunt.registerTask('raml-console-embedded', ['clean:embedded', 'ngtemplates:consoleEmbedded', 'concat:embeddedMin', 'uglify:embedded', 'copy:embedded', 'less:embedded', 'clean:postCompilation']);
 
     grunt.registerTask('server', function (target) {
         if (target === 'dist') {
