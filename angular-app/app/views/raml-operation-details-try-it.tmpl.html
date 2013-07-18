@@ -23,7 +23,7 @@
             </div>
             <div role="request-body" ng-show="hasRequestBody(operation)">
                 <label>Body
-                    <textarea ng-model="requestBody"></textarea>
+                    <textarea ng-model="requestBody[operation.method]"></textarea>
                 </label>
             </div>
         </div>
