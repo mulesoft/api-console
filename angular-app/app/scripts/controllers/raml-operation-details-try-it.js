@@ -1,5 +1,5 @@
 angular.module('ramlConsoleApp')
-    .controller('ramlOperationDetailsTryIt', function ($scope, $resource, commons) {
+    .controller('ramlOperationDetailsTryIt', function ($scope, $resource, commons, eventService) {
         $scope.hasAdditionalParams = function (operation) {
             return operation.query || operation.method === 'post' || operation.method === 'put';
         };
@@ -23,10 +23,10 @@ angular.module('ramlConsoleApp')
         $scope.buildTester = function () {
             var resourceUri = this.resource.relativeUri.replace(/{/g, ':').replace(/}/g, '');
             var TesterResource = $resource(resourceUri, null, {
-                    'get': { method:'GET' },
-                    'post': { method:'POST' },
-                    'put': { method:'PUT' },
-                    'delete': { method:'DELETE' }
+                    get: { method:'GET' },
+                    post: { method:'POST' },
+                    put: { method:'PUT' },
+                    delete: { method:'DELETE' }
                 });
 
             this.tester = new TesterResource();
@@ -35,7 +35,7 @@ angular.module('ramlConsoleApp')
         $scope.init = function () {
             $scope.request = {};
             $scope.url = {};
-            $scope.query = {};
+            $scope.query = { get: {}, put: {}, post: {}, delete: {} };
             $scope.requestBody = '';
 
             $scope.buildTester();
