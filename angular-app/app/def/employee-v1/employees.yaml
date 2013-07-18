@@ -2,7 +2,7 @@
 ---
 title: Employees API
 version: v0.2
-baseUri: http://localhost:9000/api/{version}/
+baseUri: https://localhost:9091/api/{version}/{company}
 uriParameters:
     company:
         name: Company
@@ -22,7 +22,7 @@ documentation:
     - title: More info
       content: |
         !include more_info.txt
-/employees.json:
+/employees:
     name: Employees
     get:
         summary: Get a list of employees.
@@ -78,17 +78,20 @@ documentation:
                     description: Bad request.
         post:
             summary: Create a new employee.
-            body:
-                text/xml: !!null
-                application/json:
-                    schema: !include employee_insert.json
+#            body:
+#                text/xml: !!null
+#                application/json:
+#                    schema: !include employee_insert.json
             responses:
-                200:
+                202:
                     body:
                         application/json:
                             schema: !include employees.json
                 404:
                     description: Resource not found.
+                    body:
+                        application/json:
+                            schema: !include employee_insert.json
                 405:
                     description: Method not allowed.
                 415:

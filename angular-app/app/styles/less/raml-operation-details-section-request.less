@@ -13,19 +13,37 @@ section[role=api-operation-details-section-request] {
   .padded-table-cell {
     padding: 7px 20px;
   }
-  > section[role=parameter-list] {
+  > section[role=codes-list] {
     > header {
       display: block;
       background: rgb(251,251,251);
-      height: 60px;
+      margin-bottom: 13px;
       > h1 {
         font-size: 16px;
         font-weight: normal;
-        line-height: 60px;
+        line-height: 30px;
         margin: 0px;
         padding: 0px 20px;
         color: black;
+        padding-top: 11px;
       }
+      > p {
+        font-size: 11px;
+        font-weight: 100;
+        color: #33373b;
+        line-height: 15px;
+        margin: 0px;
+        padding: 0px 20px;
+      }
+    }
+    > pre {
+      height: 200px;
+      overflow: scroll;
+      background-color: white;
+      padding-bottom: 10px;
+      padding-top: 10px;
+      border: 1px solid @border-color-gray;
+      margin: 15px 20px 20px 20px;
     }
     > table {
       border: 1px solid @border-color-gray;
@@ -35,7 +53,7 @@ section[role=api-operation-details-section-request] {
       border-right: 0px;
       border-left: 0px;
       box-shadow: 0px 3px 6px -4px @border-color-gray;
-      margin-bottom: 13px;
+      // margin-bottom: 13px;
       > thead {
         > tr {
           > th:first-of-type {
@@ -76,27 +94,21 @@ section[role=api-operation-details-section-request] {
             padding-top: 10px;
             line-height: 23px;
           }
-          // Param
-          > td:nth-child(1) {
-            color: black;
-            font-style: italic;
-            font-weight: bolder;
-          }
-          // Type
-          > td:nth-child(2) {
-            font-style: italic;
-          }
-          // Description
-          > td:nth-child(3) {
-          }
-          // Example
-          > td:nth-child(4) {
+          > td {
             > pre {
               background-color: rgb(255, 253, 244);
               border: 1px solid rgb(227, 214, 177);
-              display: inline;
+              width: 670px;
               padding: 3px 5px;
               font-size: 11px;
+
+              height: 200px;
+              overflow: scroll;
+              // background-color: white;
+              // padding-bottom: 10px;
+              // padding-top: 10px;
+              // border: 1px solid @border-color-gray;
+              // margin: 15px 20px 20px 20px;
             }
           }
         }

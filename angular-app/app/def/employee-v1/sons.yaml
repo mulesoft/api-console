@@ -25,6 +25,8 @@ get:
     post:
         summary: Create a son.
         body:
+            application/json:
+                schema: !include sons.json
             application/x-www-form-urlencoded:
                 formParameters:
                     sonName:
@@ -35,12 +37,14 @@ get:
                         maxLength: 30
                         example: "Lara"
                     sonAge:
-                        description: This is the son' age.
+                        description: This is the son's age.
                         type: integer
                         required: no
                         minimum: 0
                         maximum: 99
                         example: 2
+        responses:
+            200: !!null
     put:
         summary: Update a son.
         body:

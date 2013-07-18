@@ -1,1 +1,40 @@
-<section role="api-operation-details-section-request"></section>
+<section role="api-operation-details-section-request" ng-controller="ramlOperationDetailsRequest">
+  <section role="codes-list" ng-show="!description">
+    <header>
+      <h1>No request information</h1>
+    </header>
+  </section>
+
+  <section role="codes-list">
+    <table ng-show="description.schema">
+      <thead>
+        <tr>
+          <th>Schema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        	<td>
+				<pre>{{description.schema}}</pre>
+			</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table ng-show="description.example">
+      <thead>
+        <tr>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        	<td>
+				<pre>{{description.example}}</pre>
+			</td>
+        </tr>
+      </tbody>
+    </table>
+   
+  </section>
+</section>
