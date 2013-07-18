@@ -11,14 +11,14 @@
         <div role="uri-params">
             <h2>Resource Uri</h2>
             <div role="uri">
-                <ng-include src="'/views/raml-uri-part.tmpl.html'" ng-repeat="uriPart in urlParams"></ng-include>
+                <ng-include src="'views/raml-uri-part.tmpl.html'" ng-repeat="uriPart in urlParams"></ng-include>
             </div>
         </div>
         <div role="additional-params" ng-show="hasAdditionalParams(operation)">
             <div role="query-params">
                 <h2>Additional parameters</h2>
                 <div role="params">
-                    <ng-include src="'/views/raml-query-param.tmpl.html'" ng-repeat="queryParam in queryParams"></ng-include>
+                    <ng-include src="'views/raml-query-param.tmpl.html'" ng-repeat="queryParam in queryParams"></ng-include>
                 </div>
             </div>
             <div role="request-body" ng-show="hasRequestBody(operation)">

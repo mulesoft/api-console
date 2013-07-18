@@ -2,7 +2,7 @@ angular.module('ramlConsoleApp')
     .directive('ramlConsole', function ($rootScope) {
         return {
             restrict: 'E',
-            templateUrl: '/views/raml-console.tmpl.html',
+            templateUrl: 'views/raml-console.tmpl.html',
             replace: true,
             transclude: false,
             scope: {

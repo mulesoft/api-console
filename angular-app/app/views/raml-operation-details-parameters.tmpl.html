@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-include="'/views/raml-parameter-row-part.tmpl.html'" ng-repeat="param in urlParams | filter: {editable: true}"></tr>
+        <tr ng-include="'views/raml-parameter-row-part.tmpl.html'" ng-repeat="param in urlParams | filter: {editable: true}"></tr>
       </tbody>
     </table>
   </section>
@@ -31,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-include="'/views/raml-parameter-row-part.tmpl.html'" ng-repeat="param in queryParams"></tr>
+        <tr ng-include="'views/raml-parameter-row-part.tmpl.html'" ng-repeat="param in queryParams"></tr>
       </tbody>
     </table>
   </section>

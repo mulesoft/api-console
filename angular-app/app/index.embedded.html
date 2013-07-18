@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="app.css" type="text/css" />
+</head>
+  <body ng-app="ramlConsoleApp">
+    <raml-console id="console" definition="#instagramApi"></raml-console>
+    <raml-definition id="instagramApi" src="http://localhost:8080/app/def/instagram-v1/instagram-v1.yml"></raml-definition>
+
+    <script src="vendor.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
