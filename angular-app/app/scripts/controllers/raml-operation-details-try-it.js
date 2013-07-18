@@ -27,6 +27,7 @@ angular.module('ramlConsoleApp')
 
             tester.$get(params, function (data) {
                 this.response = data.data;
+                this.headers = data.headers;
             }.bind(this), function (error) {
                 console.log(error);
             }.bind(this));
@@ -43,8 +44,8 @@ angular.module('ramlConsoleApp')
                     'get': {
                         method:'GET',
                         isArray: false,
-                        transformResponse: function (data, header) {
-                            return { data: data };
+                        transformResponse: function (data, headers) {
+                            return { data: data, headers: angular.toJson(headers(), true) };
                         },
                         transformRequest: function (data, headers) {
                             return data;
