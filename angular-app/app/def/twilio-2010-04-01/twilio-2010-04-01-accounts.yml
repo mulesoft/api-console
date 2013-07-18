@@ -19,6 +19,7 @@ get:
       enum: [ closed, suspended, active ]
   responses:
     200:
+      description: Ok.
       body:
         application/json:
           schema: !include schemas/twilio-2010-04-01-accounts.schema.json
