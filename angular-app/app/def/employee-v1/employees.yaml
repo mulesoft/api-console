@@ -2,7 +2,7 @@
 ---
 title: Employees API
 version: v0.2
-baseUri: https://localhost:9091/api/{version}/{company}
+baseUri: http://localhost:9000/api/{version}/
 uriParameters:
     company:
         name: Company
@@ -22,7 +22,7 @@ documentation:
     - title: More info
       content: |
         !include more_info.txt
-/employees:
+/employees.json:
     name: Employees
     get:
         summary: Get a list of employees.

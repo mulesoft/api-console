@@ -12,7 +12,7 @@ angular.module('ramlConsoleApp')
 
             if (methodDescriptor.responses) {
                 for (var prop in methodDescriptor.responses) {
-                    var response = methodDescriptor.responses[prop],
+                    var response = methodDescriptor.responses[prop] || {},
                         example = response.body ? response.body['application/json'].example : '',
                         schema = response.body ? response.body['application/json'].schema : '';
 
