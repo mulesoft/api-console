@@ -1,5 +1,5 @@
 angular.module('ramlConsoleApp')
-    .directive('ramlDefinition', function ($rootScope, eventService) {
+    .directive('ramlDefinition', function ($rootScope) {
         return {
             restrict: 'E',
             templateUrl: '/views/raml-definition.tmpl.html',
@@ -15,10 +15,8 @@ angular.module('ramlConsoleApp')
                         angular.forEach(result.resources, function (resource) {
                             ramlHelper.massage(resource);
                         });
-
                         console.log(result);
-
-                        eventService.broadcast('event:raml-parsed', result);
+                        $rootScope.$emit('event:raml-parsed', result);
                     });
             }
         };

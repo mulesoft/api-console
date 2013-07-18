@@ -4,8 +4,8 @@
       <h1>Overview</h1>
     </header>
     <ul role="documentation">
-      <li ng-class="{active:isElementActive(document.$$hashKey)}" ng-repeat="document in documentation">
-        <a href="#" ng-click="elementClick(document.$$hashKey)">{{document.title}}</a>
+      <li ng-class="{active:isElementActive(document.title, 'document')}" ng-repeat="document in documentation">
+        <a href="#" ng-click="elementClick(document.title)">{{document.title}}</a>
       </li>
     </ul>
   </section>
@@ -14,8 +14,8 @@
       <h1>Api Reference</h1>
     </header>
     <ul>
-      <li ng-class="{active:isElementActive(resource.$$hashKey)}" ng-repeat="resource in resources">
-        <a href="#" ng-click="elementClick(resource.$$hashKey)">{{resource.name}}</a>
+      <li ng-class="{active:isElementActive(resource.name, 'resource')}" ng-repeat="resource in resources">
+        <a href="#" ng-click="elementClick(resource.name)">{{resource.name}}</a>
       </li>
     </ul>
   </section>

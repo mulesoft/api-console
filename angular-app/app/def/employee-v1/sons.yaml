@@ -16,7 +16,7 @@ get:
     name: Son
     get:
         summary: Get a particular son from an employee.
-        response:
+        responses:
             200:
                 body:
                     application/json:
@@ -26,7 +26,7 @@ get:
         summary: Create a son.
         body:
             application/x-www-form-urlencoded:
-                parameters:
+                formParameters:
                     sonName:
                         description: This is the son's name.
                         type: string
