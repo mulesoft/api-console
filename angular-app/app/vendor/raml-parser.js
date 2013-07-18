@@ -3108,8 +3108,17 @@ function parseHost(host) {
       }
     };
 
-    Composer.prototype.get_single_node = function() {
+    Composer.prototype.get_single_node = function(validate, apply, join) {
       var document, event;
+      if (validate == null) {
+        validate = true;
+      }
+      if (apply == null) {
+        apply = true;
+      }
+      if (join == null) {
+        join = true;
+      }
       this.get_event();
       document = null;
       if (!this.check_event(events.StreamEndEvent)) {
@@ -3120,9 +3129,15 @@ function parseHost(host) {
         throw new exports.ComposerError('expected a single document in the stream', document.start_mark, 'but found another document', event.start_mark);
       }
       this.get_event();
-      this.validate_document(document);
-      this.apply_traits(document);
-      this.join_resources(document);
+      if (validate) {
+        this.validate_document(document);
+      }
+      if (apply) {
+        this.apply_traits(document);
+      }
+      if (join) {
+        this.join_resources(document);
+      }
       return document;
     };
 
@@ -3185,7 +3200,7 @@ function parseHost(host) {
           event.value = require('url').resolve(this.src, event.value);
         }
         if (extension === 'yaml' || extension === 'yml' || extension === 'raml') {
-          return raml.composeFile(event.value, false);
+          return raml.composeFile(event.value, false, false, false);
         } else {
           node = new nodes.ScalarNode('tag:yaml.org,2002:str', raml.readFile(event.value), event.start_mark, event.end_mark, event.style);
         }
@@ -5327,88 +5342,88 @@ exports.format = function(f) {
 
 },{"events":6}],5:[function(require,module,exports){
 (function (exports) {
-	'use strict';
+  'use strict';
 
-	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-	function b64ToByteArray(b64) {
-		var i, j, l, tmp, placeHolders, arr;
-	
-		if (b64.length % 4 > 0) {
-			throw 'Invalid string. Length must be a multiple of 4';
-		}
+  function b64ToByteArray(b64) {
+    var i, j, l, tmp, placeHolders, arr;
+  
+    if (b64.length % 4 > 0) {
+      throw 'Invalid string. Length must be a multiple of 4';
+    }
 
-		// the number of equal signs (place holders)
-		// if there are two placeholders, than the two characters before it
-		// represent one byte
-		// if there is only one, then the three characters before it represent 2 bytes
-		// this is just a cheap hack to not do indexOf twice
-		placeHolders = b64.indexOf('=');
-		placeHolders = placeHolders > 0 ? b64.length - placeHolders : 0;
+    // the number of equal signs (place holders)
+    // if there are two placeholders, than the two characters before it
+    // represent one byte
+    // if there is only one, then the three characters before it represent 2 bytes
+    // this is just a cheap hack to not do indexOf twice
+    placeHolders = b64.indexOf('=');
+    placeHolders = placeHolders > 0 ? b64.length - placeHolders : 0;
 
-		// base64 is 4/3 + up to two characters of the original data
-		arr = [];//new Uint8Array(b64.length * 3 / 4 - placeHolders);
+    // base64 is 4/3 + up to two characters of the original data
+    arr = [];//new Uint8Array(b64.length * 3 / 4 - placeHolders);
 
-		// if there are placeholders, only get up to the last complete 4 chars
-		l = placeHolders > 0 ? b64.length - 4 : b64.length;
+    // if there are placeholders, only get up to the last complete 4 chars
+    l = placeHolders > 0 ? b64.length - 4 : b64.length;
 
-		for (i = 0, j = 0; i < l; i += 4, j += 3) {
-			tmp = (lookup.indexOf(b64[i]) << 18) | (lookup.indexOf(b64[i + 1]) << 12) | (lookup.indexOf(b64[i + 2]) << 6) | lookup.indexOf(b64[i + 3]);
-			arr.push((tmp & 0xFF0000) >> 16);
-			arr.push((tmp & 0xFF00) >> 8);
-			arr.push(tmp & 0xFF);
-		}
+    for (i = 0, j = 0; i < l; i += 4, j += 3) {
+      tmp = (lookup.indexOf(b64[i]) << 18) | (lookup.indexOf(b64[i + 1]) << 12) | (lookup.indexOf(b64[i + 2]) << 6) | lookup.indexOf(b64[i + 3]);
+      arr.push((tmp & 0xFF0000) >> 16);
+      arr.push((tmp & 0xFF00) >> 8);
+      arr.push(tmp & 0xFF);
+    }
 
-		if (placeHolders === 2) {
-			tmp = (lookup.indexOf(b64[i]) << 2) | (lookup.indexOf(b64[i + 1]) >> 4);
-			arr.push(tmp & 0xFF);
-		} else if (placeHolders === 1) {
-			tmp = (lookup.indexOf(b64[i]) << 10) | (lookup.indexOf(b64[i + 1]) << 4) | (lookup.indexOf(b64[i + 2]) >> 2);
-			arr.push((tmp >> 8) & 0xFF);
-			arr.push(tmp & 0xFF);
-		}
+    if (placeHolders === 2) {
+      tmp = (lookup.indexOf(b64[i]) << 2) | (lookup.indexOf(b64[i + 1]) >> 4);
+      arr.push(tmp & 0xFF);
+    } else if (placeHolders === 1) {
+      tmp = (lookup.indexOf(b64[i]) << 10) | (lookup.indexOf(b64[i + 1]) << 4) | (lookup.indexOf(b64[i + 2]) >> 2);
+      arr.push((tmp >> 8) & 0xFF);
+      arr.push(tmp & 0xFF);
+    }
 
-		return arr;
-	}
+    return arr;
+  }
 
-	function uint8ToBase64(uint8) {
-		var i,
-			extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
-			output = "",
-			temp, length;
+  function uint8ToBase64(uint8) {
+    var i,
+      extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
+      output = "",
+      temp, length;
 
-		function tripletToBase64 (num) {
-			return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F];
-		};
+    function tripletToBase64 (num) {
+      return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F];
+    };
 
-		// go through the array every three bytes, we'll deal with trailing stuff later
-		for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
-			temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
-			output += tripletToBase64(temp);
-		}
+    // go through the array every three bytes, we'll deal with trailing stuff later
+    for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
+      temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
+      output += tripletToBase64(temp);
+    }
 
-		// pad the end with zeros, but make sure to not forget the extra bytes
-		switch (extraBytes) {
-			case 1:
-				temp = uint8[uint8.length - 1];
-				output += lookup[temp >> 2];
-				output += lookup[(temp << 4) & 0x3F];
-				output += '==';
-				break;
-			case 2:
-				temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1]);
-				output += lookup[temp >> 10];
-				output += lookup[(temp >> 4) & 0x3F];
-				output += lookup[(temp << 2) & 0x3F];
-				output += '=';
-				break;
-		}
+    // pad the end with zeros, but make sure to not forget the extra bytes
+    switch (extraBytes) {
+      case 1:
+        temp = uint8[uint8.length - 1];
+        output += lookup[temp >> 2];
+        output += lookup[(temp << 4) & 0x3F];
+        output += '==';
+        break;
+      case 2:
+        temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1]);
+        output += lookup[temp >> 10];
+        output += lookup[(temp >> 4) & 0x3F];
+        output += lookup[(temp << 2) & 0x3F];
+        output += '=';
+        break;
+    }
 
-		return output;
-	}
+    return output;
+  }
 
-	module.exports.toByteArray = b64ToByteArray;
-	module.exports.fromByteArray = uint8ToBase64;
+  module.exports.toByteArray = b64ToByteArray;
+  module.exports.fromByteArray = uint8ToBase64;
 }());
 
 },{}],7:[function(require,module,exports){
@@ -7024,88 +7039,88 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 })()
 },{"assert":2,"./buffer_ieee754":7,"base64-js":9}],9:[function(require,module,exports){
 (function (exports) {
-	'use strict';
+  'use strict';
 
-	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-	function b64ToByteArray(b64) {
-		var i, j, l, tmp, placeHolders, arr;
-	
-		if (b64.length % 4 > 0) {
-			throw 'Invalid string. Length must be a multiple of 4';
-		}
+  function b64ToByteArray(b64) {
+    var i, j, l, tmp, placeHolders, arr;
+  
+    if (b64.length % 4 > 0) {
+      throw 'Invalid string. Length must be a multiple of 4';
+    }
 
-		// the number of equal signs (place holders)
-		// if there are two placeholders, than the two characters before it
-		// represent one byte
-		// if there is only one, then the three characters before it represent 2 bytes
-		// this is just a cheap hack to not do indexOf twice
-		placeHolders = b64.indexOf('=');
-		placeHolders = placeHolders > 0 ? b64.length - placeHolders : 0;
+    // the number of equal signs (place holders)
+    // if there are two placeholders, than the two characters before it
+    // represent one byte
+    // if there is only one, then the three characters before it represent 2 bytes
+    // this is just a cheap hack to not do indexOf twice
+    placeHolders = b64.indexOf('=');
+    placeHolders = placeHolders > 0 ? b64.length - placeHolders : 0;
 
-		// base64 is 4/3 + up to two characters of the original data
-		arr = [];//new Uint8Array(b64.length * 3 / 4 - placeHolders);
+    // base64 is 4/3 + up to two characters of the original data
+    arr = [];//new Uint8Array(b64.length * 3 / 4 - placeHolders);
 
-		// if there are placeholders, only get up to the last complete 4 chars
-		l = placeHolders > 0 ? b64.length - 4 : b64.length;
+    // if there are placeholders, only get up to the last complete 4 chars
+    l = placeHolders > 0 ? b64.length - 4 : b64.length;
 
-		for (i = 0, j = 0; i < l; i += 4, j += 3) {
-			tmp = (lookup.indexOf(b64[i]) << 18) | (lookup.indexOf(b64[i + 1]) << 12) | (lookup.indexOf(b64[i + 2]) << 6) | lookup.indexOf(b64[i + 3]);
-			arr.push((tmp & 0xFF0000) >> 16);
-			arr.push((tmp & 0xFF00) >> 8);
-			arr.push(tmp & 0xFF);
-		}
+    for (i = 0, j = 0; i < l; i += 4, j += 3) {
+      tmp = (lookup.indexOf(b64[i]) << 18) | (lookup.indexOf(b64[i + 1]) << 12) | (lookup.indexOf(b64[i + 2]) << 6) | lookup.indexOf(b64[i + 3]);
+      arr.push((tmp & 0xFF0000) >> 16);
+      arr.push((tmp & 0xFF00) >> 8);
+      arr.push(tmp & 0xFF);
+    }
 
-		if (placeHolders === 2) {
-			tmp = (lookup.indexOf(b64[i]) << 2) | (lookup.indexOf(b64[i + 1]) >> 4);
-			arr.push(tmp & 0xFF);
-		} else if (placeHolders === 1) {
-			tmp = (lookup.indexOf(b64[i]) << 10) | (lookup.indexOf(b64[i + 1]) << 4) | (lookup.indexOf(b64[i + 2]) >> 2);
-			arr.push((tmp >> 8) & 0xFF);
-			arr.push(tmp & 0xFF);
-		}
+    if (placeHolders === 2) {
+      tmp = (lookup.indexOf(b64[i]) << 2) | (lookup.indexOf(b64[i + 1]) >> 4);
+      arr.push(tmp & 0xFF);
+    } else if (placeHolders === 1) {
+      tmp = (lookup.indexOf(b64[i]) << 10) | (lookup.indexOf(b64[i + 1]) << 4) | (lookup.indexOf(b64[i + 2]) >> 2);
+      arr.push((tmp >> 8) & 0xFF);
+      arr.push(tmp & 0xFF);
+    }
 
-		return arr;
-	}
+    return arr;
+  }
 
-	function uint8ToBase64(uint8) {
-		var i,
-			extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
-			output = "",
-			temp, length;
+  function uint8ToBase64(uint8) {
+    var i,
+      extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
+      output = "",
+      temp, length;
 
-		function tripletToBase64 (num) {
-			return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F];
-		};
+    function tripletToBase64 (num) {
+      return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F];
+    };
 
-		// go through the array every three bytes, we'll deal with trailing stuff later
-		for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
-			temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
-			output += tripletToBase64(temp);
-		}
+    // go through the array every three bytes, we'll deal with trailing stuff later
+    for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
+      temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
+      output += tripletToBase64(temp);
+    }
 
-		// pad the end with zeros, but make sure to not forget the extra bytes
-		switch (extraBytes) {
-			case 1:
-				temp = uint8[uint8.length - 1];
-				output += lookup[temp >> 2];
-				output += lookup[(temp << 4) & 0x3F];
-				output += '==';
-				break;
-			case 2:
-				temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1]);
-				output += lookup[temp >> 10];
-				output += lookup[(temp >> 4) & 0x3F];
-				output += lookup[(temp << 2) & 0x3F];
-				output += '=';
-				break;
-		}
+    // pad the end with zeros, but make sure to not forget the extra bytes
+    switch (extraBytes) {
+      case 1:
+        temp = uint8[uint8.length - 1];
+        output += lookup[temp >> 2];
+        output += lookup[(temp << 4) & 0x3F];
+        output += '==';
+        break;
+      case 2:
+        temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1]);
+        output += lookup[temp >> 10];
+        output += lookup[(temp >> 4) & 0x3F];
+        output += lookup[(temp << 2) & 0x3F];
+        output += '=';
+        break;
+    }
 
-		return output;
-	}
+    return output;
+  }
 
-	module.exports.toByteArray = b64ToByteArray;
-	module.exports.fromByteArray = uint8ToBase64;
+  module.exports.toByteArray = b64ToByteArray;
+  module.exports.fromByteArray = uint8ToBase64;
 }());
 
 },{}]},{},[])
@@ -7186,9 +7201,18 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
     */
 
 
-    BaseConstructor.prototype.get_single_data = function() {
+    BaseConstructor.prototype.get_single_data = function(validate, apply, join) {
       var node;
-      node = this.get_single_node();
+      if (validate == null) {
+        validate = true;
+      }
+      if (apply == null) {
+        apply = true;
+      }
+      if (join == null) {
+        join = true;
+      }
+      node = this.get_single_node(validate, apply, join);
       if (node != null) {
         return this.construct_document(node);
       }
@@ -7696,9 +7720,35 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
   this.Constructor.add_constructor('tag:yaml.org,2002:map', this.Constructor.prototype.construct_yaml_map);
 
+  this.Constructor.add_constructor('tag:raml.org,0.1:null', this.Constructor.prototype.construct_yaml_null);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:bool', this.Constructor.prototype.construct_yaml_bool);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:int', this.Constructor.prototype.construct_yaml_int);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:float', this.Constructor.prototype.construct_yaml_float);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:binary', this.Constructor.prototype.construct_yaml_binary);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:timestamp', this.Constructor.prototype.construct_yaml_timestamp);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:omap', this.Constructor.prototype.construct_yaml_omap);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:pairs', this.Constructor.prototype.construct_yaml_pairs);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:set', this.Constructor.prototype.construct_yaml_set);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:str', this.Constructor.prototype.construct_yaml_str);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:seq', this.Constructor.prototype.construct_yaml_seq);
+
+  this.Constructor.add_constructor('tag:raml.org,0.1:map', this.Constructor.prototype.construct_yaml_map);
+
   this.Constructor.add_constructor(null, this.Constructor.prototype.construct_undefined);
 
   module.exports.Constructor = this.Constructor;
+
+  module.exports.ConstructorError = this.ConstructorError;
 
 }).call(this);
 
@@ -7741,9 +7791,6 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
     Joiner.prototype.join_resources = function(node) {
       var resources, resourcesArray, resourcesName, resourcesValue,
         _this = this;
-      if (!this.shoudValidate) {
-        return;
-      }
       resources = node.value.filter(function(childNode) {
         return childNode[0].value.match(/^\//i);
       });
@@ -7867,9 +7914,9 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
         return _results;
       })()));
 
-      function _Class(stream, validate, location) {
+      function _Class(stream, location) {
         var _i, _len, _ref;
-        components[0].call(this, stream, validate, location);
+        components[0].call(this, stream, location);
         _ref = components.slice(1);
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           component = _ref[_i];
@@ -7886,7 +7933,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./util":4,"./reader":17,"./scanner":18,"./parser":19,"./composer":10,"./construct":14,"./joiner":15,"./resolver":20,"./validator":21,"./traits":22}],11:[function(require,module,exports){
+},{"./util":4,"./reader":17,"./scanner":18,"./parser":19,"./composer":10,"./resolver":20,"./construct":14,"./validator":21,"./joiner":15,"./traits":22}],11:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, unique_id, _ref, _ref1, _ref2,
     __hasProp = {}.hasOwnProperty,
@@ -8086,7 +8133,11 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1}],19:[function(require,module,exports){
+},{"./errors":1}],23:[function(require,module,exports){
+window.RAML = {}
+
+window.RAML.Parser = require('../lib/raml')
+},{"../lib/raml":12}],19:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, events, tokens, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -8737,9 +8788,8 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
     NON_PRINTABLE = /[^\x09\x0A\x0D\x20-\x7E\x85\xA0-\uD7FF\uE000-\uFFFD]/;
 
-    function Reader(string, shoudValidate, src) {
+    function Reader(string, src) {
       this.string = string;
-      this.shoudValidate = shoudValidate;
       this.src = src;
       this.line = 0;
       this.column = 0;
@@ -8783,7 +8833,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
     };
 
     Reader.prototype.get_mark = function() {
-      return new Mark(this.name, this.line, this.column, this.string, this.index);
+      return new Mark(this.src, this.line, this.column, this.string, this.index);
     };
 
     Reader.prototype.check_printable = function() {
@@ -9011,11 +9061,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./nodes":11,"./util":4,"./errors":1}],23:[function(require,module,exports){
-window.RAML = {}
-
-window.RAML.Parser = require('../lib/raml')
-},{"../lib/raml":12}],18:[function(require,module,exports){
+},{"./nodes":11,"./util":4,"./errors":1}],18:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, SimpleKey, tokens, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -9492,7 +9538,7 @@ window.RAML.Parser = require('../lib/raml')
       var mark, start_mark;
       if (this.flow_level === 0) {
         if (!this.allow_simple_key) {
-          throw new exports.ScannerError(null, null, 'mapping keys are not allowed here', this.get_mark());
+          throw new exports.ScannerError(null, null, 'mapping keys are not allowed here', this.et_mark());
         }
         if (this.add_indent(this.column)) {
           mark = this.get_mark();
@@ -10536,8 +10582,8 @@ window.RAML.Parser = require('../lib/raml')
     }
 
     Traits.prototype.has_traits = function(node) {
-      if (this.has_property(node, /traits/i)) {
-        this.declaredTraits = this.property_value(node, /traits/i);
+      if (this.has_property(node, /^traits$/i)) {
+        this.declaredTraits = this.property_value(node, /^traits$/i);
       }
       return this.declaredTraits.length > 0;
     };
@@ -10545,16 +10591,13 @@ window.RAML.Parser = require('../lib/raml')
     Traits.prototype.apply_traits = function(node) {
       var resources,
         _this = this;
-      if (!this.shoudValidate) {
-        return;
-      }
       this.check_is_map(node);
       if (this.has_traits(node)) {
         resources = this.child_resources(node);
         return resources.forEach(function(resource) {
           var uses;
-          if (_this.has_property(resource[1], /use/i)) {
-            uses = _this.property_value(resource[1], /use/i);
+          if (_this.has_property(resource[1], /^use$/i)) {
+            uses = _this.property_value(resource[1], /^use$/i);
             uses.forEach(function(use) {
               var temp, trait;
               trait = _this.get_trait(_this.key_or_value(use));
@@ -10905,242 +10948,7 @@ function decode(str) {
   }
 }
 
-},{}],12:[function(require,module,exports){
-(function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  this.composer = require('./composer');
-
-  this.constructor = require('./construct');
-
-  this.errors = require('./errors');
-
-  this.events = require('./events');
-
-  this.loader = require('./loader');
-
-  this.nodes = require('./nodes');
-
-  this.parser = require('./parser');
-
-  this.reader = require('./reader');
-
-  this.resolver = require('./resolver');
-
-  this.scanner = require('./scanner');
-
-  this.tokens = require('./tokens');
-
-  this.q = require('q');
-
-  this.FileError = (function(_super) {
-    __extends(FileError, _super);
-
-    function FileError() {
-      _ref = FileError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return FileError;
-
-  })(this.errors.MarkedYAMLError);
-
-  /*
-  Scan a RAML stream and produce scanning tokens.
-  */
-
-
-  this.scan = function(stream, validate, location) {
-    var loader, _results;
-    if (validate == null) {
-      validate = true;
-    }
-    loader = new exports.loader.Loader(stream, validate, location);
-    _results = [];
-    while (loader.check_token()) {
-      _results.push(loader.get_token());
-    }
-    return _results;
-  };
-
-  /*
-  Parse a RAML stream and produce parsing events.
-  */
-
-
-  this.parse = function(stream, validate, location) {
-    var loader, _results;
-    if (validate == null) {
-      validate = true;
-    }
-    loader = new exports.loader.Loader(stream, validate, location);
-    _results = [];
-    while (loader.check_event()) {
-      _results.push(loader.get_event());
-    }
-    return _results;
-  };
-
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  representation tree.
-  */
-
-
-  this.compose = function(stream, validate, location) {
-    var loader;
-    if (validate == null) {
-      validate = true;
-    }
-    loader = new exports.loader.Loader(stream, validate, location);
-    return loader.get_single_node();
-  };
-
-  /*
-  Parse all RAML documents in a stream and produce corresponding representation
-  trees.
-  */
-
-
-  this.compose_all = function(stream, validate, location) {
-    var loader, _results;
-    if (validate == null) {
-      validate = true;
-    }
-    loader = new exports.loader.Loader(stream, validate, location);
-    _results = [];
-    while (loader.check_node()) {
-      _results.push(loader.get_node());
-    }
-    return _results;
-  };
-
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  Javascript object.
-  */
-
-
-  this.load = function(stream, validate, location) {
-    var deferred, error, loader, result;
-    if (validate == null) {
-      validate = true;
-    }
-    loader = new exports.loader.Loader(stream, validate, location);
-    deferred = new this.q.defer;
-    try {
-      result = loader.get_single_data();
-      deferred.resolve(result);
-    } catch (_error) {
-      error = _error;
-      deferred.reject(error);
-    }
-    return deferred.promise;
-  };
-
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  Javascript object.
-  */
-
-
-  this.loadFile = function(file, validate) {
-    var stream;
-    if (validate == null) {
-      validate = true;
-    }
-    stream = this.readFile(file);
-    return this.load(stream, validate, file);
-  };
-
-  /*
-  Parse all RAML documents in a stream and produce the corresponing Javascript
-  object.
-  */
-
-
-  this.load_all = function(stream, validate, location) {
-    var loader, _results;
-    if (validate == null) {
-      validate = true;
-    }
-    loader = new exports.loader.Loader(stream, validate, location);
-    _results = [];
-    while (loader.check_data()) {
-      _results.push(loader.get_data());
-    }
-    return _results;
-  };
-
-  /*
-  Parse the first RAML document in a file and produce the corresponding
-  representation tree.
-  */
-
-
-  this.composeFile = function(file, validate) {
-    var stream;
-    if (validate == null) {
-      validate = true;
-    }
-    stream = this.readFile(file);
-    return this.compose(stream, validate, file);
-  };
-
-  /*
-  Read file either locally or from the network
-  */
-
-
-  this.readFile = function(file) {
-    var fs, url;
-    url = require('url').parse(file);
-    if (url.protocol != null) {
-      if (!url.protocol.match(/^https?/i)) {
-        throw new exports.FileError('while reading ' + file, null, 'unknown protocol ' + url.protocol, this.start_mark);
-      } else {
-        return this.fetchFile(file);
-      }
-    } else {
-      if (!(typeof window !== "undefined" && window !== null)) {
-        fs = require('fs');
-        if (fs.existsSync(file)) {
-          return fs.readFileSync(file).toString();
-        } else {
-          throw new exports.FileError('while reading ' + file, null, 'cannot find ' + file, this.start_mark);
-        }
-      } else {
-        return this.fetchFile(file);
-      }
-    }
-  };
-
-  /*
-  Read file from the network
-  */
-
-
-  this.fetchFile = function(file) {
-    var xhr;
-    if (typeof window === "undefined" || window === null) {
-      xhr = new (require("xmlhttprequest").XMLHttpRequest)();
-    } else {
-      xhr = new XMLHttpRequest();
-    }
-    xhr.open('GET', file, false);
-    xhr.send(null);
-    if ((typeof xhr.status === 'number' && xhr.status === 200) || (typeof xhr.status === 'string' && xhr.status.match(/^200/i))) {
-      return xhr.responseText;
-    } else {
-      throw new exports.FileError('while reading ' + file, null, 'error ' + xhr.status, this.start_mark);
-    }
-  };
-
-}).call(this);
-
-},{"url":7,"fs":9,"./composer":10,"./construct":14,"./events":2,"./errors":1,"./loader":16,"./nodes":11,"./parser":19,"./reader":17,"./resolver":20,"./scanner":18,"./tokens":3,"q":6,"xmlhttprequest":24}],21:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, uritemplate, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -11196,16 +11004,14 @@ function decode(str) {
 
   this.Validator = (function() {
     function Validator() {
-      this.validations = [this.has_title, this.valid_base_uri, this.valid_root_properties, this.valid_absolute_uris, this.validate_traits, this.valid_trait_consumption];
+      this.validations = [this.has_title, this.valid_base_uri, this.valid_root_properties, this.validate_traits, this.valid_absolute_uris, this.valid_trait_consumption];
     }
 
     Validator.prototype.validate_document = function(node) {
       var _this = this;
-      if (this.shoudValidate) {
-        this.validations.forEach(function(validation) {
-          return validation.call(_this, node);
-        });
-      }
+      this.validations.forEach(function(validation) {
+        return validation.call(_this, node);
+      });
       return true;
     };
 
@@ -11213,14 +11019,14 @@ function decode(str) {
       var traits,
         _this = this;
       this.check_is_map(node);
-      if (this.has_property(node, /traits/i)) {
-        traits = this.property_value(node, /traits/i);
+      if (this.has_property(node, /^traits$/i)) {
+        traits = this.property_value(node, /^traits$/i);
         return traits.forEach(function(trait) {
           _this.valid_traits_properties(trait[1]);
-          if (!(_this.has_property(trait[1], /provides/i))) {
+          if (!(_this.has_property(trait[1], /^provides$/i))) {
             throw new exports.ValidationError('while validating trait properties', null, 'every trait must have a provides property', node.start_mark);
           }
-          if (!(_this.has_property(trait[1], /name/i))) {
+          if (!(_this.has_property(trait[1], /^name$/i))) {
             throw new exports.ValidationError('while validating trait properties', null, 'every trait must have a name property', node.start_mark);
           }
         });
@@ -11231,7 +11037,7 @@ function decode(str) {
       var invalid;
       this.check_is_map(node);
       invalid = node.value.filter(function(childNode) {
-        return !(childNode[0].value.match(/name/i) || childNode[0].value.match(/description/i) || childNode[0].value.match(/provides/i));
+        return !(childNode[0].value.match(/^name$/i) || childNode[0].value.match(/^description$/i) || childNode[0].value.match(/^provides$/i));
       });
       if (invalid.length > 0) {
         throw new exports.ValidationError('while validating trait properties', null, 'unknown property ' + invalid[0][0].value, node.start_mark);
@@ -11242,7 +11048,7 @@ function decode(str) {
       var invalid;
       this.check_is_map(node);
       invalid = node.value.filter(function(childNode) {
-        return !(childNode[0].value.match(/title/i) || childNode[0].value.match(/baseUri/i) || childNode[0].value.match(/version/i) || childNode[0].value.match(/traits/i) || childNode[0].value.match(/documentation/i) || childNode[0].value.match(/uriParameters/i) || childNode[0].value.match(/^\//i));
+        return !(childNode[0].value.match(/^title$/i) || childNode[0].value.match(/^baseUri$/i) || childNode[0].value.match(/^version$/i) || childNode[0].value.match(/^traits$/i) || childNode[0].value.match(/^documentation$/i) || childNode[0].value.match(/^uriParameters$/i) || childNode[0].value.match(/^\//i));
       });
       if (invalid.length > 0) {
         throw new exports.ValidationError('while validating root properties', null, 'unknown property ' + invalid[0][0].value, node.start_mark);
@@ -11275,30 +11081,96 @@ function decode(str) {
       }
     };
 
-    Validator.prototype.valid_absolute_uris = function(node, parent, absolute_uris) {
-      var resources,
+    Validator.prototype.resources = function(node, parentPath) {
+      var child_resources, response,
         _this = this;
-      if (parent == null) {
-        parent = void 0;
-      }
-      if (absolute_uris == null) {
-        absolute_uris = [];
+      if (node == null) {
+        node = this.get_single_node(true, true, false);
       }
       this.check_is_map(node);
-      resources = this.child_resources(node);
-      return resources.forEach(function(resource) {
-        var absolute_uri;
-        if (parent != null) {
-          absolute_uri = parent.value + resource[0].value;
+      response = [];
+      child_resources = this.child_resources(node);
+      child_resources.forEach(function(childResource) {
+        var resourceResponse;
+        resourceResponse = {};
+        resourceResponse.methods = [];
+        if (parentPath != null) {
+          resourceResponse.uri = parentPath + childResource[0].value;
         } else {
-          absolute_uri = resource[0].value;
+          resourceResponse.uri = childResource[0].value;
         }
-        if (absolute_uris.indexOf(absolute_uri) !== -1) {
-          throw new exports.ValidationError('while validating resources URI', null, 'two resources share same URI ' + absolute_uri, node.start_mark);
+        if (_this.has_property(childResource[1], /^name$/i)) {
+          resourceResponse.name = _this.property_value(childResource[1], /^name$/i);
         }
-        absolute_uris.push(absolute_uri);
-        return _this.valid_absolute_uris(resource[1], resource[0], absolute_uris);
+        if (_this.has_property(childResource[1], /^get$/i)) {
+          resourceResponse.methods.push('get');
+        }
+        if (_this.has_property(childResource[1], /^post$/i)) {
+          resourceResponse.methods.push('post');
+        }
+        if (_this.has_property(childResource[1], /^put$/i)) {
+          resourceResponse.methods.push('put');
+        }
+        if (_this.has_property(childResource[1], /^patch$/i)) {
+          resourceResponse.methods.push('patch');
+        }
+        if (_this.has_property(childResource[1], /^delete$/i)) {
+          resourceResponse.methods.push('delete');
+        }
+        if (_this.has_property(childResource[1], /^head$/i)) {
+          resourceResponse.methods.push('head');
+        }
+        if (_this.has_property(childResource[1], /^options$/i)) {
+          resourceResponse.methods.push('options');
+        }
+        resourceResponse.line = childResource[0].start_mark.line + 1;
+        resourceResponse.column = childResource[0].start_mark.column + 1;
+        if (childResource[0].start_mark.name != null) {
+          resourceResponse.src = childResource[0].start_mark.name;
+        }
+        response.push(resourceResponse);
+        return response = response.concat(_this.resources(childResource[1], resourceResponse.uri));
       });
+      return response;
+    };
+
+    Validator.prototype.valid_absolute_uris = function(node) {
+      var i, sorted_uris, uris, _i, _ref1, _results;
+      uris = this.get_absolute_uris(node);
+      sorted_uris = uris.sort();
+      if (sorted_uris.length > 1) {
+        _results = [];
+        for (i = _i = 0, _ref1 = sorted_uris.length; 0 <= _ref1 ? _i < _ref1 : _i > _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
+          if (sorted_uris[i + 1] === sorted_uris[i]) {
+            throw new exports.ValidationError('while validating trait consumption', null, 'two resources share same URI ' + sorted_uris[i], null);
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      }
+    };
+
+    Validator.prototype.get_absolute_uris = function(node, parentPath) {
+      var child_resources, response,
+        _this = this;
+      if (node == null) {
+        node = this.get_single_node(true, true, false);
+      }
+      this.check_is_map(node);
+      response = [];
+      child_resources = this.child_resources(node);
+      child_resources.forEach(function(childResource) {
+        var uri;
+        if (parentPath != null) {
+          uri = parentPath + childResource[0].value;
+        } else {
+          uri = childResource[0].value;
+        }
+        response.push(uri);
+        return response = response.concat(_this.get_absolute_uris(childResource[1], uri));
+      });
+      return response;
     };
 
     Validator.prototype.key_or_value = function(node) {
@@ -11308,6 +11180,7 @@ function decode(str) {
       if (node instanceof nodes.MappingNode) {
         return node.value[0][0].value;
       }
+      return console.log(node);
     };
 
     Validator.prototype.valid_trait_consumption = function(node, traits) {
@@ -11317,14 +11190,14 @@ function decode(str) {
         traits = void 0;
       }
       this.check_is_map(node);
-      if ((traits == null) && this.has_property(node, /traits/i)) {
-        traits = this.property_value(node, /traits/i);
+      if ((traits == null) && this.has_property(node, /^traits$/i)) {
+        traits = this.property_value(node, /^traits$/i);
       }
       resources = this.child_resources(node);
       return resources.forEach(function(resource) {
         var uses;
-        if (_this.has_property(resource[1], /use/i)) {
-          uses = _this.property_value(resource[1], /use/i);
+        if (_this.has_property(resource[1], /^use$/i)) {
+          uses = _this.property_value(resource[1], /^use$/i);
           if (!(uses instanceof Array)) {
             throw new exports.ValidationError('while validating trait consumption', null, 'use property must be an array', node.start_mark);
           }
@@ -11342,22 +11215,22 @@ function decode(str) {
 
     Validator.prototype.has_title = function(node) {
       this.check_is_map(node);
-      if (!this.has_property(node, /title/i)) {
+      if (!this.has_property(node, /^title$/i)) {
         throw new exports.ValidationError('while validating title', null, 'missing title', node.start_mark);
       }
     };
 
     Validator.prototype.has_version = function(node) {
       this.check_is_map(node);
-      if (!this.has_property(node, /version/i)) {
+      if (!this.has_property(node, /^version$/i)) {
         throw new exports.ValidationError('while validating version', null, 'missing version', node.start_mark);
       }
     };
 
     Validator.prototype.valid_base_uri = function(node) {
       var baseUri, err, expression, expressions, template, _i, _len, _results;
-      if (this.has_property(node, /baseUri/i)) {
-        baseUri = this.property_value(node, /baseUri/i);
+      if (this.has_property(node, /^baseUri$/i)) {
+        baseUri = this.property_value(node, /^baseUri$/i);
         try {
           template = uritemplate.parse(baseUri);
         } catch (_error) {
@@ -11394,7 +11267,249 @@ function decode(str) {
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"uritemplate":25}],24:[function(require,module,exports){
+},{"./errors":1,"./nodes":11,"uritemplate":24}],12:[function(require,module,exports){
+(function() {
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  this.composer = require('./composer');
+
+  this.constructor = require('./construct');
+
+  this.errors = require('./errors');
+
+  this.events = require('./events');
+
+  this.loader = require('./loader');
+
+  this.nodes = require('./nodes');
+
+  this.parser = require('./parser');
+
+  this.reader = require('./reader');
+
+  this.resolver = require('./resolver');
+
+  this.scanner = require('./scanner');
+
+  this.tokens = require('./tokens');
+
+  this.q = require('q');
+
+  this.FileError = (function(_super) {
+    __extends(FileError, _super);
+
+    function FileError() {
+      _ref = FileError.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return FileError;
+
+  })(this.errors.MarkedYAMLError);
+
+  /*
+  Scan a RAML stream and produce scanning tokens.
+  */
+
+
+  this.scan = function(stream, location) {
+    var loader, _results;
+    loader = new exports.loader.Loader(stream, location);
+    _results = [];
+    while (loader.check_token()) {
+      _results.push(loader.get_token());
+    }
+    return _results;
+  };
+
+  /*
+  Parse a RAML stream and produce parsing events.
+  */
+
+
+  this.parse = function(stream, location) {
+    var loader, _results;
+    loader = new exports.loader.Loader(stream, location);
+    _results = [];
+    while (loader.check_event()) {
+      _results.push(loader.get_event());
+    }
+    return _results;
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  representation tree.
+  */
+
+
+  this.compose = function(stream, validate, apply, join, location) {
+    var loader;
+    if (validate == null) {
+      validate = true;
+    }
+    if (apply == null) {
+      apply = true;
+    }
+    if (join == null) {
+      join = true;
+    }
+    loader = new exports.loader.Loader(stream, location);
+    return loader.get_single_node(validate, apply, join);
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  Javascript object.
+  */
+
+
+  this.load = function(stream, validate, location) {
+    var deferred, error, loader, result;
+    if (validate == null) {
+      validate = true;
+    }
+    loader = new exports.loader.Loader(stream, location);
+    deferred = new this.q.defer;
+    try {
+      result = loader.get_single_data();
+      deferred.resolve(result);
+    } catch (_error) {
+      error = _error;
+      deferred.reject(error);
+    }
+    return deferred.promise;
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce a list of
+    all the absolute URIs for all resources
+  */
+
+
+  this.resources = function(stream, validate, location) {
+    var deferred, error, loader, result;
+    if (validate == null) {
+      validate = true;
+    }
+    loader = new exports.loader.Loader(stream, location);
+    deferred = new this.q.defer;
+    try {
+      result = loader.resources();
+      deferred.resolve(result);
+    } catch (_error) {
+      error = _error;
+      deferred.reject(error);
+    }
+    return deferred.promise;
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  Javascript object.
+  */
+
+
+  this.loadFile = function(file, validate) {
+    var stream;
+    if (validate == null) {
+      validate = true;
+    }
+    stream = this.readFile(file);
+    return this.load(stream, validate, file);
+  };
+
+  /*
+  Parse the first RAML document in a file and produce the corresponding
+  representation tree.
+  */
+
+
+  this.composeFile = function(file, validate, apply, join) {
+    var stream;
+    if (validate == null) {
+      validate = true;
+    }
+    if (apply == null) {
+      apply = true;
+    }
+    if (join == null) {
+      join = true;
+    }
+    stream = this.readFile(file);
+    return this.compose(stream, validate, apply, join, file);
+  };
+
+  /*
+  Parse the first RAML document in a file and produce a list of
+    all the absolute URIs for all resources
+  */
+
+
+  this.resourcesFile = function(file, validate) {
+    var stream;
+    if (validate == null) {
+      validate = true;
+    }
+    stream = this.readFile(file);
+    return this.resources(stream, validate, file);
+  };
+
+  /*
+  Read file either locally or from the network
+  */
+
+
+  this.readFile = function(file) {
+    var fs, url;
+    url = require('url').parse(file);
+    if (url.protocol != null) {
+      if (!url.protocol.match(/^https?/i)) {
+        throw new exports.FileError('while reading ' + file, null, 'unknown protocol ' + url.protocol, this.start_mark);
+      } else {
+        return this.fetchFile(file);
+      }
+    } else {
+      if (!(typeof window !== "undefined" && window !== null)) {
+        fs = require('fs');
+        if (fs.existsSync(file)) {
+          return fs.readFileSync(file).toString();
+        } else {
+          throw new exports.FileError('while reading ' + file, null, 'cannot find ' + file, this.start_mark);
+        }
+      } else {
+        return this.fetchFile(file);
+      }
+    }
+  };
+
+  /*
+  Read file from the network
+  */
+
+
+  this.fetchFile = function(file) {
+    var xhr;
+    if (typeof window === "undefined" || window === null) {
+      xhr = new (require("xmlhttprequest").XMLHttpRequest)();
+    } else {
+      xhr = new XMLHttpRequest();
+    }
+    xhr.open('GET', file, false);
+    xhr.setRequestHeader('Accept', 'application/raml+yaml, */*');
+    xhr.send(null);
+    if ((typeof xhr.status === 'number' && xhr.status === 200) || (typeof xhr.status === 'string' && xhr.status.match(/^200/i))) {
+      return xhr.responseText;
+    } else {
+      throw new exports.FileError('while reading ' + file, null, 'error ' + xhr.status, this.start_mark);
+    }
+  };
+
+}).call(this);
+
+},{"url":7,"fs":9,"./composer":10,"./construct":14,"./errors":1,"./events":2,"./loader":16,"./nodes":11,"./parser":19,"./reader":17,"./resolver":20,"./scanner":18,"./tokens":3,"q":6,"xmlhttprequest":25}],25:[function(require,module,exports){
 (function(process,Buffer){/**
  * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
  *
@@ -11960,7 +12075,7 @@ exports.XMLHttpRequest = function() {
 };
 
 })(require("__browserify_process"),require("__browserify_buffer").Buffer)
-},{"url":7,"child_process":26,"fs":9,"http":27,"https":28,"__browserify_process":5,"__browserify_buffer":13}],25:[function(require,module,exports){
+},{"url":7,"child_process":26,"fs":9,"http":27,"https":28,"__browserify_process":5,"__browserify_buffer":13}],24:[function(require,module,exports){
 (function(global){/*global unescape, module, define, window, global*/
 
 /*
@@ -12848,10 +12963,6 @@ var UriTemplate = (function () {
 ));
 
 })(window)
-},{}],26:[function(require,module,exports){
-exports.spawn = function () {};
-exports.exec = function () {};
-
 },{}],28:[function(require,module,exports){
 var http = require('http');
 
@@ -12866,7 +12977,11 @@ https.request = function (params, cb) {
     params.scheme = 'https';
     return http.request.call(this, params, cb);
 }
-},{"http":27}],29:[function(require,module,exports){
+},{"http":27}],26:[function(require,module,exports){
+exports.spawn = function () {};
+exports.exec = function () {};
+
+},{}],29:[function(require,module,exports){
 (function(process){if (!process.EventEmitter) process.EventEmitter = function () {};
 
 var EventEmitter = exports.EventEmitter = process.EventEmitter;
@@ -13589,127 +13704,6 @@ exports.format = function(f) {
 };
 
 },{"events":29}],33:[function(require,module,exports){
-var Stream = require('stream');
-
-var Response = module.exports = function (res) {
-    this.offset = 0;
-    this.readable = true;
-};
-
-Response.prototype = new Stream;
-
-var capable = {
-    streaming : true,
-    status2 : true
-};
-
-function parseHeaders (res) {
-    var lines = res.getAllResponseHeaders().split(/\r?\n/);
-    var headers = {};
-    for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        if (line === '') continue;
-        
-        var m = line.match(/^([^:]+):\s*(.*)/);
-        if (m) {
-            var key = m[1].toLowerCase(), value = m[2];
-            
-            if (headers[key] !== undefined) {
-            
-                if (isArray(headers[key])) {
-                    headers[key].push(value);
-                }
-                else {
-                    headers[key] = [ headers[key], value ];
-                }
-            }
-            else {
-                headers[key] = value;
-            }
-        }
-        else {
-            headers[line] = true;
-        }
-    }
-    return headers;
-}
-
-Response.prototype.getResponse = function (xhr) {
-    var respType = String(xhr.responseType).toLowerCase();
-    if (respType === 'blob') return xhr.responseBlob || xhr.response;
-    if (respType === 'arraybuffer') return xhr.response;
-    return xhr.responseText;
-}
-
-Response.prototype.getHeader = function (key) {
-    return this.headers[key.toLowerCase()];
-};
-
-Response.prototype.handle = function (res) {
-    if (res.readyState === 2 && capable.status2) {
-        try {
-            this.statusCode = res.status;
-            this.headers = parseHeaders(res);
-        }
-        catch (err) {
-            capable.status2 = false;
-        }
-        
-        if (capable.status2) {
-            this.emit('ready');
-        }
-    }
-    else if (capable.streaming && res.readyState === 3) {
-        try {
-            if (!this.statusCode) {
-                this.statusCode = res.status;
-                this.headers = parseHeaders(res);
-                this.emit('ready');
-            }
-        }
-        catch (err) {}
-        
-        try {
-            this._emitData(res);
-        }
-        catch (err) {
-            capable.streaming = false;
-        }
-    }
-    else if (res.readyState === 4) {
-        if (!this.statusCode) {
-            this.statusCode = res.status;
-            this.emit('ready');
-        }
-        this._emitData(res);
-        
-        if (res.error) {
-            this.emit('error', this.getResponse(res));
-        }
-        else this.emit('end');
-        
-        this.emit('close');
-    }
-};
-
-Response.prototype._emitData = function (res) {
-    var respBody = this.getResponse(res);
-    if (respBody.toString().match(/ArrayBuffer/)) {
-        this.emit('data', new Uint8Array(respBody, this.offset));
-        this.offset = respBody.byteLength;
-        return;
-    }
-    if (respBody.length > this.offset) {
-        this.emit('data', respBody.slice(this.offset));
-        this.offset = respBody.length;
-    }
-};
-
-var isArray = Array.isArray || function (xs) {
-    return Object.prototype.toString.call(xs) === '[object Array]';
-};
-
-},{"stream":31}],34:[function(require,module,exports){
 (function(){// UTILITY
 var util = require('util');
 var Buffer = require("buffer").Buffer;
@@ -14026,7 +14020,128 @@ assert.doesNotThrow = function(block, /*optional*/error, /*optional*/message) {
 assert.ifError = function(err) { if (err) {throw err;}};
 
 })()
-},{"util":32,"buffer":35}],36:[function(require,module,exports){
+},{"util":32,"buffer":34}],35:[function(require,module,exports){
+var Stream = require('stream');
+
+var Response = module.exports = function (res) {
+    this.offset = 0;
+    this.readable = true;
+};
+
+Response.prototype = new Stream;
+
+var capable = {
+    streaming : true,
+    status2 : true
+};
+
+function parseHeaders (res) {
+    var lines = res.getAllResponseHeaders().split(/\r?\n/);
+    var headers = {};
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        if (line === '') continue;
+        
+        var m = line.match(/^([^:]+):\s*(.*)/);
+        if (m) {
+            var key = m[1].toLowerCase(), value = m[2];
+            
+            if (headers[key] !== undefined) {
+            
+                if (isArray(headers[key])) {
+                    headers[key].push(value);
+                }
+                else {
+                    headers[key] = [ headers[key], value ];
+                }
+            }
+            else {
+                headers[key] = value;
+            }
+        }
+        else {
+            headers[line] = true;
+        }
+    }
+    return headers;
+}
+
+Response.prototype.getResponse = function (xhr) {
+    var respType = String(xhr.responseType).toLowerCase();
+    if (respType === 'blob') return xhr.responseBlob || xhr.response;
+    if (respType === 'arraybuffer') return xhr.response;
+    return xhr.responseText;
+}
+
+Response.prototype.getHeader = function (key) {
+    return this.headers[key.toLowerCase()];
+};
+
+Response.prototype.handle = function (res) {
+    if (res.readyState === 2 && capable.status2) {
+        try {
+            this.statusCode = res.status;
+            this.headers = parseHeaders(res);
+        }
+        catch (err) {
+            capable.status2 = false;
+        }
+        
+        if (capable.status2) {
+            this.emit('ready');
+        }
+    }
+    else if (capable.streaming && res.readyState === 3) {
+        try {
+            if (!this.statusCode) {
+                this.statusCode = res.status;
+                this.headers = parseHeaders(res);
+                this.emit('ready');
+            }
+        }
+        catch (err) {}
+        
+        try {
+            this._emitData(res);
+        }
+        catch (err) {
+            capable.streaming = false;
+        }
+    }
+    else if (res.readyState === 4) {
+        if (!this.statusCode) {
+            this.statusCode = res.status;
+            this.emit('ready');
+        }
+        this._emitData(res);
+        
+        if (res.error) {
+            this.emit('error', this.getResponse(res));
+        }
+        else this.emit('end');
+        
+        this.emit('close');
+    }
+};
+
+Response.prototype._emitData = function (res) {
+    var respBody = this.getResponse(res);
+    if (respBody.toString().match(/ArrayBuffer/)) {
+        this.emit('data', new Uint8Array(respBody, this.offset));
+        this.offset = respBody.byteLength;
+        return;
+    }
+    if (respBody.length > this.offset) {
+        this.emit('data', respBody.slice(this.offset));
+        this.offset = respBody.length;
+    }
+};
+
+var isArray = Array.isArray || function (xs) {
+    return Object.prototype.toString.call(xs) === '[object Array]';
+};
+
+},{"stream":31}],36:[function(require,module,exports){
 exports.readIEEE754 = function(buffer, offset, isBE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -14112,7 +14227,7 @@ exports.writeIEEE754 = function(buffer, value, offset, isBE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],35:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function(){var assert = require('assert');
 exports.Buffer = Buffer;
 exports.SlowBuffer = Buffer;
@@ -15196,7 +15311,7 @@ Buffer.prototype.writeDoubleBE = function(value, offset, noAssert) {
 };
 
 })()
-},{"assert":34,"./buffer_ieee754":36,"base64-js":37}],30:[function(require,module,exports){
+},{"assert":33,"./buffer_ieee754":36,"base64-js":37}],30:[function(require,module,exports){
 (function(){var Stream = require('stream');
 var Response = require('./response');
 var concatStream = require('concat-stream')
@@ -15330,90 +15445,90 @@ var indexOf = function (xs, x) {
 };
 
 })()
-},{"stream":31,"buffer":35,"./response":33,"concat-stream":38}],37:[function(require,module,exports){
+},{"stream":31,"buffer":34,"./response":35,"concat-stream":38}],37:[function(require,module,exports){
 (function (exports) {
-	'use strict';
+  'use strict';
 
-	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-	function b64ToByteArray(b64) {
-		var i, j, l, tmp, placeHolders, arr;
-	
-		if (b64.length % 4 > 0) {
-			throw 'Invalid string. Length must be a multiple of 4';
-		}
+  function b64ToByteArray(b64) {
+    var i, j, l, tmp, placeHolders, arr;
+  
+    if (b64.length % 4 > 0) {
+      throw 'Invalid string. Length must be a multiple of 4';
+    }
 
-		// the number of equal signs (place holders)
-		// if there are two placeholders, than the two characters before it
-		// represent one byte
-		// if there is only one, then the three characters before it represent 2 bytes
-		// this is just a cheap hack to not do indexOf twice
-		placeHolders = b64.indexOf('=');
-		placeHolders = placeHolders > 0 ? b64.length - placeHolders : 0;
+    // the number of equal signs (place holders)
+    // if there are two placeholders, than the two characters before it
+    // represent one byte
+    // if there is only one, then the three characters before it represent 2 bytes
+    // this is just a cheap hack to not do indexOf twice
+    placeHolders = b64.indexOf('=');
+    placeHolders = placeHolders > 0 ? b64.length - placeHolders : 0;
 
-		// base64 is 4/3 + up to two characters of the original data
-		arr = [];//new Uint8Array(b64.length * 3 / 4 - placeHolders);
+    // base64 is 4/3 + up to two characters of the original data
+    arr = [];//new Uint8Array(b64.length * 3 / 4 - placeHolders);
 
-		// if there are placeholders, only get up to the last complete 4 chars
-		l = placeHolders > 0 ? b64.length - 4 : b64.length;
+    // if there are placeholders, only get up to the last complete 4 chars
+    l = placeHolders > 0 ? b64.length - 4 : b64.length;
 
-		for (i = 0, j = 0; i < l; i += 4, j += 3) {
-			tmp = (lookup.indexOf(b64[i]) << 18) | (lookup.indexOf(b64[i + 1]) << 12) | (lookup.indexOf(b64[i + 2]) << 6) | lookup.indexOf(b64[i + 3]);
-			arr.push((tmp & 0xFF0000) >> 16);
-			arr.push((tmp & 0xFF00) >> 8);
-			arr.push(tmp & 0xFF);
-		}
+    for (i = 0, j = 0; i < l; i += 4, j += 3) {
+      tmp = (lookup.indexOf(b64[i]) << 18) | (lookup.indexOf(b64[i + 1]) << 12) | (lookup.indexOf(b64[i + 2]) << 6) | lookup.indexOf(b64[i + 3]);
+      arr.push((tmp & 0xFF0000) >> 16);
+      arr.push((tmp & 0xFF00) >> 8);
+      arr.push(tmp & 0xFF);
+    }
 
-		if (placeHolders === 2) {
-			tmp = (lookup.indexOf(b64[i]) << 2) | (lookup.indexOf(b64[i + 1]) >> 4);
-			arr.push(tmp & 0xFF);
-		} else if (placeHolders === 1) {
-			tmp = (lookup.indexOf(b64[i]) << 10) | (lookup.indexOf(b64[i + 1]) << 4) | (lookup.indexOf(b64[i + 2]) >> 2);
-			arr.push((tmp >> 8) & 0xFF);
-			arr.push(tmp & 0xFF);
-		}
+    if (placeHolders === 2) {
+      tmp = (lookup.indexOf(b64[i]) << 2) | (lookup.indexOf(b64[i + 1]) >> 4);
+      arr.push(tmp & 0xFF);
+    } else if (placeHolders === 1) {
+      tmp = (lookup.indexOf(b64[i]) << 10) | (lookup.indexOf(b64[i + 1]) << 4) | (lookup.indexOf(b64[i + 2]) >> 2);
+      arr.push((tmp >> 8) & 0xFF);
+      arr.push(tmp & 0xFF);
+    }
 
-		return arr;
-	}
+    return arr;
+  }
 
-	function uint8ToBase64(uint8) {
-		var i,
-			extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
-			output = "",
-			temp, length;
+  function uint8ToBase64(uint8) {
+    var i,
+      extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
+      output = "",
+      temp, length;
 
-		function tripletToBase64 (num) {
-			return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F];
-		};
+    function tripletToBase64 (num) {
+      return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F];
+    };
 
-		// go through the array every three bytes, we'll deal with trailing stuff later
-		for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
-			temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
-			output += tripletToBase64(temp);
-		}
+    // go through the array every three bytes, we'll deal with trailing stuff later
+    for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
+      temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
+      output += tripletToBase64(temp);
+    }
 
-		// pad the end with zeros, but make sure to not forget the extra bytes
-		switch (extraBytes) {
-			case 1:
-				temp = uint8[uint8.length - 1];
-				output += lookup[temp >> 2];
-				output += lookup[(temp << 4) & 0x3F];
-				output += '==';
-				break;
-			case 2:
-				temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1]);
-				output += lookup[temp >> 10];
-				output += lookup[(temp >> 4) & 0x3F];
-				output += lookup[(temp << 2) & 0x3F];
-				output += '=';
-				break;
-		}
+    // pad the end with zeros, but make sure to not forget the extra bytes
+    switch (extraBytes) {
+      case 1:
+        temp = uint8[uint8.length - 1];
+        output += lookup[temp >> 2];
+        output += lookup[(temp << 4) & 0x3F];
+        output += '==';
+        break;
+      case 2:
+        temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1]);
+        output += lookup[temp >> 10];
+        output += lookup[(temp >> 4) & 0x3F];
+        output += lookup[(temp << 2) & 0x3F];
+        output += '=';
+        break;
+    }
 
-		return output;
-	}
+    return output;
+  }
 
-	module.exports.toByteArray = b64ToByteArray;
-	module.exports.fromByteArray = uint8ToBase64;
+  module.exports.toByteArray = b64ToByteArray;
+  module.exports.fromByteArray = uint8ToBase64;
 }());
 
 },{}],38:[function(require,module,exports){
