@@ -7,7 +7,7 @@
       <li role="try-it" ng-class="{active:isTabActive('try-it')}" ng-click="changeTab('try-it')">
         <span>Try it</span>
       </li>
-      <li role="parameters" ng-class="{active:isTabActive('parameters')}" ng-click="changeTab('parameters')">
+      <li role="parameters" ng-class="{active:isTabActive('parameters')}" ng-click="changeTab('parameters')" ng-show="(urlParams | filter: {editable: true}).length || queryParams.length">
         <span>Parameters</span>
       </li>
       <li role="requests" ng-class="{active:isTabActive('requests')}" ng-click="changeTab('requests')">
