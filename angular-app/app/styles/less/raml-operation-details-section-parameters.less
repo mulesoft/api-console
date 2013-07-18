@@ -3,7 +3,8 @@
 @table-font-color: rgb(96, 100, 104);
 
 section[role=api-operation-details-section-parameters] {
-
+  background: rgb(251,251,251);
+  padding-bottom: 40px;
   * {
     font-size: 13px;
     color: @table-font-color;
@@ -33,6 +34,8 @@ section[role=api-operation-details-section-parameters] {
       border-collapse: collapse;
       border-right: 0px;
       border-left: 0px;
+      box-shadow: 0px 3px 6px -4px @border-color-gray;
+      margin-bottom: 13px;
       > thead {
         > tr {
           > th:first-of-type {
@@ -46,18 +49,29 @@ section[role=api-operation-details-section-parameters] {
             text-transform: uppercase;
             margin: 0px;
             border: 1px solid @border-color-gray;
-            background-color: @fill-color-dark-gray;
             border-right: 0px;
+            background-color: @fill-color-dark-gray;
             font-weight: lighter;
             text-align: left;
           }
         }
       }
       > tbody {
+        > tr:nth-of-type(1) {
+          > td {
+            box-shadow: inset 0px 4px 2px -3px @border-color-gray;
+          }
+        }
         > tr {
           border-bottom: 1px solid @border-color-gray;
+          &:hover {
+            border-left: 1px solid #40cd5d;
+            background-color: @background-selected-color;
+            cursor: pointer;
+          }
           > td {
             .padded-table-cell;
+            background-color: white;
             padding-bottom: 10px;
             padding-top: 10px;
             line-height: 23px;

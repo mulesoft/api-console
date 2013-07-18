@@ -133,6 +133,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 */
+section[role=api-operation-details-section-parameters] {
+  background: #fbfbfb;
+  padding-bottom: 40px;
+}
 section[role=api-operation-details-section-parameters] * {
   font-size: 13px;
   color: #606468;
@@ -160,6 +164,8 @@ section[role=api-operation-details-section-parameters] > section[role=parameter-
   border-collapse: collapse;
   border-right: 0px;
   border-left: 0px;
+  box-shadow: 0px 3px 6px -4px #dadcdd;
+  margin-bottom: 13px;
 }
 section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > thead > tr > th:first-of-type {
   border-left: 0px;
@@ -172,16 +178,25 @@ section[role=api-operation-details-section-parameters] > section[role=parameter-
   text-transform: uppercase;
   margin: 0px;
   border: 1px solid #dadcdd;
-  background-color: #f4f6f8;
   border-right: 0px;
+  background-color: #f4f6f8;
   font-weight: lighter;
   text-align: left;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr:nth-of-type(1) > td {
+  box-shadow: inset 0px 4px 2px -3px #dadcdd;
 }
 section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr {
   border-bottom: 1px solid #dadcdd;
 }
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr:hover {
+  border-left: 1px solid #40cd5d;
+  background-color: #fbfbfb;
+  cursor: pointer;
+}
 section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr > td {
   padding: 7px 20px;
+  background-color: white;
   padding-bottom: 10px;
   padding-top: 10px;
   line-height: 23px;
