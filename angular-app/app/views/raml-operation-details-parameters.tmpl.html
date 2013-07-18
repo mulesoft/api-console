@@ -1,1 +1,38 @@
-<section role="api-operation-details-section-parameters"></section>
+<section role="api-operation-details-section-parameters">
+  <section role="parameter-list" ng-show="(urlParams | filter: {editable: true}).length">
+    <header>
+      <h1>Url Parameters</h1>
+    </header>
+    <table>
+      <thead>
+        <tr>
+          <th>Param</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-include="'/views/raml-parameter-row-part.tmpl.html'" ng-repeat="param in urlParams | filter: {editable: true}"></tr>
+      </tbody>
+    </table>
+  </section>
+  <section role="parameter-list" ng-show="urlParams.length">
+    <header>
+      <h1>Query Parameters</h1>
+    </header>
+    <table>
+      <thead>
+        <tr>
+          <th>Param</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-include="'/views/raml-parameter-row-part.tmpl.html'" ng-repeat="param in queryParams"></tr>
+      </tbody>
+    </table>
+  </section>
+</section>

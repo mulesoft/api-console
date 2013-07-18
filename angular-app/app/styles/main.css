@@ -133,6 +133,89 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 */
+section[role=api-operation-details-section-parameters] {
+  background: #fbfbfb;
+  padding-bottom: 40px;
+}
+section[role=api-operation-details-section-parameters] * {
+  font-size: 13px;
+  color: #606468;
+}
+section[role=api-operation-details-section-parameters] .padded-table-cell {
+  padding: 7px 20px;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > header {
+  display: block;
+  background: #fbfbfb;
+  height: 60px;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > header > h1 {
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 60px;
+  margin: 0px;
+  padding: 0px 20px;
+  color: black;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table {
+  border: 1px solid #dadcdd;
+  width: 100%;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  border-right: 0px;
+  border-left: 0px;
+  box-shadow: 0px 3px 6px -4px #dadcdd;
+  margin-bottom: 13px;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > thead > tr > th:first-of-type {
+  border-left: 0px;
+  margin-left: -1px;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > thead > tr > th {
+  padding: 7px 20px;
+  color: #9fa3a6;
+  font-size: 10px;
+  text-transform: uppercase;
+  margin: 0px;
+  border: 1px solid #dadcdd;
+  border-right: 0px;
+  background-color: #f4f6f8;
+  font-weight: lighter;
+  text-align: left;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr:nth-of-type(1) > td {
+  box-shadow: inset 0px 4px 2px -3px #dadcdd;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr {
+  border-bottom: 1px solid #dadcdd;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr:hover {
+  border-left: 1px solid #40cd5d;
+  background-color: #fbfbfb;
+  cursor: pointer;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr > td {
+  padding: 7px 20px;
+  background-color: white;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  line-height: 23px;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr > td:nth-child(1) {
+  color: black;
+  font-style: italic;
+  font-weight: bolder;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr > td:nth-child(2) {
+  font-style: italic;
+}
+section[role=api-operation-details-section-parameters] > section[role=parameter-list] > table > tbody > tr > td:nth-child(4) > pre {
+  background-color: #fffdf4;
+  border: 1px solid #e3d6b1;
+  display: inline;
+  padding: 3px 5px;
+  font-size: 11px;
+}
 section[role=api-operation-details-section-try-it] > section[role=request] {
   background: white;
 }
@@ -394,6 +477,13 @@ section[role=api-operation] {
   /* api-operation hover */
 
   /* api-operation active */
+
+  /*
+    > api-operation-details,
+    &:hover > api-operation-details {
+        display: none;
+    }
+    */
 
 }
 section[role=api-operation] > header {
@@ -677,11 +767,23 @@ section[role=api-operation].active > header > hgroup,
 section[role=api-operation].active:hover > header > hgroup {
   padding: 15px 20px 0px 20px;
 }
-section[role=api-operation] > api-operation-details,
-section[role=api-operation]:hover > api-operation-details {
-  display: none;
-}
 section[role=api-operation].active > api-operation-details,
 section[role=api-operation].active:hover > api-operation-details {
   display: block;
 }
+/*
+@media (max-width: @responsive-switch) {
+    section[role=api-operation] {
+        display: block;
+        border: 1px solid rgb(218,220,221);
+        max-height: 45px;
+        color: black;
+        background: white;
+        padding: 15px 20px;
+        position: relative;
+        margin: 0px;
+        margin-top: -1px;
+        transition: max-height 0.05s;
+    }
+}
+*/
