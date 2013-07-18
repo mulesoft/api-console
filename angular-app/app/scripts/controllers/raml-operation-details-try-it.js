@@ -23,14 +23,26 @@ angular.module('ramlConsoleApp')
         };
 
         $scope.$get = function (tester, params) {
+            var that = this;
             this.responseAvailable = true;
 
-            tester.$get(params, function (data) {
-                this.response = data.data;
-                this.headers = data.headers;
-            }.bind(this), function (error) {
+            tester.$get(params, function (data, headers, status, url) {
+                that.response = {
+                    data: data.data,
+                    headers: data.headers,
+                    statusCode: status,
+                    url: url
+                };
+            }, function (error) {
+                that.response = {
+                    data: error.data.data,
+                    headers: error.data.headers,
+                    statusCode: error.status,
+                    url: error.config.url
+                };
+
                 console.log(error);
-            }.bind(this));
+            });
         }
 
         $scope.transformResponse = function (data) {
@@ -45,6 +57,12 @@ angular.module('ramlConsoleApp')
                         method:'GET',
                         isArray: false,
                         transformResponse: function (data, headers) {
+                            try {
+                                data = JSON.parse(data);
+                                data = angular.toJson(data, true);
+                            }
+                            catch (e) {}
+
                             return { data: data, headers: angular.toJson(headers(), true) };
                         },
                         transformRequest: function (data, headers) {

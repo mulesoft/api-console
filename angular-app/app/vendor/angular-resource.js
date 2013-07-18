@@ -40,9 +40,9 @@
  *   `http://example.com:8080/api`), you'll need to escape the colon character before the port
  *   number, like this: `$resource('http://example.com\\:8080/api')`.
  *
- *   If you are using a url with a suffix, just add the suffix, like this: 
+ *   If you are using a url with a suffix, just add the suffix, like this:
  *   `$resource('http://example.com/resource.json')` or `$resource('http://example.com/:id.json')
- *   or even `$resource('http://example.com/resource/:resource_id.:format')` 
+ *   or even `$resource('http://example.com/resource/:resource_id.:format')`
  *   If the parameter before the suffix is empty, :resource_id in this case, then the `/.` will be
  *   collapsed down to a single `.`.  If you need this sequence to appear and not collapse then you
  *   can escape it with `/\.`.
@@ -376,7 +376,7 @@ angular.module('ngResource', ['ng']).
         url = url.replace(/\/\.(?=\w+($|\?))/, '.');
         // replace escaped `/\.` with `/.`
         config.url = url.replace(/\/\\\./, '/.');
-          
+
 
         // set params - delegate param encoding to $http
         forEach(params, function(value, key){
@@ -487,7 +487,7 @@ angular.module('ngResource', ['ng']).
               }
             }
 
-            (success||noop)(value, response.headers);
+            (success||noop)(value, response.headers, response.status, response.config.url);
 
             response.resource = value;
             return response;
