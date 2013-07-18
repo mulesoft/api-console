@@ -487,7 +487,7 @@ angular.module('ngResource', ['ng']).
               }
             }
 
-            (success||noop)(value, response.headers, response.status);
+            (success||noop)(value, response.headers, response.status, response.config.url);
 
             response.resource = value;
             return response;

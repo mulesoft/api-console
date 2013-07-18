@@ -26,13 +26,21 @@ angular.module('ramlConsoleApp')
             var that = this;
             this.responseAvailable = true;
 
-            tester.$get(params, function (data, headers, status) {
+            tester.$get(params, function (data, headers, status, url) {
                 that.response = {
                     data: data.data,
                     headers: data.headers,
-                    statusCode: status
+                    statusCode: status,
+                    url: url
                 };
             }, function (error) {
+                that.response = {
+                    data: error.data.data,
+                    headers: error.data.headers,
+                    statusCode: error.status,
+                    url: error.config.url
+                };
+
                 console.log(error);
             });
         }
