@@ -26,10 +26,10 @@ angular.module('ramlConsoleApp')
             this.responseAvailable = true;
 
             tester.$get(params, function (data) {
-                console.log(data);
-            }, function (error) {
+                this.response = data.data;
+            }.bind(this), function (error) {
                 console.log(error);
-            });
+            }.bind(this));
         }
 
         $scope.transformResponse = function (data) {
@@ -44,8 +44,7 @@ angular.module('ramlConsoleApp')
                         method:'GET',
                         isArray: false,
                         transformResponse: function (data, header) {
-                            var wrapped = angular.fromJson(data);
-                            return wrapped;
+                            return { data: data };
                         },
                         transformRequest: function (data, headers) {
                             return data;

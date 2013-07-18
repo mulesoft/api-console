@@ -549,6 +549,10 @@ section[role=api-operation-details-section-try-it] > section[role=response] > se
   max-width: 723px;
   overflow: scroll;
 }
+section[role=api-operation-details-section-try-it] > section[role=response] > section[role=response-body] pre {
+  padding: 3px 20px;
+  font-size: 11px;
+}
 section[role=api-operation].active section[role=api-operation-details] {
   display: block;
 }
