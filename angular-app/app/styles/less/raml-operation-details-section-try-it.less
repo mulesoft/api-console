@@ -171,12 +171,20 @@ section[role=api-operation-details-section-try-it] > section[role=response] {
   }
   > section[role=request-uri] > p,
   > section[role=response-code] > p,
-  > section[role=response-headers] > p,
+  > section[role=response-headers] > ul[role=headers-list],
   > section[role=response-body] > p {
       padding: 0px 20px;
       margin: 0px;
       font-family: monospace;
+      list-style: none;
   }
+  
+  > section[role=response-headers] > ul[role=headers-list] > li > span[role=key] {
+    &:after {
+      content: ':';
+    }
+  }
+
   > section[role=response-headers] {
       pre {
         padding: 3px 20px;

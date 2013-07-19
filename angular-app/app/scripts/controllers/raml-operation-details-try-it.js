@@ -52,7 +52,7 @@ angular.module('ramlConsoleApp')
             }
             catch (e) {}
 
-            return { data: data, headers: angular.toJson(headers(), true) };
+            return { data: data, headers: headers() };
         };
 
         $scope.transformRequest = function (data, headers) {

@@ -3,25 +3,27 @@
       <h1>Summary</h1>
       <p>{{operation.summary}}</p>
   </header>
-  <ul role="details-sections">
-      <li role="try-it" ng-class="{active:isTabActive('try-it')}" ng-click="changeTab('try-it')">
-        <span>Try it</span>
-      </li>
-      <li role="parameters" ng-class="{active:isTabActive('parameters')}" ng-click="changeTab('parameters')" ng-show="(urlParams | filter: {editable: true}).length || queryParams.length">
-        <span>Parameters</span>
-      </li>
-      <li role="requests" ng-class="{active:isTabActive('requests')}" ng-click="changeTab('requests')" ng-show="(resource.methods | filter: requestFilter).length">
-        <span>Request</span>
-      </li>
-      <li role="response" ng-class="{active:isTabActive('response')}" ng-click="changeTab('response')" ng-show="(resource.methods | filter: responseFilter).length">
-        <span>Response</span>
-      </li>
-  </ul>
-  <ul role="response-type" ng-repeat="bodyParam in bodyParams">
-      <li ng-click="changeBodyType(bodyParam.name)">{{bodyParam.name}}</li>
-  </ul>
-  <ng-include ng-show="isTabActive('try-it')" src="'views/raml-operation-details-try-it.tmpl.html'"></ng-include>
-  <ng-include ng-show="isTabActive('parameters')" src="'views/raml-operation-details-parameters.tmpl.html'"></ng-include>
-  <ng-include ng-show="isTabActive('requests')" src="'views/raml-operation-details-request.tmpl.html'"></ng-include>
-  <ng-include ng-show="isTabActive('response')" src="'views/raml-operation-details-response.tmpl.html'"></ng-include>
+  <div role="details-body">
+    <ul role="details-sections">
+        <li role="try-it" ng-class="{active:isTabActive('try-it')}" ng-click="changeTab('try-it')">
+          <span>Try it</span>
+        </li>
+        <li role="parameters" ng-class="{active:isTabActive('parameters')}" ng-click="changeTab('parameters')" ng-show="(urlParams | filter: {editable: true}).length || queryParams.length">
+          <span>Parameters</span>
+        </li>
+        <li role="requests" ng-class="{active:isTabActive('requests')}" ng-click="changeTab('requests')" ng-show="(resource.methods | filter: requestFilter).length">
+          <span>Request</span>
+        </li>
+        <li role="response" ng-class="{active:isTabActive('response')}" ng-click="changeTab('response')" ng-show="(resource.methods | filter: responseFilter).length">
+          <span>Response</span>
+        </li>
+    </ul>
+    <ul role="content-types">
+        <li ng-repeat="bodyParam in bodyParams" ng-click="changeBodyType(bodyParam.name)">{{bodyParam.name}}</li>
+    </ul>
+    <ng-include ng-show="isTabActive('try-it')" src="'views/raml-operation-details-try-it.tmpl.html'"></ng-include>
+    <ng-include ng-show="isTabActive('parameters')" src="'views/raml-operation-details-parameters.tmpl.html'"></ng-include>
+    <ng-include ng-show="isTabActive('requests')" src="'views/raml-operation-details-request.tmpl.html'"></ng-include>
+    <ng-include ng-show="isTabActive('response')" src="'views/raml-operation-details-response.tmpl.html'"></ng-include>
+  </div>
 </section>
