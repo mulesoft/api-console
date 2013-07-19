@@ -794,6 +794,14 @@ section[role=api-operation] > header > div[role=summary] > ul[role=operations] >
   margin-top: -2px;
   display: block;
 }
+section[role=api-operation]:not(.active) > header > div[role=summary] > ul[role=operations] > li {
+  color: transparent;
+  max-width: 8px;
+}
+section[role=api-operation]:not(.active):hover > header > div[role=summary] > ul[role=operations] > li {
+  color: white;
+  max-width: 80px;
+}
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=get],
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=get]:after,
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=get]:before {
@@ -803,14 +811,6 @@ section[role=api-operation]:hover > header > div[role=summary] > ul[role=operati
 section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=get]:after,
 section[role=api-operation]:hover > header > div[role=summary] > ul[role=operations] > li[role=get]:before {
   background: #0078ca;
-}
-section[role=api-operation]:not(.active) > header > div[role=summary] > ul[role=operations] > li {
-  color: transparent;
-  max-width: 8px;
-}
-section[role=api-operation]:not(.active):hover > header > div[role=summary] > ul[role=operations] > li {
-  color: white;
-  max-width: 80px;
 }
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=post],
 section[role=api-operation] > header > div[role=summary] > ul[role=operations] > li[role=post]:after,
@@ -904,14 +904,57 @@ section[role=api-operation].active:hover > header > div[role=summary] > ul[role=
   transition: none;
   position: relative;
 }
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li:hover,
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li:hover {
+  transition: all ease-in 0.1s;
+  text-shadow: white 0em 0em 0.2em;
+  border-top: 1px solid #3e505a;
+}
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li:hover[role=get],
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li:hover[role=get] {
+  border-top: 1px solid #7cbce4;
+  text-shadow: #7cbce4 0em 0em 0.2em;
+}
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li:hover[role=post],
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li:hover[role=post] {
+  border-top: 1px solid #9ee9ab;
+  text-shadow: #9ee9ab 0em 0em 0.2em;
+}
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li:hover[role=put],
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li:hover[role=put] {
+  border-top: 1px solid #fdc692;
+  text-shadow: #fdc692 0em 0em 0.2em;
+}
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li:hover[role=delete],
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li:hover[role=delete] {
+  border-top: 1px solid #f78f96;
+  text-shadow: #f78f96 0em 0em 0.2em;
+}
 section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li > a,
 section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li > a {
   line-height: 0px;
 }
 section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li.active,
 section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li.active {
-  background: #5688c9;
-  color: white;
+  color: #3e505a;
+  font-weight: bolder;
+  transition: background 0.5s;
+}
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li.active[role=get],
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li.active[role=get] {
+  background: #7cbce4;
+}
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li.active[role=post],
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li.active[role=post] {
+  background: #9ee9ab;
+}
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li.active[role=put],
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li.active[role=put] {
+  background: #fdc692;
+}
+section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li.active[role=delete],
+section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li.active[role=delete] {
+  background: #f78f96;
 }
 section[role=api-operation].active > header > div[role=summary] > ul[role=operations] > li.active:after,
 section[role=api-operation].active:hover > header > div[role=summary] > ul[role=operations] > li.active:after {
