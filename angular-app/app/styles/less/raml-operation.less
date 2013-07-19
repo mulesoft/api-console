@@ -130,6 +130,18 @@ section[role=api-operation] {
         max-width: 80px;
     }
     
+    > header > div[role=summary] > ul[role=operations] > li,
+    > header > div[role=summary] > ul[role=operations] > li:after,
+    > header > div[role=summary] > ul[role=operations] > li:before {
+      background: @unknown-inactive-color;
+    }
+    
+    &:hover > header > div[role=summary] > ul[role=operations] > li,
+    &:hover > header > div[role=summary] > ul[role=operations] > li:after,
+    &:hover > header > div[role=summary] > ul[role=operations] > li:before {
+        background: @unknown-color;
+    }
+    
     > header > div[role=summary] > ul[role=operations] > li[role=get],
     > header > div[role=summary] > ul[role=operations] > li[role=get]:after,
     > header > div[role=summary] > ul[role=operations] > li[role=get]:before {
@@ -259,22 +271,22 @@ section[role=api-operation] {
         &:hover {
           transition: all ease-in 0.1s;
           text-shadow: white 0em 0em 0.2em;
-          border-top: 1px solid #3e505a;
+          border-top: 1px solid white;
           &[role=get] {
             border-top: 1px solid @get-inactive-color;
-            text-shadow: @get-inactive-color 0em 0em 0.2em;
+            text-shadow: @get-color 0em 0em 0.2em;
           }
           &[role=post] {
             border-top: 1px solid @post-inactive-color;
-            text-shadow: @post-inactive-color 0em 0em 0.2em;
+            text-shadow: @post-color 0em 0em 0.2em;
           }
           &[role=put] {
             border-top: 1px solid @put-inactive-color;
-            text-shadow: @put-inactive-color 0em 0em 0.2em;
+            text-shadow: @put-color 0em 0em 0.2em;
           }
           &[role=delete] {
             border-top: 1px solid @delete-inactive-color;
-            text-shadow: @delete-inactive-color 0em 0em 0.2em;
+            text-shadow: @delete-color 0em 0em 0.2em;
           }
         }
     }
@@ -286,9 +298,10 @@ section[role=api-operation] {
     
     &.active > header > div[role=summary] > ul[role=operations] > li.active,
     &.active:hover > header > div[role=summary] > ul[role=operations] > li.active {
-        color: #3e505a;
+        color: white;
         font-weight: bolder;
         transition: background 0.5s;
+        background: rgb(103,112,122);
         &[role=get] {
           background: @get-inactive-color;
         }
