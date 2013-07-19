@@ -126,6 +126,17 @@ section[role=api-operation-details-section-try-it] > section[role=request] {
       border: 1px solid rgb(108,183,80);
       padding: 10px 40px;
       box-shadow: 0px 0px 4px lightgrey;
+
+      &:hover {
+        text-shadow: 0px 0px 5px greenyellow;
+        box-shadow: 0px 0px 5px rgb(123, 209, 92);
+      }
+
+      &:active {
+        opacity: 0.7;
+        transition: opacity ease-in 0.1s;
+        //text-shadow: 0px 0px 5px gray;
+      }
   }
 }
 
