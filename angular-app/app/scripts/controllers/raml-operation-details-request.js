@@ -17,8 +17,6 @@ angular.module('ramlConsoleApp')
             $scope.description = $filter('filter')(ramlHelper.getRequestData(methodDescriptor), {
                 name: contentType
             })[0];
-
-            console.log($scope.description);
         };
 
         $scope.init();

@@ -1,0 +1,345 @@
+%YAML 1.2
+%TAG ! tag:raml.org,0.1:
+---
+title: La Liga
+version: 1.0
+documentation:
+  - title: Getting Started
+    content: |
+      This sample API has been created as part of your APIkit project. It is located in src/main/api and it has been designed using RAML (Restful
+      API Modeling Language). Feel free to poke around.
+/teams:
+  name: Teams
+  description: |
+    A collection of teams that are participating in La Liga. Teams API allow you add, remove and retrieve individual team information from La Liga.
+  get:
+    summary: Obtain information from a collection of teams simultaneously
+    queryParameters:
+      city:
+        description: |
+          Filter the list of teams by home city.
+        type: string
+        required: false
+        example: Barcelona
+    responses:
+      200:
+        application/json:
+          schema: |
+            {
+                "$schema": "http://json-schema.org/draft-03/schema",
+                "items": {
+                    "description": "The team is the basic unit for keeping track of a roster of players. With the Team APIs, you can obtain team-related information, like the team name, stats, points, and more.",
+                    "name": "Team",
+                    "properties": {
+                        "homeCity": {
+                            "description": "Name of the city to which this team belongs",
+                            "type": "string"
+                        },
+                        "id": {
+                            "description": "A three-letter code that identifies the team id",
+                            "maxLength": 3,
+                            "minLength": 3,
+                            "type": "string"
+                        },
+                        "name": {
+                            "description": "Name of the team",
+                            "type": "string"
+                        },
+                        "required": [
+                            "id",
+                            "name",
+                            "homeCity"
+                        ],
+                        "stadium": {
+                            "description": "Name of the stadium",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "name": "Teams",
+                "required": true,
+                "type": "array"
+            }
+          example: |
+            [{
+              "name": "Athletic Bilbao",
+              "id": "ATH",
+              "homeCity": "Bilbao",
+              "stadium": "San Mames"
+            },
+            {
+              "name": "Atletico Madrid",
+              "id": "ATL",
+              "homeCity": "Madrid",
+              "stadium": "Vicente Calderon"
+            },
+            {
+              "name": "Barcelona",
+              "id": "BAR",
+              "homeCity": "Barcelona",
+              "stadium": "Camp Nou"
+            },
+            {
+              "name": "Betis",
+              "id": "BET",
+              "homeCity": "Seville",
+              "stadium": "Benito Villamarin"
+            },
+            {
+              "name": "Espanyol",
+              "id": "ESP",
+              "homeCity": "Barcelona",
+              "stadium": "Cornella-El Prat"
+            },
+            {
+              "name": "Getafe",
+              "id": "GET",
+              "homeCity": "Getafe",
+              "stadium": "Coliseum Alfonso Perez"
+            },
+            {
+              "name": "Granada",
+              "id": "GRA",
+              "homeCity": "Granada",
+              "stadium": "Nuevo Los Carmenes"
+            },
+            {
+              "name": "Levante",
+              "id": "LEV",
+              "homeCity": "Valencia",
+              "stadium": "Ciutat de Valencia"
+            },
+            {
+              "name": "Malaga",
+              "id": "MAL",
+              "homeCity": "Malaga",
+              "stadium": "La Roselda"
+            },
+            {
+              "name": "Mallorca",
+              "id": "MAL",
+              "homeCity": "Palma",
+              "stadium": "Iberostar Stadium"
+            },
+            {
+              "name": "Osasuna",
+              "id": "OSA",
+              "homeCity": "Pamplona",
+              "stadium": "El Sadar"
+            },
+            {
+              "name": "Racing Santander",
+              "id": "RAC",
+              "homeCity": "Santander",
+              "stadium": "El Sardinero"
+            },
+            {
+              "name": "Rayo Vallecano",
+              "id": "RAY",
+              "homeCity": "Madrid",
+              "stadium": "Campo de Vallecas"
+            },
+            {
+              "name": "Real Madrid",
+              "id": "RMA",
+              "homeCity": "Madrid",
+              "stadium": "Santiago Bernabeu"
+            },
+            {
+              "name": "Real Sociedad",
+              "id": "RSC",
+              "homeCity": "San Sebastian",
+              "stadium": "Anoeta"
+            },
+            {
+              "name": "Sevilla",
+              "id": "SEV",
+              "homeCity": "Seville",
+              "stadium": "Ramon Sanchez Pizjuan"
+            },
+            {
+              "name": "Sporting de Gijon",
+              "id": "SPG",
+              "homeCity": "Gijon",
+              "stadium": "El Molinon"
+            },
+            {
+              "name": "Valencia",
+              "id": "VAL",
+              "homeCity": "Valencia",
+              "stadium": "Mestalla"
+            },
+            {
+              "name": "Villareal",
+              "id": "VIL",
+              "homeCity": "Vila-real",
+              "stadium": "El Madrigal"
+            },
+            {
+              "name": "Zaragoza",
+              "id": "ZAR",
+              "homeCity": "Zaragoza",
+              "stadium": "La Romareda"
+            }]
+  post:
+    summary: Add a new team to the league
+    body:
+      application/json:
+        example: |
+          {
+            "name": "Barcelona",
+            "id": "BAR",
+            "homeCity": "Barcelona",
+            "stadium": "Camp Nou"
+          }
+        schema: |
+          {
+              "$schema": "http://json-schema.org/draft-03/schema",
+              "properties": {
+                  "homeCity": {
+                      "description": "Name of the city to which this team belongs",
+                      "type": "string"
+                  },
+                  "id": {
+                      "description": "A three-letter code that identifies the team id",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                  },
+                  "name": {
+                      "description": "Name of the team",
+                      "type": "string"
+                  },
+                  "required": [
+                      "id",
+                      "name",
+                      "homeCity"
+                  ],
+                  "stadium": {
+                      "description": "Name of the stadium",
+                      "type": "string"
+                  }
+              },
+              "type": "object"
+              "name": "Team"
+          }
+    responses:
+      201:
+        description: |
+          The team has been succesfully created
+        headers:
+          Location:
+            type: string
+            description: Location of the newly created team
+  /{teamId}:
+    name: Team
+    description: |
+      The team is the basic unit for keeping track of a roster of players that are participating together in La Liga. With the Team APIs, you can obtain team-related information, like the team name, stats, points, and more.
+    uriParameters:
+      teamId:
+        description: |
+          Three letter code that identifies the team.
+        type: string
+        minLength: 3
+        maxLength: 3
+        example: BAR
+    get:
+      summary: Retrieve team-related information such as the name, the home city, the stadium, current position, and other statistical information about a team.
+      responses:
+        200:
+          application/json:
+            example: |
+              {
+                "name": "Barcelona",
+                "id": "BAR",
+                "homeCity": "Barcelona",
+                "stadium": "Camp Nou",
+                "matches": 24
+              }
+            schema: |
+              {
+                  "$schema": "http://json-schema.org/draft-03/schema",
+                  "properties": {
+                      "homeCity": {
+                          "description": "Name of the city to which this team belongs",
+                          "type": "string"
+                      },
+                      "matches": {
+                          "description": "The total number of matches that has been played by this team between all seasons",
+                          "type": "integer",
+                          "minimum": 0
+                      },
+                      "id": {
+                          "description": "A three-letter code that identifies the team id",
+                          "maxLength": 3,
+                          "minLength": 3,
+                          "type": "string"
+                      },
+                      "name": {
+                          "description": "Name of the team",
+                          "type": "string"
+                      },
+                      "required": [
+                          "id",
+                          "name",
+                          "homeCity"
+                      ],
+                      "stadium": {
+                          "description": "Name of the stadium",
+                          "type": "string"
+                      }
+                  },
+                  "type": "object"
+                  "name": "Team"
+              }
+        404:
+          description: |
+            Unable to find a team with that identifier
+    patch:
+      summary: Update team details such as the name of the home stadium, or the name of the team itself.
+      body:
+        application/json:
+          example: |
+            {
+              "name": "Barcelona",
+              "stadium": "Camp Nou"
+            }
+          schema: |
+            {
+                "$schema": "http://json-schema.org/draft-03/schema",
+                "properties": {
+                    "homeCity": {
+                        "description": "Name of the city to which this team belongs",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "Name of the team",
+                        "type": "string"
+                    },
+                    "stadium": {
+                        "description": "Name of the stadium",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+                "name": "Team"
+            }
+      responses:
+        204:
+          description: |
+            The team has been succesfully updated
+        404:
+          description: |
+            Unable to find a team with that identifier
+    delete:
+      summary: Remove a team from the league. Notice that this operation is non-reversible and all data associated with the team, including its statistics will be lost. Use with caution.
+      responses:
+        204:
+          description: |
+            The resource has been succesfully removed.
+        404:
+          description: |
+            Unable to find a team with that identifier
+    
+      

@@ -83,6 +83,10 @@ angular.module('helpers', [])
             massage: function (resource, parent) {
                 resource.use = this.readTraits(resource.use);
 
+                if (!resource.name) {
+                    resource.name = resource.relativeUri;
+                }
+
                 if (resource.resources) {
                     var temp = JSON.parse(JSON.stringify(resource));
 
@@ -95,6 +99,10 @@ angular.module('helpers', [])
                     }
 
                     angular.forEach(resource.resources, function (r) {
+                        if (!r.name) {
+                            r.name = r.relativeUri;
+                        }
+
                         r.relativeUri = resource.relativeUri + r.relativeUri;
 
                         var exists = null;
@@ -112,12 +120,37 @@ angular.module('helpers', [])
                         this.massage(r, resource);
                     }.bind(this));
                 } else {
-                    var exists = parent.resources.filter(function (p) {
-                        return p.name === p.name;
-                    }.bind(this)).pop();
+                    var exists = false;
+
+                    if (parent) {
+                        exists = parent.resources.filter(function (p) {
+                            return p.name === p.name;
+                        }.bind(this)).pop();
+                    }
 
                     if (parent && !exists) {
                         parent.resources.push(resource);
+                    }
+                }
+
+                if (!parent) {
+                    var res = JSON.parse(JSON.stringify(resource));
+
+                    if (resource.resources) {
+                        var flag = resource.resources.filter(function (p) {
+                            return p.name === p.name;
+                        }.bind(this)).pop();
+
+                        if (!flag) {
+                            var tt = JSON.Parse(JSON.stringify(resource));
+
+                            delete res.resources;
+
+                            resource.resources.push(tt);
+                        }
+                    } else {
+                        resource.resources = [];
+                        resource.resources.push(res);
                     }
                 }
             },

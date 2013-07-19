@@ -7,7 +7,7 @@ angular.module('ramlConsoleApp')
                 isResource: isRes
             };
 
-            $rootScope.elementName = data.name || data[0].title;
+            $rootScope.elementName = data.name || (data[0] ? data[0].title : data.relativeUri);
             $rootScope.type = isDoc && !isRes ? 'document' : 'resource';
 
             eventService.broadcast('event:raml-sidebar-clicked', result);

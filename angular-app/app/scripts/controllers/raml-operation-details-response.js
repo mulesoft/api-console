@@ -18,8 +18,8 @@ angular.module('ramlConsoleApp')
             if (methodDescriptor.responses) {
                 for (var prop in methodDescriptor.responses) {
                     var response = methodDescriptor.responses[prop] || {},
-                        example = response.body ? response.body[contentType].example : '',
-                        schema = response.body ? response.body[contentType].schema : '';
+                        example = response.body ? (response.body[contentType] ? response.body[contentType].example : '') : '',
+                        schema = response.body ? (response.body[contentType] ? response.body[contentType].schema : '') : '';
 
                     statusCodes.push({
                         name: prop,
