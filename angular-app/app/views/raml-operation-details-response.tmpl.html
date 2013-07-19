@@ -1,10 +1,4 @@
 <section role="api-operation-details-section-response" ng-controller="ramlOperationDetailsResponse">
-  <section role="codes-list" ng-show="!statusCodes.length">
-    <header>
-      <h1>No response information</h1>
-    </header>
-  </section>
-
   <section role="codes-list" ng-repeat="code in statusCodes">
     <header>
       <h1>{{code.name}}</h1>

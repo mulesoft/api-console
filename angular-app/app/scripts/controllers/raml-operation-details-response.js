@@ -3,7 +3,7 @@ angular.module('ramlConsoleApp')
         $scope.$on('event:raml-method-changed', function () {
             $scope.init();
         });
-
+        //// TODO: filter by the current content-type
         $scope.init = function () {
             var statusCodes = [],
                 methodDescriptor = $filter('filter')($scope.resource.methods, {
