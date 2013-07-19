@@ -15,7 +15,7 @@ angular.module('ramlConsoleApp')
                         angular.forEach(result.resources, function (resource) {
                             ramlHelper.massage(resource);
                         });
-                        console.log(result);
+                        
                         $rootScope.$emit('event:raml-parsed', result);
                     });
             }

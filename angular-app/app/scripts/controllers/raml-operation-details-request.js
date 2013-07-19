@@ -3,15 +3,22 @@ angular.module('ramlConsoleApp')
         $scope.$on('event:raml-method-changed', function () {
             $scope.init();
         });
-        //// TODO: filter by the current content-type
+
+        $scope.$on('event:raml-body-type-changed', function () {
+            $scope.init();
+        });
+
         $scope.init = function () {
-            var methodDescriptor = $filter('filter')($scope.resource.methods, {
-                method: $scope.operation.method
-            })[0];
+            var contentType = $scope.bodyType ? $scope.bodyType.name : 'application/json',
+                methodDescriptor = $filter('filter')($scope.resource.methods, {
+                    method: $scope.operation.method
+                })[0];
 
             $scope.description = $filter('filter')(ramlHelper.getRequestData(methodDescriptor), {
-                name: 'application/json'
+                name: contentType
             })[0];
+
+            console.log($scope.description);
         };
 
         $scope.init();
