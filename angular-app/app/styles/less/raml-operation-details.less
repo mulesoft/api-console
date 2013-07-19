@@ -10,17 +10,17 @@ section[role=api-operation]:not(.active) section[role=api-operation-details] {
 
 section[role=api-operation-details] {
     background: white;
-  
+
   > header {
       padding: 15px 20px;
-  
+
       > h1 {
           margin: 5px 0px;
           font-size: 16px;
           font-weight: normal;
           color: rgb(99,153,214);
       }
-      
+
       > p {
           margin: 10px 0px;
           font-size: 13px;
@@ -28,7 +28,26 @@ section[role=api-operation-details] {
           color: black;
       }
   }
-  
+
+  > ul[role=response-type] {
+      position: absolute;
+      top: 155px;
+      border: 1px solid @border-color-gray;
+      right: 10px;
+      padding: 0px;
+      vertical-align: middle;
+      border-radius: 2px;
+
+    > li {
+        display: inline-block;
+        list-style: none;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 13px;
+        font-weight: bold;
+    }
+  }
+
   > ul[role=details-sections] {
       display: block;
       width: 100%;
@@ -40,7 +59,7 @@ section[role=api-operation-details] {
       font-size: 0px;
       height: 60px;
       box-shadow: inset 1px -1px 1px #eee;
-  
+
     > li {
         display: inline-block;
         list-style: none;
@@ -50,7 +69,7 @@ section[role=api-operation-details] {
         font-size: 13px;
         font-weight: bold;
     }
-    
+
     > li > a,
     > li > span {
         cursor: pointer;
@@ -58,7 +77,7 @@ section[role=api-operation-details] {
         color: black;
         border-right: 1px solid rgb(223,227,231);
     }
-    
+
     > li.active {
         background-color: rgb(251,251,251);
         border-top: 1px solid rgb(0,120,202);
@@ -69,7 +88,7 @@ section[role=api-operation-details] {
         margin-left: -1px;
         box-shadow: 1px -1px 1px #eee;
     }
-    
+
     > li.active > a,
     > li.active > span {
         border-right: none;
