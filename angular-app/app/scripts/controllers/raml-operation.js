@@ -10,6 +10,7 @@ angular.module('ramlConsoleApp')
                 $scope.operation = method[0];
                 $scope.urlParams = ramlHelper.processUrlParts($scope.resource.relativeUri);
                 $scope.queryParams = ramlHelper.processQueryParts($scope.operation.query);
+                $scope.bodyParams = ramlHelper.getRequestData($scope.operation);
 
                 eventService.broadcast('event:raml-method-changed', methodName);
             }
