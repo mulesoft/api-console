@@ -90,7 +90,7 @@ section[role=api-console] {
 aside[role=sidebar] {
   float: left;
   box-sizing: border-box;
-  width: 190px;
+  width: 186px;
   background: #eff2f4;
   border-left: 1px solid #dadcdd;
   border-right: 1px solid #dadcdd;
