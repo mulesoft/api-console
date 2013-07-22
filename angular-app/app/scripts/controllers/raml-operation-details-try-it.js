@@ -1,5 +1,5 @@
 angular.module('ramlConsoleApp')
-    .controller('ramlOperationDetailsTryIt', function ($scope, $resource, commons, eventService) {
+    .controller('ramlOperationDetailsTryIt', function ($scope, $resource, commons, eventService, ramlHelper) {
         $scope.hasAdditionalParams = function (operation) {
             return operation.query || operation.method === 'post' || operation.method === 'put';
         };
@@ -8,6 +8,11 @@ angular.module('ramlConsoleApp')
             return operation.method === 'post' || operation.method === 'put';
         };
 
+        $scope.hasBodyParams = function (bodyType) {
+            return bodyType && bodyType.params && bodyType.params.length;
+        };
+
+
         $scope.showResponse = function () {
             return this.response;
         };
@@ -15,7 +20,10 @@ angular.module('ramlConsoleApp')
         $scope.tryIt = function () {
             var params = {};
             var tester = new this.testerResource();
+            var bodyParams = this.hasBodyParams(this.bodyType) ? this.body[this.operation.method] : null;
             var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.method] : null;
+
+            body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
 
             commons.extend(params, this.url);
             commons.extend(params, this.query[this.operation.method]);
@@ -61,25 +69,30 @@ angular.module('ramlConsoleApp')
 
         $scope.buildTester = function () {
             var resourceUri = this.baseUri + this.resource.relativeUri.replace(/{/g, ':').replace(/}/g, '');
+            var contentType = $scope.bodyType ? $scope.bodyType.name : $scope.bodyParams[0].name;
+
             this.testerResource = $resource(resourceUri, null, {
                 'get': {
                     method:'GET',
-                    // headers: { 'content-type': 'application/x-www-form-urlencoded', 'accept': 'application/x-www-form-urlencoded' },
+                    headers: { 'accept': contentType },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 },
                 'post': {
                     method:'POST',
+                    headers: { 'content-type': contentType, 'accept': contentType },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 },
                 'put': {
                     method:'PUT',
+                    headers: { 'content-type': contentType, 'accept': contentType },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 },
                 'delete': {
                     method:'DELETE',
+                    headers: { 'accept': contentType },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 }
@@ -95,6 +108,10 @@ angular.module('ramlConsoleApp')
                 this.requestBody = { put: '', post: '' };
             }
 
+            if (!this.body) {
+                this.body = { put: {}, post: {} };
+            }
+
             if (!this.url) {
                 this.url = {};
             }
@@ -108,6 +125,10 @@ angular.module('ramlConsoleApp')
         };
 
         $scope.$on('event:raml-method-changed', function () {
+            $scope.init();
+        });
+
+        $scope.$on('event:raml-body-type-changed', function () {
             $scope.init();
         });
 

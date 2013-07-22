@@ -1,7 +1,7 @@
 %TAG ! tag:raml.org,0.1:
 ---
 title: Twilio API
-version: 2010-04-01
+version: '2010-04-01'
 baseUri: https://api.twilio.com/{version}
 documentation:
   - title: Request Formats

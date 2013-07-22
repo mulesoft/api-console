@@ -4,6 +4,15 @@ angular.module('helpers', [])
     })
     .factory('ramlHelper', function () {
         return {
+            toUriParams: function (object) {
+                var result = '';
+
+                for (var param in object) {
+                    result = result + param + '=' + object[param] + '&';
+                }
+
+                return result.replace(/\&$/, ';');
+            },
             getUriPath: function (uri) {
                 var tempUri = uri.replate('//', '');
                 var pathStart = tempUri.indexOf('/');
