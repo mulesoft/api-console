@@ -18,33 +18,55 @@ section[role=api-operation] {
 
     > header {
         height: 73px;
-    }
-
-    > header h1 {
-        font-size: 13px;
-        font-weight: bold;
-        margin: 0px;
-        padding: 0px;
-        color: black;
-    }
-
-    > header h2 {
-        font-size: 12px;
-        font-weight: normal;
-        margin: 0px;
-        padding: 0px;
-        margin-top: 8px;
-        color: rgb(158,163,166);
-        letter-spacing:1px;
-    }
-
-    > header > div[role=summary] {
+        h1 {
+          font-size: 13px;
+          font-weight: bold;
+          margin: 0px;
+          padding: 0px;
+          color: black;
+        }
+        h2 {
+          font-size: 12px;
+          font-weight: normal;
+          margin: 0px;
+          padding: 0px;
+          margin-top: 8px;
+          color: rgb(158,163,166);
+          letter-spacing:1px;
+      }
+      
+      > div[role=summary] {
         position: absolute;
         right: 0px;
         top: 0px;
         margin-right: 20px;
         text-align: right;
         font-size: 0px;
+        > ul {
+          display: block;
+          margin: 0px;
+          cursor: default;
+          > li {
+            display: inline-block;
+            margin-left: 4px;
+            list-style: none;
+          }
+        }
+        > ul[role=traits] {
+          margin-top: 18px;
+          > li {
+              color: white;
+              text-transform: uppercase;
+              font-size: 10px;
+              line-height: 12px;
+              vertical-align: middle;
+              text-align: center;
+              background: rgb(207,211,215);
+              padding: 1px 4px 1px 4px;
+              border-radius: 2px;
+          }
+        }
+      }
     }
 
     > header > div[role=summary] > ul {
@@ -409,19 +431,68 @@ section[role=api-operation] {
 
 }
 
-/*
 @media (max-width: @responsive-switch) {
-    section[role=api-operation] {
-        display: block;
-        border: 1px solid rgb(218,220,221);
-        max-height: 45px;
-        color: black;
-        background: white;
-        padding: 15px 20px;
-        position: relative;
-        margin: 0px;
-        margin-top: -1px;
-        transition: max-height 0.05s;
+//@media (max-width: 0px) {
+
+  section[role=api-console] > header > ng-include > header {
+    width: 100%;
+  }
+
+  aside[role=sidebar] {
+    float: left;
+    clear: right;
+    min-height: 0;
+    width: 100%;
+  }
+
+  body {
+
+  }
+  section[role=api-operation-list] {
+    padding: 0px;
+  }
+
+  section[role=main] {
+    float: left;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  section[role=api-console] {
+    width: 100%;
+  }
+  section[role=api-operation] {
+    display: block;
+    border: 1px solid rgb(218,220,221);
+    max-height: 45px;
+    color: black;
+    background: white;
+    padding: 15px 20px;
+    position: relative;
+    margin: 0px;
+    margin-top: -1px;
+    transition: max-height 0.05s;
+  }
+  aside[role=sidebar] h1 {
+    float: left;
+    display: block;
+    text-transform: none;
+    font: inherit;
+    color: black;
+    text-shadow: 0px 0px 0px;
+    padding: 10px 20px;
+  }
+  aside[role=sidebar] h1:after {
+    content: ':';
+  }
+  aside[role=sidebar] ul > li,
+  aside[role=sidebar] ul > li.active {
+    float: left;
+    display: block;
+    border-bottom: none;
+    a {
+      text-decoration: underline;
     }
+  
+  }
 }
-*/
