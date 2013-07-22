@@ -68,6 +68,7 @@ module.exports = function (grunt) {
                         'dist/templates.js'
                     ],
                     'dist/vendor.js': ['app/vendor/angular.js',
+                        'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js'
@@ -342,6 +343,7 @@ module.exports = function (grunt) {
                 files: {
                     'dist/vendor.js': ['app/vendor/angular.js',
                         'app/vendor/angular-resource.js',
+                        'app/vendor/angular-sanitize.js',
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js'
                     ],
