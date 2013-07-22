@@ -3,19 +3,23 @@
 section[role=api-operation] {
     display: block;
     border: 1px solid rgb(218,220,221);
+    border-top: 0px;
     max-height: 45px;
     color: black;
     background: white;
     padding: 15px 20px;
     position: relative;
     margin: 0px;
-    margin-top: -1px;
     transition: max-height 0.05s;
+
+    &.first {
+        border-top: 1px solid rgb(218,220,221);
+    }
 
     > header {
         height: 73px;
     }
-    
+
     > header h1 {
         font-size: 13px;
         font-weight: bold;
@@ -23,7 +27,7 @@ section[role=api-operation] {
         padding: 0px;
         color: black;
     }
-    
+
     > header h2 {
         font-size: 12px;
         font-weight: normal;
@@ -33,7 +37,7 @@ section[role=api-operation] {
         color: rgb(158,163,166);
         letter-spacing:1px;
     }
-    
+
     > header > div[role=summary] {
         position: absolute;
         right: 0px;
@@ -42,23 +46,23 @@ section[role=api-operation] {
         text-align: right;
         font-size: 0px;
     }
-    
+
     > header > div[role=summary] > ul {
         display: block;
         margin: 0px;
         cursor: default;
     }
-    
+
     > header > div[role=summary] > ul > li {
         display: inline-block;
         margin-left: 4px;
         list-style: none;
     }
-    
+
     > header > div[role=summary] > ul[role=traits] {
         margin-top: 18px;
     }
-    
+
     > header > div[role=summary] > ul[role=traits] > li {
         color: white;
         text-transform: uppercase;
@@ -70,11 +74,11 @@ section[role=api-operation] {
         padding: 1px 4px 1px 4px;
         border-radius: 2px;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] {
         margin-top: 10px;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li {
         text-transform: uppercase;
         font-size: 11px;
@@ -88,14 +92,14 @@ section[role=api-operation] {
         transition: max-width 0.4s ease-in;
         position: relative;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li > a {
         color: inherit;
         line-height: inherit;
         vertical-align: inherit;
         text-align: inherit;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li:after {
         background: transparent;
         content: "";
@@ -107,7 +111,7 @@ section[role=api-operation] {
         margin-top: -2px;
         display: block;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li:before {
         background: transparent;
         content: "";
@@ -119,12 +123,12 @@ section[role=api-operation] {
         margin-top: -2px;
         display: block;
     }
-    
+
     &:not(.active) > header > div[role=summary] > ul[role=operations] > li {
         color: transparent;
         max-width: 8px;
     }
-    
+
     &:not(.active):hover > header > div[role=summary] > ul[role=operations] > li {
         color: white;
         max-width: 80px;
@@ -147,113 +151,113 @@ section[role=api-operation] {
     > header > div[role=summary] > ul[role=operations] > li[role=get]:before {
         background: @get-inactive-color;
     }
-    
+
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=get],
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=get]:after,
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=get]:before {
         background: @get-color;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li[role=post],
     > header > div[role=summary] > ul[role=operations] > li[role=post]:after,
     > header > div[role=summary] > ul[role=operations] > li[role=post]:before {
         background: @post-inactive-color;
     }
-    
+
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=post],
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=post]:after,
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=post]:before {
         background: @post-color;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li[role=put],
     > header > div[role=summary] > ul[role=operations] > li[role=put]:after,
     > header > div[role=summary] > ul[role=operations] > li[role=put]:before {
         background: @put-inactive-color;
     }
-    
+
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=put],
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=put]:after,
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=put]:before {
         background: @put-color;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li[role=delete],
     > header > div[role=summary] > ul[role=operations] > li[role=delete]:after,
     > header > div[role=summary] > ul[role=operations] > li[role=delete]:before {
         background: @delete-inactive-color;
     }
-    
+
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=delete],
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=delete]:after,
     &:hover > header > div[role=summary] > ul[role=operations] > li[role=delete]:before {
         background: @delete-color;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li:nth-of-type(1):before,
     &:hover > header > div[role=summary] > ul[role=operations] > li:nth-of-type(1):before {
         background: transparent;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li:last-of-type:after,
     &:hover > header > div[role=summary] > ul[role=operations] > li:last-of-type:after {
         background: transparent;
     }
-    
+
     > section[role=api-operation-details] {
         display: none;
     }
-    
+
     /* api-operation hover */
-    
+
     &:hover {
         border-left: 1px solid rgb(64,205,93);
     }
-    
+
     &:hover > header h1 {
         color: rgb(50,137,202);
     }
-    
+
     &:hover > header h2 {
         color: rgb(51,55,59);
     }
-    
+
     /* api-operation active */
-    
+
     &.active,
     &.active:hover {
-        border: 1px solid rgb(218,220,221);
+        border: 1px solid rgb(62,80,90);
         transition: max-height 0.5s;
         max-height: 2000px;
     }
-    
+
     &.active > header,
     &.active:hover > header {
         background: rgb(62,80,90);
         transition: background 0.1s;
     }
-    
+
     &.active > header h1,
     &.active:hover > header h1 {
         color: white;
     }
-    
+
     &.active > header h2,
     &.active:hover > header h2 {
         color: white;
     }
-    
+
     &.active > header > div[role=summary] > ul[role=traits],
     &.active:hover > header > div[role=summary] > ul[role=traits] {
         display: none;
     }
-    
+
     &.active > header > div[role=summary] > ul[role=operations],
     &.active:hover > header > div[role=summary] > ul[role=operations] {
         margin-top: 19px;
         cursor: pointer;
     }
-    
+
     &.active > header > div[role=summary] > ul[role=operations] > li,
     &.active:hover > header > div[role=summary] > ul[role=operations] > li {
         margin: 0px;
@@ -290,12 +294,12 @@ section[role=api-operation] {
           }
         }
     }
-    
+
     &.active > header > div[role=summary] > ul[role=operations] > li > a,
     &.active:hover > header > div[role=summary] > ul[role=operations] > li > a {
         line-height: 0px;
     }
-    
+
     &.active > header > div[role=summary] > ul[role=operations] > li.active,
     &.active:hover > header > div[role=summary] > ul[role=operations] > li.active {
         color: white;
@@ -315,7 +319,7 @@ section[role=api-operation] {
           background: @delete-inactive-color;
         }
     }
-    
+
     &.active > header > div[role=summary] > ul[role=operations] > li.active:after,
     &.active:hover > header > div[role=summary] > ul[role=operations] > li.active:after {
         content: "";
@@ -330,7 +334,7 @@ section[role=api-operation] {
         margin-right: -13px;
         border-radius: 12px 0 0 0;
     }
-    
+
     &.active > header > div[role=summary] > ul[role=operations] > li.active:before,
     &.active:hover > header > div[role=summary] > ul[role=operations] > li.active:before {
         content: "";
@@ -366,13 +370,13 @@ section[role=api-operation] {
     &.active:hover > header > div[role=summary] > ul[role=operations] > li:nth-of-type(1) {
         border-radius: 3px 0px 0px 3px;
     }
-    
+
     &.active > header > div[role=summary] > ul[role=operations] > li:last-of-type,
     &.active:hover > header > div[role=summary] > ul[role=operations] > li:last-of-type {
         border-radius: 0px 3px 3px 0px;
         border-right: 1px solid rgb(59,69,78);
     }
-    
+
     &.active > header > div[role=summary] > ul[role=operations] > li:before,
     &.active:hover > header > div[role=summary] > ul[role=operations] > li:before,
     &.active > header > div[role=summary] > ul[role=operations] > li:after,
@@ -380,24 +384,24 @@ section[role=api-operation] {
         width: 0px;
         height: 0px;
     }
-    
+
     &.active,
     &.active:hover {
         padding: 0px;
     }
-    
+
     &.active > header > hgroup,
     &.active:hover > header >  hgroup {
         padding: 15px 20px 0px 20px;
     }
-    
+
     /*
     > api-operation-details,
     &:hover > api-operation-details {
         display: none;
     }
     */
-    
+
     &.active > api-operation-details,
     &.active:hover > api-operation-details {
         display: block;

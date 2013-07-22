@@ -1,1 +1,1 @@
-angular.module('ramlConsoleApp', ['helpers', 'ngResource']);
+angular.module('ramlConsoleApp', ['helpers', 'ngResource', 'ngSanitize']);

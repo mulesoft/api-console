@@ -4,6 +4,15 @@ angular.module('helpers', [])
     })
     .factory('ramlHelper', function () {
         return {
+            getUriPath: function (uri) {
+                var tempUri = uri.replate('//', '');
+                var pathStart = tempUri.indexOf('/');
+
+                return tempUri.substr(pathStart);
+            },
+            getAbsoluteUri: function (baseUri, relativeUri) {
+                return baseUri + relativeUri;
+            },
             getRequestData: function (descriptor) {
                 var arr = [];
 
@@ -53,6 +62,30 @@ angular.module('helpers', [])
                 }
 
                 return queryParams;
+            },
+            processUrlPartsNew: function (url) {
+                var urlParts = [];
+                var parts = url.split('}');
+
+                angular.forEach(parts, function (part) {
+                    var splitted = (part || '').split('{');
+
+                    if (splitted.length) {
+                        urlParts.push({
+                            name: splitted[0],
+                            editable: false
+                        });
+                    }
+                    if (splitted.length === 2) {
+                        urlParts.push({
+                            name: '{' + splitted[1] + '}',
+                            editable: true,
+                            memberName: splitted[1]
+                        });
+                    }
+                });
+
+                return urlParts;
             },
             processUrlParts: function (url) {
                 var urlParts = [];
@@ -269,5 +302,10 @@ angular.module('helpers', [])
                 }
                 return xhr;
             }
+        };
+    })
+    .filter('formatUriPart', function () {
+        return function (text) {
+            return text.replace(/\//g, '&nbsp/&nbsp').replace(/\&nbsp\&nbsp/g, '&nbsp').replace(/\&nbsp$/g, '');
         };
     });

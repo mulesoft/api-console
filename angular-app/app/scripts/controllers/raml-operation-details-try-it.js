@@ -64,6 +64,7 @@ angular.module('ramlConsoleApp')
             this.testerResource = $resource(resourceUri, null, {
                 'get': {
                     method:'GET',
+                    // headers: { 'content-type': 'application/x-www-form-urlencoded', 'accept': 'application/x-www-form-urlencoded' },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 },
