@@ -7,20 +7,14 @@ get:
         This will retrieve a complete list of sons from
         a particular employee.
     responses:
-        200:
-            body:
-                application/json:
-                    schema: !include employees.json
+        200: !!null
         404: !!null
 /{sonId}:
     name: Son
     get:
         summary: Get a particular son from an employee.
         responses:
-            200:
-                body:
-                    application/json:
-                        schema: !include sons.json
+            200: !!null
             404: !!null
     post:
         summary: Create a son.
@@ -45,33 +39,17 @@ get:
                         example: 2
         responses:
             200: !!null
+            400: !!null
     put:
         summary: Update a son.
         body:
             application/json:
-                schema: |
-                    { "$schema" : "http://json-schema.org/draft-03/schema",
-                      "id" : "http://jsonschema.net",
-                      "properties" : { "son" : { "id" : "http://jsonschema.net/son",
-                              "properties" : { "parentId" : { "id" : "http://jsonschema.net/son/parentId",
-                                      "required" : false,
-                                      "type" : "number"
-                                    },
-                                  "sonAge" : { "id" : "http://jsonschema.net/son/sonAge",
-                                      "required" : false,
-                                      "type" : "number"
-                                    },
-                                  "sonName" : { "id" : "http://jsonschema.net/son/sonName",
-                                      "required" : false,
-                                      "type" : "string"
-                                    }
-                                },
-                              "required" : false,
-                              "type" : "object"
-                            } },
-                      "required" : false,
-                      "type" : "object"
-                    }
+                schema: !include son_insert.json
+        responses:
+            200: !!null
+            404: !!null
+    delete:
+        summary: Delete a son.
         responses:
             200: !!null
             404: !!null

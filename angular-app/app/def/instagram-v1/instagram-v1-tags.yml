@@ -16,7 +16,7 @@ get:
       Get a list of recently tagged media. Note that this media is ordered by when the media was tagged 
       with this tag, rather than the order it was posted. Use the max_tag_id and min_tag_id parameters 
       in the pagination response to paginate through these objects.
-    query:
+    queryParameters:
       min_id:
         description: |
           Return media before this min_id.

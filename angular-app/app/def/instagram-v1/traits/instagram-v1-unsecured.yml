@@ -7,7 +7,7 @@ description: |
   specific application.
 provides:
   get?: &clientId
-    query:
+    queryParameters:
       client_id:
         description: |
           Client ID

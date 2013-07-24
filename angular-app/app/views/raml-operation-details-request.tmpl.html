@@ -1,35 +1,37 @@
 <section role="api-operation-details-section-request" ng-controller="ramlOperationDetailsRequest">
-  <section role="codes-list">
-    <table ng-show="description.schema">
+   <section role="codes-list" ng-repeat="(contentType, content) in operation.request">
+    <table ng-show="content.schema">
       <thead>
         <tr>
-          <th>Schema</th>
+          <th>{{ parseTypeName(contentType) }} Schema</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-        	<td>
-				<pre>{{description.schema}}</pre>
-			</td>
+          <td>
+        <pre>{{content.schema}}</pre>
+      </td>
         </tr>
       </tbody>
     </table>
 
-    <table ng-show="description.example">
+    <table ng-show="content.example">
       <thead>
         <tr>
-          <th>Example</th>
+          <th>{{ parseTypeName(contentType) }} Example</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-        	<td>
-				<pre>{{description.example}}</pre>
-			</td>
+          <td>
+        <pre>{{content.example}}</pre>
+      </td>
         </tr>
       </tbody>
-    </table>   
+    </table>
+
   </section>
+
   <section role="codes-list" ng-show="description.params">
     <header>
       <h1>Form Parameters</h1>

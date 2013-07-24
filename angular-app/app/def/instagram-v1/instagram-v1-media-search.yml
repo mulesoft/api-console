@@ -7,7 +7,7 @@ get:
     Search for media in a given area. The default time span is set to 5 days. 
     The time span must not exceed 7 days. Defaults time stamps cover the 
     last 5 days.
-  query:
+  queryParameters:
     lat:
       description: Latitude of the center search coordinate. If used, lng is required.
       required: no

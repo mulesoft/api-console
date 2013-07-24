@@ -2,14 +2,14 @@
 ---
 title: Employees API
 version: v0.2
-baseUri: http://localhost:9000/api/{version}
-uriParameters:
-    company:
-        name: Company
-        type: string
-        minLength: 0
-        maxLength: 10
-        required: yes
+baseUri: http://localhost:9091/api/{version}
+#uriParameters:
+#    company:
+#        name: Company
+#        type: string
+#        minLength: 0
+#        maxLength: 10
+#        required: yes
 documentation:
     - title: Employees
       content: |
@@ -20,17 +20,16 @@ documentation:
       content: |
         If you need support, please contact asr@mulesoft.com.
     - title: More info
-      content: 
-        !include more_info.txt
-/employees.json:
+      content: !include more_info.txt
+/employees:
     name: Employees
     get:
-        summary: Get a list of employees.
         description: |
             The employees returned will display the following data: First Name,
             Last Name and Birth Date.
         queryParameters:
             firstName:
+                name: First Name
                 description: |
                     First Name of the employee. This value is not required.
                 type: string
@@ -46,7 +45,33 @@ documentation:
             200:
                 body:
                     application/json:
-                        example: !include employees.json
+                        schema: !include employees.json
+                    text/xml:
+                        schema: !include employees.xsd
+            404:
+                description: Resource not found.
+            405:
+                description: Method not allowed.
+            415:
+                description: Unsupported media type.
+            406:
+                description: Not acceptable.
+            400:
+                description: Bad request.
+    post:
+        summary: Create a new employee.
+        body:
+            text/xml:
+                schema: !include employee_insert.xsd
+            application/json:
+                schema: !include employee_insert.json
+        responses:
+            202:
+                body:
+                    application/json:
+                        schema: !include employees.json
+                    text/xml:
+                        schema: !include employees.xsd
             404:
                 description: Resource not found.
             405:
@@ -65,33 +90,11 @@ documentation:
                 200:
                     body:
                         application/json:
-                            example: !include employees.json
-                404:
-                    description: Resource not found.
-                405:
-                    description: Method not allowed.
-                415:
-                    description: Unsupported media type.
-                406:
-                    description: Not acceptable.
-                400:
-                    description: Bad request.
-        post:
-            summary: Create a new employee.
-#            body:
-#                text/xml: !!null
-#                application/json:
-#                    schema: !include employee_insert.json
-            responses:
-                202:
-                    body:
-                        application/json:
                             schema: !include employees.json
+                        text/xml:
+                            schema: !include employees.xsd
                 404:
                     description: Resource not found.
-                    body:
-                        application/json:
-                            schema: !include employee_insert.json
                 405:
                     description: Method not allowed.
                 415:
@@ -106,10 +109,12 @@ documentation:
                 application/json:
                     schema: !include employee_insert.json
             responses:
-                200:
+                202:
                     body:
                         application/json:
                             schema: !include employees.json
+                        text/xml:
+                            schema: !include employees.xsd
                 404:
                     description: Resource not found.
                 405:
@@ -123,10 +128,7 @@ documentation:
         delete:
             summary: Delete an employee.
             responses:
-                200:
-                    body:
-                        application/json:
-                            schema: !include employees.json
+                200: !!null
                 404:
                     description: Resource not found.
                 405:

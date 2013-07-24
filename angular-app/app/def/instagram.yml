@@ -13,7 +13,7 @@ traits:
       may expire at any time in the future.
     provides:
       get?:
-        query:
+        queryParameters:
           access_token:
             description: |
               Access Token
@@ -28,7 +28,7 @@ traits:
       specific application.
     provides:
       get?:
-        query:
+        queryParameters:
           client_id:
             description: |
               Client ID
@@ -79,7 +79,7 @@ traits:
       decide to increase this number there is a maximum value defined on each endpoint.
     provides:
       get?:
-        query:
+        queryParameters:
           count:
             description: |
               Number of items you would like to receive.
@@ -98,7 +98,7 @@ traits:
         });
     provides:
       get?:
-        query:
+        queryParameters:
           callback:
             description: |
               Callback function name. All output will be wrapper under this function name.
@@ -132,7 +132,7 @@ traits:
               application/json:
       post:
         summary: Create a comment on a media. Please email apidevelopers[at]instagram.com for access.
-        query:
+        queryParameters:
           text:
             description: Text to post as a comment on the media as specified in {mediaId}.
             type: string
@@ -181,7 +181,7 @@ traits:
         Search for media in a given area. The default time span is set to 5 days. 
         The time span must not exceed 7 days. Defaults time stamps cover the 
         last 5 days.
-      query:
+      queryParameters:
         lat:
           description: Latitude of the center search coordinate. If used, lng is required.
           required: no
@@ -231,7 +231,7 @@ traits:
           Get a list of recently tagged media. Note that this media is ordered by when the media was tagged 
           with this tag, rather than the order it was posted. Use the max_tag_id and min_tag_id parameters 
           in the pagination response to paginate through these objects.
-        query:
+        queryParameters:
           min_id:
             description: |
               Return media before this min_id.
@@ -252,7 +252,7 @@ traits:
       description: |
         Search for tags by name. Results are ordered first as an exact match, then by popularity. 
         Short tags will be treated as exact matches.
-      query:
+      queryParameters:
         q:
           description: |
             A valid tag name without a leading #. (eg. snowy, nofilter)

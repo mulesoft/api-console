@@ -14,9 +14,9 @@
         </li>
     </ul>
     <ul role="content-types">
-        <li ng-repeat="bodyParam in bodyParams"
-            ng-click="changeBodyType(bodyParam.name)">
-          {{bodyParam.name}}
+        <li ng-repeat="contenType in operation.supportedTypes"
+            ng-click="changeBodyType(contenType)">
+          {{contenType}}
         </li>
     </ul>
     <ng-include ng-repeat="tab in tabs"

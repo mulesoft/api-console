@@ -19,7 +19,7 @@ description: |
   decide to increase this number there is a maximum value defined on each endpoint.
 provides:
   get?:
-    query:
+    queryParameters:
       count:
         description: |
           Number of items you would like to receive.

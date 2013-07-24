@@ -15,7 +15,7 @@ get:
           example: !include examples/instagram-v1-media-comment-example.json
 post:
   summary: Create a comment on a media. Please email apidevelopers[at]instagram.com for access.
-  query:
+  queryParameters:
     text:
       description: Text to post as a comment on the media as specified in {mediaId}.
       type: string

@@ -21,7 +21,7 @@ angular.module('ramlConsoleApp')
                 displayName: 'Parameters',
                 view: 'views/raml-operation-details-parameters.tmpl.html',
                 show: function () {
-                    return $filter('filter')($scope.urlParams, { editable: true }).length || $scope.queryParams.length;
+                    return typeof $scope.operation.queryParameters !== 'undefined';
                 }
             });
 
@@ -30,7 +30,7 @@ angular.module('ramlConsoleApp')
                 displayName: 'Request',
                 view: 'views/raml-operation-details-request.tmpl.html',
                 show: function () {
-                    return $filter('filter')($scope.resource.methods, $scope.requestFilter).length;
+                    return typeof $scope.operation.request !== 'undefined';
                 }
             });
 
@@ -39,7 +39,7 @@ angular.module('ramlConsoleApp')
                 displayName: 'Response',
                 view: 'views/raml-operation-details-response.tmpl.html',
                 show: function () {
-                    return $filter('filter')($scope.resource.methods, $scope.responseFilter).length;
+                    return typeof $scope.operation.responses !== 'undefined';
                 }
             });
 
@@ -62,25 +62,20 @@ angular.module('ramlConsoleApp')
             return el.method === $scope.operation.method && typeof el.body !== 'undefined' && typeof el.body[$scope.bodyType.name] !== 'undefined';
         };
 
-        $scope.init = function () {
-            $scope.bodyType = $scope.bodyParams ? $scope.bodyParams[0] : {
-                name: 'application/json'
-            };
-        }
-
         $scope.changeBodyType = function (bodyTypeName) {
-            var bodyParam = $filter('filter')(this.bodyParams, {
-                name: bodyTypeName
-            });
-            if (bodyParam && bodyParam.length) {
-                $scope.bodyType = bodyParam[0];
+            debugger  
+            // var bodyParam = $filter('filter')(this.bodyParams, {
+            //     name: bodyTypeName
+            // });
+            // if (bodyParam && bodyParam.length) {
+            //     $scope.bodyType = bodyParam[0];
 
-                eventService.broadcast('event:raml-body-type-changed', bodyTypeName);
-            }
+            //     eventService.broadcast('event:raml-body-type-changed', bodyTypeName);
+            // }
         };
 
         $scope.responseFilter = function (el) {
-            return el.method === $scope.operation.method && typeof el.responses !== 'undefined';
+            return el.name === $scope.operation.name && typeof el.responses !== 'undefined';
         };
 
         $scope.initTabs();

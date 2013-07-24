@@ -1,11 +1,11 @@
 angular.module('ramlConsoleApp')
     .controller('ramlOperationDetailsTryIt', function ($scope, $resource, commons, eventService, ramlHelper) {
         $scope.hasAdditionalParams = function (operation) {
-            return operation.query || operation.method === 'post' || operation.method === 'put';
+            return operation.queryParameters || operation.name === 'post' || operation.name === 'put';
         };
 
         $scope.hasRequestBody = function (operation) {
-            return operation.method === 'post' || operation.method === 'put';
+            return operation.name === 'post' || operation.name === 'put';
         };
 
         $scope.hasBodyParams = function (bodyType) {
@@ -20,17 +20,17 @@ angular.module('ramlConsoleApp')
         $scope.tryIt = function () {
             var params = {};
             var tester = new this.testerResource();
-            var bodyParams = this.hasBodyParams(this.bodyType) ? this.body[this.operation.method] : null;
-            var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.method] : null;
+            var bodyParams = this.hasBodyParams(this.bodyType) ? this.body[this.operation.name] : null;
+            var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.name] : null;
 
             body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
 
             commons.extend(params, this.url);
-            commons.extend(params, this.query[this.operation.method]);
+            commons.extend(params, this.query[this.operation.name]);
             tester.body = body || null;
 
             this.response = null;
-            this.$request(tester, params, this.operation.method);
+            this.$request(tester, params, this.operation.name);
         };
 
         $scope.$request = function (tester, params, method) {
@@ -57,10 +57,12 @@ angular.module('ramlConsoleApp')
             try {
                 data = JSON.parse(data);
                 data = angular.toJson(data, true);
-            }
-            catch (e) {}
+            } catch (e) {}
 
-            return { data: data, headers: headers() };
+            return {
+                data: data,
+                headers: headers()
+            };
         };
 
         $scope.transformRequest = function (data, headers) {
@@ -69,30 +71,40 @@ angular.module('ramlConsoleApp')
 
         $scope.buildTester = function () {
             var resourceUri = this.baseUri + this.resource.relativeUri.replace(/{/g, ':').replace(/}/g, '');
-            var contentType = $scope.bodyType ? $scope.bodyType.name : $scope.bodyParams[0].name;
+            var contentType = $scope.contentType;
 
             this.testerResource = $resource(resourceUri, null, {
                 'get': {
-                    method:'GET',
-                    headers: { 'accept': contentType },
+                    method: 'GET',
+                    headers: {
+                        'accept': contentType
+                    },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 },
                 'post': {
-                    method:'POST',
-                    headers: { 'content-type': contentType, 'accept': contentType },
+                    method: 'POST',
+                    headers: {
+                        'content-type': contentType,
+                        'accept': contentType
+                    },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 },
                 'put': {
-                    method:'PUT',
-                    headers: { 'content-type': contentType, 'accept': contentType },
+                    method: 'PUT',
+                    headers: {
+                        'content-type': contentType,
+                        'accept': contentType
+                    },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 },
                 'delete': {
-                    method:'DELETE',
-                    headers: { 'accept': contentType },
+                    method: 'DELETE',
+                    headers: {
+                        'accept': contentType
+                    },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
                 }
@@ -105,11 +117,17 @@ angular.module('ramlConsoleApp')
             }
 
             if (!this.requestBody) {
-                this.requestBody = { put: '', post: '' };
+                this.requestBody = {
+                    put: '',
+                    post: ''
+                };
             }
 
             if (!this.body) {
-                this.body = { put: {}, post: {} };
+                this.body = {
+                    put: {},
+                    post: {}
+                };
             }
 
             if (!this.url) {
@@ -117,7 +135,12 @@ angular.module('ramlConsoleApp')
             }
 
             if (!this.query) {
-                this.query = { get: {}, put: {}, post: {}, delete: {} };
+                this.query = {
+                    get: {},
+                    put: {},
+                    post: {},
+                    delete: {}
+                };
             }
 
             this.response = null;

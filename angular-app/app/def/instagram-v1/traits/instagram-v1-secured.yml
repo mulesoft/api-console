@@ -8,7 +8,7 @@ description: |
   may expire at any time in the future.
 provides:
   get?: &accessToken
-    query:
+    queryParameters:
       access_token:
         description: |
           Access Token

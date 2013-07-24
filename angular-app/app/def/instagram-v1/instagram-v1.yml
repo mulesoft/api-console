@@ -27,7 +27,7 @@ documentation:
       description: |
         Search for tags by name. Results are ordered first as an exact match, then by popularity. 
         Short tags will be treated as exact matches.
-      query:
+      queryParameters:
         q:
           description: |
             A valid tag name without a leading #. (eg. snowy, nofilter)

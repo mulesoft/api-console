@@ -1,26 +1,22 @@
 { "$schema" : "http://json-schema.org/draft-03/schema",
   "id" : "http://jsonschema.net",
-  "properties" : { "employee" : { "id" : "http://jsonschema.net/employee",
-          "properties" : { "birthDate" : { "id" : "http://jsonschema.net/employee/birthDate",
-                  "required" : false,
-                  "type" : "string"
-                },
-              "employeeId" : { "id" : "http://jsonschema.net/employee/employeeId",
-                  "required" : false,
-                  "type" : "number"
-                },
-              "firstName" : { "id" : "http://jsonschema.net/employee/firstName",
-                  "required" : false,
-                  "type" : "string"
-                },
-              "lastName" : { "id" : "http://jsonschema.net/employee/lastName",
-                  "required" : false,
-                  "type" : "string"
-                }
-            },
+  "properties" : { "birthDate" : { "id" : "http://jsonschema.net/birthDate",
           "required" : false,
-          "type" : "object"
-        } },
+          "type" : "string"
+        },
+      "employeeId" : { "id" : "http://jsonschema.net/employeeId",
+          "required" : false,
+          "type" : "number"
+        },
+      "firstName" : { "id" : "http://jsonschema.net/firstName",
+          "required" : false,
+          "type" : "string"
+        },
+      "lastName" : { "id" : "http://jsonschema.net/lastName",
+          "required" : false,
+          "type" : "string"
+        }
+    },
   "required" : false,
   "type" : "object"
 }

@@ -61,6 +61,7 @@ angular.module('helpers', [])
                 return arr;
             },
             processQueryParts: function (query) {
+                debugger
                 var queryParams = [];
                 var param;
 
