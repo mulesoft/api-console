@@ -6,18 +6,22 @@
   <div role="details-body">
     <ul role="details-sections">
         <li role="{{tab.name}}"
+            ng-repeat="tab in tabs"
             ng-class="{active:isTabActive(tab.name)}"
             ng-click="changeTab(tab.name)"
-            ng-show="tab.show()"
-            ng-repeat="tab in tabs">
+            ng-show="tab.show()">
           <span>{{tab.displayName}}</span>
         </li>
     </ul>
     <ul role="content-types">
-        <li ng-repeat="bodyParam in bodyParams" ng-click="changeBodyType(bodyParam.name)">
+        <li ng-repeat="bodyParam in bodyParams"
+            ng-click="changeBodyType(bodyParam.name)">
           {{bodyParam.name}}
         </li>
     </ul>
-    <ng-include ng-show="isTabActive(tab.name)" src="tab.view" ng-repeat="tab in tabs"></ng-include>
+    <ng-include ng-repeat="tab in tabs"
+                ng-show="isTabActive(tab.name)"
+                src="tab.view">
+    </ng-include>
   </div>
 </section>
