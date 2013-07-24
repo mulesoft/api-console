@@ -1,16 +1,61 @@
 angular.module('ramlConsoleApp')
     .controller('ramlOperationDetails', function ($scope, $filter, eventService) {
-        $scope.tabName = 'try-it';
+
+        $scope.initTabs = function () {
+            if (this.tabs) {
+                return;
+            }
+
+            this.tabs = [];
+            this.tabs.push({
+                name: 'try-it',
+                displayName: 'Try It',
+                view: 'views/raml-operation-details-try-it.tmpl.html',
+                show: function () {
+                    return true;
+                }
+            });
+
+            this.tabs.push({
+                name: 'parameters',
+                displayName: 'Parameters',
+                view: 'views/raml-operation-details-parameters.tmpl.html',
+                show: function () {
+                    return $filter('filter')($scope.urlParams, { editable: true }).length || $scope.queryParams.length;
+                }
+            });
+
+            this.tabs.push({
+                name: 'requests',
+                displayName: 'Request',
+                view: 'views/raml-operation-details-request.tmpl.html',
+                show: function () {
+                    return $filter('filter')($scope.resource.methods, $scope.requestFilter).length;
+                }
+            });
+
+            this.tabs.push({
+                name: 'response',
+                displayName: 'Response',
+                view: 'views/raml-operation-details-response.tmpl.html',
+                show: function () {
+                    return $filter('filter')($scope.resource.methods, $scope.responseFilter).length;
+                }
+            });
+
+            this.tabName = this.tabs[0].name;
+        };
 
         $scope.$on('event:raml-method-changed', function () {
             $scope.init();
         });
 
         $scope.isTabActive = function (tabName) {
-            return tabName === this.tabName;
+            return tabName === $scope.tabName;
         };
+
         $scope.changeTab = function (tabName) {
-            this.tabName = tabName;
+            $scope.tabName = tabName;
         };
 
         $scope.requestFilter = function (el) {
@@ -37,4 +82,6 @@ angular.module('ramlConsoleApp')
         $scope.responseFilter = function (el) {
             return el.method === $scope.operation.method && typeof el.responses !== 'undefined';
         };
+
+        $scope.initTabs();
     });
