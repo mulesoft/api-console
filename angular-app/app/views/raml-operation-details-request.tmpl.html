@@ -32,7 +32,7 @@
 
   </section>
 
-  <section role="codes-list" ng-show="description.params">
+  <section role="codes-list" ng-repeat="(contentType, content) in operation.request" ng-show="content.formParameters">
     <header>
       <h1>Form Parameters</h1>
     </header>
@@ -45,7 +45,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="param in description.params">
+        <tr ng-repeat="param in content.formParameters">
           <td>{{param.name}}</td>
           <td>{{param.type}}</td>
           <td>{{param.description}}</td>

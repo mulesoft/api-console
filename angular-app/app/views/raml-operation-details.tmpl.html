@@ -15,8 +15,8 @@
     </ul>
     <ul role="content-types">
         <li ng-repeat="contenType in operation.supportedTypes"
-            ng-click="changeBodyType(contenType)">
-          {{contenType}}
+            ng-click="changeBodyType(contenType)" ng-class="{active:isTypeActive(contenType)}">
+          {{ parseTypeName(contenType)}}
         </li>
     </ul>
     <ng-include ng-repeat="tab in tabs"
