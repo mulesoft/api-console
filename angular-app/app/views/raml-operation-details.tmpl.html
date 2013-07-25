@@ -2,6 +2,7 @@
   <header>
       <h1>Summary</h1>
       <p>{{operation.summary}}</p>
+      <p ng-if="hasSummary(operation.summary)">No summary.</p>
   </header>
   <div role="details-body">
     <ul role="details-sections">

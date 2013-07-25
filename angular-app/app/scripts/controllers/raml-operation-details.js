@@ -10,6 +10,10 @@ angular.module('ramlConsoleApp')
             }
         };
 
+        $scope.hasSummary = function (value) {
+            return !(typeof value !== 'undefined' && value !== '');
+        };
+
         $scope.initTabs = function () {
             if (this.tabs) {
                 return;

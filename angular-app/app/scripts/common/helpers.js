@@ -316,6 +316,7 @@ angular.module('helpers', [])
     })
     .filter('formatUriPart', function () {
         return function (text) {
-            return text.replace(/\//g, '&nbsp/&nbsp').replace(/\&nbsp\&nbsp/g, '&nbsp').replace(/\&nbsp$/g, '');
+            return text.replace('\\', '');
+            // return text.replace(/\//g, '&nbsp/&nbsp').replace(/\&nbsp\&nbsp/g, '&nbsp').replace(/\&nbsp$/g, '');
         };
     });
