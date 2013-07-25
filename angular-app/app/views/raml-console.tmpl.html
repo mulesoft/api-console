@@ -2,13 +2,17 @@
     <header>
         <ng-include src="'views/raml-console-navbar.tmpl.html'"></ng-include>
     </header>
-    <div>
-    <aside role="sidebar">
-        <ng-include src="'views/raml-console-sidebar.tmpl.html'" onload="loaded(documentation[0], resources[0])" ng-controller="ramlConsoleSidebar"></ng-include>
-    </aside>
-    <section role="main">
-        <ng-include src="'views/raml-documentation.tmpl.html'" ng-controller="ramlDocumentation"></ng-include>
-        <ng-include src="'views/raml-operation-list.tmpl.html'"></ng-include>
-    </section>
+    <div style="display:table;">
+        <div style="display:table-row;">
+            <aside role="sidebar" style="display:table-cell;">
+                <ng-include src="'views/raml-console-sidebar.tmpl.html'" onload="loaded(documentation[0], resources[0])" ng-controller="ramlConsoleSidebar"></ng-include>
+            </aside>
+            <div style="display:table-cell;">
+                <section role="main">
+                    <ng-include src="'views/raml-documentation.tmpl.html'" ng-controller="ramlDocumentation"></ng-include>
+                    <ng-include src="'views/raml-operation-list.tmpl.html'"></ng-include>
+                </section>
+            </div>
+        </div>
     </div>
 </section>
