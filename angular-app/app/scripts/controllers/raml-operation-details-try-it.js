@@ -24,7 +24,6 @@ angular.module('ramlConsoleApp')
             var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.name] : null;
 
             body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
-
             commons.extend(params, this.url);
             commons.extend(params, this.query[this.operation.name]);
             tester.body = body || null;
@@ -70,7 +69,7 @@ angular.module('ramlConsoleApp')
         };
 
         $scope.buildTester = function () {
-            var resourceUri = this.baseUri + this.resource.relativeUri.replace(/{/g, ':').replace(/}/g, '');
+            var resourceUri = this.baseUri.replace(/{/g, ':').replace(/}/g, '') + this.resource.relativeUri.replace(/{/g, ':').replace(/}/g, '');
             var contentType = $scope.contentType;
 
             this.testerResource = $resource(resourceUri, null, {

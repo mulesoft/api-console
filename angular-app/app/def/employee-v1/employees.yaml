@@ -2,14 +2,14 @@
 ---
 title: Employees API
 version: v0.2
-baseUri: http://localhost:9091/api/{version}
-#uriParameters:
-#    company:
-#        name: Company
-#        type: string
-#        minLength: 0
-#        maxLength: 10
-#        required: yes
+baseUri: http://localhost:9091/api/{version}/{company}
+uriParameters:
+   company:
+       name: Company
+       type: string
+       minLength: 0
+       maxLength: 10
+       required: yes
 documentation:
     - title: Employees
       content: |
