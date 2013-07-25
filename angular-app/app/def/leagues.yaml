@@ -2,8 +2,8 @@
 %TAG ! tag:raml.org,0.1:
 ---
 title: La Liga
-baseUri: https://api.leagues.com/
 version: 1.0
+baseUri: https://api.leagues.com/{version}/
 documentation:
   - title: Getting Started
     content: |
@@ -201,23 +201,21 @@ documentation:
               "properties": {
                   "homeCity": {
                       "description": "Name of the city to which this team belongs",
-                      "type": "string"
+                      "type": "string",
+                      "required": true
                   },
                   "id": {
                       "description": "A three-letter code that identifies the team id",
                       "maxLength": 3,
                       "minLength": 3,
-                      "type": "string"
+                      "type": "string",
+                      "required": true
                   },
                   "name": {
                       "description": "Name of the team",
-                      "type": "string"
-                  },
-                  "required": [
-                      "id",
-                      "name",
-                      "homeCity"
-                  ],
+                      "type": "string",
+                      "required": true
+                  }
                   "stadium": {
                       "description": "Name of the stadium",
                       "type": "string"
@@ -269,7 +267,8 @@ documentation:
                     "properties": {
                         "homeCity": {
                             "description": "Name of the city to which this team belongs",
-                            "type": "string"
+                            "type": "string",
+                            "required": true
                         },
                         "matches": {
                             "description": "The total number of matches that has been played by this team between all seasons",
@@ -280,11 +279,8 @@ documentation:
                             "description": "A three-letter code that identifies the team id",
                             "maxLength": 3,
                             "minLength": 3,
-                            "type": "string"
-                        },
-                        "name": {
-                            "description": "Name of the team",
-                            "type": "string"
+                            "type": "string",
+                            "required": true
                         },
                         "required": [
                             "id",

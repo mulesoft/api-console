@@ -76,7 +76,7 @@ angular.module('ramlConsoleApp')
                 'get': {
                     method: 'GET',
                     headers: {
-                        'Accept': contentType
+                        'Accept': '*/*'
                     },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
@@ -85,7 +85,7 @@ angular.module('ramlConsoleApp')
                     method: 'POST',
                     headers: {
                         'Content-Type': contentType,
-                        'Accept': contentType
+                        'Accept': '*/*'
                     },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
@@ -94,7 +94,7 @@ angular.module('ramlConsoleApp')
                     method: 'PUT',
                     headers: {
                         'Content-Type': contentType,
-                        'Accept': contentType
+                        'Accept': '*/*'
                     },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
@@ -103,7 +103,7 @@ angular.module('ramlConsoleApp')
                     method: 'PATCH',
                     headers: {
                         'Content-Type': contentType,
-                        'Accept': contentType
+                        'Accept': '*/*'
                     },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
@@ -111,7 +111,7 @@ angular.module('ramlConsoleApp')
                 'delete': {
                     method: 'DELETE',
                     headers: {
-                        'Accept': contentType
+                        'Accept': '*/*'
                     },
                     transformResponse: this.transformResponse,
                     transformRequest: this.transformRequest
