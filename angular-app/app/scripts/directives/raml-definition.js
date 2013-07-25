@@ -13,7 +13,6 @@ angular.module('ramlConsoleApp')
                 ramlPaser.loadFile($attrs.src)
                     .done(function (result) {
                         var readData = ramlReader.read(result);
-                        console.log(result);
                         console.log(readData);
                         $rootScope.$emit('event:raml-parsed', readData);
                     });
