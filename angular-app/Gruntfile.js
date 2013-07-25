@@ -53,6 +53,7 @@ module.exports = function (grunt) {
                         'app/scripts/common/showdown.js',
                         'app/scripts/common/eventService.js',
                         'app/scripts/app.js',
+                        'app/scripts/services/ramlService.js',
                         'app/scripts/directives/prevent-default.js',
                         'app/scripts/directives/raml-console.js',
                         'app/scripts/directives/raml-definition.js',
@@ -339,9 +340,11 @@ module.exports = function (grunt) {
             options: {
                 mangle: false
             },
+
             embedded: {
                 files: {
-                    'dist/vendor.js': ['app/vendor/angular.js',
+                    'dist/vendor.js': [
+                        'app/vendor/angular.js',
                         'app/vendor/angular-resource.js',
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/raml-parser.js',
@@ -352,6 +355,7 @@ module.exports = function (grunt) {
                         'app/scripts/common/showdown.js',
                         'app/scripts/common/eventService.js',
                         'app/scripts/app.js',
+                        'app/scripts/services/ramlService.js',
                         'app/scripts/directives/prevent-default.js',
                         'app/scripts/directives/raml-console.js',
                         'app/scripts/directives/raml-definition.js',
