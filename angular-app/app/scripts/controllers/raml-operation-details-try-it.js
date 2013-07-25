@@ -43,11 +43,12 @@ angular.module('ramlConsoleApp')
                     url: url
                 };
             }, function (error) {
+                var params = ramlHelper.toUriParams(error.config.params).replace(';', '');
                 that.response = {
                     data: error.data.data,
                     headers: error.data.headers,
                     statusCode: error.status,
-                    url: error.config.url
+                    url: error.config.url + '?' + params
                 };
             });
         };
