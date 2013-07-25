@@ -9,7 +9,7 @@
         <li ng-repeat="trait in resource.traits">{{trait}}</li>
       </ul>
       <ul role="operations">
-        <li role="{{key}}" ng-repeat="(key, value) in resource.methods" ng-class="{active:isMethodActive(key)}" ng-click="changeMethod(key)" prevent-default>
+        <li role="{{key}}" ng-repeat="(key, value) in resource.methods" ng-class="{active:isMethodActive(key)}" ng-click="changeMethod(key); $event.stopPropagation()">
           <span>{{key}}</span>
         </li>
       </ul>
