@@ -3,12 +3,12 @@
         <header>
             <h1>Request</h1>
         </header>
-        <div role="uri-params">
+        <form role="uri-params" name="uriParamsForm">
             <h2>Resource Uri</h2>
             <div role="uri">
                 <ng-include src="'views/raml-uri-part.tmpl.html'" ng-repeat="uriPart in urlParams"></ng-include>
             </div>
-        </div>
+        </form>
         <div role="additional-params" ng-show="hasAdditionalParams(operation)">
             <div role="query-params">
                 <h2>Additional parameters</h2>

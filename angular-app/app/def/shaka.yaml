@@ -12,6 +12,13 @@ documentation:
   name: Projects
   get:
     summary: Get a list of projects
+    queryParameters:
+      city:
+        description: |
+          Filter the list of teams by home city.
+        type: string
+        required: false
+        example: Barcelona
     responses:
       200:
         body:

@@ -22,13 +22,28 @@ angular.module('ramlConsoleApp')
             var bodyParams = this.hasBodyParams(this.bodyType) ? this.body[this.operation.name] : null;
             var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.name] : null;
 
-            body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
-            commons.extend(params, this.url);
-            commons.extend(params, this.query[this.operation.name]);
-            tester.body = body || null;
+            if (this.isValid()) {
+                body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
+                commons.extend(params, this.url);
+                commons.extend(params, this.query[this.operation.name]);
+                tester.body = body || null;
 
-            this.response = null;
-            this.$request(tester, params, this.operation.name);
+                this.response = null;
+                this.$request(tester, params, this.operation.name);
+            }
+        };
+
+        $scope.isValid = function () {
+            var flag = true;
+
+            for (var prop in this.url) {
+                if (this.url[prop] === null || this.url[prop] === '') {
+                    flag = false;
+                    break;
+                }
+            }
+
+            return flag;
         };
 
         $scope.$request = function (tester, params, method) {
@@ -142,6 +157,12 @@ angular.module('ramlConsoleApp')
 
             if (!this.url) {
                 this.url = {};
+
+                angular.forEach(this.urlParams, function (el) {
+                    if (el.memberName) {
+                        this.url[el.memberName] = null;
+                    }
+                }.bind(this));
             }
 
             if (!this.query) {
