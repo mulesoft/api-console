@@ -22,12 +22,12 @@ angular.module('ramlConsoleApp')
             var bodyParams = this.hasBodyParams(this.bodyType) ? this.body[this.operation.name] : null;
             var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.name] : null;
 
-            if (this.isValid()) {
-                body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
-                commons.extend(params, this.url);
-                commons.extend(params, this.query[this.operation.name]);
-                tester.body = body || null;
+            body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
+            commons.extend(params, this.url);
+            commons.extend(params, this.query[this.operation.name]);
+            tester.body = body || null;
 
+            if (this.isValid() && $scope.additionalParamsForm.$valid) {
                 this.response = null;
                 this.$request(tester, params, this.operation.name);
             }

@@ -10,7 +10,7 @@
             </div>
         </form>
         <div role="additional-params" ng-show="hasAdditionalParams(operation)">
-            <div role="query-params">
+            <form role="query-params" name="additionalParamsForm">
                 <h2>Additional parameters</h2>
                 <div role="params">
                     <ng-include src="'views/raml-query-param.tmpl.html'" ng-repeat="queryParam in queryParams"></ng-include>
@@ -18,7 +18,7 @@
                 <div role="params">
                     <ng-include src="'views/raml-body-param.tmpl.html'" ng-repeat="bodyParam in operation.request[contentType].formParameters"></ng-include>
                 </div>
-            </div>
+            </form>
             <div role="request-body" ng-show="hasRequestBody(operation) && !hasBodyParams(bodyType)">
                 <label>Body
                     <textarea ng-model="requestBody[operation.name]"></textarea>

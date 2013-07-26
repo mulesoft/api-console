@@ -227,7 +227,9 @@ angular.module('helpers', [])
             extend: function (destination, source) {
                 for (var elem in source) {
                     if (source.hasOwnProperty(elem)) {
-                        destination[elem] = source[elem];
+                        if (source[elem]) {
+                            destination[elem] = source[elem];
+                        }
                     }
                 }
 

@@ -13,12 +13,18 @@ documentation:
   get:
     summary: Get a list of projects
     queryParameters:
-      city:
+      auth:
+        description: |
+          Filter the list of teams by home city.
+        type: string
+        required: true
+        example: auth_token
+      orderBy:
         description: |
           Filter the list of teams by home city.
         type: string
         required: false
-        example: Barcelona
+        example: projectName
     responses:
       200:
         body:

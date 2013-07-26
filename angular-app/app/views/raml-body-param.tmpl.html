@@ -1,3 +1,4 @@
 <label>{{bodyParam.name}}
-    <input type="text" placeholder="{{bodyParam.example}}" ng-model="body[operation.method][bodyParam.name]">
+	<span style="color: #e9322d;" ng-show="bodyParam.required">*</span>
+    <input type="text" placeholder="{{bodyParam.example}}" ng-model="body[operation.method][bodyParam.name]" ng-required="{{bodyParam.required}}">
 </label>
