@@ -7,7 +7,10 @@ angular.module('ramlConsoleApp').directive('fileUpload', function () {
 
                 for (var i = 0; i < files.length; i++) {
                     scope.$emit('fileSelected', {
-                        file: files[i],
+                        file: {
+                            stream: files[i],
+                            name: event.currentTarget.dataset.description
+                        },
                         target: event.currentTarget.dataset.description
                     });
                 }
@@ -128,7 +131,7 @@ angular.module('ramlConsoleApp')
             });
 
             for (var i = 0; i < $scope.files.length; i++) {
-                fd.append('file' + i, $scope.files[i]);
+                fd.append($scope.files[i].name, $scope.files[i].stream);
             }
 
             return fd;
