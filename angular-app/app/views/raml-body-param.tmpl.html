@@ -1,5 +1,5 @@
 <label ng-switch on="bodyParam.type" ng-show="bodyParam.name">{{bodyParam.name}}
     <span style="color: #e9322d;" ng-show="bodyParam.required">*</span>
 
-    <input ng-switch-default type="text" placeholder="{{bodyParam.example}}" ng-model="body[operation.name][bodyParam.name]" ng-required="{{bodyParam.required}}">
+    <input ng-switch-default type="text" placeholder="{{bodyParam.example}}" ng-model="body[operation.name][bodyParam.paramName]" ng-required="{{bodyParam.required}}">
 </label>

@@ -1,4 +1,5 @@
 <label ng-switch on="bodyParam.type">{{bodyParam.name}}
     <span style="color: #e9322d;" ng-show="bodyParam.required">*</span>
-    <input ng-switch-when="file" data-description="{{bodyParam.name}}" style="width: 533px; padding-top: 9px;" name="file" type="file" placeholder="{{bodyParam.example}}" ng-model="body[operation.name][bodyParam.name]" ng-required="{{bodyParam.required}}" file-upload>
+
+    <input ng-switch-when="file" data-description="{{bodyParam.paramName}}" style="width: 533px; padding-top: 9px;" name="file" type="file" placeholder="{{bodyParam.example}}" ng-model="body[operation.name][bodyParam.paramName]" ng-required="{{bodyParam.required}}" file-upload>
 </label>

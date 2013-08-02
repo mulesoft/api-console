@@ -90,6 +90,9 @@ angular.module('raml', [])
                             for (var param in result.request[contentType].formParameters) {
                                 var temp = JSON.parse(JSON.stringify(result.request[contentType].formParameters[param]));
 
+                                result.request[contentType].formParameters[param].paramName = param;
+                                temp.paramName = param;
+
                                 if (temp.type === 'file') {
                                     delete result.request[contentType].formParameters[param];
 
