@@ -57,7 +57,7 @@ angular.module('ramlConsoleApp')
 
             if ($scope.contentType.indexOf('multipart') >= 0) {
                 body = bodyParams ? bodyParams : body;
-                body.payload = 'fake';
+                body.payload = 'multipart/form-data';
             }
 
             commons.extend(params, this.url);
