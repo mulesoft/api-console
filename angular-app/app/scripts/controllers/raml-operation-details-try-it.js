@@ -1,3 +1,21 @@
+angular.module('ramlConsoleApp').directive('fileUpload', function () {
+    return {
+        scope: true,
+        link: function (scope, el, attrs) {
+            el.bind('change', function (event) {
+                var files = event.target.files;
+
+                for (var i = 0; i < files.length; i++) {
+                    scope.$emit('fileSelected', {
+                        file: files[i],
+                        target: event.currentTarget.dataset.description
+                    });
+                }
+            });
+        }
+    };
+});
+
 angular.module('ramlConsoleApp')
     .controller('ramlOperationDetailsTryIt', function ($scope, $resource, commons, eventService, ramlHelper) {
         $scope.hasAdditionalParams = function (operation) {
@@ -8,13 +26,26 @@ angular.module('ramlConsoleApp')
             return operation.name === 'post' || operation.name === 'put' || operation.name === 'patch';
         };
 
-        $scope.hasBodyParams = function (bodyType) {
-            return bodyType && bodyType.params && bodyType.params.length;
+        $scope.hasBodyParams = function () {
+            return this.operation && this.operation.request && this.operation.request[$scope.contentType] && this.operation.request[$scope.contentType].formParameters;
         };
 
         $scope.showResponse = function () {
             return this.response;
         };
+
+        $scope.isFile = function (type) {
+            return type === 'file';
+        };
+
+        $scope.files = [];
+
+        $scope.$on('fileSelected', function (event, args) {
+            $scope.$apply(function () {
+                $scope.body[$scope.operation.name][args.target] = args.file.name;
+                $scope.files.push(args.file);
+            });
+        });
 
         $scope.tryIt = function () {
             var params = {};
@@ -23,6 +54,12 @@ angular.module('ramlConsoleApp')
             var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.name] : null;
 
             body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
+
+            if ($scope.contentType.indexOf('multipart') >= 0) {
+                body = bodyParams ? bodyParams : body;
+                body.payload = 'fake';
+            }
+
             commons.extend(params, this.url);
             commons.extend(params, this.query[this.operation.name]);
             tester.body = body || null;
@@ -83,6 +120,20 @@ angular.module('ramlConsoleApp')
             return (data && data.body) ? data.body : null;
         };
 
+        $scope.transformMultipartRequest = function (data, headers) {
+            var fd = new FormData();
+
+            angular.forEach(data.body, function (value, key) {
+                fd.append(key, value);
+            });
+
+            for (var i = 0; i < $scope.files.length; i++) {
+                fd.append('file' + i, $scope.files[i]);
+            }
+
+            return fd;
+        };
+
         $scope.buildTester = function () {
             var resourceUri = this.baseUri.replace(/{/g, ':').replace(/}/g, '') + this.resource.relativeUri.replace(/{/g, ':').replace(/}/g, '');
             var contentType = $scope.contentType;
@@ -99,11 +150,11 @@ angular.module('ramlConsoleApp')
                 'post': {
                     method: 'POST',
                     headers: {
-                        'Content-Type': contentType,
+                        'Content-Type': contentType.indexOf('multipart') >= 0 ? false : contentType,
                         'Accept': '*/*'
                     },
                     transformResponse: this.transformResponse,
-                    transformRequest: this.transformRequest
+                    transformRequest: contentType.indexOf('multipart') >= 0 ? this.transformMultipartRequest : this.transformRequest
                 },
                 'put': {
                     method: 'PUT',

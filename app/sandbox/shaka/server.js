@@ -1,7 +1,8 @@
 var express = require('express'),
 	restful = require('node-restful'),
 	mongoose = restful.mongoose,
-	app = express();
+	app = express(),
+	format = require('util').format;
 
 app.use(express.bodyParser());
 app.use(express.query());
@@ -19,6 +20,32 @@ var Project = app.resource = restful.model('projects', mongoose.Schema({
 	description: String,
 	year: Number
 })).methods(['get', 'post', 'put', 'delete']);
+
+app.get('/api/issues', function (req, res) {
+	res.send({
+		message: 'OK'
+	});
+});
+
+app.post('/api/issues', function (req, res, next) {
+	var info = {};
+
+	info.hPubFile = {
+		name: req.files.file1.name,
+		path: req.files.file1.path,
+		type: req.files.file1.type,
+		size: req.files.file1.size
+	};
+
+	info.coverFile = {
+		name: req.files.file0.name,
+		path: req.files.file0.path,
+		type: req.files.file0.type,
+		size: req.files.file0.size
+	};
+
+	res.send(info);
+});
 
 Project.register(app, '/api/projects');
 

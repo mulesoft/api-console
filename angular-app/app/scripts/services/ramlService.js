@@ -84,6 +84,24 @@ angular.module('raml', [])
 
                 if (typeof methodDescriptor.body !== 'undefined') {
                     result.request = methodDescriptor.body;
+
+                    for (var contentType in result.request) {
+                        if (typeof result.request[contentType].formParameters !== 'undefined') {
+                            for (var param in result.request[contentType].formParameters) {
+                                var temp = JSON.parse(JSON.stringify(result.request[contentType].formParameters[param]));
+
+                                if (temp.type === 'file') {
+                                    delete result.request[contentType].formParameters[param];
+
+                                    if (typeof result.request[contentType].formParameters.__files === 'undefined') {
+                                        result.request[contentType].formParameters.__files = {};
+                                    }
+
+                                    result.request[contentType].formParameters.__files[param] = temp;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 return result;
