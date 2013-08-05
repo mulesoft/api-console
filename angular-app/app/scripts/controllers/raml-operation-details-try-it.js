@@ -58,7 +58,7 @@ angular.module('ramlConsoleApp')
 
             body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
 
-            if ($scope.contentType.indexOf('multipart') >= 0) {
+            if ($scope.contentType && $scope.contentType.indexOf('multipart') >= 0) {
                 body = bodyParams ? bodyParams : body;
                 body.payload = 'multipart/form-data';
             }

@@ -31,17 +31,17 @@ app.post('/api/issues', function (req, res, next) {
 	var info = {};
 
 	info.hPubFile = {
-		name: req.files.file1.name,
-		path: req.files.file1.path,
-		type: req.files.file1.type,
-		size: req.files.file1.size
+		name: req.files.hpub.name,
+		path: req.files.hpub.path,
+		type: req.files.hpub.type,
+		size: req.files.hpub.size
 	};
 
 	info.coverFile = {
-		name: req.files.file0.name,
-		path: req.files.file0.path,
-		type: req.files.file0.type,
-		size: req.files.file0.size
+		name: req.files.cover.name,
+		path: req.files.cover.path,
+		type: req.files.cover.type,
+		size: req.files.cover.size
 	};
 
 	res.send(info);

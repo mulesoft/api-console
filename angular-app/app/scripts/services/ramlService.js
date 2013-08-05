@@ -111,8 +111,8 @@ angular.module('raml', [])
             },
 
             readContentTypes: function (methodDescriptor) {
-                var types = ['application/json'];
-
+                var types = [];
+                
                 if (typeof methodDescriptor.body !== 'undefined') {
                     for (var type in methodDescriptor.body) {
                         if (types.indexOf(type) === -1) {
@@ -121,17 +121,17 @@ angular.module('raml', [])
                     }
                 }
 
-                if (typeof methodDescriptor.responses !== 'undefined') {
-                    angular.forEach(methodDescriptor.responses, function (element) {
-                        for (var httpCode in element) {
-                            for (var contentType in methodDescriptor.responses[httpCode]) {
-                                if (types.indexOf(contentType) === -1) {
-                                    types.push(contentType);
-                                }
-                            }
-                        }
-                    });
-                }
+                // if (typeof methodDescriptor.responses !== 'undefined') {
+                //     angular.forEach(methodDescriptor.responses, function (element) {
+                //         for (var httpCode in element) {
+                //             for (var contentType in methodDescriptor.responses[httpCode]) {
+                //                 if (types.indexOf(contentType) === -1) {
+                //                     types.push(contentType);
+                //                 }
+                //             }
+                //         }
+                //     });
+                // }
 
                 return types;
             },
