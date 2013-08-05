@@ -48,7 +48,7 @@
         <tr ng-repeat="param in content.formParameters">
           <td>{{param.name}}</td>
           <td>{{param.type}}</td>
-          <td>{{param.description}}</td>
+          <td class="markdown" ng-model="param.description"></td>
         </tr>
       </tbody>
     </table>
