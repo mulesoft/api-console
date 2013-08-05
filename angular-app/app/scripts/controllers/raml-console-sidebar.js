@@ -16,15 +16,6 @@ angular.module('ramlConsoleApp')
         $rootScope.elementName = '';
         $rootScope.type = '';
 
-        $scope.loaded = function (doc, res) {
-            if (typeof doc !== 'undefined') {
-                broadcast([doc], true, false);
-            } else if (typeof res !== 'undefined') {
-                broadcast(res, false, true);
-            }
-
-        };
-
         $scope.elementClick = function (id) {
             var data = this.resource || this.documentation;
 
@@ -36,4 +27,17 @@ angular.module('ramlConsoleApp')
         $scope.isElementActive = function (elementName, type) {
             return elementName === $rootScope.elementName && type === $rootScope.type;
         };
+
+        $scope.initialStatus = function () {
+            var doc = this.documentation && this.documentation.length ? this.documentation[0] : null,
+                res = this.resources && this.resources.length ? this.resources[0] : null;
+
+            if (doc) {
+                broadcast([doc], true, false);
+            } else if (res) {
+                broadcast(res, false, true);
+            }
+        };
+
+        $scope.$watch('resources || documentation', $scope.initialStatus.bind($scope), true);
     });

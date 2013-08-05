@@ -1,5 +1,5 @@
 angular.module('ramlConsoleApp')
-    .controller('ramlDocumentation', function ($scope, $filter) {
+    .controller('ramlDocumentation', function ($scope, $filter, eventService) {
         $scope.model = {};
 
         $scope.$on('event:raml-sidebar-clicked', function (e, eventData) {
