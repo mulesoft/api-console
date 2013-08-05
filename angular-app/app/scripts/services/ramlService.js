@@ -112,7 +112,7 @@ angular.module('raml', [])
 
             readContentTypes: function (methodDescriptor) {
                 var types = [];
-                
+
                 if (typeof methodDescriptor.body !== 'undefined') {
                     for (var type in methodDescriptor.body) {
                         if (types.indexOf(type) === -1) {
@@ -136,12 +136,12 @@ angular.module('raml', [])
                 return types;
             },
 
-            readTraits: function (resource) {
+            readTraits: function (traitList, traitsDescription) {
                 var traits = [];
 
-                angular.forEach(resource.use, function (use) {
+                angular.forEach(traitList, function (use) {
                     if (typeof use === 'string' && traits.indexOf(use) === -1) {
-                        traits.push(use);
+                        traits.push(traitsDescription[use].name);
                     } else if (typeof use === 'object') {
                         var keys = Object.keys(use);
 
@@ -149,7 +149,7 @@ angular.module('raml', [])
                             var key = Object.keys(use)[0];
 
                             if (traits.indexOf(key) === -1) {
-                                traits.push(key);
+                                traits.push(traitsDescription[key].name);
                             }
                         }
                     }
@@ -158,7 +158,7 @@ angular.module('raml', [])
                 return traits;
             },
 
-            readResourceData: function (resource, baseUri) {
+            readResourceData: function (resource, raml) {
                 var result = JSON.parse(JSON.stringify(resource));
 
                 if (!resource.methods instanceof Array) {
@@ -183,13 +183,31 @@ angular.module('raml', [])
                     }
                 }
 
-                if (typeof resource.use !== 'undefined') {
-                    result.traits = this.readTraits(resource);
+                if (result.traits) {
+                    result.traits.concat(this.readTraitsDeep(resource, raml.traits));
+                } else {
+                    result.traits = this.readTraitsDeep(resource, raml.traits);
                 }
 
-                result.absoluteUri = baseUri + result.relativeUri;
+                result.absoluteUri = raml.baseUri + result.relativeUri;
 
                 return result;
+            },
+
+            readTraitsDeep: function (resource, traitsDetails) {
+                var traits = [];
+
+                if (typeof resource.use !== 'undefined') {
+                    traits = this.readTraits(resource.use, traitsDetails);
+                }
+
+                angular.forEach(resource.methods, function (method) {
+                    if (typeof method.use !== 'undefined') {
+                        traits = traits.concat(this.readTraits(method.use, traitsDetails));
+                    }
+                }.bind(this));
+
+                return traits;
             },
 
             readRootResources: function (raml) {
@@ -199,7 +217,7 @@ angular.module('raml', [])
 
                 if (typeof raml.resources !== 'undefined') {
                     angular.forEach(raml.resources, function (element) {
-                        result.resources.push(this.readResourceData(element, raml.baseUri));
+                        result.resources.push(this.readResourceData(element, raml));
                     }.bind(this));
                 }
 
@@ -219,7 +237,7 @@ angular.module('raml', [])
                     resource.resources = [];
 
                     angular.forEach(flatResources, function (el) {
-                        var r = this.readResourceData(el, raml.baseUri);
+                        var r = this.readResourceData(el, raml);
                         resource.resources.push(r);
                     }.bind(this));
                 }.bind(this));
