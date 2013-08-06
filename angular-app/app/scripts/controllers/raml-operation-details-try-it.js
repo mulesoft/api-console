@@ -153,11 +153,11 @@ angular.module('ramlConsoleApp')
                 'post': {
                     method: 'POST',
                     headers: {
-                        'Content-Type': contentType.indexOf('multipart') >= 0 ? false : contentType,
+                        'Content-Type': contentType && contentType.indexOf('multipart') >= 0 ? false : contentType,
                         'Accept': '*/*'
                     },
                     transformResponse: this.transformResponse,
-                    transformRequest: contentType.indexOf('multipart') >= 0 ? this.transformMultipartRequest : this.transformRequest
+                    transformRequest: contentType && contentType.indexOf('multipart') >= 0 ? this.transformMultipartRequest : this.transformRequest
                 },
                 'put': {
                     method: 'PUT',
@@ -233,9 +233,9 @@ angular.module('ramlConsoleApp')
             this.buildTester();
         };
 
-        $scope.$on('event:raml-method-changed', function () {
-            $scope.init();
-        });
+        // $scope.$on('event:raml-method-changed', function () {
+        //     $scope.init();
+        // });
 
         $scope.$on('event:raml-body-type-changed', function () {
             $scope.init();

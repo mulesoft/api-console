@@ -8,7 +8,7 @@ version: 1.0
 documentation:
   - title: Getting Started
     content: |
-      Certain **features** will only be available when supporting Baker with an external server. 
+      Certain features will only be available when supporting Baker with an external server. 
       You will need a server to:
 
       * Host the shelf JSON file
@@ -70,6 +70,7 @@ traits:
             required: true
 /issues:
   name: Shelf
+  use: [ appIdAware, userIdAware, environmentAware ]
   post:
     summary: Create a new issue for Baker
     body:
@@ -77,7 +78,7 @@ traits:
         formParameters:
           name:
             name: Name
-            description: A unique **identifier** for the issue. Note that both Newsstand and Baker rely on this ID, which should be unique and should never change. This property is used internally and it won't be shown to the user.
+            description: A unique identifier for the issue. Note that both Newsstand and Baker rely on this ID, which should be unique and should never change. This property is used internally and it won't be shown to the user.
             type: string
             required: true
           title:
@@ -113,13 +114,12 @@ traits:
     responses:
       201:
         description: |
-          The issue has been succesfully created
+          The issue has been successfully created
         headers:
           Location:
             type: string
             description: Location of the newly created issue
   get:
-    use: [ appIdAware, userIdAware, environmentAware ]
     summary: List all issues available to Baker
     responses:
       200:

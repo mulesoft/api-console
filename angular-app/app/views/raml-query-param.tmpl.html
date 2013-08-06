@@ -1,4 +1,4 @@
 <label>{{queryParam.name}}
-	 <span style="color: #e9322d;" ng-show="queryParam.required">*</span>
-    <input type="text" placeholder="{{queryParam.example}}" ng-model="query[operation.name][queryParam.name]" ng-required="{{queryParam.required}}">
+	<span style="color: #e9322d;" ng-show="queryParam.required">*</span>
+    <input type="text" placeholder="{{queryParam.example}}" ng-model="query[operation.name][queryParam.paramName]" ng-required="{{queryParam.required}}">
 </label>

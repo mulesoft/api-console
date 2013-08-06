@@ -60,7 +60,11 @@ angular.module('ramlConsoleApp')
         };
 
         $scope.$on('event:raml-method-changed', function () {
-            $scope.init();
+            if ($scope.operation.supportedTypes.length) {
+                eventService.broadcast('event:raml-body-type-changed', $scope.operation.supportedTypes[0]);
+            } else {
+                eventService.broadcast('event:raml-body-type-changed', 'application/json');
+            }
         });
 
         $scope.isTabActive = function (tabName) {

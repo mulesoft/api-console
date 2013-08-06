@@ -14,6 +14,8 @@ angular.module('ramlConsoleApp')
                 $scope.queryParams = this.operation.queryParameters;
                 $scope.contentType = this.operation.supportedTypes[0];
             }
+            
+            eventService.broadcast('event:raml-method-changed', methodName);
         };
 
         $scope.isMethodActive = function (methodName) {

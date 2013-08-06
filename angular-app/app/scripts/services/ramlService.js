@@ -42,7 +42,7 @@ angular.module('raml', [])
 
                 for (var prop in query) {
                     param = query[prop];
-                    param.name = prop;
+                    param.paramName = prop;
                     queryParams.push(param);
                 }
 
