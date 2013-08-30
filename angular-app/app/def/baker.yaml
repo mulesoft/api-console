@@ -119,10 +119,16 @@ traits:
           Location:
             type: string
             description: Location of the newly created issue
+      403:
+        summary: Unauthorized
+        description: |
+          The user is not allowed to create issues
   get:
     summary: List all issues available to Baker
     responses:
       200:
+        summary: OK
+        description: this is a test
         body:
           application/json:
             schema: |
