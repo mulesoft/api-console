@@ -153,12 +153,15 @@ angular.module('raml', [])
                     }
 
                     if (traitName) {
-                        found = traitsDescription.filter(function (t) {
-                            return t[traitName];
-                        });
-                        if (found.length === 1) {
-                            traits.push(found[0][traitName]);
-                        }
+                        found = traitsDescription
+                            .filter(function (t) {
+                                return t[traitName];
+                            })
+                            .map(function (t) {
+                                return t[traitName];
+                            });
+
+                        traits.push.apply(traits, found);
                     }
                 });
 
