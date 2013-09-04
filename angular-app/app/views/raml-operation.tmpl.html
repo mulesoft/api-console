@@ -6,7 +6,7 @@
     </hgroup>
     <div role="summary">
       <ul role="traits">
-        <li ng-repeat="trait in resource.traits">{{trait}}</li>
+        <li ng-repeat="trait in resource.traits">{{trait.name}}</li>
       </ul>
       <ul role="operations">
         <li role="{{key}}" ng-repeat="(key, value) in resource.methods" ng-class="{active:isMethodActive(key)}" ng-click="changeMethod(key); $event.stopPropagation()">

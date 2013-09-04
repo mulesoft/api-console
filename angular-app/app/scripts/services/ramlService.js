@@ -139,19 +139,29 @@ angular.module('raml', [])
             readTraits: function (traitList, traitsDescription) {
                 var traits = [];
 
-                angular.forEach(traitList, function (use) {
-                    if (typeof use === 'string' && traits.indexOf(use) === -1) {
-                        traits.push(traitsDescription[use].name);
+                traitList.forEach(function (use) {
+                    var traitName, found;
+
+                    if (typeof use === 'string') {
+                        traitName = use;
                     } else if (typeof use === 'object') {
-                        var keys = Object.keys(use);
-
-                        if (keys.length) {
-                            var key = Object.keys(use)[0];
-
-                            if (traits.indexOf(key) === -1) {
-                                traits.push(traitsDescription[key].name);
+                        for (var key in use) {
+                            if (use.hasOwnProperty(key)) {
+                                traitName = key;
                             }
                         }
+                    }
+
+                    if (traitName) {
+                        found = traitsDescription
+                            .filter(function (t) {
+                                return t[traitName];
+                            })
+                            .map(function (t) {
+                                return t[traitName];
+                            });
+
+                        traits.push.apply(traits, found);
                     }
                 });
 
@@ -197,13 +207,13 @@ angular.module('raml', [])
             readTraitsDeep: function (resource, traitsDetails) {
                 var traits = [];
 
-                if (typeof resource.use !== 'undefined') {
-                    traits = this.readTraits(resource.use, traitsDetails);
+                if (typeof resource.is !== 'undefined') {
+                    traits = this.readTraits(resource.is, traitsDetails);
                 }
 
                 angular.forEach(resource.methods, function (method) {
-                    if (typeof method.use !== 'undefined') {
-                        traits = traits.concat(this.readTraits(method.use, traitsDetails));
+                    if (typeof method.is !== 'undefined') {
+                        traits = traits.concat(this.readTraits(method.is, traitsDetails));
                     }
                 }.bind(this));
 

@@ -258,8 +258,8 @@ angular.module('helpers', [])
             },
             makeReadyStateHandler: function (xhr, callback) {
                 xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        callback && callback.call(null, xhr.responseText, xhr);
+                    if (xhr.readyState === 4 && callback) {
+                        callback.call(null, xhr.responseText, xhr);
                     }
                 };
             },
@@ -275,7 +275,7 @@ angular.module('helpers', [])
                 for (var n in params) {
                     var v = params[n];
                     n = encodeURIComponent(n);
-                    r.push(v == null ? n : (n + '=' + encodeURIComponent(v)));
+                    r.push(v === null ? n : (n + '=' + encodeURIComponent(v)));
                 }
                 return r.join('&');
             },

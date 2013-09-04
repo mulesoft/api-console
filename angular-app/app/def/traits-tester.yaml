@@ -1,0 +1,20 @@
+#%RAML 0.2
+---
+title: Example API
+baseUri: http://localhost:3000/api
+version: 1.0
+traits:
+  - secured:
+      name: Secured
+      queryParameters:
+        q:
+          name: q
+          type: string
+          required: true
+  - collection:
+      name: Collection
+      description: Collection of <<item>>
+/users:
+  is: [ secured, collection: { item: Users } ]
+  get:
+    name: Users

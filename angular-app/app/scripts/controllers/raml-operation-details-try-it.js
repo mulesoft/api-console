@@ -1,7 +1,7 @@
 angular.module('ramlConsoleApp').directive('fileUpload', function () {
     return {
         scope: true,
-        link: function (scope, el, attrs) {
+        link: function (scope, el) {
             el.bind('change', function (event) {
                 var files = event.target.files;
 
@@ -119,11 +119,11 @@ angular.module('ramlConsoleApp')
             };
         };
 
-        $scope.transformRequest = function (data, headers) {
+        $scope.transformRequest = function (data) {
             return (data && data.body) ? data.body : null;
         };
 
-        $scope.transformMultipartRequest = function (data, headers) {
+        $scope.transformMultipartRequest = function (data) {
             var fd = new FormData();
 
             angular.forEach(data.body, function (value, key) {
