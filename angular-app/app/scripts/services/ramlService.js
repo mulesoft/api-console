@@ -139,23 +139,13 @@ angular.module('raml', [])
             readTraits: function (traitList, traitsDescription) {
                 var traits = [];
 
-                angular.forEach(traitList, function (use) {
-                    if (typeof use === 'string' && traits.indexOf(use) === -1) {
+                traitList.forEach(function (use) {
+                    if (typeof use === 'string') {
                         var found = traitsDescription.filter(function (t) {
                             return t[use];
                         });
                         if (found.length === 1) {
                             traits.push(found[0][use]);
-                        }
-                    } else if (typeof use === 'object') {
-                        var keys = Object.keys(use);
-
-                        if (keys.length) {
-                            var key = Object.keys(use)[0];
-
-                            if (traits.indexOf(key) === -1) {
-                                traits.push(traitsDescription[key].name);
-                            }
                         }
                     }
                 });
