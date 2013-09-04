@@ -140,12 +140,24 @@ angular.module('raml', [])
                 var traits = [];
 
                 traitList.forEach(function (use) {
+                    var traitName, found;
+
                     if (typeof use === 'string') {
-                        var found = traitsDescription.filter(function (t) {
-                            return t[use];
+                        traitName = use;
+                    } else if (typeof use === 'object') {
+                        for (var key in use) {
+                            if (use.hasOwnProperty(key)) {
+                                traitName = key;
+                            }
+                        }
+                    }
+
+                    if (traitName) {
+                        found = traitsDescription.filter(function (t) {
+                            return t[traitName];
                         });
                         if (found.length === 1) {
-                            traits.push(found[0][use]);
+                            traits.push(found[0][traitName]);
                         }
                     }
                 });

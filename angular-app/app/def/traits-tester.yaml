@@ -11,9 +11,10 @@ traits:
           name: q
           type: string
           required: true
-  - unsecured:
-      name: Unsecured
+  - collection:
+      name: Collection
+      description: Collection of <<item>>
 /users:
-  is: [ secured ]
+  is: [ secured, collection: { item: Users } ]
   get:
     name: Users
