@@ -9,7 +9,7 @@ angular.module('ramlConsoleApp')
                 'id': '@',
                 'definition': '@'
             },
-            link: function ($scope, $element, $attributes) {
+            link: function ($scope) {
                 $scope.resources = [];
 
                 $rootScope.$on('event:raml-parsed', function (e, args) {
