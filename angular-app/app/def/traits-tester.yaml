@@ -6,6 +6,13 @@ version: 1.0
 traits:
   - secured:
       name: Secured
+      queryParameters:
+        q:
+          name: q
+          type: string
+          required: true
+  - unsecured:
+      name: Unsecured
 /users:
   is: [ secured ]
   get:
