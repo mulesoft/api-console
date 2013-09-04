@@ -1,7 +1,7 @@
 angular.module('ramlConsoleApp').directive('markdown', function (showdown) {
     return {
         restrict: 'C',
-        link: function ($scope, element, attrs, ngModel) {
+        link: function ($scope, element, attrs) {
             $scope.$watch(attrs.ngModel, function (value) {
                 if (typeof value !== 'undefined') {
                     element.html(showdown.makeHtml(value));

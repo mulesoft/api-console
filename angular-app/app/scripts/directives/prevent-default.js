@@ -1,6 +1,6 @@
 angular.module('ramlConsoleApp')
     .directive('preventDefault', function () {
-        return function (scope, element, attrs) {
+        return function (scope, element) {
             var preventDefaultHandler = function (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -16,7 +16,7 @@ angular.module('ramlConsoleApp')
                     targetOffset = elem.offsetTop,
                     currentOffset = window.scrollY,
                     scrollLeap = 80,
-                    partialOffset, sign;
+                    partialOffset;
 
                 if (!scope.$eval(attrs.scrollToIf)) {
                     return;
