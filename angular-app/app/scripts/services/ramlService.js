@@ -141,7 +141,12 @@ angular.module('raml', [])
 
                 angular.forEach(traitList, function (use) {
                     if (typeof use === 'string' && traits.indexOf(use) === -1) {
-                        traits.push(traitsDescription[use].name);
+                        var found = traitsDescription.filter(function (t) {
+                            return t[use];
+                        });
+                        if (found.length === 1) {
+                            traits.push(found[0][use]);
+                        }
                     } else if (typeof use === 'object') {
                         var keys = Object.keys(use);
 
@@ -197,13 +202,13 @@ angular.module('raml', [])
             readTraitsDeep: function (resource, traitsDetails) {
                 var traits = [];
 
-                if (typeof resource.use !== 'undefined') {
-                    traits = this.readTraits(resource.use, traitsDetails);
+                if (typeof resource.is !== 'undefined') {
+                    traits = this.readTraits(resource.is, traitsDetails);
                 }
 
                 angular.forEach(resource.methods, function (method) {
-                    if (typeof method.use !== 'undefined') {
-                        traits = traits.concat(this.readTraits(method.use, traitsDetails));
+                    if (typeof method.is !== 'undefined') {
+                        traits = traits.concat(this.readTraits(method.is, traitsDetails));
                     }
                 }.bind(this));
 

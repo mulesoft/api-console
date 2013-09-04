@@ -1,0 +1,12 @@
+#%RAML 0.2
+---
+title: Example API
+baseUri: http://localhost:3000/api
+version: 1.0
+traits:
+  - secured:
+      name: Secured
+/users:
+  is: [ secured ]
+  get:
+    name: Users
