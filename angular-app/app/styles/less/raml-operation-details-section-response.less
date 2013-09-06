@@ -17,7 +17,7 @@ section[role=api-operation-details-section-response] {
     > header {
       display: block;
       background: rgb(251,251,251);
-      margin-bottom: 13px;
+      margin-bottom: 10px;
       > h1 {
         font-size: 16px;
         font-weight: normal;
@@ -26,14 +26,21 @@ section[role=api-operation-details-section-response] {
         padding: 0px 20px;
         color: black;
         padding-top: 11px;
+        > small {
+          font-size: 13px;
+        }
       }
-      > p {
-        font-size: 11px;
-        font-weight: 100;
-        color: #33373b;
-        line-height: 15px;
-        margin: 0px;
-        padding: 0px 20px;
+      > div.markdown {
+        * {
+          font-size: 11px;
+        }
+        > p {
+          font-weight: 100;
+          color: #33373b;
+          line-height: 15px;
+          margin: 0px;
+          padding: 0px 20px;
+        }
       }
     }
     > pre {

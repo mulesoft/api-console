@@ -18,3 +18,12 @@ traits:
   is: [ secured, collection: { item: Users } ]
   get:
     name: Users
+    responses:
+      200:
+        summary: OK
+        description: |
+          This operation returns a collection of **users**
+      403:
+        summary: Unauthorized
+        description: |
+          The user doesn't have enough permissions to invoke this operation

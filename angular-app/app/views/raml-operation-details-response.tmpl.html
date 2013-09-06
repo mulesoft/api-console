@@ -2,7 +2,7 @@
   <section role="codes-list" ng-repeat="(statusCode, response) in operation.responses">
     <header>
       <h1>{{statusCode}}<small ng-show="response.summary">:&nbsp;{{response.summary}}</small></h1>
-      <p>{{response.description}}</p>
+      <div class="markdown" ng-model="response.description"></div>
     </header>
 
     <table ng-show="content.schema" ng-repeat="(contentType, content) in response.body">
