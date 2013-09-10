@@ -1,34 +1,56 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Api Console</title>
-  <!-- Load Polymer -->
-  <script src="polymer.min.js"></script>
-  <script src="raml-parser.js"></script>
-  <script type="text/javascript" src="codemirror.js"></script>
-  <!-- Import Api Console elements -->
-  <link rel="import" href="raml.html">
-  <style>
-    body {
-      margin: 0px;
-      font-family: 'Ubuntu', sans-serif;
-      text-align: center;
-      background: rgb(248,248,248);
-    }
-
-    #content {
-      width: 960px;
-      margin: 0px auto;
-      text-align:left;
-    }
-  </style>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>api:Console</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="styles/main.css" type="text/css" />
 </head>
-<body>
-  <div id="content">
-    <api-definition id="instagramApi" src="http://localhost:9001/app/sandbox/instagram-v1/instagram-v1.yml"></api-definition>
-    <api-console id="console" definition="#instagramApi"></api-console>
-  </div>
-</body>
+  <body ng-app="ramlConsoleApp">
+
+    <!-- Add your site or application content here -->
+    <raml-console id="console" definition="#instagramApi"></raml-console>
+
+    <!-- <raml-definition id="twilioApi" src="/def/twilio-2010-04-01/twilio-2010-04-01.yml"></raml-definition> -->
+    <!-- <raml-definition id="instagramApi" src="/def/instagram-v1/instagram-v1.yml"></raml-definition> -->
+    <!-- <raml-definition id="employeeApi" src="/def/employee-v1/employees.yaml"></raml-definition> -->
+    <!-- <raml-definition id="leages" src="/def/leagues.yaml"></raml-definition> -->
+    <!-- <raml-definition id="ramlExample" src="/def/raml-example.yaml"></raml-definition> -->
+    <!-- <raml-definition id="shakaExample" src="/def/shaka.yaml"></raml-definition> -->
+    <!-- <raml-definition id="baker" src="/def/baker-raml2.yaml"></raml-definition> -->
+    <raml-definition id="baker" src="/def/traits-tester.yaml"></raml-definition>
+
+    <!-- build:js({.tmp,app}) scripts/vendor.js -->
+    <script src="vendor/angular.js"></script>
+    <script src="vendor/angular-resource.js"></script>
+    <script src="vendor/angular-sanitize.js"></script>
+    <script src="vendor/raml-parser.js"></script>
+    <script src="vendor/showdown.min.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/services/raml-service.js"></script>
+    <script src="scripts/services/raml-parser.js"></script>
+    <script src="scripts/services/helpers.js"></script>
+    <script src="scripts/services/showdown.js"></script>
+    <script src="scripts/services/event-service.js"></script>
+    <script src="scripts/directives/prevent-default.js"></script>
+    <script src="scripts/directives/raml-console.js"></script>
+    <script src="scripts/directives/raml-definition.js"></script>
+    <script src="scripts/directives/markdown.js"></script>
+    <script src="scripts/filters/filters.js"></script>
+    <script src="scripts/controllers/raml-operation.js"></script>
+    <script src="scripts/controllers/raml-operation-list.js"></script>
+    <script src="scripts/controllers/raml-documentation.js"></script>
+    <script src="scripts/controllers/raml-console-sidebar.js"></script>
+    <script src="scripts/controllers/raml-operation-details.js"></script>
+    <script src="scripts/controllers/raml-operation-details-try-it.js"></script>
+    <script src="scripts/controllers/raml-operation-details-response.js"></script>
+    <script src="scripts/controllers/raml-operation-details-request.js"></script>
+    <!-- endbuild -->
+  </body>
 </html>
