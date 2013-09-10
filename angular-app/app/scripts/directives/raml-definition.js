@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('ramlConsoleApp')
     .directive('ramlDefinition', function ($rootScope) {
         return {
@@ -9,8 +11,8 @@ angular.module('ramlConsoleApp')
                 'id': '@',
                 'src': '@'
             },
-            controller: function ($scope, $element, $attrs, ramlPaser, ramlReader) {
-                ramlPaser.loadFile($attrs.src)
+            controller: function ($scope, $element, $attrs, ramlParser, ramlReader) {
+                ramlParser.loadFile($attrs.src)
                     .done(function (result) {
                         var readData = ramlReader.read(result);
                         console.log(readData);

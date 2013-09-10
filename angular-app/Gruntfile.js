@@ -49,15 +49,17 @@ module.exports = function (grunt) {
             embedded: {
                 files: {
                     'dist/app.js': [
-                        'app/scripts/common/helpers.js',
-                        'app/scripts/common/showdown.js',
-                        'app/scripts/common/eventService.js',
                         'app/scripts/app.js',
-                        'app/scripts/services/ramlService.js',
+                        'app/scripts/services/raml-service.js',
+                        'app/scripts/services/raml-parser.js',
+                        'app/scripts/services/helpers.js',
+                        'app/scripts/services/showdown.js',
+                        'app/scripts/services/event-service.js',
                         'app/scripts/directives/prevent-default.js',
                         'app/scripts/directives/raml-console.js',
                         'app/scripts/directives/raml-definition.js',
                         'app/scripts/directives/markdown.js',
+                        'app/scripts/filters/filters.js',
                         'app/scripts/controllers/raml-operation.js',
                         'app/scripts/controllers/raml-operation-list.js',
                         'app/scripts/controllers/raml-documentation.js',
@@ -68,7 +70,8 @@ module.exports = function (grunt) {
                         'app/scripts/controllers/raml-operation-details-request.js',
                         'dist/templates.js'
                     ],
-                    'dist/vendor.js': ['app/vendor/angular.js',
+                    'dist/vendor.js': [
+                        'app/vendor/angular.js',
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
@@ -290,7 +293,7 @@ module.exports = function (grunt) {
             },
             embedded: {
                 files: [{
-                    src: ['app/def/instagram-v1/**/*.*'],
+                    src: ['app/def/traits-tester.yaml'],
                     dest: 'dist/'
                 }]
             }
@@ -345,21 +348,23 @@ module.exports = function (grunt) {
                 files: {
                     'dist/vendor.js': [
                         'app/vendor/angular.js',
-                        'app/vendor/angular-resource.js',
                         'app/vendor/angular-sanitize.js',
+                        'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js'
                     ],
                     'dist/app.js': [
-                        'app/scripts/common/helpers.js',
-                        'app/scripts/common/showdown.js',
-                        'app/scripts/common/eventService.js',
                         'app/scripts/app.js',
-                        'app/scripts/services/ramlService.js',
+                        'app/scripts/services/raml-service.js',
+                        'app/scripts/services/raml-parser.js',
+                        'app/scripts/services/helpers.js',
+                        'app/scripts/services/showdown.js',
+                        'app/scripts/services/event-service.js',
                         'app/scripts/directives/prevent-default.js',
                         'app/scripts/directives/raml-console.js',
                         'app/scripts/directives/raml-definition.js',
                         'app/scripts/directives/markdown.js',
+                        'app/scripts/filters/filters.js',
                         'app/scripts/controllers/raml-operation.js',
                         'app/scripts/controllers/raml-operation-list.js',
                         'app/scripts/controllers/raml-documentation.js',
@@ -431,7 +436,7 @@ module.exports = function (grunt) {
         'copy',
         'cdnify',
         'ngmin',
-        'cssmin',
+        //'cssmin',
         'uglify',
         'rev',
         'usemin',

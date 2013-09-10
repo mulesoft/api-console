@@ -1,9 +1,5 @@
-<div ng-show="model" ng-controller="ramlOperationList">
-  <header ng-show="topResource">
-    {{model}}
-    <h1>{{model.name}}</h1>
-  </header>
-  <section role="api-operation-list">
+<div ng-show="resources && resources.length" ng-controller="ramlOperationList">
+  <section role="api-operation-list" ng-repeat="model in resources">
     <ng-include src="'views/raml-operation.tmpl.html'" ng-repeat="resource in model.resources"></ng-include>
   </section>
 </div>

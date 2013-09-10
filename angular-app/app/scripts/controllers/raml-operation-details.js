@@ -20,14 +20,17 @@ angular.module('ramlConsoleApp')
             }
 
             this.tabs = [];
-            this.tabs.push({
-                name: 'try-it',
-                displayName: 'Try It',
-                view: 'views/raml-operation-details-try-it.tmpl.html',
-                show: function () {
-                    return true;
-                }
-            });
+
+            if ($scope.consoleSettings && $scope.consoleSettings.displayTryIt){
+                this.tabs.push({
+                    name: 'try-it',
+                    displayName: 'Try It',
+                    view: 'views/raml-operation-details-try-it.tmpl.html',
+                    show: function () {
+                        return true;
+                    }
+                });
+            }
 
             this.tabs.push({
                 name: 'parameters',
@@ -60,7 +63,7 @@ angular.module('ramlConsoleApp')
         };
 
         $scope.$on('event:raml-method-changed', function () {
-            if ($scope.operation.supportedTypes.length) {
+            if ($scope.operation.supportedTypes && $scope.operation.supportedTypes.length) {
                 eventService.broadcast('event:raml-body-type-changed', $scope.operation.supportedTypes[0]);
             } else {
                 eventService.broadcast('event:raml-body-type-changed', 'application/json');

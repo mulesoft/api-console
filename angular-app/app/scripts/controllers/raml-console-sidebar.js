@@ -10,7 +10,11 @@ angular.module('ramlConsoleApp')
             $rootScope.elementName = data.name || (data[0] ? data[0].title : data.relativeUri);
             $rootScope.type = isDoc && !isRes ? 'document' : 'resource';
 
-            eventService.broadcast('event:raml-sidebar-clicked', result);
+            if (isDoc) {
+                eventService.broadcast('event:raml-sidebar-clicked', result);
+            } else {
+                eventService.broadcast('event:raml-operation-list-published', [data]);
+            }
         };
 
         $rootScope.elementName = '';

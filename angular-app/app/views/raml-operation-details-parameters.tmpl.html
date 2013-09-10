@@ -14,7 +14,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="param in urlParams | filter: {editable: true}">
-          <td>{{param.name}}</td>
+          <td>{{param.displayName}}</td>
           <td>{{param.type}}</td>
           <td class="markdown" ng-model="param.description"></td>
           <td>{{param.example}}</td>
@@ -22,7 +22,7 @@
       </tbody>
     </table>
   </section>
-  <section role="parameter-list" ng-show="queryParams.length">
+  <section role="parameter-list" ng-show="queryParams && queryParams.length">
     <header>
       <h1>Query Parameters</h1>
     </header>
@@ -37,7 +37,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="param in queryParams">
-          <td>{{param.name}}</td>
+          <td>{{param.displayName}}</td>
           <td>{{param.type}}</td>
           <td class="markdown" ng-model="param.description"></td>
           <td>{{param.example}}</td>

@@ -3,6 +3,23 @@
 angular.module('raml', [])
     .factory('ramlReader', function () {
         return {
+            processBaseUri: function (definition) {
+                var baseUri = (definition.baseUri || '').replace(/\/\/*$/g, '');
+                var version = definition.version || '';
+
+                baseUri = baseUri.replace(':0', '\\:0');
+                baseUri = baseUri.replace(':1', '\\:1');
+                baseUri = baseUri.replace(':2', '\\:2');
+                baseUri = baseUri.replace(':3', '\\:3');
+                baseUri = baseUri.replace(':4', '\\:4');
+                baseUri = baseUri.replace(':5', '\\:5');
+                baseUri = baseUri.replace(':6', '\\:6');
+                baseUri = baseUri.replace(':7', '\\:7');
+                baseUri = baseUri.replace(':8', '\\:8');
+                baseUri = baseUri.replace(':9', '\\:9');
+
+                return baseUri.replace('{version}', version);
+            },
             readRootElements: function (raml) {
                 var result = {};
 
@@ -25,7 +42,6 @@ angular.module('raml', [])
 
                 return result;
             },
-
             readDocumentation: function (raml) {
                 var result = {};
 
@@ -35,7 +51,6 @@ angular.module('raml', [])
 
                 return result;
             },
-
             convert: function (query) {
                 var queryParams = [];
                 var param;
@@ -48,7 +63,6 @@ angular.module('raml', [])
 
                 return queryParams;
             },
-
             readHttpMethodData: function (methodDescriptor) {
                 var result = {};
 
@@ -109,7 +123,6 @@ angular.module('raml', [])
 
                 return result;
             },
-
             readContentTypes: function (methodDescriptor) {
                 var types = [];
 
@@ -135,7 +148,6 @@ angular.module('raml', [])
 
                 return types;
             },
-
             readTraits: function (traitList, traitsDescription) {
                 var traits = [];
 
@@ -167,7 +179,6 @@ angular.module('raml', [])
 
                 return traits;
             },
-
             readResourceData: function (resource, raml) {
                 var result = JSON.parse(JSON.stringify(resource));
 
@@ -203,7 +214,6 @@ angular.module('raml', [])
 
                 return result;
             },
-
             readTraitsDeep: function (resource, traitsDetails) {
                 var traits = [];
 
@@ -219,7 +229,6 @@ angular.module('raml', [])
 
                 return traits;
             },
-
             readRootResources: function (raml) {
                 var result = {
                     resources: []
@@ -233,7 +242,6 @@ angular.module('raml', [])
 
                 return result;
             },
-
             read: function (raml) {
                 var rootResources = this.readRootResources(raml),
                     rootDocumentation = this.readDocumentation(raml),
@@ -258,7 +266,6 @@ angular.module('raml', [])
 
                 return result;
             },
-
             flatten: function (resource, container) {
                 var result = [],
                     temp, uriPart = resource.relativeUri;

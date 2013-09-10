@@ -20,7 +20,7 @@ angular.module('ramlConsoleApp').directive('fileUpload', function () {
 });
 
 angular.module('ramlConsoleApp')
-    .controller('ramlOperationDetailsTryIt', function ($scope, $resource, commons, eventService, ramlHelper) {
+    .controller('ramlOperationDetailsTryIt', function ($scope, $resource, commons, eventService) {
         $scope.hasAdditionalParams = function (operation) {
             return operation.queryParameters || operation.name === 'post' || operation.name === 'put' || operation.name === 'patch';
         };
@@ -56,7 +56,7 @@ angular.module('ramlConsoleApp')
             var bodyParams = this.hasBodyParams(this.bodyType) ? this.body[this.operation.name] : null;
             var body = this.hasRequestBody(this.operation) ? this.requestBody[this.operation.name] : null;
 
-            body = bodyParams ? ramlHelper.toUriParams(bodyParams) : body;
+            body = bodyParams ? commons.toUriParams(bodyParams) : body;
 
             if ($scope.contentType && $scope.contentType.indexOf('multipart') >= 0) {
                 body = bodyParams ? bodyParams : body;
@@ -97,7 +97,7 @@ angular.module('ramlConsoleApp')
                     url: url
                 };
             }, function (error) {
-                var params = ramlHelper.toUriParams(error.config.params).replace(';', '');
+                var params = commons.toUriParams(error.config.params).replace(';', '');
                 that.response = {
                     data: error.data.data,
                     headers: error.data.headers,
