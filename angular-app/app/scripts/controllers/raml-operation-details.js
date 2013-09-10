@@ -37,7 +37,8 @@ angular.module('ramlConsoleApp')
                 displayName: 'Parameters',
                 view: 'views/raml-operation-details-parameters.tmpl.html',
                 show: function () {
-                    return typeof $scope.operation.queryParameters !== 'undefined';
+                    var urlParams = ($scope.urlParams || []).filter(function (p) { return p.editable; });
+                    return ($scope.operation.queryParameters && $scope.operation.queryParameters.length) || urlParams.length;
                 }
             });
 

@@ -1,1 +1,1 @@
-<span ng-hide="uriPart.editable" ng-bind-html='uriPart.name | formatUriPart'></span><input type="text" name="{{uriPart.memberName}}" ng-model="url[uriPart.memberName]" ng-show="uriPart.editable" placeholder="{{uriPart.name}}" required></input>
+<span ng-hide="uriPart.editable" ng-bind-html='uriPart.displayName | formatUriPart'></span><input type="text" name="{{uriPart.memberName}}" ng-model="url[uriPart.memberName]" ng-show="uriPart.editable" placeholder="{{uriPart.displayName}}" required></input>

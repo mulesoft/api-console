@@ -57,13 +57,13 @@ angular.module('helpers', [])
 
                     if (splitted.length) {
                         urlParts.push({
-                            name: splitted[0],
+                            displayName: splitted[0],
                             editable: false
                         });
                     }
                     if (splitted.length === 2) {
                         urlParts.push({
-                            name: '{' + splitted[1] + '}',
+                            displayName: '{' + splitted[1] + '}',
                             editable: true,
                             memberName: splitted[1]
                         });
