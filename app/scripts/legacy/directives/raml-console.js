@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('ramlConsoleApp')
-    .directive('ramlConsole', function (ramlReader) {
+    .directive('ramlConsole', function (ramlReader, $rootScope) {
         return {
             restrict: 'E',
             templateUrl: 'views/raml-console.tmpl.html',

@@ -1,19 +1,13 @@
 // Karma configuration
 
 // base path, that will be used to resolve files and exclude
-basePath = '';
+basePath = '../..';
 
 // list of files / patterns to load in the browser
 files = [
     JASMINE,
     JASMINE_ADAPTER,
-    'app/vendor/angular.js',
-    'app/scripts/services/helpers.js',
-    'app/scripts/services/raml-service.js',
-    'app/scripts/services/*.js',
-    'test/lib/**/*.js',
-    'test/spec/**/*.js',
-    'test/mocks/**/*.js'
+    'app/vendor/angular.js'
 ];
 
 // list of files to exclude
