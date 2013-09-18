@@ -27,10 +27,24 @@ module.exports = function(grunt) {
       data.configFile = grunt.template.process(data.configFile);
     }
 
-    function runProtractor() {
-      var selenium = spawn('java', ['-jar', 'selenium/selenium-server-standalone-2.35.0.jar', '-Dwebdriver.chrome.driver=./selenium/chromedriver']);
+    function runSelenium(callback) {
+      var selenium = spawn('java', ['-jar', 'selenium/selenium-server-standalone-2.35.0.jar']);
 
-      var proc = spawn('protractor', [data.configFile], { stdio: 'inherit' });
+      selenium.stdout.on('data', function (data) {
+        if (data.toString().indexOf('Started SocketListener') !== -1) {
+          grunt.log.write('\nServer started successfully!');
+          grunt.log.writeln('\nStarting tests now...\n');
+
+          process.on('exit', function (code, signal) {
+            process.kill(selenium.pid, signal);
+          });
+          callback();
+        }
+      });
+    }
+
+    function runProtractor() {
+      var proc = spawn('./node_modules/protractor/bin/protractor', [data.configFile], { stdio: 'inherit' });
       proc.on('exit', function (code, signal) {
         if (signal) {
           process.kill(process.pid, signal);
@@ -44,11 +58,11 @@ module.exports = function(grunt) {
       var installProc = spawn('./node_modules/protractor/bin/install_selenium_standalone', [], { stdio: 'inherit' });
 
       installProc.on('exit', function (code, signal) {
-        runProtractor();
+        runSelenium(runProtractor);
       })
     }
     else {
-      runProtractor();
+      runSelenium(runProtractor);
     }
   });
 }
