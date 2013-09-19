@@ -1,17 +1,24 @@
 // Karma configuration
 
 // base path, that will be used to resolve files and exclude
-basePath = '../..';
+basePath = '../../..';
 
 // list of files / patterns to load in the browser
 files = [
     JASMINE,
     JASMINE_ADAPTER,
-    'app/vendor/angular.js'
+    'app/vendor/raml-parser.js',
+    'app/scripts/**/*.js',
+    'spec/matchers/**/*.js',
+    'spec/unit/support/helpers/**/*.js',
+    'spec/unit/**/*_spec.js'
 ];
 
 // list of files to exclude
-exclude = [];
+exclude = [
+  'app/scripts/raml.js',
+  'app/scripts/raml_console.js'
+];
 
 // test results reporter to use
 // possible values: dots || progress || growl

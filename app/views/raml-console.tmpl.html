@@ -1,0 +1,11 @@
+<article role="api-console">
+  <section role="error" ng-if="parseError">
+    {{parseError}}
+  </section>
+
+  <h1>{{api.title}}</h1>
+  <section role="resource" ng-repeat="resource in api.resources">
+    {{resource.pathSegments[0]}}
+    {{resource.name}}
+  </section>
+</article>

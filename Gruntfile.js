@@ -216,12 +216,12 @@ module.exports = function (grunt) {
         },
         protractor: {
             scenario: {
-                configFile: 'spec/support/protractor.conf.js'
+                configFile: 'spec/scenario/support/protractor.conf.js'
             }
         },
         karma: {
             unit: {
-                configFile: 'spec/support/karma.conf.js',
+                configFile: 'spec/unit/support/karma.conf.js',
                 autoWatch: true
             }
         },
@@ -339,6 +339,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
 	   'spec',
-       'protractor'
+       'scenario'
     ]);
 };

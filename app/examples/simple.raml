@@ -1,0 +1,23 @@
+#%RAML 0.2
+---
+title: Example API
+baseUri: #{test_api_uri}
+traits:
+  - secured:
+      description: Some requests require authentication
+resourceTypes:
+  - collection:
+      description: bunk
+/resource:
+  get: !!null
+  /{resourceId}:
+    uriParameters:
+      resourceId:
+        required: true
+    get: !!null
+    post: !!null
+
+/another/resource:
+  type: collection
+  is: [secured]
+  get: !!null
