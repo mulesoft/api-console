@@ -5,11 +5,17 @@ baseUri: #{test_api_uri}
 traits:
   - secured:
       description: Some requests require authentication
+  - unsecured:
+      description: This is not secured
+  - catpictures:
+      description: requires cat headers
 resourceTypes:
   - collection:
       description: bunk
 /resource:
+  displayName: First One
   get: !!null
+  is: [unsecured]
   /{resourceId}:
     uriParameters:
       resourceId:
@@ -18,6 +24,8 @@ resourceTypes:
     post: !!null
 
 /another/resource:
+  displayName: Cats
   type: collection
-  is: [secured]
+  is: [secured, catpictures]
   get: !!null
+  options: !!null

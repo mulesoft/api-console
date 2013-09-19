@@ -28,8 +28,10 @@
 
     <raml-console-initializer>
       <div ng-if="!consoleLoader.locationSet">
-        location of RAML <input type="text" name='raml_location' ng-model="consoleLoader.location"/>
-        <button name='submit' ng-click="consoleLoader.load()"> GO </button>
+        <form>
+          location of RAML <input type="text" name='raml_location' ng-model="consoleLoader.location"/>
+        <input type='submit' name='submit' ng-click="consoleLoader.load()" value='GO'>
+        </form>
       </div>
 
       <div ng-if="consoleLoader.locationSet">

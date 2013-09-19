@@ -4,8 +4,29 @@
   </section>
 
   <h1>{{api.title}}</h1>
-  <section role="resource" ng-repeat="resource in api.resources">
-    {{resource.pathSegments[0]}}
-    {{resource.name}}
-  </section>
+  <ul role="resources">
+    <li role="resource" ng-repeat="resource in api.resources">
+      <ul role="traits">
+        <li role="trait" ng-repeat="trait in resource.traits">{{trait}}</li>
+      </ul>
+      <h2>
+        <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
+      </h2>
+
+      <span role="displayName" ng-show='resource.name'>
+        "{{resource.name}}"
+        <span ng-show='resource.resourceType'>
+          |
+        </span>
+      </span>
+      <span role="resourceType" ng-show='resource.resourceType'>
+        Type: <span>{{resource.resourceType}}</span>
+      </span>
+
+      <ul role="methods">
+        <li role="{{method}}" ng-repeat="method in resource.methods">{{method}}</li>
+      </ul>
+
+    </li>
+  </ul>
 </article>

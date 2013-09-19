@@ -96,10 +96,12 @@ module.exports = function (grunt) {
             },
             test: {
                 options: {
+                    port: 9001,
                     middleware: function (connect) {
                         return [
                             mountFolder(connect, '.tmp'),
-                            mountFolder(connect, 'test')
+                            mountFolder(connect, 'test'),
+                            mountFolder(connect, yeomanConfig.app)
                         ];
                     }
                 }
@@ -315,7 +317,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('scenario', [
         'clean:server',
-        'connect:livereload',
+        'connect:test',
         'protractor'
     ]);
 
