@@ -26,7 +26,7 @@
     "grunt-google-cdn": "~0.2.0",
     "grunt-ngmin": "~0.0.2",
     "grunt-angular-templates": "~0.3.10",
-    "protractor": "0.9.0"
+    "protractor": "https://github.com/jeremysmears/protractor/tarball/bugs/allow-custom-matchers"
   },
   "engines": {
     "node": ">=0.8.0"
