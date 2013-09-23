@@ -150,4 +150,42 @@ describe('accordion view of API', function() {
       });
     });
   });
+
+  var waitUntilTextEquals = function(ptor, element, expectedText) {
+    ptor.wait(function() {
+      return element.getText().then(function(text) {
+        return text === expectedText;
+      });
+    }, 5000);
+  };
+
+  describe('method detail view', function() {
+    raml = [
+      '#%RAML 0.2',
+      '---',
+      'title: Example API',
+      'baseUri: #{test_api_uri}',
+      '',
+      '/resource:',
+      '  get:',
+      '    description: Get all resources'
+    ].join('\n');
+
+   var fixturePath = fixturizeRaml(raml);
+
+    beforeEach(function() {
+      ptor = protractor.getInstance();
+
+      ptor.get('http://localhost:9001');
+      ptor.findElement(protractor.By.css("input[type=text]")).sendKeys(fixturePath);
+      ptor.findElement(protractor.By.css("input[type=submit]")).click();
+    });
+
+    it('displays the description of the method', function() {
+      ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
+      ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click()
+      var description = ptor.findElement(protractor.By.css('[role="methodSummary"] [role="description"]'));
+      waitUntilTextEquals(ptor, description, 'Description: Get all resources');
+    });
+  });
 });
