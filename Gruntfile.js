@@ -45,6 +45,12 @@ module.exports = function (grunt) {
             embedded: {
                 files: {
                     'dist/app.js': [
+                        'app/scripts/inspector.js',
+                        'app/scripts/directives.js',
+                        'app/scripts/directives/raml_console.js',
+                        'app/scripts/directives/raml_console_initializer.js',
+                        'app/scripts/raml.js',
+                        'app/scripts/raml_console.js',
                         'dist/templates.js'
                     ],
                     'dist/vendor.js': [
