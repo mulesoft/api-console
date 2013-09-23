@@ -1,1 +1,1 @@
-RAML.Directives = {}
+RAML.Directives = {};
