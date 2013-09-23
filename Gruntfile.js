@@ -54,6 +54,8 @@ module.exports = function (grunt) {
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js'
                     ],
+                    'dist/examples/simple.raml': ['app/examples/simple.raml'],
+                    'dist/examples/multiple-methods.raml': ['app/examples/multiple-methods.raml'],
                     'dist/index.html': ['app/index.embedded.html'],
                     'dist/index.acceptance.html': ['app/index.html']
                 }
