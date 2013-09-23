@@ -62,7 +62,7 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
   });
 
   it("reduces the methods to an array of http verbs", function() {
-    expect(this.resourceOverview.methods).toEqual(['get', 'post']);
+    expect(this.resourceOverview.methods).toEqual([{ verb: 'get' }, { verb: 'post' }]);
   });
 
   it("translates resource.is to traits", function() {

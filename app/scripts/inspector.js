@@ -1,6 +1,6 @@
 (function() {
   function extractMethods(resource) {
-    var mapper = function(method) { return method.method; }
+    var mapper = function(method) { return { verb: method.method }; }
     return (resource.methods || []).map(mapper);
   }
 

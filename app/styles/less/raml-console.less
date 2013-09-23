@@ -26,21 +26,24 @@ ul[role=traits] {
 
 }
 
-ul[role=resources] {
+[role=resources] > .accordion {
   background-color: white;
   box-shadow: -3px -2px 3px 1px #D5D6DA;
 }
 
-li[role=resource] {
+[role=resource] {
   border-bottom: 1px solid #E4E4E6;
-  padding: 20px;
   color: #B2AEAD;
 
-  h2 {
-    margin: 0 0 10px 0;
-    font-size: 16px;
+  .accordion-heading {
+    padding: 5px 10px;
+
+    h2 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
+    .clearfix()
   }
-  .clearfix();
 }
 
 ul[role=methods] {
@@ -54,6 +57,15 @@ ul[role=methods] {
     text-align: center;
     font-size: 11px;
     padding: 5px 20px;
+  }
+}
+[role=methodSummary] {
+  border-top: 1px solid #E4E4E6;
+  i {
+    font-size: 24px;
+    line-height: 20px;
+    vertical-align: middle;
+    color: #CBCDCC;
   }
 }
 
