@@ -57,7 +57,7 @@ module.exports = function (grunt) {
                     'dist/examples/simple.raml': ['app/examples/simple.raml'],
                     'dist/examples/multiple-methods.raml': ['app/examples/multiple-methods.raml'],
                     'dist/index.html': ['app/index.embedded.html'],
-                    'dist/index.acceptance.html': ['app/index.html']
+                    'dist/index.acceptance.html': ['app/index.acceptance.html']
                 }
             }
         },
