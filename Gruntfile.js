@@ -1,5 +1,6 @@
 // Generated on 2013-07-08 using generator-angular 0.3.0
 'use strict';
+
 var LIVERELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({
     port: LIVERELOAD_PORT
@@ -8,15 +9,10 @@ var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
-
 module.exports = function (grunt) {
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+    require('./tasks/protractor')(grunt);
 
     // configurable paths
     var yeomanConfig = {
@@ -49,25 +45,6 @@ module.exports = function (grunt) {
             embedded: {
                 files: {
                     'dist/app.js': [
-                        'app/scripts/app.js',
-                        'app/scripts/services/raml-service.js',
-                        'app/scripts/services/raml-parser.js',
-                        'app/scripts/services/helpers.js',
-                        'app/scripts/services/showdown.js',
-                        'app/scripts/services/event-service.js',
-                        'app/scripts/directives/prevent-default.js',
-                        'app/scripts/directives/raml-console.js',
-                        'app/scripts/directives/raml-definition.js',
-                        'app/scripts/directives/markdown.js',
-                        'app/scripts/filters/filters.js',
-                        'app/scripts/controllers/raml-operation.js',
-                        'app/scripts/controllers/raml-operation-list.js',
-                        'app/scripts/controllers/raml-documentation.js',
-                        'app/scripts/controllers/raml-console-sidebar.js',
-                        'app/scripts/controllers/raml-operation-details.js',
-                        'app/scripts/controllers/raml-operation-details-try-it.js',
-                        'app/scripts/controllers/raml-operation-details-response.js',
-                        'app/scripts/controllers/raml-operation-details-request.js',
                         'dist/templates.js'
                     ],
                     'dist/vendor.js': [
@@ -84,14 +61,6 @@ module.exports = function (grunt) {
 
         yeoman: yeomanConfig,
         watch: {
-            coffee: {
-                files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
-                tasks: ['coffee:dist']
-            },
-            coffeeTest: {
-                files: ['test/spec/{,*/}*.coffee'],
-                tasks: ['coffee:test']
-            },
             less: {
                 files: ['app/styles/less/**/*.less'],
                 tasks: ['less']
@@ -127,10 +96,12 @@ module.exports = function (grunt) {
             },
             test: {
                 options: {
+                    port: 9001,
                     middleware: function (connect) {
                         return [
                             mountFolder(connect, '.tmp'),
-                            mountFolder(connect, 'test')
+                            mountFolder(connect, 'test'),
+                            mountFolder(connect, yeomanConfig.app)
                         ];
                     }
                 }
@@ -178,26 +149,6 @@ module.exports = function (grunt) {
                 '<%= yeoman.app %>/scripts/{,*/}*.js'
             ]
         },
-        coffee: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/scripts',
-                    src: '{,*/}*.coffee',
-                    dest: '.tmp/scripts',
-                    ext: '.js'
-                }]
-            },
-            test: {
-                files: [{
-                    expand: true,
-                    cwd: 'test/spec',
-                    src: '{,*/}*.coffee',
-                    dest: '.tmp/spec',
-                    ext: '.js'
-                }]
-            }
-        },
         rev: {
             dist: {
                 files: {
@@ -223,32 +174,8 @@ module.exports = function (grunt) {
                 dirs: ['<%= yeoman.dist %>']
             }
         },
-        cssmin: {
-            // By default, your `index.html` <!-- Usemin Block --> will take care of
-            // minification. This option is pre-configured if you do not wish to use
-            // Usemin blocks.
-            // dist: {
-            //   files: {
-            //     '<%= yeoman.dist %>/styles/main.css': [
-            //       '.tmp/styles/{,*/}*.css',
-            //       '<%= yeoman.app %>/styles/{,*/}*.css'
-            //     ]
-            //   }
-            // }
-        },
         htmlmin: {
             dist: {
-                options: {
-                    /*removeCommentsFromCDATA: true,
-          // https://github.com/yeoman/grunt-usemin/issues/44
-          //collapseWhitespace: true,
-          collapseBooleanAttributes: true,
-          removeAttributeQuotes: true,
-          removeRedundantAttributes: true,
-          useShortDoctype: true,
-          removeEmptyAttributes: true,
-          removeOptionalTags: true*/
-                },
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.app %>',
@@ -257,6 +184,7 @@ module.exports = function (grunt) {
                 }]
             }
         },
+
         // Put files not handled in other tasks here
         copy: {
             dist: {
@@ -288,21 +216,18 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        concurrent: {
-            server: [
-                'coffee:dist'
-            ],
-            test: [
-                'coffee'
-            ],
-            dist: [
-                'coffee',
-                'htmlmin'
-            ]
+        protractor: {
+            scenario: {
+                configFile: 'spec/scenario/support/protractor.conf.js'
+            },
+            debug: {
+                configFile: 'spec/scenario/support/protractor.conf.js',
+                debug: true
+            }
         },
         karma: {
             unit: {
-                configFile: 'karma.conf.js',
+                configFile: 'spec/unit/support/karma.conf.js',
                 autoWatch: true
             }
         },
@@ -343,25 +268,6 @@ module.exports = function (grunt) {
                         'app/vendor/showdown.min.js'
                     ],
                     'dist/app.js': [
-                        'app/scripts/app.js',
-                        'app/scripts/services/raml-service.js',
-                        'app/scripts/services/raml-parser.js',
-                        'app/scripts/services/helpers.js',
-                        'app/scripts/services/showdown.js',
-                        'app/scripts/services/event-service.js',
-                        'app/scripts/directives/prevent-default.js',
-                        'app/scripts/directives/raml-console.js',
-                        'app/scripts/directives/raml-definition.js',
-                        'app/scripts/directives/markdown.js',
-                        'app/scripts/filters/filters.js',
-                        'app/scripts/controllers/raml-operation.js',
-                        'app/scripts/controllers/raml-operation-list.js',
-                        'app/scripts/controllers/raml-documentation.js',
-                        'app/scripts/controllers/raml-console-sidebar.js',
-                        'app/scripts/controllers/raml-operation-details.js',
-                        'app/scripts/controllers/raml-operation-details-try-it.js',
-                        'app/scripts/controllers/raml-operation-details-response.js',
-                        'app/scripts/controllers/raml-operation-details-request.js',
                         'dist/templates.js'
                     ]
                 }
@@ -403,29 +309,36 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'concurrent:server',
             'connect:livereload',
             'open',
             'watch'
         ]);
     });
 
-    grunt.registerTask('test', [
-        'clean:server',
-        'concurrent:test',
-        'connect:test',
+    grunt.registerTask('spec', [
         'karma'
+    ]);
+
+    grunt.registerTask('scenario', [
+        'clean:server',
+        'less',
+        'connect:test',
+        'protractor'
+    ]);
+
+    grunt.registerTask('scenario:debug', [
+        'clean:server',
+        'less',
+        'connect:test',
+        'protractor:debug'
     ]);
 
     grunt.registerTask('build', [
         'clean:dist',
         'useminPrepare',
-        'concurrent:dist',
-        // 'concat',
         'copy',
         'cdnify',
         'ngmin',
-        //'cssmin',
         'uglify',
         'rev',
         'usemin',
@@ -436,5 +349,10 @@ module.exports = function (grunt) {
         'jshint',
         'test',
         'build'
+    ]);
+
+    grunt.registerTask('test', [
+	   'spec',
+       'scenario'
     ]);
 };

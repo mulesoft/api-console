@@ -1,19 +1,49 @@
-<section role="api-console">
-    <header>
-        <ng-include src="'views/raml-console-navbar.tmpl.html'"></ng-include>
-    </header>
-    <div style="display:table;">
-        <div style="display:table-row;">
-            <aside role="sidebar" style="display:table-cell; vertical-align: top;">
-                <ng-include src="'views/raml-console-sidebar.tmpl.html'" ng-controller="ramlConsoleSidebar"></ng-include>
-            </aside>
-            <div style="display:table-cell; vertical-align: top;">
-                <section role="main">
-                    <ng-include src="'views/raml-documentation.tmpl.html'" ng-controller="ramlDocumentation"></ng-include>
-                    <ng-include src="'views/raml-operation-list.tmpl.html'"></ng-include>
-                </section>
+<article role="api-console">
+  <section role="error" ng-if="parseError">
+    {{parseError}}
+  </section>
+
+  <h1>{{api.title}}</h1>
+
+  <accordion role="resources" close-others="false">
+    <accordion-group role="resource" ng-repeat="resource in api.resources" is-open="resource.isOpen">
+      <accordion-heading>
+        <ul role="traits">
+          <li role="trait" ng-repeat="trait in resource.traits">{{trait}}</li>
+        </ul>
+        <h2>
+          <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
+        </h2>
+
+        <span role="displayName" ng-show='resource.name'>
+          "{{resource.name}}"
+          <span ng-show='resource.resourceType'>
+            |
+          </span>
+        </span>
+        <span role="resourceType" ng-show='resource.resourceType'>
+          Type: <span>{{resource.resourceType}}</span>
+        </span>
+
+        <ul role="methods" ng-class="{'hidden': resource.isOpen}">
+          <li role="{{method}}" ng-repeat="method in resource.methods">{{method.verb}}</li>
+        </ul>
+      </accordion-heading>
+      <accordion role="methodSummaries" close-others="false">
+        <accordion-group role="methodSummary" ng-repeat="method in resource.methods" is-open="method.isOpen">
+          <accordion-heading>
+            <i ng-class="{'icon-caret-right': !method.isOpen, 'icon-caret-down': method.isOpen}"></i>
+            <span role="method">{{method.verb}}</span>
+            <span role="path">
+              <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
+            </span>
+            <div class="pull-right">
+              <button role="try-it" class="btn">Try It</button>
+              <i class="icon-file-alt"></i>
             </div>
-        </div>
-    </div>
-    <footer></footer>
-</section>
+          </accordion-heading>
+        </accordion-group>
+      </accordion>
+    </accordion-group>
+  </accordion>
+</article>
