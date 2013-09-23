@@ -214,7 +214,7 @@ module.exports = function (grunt) {
             },
             embedded: {
                 files: [{
-                    src: ['app/def/traits-tester.yaml'],
+                    src: ['app/examples/simple.raml'],
                     dest: 'dist/'
                 }]
             }
