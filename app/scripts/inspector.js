@@ -1,18 +1,15 @@
-(function() {
-  function extractMethods(resource) {
-    var mapper = function(method) { return { verb: method.method }; }
-    return (resource.methods || []).map(mapper);
-  }
+RAML.Inspector = (function() {
+  var exports = {};
 
-  function extractResources(basePathSegments, api, resourceOverviewSource) {
+  var extractResources = function(basePathSegments, api) {
     var resources = [];
 
     api.resources.forEach(function(resource) {
       var pathSegments = basePathSegments.concat(resource.relativeUri);
 
-      resources.push(resourceOverviewSource(pathSegments, resource));
+      resources.push(exports.resourceOverviewSource(pathSegments, resource));
       if (resource.resources) {
-        extracted = extractResources(pathSegments, resource, resourceOverviewSource);
+        extracted = extractResources(pathSegments, resource);
         extracted.forEach(function(resource) {
           resources.push(resource);
         });
@@ -20,25 +17,32 @@
     });
 
     return resources;
-  }
+  };
 
-  RAML.Inspector = {
-    create: function(api) {
-      var resources = extractResources([], api, this.resourceOverviewSource)
-      return {
-        title: api.title,
-        resources: resources
-      }
-    },
-
-    resourceOverviewSource: function(pathSegments, resource) {
-      return {
-        pathSegments: pathSegments,
-        name: resource.displayName,
-        methods: extractMethods(resource),
-        traits: resource.is,
-        resourceType: resource.type
-      }
+  exports.methodOverviewSource = function(method) {
+    return {
+      verb: method.method,
+      description: method.description
     }
-  }
+  };
+
+  exports.resourceOverviewSource = function(pathSegments, resource) {
+    return {
+      pathSegments: pathSegments,
+      name: resource.displayName,
+      methods: (resource.methods || []).map(exports.methodOverviewSource),
+      traits: resource.is,
+      resourceType: resource.type
+    }
+  };
+
+  exports.create = function(api) {
+    var resources = extractResources([], api)
+    return {
+      title: api.title,
+      resources: resources
+    }
+  };
+
+  return exports;
 })();

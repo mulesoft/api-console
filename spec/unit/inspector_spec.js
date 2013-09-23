@@ -1,5 +1,6 @@
 describe("RAML.Inspector.create", function() {
-  var definition = [
+  var resourceOverviewSpy,
+    definition = [
     '#%RAML 0.2',
     '---',
     'title: MyApi',
@@ -37,9 +38,7 @@ describe("RAML.Inspector.create", function() {
 
 describe("RAML.Inspector.resourceOverviewSource", function() {
   function createMethod(verb) {
-    return {
-      method: verb
-    }
+    return jasmine.createSpy(verb);
   }
 
   var resource = {
@@ -49,7 +48,10 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     methods: [createMethod("get"), createMethod("post")]
   }
 
+  var methodOverviewSourceSpy;
+
   beforeEach(function() {
+    methodOverviewSourceSpy = spyOn(RAML.Inspector, 'methodOverviewSource').andReturn('methodOverview');
     this.resourceOverview = RAML.Inspector.resourceOverviewSource(['/resource'], resource);
   });
 
@@ -61,10 +63,6 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     expect(this.resourceOverview.name).toEqual(resource.displayName);
   });
 
-  it("reduces the methods to an array of http verbs", function() {
-    expect(this.resourceOverview.methods).toEqual([{ verb: 'get' }, { verb: 'post' }]);
-  });
-
   it("translates resource.is to traits", function() {
     expect(this.resourceOverview.traits).toEqual(resource.is);
   });
@@ -72,4 +70,31 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
   it("translates resource.type to resourceType", function() {
     expect(this.resourceOverview.resourceType).toEqual(resource.type);
   });
+
+  it("creates a method overview for each method", function() {
+    expect(methodOverviewSourceSpy).toHaveBeenCalledWith(resource.methods[0], 0, resource.methods);
+    expect(methodOverviewSourceSpy).toHaveBeenCalledWith(resource.methods[1], 1, resource.methods);
+    expect(this.resourceOverview.methods).toEqual(['methodOverview', 'methodOverview']);
+  });
+});
+
+describe("RAML.Inspector.methodOverviewSource", function() {
+
+  var method = {
+    method: 'post',
+    description: 'The best method in the world'
+  }
+
+  beforeEach(function() {
+    this.methodOverview = RAML.Inspector.methodOverviewSource(method);
+  });
+
+  it("returns the verb of the method", function() {
+    expect(this.methodOverview.verb).toEqual('post');
+  });
+
+  it("returns the description of the method", function() {
+    expect(this.methodOverview.description).toEqual('The best method in the world');
+  });
+
 });

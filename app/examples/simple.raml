@@ -14,7 +14,8 @@ resourceTypes:
       description: bunk
 /resource:
   displayName: First One
-  get: !!null
+  get:
+    description: get the first one
   is: [unsecured]
   /{resourceId}:
     uriParameters:
