@@ -44,7 +44,11 @@ module.exports = function(grunt) {
     }
 
     function runProtractor() {
-      var proc = spawn('./node_modules/protractor/bin/protractor', [data.configFile], { stdio: 'inherit' });
+      args = [data.configFile]
+      if (data.debug)
+        args.unshift("debug")
+
+      var proc = spawn('./node_modules/protractor/bin/protractor', args, { stdio: 'inherit' });
       proc.on('exit', function (code, signal) {
         if (signal) {
           process.kill(process.pid, signal);

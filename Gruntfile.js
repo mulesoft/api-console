@@ -219,6 +219,10 @@ module.exports = function (grunt) {
         protractor: {
             scenario: {
                 configFile: 'spec/scenario/support/protractor.conf.js'
+            },
+            debug: {
+                configFile: 'spec/scenario/support/protractor.conf.js',
+                debug: true
             }
         },
         karma: {
@@ -317,8 +321,16 @@ module.exports = function (grunt) {
 
     grunt.registerTask('scenario', [
         'clean:server',
+        'less',
         'connect:test',
         'protractor'
+    ]);
+
+    grunt.registerTask('scenario:debug', [
+        'clean:server',
+        'less',
+        'connect:test',
+        'protractor:debug'
     ]);
 
     grunt.registerTask('build', [
