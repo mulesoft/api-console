@@ -25,9 +25,15 @@
     "connect-livereload": "~0.2.0",
     "grunt-google-cdn": "~0.2.0",
     "grunt-ngmin": "~0.0.2",
-    "grunt-angular-templates": "~0.3.10"
+    "grunt-angular-templates": "~0.3.10",
+    "protractor": "https://github.com/jeremysmears/protractor/tarball/bugs/allow-custom-matchers",
+    "selenium-webdriver": "*"
   },
   "engines": {
     "node": ">=0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
   }
+
 }

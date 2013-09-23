@@ -1,4 +1,4 @@
-@import 'preboot';
+@import "bootstrap/less/bootstrap";
 
 // Responsive
 @responsive-switch: 750px;
@@ -26,14 +26,29 @@
 @unknown-color: gray;
 @unknown-inactive-color: lightgray;
 
+body {
+  margin: 0px;
+  font-family: 'Ubuntu', sans-serif;
+  background-color: #E6E7EB;
+}
+
 section, aside {
-  font-family: 'Ubuntu', sans-serif; }
+  font-family: 'Ubuntu', sans-serif;
+}
 
 a, a:visited {
   color: #07c; text-decoration: none;
-  outline: 0; }
-
-a:hover, a:focus { color: #000;
+  outline: 0;
 }
-p a, p a:visited { line-height: inherit;
+
+a:hover, a:focus {
+  text-decoration: none;
+}
+
+p a, p a:visited {
+  line-height: inherit;
+}
+
+.hidden {
+  visibility: hidden;
 }
