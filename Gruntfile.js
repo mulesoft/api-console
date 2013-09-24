@@ -60,8 +60,6 @@ module.exports = function (grunt) {
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js'
                     ],
-                    'dist/examples/simple.raml': ['app/examples/simple.raml'],
-                    'dist/examples/multiple-methods.raml': ['app/examples/multiple-methods.raml'],
                     'dist/index.html': ['app/index.embedded.html'],
                     'dist/index.acceptance.html': ['app/index.acceptance.html']
                 }
@@ -220,9 +218,18 @@ module.exports = function (grunt) {
             },
             embedded: {
                 files: [{
-                    src: ['app/examples/simple.raml'],
-                    dest: 'dist/'
-                }]
+                    expand: true,
+                    cwd: 'app/examples',
+                    src: ['*'],
+                    dest: 'dist/examples/'
+                },
+                {
+                    expand: true,
+                    cwd: 'app/vendor/font-awesome/font',
+                    src: ['*'],
+                    dest: 'dist/font/'
+                }
+                ]
             }
         },
         protractor: {

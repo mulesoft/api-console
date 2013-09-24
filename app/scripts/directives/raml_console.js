@@ -19,7 +19,15 @@
         $scope.$apply();
       }
 
-      importAndParseRaml($scope.src).then(success, error);
+      // FIXME: move to a controller
+      if ($scope.src) {
+        importAndParseRaml($scope.src).then(success, error);
+      }
+
+      // FIXME: move this to the app on module('ramlConsoleApp').run...
+      $scope.$on('event:raml-parsed', function(e, raml) {
+        $scope.api = RAML.Inspector.create(raml);
+      });
     }
 
     return {
