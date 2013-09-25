@@ -245,6 +245,10 @@ module.exports = function (grunt) {
             unit: {
                 configFile: 'spec/unit/support/karma.conf.js',
                 autoWatch: true
+            },
+            parser: {
+                configFile: 'spec/parser/support/karma.conf.js',
+                autoWatch: true
             }
         },
         cdnify: {
@@ -332,7 +336,11 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('spec', [
-        'karma'
+        'karma:unit'
+    ]);
+
+    grunt.registerTask('spec:parser', [
+        'karma:parser'
     ]);
 
     grunt.registerTask('scenario', [
