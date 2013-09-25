@@ -82,7 +82,14 @@ describe("RAML.Inspector.methodOverviewSource", function() {
 
   var method = {
     method: 'post',
-    description: 'The best method in the world'
+    description: 'The best method in the world',
+    queryParameters: {
+      param1: {
+        displayName: 'a param',
+        type: 'string',
+        required: false
+      }
+    }
   }
 
   beforeEach(function() {
@@ -93,8 +100,11 @@ describe("RAML.Inspector.methodOverviewSource", function() {
     expect(this.methodOverview.verb).toEqual('post');
   });
 
-  it("returns the description of the method", function() {
+  it("copies the description of the method", function() {
     expect(this.methodOverview.description).toEqual('The best method in the world');
   });
 
+  it("copies the query parameters of the method", function() {
+    expect(this.methodOverview.queryParameters).toEqual(method.queryParameters);
+  });
 });
