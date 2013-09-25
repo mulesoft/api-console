@@ -1,1 +1,3 @@
-RAML.Directives = {};
+(function() {
+  RAML.Directives = {};
+})();

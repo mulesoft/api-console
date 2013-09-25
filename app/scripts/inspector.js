@@ -40,7 +40,8 @@ RAML.Inspector = (function() {
     var resources = extractResources([], api)
     return {
       title: api.title,
-      resources: resources
+      resources: resources,
+      baseUri: api.baseUri
     }
   };
 

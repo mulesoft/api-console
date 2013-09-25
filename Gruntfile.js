@@ -46,6 +46,8 @@ module.exports = function (grunt) {
                 files: {
                     'dist/app.js': [
                         'app/scripts/inspector.js',
+                        'app/scripts/controllers.js',
+                        'app/scripts/controllers/**/*.js',
                         'app/scripts/directives.js',
                         'app/scripts/directives/**/*.js',
                         'app/scripts/raml.js',
