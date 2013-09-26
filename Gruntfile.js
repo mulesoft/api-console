@@ -58,7 +58,6 @@ module.exports = function (grunt) {
                         'app/vendor/angular.js',
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
-                        'app/vendor/angular-ui-bootstrap-accordion-0.6.0.js',
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js'
                     ],
