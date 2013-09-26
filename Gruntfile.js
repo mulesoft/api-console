@@ -48,6 +48,8 @@ module.exports = function (grunt) {
                         'app/scripts/inspector.js',
                         'app/scripts/directives.js',
                         'app/scripts/directives/**/*.js',
+                        'app/scripts/filters.js',
+                        'app/scripts/filters/**/*.js',
                         'app/scripts/raml.js',
                         'app/scripts/raml_console.js',
                         'dist/templates.js'
@@ -56,7 +58,6 @@ module.exports = function (grunt) {
                         'app/vendor/angular.js',
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
-                        'app/vendor/angular-ui-bootstrap-accordion-0.6.0.js',
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js'
                     ],
