@@ -33,7 +33,8 @@ RAML.Inspector = (function() {
       name: resource.displayName,
       methods: (resource.methods || []).map(exports.methodOverviewSource),
       traits: resource.is,
-      resourceType: resource.type
+      resourceType: resource.type,
+      uriParameters: resource.uriParameters
     }
   };
 

@@ -45,7 +45,12 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     displayName: "Test Resource",
     is: ["secured"],
     type: "Collection",
-    methods: [createMethod("get"), createMethod("post")]
+    methods: [createMethod("get"), createMethod("post")],
+    uriParameters: {
+      query: {
+        type: 'string'
+      }
+    }
   }
 
   var methodOverviewSourceSpy;
@@ -57,6 +62,10 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
 
   it("copies the supplied path segments", function() {
     expect(this.resourceOverview.pathSegments).toEqual(['/resource']);
+  });
+
+  it("copies URI parameters", function() {
+    expect(this.resourceOverview.uriParameters).toEqual(resource.uriParameters);
   });
 
   it("translates resource.displayName to name", function() {
