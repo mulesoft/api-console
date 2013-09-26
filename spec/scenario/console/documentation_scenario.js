@@ -61,7 +61,7 @@ describe('API Documentation', function() {
 
       param = findParameterRow(2);
       verifyCellData(param, ["order", "string", "The sort order of resources", "oldest", "No",
-        "newest", "Yes","", "", "5", "7", '["oldest","newest"]', ""]);
+        "newest", "No","", "", "5", "7", '["oldest","newest"]', ""]);
     });
   });
 
