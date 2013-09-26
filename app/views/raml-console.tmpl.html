@@ -39,10 +39,55 @@
             </span>
             <div class="pull-right">
               <button role="try-it" class="btn">Try It</button>
-              <i class="icon-file-alt"></i>
+              <i class="icon-file-alt documentation"></i>
             </div>
           </accordion-heading>
-          <h3 role='description'>Description: {{method.description}}</h3>
+          <section role='documentation'>
+            <p>Description: {{method.description}}</p>
+
+            <h4 class='selector'>
+              Parameters
+            </h4>
+            <section role='parameters'>
+              <table>
+                <caption>Attributes</caption>
+                <thead>
+                  <tr>
+                    <th>Param</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                    <th>Repeatable</th>
+                    <th>Default</th>
+                    <th>Required</th>
+                    <th>Minimum</th>
+                    <th>Maximum</th>
+                    <th>Minimum Length</th>
+                    <th>Maximum Length</th>
+                    <th>Valid Values</th>
+                    <th>Pattern</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr role='parameter' ng-repeat='param in method.queryParameters'>
+                    <td><strong>{{param.displayName}}</strong></td>
+                    <td><em>{{param.type}}</em></td>
+                    <td>{{param.description}}</td>
+                    <td>{{param.example}}</td>
+                    <td>{{param.repeat}}</td>
+                    <td>{{param.default}}</td>
+                    <td>{{param.required}}</td>
+                    <td>{{param.minimum}}</td>
+                    <td>{{param.maximum}}</td>
+                    <td>{{param.minLength}}</td>
+                    <td>{{param.maxLength}}</td>
+                    <td>{{param.enum}}</td>
+                    <td>{{param.pattern}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </section>
         </accordion-group>
       </accordion>
     </accordion-group>
