@@ -56,12 +56,12 @@ describe('API Documentation', function() {
       waitUntilTextEquals(ptor.findElement(protractor.By.css("[role='parameters'] caption")), "Attributes");
 
       var param = findParameterRow(1);
-      verifyCellData(param, ["page", "integer", "Which page to display", "1", "",
-        "", "true", "1", "100", "", "", "", ""]);
+      verifyCellData(param, ["page", "integer", "Which page to display", "1", "No",
+        "", "Yes", "1", "100", "", "", "", ""]);
 
       param = findParameterRow(2);
-      verifyCellData(param, ["order", "string", "The sort order of resources", "oldest", "",
-        "newest", "true","", "", "5", "7", '["oldest","newest"]', ""]);
+      verifyCellData(param, ["order", "string", "The sort order of resources", "oldest", "No",
+        "newest", "Yes","", "", "5", "7", '["oldest","newest"]', ""]);
     });
   });
 
