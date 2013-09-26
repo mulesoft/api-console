@@ -22,7 +22,8 @@ RAML.Inspector = (function() {
   exports.methodOverviewSource = function(method) {
     return {
       verb: method.method,
-      description: method.description
+      description: method.description,
+      queryParameters: method.queryParameters
     }
   };
 

@@ -5,9 +5,9 @@
 
   <h1>{{api.title}}</h1>
 
-  <accordion role="resources" close-others="false">
-    <accordion-group role="resource" ng-repeat="resource in api.resources" is-open="resource.isOpen">
-      <accordion-heading>
+  <div class='accordion' role="resources">
+    <div class='accordion-group' role="resource" ng-repeat="resource in api.resources">
+      <div class='accordion-heading accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'>
         <ul role="traits">
           <li role="trait" ng-repeat="trait in resource.traits">{{trait}}</li>
         </ul>
@@ -28,23 +28,76 @@
         <ul role="methods" ng-class="{'hidden': resource.isOpen}">
           <li role="{{method}}" ng-repeat="method in resource.methods">{{method.verb}}</li>
         </ul>
-      </accordion-heading>
-      <accordion role="methodSummaries" close-others="false">
-        <accordion-group role="methodSummary" ng-repeat="method in resource.methods" is-open="method.isOpen">
-          <accordion-heading>
-            <i ng-class="{'icon-caret-right': !method.isOpen, 'icon-caret-down': method.isOpen}"></i>
-            <span role="method">{{method.verb}}</span>
-            <span role="path">
-              <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
-            </span>
-            <div class="pull-right">
-              <button role="try-it" class="btn">Try It</button>
-              <i class="icon-file-alt"></i>
+      </div>
+      <div class='accordion-body' ng-show='resource.isOpen'>
+        <div class='accordion-inner'>
+          <div class='accordion' role="methodSummaries">
+            <div class='accordion-group' role="methodSummary" ng-repeat="method in resource.methods">
+              <div class='accordion-heading accordion-toggle' ng-click='method.isOpen = !method.isOpen'>
+                <i ng-class="{'icon-caret-right': !method.isOpen, 'icon-caret-down': method.isOpen}"></i>
+                <span role="method">{{method.verb}}</span>
+                <span role="path">
+                  <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
+                </span>
+                <div class="pull-right">
+                  <button role="try-it" class="btn">Try It</button>
+                  <i class="icon-file-alt documentation"></i>
+                </div>
+              </div>
+              <div class='accordion-body' ng-show='method.isOpen'>
+                <div class='accordion-inner'>
+                  <section role='documentation'>
+                    <p>Description: {{method.description}}</p>
+
+                    <h4 class='selector'>
+                      Parameters
+                    </h4>
+                    <section role='parameters'>
+                      <table>
+                        <caption>Attributes</caption>
+                        <thead>
+                          <tr>
+                            <th>Param</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                            <th>Repeatable</th>
+                            <th>Default</th>
+                            <th>Required</th>
+                            <th>Minimum</th>
+                            <th>Maximum</th>
+                            <th>Minimum Length</th>
+                            <th>Maximum Length</th>
+                            <th>Valid Values</th>
+                            <th>Pattern</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr role='parameter' ng-repeat='param in method.queryParameters'>
+                            <td><strong>{{param.displayName}}</strong></td>
+                            <td><em>{{param.type}}</em></td>
+                            <td>{{param.description}}</td>
+                            <td>{{param.example}}</td>
+                            <td>{{param.repeat | yesNo}}</td>
+                            <td>{{param.default}}</td>
+                            <td>{{param.required | yesNo}}</td>
+                            <td>{{param.minimum}}</td>
+                            <td>{{param.maximum}}</td>
+                            <td>{{param.minLength}}</td>
+                            <td>{{param.maxLength}}</td>
+                            <td>{{param.enum}}</td>
+                            <td>{{param.pattern}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </section>
+                  </section>
+                </div>
+              </div>
             </div>
-          </accordion-heading>
-          <h3 role='description'>Description: {{method.description}}</h3>
-        </accordion-group>
-      </accordion>
-    </accordion-group>
-  </accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </article>
