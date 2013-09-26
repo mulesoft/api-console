@@ -19,22 +19,29 @@ section[role=api-operation] {
     > header {
         height: 73px;
         h1 {
-          font-size: 13px;
-          font-weight: bold;
+          font-size: 11px;
+          font-weight: normal;
           margin: 0px;
           padding: 0px;
-          color: black;
+          padding-top: 12px;
+          color: rgb(158,163,166);
+          strong {
+            color: #666;
+          }
         }
         h2 {
           font-size: 12px;
           font-weight: normal;
           margin: 0px;
           padding: 0px;
-          margin-top: 8px;
+          padding-top: 1px;
           color: rgb(158,163,166);
           letter-spacing:1px;
+          strong {
+            color: rgb(63,152,201);
+          }
       }
-      
+
       > div[role=summary] {
         position: absolute;
         right: 0px;
@@ -155,19 +162,19 @@ section[role=api-operation] {
         color: white;
         max-width: 80px;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li,
     > header > div[role=summary] > ul[role=operations] > li:after,
     > header > div[role=summary] > ul[role=operations] > li:before {
       background: @unknown-inactive-color;
     }
-    
+
     &:hover > header > div[role=summary] > ul[role=operations] > li,
     &:hover > header > div[role=summary] > ul[role=operations] > li:after,
     &:hover > header > div[role=summary] > ul[role=operations] > li:before {
         background: @unknown-color;
     }
-    
+
     > header > div[role=summary] > ul[role=operations] > li[role=get],
     > header > div[role=summary] > ul[role=operations] > li[role=get]:after,
     > header > div[role=summary] > ul[role=operations] > li[role=get]:before {
@@ -296,12 +303,16 @@ section[role=api-operation] {
     }
 
     &.active > header h1,
-    &.active:hover > header h1 {
+    &.active:hover > header h1,
+    &.active > header h1 strong,
+    &.active:hover > header h1 strong {
         color: white;
     }
 
     &.active > header h2,
-    &.active:hover > header h2 {
+    &.active:hover > header h2,
+    &.active > header h2 strong,
+    &.active:hover > header h2 strong  {
         color: white;
     }
 
@@ -550,6 +561,6 @@ section[role=api-operation] {
     a {
       text-decoration: underline;
     }
-  
+
   }
 }

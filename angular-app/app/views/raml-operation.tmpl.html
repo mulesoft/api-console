@@ -1,8 +1,8 @@
 <section role="api-operation" ng-class="{active:active, first:$first, last:$last}" ng-controller="ramlOperation">
   <header id="operationHeader" ng-click="headerClick()">
     <hgroup>
-      <h1>{{resource.displayName}}</h1>
-      <h2>{{resource.relativeUri}}</h2>
+      <h2><span ng-show="resource.parentUri">{{resource.parentUri}}&nbsp;</span><strong>{{resource.localUri || resource.relativeUri}}</strong></h2>
+      <h1 ng-show="resource.resourceType">Type: <strong>{{resource.resourceType}}</strong></h1>
     </hgroup>
     <div role="summary">
       <ul role="traits">

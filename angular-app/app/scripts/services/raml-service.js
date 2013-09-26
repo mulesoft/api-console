@@ -31,10 +31,7 @@ angular.module('raml', [])
 
                 if (typeof raml.baseUri !== 'undefined') {
                     result.baseUri = raml.baseUri;
-                } else {
-                    throw new Error('baseUri is not defined');
                 }
-
 
                 if (typeof raml.version !== 'undefined') {
                     result.version = raml.version;
@@ -70,8 +67,8 @@ angular.module('raml', [])
                     result.name = methodDescriptor.method;
                 }
 
-                if (typeof methodDescriptor.summary !== 'undefined') {
-                    result.summary = methodDescriptor.summary;
+                if (typeof methodDescriptor.description !== 'undefined') {
+                    result.description = methodDescriptor.description;
                 }
 
                 if (typeof methodDescriptor.responses !== 'undefined') {
@@ -190,6 +187,10 @@ angular.module('raml', [])
                     result.name = result.relativeUri;
                 }
 
+                if (result.type) {
+                    result.resourceType = this.readResourceType(result, raml.resourceTypes);
+                }
+
                 if (typeof result.relativeUri === 'undefined') {
                     throw new Error('relativeUri is not defined');
                 }
@@ -213,6 +214,19 @@ angular.module('raml', [])
                 result.absoluteUri = raml.baseUri + result.relativeUri;
 
                 return result;
+            },
+            readResourceType: function (resource, resourceTypeDetails) {
+                var resourceTypeName;
+
+                for (var prop in resource.type) {
+                    resourceTypeName = prop;
+                }
+
+                if (!resourceTypeName) {
+                    return null;
+                } else {
+                    return resourceTypeName;
+                }
             },
             readTraitsDeep: function (resource, traitsDetails) {
                 var traits = [];
@@ -292,6 +306,9 @@ angular.module('raml', [])
                         temp = JSON.parse(JSON.stringify(el));
 
                         delete temp.resources;
+
+                        temp.parentUri = uriPart;
+                        temp.localUri = temp.relativeUri;
 
                         temp.relativeUri = uriPart + temp.relativeUri;
                         el.relativeUri = temp.relativeUri;

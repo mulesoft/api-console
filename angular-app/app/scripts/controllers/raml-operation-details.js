@@ -10,7 +10,7 @@ angular.module('ramlConsoleApp')
             }
         };
 
-        $scope.hasSummary = function (value) {
+        $scope.hasDescription = function (value) {
             return !(typeof value !== 'undefined' && value !== '');
         };
 

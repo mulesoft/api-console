@@ -1,8 +1,8 @@
 <section role="api-operation-details" ng-show="operation" ng-controller="ramlOperationDetails">
   <header>
-      <h1>Summary</h1>
-      <p>{{operation.summary}}</p>
-      <p ng-if="hasSummary(operation.summary)">No summary.</p>
+      <h1>Description</h1>
+      <p ng-show="operation.description">{{operation.description}}</p>
+      <p ng-hide="operation.description">No description.</p>
   </header>
   <div role="details-body">
     <ul role="details-sections">
