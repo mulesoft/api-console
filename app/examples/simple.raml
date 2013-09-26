@@ -21,12 +21,38 @@ resourceTypes:
     uriParameters:
       resourceId:
         required: true
-    get: !!null
+        description: Which resoure would you like to view
+    get:
+      queryParameters:
+        filter:
+          description: What to filter
+          type: string
     post: !!null
 
 /another/resource:
   displayName: Cats
   type: collection
   is: [secured, catpictures]
-  get: !!null
+  get:
+    queryParameters:
+      chunk:
+        displayName: page
+        description: Which page to display
+        type: integer
+        example: 1
+        minimum: 1
+        maximum: 100
+        required: true
+      order:
+        description: The sort order of resources
+        type: string
+        enum: ["oldest", "newest"]
+        example: oldest
+        minLength: 5
+        maxLength: 7
+        default: newest
+      query:
+        description: A query parameter
+        repeat: true
+
   options: !!null

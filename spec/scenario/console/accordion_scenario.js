@@ -1,11 +1,5 @@
-var fs = require('fs'),
-  path = require('path'),
-  util = require('util');
-
-var webdriver = require('selenium-webdriver');
-
 describe('accordion view of API', function() {
-  var ptor;
+  var ptor = protractor.getInstance();
 
   var getResources = function() {
     return ptor.findElements(protractor.By.css('[role="api-console"] [role="resource"]'));
@@ -33,15 +27,7 @@ describe('accordion view of API', function() {
       "  is: [secured]",
       "  get: !!null"].join('\n');
 
-    var fixturePath = fixturizeRaml(raml);
-
-    beforeEach(function() {
-      ptor = protractor.getInstance();
-
-      ptor.get('http://localhost:9001');
-      ptor.findElement(protractor.By.css("input[type=text]")).sendKeys(fixturePath);
-      ptor.findElement(protractor.By.css("input[type=submit]")).click();
-    });
+    loadRamlFixture(raml);
 
     it('renders an overview of each API resource', function() {
       var body = ptor.findElement(protractor.By.css("body"));
@@ -103,15 +89,7 @@ describe('accordion view of API', function() {
       "  delete: !!null",
     ].join('\n');
 
-    var fixturePath = fixturizeRaml(raml);
-
-    beforeEach(function() {
-      ptor = protractor.getInstance();
-
-      ptor.get('http://localhost:9001');
-      ptor.findElement(protractor.By.css("input[type=text]")).sendKeys(fixturePath);
-      ptor.findElement(protractor.By.css("input[type=submit]")).click();
-    });
+    loadRamlFixture(raml);
 
     it('provides each method the resource supports', function() {
       getResources().then(function(resources) {
@@ -151,14 +129,6 @@ describe('accordion view of API', function() {
     });
   });
 
-  var waitUntilTextEquals = function(ptor, element, expectedText) {
-    ptor.wait(function() {
-      return element.getText().then(function(text) {
-        return text === expectedText;
-      });
-    }, 5000);
-  };
-
   describe('method detail view', function() {
     raml = [
       '#%RAML 0.2',
@@ -171,21 +141,14 @@ describe('accordion view of API', function() {
       '    description: Get all resources'
     ].join('\n');
 
-   var fixturePath = fixturizeRaml(raml);
-
-    beforeEach(function() {
-      ptor = protractor.getInstance();
-
-      ptor.get('http://localhost:9001');
-      ptor.findElement(protractor.By.css("input[type=text]")).sendKeys(fixturePath);
-      ptor.findElement(protractor.By.css("input[type=submit]")).click();
-    });
+   loadRamlFixture(raml);
 
     it('displays the description of the method', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
-      ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click()
-      var description = ptor.findElement(protractor.By.css('[role="methodSummary"] [role="description"]'));
-      waitUntilTextEquals(ptor, description, 'Description: Get all resources');
+      ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click();
+
+      var description = ptor.findElement(protractor.By.css('[role="methodSummary"] p'));
+      waitUntilTextEquals(description, 'Description: Get all resources');
     });
   });
 });

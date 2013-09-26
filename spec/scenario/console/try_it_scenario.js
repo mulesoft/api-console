@@ -24,11 +24,9 @@ describe("trying an API method", function() {
       resource.findElement(protractor.By.css('.accordion-toggle')).click();
 
       var tryItTab = resource.findElement(protractor.By.css('[role="methodSummary"] button[role="try-it-tab"]'));
-      ptor.sleep(500);
       tryItTab.click();
 
       var tryItButton = resource.findElement(protractor.By.css('button[role="try-it"]'));
-      ptor.sleep(500);
       tryItButton.click();
 
       var responseStatus = resource.findElement(protractor.By.css('.try-it .response .status'));

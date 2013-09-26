@@ -45,7 +45,12 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     displayName: "Test Resource",
     is: ["secured"],
     type: "Collection",
-    methods: [createMethod("get"), createMethod("post")]
+    methods: [createMethod("get"), createMethod("post")],
+    uriParameters: {
+      query: {
+        type: 'string'
+      }
+    }
   }
 
   var methodOverviewSourceSpy;
@@ -57,6 +62,10 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
 
   it("copies the supplied path segments", function() {
     expect(this.resourceOverview.pathSegments).toEqual(['/resource']);
+  });
+
+  it("copies URI parameters", function() {
+    expect(this.resourceOverview.uriParameters).toEqual(resource.uriParameters);
   });
 
   it("translates resource.displayName to name", function() {
@@ -82,7 +91,14 @@ describe("RAML.Inspector.methodOverviewSource", function() {
 
   var method = {
     method: 'post',
-    description: 'The best method in the world'
+    description: 'The best method in the world',
+    queryParameters: {
+      param1: {
+        displayName: 'a param',
+        type: 'string',
+        required: false
+      }
+    }
   }
 
   beforeEach(function() {
@@ -93,8 +109,11 @@ describe("RAML.Inspector.methodOverviewSource", function() {
     expect(this.methodOverview.verb).toEqual('post');
   });
 
-  it("returns the description of the method", function() {
+  it("copies the description of the method", function() {
     expect(this.methodOverview.description).toEqual('The best method in the world');
   });
 
+  it("copies the query parameters of the method", function() {
+    expect(this.methodOverview.queryParameters).toEqual(method.queryParameters);
+  });
 });

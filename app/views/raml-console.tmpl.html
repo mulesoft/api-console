@@ -5,9 +5,9 @@
 
   <h1>{{api.title}}</h1>
 
-  <accordion role="resources" close-others="false">
-    <accordion-group role="resource" ng-repeat="resource in api.resources" is-open="resource.isOpen">
-      <accordion-heading>
+  <div class='accordion' role="resources">
+    <div class='accordion-group' role="resource" ng-repeat="resource in api.resources">
+      <div class='accordion-heading accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'>
         <ul role="traits">
           <li role="trait" ng-repeat="trait in resource.traits">{{trait}}</li>
         </ul>
@@ -28,53 +28,73 @@
         <ul role="methods" ng-class="{'hidden': resource.isOpen}">
           <li role="{{method}}" ng-repeat="method in resource.methods">{{method.verb}}</li>
         </ul>
-      </accordion-heading>
-      <accordion role="methodSummaries" close-others="false">
-        <accordion-group role="methodSummary" ng-repeat="method in resource.methods" is-open="method.isOpen">
-          <accordion-heading>
-            <i ng-class="{'icon-caret-right': !method.isOpen, 'icon-caret-down': method.isOpen}"></i>
-            <span role="method">{{method.verb}}</span>
-            <span role="path">
-              <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
-            </span>
-            <div class="pull-right">
-              <button role="try-it-tab" class="btn">Try It</button>
-              <i class="icon-file-alt"></i>
-            </div>
-          </accordion-heading>
-
-          <div>
-            <h3 role='description' ng-show="method.description">Description: {{method.description}}</h3>
-          </div>
-
-          <div class="try-it" ng-controller="TryItController">
-            <button role="try-it" class="btn btn-primary" ng-click="apiClient.execute()">Try It</button>
-
-            <div class="response" ng-show="apiClient.response">
-              <h3>Response</h3>
-              <div class="status">
-                <h4>Status</h4>
-                <span class="response-value">{{apiClient.response.status}}</span>
+      </div>
+      <div class='accordion-body' ng-show='resource.isOpen'>
+        <div class='accordion-inner'>
+          <div class='accordion' role="methodSummaries">
+            <div class='accordion-group' role="methodSummary" ng-repeat="method in resource.methods">
+              <div class='accordion-heading accordion-toggle' ng-click='method.isOpen = !method.isOpen'>
+                <i ng-class="{'icon-caret-right': !method.isOpen, 'icon-caret-down': method.isOpen}"></i>
+                <span role="method">{{method.verb}}</span>
+                <span role="path">
+                  <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
+                </span>
+                <div class="pull-right">
+                  <button role="try-it-tab" class="btn">Try It</button>
+                  <i class="icon-file-alt documentation"></i>
+                </div>
               </div>
-              <div class="headers">
-                <h4>Headers</h4>
-                <ul class="response-value">
-                  <li ng-repeat="(header, value) in apiClient.response.headers">
-                    <span class="header-key">{{header}}:</span>
-                    <span class="header-value">{{value}}</span>
-                  </li>
-                </ul>
-              </div>
-              <div class="body">
-                <h4>Body</h4>
-                <div class="response-value">
-                  {{apiClient.response.body}}
+              <div class='accordion-body' ng-show='method.isOpen'>
+                <div class='accordion-inner'>
+                  <section role='documentation'>
+                    <p ng-show="method.description">Description: {{method.description}}</p>
+
+                    <h4 class='selector'>
+                      Parameters
+                    </h4>
+                    <section role='uri-parameters'>
+                      <parameter-table heading='URI Parameters' parameters='resource.uriParameters'/>
+                      }
+                    </section>
+                    <section role='query-parameters'>
+                      <parameter-table heading='Query Parameters' parameters='method.queryParameters'/>
+                    </section>
+                  </section>
+
+                  <section class="try-it" ng-controller="TryItController">
+                    <button role="try-it" class="btn btn-primary" ng-click="apiClient.execute()">
+                      Try It
+                    </button>
+
+                    <div class="response" ng-show="apiClient.response">
+                      <h3>Response</h3>
+                      <div class="status">
+                        <h4>Status</h4>
+                        <span class="response-value">{{apiClient.response.status}}</span>
+                      </div>
+                      <div class="headers">
+                        <h4>Headers</h4>
+                        <ul class="response-value">
+                          <li ng-repeat="(header, value) in apiClient.response.headers">
+                            <span class="header-key">{{header}}:</span>
+                            <span class="header-value">{{value}}</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="body">
+                        <h4>Body</h4>
+                        <div class="response-value">
+                          {{apiClient.response.body}}
+                        </div>
+                      </div>
+                    </div>
+                  </section>
                 </div>
               </div>
             </div>
           </div>
-        </accordion-group>
-      </accordion>
-    </accordion-group>
-  </accordion>
+        </div>
+      </div>
+    </div>
+  </div>
 </article>
