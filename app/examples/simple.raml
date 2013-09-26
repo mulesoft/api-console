@@ -21,7 +21,12 @@ resourceTypes:
     uriParameters:
       resourceId:
         required: true
-    get: !!null
+        description: Which resoure would you like to view
+    get:
+      queryParameters:
+        filter:
+          description: What to filter
+          type: string
     post: !!null
 
 /another/resource:
