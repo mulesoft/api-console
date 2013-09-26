@@ -1,37 +1,39 @@
-<table class='parameterTable'>
-  <caption>{{heading}}</caption>
-  <thead>
-    <tr>
-      <th>Param</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Example</th>
-      <th>Repeatable</th>
-      <th>Default</th>
-      <th>Required</th>
-      <th>Minimum</th>
-      <th>Maximum</th>
-      <th>Minimum Length</th>
-      <th>Maximum Length</th>
-      <th>Valid Values</th>
-      <th>Pattern</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr role='parameter' ng-repeat='param in parameters'>
-      <td><strong>{{param.displayName}}</strong></td>
-      <td><em>{{param.type}}</em></td>
-      <td>{{param.description}}</td>
-      <td>{{param.example}}</td>
-      <td>{{param.repeat | yesNo}}</td>
-      <td>{{param.default}}</td>
-      <td>{{param.required | yesNo}}</td>
-      <td>{{param.minimum}}</td>
-      <td>{{param.maximum}}</td>
-      <td>{{param.minLength}}</td>
-      <td>{{param.maxLength}}</td>
-      <td>{{param.enum}}</td>
-      <td>{{param.pattern}}</td>
-    </tr>
-  </tbody>
-</table>
+<section class='parameterTable' role='{{heading}}' ng-show='parameters'>
+  <h3>{{heading}}</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Param</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Example</th>
+        <th>Repeatable</th>
+        <th>Default</th>
+        <th>Required</th>
+        <th>Minimum</th>
+        <th>Maximum</th>
+        <th>Minimum Length</th>
+        <th>Maximum Length</th>
+        <th>Valid Values</th>
+        <th>Pattern</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr role='parameter' ng-repeat='param in parameters'>
+        <td><strong>{{param.displayName}}</strong></td>
+        <td><em>{{param.type}}</em></td>
+        <td>{{param.description}}</td>
+        <td>{{param.example}}</td>
+        <td>{{param.repeat | yesNo}}</td>
+        <td>{{param.default}}</td>
+        <td>{{param.required | yesNo}}</td>
+        <td>{{param.minimum}}</td>
+        <td>{{param.maximum}}</td>
+        <td>{{param.minLength}}</td>
+        <td>{{param.maxLength}}</td>
+        <td>{{param.enum}}</td>
+        <td>{{param.pattern}}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

@@ -2,7 +2,7 @@ describe('API Documentation', function() {
   var ptor = protractor.getInstance();
 
   var findParameterTable = function (identifier) {
-    var table = ptor.findElement(protractor.By.css("[role='" + identifier + "'] table"));
+    var table = ptor.findElement(protractor.By.css("[role='" + identifier + "']"));
 
     table.findRow = function (rowIndex) {
       var selector = protractor.By.css("[role='parameter']:nth-child(" + rowIndex +")");
@@ -23,7 +23,7 @@ describe('API Documentation', function() {
     });
   };
 
-  describe('for query parameters', function() {
+  describe('for RAML with query parameters', function() {
     raml = [
       '#%RAML 0.2',
       '---',
@@ -57,9 +57,8 @@ describe('API Documentation', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
       ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click();
 
-      var table = findParameterTable('query-parameters');
-
-      expect(table.findElement(protractor.By.css("caption")).getText()).toEqual("Query Parameters");
+      var table = findParameterTable('Query Parameters');
+      expect(table.isDisplayed()).toBeTruthy();
 
       var param = table.findRow(1);
       verifyCellData(param,
@@ -68,10 +67,13 @@ describe('API Documentation', function() {
       param = table.findRow(2);
       verifyCellData(param,
         ["order", "string", "", "oldest", "No", "newest", "No", "", "", "5", "7", '["oldest","newest"]', ""]);
+
+      table = findParameterTable('URI Parameters');
+      expect(table.isDisplayed()).toBeFalsy();
     });
   });
 
-  describe('for URI parameters', function() {
+  describe('for raml with an implicit URI parameter', function() {
     raml = [
       '#%RAML 0.2',
       '---',
@@ -82,18 +84,20 @@ describe('API Documentation', function() {
 
     loadRamlFixture(raml);
 
-    it('displays information about the parameter', function() {
+    it('displays information about the URI parameter', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
       ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click();
 
-      var table = findParameterTable('uri-parameters');
-
-      expect(table.findElement(protractor.By.css("caption")).getText()).toEqual("URI Parameters");
+      var table = findParameterTable('URI Parameters');
+      expect(table.isDisplayed()).toBeTruthy();
 
       var param = table.findRow(1);
       verifyCellData(param,
         ["resourceId", "string", "", "", "No", "", "Yes", "", "", "", "", "", ""]);
 
+      table = findParameterTable('Query Parameters');
+      expect(table.isDisplayed()).toBeFalsy();
     });
+
   });
 });
