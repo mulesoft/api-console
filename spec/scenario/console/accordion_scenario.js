@@ -115,7 +115,7 @@ describe('accordion view of API', function() {
 
     it('shows a try it button', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
-      var tryIt = ptor.findElement(protractor.By.css('[role="resource"] [role="methodSummary"] button[role="try-it"]'));
+      var tryIt = ptor.findElement(protractor.By.css('[role="resource"] [role="methodSummary"] button[role="try-it-tab"]'));
       expect(tryIt.getText()).toMatch(/Try It/i)
     });
 
