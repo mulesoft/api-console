@@ -7,28 +7,7 @@
 
   <div class='accordion' role="resources">
     <div class='accordion-group' role="resource" ng-repeat="resource in api.resources">
-      <div class='accordion-heading accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'>
-        <ul role="traits">
-          <li role="trait" ng-repeat="trait in resource.traits">{{trait}}</li>
-        </ul>
-        <h2>
-          <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
-        </h2>
-
-        <span role="displayName" ng-show='resource.name'>
-          "{{resource.name}}"
-          <span ng-show='resource.resourceType'>
-            |
-          </span>
-        </span>
-        <span role="resourceType" ng-show='resource.resourceType'>
-          Type: <span>{{resource.resourceType}}</span>
-        </span>
-
-        <ul role="methods" ng-class="{'hidden': resource.isOpen}">
-          <li role="{{method}}"  ng-init="method.currentTab= 'documentation'" ng-repeat="method in resource.methods">{{method.verb}}</li>
-        </ul>
-      </div>
+      <resource-summary class='accordion-heading accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'></resource-summary>
       <div class='accordion-body' ng-show='resource.isOpen'>
         <div class='accordion-inner'>
           <div class='accordion' role="methodSummaries">
