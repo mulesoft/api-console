@@ -52,13 +52,8 @@
                     <h4 class='selector'>
                       Parameters
                     </h4>
-                    <section role='uri-parameters'>
-                      <parameter-table heading='URI Parameters' parameters='resource.uriParameters'/>
-                      }
-                    </section>
-                    <section role='query-parameters'>
-                      <parameter-table heading='Query Parameters' parameters='method.queryParameters'/>
-                    </section>
+                    <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
+                    <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
                   </section>
 
                   <section class="try-it" ng-show="method.currentTab == 'tryIt'" ng-controller="TryItController">
