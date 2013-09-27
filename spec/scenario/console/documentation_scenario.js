@@ -57,7 +57,7 @@ describe('API Documentation', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
       ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click();
 
-      var table = findParameterTable('Query Parameters');
+      var table = findParameterTable('query-parameters');
       expect(table.isDisplayed()).toBeTruthy();
 
       var param = table.findRow(1);
@@ -68,7 +68,7 @@ describe('API Documentation', function() {
       verifyCellData(param,
         ["order", "string", "", "oldest", "No", "newest", "No", "", "", "5", "7", '["oldest","newest"]', ""]);
 
-      table = findParameterTable('URI Parameters');
+      table = findParameterTable('uri-parameters');
       expect(table.isDisplayed()).toBeFalsy();
     });
   });
@@ -88,14 +88,14 @@ describe('API Documentation', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
       ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click();
 
-      var table = findParameterTable('URI Parameters');
+      var table = findParameterTable('uri-parameters');
       expect(table.isDisplayed()).toBeTruthy();
 
       var param = table.findRow(1);
       verifyCellData(param,
         ["resourceId", "string", "", "", "No", "", "Yes", "", "", "", "", "", ""]);
 
-      table = findParameterTable('Query Parameters');
+      table = findParameterTable('query-parameters');
       expect(table.isDisplayed()).toBeFalsy();
     });
 

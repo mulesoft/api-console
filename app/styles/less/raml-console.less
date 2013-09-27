@@ -83,14 +83,23 @@ span[role=segment] {
   }
 }
 
-[role=displayName], [role=resourceType] {
+.byline {
   font-size: 12px;
   padding-top: 5px;
-  display: inline-block;
-}
 
-[role=resourceType] {
-  span {
+  li {
+    display: inline-block;
+
+    &:after {
+      content: "|";
+    }
+
+    &:last-child:after {
+      content: "";
+    }
+  }
+
+  [role=resourceType] {
     text-transform: uppercase;
     font-weight: bold;
     color: black;

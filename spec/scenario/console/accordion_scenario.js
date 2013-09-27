@@ -68,7 +68,7 @@ describe('accordion view of API', function() {
         var resourceTypesPromise = resources[2].findElements(protractor.By.css('[role="resourceType"]'))
         expect(resourceTypesPromise).toHaveLength(1);
         resourceTypesPromise.then(function(resourceType) {
-          expect(resourceType[0].getText()).toMatch(/^type: collection$/i);
+          expect(resourceType[0].getText()).toMatch(/^collection$/i);
         });
       });
     });
