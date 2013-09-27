@@ -1,12 +1,12 @@
 describe("trying an API method", function() {
   fakeApiEndpoint("resource", "Hello World!");
 
-  var definition = createRAML([
+  var definition = createRAML(
     "title: Example API",
     "baseUri: http://localhost:9001",
     "/resource:",
     "  get:"
-  ]);
+  );
 
   var fixturePath = fixturizeRaml(definition);
 
