@@ -1,4 +1,4 @@
-<article class="container" role="api-console">
+<article role="api-console">
   <section role="error" ng-if="parseError">
     {{parseError}}
   </section>
@@ -26,7 +26,7 @@
         </span>
 
         <ul role="methods" ng-class="{'hidden': resource.isOpen}">
-          <li role="{{method}}" ng-repeat="method in resource.methods">{{method.verb}}</li>
+          <li role="{{method}}"  ng-init="method.currentTab= 'documentation'" ng-repeat="method in resource.methods">{{method.verb}}</li>
         </ul>
       </div>
       <div class='accordion-body' ng-show='resource.isOpen'>
@@ -40,13 +40,13 @@
                   <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
                 </span>
                 <div class="pull-right">
-                  <button role="try-it-tab" class="btn">Try It</button>
-                  <i class="icon-file-alt documentation"></i>
+                  <button role="try-it-tab" class="btn" ng-click="method.currentTab='tryIt'; method.isOpen && $event.stopPropagation(); ">Try It</button>
+                  <i class="icon-file-alt documentation" ng-click="method.currentTab='documentation'; method.isOpen && $event.stopPropagation();"></i>
                 </div>
               </div>
               <div class='accordion-body' ng-show='method.isOpen'>
                 <div class='accordion-inner'>
-                  <section role='documentation'>
+                  <section role='documentation' ng-show="method.currentTab == 'documentation'">
                     <p ng-show="method.description">Description: {{method.description}}</p>
 
                     <h4 class='selector'>
@@ -61,7 +61,7 @@
                     </section>
                   </section>
 
-                  <section class="try-it" ng-controller="TryItController">
+                  <section class="try-it" ng-show="method.currentTab == 'tryIt'" ng-controller="TryItController">
                     <button role="try-it" class="btn btn-primary" ng-click="apiClient.execute()">
                       Try It
                     </button>
