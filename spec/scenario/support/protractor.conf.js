@@ -13,7 +13,7 @@ exports.config = {
   specs: [
     '../../matchers/**/*.js',
     'helpers/**/*.js',
-    '../**/*.js'
+    '../**/*_scenario.js'
   ],
 
   // Options to be passed to Jasmine-node.
