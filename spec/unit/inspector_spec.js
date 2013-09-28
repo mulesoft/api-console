@@ -1,8 +1,6 @@
 describe("RAML.Inspector.create", function() {
-  var resourceOverviewSpy,
-    definition = [
-    '#%RAML 0.2',
-    '---',
+  var resourceOverviewSpy;
+  parseRAML(createRAML(
     'title: MyApi',
     'baseUri: http://myapi.com',
     '/resource:',
@@ -11,11 +9,7 @@ describe("RAML.Inspector.create", function() {
     '    get: !!null',
     '/another/resource:',
     '  get: !!null'
-  ].join('\n');
-
-  beforeEach(function() {
-    this.api = parseRAML(definition);
-  });
+  ));
 
   describe("inspecting an api's resources", function() {
     beforeEach(function() {
