@@ -1,26 +1,6 @@
 describe("RAML.Directives.pathBuilder", function() {
   var scope, el;
 
-  function createScope(cb) {
-    var scope;
-    inject(function($rootScope) {
-      scope = $rootScope.$new();
-      cb(scope);
-    });
-
-    return scope
-  }
-
-  function compileTemplate(tempalte, scope) {
-    var compiled;
-    inject(function($compile) {
-      compiled = $compile(tempalte)(scope);
-      scope.$digest();
-    });
-
-    return $(compiled);
-  }
-
   function createPathBuilderScope(pathSegments) {
     return createScope(function(scope) {
       scope.method = {};
