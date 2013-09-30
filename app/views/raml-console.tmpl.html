@@ -15,9 +15,7 @@
               <div class='accordion-heading accordion-toggle' ng-click='method.isOpen = !method.isOpen'>
                 <i ng-class="{'icon-caret-right': !method.isOpen, 'icon-caret-down': method.isOpen}"></i>
                 <span role="method">{{method.verb}}</span>
-                <span role="path">
-                  <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}}</span>
-                </span>
+                <path-builder></path-builder>
                 <div class="pull-right">
                   <button role="try-it-tab" class="btn" ng-click="method.currentTab='tryIt'; method.isOpen && $event.stopPropagation(); ">Try It</button>
                   <i class="icon-file-alt documentation" ng-click="method.currentTab='documentation'; method.isOpen && $event.stopPropagation();"></i>

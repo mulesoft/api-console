@@ -14,8 +14,10 @@ files = [
     'app/scripts/**/*.js',
     'dist/templates.js',
     'spec/integration/support/angular-mocks.js',
+    'spec/helprs/**/*.js',
     'spec/matchers/**/*.js',
     'spec/integration/support/jquery.js',
+    'spec/integration/support/jasmine-jquery.js',
     'spec/integration/support/helpers/**/*.js',
     'spec/integration/**/*_spec.js'
 ];
