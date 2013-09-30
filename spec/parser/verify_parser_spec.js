@@ -55,12 +55,12 @@ describe("Verifying parser output", function() {
 
   describe("with baseURI params", function() {
     describe("by default, inferred", function() {
-      var definition = createRAML([
+      var definition = createRAML(
         'title: MyApi',
         'baseUri: http://example.com/{something}',
         '/resource:',
         '  get: !!null'
-      ]);
+      );
 
       beforeEach(function() {
         this.api = parseRAML(definition);
@@ -73,9 +73,7 @@ describe("Verifying parser output", function() {
     });
 
     describe("by default, specified", function() {
-      var definition = [
-        '#%RAML 0.2',
-        '---',
+      var definition = createRAML(
         'title: MyApi',
         'baseUri: http://example.com/{something}',
         'baseUriParameters:',
@@ -83,7 +81,7 @@ describe("Verifying parser output", function() {
         '    description: something description',
         '/resource:',
         '  get: !!null'
-      ].join('\n');
+      );
 
       beforeEach(function() {
         this.api = parseRAML(definition);
