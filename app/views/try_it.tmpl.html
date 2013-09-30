@@ -1,7 +1,7 @@
 <section class="try-it">
 
   <form class='form-labelled-inline'>
-    <legend>Query Parameters</legend>
+    <legend ng-show='apiClient.hasQueryParameters()'>Query Parameters</legend>
     <div class="control-group" ng-repeat="(paramName,paramParameters) in method.queryParameters track by paramName">
       <label for="{{paramName}}">{{paramParameters.displayName}}</label>
       <input type="text" name="{{paramName}}" ng-model='apiClient.queryParameters[paramName]'/>
