@@ -4,6 +4,7 @@
     this.pathBuilder = $scope.method.pathBuilder;
 
     this.httpMethod = $http[$scope.method.verb];
+    this.queryParameters = {};
 
     $scope.apiClient = this;
   };
@@ -12,7 +13,7 @@
     var url = this.baseUri + this.pathBuilder(this.pathBuilder);
     var response = this.response = {};
 
-    this.httpMethod(url).then(function(httpResponse) {
+    this.httpMethod(url, { params: this.queryParameters }).then(function(httpResponse) {
       response.body = httpResponse.data,
       response.status = httpResponse.status,
       response.headers = httpResponse.headers()

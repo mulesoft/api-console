@@ -1,9 +1,11 @@
 var module = angular.module('ramlConsoleApp', ['raml']);
+
+module.directive('parameterTable', RAML.Directives.parameterTable);
+module.directive('pathBuilder', RAML.Directives.pathBuilder);
 module.directive('ramlConsole', RAML.Directives.ramlConsole);
 module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
-module.directive('parameterTable', RAML.Directives.parameterTable);
 module.directive('resourceSummary', RAML.Directives.resourceSummary);
-module.directive('pathBuilder', RAML.Directives.pathBuilder);
+module.directive('tryIt', RAML.Directives.tryIt);
 
 module.controller('TryItController', RAML.Controllers.TryIt);
 
