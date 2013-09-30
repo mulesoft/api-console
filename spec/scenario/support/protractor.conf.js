@@ -12,6 +12,7 @@ exports.config = {
   // include glob patterns.
   specs: [
     '../../matchers/**/*.js',
+    '../../support/helpers/**/*.js',
     'helpers/**/*.js',
     '../**/*_scenario.js'
   ],

@@ -16,6 +16,7 @@ files = [
     'spec/integration/support/angular-mocks.js',
     'spec/helprs/**/*.js',
     'spec/matchers/**/*.js',
+    'spec/support/helpers/**/*.js',
     'spec/integration/support/jquery.js',
     'spec/integration/support/jasmine-jquery.js',
     'spec/integration/support/helpers/**/*.js',
@@ -40,7 +41,7 @@ colors = true;
 
 // level of logging
 // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-logLevel = LOG_DEBUG;
+logLevel = LOG_INFO;
 
 // enable / disable watching file and executing tests whenever any file changes
 autoWatch = true;

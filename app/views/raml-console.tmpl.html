@@ -33,34 +33,7 @@
                     <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
                   </section>
 
-                  <section class="try-it" ng-show="method.currentTab == 'tryIt'" ng-controller="TryItController">
-                    <button role="try-it" class="btn btn-primary" ng-click="apiClient.execute()">
-                      Try It
-                    </button>
-
-                    <div class="response" ng-show="apiClient.response">
-                      <h3>Response</h3>
-                      <div class="status">
-                        <h4>Status</h4>
-                        <span class="response-value">{{apiClient.response.status}}</span>
-                      </div>
-                      <div class="headers">
-                        <h4>Headers</h4>
-                        <ul class="response-value">
-                          <li ng-repeat="(header, value) in apiClient.response.headers">
-                            <span class="header-key">{{header}}:</span>
-                            <span class="header-value">{{value}}</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="body">
-                        <h4>Body</h4>
-                        <div class="response-value">
-                          {{apiClient.response.body}}
-                        </div>
-                      </div>
-                    </div>
-                  </section>
+                  <try-it ng-show="method.currentTab == 'tryIt'"></try-it>
                 </div>
               </div>
             </div>

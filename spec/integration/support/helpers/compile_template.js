@@ -1,7 +1,7 @@
-function compileTemplate(tempalte, scope) {
+function compileTemplate(template, scope) {
   var compiled;
   inject(function($compile) {
-    compiled = $compile(tempalte)(scope);
+    compiled = $compile(template)(scope);
     scope.$digest();
   });
 

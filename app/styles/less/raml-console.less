@@ -32,6 +32,11 @@ ul[role=traits] {
 
 [role=resource] {
   color: #B2AEAD;
+  border-top: 4px solid #e4e4e6;
+
+  &:first-child {
+    border: none;
+  }
 
   .accordion-heading {
     padding: 5px 10px;
@@ -107,13 +112,10 @@ span[role=segment] {
 }
 
 .try-it {
-  padding-top: 10px;
-  padding-bottom: 10px;
   .clearfix;
 
-  [role="try-it"] {
-    float: right;
-    margin-right: 25px;
+  form {
+    margin-bottom: 0;
   }
 
   .response {
