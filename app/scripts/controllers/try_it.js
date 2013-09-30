@@ -1,23 +1,23 @@
 (function() {
   TryIt = function($scope, $http) {
+    this.baseUri = $scope.api.baseUri || "";
+    this.pathBuilder = $scope.method.pathBuilder;
+
     this.httpMethod = $http[$scope.method.verb];
-    this.url = $scope.api.baseUri + $scope.resource.pathSegments.join("")
 
     $scope.apiClient = this;
   };
 
   TryIt.prototype.execute = function() {
-    var success = this.handleResponse.bind(this);
-    this.httpMethod(this.url).then(success);
-  };
+    var url = this.baseUri + this.pathBuilder(this.pathBuilder);
+    var response = this.response = {};
 
-  TryIt.prototype.handleResponse = function(response) {
-    this.response = {
-      body: response.data,
-      status: response.status,
-      headers: response.headers()
-    };
-  }
+    this.httpMethod(url).then(function(httpResponse) {
+      response.body = httpResponse.data,
+      response.status = httpResponse.status,
+      response.headers = httpResponse.headers()
+    });
+  };
 
   RAML.Controllers.TryIt = TryIt;
 })();
