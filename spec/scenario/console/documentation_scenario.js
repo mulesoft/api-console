@@ -55,7 +55,7 @@ describe('API Documentation', function() {
 
     it('displays information about each parameter', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
-      ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click();
+      ptor.findElement(protractor.By.css('[role="methodSummary"]')).click();
 
       var table = findParameterTable('query-parameters');
       expect(table.isDisplayed()).toBeTruthy();
@@ -86,7 +86,7 @@ describe('API Documentation', function() {
 
     it('displays information about the URI parameter', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
-      ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click();
+      ptor.findElement(protractor.By.css('[role="methodSummary"]')).click();
 
       var table = findParameterTable('uri-parameters');
       expect(table.isDisplayed()).toBeTruthy();

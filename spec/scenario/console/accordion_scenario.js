@@ -117,9 +117,9 @@ describe('accordion view of API', function() {
 
     it('displays the description of the method', function() {
       ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
-      ptor.findElement(protractor.By.css('[role="methodSummary"] .accordion-toggle')).click();
+      ptor.findElement(protractor.By.css('[role="methodSummary"]')).click();
 
-      var description = ptor.findElement(protractor.By.css('[role="methodSummary"] p'));
+      var description = ptor.findElement(protractor.By.css('[role="method"] p'));
       waitUntilTextEquals(description, 'Description: Get all resources');
     });
   });

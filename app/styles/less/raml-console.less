@@ -38,7 +38,7 @@ ul[role=traits] {
     border: none;
   }
 
-  .accordion-heading {
+  [role=resourceSummary] {
     padding: 5px 10px;
 
     h2 {
@@ -62,7 +62,26 @@ ul[role=methods] {
     padding: 5px 20px;
   }
 }
+
 [role=methodSummary] {
+  padding: 15px;
+  background-color: #FCFBF6;
+
+  .expanded& {
+    background-color: #F6F5E4;
+  }
+
+  [role=verb] {
+    text-transform: uppercase;
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  input {
+    margin-bottom: 0;
+  }
+
   i {
     font-size: 24px;
     line-height: 20px;
@@ -132,7 +151,8 @@ span[role=segment] {
   padding: 20px;
 
   .selector {
-    padding: 30px 0 5px;
+    padding: 0;
+    margin: 0;
     border-bottom: 1px solid #CBCDCC;
   }
 }

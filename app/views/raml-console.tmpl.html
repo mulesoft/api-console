@@ -10,33 +10,8 @@
       <resource-summary class='accordion-heading accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'></resource-summary>
       <div class='accordion-body' ng-show='resource.isOpen'>
         <div class='accordion-inner'>
-          <div class='accordion' role="methodSummaries">
-            <div class='accordion-group' role="methodSummary" ng-repeat="method in resource.methods">
-              <div class='accordion-heading accordion-toggle' ng-click='method.isOpen = !method.isOpen'>
-                <i ng-class="{'icon-caret-right': !method.isOpen, 'icon-caret-down': method.isOpen}"></i>
-                <span role="method">{{method.verb}}</span>
-                <path-builder></path-builder>
-                <div class="pull-right">
-                  <button role="try-it-tab" class="btn" ng-click="method.currentTab='tryIt'; method.isOpen && $event.stopPropagation(); ">Try It</button>
-                  <i class="icon-file-alt documentation" ng-click="method.currentTab='documentation'; method.isOpen && $event.stopPropagation();"></i>
-                </div>
-              </div>
-              <div class='accordion-body' ng-show='method.isOpen'>
-                <div class='accordion-inner'>
-                  <section role='documentation' ng-show="method.currentTab == 'documentation'">
-                    <p ng-show="method.description">Description: {{method.description}}</p>
-
-                    <h4 class='selector'>
-                      Parameters
-                    </h4>
-                    <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
-                    <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
-                  </section>
-
-                  <try-it ng-show="method.currentTab == 'tryIt'"></try-it>
-                </div>
-              </div>
-            </div>
+          <div class='accordion' role="methods">
+            <method ng-repeat="method in resource.methods"></method>
           </div>
         </div>
       </div>

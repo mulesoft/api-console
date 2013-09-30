@@ -1,5 +1,6 @@
 var module = angular.module('ramlConsoleApp', ['raml']);
 
+module.directive('method', RAML.Directives.method);
 module.directive('parameterTable', RAML.Directives.parameterTable);
 module.directive('pathBuilder', RAML.Directives.pathBuilder);
 module.directive('ramlConsole', RAML.Directives.ramlConsole);
