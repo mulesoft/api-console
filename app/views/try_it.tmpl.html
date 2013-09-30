@@ -1,10 +1,17 @@
 <section class="try-it">
 
-  <input ng-repeat="(paramName,paramParameters) in method.queryParameters track by paramName" name="{{paramName}}" ng-model='apiClient.queryParameters[paramName]'>
-
-  <button role="try-it" class="btn btn-primary" ng-click="apiClient.execute()">
-    Try It
-  </button>
+  <form class='form-labelled-inline'>
+    <legend>Query Parameters</legend>
+    <div class="control-group" ng-repeat="(paramName,paramParameters) in method.queryParameters track by paramName">
+      <label for="{{paramName}}">{{paramParameters.displayName}}</label>
+      <input type="text" name="{{paramName}}" ng-model='apiClient.queryParameters[paramName]'/>
+    </div>
+    <div class="form-actions">
+      <button role="try-it" class="btn btn-primary" ng-click="apiClient.execute()">
+        Try It
+      </button>
+    </div>
+  </form>
 
   <div class="response" ng-show="apiClient.response">
     <h3>Response</h3>
