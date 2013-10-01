@@ -1,11 +1,26 @@
 <section class="try-it">
 
-  <form class='form-labelled-inline'>
-    <legend ng-show='apiClient.hasQueryParameters()'>Query Parameters</legend>
-    <div class="control-group" ng-repeat="(paramName,paramParameters) in method.queryParameters track by paramName">
-      <label for="{{paramName}}">{{paramParameters.displayName}}</label>
-      <input type="text" name="{{paramName}}" ng-model='apiClient.queryParameters[paramName]'/>
-    </div>
+  <form>
+    <fieldset class='labelled-inline'>
+      <legend ng-show='apiClient.hasQueryParameters()'>Query Parameters</legend>
+      <div class="control-group" ng-repeat="(paramName,paramParameters) in method.queryParameters track by paramName">
+        <label for="{{paramName}}">{{paramParameters.displayName}}</label>
+        <input type="text" name="{{paramName}}" ng-model='apiClient.queryParameters[paramName]'/>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Body</legend>
+      <fieldset class="media-types" ng-show="apiClient.supportsMediaType">
+        <span class="radio-group-label">Content Type</span>
+        <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
+          <input type="radio" name="media-type" value="{{mediaType}}" ng-model="apiClient.mediaType">
+          {{mediaType}}
+        </label>
+      </fieldset>
+      <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
+    </fieldset>
+
     <div class="form-actions">
       <button role="try-it" class="btn inverted" ng-click="apiClient.execute()">
         Try It
