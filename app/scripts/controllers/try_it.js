@@ -1,4 +1,8 @@
 (function() {
+  function isEmpty(object) {
+    return Object.keys(object).length == 0;
+  }
+
   TryIt = function($scope, $http) {
     this.baseUri = $scope.api.baseUri || "";
     this.pathBuilder = $scope.method.pathBuilder;
@@ -12,8 +16,18 @@
   TryIt.prototype.execute = function() {
     var url = this.baseUri + this.pathBuilder(this.pathBuilder);
     var response = this.response = {};
+    var requestOptions = {};
 
-    this.httpMethod(url, { params: this.queryParameters }).then(function(httpResponse) {
+    if (!isEmpty(this.queryParameters)) {
+      requestOptions.params = this.queryParameters;
+    }
+
+    if (this.mediaType) {
+      requestOptions.headers = { 'Content-Type': this.mediaType };
+      requestOptions.data = this.body;
+    }
+
+    this.httpMethod(url, requestOptions).then(function(httpResponse) {
       response.body = httpResponse.data,
       response.status = httpResponse.status,
       response.headers = httpResponse.headers()
