@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<job>
+  <id>1511685</id>
+        <expiration-timestamp>1304030488000</expiration-timestamp>
+        <company>
+                <id>229433</id>
+                <name>Cloudera</name>
+        </company>
+        <position>
+                <title>Technical Writer</title>
+                <location>
+                        <name>San Francisco Bay Area</name>
+                        <country>
+                                <code>us</code>
+                        </country>
+                </location>
+        </position>
+        <location-description>San Francisco or Palo Alto, CA</location-description>
+        <job-poster>
+                <id>hQ4ruu3J2q</id>
+                <first-name>Paul</first-name>
+                <last-name>Battaglia</last-name>
+                <headline>Technical Writer at Cloudera</headline>
+        </job-poster>
+</job>
