@@ -1,10 +1,18 @@
 describe("RAML.Controllers.tryIt", function() {
-  beforeEach(module('ramlConsoleApp'));
-
   var scope, $el, httpBackend;
 
-  describe('given query parameters', function() {
+  function createScopeWithStuff(parsedApi) {
+    return createScope(function(scope) {
+      scope.api = RAML.Inspector.create(parsedApi);
+      scope.resource = scope.api.resources[0];
+      scope.method = scope.resource.methods[0];
+      scope.method.pathBuilder = new RAML.Inspector.PathBuilder.create(scope.resource.pathSegments);
+    });
+  }
 
+  beforeEach(module('ramlConsoleApp'));
+
+  describe('given query parameters', function() {
     var raml = createRAML(
       'title: Example API',
       'baseUri: http://www.example.com',
@@ -17,23 +25,10 @@ describe("RAML.Controllers.tryIt", function() {
 
     parseRAML(raml);
 
-    beforeEach(inject(function($httpBackend) {
-      httpBackend = $httpBackend;
-
-      var parsedApi = this.api;
-      scope = createScope(function(scope) {
-        scope.api = RAML.Inspector.create(parsedApi);
-        scope.resource = scope.api.resources[0];
-        scope.method = scope.resource.methods[0];
-        scope.method.pathBuilder = new RAML.Inspector.PathBuilder.create(scope.resource.pathSegments);
-      });
-
+    beforeEach(function() {
+      httpBackend = prepareHttpBackend();
+      scope = createScopeWithStuff(this.api);
       $el = compileTemplate('<try-it></try-it>', scope);
-    }));
-
-    afterEach(function() {
-      httpBackend.verifyNoOutstandingExpectation();
-      httpBackend.verifyNoOutstandingRequest();
     });
 
     it('executes a request with the provided values', function() {
@@ -59,23 +54,10 @@ describe("RAML.Controllers.tryIt", function() {
 
     parseRAML(raml);
 
-    beforeEach(inject(function($httpBackend) {
-      httpBackend = $httpBackend;
-
-      var parsedApi = this.api;
-      scope = createScope(function(scope) {
-        scope.api = RAML.Inspector.create(parsedApi);
-        scope.resource = scope.api.resources[0];
-        scope.method = scope.resource.methods[0];
-        scope.method.pathBuilder = new RAML.Inspector.PathBuilder.create(scope.resource.pathSegments);
-      });
-
+    beforeEach(function() {
+      httpBackend = prepareHttpBackend();
+      scope = createScopeWithStuff(this.api);
       $el = compileTemplate('<try-it></try-it>', scope);
-    }));
-
-    afterEach(function() {
-      httpBackend.verifyNoOutstandingExpectation();
-      httpBackend.verifyNoOutstandingRequest();
     });
 
     it('executes a request with the Content-Type header set to the chosen media type', function() {
