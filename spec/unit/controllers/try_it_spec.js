@@ -28,7 +28,7 @@ describe("RAML.Controllers.TryIt", function() {
       });
 
       it("executes the described method", function() {
-        expect(this.getSpy).toHaveBeenCalledWith("http://example.com/resources/search", { params: {} });
+        expect(this.getSpy).toHaveBeenCalledWith("http://example.com/resources/search", { });
       });
     });
 

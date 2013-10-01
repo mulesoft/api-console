@@ -11,12 +11,13 @@
 
     <fieldset>
       <legend>Body</legend>
-      <fieldset class="media-types">
+      <fieldset class="media-types" ng-show="apiClient.supportsMediaType">
+        <span class="radio-group-label">Content Type</span>
         <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
           <input type="radio" name="media-type" value="{{mediaType}}" ng-model="apiClient.mediaType">
           {{mediaType}}
         </label>
-      </fielset>
+      </fieldset>
       <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
     </fieldset>
 

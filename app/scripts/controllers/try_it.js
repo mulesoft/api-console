@@ -1,6 +1,6 @@
 (function() {
   function isEmpty(object) {
-    return Object.keys(object).length == 0;
+    return Object.keys(object || {}).length == 0;
   }
 
   TryIt = function($scope, $http) {
@@ -9,6 +9,7 @@
 
     this.httpMethod = $http[$scope.method.verb];
     this.queryParameters = {};
+    this.supportsMediaType = !isEmpty($scope.method.body);
 
     $scope.apiClient = this;
   };
