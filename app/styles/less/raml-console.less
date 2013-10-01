@@ -38,6 +38,10 @@ ul[role=traits] {
     border: none;
   }
 
+  .expanded& {
+    border-left: 5px solid #497CA1;
+  }
+
   [role=resourceSummary] {
     padding: 5px 10px;
 
@@ -67,13 +71,16 @@ ul[role=methods] {
   padding: 15px;
   background-color: #FCFBF6;
 
+  > *, .actions > * {
+    margin-right: 10px;
+  }
   .expanded& {
     background-color: #F6F5E4;
   }
 
   [role=verb] {
     text-transform: uppercase;
-    color: black;
+    color: #646461;
     font-weight: bold;
     font-style: italic;
   }
@@ -126,7 +133,7 @@ span[role=segment] {
   [role=resourceType] {
     text-transform: uppercase;
     font-weight: bold;
-    color: black;
+    color: #646461;
   }
 }
 
@@ -149,12 +156,6 @@ span[role=segment] {
 
 [role=documentation] {
   padding: 20px;
-
-  .selector {
-    padding: 0;
-    margin: 0;
-    border-bottom: 1px solid #CBCDCC;
-  }
 }
 
 .parameterTable {
@@ -162,7 +163,7 @@ span[role=segment] {
     text-align: left;
     color: black;
     font-size: 16px;
-    margin: 20px 0;
+    margin: 0;
   }
 
   th {

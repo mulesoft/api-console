@@ -3,7 +3,7 @@
     <i ng-class="{'icon-caret-right': !methodView.expanded, 'icon-caret-down': methodView.expanded}"></i>
     <span role="verb">{{method.verb}}:</span>
     <path-builder></path-builder>
-    <div class="pull-right">
+    <div class="pull-right actions">
       <button role="try-it-tab" class="btn" ng-click="methodView.openTab('tryIt', $event)">Try It</button>
       <i class="icon-file-alt documentation" ng-click="methodView.openTab('documentation', $event)"></i>
     </div>
@@ -13,9 +13,6 @@
       <section role='documentation' ng-show="methodView.currentTab == 'documentation'">
         <p ng-show="method.description">Description: {{method.description}}</p>
 
-        <h4 class='selector'>
-          Parameters
-        </h4>
         <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
         <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
       </section>
