@@ -10,12 +10,7 @@
   </div>
   <div class='accordion-body' ng-show='methodView.expanded'>
     <div class='accordion-inner'>
-      <section role='documentation' ng-show="methodView.currentTab == 'documentation'">
-        <p ng-show="method.description">Description: {{method.description}}</p>
-
-        <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
-        <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
-      </section>
+      <documentation ng-show="methodView.currentTab == 'documentation'"></documentation>
 
       <try-it ng-show="methodView.currentTab == 'tryIt'"></try-it>
     </div>
