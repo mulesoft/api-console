@@ -84,6 +84,9 @@
       this.message = message;
       this.problem_mark = problem_mark;
       this.note = note;
+      if (!this.message) {
+        this.message = this.context;
+      }
       MarkedYAMLError.__super__.constructor.call(this);
     }
 
@@ -2469,9 +2472,6 @@ return Q;
 
 })(require("__browserify_process"))
 },{"__browserify_process":5}],7:[function(require,module,exports){
-// nothing to see here... no file methods for the browser
-
-},{}],8:[function(require,module,exports){
 var punycode = { encode : function (s) { return s } };
 
 exports.parse = urlParse;
@@ -3077,7 +3077,10 @@ function parseHost(host) {
   return out;
 }
 
-},{"querystring":9}],10:[function(require,module,exports){
+},{"querystring":8}],9:[function(require,module,exports){
+// nothing to see here... no file methods for the browser
+
+},{}],10:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, events, nodes, raml, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -3144,7 +3147,7 @@ function parseHost(host) {
       }
       if (!this.check_event(events.StreamEndEvent)) {
         event = this.get_event();
-        throw new exports.ComposerError('expected a single document in the stream', document.start_mark, 'but found another document', event.start_mark);
+        throw new exports.ComposerError('document scan', document.start_mark, 'expected a single document in the stream but found another document', event.start_mark);
       }
       this.get_event();
       if (validate || apply) {
@@ -3221,17 +3224,19 @@ function parseHost(host) {
         tag = this.resolve(nodes.ScalarNode, event.value, event.implicit);
       }
       if (event.tag === '!include') {
-        extension = event.value.split(".").pop();
         if (this.src != null) {
           event.value = require('url').resolve(this.src, event.value);
         }
+        if (this.isInIncludeTagsStack(event.value)) {
+          throw new exports.ComposerError('while composing scalar out of !include', null, "detected circular !include of " + event.value, event.start_mark);
+        }
+        extension = event.value.split(".").pop();
         if (extension === 'yaml' || extension === 'yml' || extension === 'raml') {
           raml.start_mark = event.start_mark;
-          return raml.composeFile(event.value, false, false, false);
-        } else {
-          raml.start_mark = event.start_mark;
-          node = new nodes.ScalarNode('tag:yaml.org,2002:str', raml.readFile(event.value), event.start_mark, event.end_mark, event.style);
+          return raml.composeFile(event.value, false, false, false, this);
         }
+        raml.start_mark = event.start_mark;
+        node = new nodes.ScalarNode('tag:yaml.org,2002:str', raml.readFile(event.value), event.start_mark, event.end_mark, event.style);
       } else {
         node = new nodes.ScalarNode(tag, event.value, event.start_mark, event.end_mark, event.style);
       }
@@ -3283,13 +3288,28 @@ function parseHost(host) {
       return node;
     };
 
+    Composer.prototype.isInIncludeTagsStack = function(include) {
+      var parent;
+      parent = this;
+      while (parent = parent.parent) {
+        if (parent.src === include) {
+          return true;
+        }
+      }
+      return false;
+    };
+
     return Composer;
 
   })();
 
 }).call(this);
 
-},{"./errors":1,"./events":2,"./nodes":11,"./raml":12,"url":8}],13:[function(require,module,exports){
+},{"./errors":1,"./events":2,"./nodes":12,"./raml":11,"url":7}],13:[function(require,module,exports){
+window.RAML = {}
+
+window.RAML.Parser = require('../lib/raml')
+},{"../lib/raml":11}],14:[function(require,module,exports){
 require=(function(e,t,n,r){function i(r){if(!n[r]){if(!t[r]){if(e)return e(r);throw new Error("Cannot find module '"+r+"'")}var s=n[r]={exports:{}};t[r][0](function(e){var n=t[r][1][e];return i(n?n:e)},s,s.exports)}return n[r].exports}for(var s=0;s<r.length;s++)i(r[s]);return i})(typeof require!=="undefined"&&require,{1:[function(require,module,exports){
 exports.readIEEE754 = function(buffer, offset, isBE, mLen, nBytes) {
   var e, m,
@@ -7154,7 +7174,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 },{}]},{},[])
 ;;module.exports=require("buffer-browserify")
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function(Buffer){(function() {
   var MarkedYAMLError, nodes, util, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -7767,7 +7787,224 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 }).call(this);
 
 })(require("__browserify_buffer").Buffer)
-},{"./errors":1,"./nodes":11,"./util":4,"__browserify_buffer":13}],11:[function(require,module,exports){
+},{"./errors":1,"./nodes":12,"./util":4,"__browserify_buffer":14}],16:[function(require,module,exports){
+(function() {
+  var MarkedYAMLError, nodes, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MarkedYAMLError = require('./errors').MarkedYAMLError;
+
+  nodes = require('./nodes');
+
+  /*
+  The Traits throws these.
+  */
+
+
+  this.JoinError = (function(_super) {
+    __extends(JoinError, _super);
+
+    function JoinError() {
+      _ref = JoinError.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return JoinError;
+
+  })(MarkedYAMLError);
+
+  /*
+  The Joiner class groups resources under resource property and groups methods under operations property
+  */
+
+
+  this.Joiner = (function() {
+    function Joiner() {}
+
+    Joiner.prototype.join_resources = function(node, call) {
+      var resources, resourcesArray, resourcesName, resourcesValue,
+        _this = this;
+      if (call == null) {
+        call = 0;
+      }
+      resources = [];
+      if (node != null ? node.value : void 0) {
+        resources = node.value.filter(function(childNode) {
+          var _ref1;
+          return (_ref1 = childNode[0]) != null ? _ref1.value.match(/^\//) : void 0;
+        });
+      }
+      resourcesArray = [];
+      if (resources.length > 0) {
+        if (node != null ? node.value : void 0) {
+          node.value = node.value.filter(function(childNode) {
+            return !childNode[0].value.match(/^\//);
+          });
+        }
+        resourcesName = new nodes.ScalarNode('tag:yaml.org,2002:str', 'resources', resources[0][0].start_mark, resources[resources.length - 1][1].end_mark);
+        resources.forEach(function(resource) {
+          var relativeUriName, relativeUriValue;
+          relativeUriName = new nodes.ScalarNode('tag:yaml.org,2002:str', 'relativeUri', resource[0].start_mark, resource[1].end_mark);
+          relativeUriValue = new nodes.ScalarNode('tag:yaml.org,2002:str', resource[0].value, resource[0].start_mark, resource[1].end_mark);
+          if (resource[1].tag === "tag:yaml.org,2002:null") {
+            resource[1] = new nodes.MappingNode('tag:yaml.org,2002:map', [], resource[0].start_mark, resource[1].end_mark);
+          }
+          resource[1].value.push([relativeUriName, relativeUriValue]);
+          resourcesArray.push(resource[1]);
+          _this.join_methods(resource[1]);
+          return _this.join_resources(resource[1], ++call);
+        });
+        resourcesValue = new nodes.SequenceNode('tag:yaml.org,2002:seq', resourcesArray, resources[0][0].start_mark, resources[resources.length - 1][1].end_mark);
+        return node.value.push([resourcesName, resourcesValue]);
+      }
+    };
+
+    Joiner.prototype.join_methods = function(node) {
+      var methods, methodsArray, methodsName, methodsValue,
+        _this = this;
+      methods = [];
+      if (node && node.value) {
+        methods = node.value.filter(function(childNode) {
+          return childNode[0] && childNode[0].value.match(/^(get|post|put|delete|head|patch|options)$/);
+        });
+      }
+      methodsArray = [];
+      if (methods.length > 0) {
+        node.value = node.value.filter(function(childNode) {
+          return !childNode[0].value.match(/^(get|post|put|delete|head|patch|options)$/);
+        });
+        methodsName = new nodes.ScalarNode('tag:yaml.org,2002:str', 'methods', methods[0][0].start_mark, methods[methods.length - 1][1].end_mark);
+        methods.forEach(function(method) {
+          var methodName, methodValue;
+          methodName = new nodes.ScalarNode('tag:yaml.org,2002:str', 'method', method[0].start_mark, method[1].end_mark);
+          methodValue = new nodes.ScalarNode('tag:yaml.org,2002:str', method[0].value, method[0].start_mark, method[1].end_mark);
+          if (method[1].tag === 'tag:yaml.org,2002:null') {
+            method[1] = new nodes.MappingNode('tag:yaml.org,2002:map', [], method[1].start_mark, method[1].end_mark);
+          }
+          method[1].value.push([methodName, methodValue]);
+          return methodsArray.push(method[1]);
+        });
+        methodsValue = new nodes.SequenceNode('tag:yaml.org,2002:seq', methodsArray, methods[0][0].start_mark, methods[methods.length - 1][1].end_mark);
+        return node.value.push([methodsName, methodsValue]);
+      }
+    };
+
+    return Joiner;
+
+  })();
+
+}).call(this);
+
+},{"./errors":1,"./nodes":12}],17:[function(require,module,exports){
+(function() {
+  var composer, construct, joiner, parser, reader, resolver, scanner, schemas, securitySchemes, traits, transformations, types, util, validator;
+
+  util = require('./util');
+
+  reader = require('./reader');
+
+  scanner = require('./scanner');
+
+  parser = require('./parser');
+
+  composer = require('./composer');
+
+  resolver = require('./resolver');
+
+  construct = require('./construct');
+
+  validator = require('./validator');
+
+  joiner = require('./joiner');
+
+  traits = require('./traits');
+
+  types = require('./resourceTypes');
+
+  schemas = require('./schemas');
+
+  securitySchemes = require('./securitySchemes');
+
+  transformations = require('./transformations');
+
+  this.make_loader = function(Reader, Scanner, Parser, Composer, Resolver, Validator, ResourceTypes, Traits, Schemas, Joiner, SecuritySchemes, Constructor, Transformations) {
+    if (Reader == null) {
+      Reader = reader.Reader;
+    }
+    if (Scanner == null) {
+      Scanner = scanner.Scanner;
+    }
+    if (Parser == null) {
+      Parser = parser.Parser;
+    }
+    if (Composer == null) {
+      Composer = composer.Composer;
+    }
+    if (Resolver == null) {
+      Resolver = resolver.Resolver;
+    }
+    if (Validator == null) {
+      Validator = validator.Validator;
+    }
+    if (ResourceTypes == null) {
+      ResourceTypes = types.ResourceTypes;
+    }
+    if (Traits == null) {
+      Traits = traits.Traits;
+    }
+    if (Schemas == null) {
+      Schemas = schemas.Schemas;
+    }
+    if (Joiner == null) {
+      Joiner = joiner.Joiner;
+    }
+    if (SecuritySchemes == null) {
+      SecuritySchemes = securitySchemes.SecuritySchemes;
+    }
+    if (Constructor == null) {
+      Constructor = construct.Constructor;
+    }
+    if (Transformations == null) {
+      Transformations = transformations.Transformations;
+    }
+    return (function() {
+      var component, components;
+
+      components = [Reader, Scanner, Parser, Composer, Resolver, Validator, Traits, ResourceTypes, Schemas, Joiner, Constructor, SecuritySchemes, Transformations];
+
+      util.extend.apply(util, [_Class.prototype].concat((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = components.length; _i < _len; _i++) {
+          component = components[_i];
+          _results.push(component.prototype);
+        }
+        return _results;
+      })()));
+
+      function _Class(stream, location, validate, parent) {
+        var _i, _len, _ref;
+        this.parent = parent;
+        components[0].call(this, stream, location);
+        components[1].call(this, validate);
+        _ref = components.slice(2);
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          component = _ref[_i];
+          component.call(this);
+        }
+      }
+
+      return _Class;
+
+    })();
+  };
+
+  this.Loader = this.make_loader();
+
+}).call(this);
+
+},{"./composer":10,"./construct":15,"./joiner":16,"./parser":20,"./reader":18,"./resolver":21,"./resourceTypes":24,"./scanner":19,"./schemas":25,"./securitySchemes":26,"./traits":23,"./transformations":27,"./util":4,"./validator":22}],12:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, unique_id, _ref, _ref1, _ref2,
     __hasProp = {}.hasOwnProperty,
@@ -8030,223 +8267,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1}],15:[function(require,module,exports){
-(function() {
-  var MarkedYAMLError, nodes, _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  MarkedYAMLError = require('./errors').MarkedYAMLError;
-
-  nodes = require('./nodes');
-
-  /*
-  The Traits throws these.
-  */
-
-
-  this.JoinError = (function(_super) {
-    __extends(JoinError, _super);
-
-    function JoinError() {
-      _ref = JoinError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return JoinError;
-
-  })(MarkedYAMLError);
-
-  /*
-  The Joiner class groups resources under resource property and groups methods under operations property
-  */
-
-
-  this.Joiner = (function() {
-    function Joiner() {}
-
-    Joiner.prototype.join_resources = function(node, call) {
-      var resources, resourcesArray, resourcesName, resourcesValue,
-        _this = this;
-      if (call == null) {
-        call = 0;
-      }
-      resources = [];
-      if (node != null ? node.value : void 0) {
-        resources = node.value.filter(function(childNode) {
-          var _ref1;
-          return (_ref1 = childNode[0]) != null ? _ref1.value.match(/^\//) : void 0;
-        });
-      }
-      resourcesArray = [];
-      if (resources.length > 0) {
-        if (node != null ? node.value : void 0) {
-          node.value = node.value.filter(function(childNode) {
-            return !childNode[0].value.match(/^\//);
-          });
-        }
-        resourcesName = new nodes.ScalarNode('tag:yaml.org,2002:str', 'resources', resources[0][0].start_mark, resources[resources.length - 1][1].end_mark);
-        resources.forEach(function(resource) {
-          var relativeUriName, relativeUriValue;
-          relativeUriName = new nodes.ScalarNode('tag:yaml.org,2002:str', 'relativeUri', resource[0].start_mark, resource[1].end_mark);
-          relativeUriValue = new nodes.ScalarNode('tag:yaml.org,2002:str', resource[0].value, resource[0].start_mark, resource[1].end_mark);
-          if (resource[1].tag === "tag:yaml.org,2002:null") {
-            resource[1] = new nodes.MappingNode('tag:yaml.org,2002:map', [], resource[0].start_mark, resource[1].end_mark);
-          }
-          resource[1].value.push([relativeUriName, relativeUriValue]);
-          resourcesArray.push(resource[1]);
-          _this.join_methods(resource[1]);
-          return _this.join_resources(resource[1], ++call);
-        });
-        resourcesValue = new nodes.SequenceNode('tag:yaml.org,2002:seq', resourcesArray, resources[0][0].start_mark, resources[resources.length - 1][1].end_mark);
-        return node.value.push([resourcesName, resourcesValue]);
-      }
-    };
-
-    Joiner.prototype.join_methods = function(node) {
-      var methods, methodsArray, methodsName, methodsValue,
-        _this = this;
-      methods = [];
-      if (node && node.value) {
-        methods = node.value.filter(function(childNode) {
-          return childNode[0] && childNode[0].value.match(/^(get|post|put|delete|head|patch|options)$/);
-        });
-      }
-      methodsArray = [];
-      if (methods.length > 0) {
-        node.value = node.value.filter(function(childNode) {
-          return !childNode[0].value.match(/^(get|post|put|delete|head|patch|options)$/);
-        });
-        methodsName = new nodes.ScalarNode('tag:yaml.org,2002:str', 'methods', methods[0][0].start_mark, methods[methods.length - 1][1].end_mark);
-        methods.forEach(function(method) {
-          var methodName, methodValue;
-          methodName = new nodes.ScalarNode('tag:yaml.org,2002:str', 'method', method[0].start_mark, method[1].end_mark);
-          methodValue = new nodes.ScalarNode('tag:yaml.org,2002:str', method[0].value, method[0].start_mark, method[1].end_mark);
-          if (method[1].tag === 'tag:yaml.org,2002:null') {
-            method[1] = new nodes.MappingNode('tag:yaml.org,2002:map', [], method[1].start_mark, method[1].end_mark);
-          }
-          method[1].value.push([methodName, methodValue]);
-          return methodsArray.push(method[1]);
-        });
-        methodsValue = new nodes.SequenceNode('tag:yaml.org,2002:seq', methodsArray, methods[0][0].start_mark, methods[methods.length - 1][1].end_mark);
-        return node.value.push([methodsName, methodsValue]);
-      }
-    };
-
-    return Joiner;
-
-  })();
-
-}).call(this);
-
-},{"./errors":1,"./nodes":11}],16:[function(require,module,exports){
-(function() {
-  var composer, construct, joiner, parser, reader, resolver, scanner, schemas, securitySchemes, traits, transformations, types, util, validator;
-
-  util = require('./util');
-
-  reader = require('./reader');
-
-  scanner = require('./scanner');
-
-  parser = require('./parser');
-
-  composer = require('./composer');
-
-  resolver = require('./resolver');
-
-  construct = require('./construct');
-
-  validator = require('./validator');
-
-  joiner = require('./joiner');
-
-  traits = require('./traits');
-
-  types = require('./resourceTypes');
-
-  schemas = require('./schemas');
-
-  securitySchemes = require('./securitySchemes');
-
-  transformations = require('./transformations');
-
-  this.make_loader = function(Reader, Scanner, Parser, Composer, Resolver, Validator, ResourceTypes, Traits, Schemas, Joiner, SecuritySchemes, Constructor, Transformations) {
-    if (Reader == null) {
-      Reader = reader.Reader;
-    }
-    if (Scanner == null) {
-      Scanner = scanner.Scanner;
-    }
-    if (Parser == null) {
-      Parser = parser.Parser;
-    }
-    if (Composer == null) {
-      Composer = composer.Composer;
-    }
-    if (Resolver == null) {
-      Resolver = resolver.Resolver;
-    }
-    if (Validator == null) {
-      Validator = validator.Validator;
-    }
-    if (ResourceTypes == null) {
-      ResourceTypes = types.ResourceTypes;
-    }
-    if (Traits == null) {
-      Traits = traits.Traits;
-    }
-    if (Schemas == null) {
-      Schemas = schemas.Schemas;
-    }
-    if (Joiner == null) {
-      Joiner = joiner.Joiner;
-    }
-    if (SecuritySchemes == null) {
-      SecuritySchemes = securitySchemes.SecuritySchemes;
-    }
-    if (Constructor == null) {
-      Constructor = construct.Constructor;
-    }
-    if (Transformations == null) {
-      Transformations = transformations.Transformations;
-    }
-    return (function() {
-      var component, components;
-
-      components = [Reader, Scanner, Parser, Composer, Resolver, Validator, Traits, ResourceTypes, Schemas, Joiner, Constructor, SecuritySchemes, Transformations];
-
-      util.extend.apply(util, [_Class.prototype].concat((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = components.length; _i < _len; _i++) {
-          component = components[_i];
-          _results.push(component.prototype);
-        }
-        return _results;
-      })()));
-
-      function _Class(stream, location, validate) {
-        var _i, _len, _ref;
-        components[0].call(this, stream, location);
-        components[1].call(this, validate);
-        _ref = components.slice(2);
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          component = _ref[_i];
-          component.call(this);
-        }
-      }
-
-      return _Class;
-
-    })();
-  };
-
-  this.Loader = this.make_loader();
-
-}).call(this);
-
-},{"./composer":10,"./construct":14,"./joiner":15,"./parser":19,"./reader":17,"./resolver":20,"./resourceTypes":23,"./scanner":18,"./schemas":24,"./securitySchemes":25,"./traits":22,"./transformations":26,"./util":4,"./validator":21}],19:[function(require,module,exports){
+},{"./errors":1}],20:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, events, tokens, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -8857,7 +8878,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./events":2,"./tokens":3}],17:[function(require,module,exports){
+},{"./errors":1,"./events":2,"./tokens":3}],18:[function(require,module,exports){
 (function() {
   var Mark, YAMLError, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -8971,7 +8992,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1}],20:[function(require,module,exports){
+},{"./errors":1}],21:[function(require,module,exports){
 (function() {
   var YAMLError, nodes, util, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -9180,7 +9201,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"./util":4}],23:[function(require,module,exports){
+},{"./errors":1,"./nodes":12,"./util":4}],24:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -9254,10 +9275,15 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
     };
 
     ResourceTypes.prototype.get_parent_type_name = function(typeName) {
-      var type;
+      var property, type;
       type = (this.get_type(typeName))[1];
       if (type && this.has_property(type, "type")) {
-        return this.property_value(type, "type");
+        property = this.property_value(type, "type");
+        if (typeof property === "object") {
+          return property[0][0].value;
+        } else {
+          return property;
+        }
       }
       return null;
     };
@@ -9299,7 +9325,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
     };
 
     ResourceTypes.prototype.resolve_inheritance_chain = function(resourceUri, typeKey) {
-      var baseType, child_type, child_type_key, compiledTypes, inherits_from, parentTypeMapping, parentTypeName, result, root_type, type, typeName, typesToApply;
+      var baseType, childTypeName, childTypeProperty, child_type_key, compiledTypes, inherits_from, parentTypeMapping, parentTypeName, pathToCircularRef, result, root_type, type, typeName, typesToApply;
       typeName = this.key_or_value(typeKey);
       compiledTypes = {};
       type = this.apply_parameters_to_type(resourceUri, typeName, typeKey);
@@ -9307,19 +9333,21 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
       this.apply_traits_to_resource(resourceUri, type, false);
       compiledTypes[typeName] = type;
       typesToApply = [typeName];
-      child_type = typeName;
+      childTypeName = typeName;
       parentTypeName = null;
-      while (parentTypeName = this.get_parent_type_name(child_type)) {
+      while (parentTypeName = this.get_parent_type_name(childTypeName)) {
         if (parentTypeName in compiledTypes) {
-          throw new exports.ResourceTypeError('while aplying resourceTypes', null, 'circular reference detected: ' + parentTypeName + "-> [" + typesToApply.reverse + "]", child_type.start_mark);
+          pathToCircularRef = typesToApply.concat(parentTypeName).join(' -> ');
+          childTypeProperty = this.get_type(childTypeName)[0];
+          throw new exports.ResourceTypeError('while aplying resourceTypes', null, "circular reference of \"" + parentTypeName + "\" has been detected: " + pathToCircularRef, childTypeProperty.start_mark);
         }
-        child_type_key = this.get_property(this.get_type(child_type)[1], "type");
+        child_type_key = this.get_property(this.get_type(childTypeName)[1], "type");
         parentTypeMapping = this.apply_parameters_to_type(resourceUri, parentTypeName, child_type_key);
         compiledTypes[parentTypeName] = parentTypeMapping;
         this.apply_default_media_type_to_resource(parentTypeMapping);
         this.apply_traits_to_resource(resourceUri, parentTypeMapping, false);
         typesToApply.push(parentTypeName);
-        child_type = parentTypeName;
+        childTypeName = parentTypeName;
       }
       root_type = typesToApply.pop();
       baseType = compiledTypes[root_type].cloneForResourceType();
@@ -9340,7 +9368,8 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
     };
 
     ResourceTypes.prototype._get_parameters_from_type_key = function(resourceUri, typeKey) {
-      var parameters, result;
+      var parameters, result,
+        _this = this;
       result = {
         resourcePath: resourceUri.replace(/\/\/*/g, '/')
       };
@@ -9351,7 +9380,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
       if (!this.isNull(parameters[0][1])) {
         parameters[0][1].value.forEach(function(parameter) {
           var _ref1;
-          if (parameter[1].tag !== 'tag:yaml.org,2002:str') {
+          if (!_this.isScalar(parameter[1])) {
             throw new exports.ResourceTypeError('while aplying parameters', null, 'parameter value is not a scalar', parameter[1].start_mark);
           }
           if ((_ref1 = parameter[1].value) === "methodName" || _ref1 === "resourcePath" || _ref1 === "resourcePathName") {
@@ -9369,7 +9398,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11}],18:[function(require,module,exports){
+},{"./errors":1,"./nodes":12}],19:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, SimpleKey, tokens, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -10875,7 +10904,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./tokens":3,"./util":4}],24:[function(require,module,exports){
+},{"./errors":1,"./tokens":3,"./util":4}],25:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -10976,7 +11005,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11}],25:[function(require,module,exports){
+},{"./errors":1,"./nodes":12}],26:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -11056,11 +11085,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11}],27:[function(require,module,exports){
-window.RAML = {}
-
-window.RAML.Parser = require('../lib/raml')
-},{"../lib/raml":12}],9:[function(require,module,exports){
+},{"./errors":1,"./nodes":12}],8:[function(require,module,exports){
 
 /**
  * Object#toString() ref for stringify().
@@ -11379,7 +11404,7 @@ function decode(str) {
   }
 }
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function() {
   var nodes, uritemplate,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -11581,15 +11606,15 @@ function decode(str) {
         return;
       }
       return property[1].value.forEach(function(param) {
+        if (_this.isNull(param[1])) {
+          param[1] = new nodes.MappingNode('tag:yaml.org,2002:map', [], param[1].start_mark, param[1].end_mark);
+        }
         return _this.transform_common_parameter_properties(param[0].value, param[1], allowParameterKeys, requiredByDefault);
       });
     };
 
     Transformations.prototype.transform_common_parameter_properties = function(parameterName, node, allowParameterKeys, requiredByDefault) {
       var _this = this;
-      if (!node.value) {
-        return;
-      }
       if (this.isSequence(node)) {
         return node.value.forEach(function(parameter) {
           return _this.transform_named_parameter(parameterName, parameter, allowParameterKeys, requiredByDefault);
@@ -11763,6 +11788,8 @@ function decode(str) {
             return _this.transform_named_params(property, allowParameterKeys);
           case "queryParameters":
             return _this.transform_named_params(property, allowParameterKeys, false);
+          case "baseUriParameters":
+            return _this.transform_named_params(property, allowParameterKeys);
           case "body":
             return _this.transform_body(property, allowParameterKeys);
           case "responses":
@@ -11827,7 +11854,7 @@ function decode(str) {
             case "schema":
               return _this.noop();
             case "formParameters":
-              return _this.transform_named_params(bodyProperty, allowParameterKeys);
+              return _this.transform_named_params(bodyProperty, allowParameterKeys, false);
             default:
               return _this.noop();
           }
@@ -11861,249 +11888,7 @@ function decode(str) {
 
 }).call(this);
 
-},{"./nodes":11,"uritemplate":28}],12:[function(require,module,exports){
-(function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  this.composer = require('./composer');
-
-  this.constructor = require('./construct');
-
-  this.errors = require('./errors');
-
-  this.events = require('./events');
-
-  this.loader = require('./loader');
-
-  this.nodes = require('./nodes');
-
-  this.parser = require('./parser');
-
-  this.reader = require('./reader');
-
-  this.resolver = require('./resolver');
-
-  this.scanner = require('./scanner');
-
-  this.tokens = require('./tokens');
-
-  this.q = require('q');
-
-  this.FileError = (function(_super) {
-    __extends(FileError, _super);
-
-    function FileError() {
-      _ref = FileError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return FileError;
-
-  })(this.errors.MarkedYAMLError);
-
-  /*
-  Scan a RAML stream and produce scanning tokens.
-  */
-
-
-  this.scan = function(stream, location) {
-    var loader, _results;
-    loader = new exports.loader.Loader(stream, location, false);
-    _results = [];
-    while (loader.check_token()) {
-      _results.push(loader.get_token());
-    }
-    return _results;
-  };
-
-  /*
-  Parse a RAML stream and produce parsing events.
-  */
-
-
-  this.parse = function(stream, location) {
-    var loader, _results;
-    loader = new exports.loader.Loader(stream, location, false);
-    _results = [];
-    while (loader.check_event()) {
-      _results.push(loader.get_event());
-    }
-    return _results;
-  };
-
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  representation tree.
-  */
-
-
-  this.compose = function(stream, validate, apply, join, location) {
-    var loader;
-    if (validate == null) {
-      validate = true;
-    }
-    if (apply == null) {
-      apply = true;
-    }
-    if (join == null) {
-      join = true;
-    }
-    loader = new exports.loader.Loader(stream, location, validate);
-    return loader.get_single_node(validate, apply, join);
-  };
-
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  Javascript object.
-  */
-
-
-  this.load = function(stream, validate, location) {
-    var deferred, error, loader, result;
-    if (validate == null) {
-      validate = true;
-    }
-    loader = new exports.loader.Loader(stream, location, validate);
-    deferred = new this.q.defer;
-    try {
-      result = loader.get_single_data();
-      deferred.resolve(result);
-    } catch (_error) {
-      error = _error;
-      deferred.reject(error);
-    }
-    return deferred.promise;
-  };
-
-  /*
-  Parse the first RAML document in a stream and produce a list of
-  all the absolute URIs for all resources.
-  */
-
-
-  this.resources = function(stream, validate, location) {
-    var deferred, error, loader, result;
-    if (validate == null) {
-      validate = true;
-    }
-    loader = new exports.loader.Loader(stream, location, validate);
-    deferred = new this.q.defer;
-    try {
-      result = loader.resources();
-      deferred.resolve(result);
-    } catch (_error) {
-      error = _error;
-      deferred.reject(error);
-    }
-    return deferred.promise;
-  };
-
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  Javascript object.
-  */
-
-
-  this.loadFile = function(file, validate) {
-    var stream;
-    if (validate == null) {
-      validate = true;
-    }
-    stream = this.readFile(file);
-    return this.load(stream, validate, file);
-  };
-
-  /*
-  Parse the first RAML document in a file and produce the corresponding
-  representation tree.
-  */
-
-
-  this.composeFile = function(file, validate, apply, join) {
-    var stream;
-    if (validate == null) {
-      validate = true;
-    }
-    if (apply == null) {
-      apply = true;
-    }
-    if (join == null) {
-      join = true;
-    }
-    stream = this.readFile(file);
-    return this.compose(stream, validate, apply, join, file);
-  };
-
-  /*
-  Parse the first RAML document in a file and produce a list of
-  all the absolute URIs for all resources.
-  */
-
-
-  this.resourcesFile = function(file, validate) {
-    var stream;
-    if (validate == null) {
-      validate = true;
-    }
-    stream = this.readFile(file);
-    return this.resources(stream, validate, file);
-  };
-
-  /*
-  Read file either locally or from the network.
-  */
-
-
-  this.readFile = function(file) {
-    var fs, url;
-    url = require('url').parse(file);
-    if (url.protocol != null) {
-      if (!url.protocol.match(/^https?/i)) {
-        throw new exports.FileError('while reading ' + file, null, 'unknown protocol ' + url.protocol, this.start_mark);
-      } else {
-        return this.fetchFile(file);
-      }
-    } else {
-      if (!(typeof window !== "undefined" && window !== null)) {
-        fs = require('fs');
-        if (fs.existsSync(file)) {
-          return fs.readFileSync(file).toString();
-        } else {
-          throw new exports.FileError('while reading ' + file, null, 'cannot find ' + file, this.start_mark);
-        }
-      } else {
-        return this.fetchFile(file);
-      }
-    }
-  };
-
-  /*
-  Read file from the network.
-  */
-
-
-  this.fetchFile = function(file) {
-    var xhr;
-    if (typeof window === "undefined" || window === null) {
-      xhr = new (require("xmlhttprequest").XMLHttpRequest)();
-    } else {
-      xhr = new XMLHttpRequest();
-    }
-    xhr.open('GET', file, false);
-    xhr.setRequestHeader('Accept', 'application/raml+yaml, */*');
-    xhr.send(null);
-    if ((typeof xhr.status === 'number' && xhr.status === 200) || (typeof xhr.status === 'string' && xhr.status.match(/^200/i))) {
-      return xhr.responseText;
-    } else {
-      throw new exports.FileError('while reading ' + file, null, 'cannot fetch ' + file + ' (HTTP ' + xhr.status + ' ' + xhr.statusText + ')', this.start_mark);
-    }
-  };
-
-}).call(this);
-
-},{"./composer":10,"./construct":14,"./errors":1,"./events":2,"./loader":16,"./nodes":11,"./parser":19,"./reader":17,"./resolver":20,"./scanner":18,"./tokens":3,"fs":7,"q":6,"url":8,"xmlhttprequest":29}],21:[function(require,module,exports){
+},{"./nodes":12,"uritemplate":28}],22:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, traits, uritemplate, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -12164,7 +11949,7 @@ function decode(str) {
   this.Validator = (function() {
     function Validator() {
       this.get_properties = __bind(this.get_properties, this);
-      this.get_enum_values = __bind(this.get_enum_values, this);
+      this.get_list_values = __bind(this.get_list_values, this);
       this.validations = [this.is_map, this.valid_root_properties, this.validate_base_uri_parameters, this.valid_absolute_uris];
     }
 
@@ -12177,10 +11962,12 @@ function decode(str) {
     };
 
     Validator.prototype.validate_security_schemes = function(schemesProperty) {
-      var _this = this;
+      var schemeNamesTrack,
+        _this = this;
       if (!this.isSequence(schemesProperty)) {
         throw new exports.ValidationError('while validating securitySchemes', null, 'invalid security schemes property, it must be an array', schemesProperty.start_mark);
       }
+      schemeNamesTrack = {};
       return schemesProperty.value.forEach(function(scheme_entry) {
         if (!_this.isMapping(scheme_entry)) {
           throw new exports.ValidationError('while validating securitySchemes', null, 'invalid security scheme property, it must be a map', scheme_entry.start_mark);
@@ -12192,6 +11979,19 @@ function decode(str) {
           return _this.validate_security_scheme(scheme[1]);
         });
       });
+    };
+
+    Validator.prototype.trackRepeatedProperties = function(properties, property, mark, section, errorMessage) {
+      if (section == null) {
+        section = "RAML";
+      }
+      if (errorMessage == null) {
+        errorMessage = "Property with the same name already exists";
+      }
+      if (property in properties) {
+        throw new exports.ValidationError("while validating " + section, null, errorMessage + (": '" + property + "'"), mark);
+      }
+      return properties[property] = true;
     };
 
     Validator.prototype.isMapping = function(node) {
@@ -12235,11 +12035,13 @@ function decode(str) {
     };
 
     Validator.prototype.validate_security_scheme = function(scheme) {
-      var settings, type,
+      var schemeProperties, settings, type,
         _this = this;
       type = null;
       settings = null;
+      schemeProperties = {};
       scheme.value.forEach(function(property) {
+        _this.trackRepeatedProperties(schemeProperties, property[0].value, property[0].start_mark, 'while validating security scheme', "property already used in security scheme");
         switch (property[0].value) {
           case "description":
             if (!_this.isScalar(property[1])) {
@@ -12280,39 +12082,42 @@ function decode(str) {
     };
 
     Validator.prototype.validate_oauth2_settings = function(settings) {
-      var accessTokenUrl, authorizationUrl,
+      var accessTokenUrl, authorizationUrl, settingProperties,
         _this = this;
       authorizationUrl = false;
       accessTokenUrl = false;
+      settingProperties = {};
       settings[1].value.forEach(function(property) {
+        _this.trackRepeatedProperties(settingProperties, property[0].value, property[0].start_mark, 'while validating security scheme', "setting with the same name already exists");
         switch (property[0].value) {
           case "authorizationUrl":
             if (!_this.isString(property[1])) {
               throw new exports.ValidationError('while validating security scheme', null, 'authorizationUrl must be a URL', property[0].start_mark);
             }
-            return authorizationUrl = true;
+            break;
           case "accessTokenUrl":
             if (!_this.isString(property[1])) {
               throw new exports.ValidationError('while validating security scheme', null, 'accessTokenUrl must be a URL', property[0].start_mark);
             }
-            return accessTokenUrl = true;
         }
       });
-      if (!accessTokenUrl) {
+      if (!("accessTokenUrl" in settingProperties)) {
         throw new exports.ValidationError('while validating security scheme', null, 'accessTokenUrl must be a URL', settings.start_mark);
       }
-      if (!authorizationUrl) {
+      if (!("authorizationUrl" in settingProperties)) {
         throw new exports.ValidationError('while validating security scheme', null, 'authorizationUrl must be a URL', settings.start_mark);
       }
     };
 
     Validator.prototype.validate_oauth1_settings = function(settings) {
-      var authorizationUri, requestTokenUri, tokenCredentialsUri,
+      var authorizationUri, requestTokenUri, settingProperties, tokenCredentialsUri,
         _this = this;
       requestTokenUri = false;
       authorizationUri = false;
       tokenCredentialsUri = false;
+      settingProperties = {};
       settings[1].value.forEach(function(property) {
+        _this.trackRepeatedProperties(settingProperties, property[0].value, property[0].start_mark, 'while validating security scheme', "setting with the same name already exists");
         switch (property[0].value) {
           case "requestTokenUri":
             if (!_this.isString(property[1])) {
@@ -12331,13 +12136,13 @@ function decode(str) {
             return tokenCredentialsUri = true;
         }
       });
-      if (!requestTokenUri) {
+      if (!("requestTokenUri" in settingProperties)) {
         throw new exports.ValidationError('while validating security scheme', null, 'requestTokenUri must be a URL', settings.start_mark);
       }
-      if (!authorizationUri) {
+      if (!("authorizationUri" in settingProperties)) {
         throw new exports.ValidationError('while validating security scheme', null, 'authorizationUri must be a URL', settings.start_mark);
       }
-      if (!tokenCredentialsUri) {
+      if (!("tokenCredentialsUri" in settingProperties)) {
         throw new exports.ValidationError('while validating security scheme', null, 'tokenCredentialsUri must be a URL', settings.start_mark);
       }
     };
@@ -12373,19 +12178,23 @@ function decode(str) {
     };
 
     Validator.prototype.validate_base_uri_parameters = function(node) {
-      var baseUriProperty;
+      var baseUriProperty, property;
       baseUriProperty = this.get_property(node, "baseUri");
       this.baseUri = baseUriProperty.value;
       if (this.has_property(node, "baseUriParameters")) {
         if (!this.isScalar(baseUriProperty)) {
-          throw new exports.ValidationError('while validating uri parameters', null, 'uri parameters defined when there is no baseUri', node.start_mark);
+          throw new exports.ValidationError('while validating uri parameters', null, 'uri parameters defined when there is no baseUri', property.start_mark);
         }
-        return this.validate_uri_parameters(this.baseUri, this.get_property(node, "baseUriParameters"), false, false, ["version"]);
+        property = this.get_property(node, "baseUriParameters");
+        if (!this.isNullableMapping(property)) {
+          throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters must be a mapping', property.start_mark);
+        }
+        return this.validate_uri_parameters(this.baseUri, property, false, false, ["version"]);
       }
     };
 
     Validator.prototype.validate_uri_parameters = function(uri, uriProperty, allowParameterKeys, skipParameterUseCheck, reservedNames) {
-      var err, expressions, template, _ref1,
+      var err, expressions, template, uriParameters, _ref1,
         _this = this;
       if (reservedNames == null) {
         reservedNames = [];
@@ -12401,10 +12210,12 @@ function decode(str) {
       }).map(function(expression) {
         return expression.templateText;
       });
+      uriParameters = {};
       if (typeof uriProperty.value === "object") {
         return uriProperty.value.forEach(function(uriParameter) {
           var parameterName;
           parameterName = _this.canonicalizePropertyName(uriParameter[0].value, allowParameterKeys);
+          _this.trackRepeatedProperties(uriParameters, parameterName, uriProperty.start_mark, 'while validating URI parameters', "URI parameter with the same name already exists");
           if (__indexOf.call(reservedNames, parameterName) >= 0) {
             throw new exports.ValidationError('while validating baseUri', null, uriParameter[0].value + ' parameter not allowed here', uriParameter[0].start_mark);
           }
@@ -12422,9 +12233,10 @@ function decode(str) {
     };
 
     Validator.prototype.validate_types = function(typeProperty) {
-      var types,
+      var types, typesNamesTrack,
         _this = this;
       types = typeProperty.value;
+      typesNamesTrack = {};
       if (!this.isSequence(typeProperty)) {
         throw new exports.ValidationError('while validating resource types', null, 'invalid resourceTypes definition, it must be an array', typeProperty.start_mark);
       }
@@ -12434,7 +12246,7 @@ function decode(str) {
         }
         return type_entry.value.forEach(function(type) {
           if (!_this.isMapping(type[1])) {
-            throw new exports.ValidationError('while validating resource types', null, 'invalid resourceType definition, it must be a mapping', type_entry.start_mark);
+            throw new exports.ValidationError('while validating resource types', null, 'invalid resourceType definition, it must be a mapping', type[1].start_mark);
           }
           return _this.validate_resource(type, true, 'resource type');
         });
@@ -12442,8 +12254,10 @@ function decode(str) {
     };
 
     Validator.prototype.validate_traits = function(traitProperty) {
-      var _this = this;
+      var traitNamesTrack,
+        _this = this;
       traits = traitProperty.value;
+      traitNamesTrack = {};
       if (!Array.isArray(traits)) {
         throw new exports.ValidationError('while validating traits', null, 'invalid traits definition, it must be an array', traitProperty.start_mark);
       }
@@ -12505,11 +12319,14 @@ function decode(str) {
     };
 
     Validator.prototype.validate_named_parameter = function(node, allowParameterKeys) {
-      var _this = this;
+      var parameterProperties,
+        _this = this;
+      parameterProperties = {};
       return node.value.forEach(function(childNode) {
         var booleanValues, canonicalPropertyName, enumValues, propertyName, propertyValue, validTypes;
         propertyName = childNode[0].value;
         propertyValue = childNode[1].value;
+        _this.trackRepeatedProperties(parameterProperties, _this.canonicalizePropertyName(childNode[0].value, true), childNode[0].start_mark, 'while validating parameter properties', "parameter property already used");
         booleanValues = ["true", "false"];
         if (allowParameterKeys && _this.isParameterKey(childNode)) {
           return;
@@ -12538,7 +12355,7 @@ function decode(str) {
             if (!childNode[1].value.length) {
               throw new exports.ValidationError('while validating parameter properties', null, 'enum is empty', childNode[1].start_mark);
             }
-            enumValues = _this.get_enum_values(childNode[1].value);
+            enumValues = _this.get_list_values(childNode[1].value);
             if (enumValues.hasDuplicates()) {
               throw new exports.ValidationError('while validating parameter properties', null, 'enum contains duplicated values', childNode[1].start_mark);
             }
@@ -12595,7 +12412,7 @@ function decode(str) {
       });
     };
 
-    Validator.prototype.get_enum_values = function(node) {
+    Validator.prototype.get_list_values = function(node) {
       var _this = this;
       return node.map(function(item) {
         return item.value;
@@ -12603,19 +12420,22 @@ function decode(str) {
     };
 
     Validator.prototype.valid_root_properties = function(node) {
-      var checkVersion, hasTitle, hasVersion,
+      var checkVersion, rootProperties,
         _this = this;
-      hasTitle = false;
       checkVersion = false;
-      hasVersion = false;
+      rootProperties = {};
       if (node != null ? node.value : void 0) {
         node.value.forEach(function(property) {
           if (!_this.isString(property[0])) {
             throw new exports.ValidationError('while validating root properties', null, 'keys can only be strings', property[0].start_mark);
           }
+          if (property[0].value.match(/^\//)) {
+            _this.trackRepeatedProperties(rootProperties, _this.canonicalizePropertyName(property[0].value, true), property[0].start_mark, 'while validating root properties', "resource already declared");
+          } else {
+            _this.trackRepeatedProperties(rootProperties, property[0].value, property[0].start_mark, 'while validating root properties', "root property already used");
+          }
           switch (property[0].value) {
             case "title":
-              hasTitle = true;
               if (!_this.isScalar(property[1])) {
                 throw new exports.ValidationError('while validating root properties', null, 'title must be a string', property[0].start_mark);
               }
@@ -12630,7 +12450,6 @@ function decode(str) {
             case "schemas":
               return _this.validate_root_schemas(property[1]);
             case "version":
-              hasVersion = true;
               if (!_this.isScalar(property[1])) {
                 throw new exports.ValidationError('while validating root properties', null, 'version must be a string', property[0].start_mark);
               }
@@ -12662,10 +12481,10 @@ function decode(str) {
           }
         });
       }
-      if (!hasTitle) {
+      if (!("title" in rootProperties)) {
         throw new exports.ValidationError('while validating root properties', null, 'missing title', node.start_mark);
       }
-      if (checkVersion && !hasVersion) {
+      if (checkVersion && !("version" in rootProperties)) {
         throw new exports.ValidationError('while validating version', null, 'missing version', node.start_mark);
       }
     };
@@ -12681,14 +12500,15 @@ function decode(str) {
     };
 
     Validator.prototype.validate_doc_section = function(docSection) {
-      var hasContent, hasTitle,
+      var docProperties,
         _this = this;
       if (!this.isMapping(docSection)) {
         throw new exports.ValidationError('while validating documentation section', null, 'each documentation section must be a mapping', docSection.start_mark);
       }
-      hasTitle = false;
-      hasContent = false;
+      docProperties = {};
       docSection.value.forEach(function(property) {
+        var hasContent, hasTitle;
+        _this.trackRepeatedProperties(docProperties, property[0].value, property[0].start_mark, 'while validating documentation section', "property already used");
         if (!_this.isScalar(property[0])) {
           throw new exports.ValidationError('while validating documentation section', null, 'keys can only be strings', property[0].start_mark);
         }
@@ -12707,10 +12527,10 @@ function decode(str) {
             throw new exports.ValidationError('while validating root properties', null, 'unknown property ' + property[0].value, property[0].start_mark);
         }
       });
-      if (!hasContent) {
+      if (!("content" in docProperties)) {
         throw new exports.ValidationError('while validating documentation section', null, 'a documentation entry must have content property', docSection.start_mark);
       }
-      if (!hasTitle) {
+      if (!("title" in docProperties)) {
         throw new exports.ValidationError('while validating documentation section', null, 'a documentation entry must have title property', docSection.start_mark);
       }
     };
@@ -12725,7 +12545,7 @@ function decode(str) {
     };
 
     Validator.prototype.validate_resource = function(resource, allowParameterKeys, context) {
-      var err, template, _ref1,
+      var err, resourceProperties, template, _ref1,
         _this = this;
       if (allowParameterKeys == null) {
         allowParameterKeys = false;
@@ -12748,8 +12568,16 @@ function decode(str) {
         return;
       }
       if (resource[1].value) {
+        resourceProperties = {};
         return resource[1].value.forEach(function(property) {
           var canonicalKey, key, valid;
+          if (property[0].value.match(/^\//)) {
+            _this.trackRepeatedProperties(resourceProperties, _this.canonicalizePropertyName(property[0].value, true), property[0].start_mark, 'while validating resource', "resource already declared");
+          } else if (property[0].value.match(/^(get|post|put|delete|head|patch|options)\??$/)) {
+            _this.trackRepeatedProperties(resourceProperties, _this.canonicalizePropertyName(property[0].value, true), property[0].start_mark, 'while validating resource', "method already declared");
+          } else {
+            _this.trackRepeatedProperties(resourceProperties, _this.canonicalizePropertyName(property[0].value, true), property[0].start_mark, 'while validating resource', "property already used");
+          }
           if (!_this.validate_common_properties(property, allowParameterKeys)) {
             if (property[0].value.match(/^\//)) {
               if (allowParameterKeys) {
@@ -12764,11 +12592,17 @@ function decode(str) {
               valid = true;
               switch (canonicalKey) {
                 case "uriParameters":
+                  if (!_this.isNullableMapping(property[1])) {
+                    throw new exports.ValidationError('while validating uri parameters', null, 'uri parameters must be a mapping', property[0].start_mark);
+                  }
                   _this.validate_uri_parameters(resource[0].value, property[1], allowParameterKeys, allowParameterKeys);
                   break;
                 case "baseUriParameters":
                   if (!_this.baseUri) {
                     throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters defined when there is no baseUri', property[0].start_mark);
+                  }
+                  if (!_this.isNullableMapping(property[1])) {
+                    throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters must be a mapping', property[0].start_mark);
                   }
                   _this.validate_uri_parameters(_this.baseUri, property[1], allowParameterKeys);
                   break;
@@ -12797,9 +12631,14 @@ function decode(str) {
     };
 
     Validator.prototype.validate_secured_by = function(property) {
-      var _this = this;
+      var secSchemes,
+        _this = this;
       if (!this.isSequence(property[1])) {
         throw new exports.ValidationError('while validating securityScheme', null, "property 'securedBy' must be a list", property[0].start_mark);
+      }
+      secSchemes = this.get_list_values(property[1].value);
+      if (secSchemes.hasDuplicates()) {
+        throw new exports.ValidationError('while validating securityScheme consumption', null, 'securitySchemes can only be referenced once in a securedBy property', property[0].start_mark);
       }
       return property[1].value.forEach(function(secScheme) {
         var securitySchemeName;
@@ -12843,7 +12682,8 @@ function decode(str) {
     };
 
     Validator.prototype.validate_method = function(method, allowParameterKeys, context) {
-      var _this = this;
+      var methodProperties,
+        _this = this;
       if (context == null) {
         context = 'method';
       }
@@ -12853,8 +12693,10 @@ function decode(str) {
       if (!this.isMapping(method[1])) {
         throw new exports.ValidationError('while validating methods', null, "method must be a mapping", method[0].start_mark);
       }
+      methodProperties = {};
       return method[1].value.forEach(function(property) {
         var canonicalKey, key, valid;
+        _this.trackRepeatedProperties(methodProperties, _this.canonicalizePropertyName(property[0].value, true), property[0].start_mark, 'while validating method', "property already used");
         if (_this.validate_common_properties(property, allowParameterKeys)) {
           return;
         }
@@ -12869,7 +12711,7 @@ function decode(str) {
             _this.validate_query_params(property, allowParameterKeys);
             break;
           case "body":
-            _this.validate_body(property, allowParameterKeys);
+            _this.validate_body(property, allowParameterKeys, null, false);
             break;
           case "responses":
             _this.validate_responses(property, allowParameterKeys);
@@ -12880,9 +12722,17 @@ function decode(str) {
         switch (key) {
           case "securedBy":
             return _this.validate_secured_by(property);
+          case "baseUriParameters":
+            if (!_this.baseUri) {
+              throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters defined when there is no baseUri', property[0].start_mark);
+            }
+            if (!_this.isNullableMapping(property[1])) {
+              throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters must be a mapping', property[0].start_mark);
+            }
+            return _this.validate_uri_parameters(_this.baseUri, property[1], allowParameterKeys);
           case "usage":
-            if (!allowParameterKeys) {
-              throw new exports.ValidationError('while validating resources', null, "property: '" + property[0].value + "' is invalid in a resource", property[0].start_mark);
+            if (!(allowParameterKeys && context === "trait")) {
+              throw new exports.ValidationError('while validating resources', null, "property: 'usage' is invalid in a " + context, property[0].start_mark);
             }
             break;
           default:
@@ -12894,111 +12744,131 @@ function decode(str) {
     };
 
     Validator.prototype.validate_responses = function(responses, allowParameterKeys) {
-      var _this = this;
+      var responseValues,
+        _this = this;
       if (this.isNull(responses[1])) {
         return;
       }
       if (!this.isMapping(responses[1])) {
-        throw new exports.ValidationError('while validating query parameters', null, "property: 'responses' must be a mapping", responses[0].start_mark);
+        throw new exports.ValidationError('while validating responses', null, "property: 'responses' must be a mapping", responses[0].start_mark);
       }
+      responseValues = {};
       return responses[1].value.forEach(function(response) {
         if (!_this.isNullableMapping(response[1])) {
-          throw new exports.ValidationError('while validating query parameters', null, "each response must be a mapping", response[1].start_mark);
+          throw new exports.ValidationError('while validating responses', null, "each response must be a mapping", response[1].start_mark);
         }
+        _this.trackRepeatedProperties(responseValues, _this.canonicalizePropertyName(response[0].value, true), response[0].start_mark, 'while validating responses', "response code already used");
         return _this.validate_response(response, allowParameterKeys);
       });
     };
 
     Validator.prototype.validate_query_params = function(property, allowParameterKeys) {
-      var _this = this;
+      var queryParameters,
+        _this = this;
       if (this.isNull(property[1])) {
         return;
       }
       if (!this.isMapping(property[1])) {
         throw new exports.ValidationError('while validating query parameters', null, "property: 'queryParameters' must be a mapping", property[0].start_mark);
       }
+      queryParameters = {};
       return property[1].value.forEach(function(param) {
         if (!(_this.isNullableMapping(param[1]) || _this.isNullableSequence(param[1]))) {
           throw new exports.ValidationError('while validating query parameters', null, "each query parameter must be a mapping", param[1].start_mark);
         }
+        _this.trackRepeatedProperties(queryParameters, _this.canonicalizePropertyName(param[0].value, true), param[0].start_mark, 'while validating query parameter', "parameter name already used");
         return _this.valid_common_parameter_properties(param[1], allowParameterKeys);
       });
     };
 
     Validator.prototype.validate_form_params = function(property, allowParameterKeys) {
-      var _this = this;
+      var formParameters,
+        _this = this;
       if (this.isNull(property[1])) {
         return;
       }
       if (!this.isMapping(property[1])) {
         throw new exports.ValidationError('while validating query parameters', null, "property: 'formParameters' must be a mapping", property[0].start_mark);
       }
+      formParameters = {};
       return property[1].value.forEach(function(param) {
         if (!(_this.isNullableMapping(param[1]) || _this.isNullableSequence(param[1]))) {
           throw new exports.ValidationError('while validating query parameters', null, "each form parameter must be a mapping", param[1].start_mark);
         }
+        _this.trackRepeatedProperties(formParameters, _this.canonicalizePropertyName(param[0].value, true), param[0].start_mark, 'while validating form parameter', "parameter name already used");
         return _this.valid_common_parameter_properties(param[1], allowParameterKeys);
       });
     };
 
     Validator.prototype.validate_headers = function(property, allowParameterKeys) {
-      var _this = this;
+      var headerNames,
+        _this = this;
       if (this.isNull(property[1])) {
         return;
       }
       if (!this.isMapping(property[1])) {
         throw new exports.ValidationError('while validating headers', null, "property: 'headers' must be a mapping", property[0].start_mark);
       }
+      headerNames = {};
       return property[1].value.forEach(function(param) {
         if (!(_this.isNullableMapping(param[1]) || _this.isNullableSequence(param[1]))) {
           throw new exports.ValidationError('while validating query parameters', null, "each header must be a mapping", param[1].start_mark);
         }
+        _this.trackRepeatedProperties(headerNames, _this.canonicalizePropertyName(param[0].value, true), param[0].start_mark, 'while validating headers', "header name already used");
         return _this.valid_common_parameter_properties(param[1], allowParameterKeys);
       });
     };
 
     Validator.prototype.validate_response = function(response, allowParameterKeys) {
-      var _this = this;
+      var responseProperties,
+        _this = this;
       if (this.isSequence(response[0])) {
         if (!response[0].value.length) {
           throw new exports.ValidationError('while validating responses', null, "there must be at least one response code", response[0].start_mark);
         }
         response[0].value.forEach(function(responseCode) {
-          if (!_this.isInteger(responseCode)) {
+          if (!(_this.isParameterKey(responseCode) || _this.isInteger(responseCode) || !isNaN(_this.canonicalizePropertyName(responseCode, allowParameterKeys)))) {
             throw new exports.ValidationError('while validating responses', null, "each response key must be an integer", responseCode.start_mark);
           }
         });
-      } else if (!this.isInteger(response[0])) {
+      } else if (!(this.isParameterKey(response) || this.isInteger(response[0]) || !isNaN(this.canonicalizePropertyName(response[0].value, allowParameterKeys)))) {
         throw new exports.ValidationError('while validating responses', null, "each response key must be an integer", response[0].start_mark);
       }
       if (!this.isNullableMapping(response[1])) {
         throw new exports.ValidationError('while validating responses', null, "each response property must be a mapping", response[0].start_mark);
       }
       if (this.isMapping(response[1])) {
+        responseProperties = {};
         return response[1].value.forEach(function(property) {
           var canonicalKey;
           canonicalKey = _this.canonicalizePropertyName(property[0].value, allowParameterKeys);
-          switch (canonicalKey) {
-            case "body":
-              return _this.validate_body(property, allowParameterKeys);
-            case "description":
-              if (!_this.isScalar(property[1])) {
-                throw new exports.ValidationError('while validating responses', null, "property description must be a string", response[0].start_mark);
-              }
-              break;
-            case "headers":
-              if (!_this.isNullableMapping(property[1])) {
-                throw new exports.ValidationError('while validating resources', null, "property 'headers' must be a mapping", property[0].start_mark);
-              }
-              return _this.validate_headers(property);
-            default:
-              throw new exports.ValidationError('while validating response', null, "property: '" + property[0].value + "' is invalid in a response", property[0].start_mark);
+          _this.trackRepeatedProperties(responseProperties, canonicalKey, property[0].start_mark, 'while validating responses', "property already used");
+          if (!_this.isParameterKey(property)) {
+            switch (canonicalKey) {
+              case "body":
+                return _this.validate_body(property, allowParameterKeys, null, true);
+              case "description":
+                if (!_this.isScalar(property[1])) {
+                  throw new exports.ValidationError('while validating responses', null, "property description must be a string", response[0].start_mark);
+                }
+                break;
+              case "headers":
+                if (!_this.isNullableMapping(property[1])) {
+                  throw new exports.ValidationError('while validating resources', null, "property 'headers' must be a mapping", property[0].start_mark);
+                }
+                return _this.validate_headers(property);
+              default:
+                throw new exports.ValidationError('while validating response', null, "property: '" + property[0].value + "' is invalid in a response", property[0].start_mark);
+            }
           }
         });
       }
     };
 
     Validator.prototype.isParameterKey = function(property) {
+      if (!this.isScalar(property[0])) {
+        return false;
+      }
       if (property[0].value.match(/<<\s*([^\|\s>]+)\s*>>/g) || property[0].value.match(/<<\s*([^\|\s>]+)\s*(\|\s*\!\s*(singularize|pluralize))?\s*>>/g)) {
         return true;
       } else if (property[0].value.match(/<<\s*([^\|\s>]+)\s*\|.*\s*>>/g)) {
@@ -13007,8 +12877,8 @@ function decode(str) {
       return false;
     };
 
-    Validator.prototype.validate_body = function(property, allowParameterKeys, bodyMode) {
-      var implicitMode, _ref1,
+    Validator.prototype.validate_body = function(property, allowParameterKeys, bodyMode, isResponseBody) {
+      var bodyProperties, implicitMode, _ref1,
         _this = this;
       if (bodyMode == null) {
         bodyMode = null;
@@ -13020,9 +12890,11 @@ function decode(str) {
         throw new exports.ValidationError('while validating body', null, "property: body specification must be a mapping", property[0].start_mark);
       }
       implicitMode = ["implicit", "forcedImplicit"];
+      bodyProperties = {};
       if ((_ref1 = property[1].value) != null) {
         _ref1.forEach(function(bodyProperty) {
           var canonicalProperty, key;
+          _this.trackRepeatedProperties(bodyProperties, _this.canonicalizePropertyName(bodyProperty[0].value, true), bodyProperty[0].start_mark, 'while validating body', "property already used");
           if (_this.isParameterKey(bodyProperty)) {
             if (!allowParameterKeys) {
               throw new exports.ValidationError('while validating body', null, "property '" + bodyProperty[0].value + "' is invalid in a resource", bodyProperty[0].start_mark);
@@ -13032,14 +12904,14 @@ function decode(str) {
               throw new exports.ValidationError('while validating body', null, "not compatible with implicit default Media Type", bodyProperty[0].start_mark);
             }
             bodyMode = "explicit";
-            return _this.validate_body(bodyProperty, allowParameterKeys, "forcedImplicit");
+            return _this.validate_body(bodyProperty, allowParameterKeys, "forcedImplicit", isResponseBody);
           } else {
             key = bodyProperty[0].value;
             canonicalProperty = _this.canonicalizePropertyName(key, allowParameterKeys);
             switch (canonicalProperty) {
               case "formParameters":
                 if (bodyMode && __indexOf.call(implicitMode, bodyMode) < 0) {
-                  throw new exports.ValidationError('while validating body', null, "not compatible with explicit default Media Type", bodyProperty[0].start_mark);
+                  throw new exports.ValidationError('while validating body', null, "not compatible with explicit Media Type", bodyProperty[0].start_mark);
                 }
                 if (bodyMode == null) {
                   bodyMode = "implicit";
@@ -13047,7 +12919,7 @@ function decode(str) {
                 return _this.validate_form_params(bodyProperty, allowParameterKeys);
               case "example":
                 if (bodyMode && __indexOf.call(implicitMode, bodyMode) < 0) {
-                  throw new exports.ValidationError('while validating body', null, "not compatible with explicit default Media Type", bodyProperty[0].start_mark);
+                  throw new exports.ValidationError('while validating body', null, "not compatible with explicit Media Type", bodyProperty[0].start_mark);
                 }
                 if (bodyMode == null) {
                   bodyMode = "implicit";
@@ -13058,7 +12930,7 @@ function decode(str) {
                 break;
               case "schema":
                 if (bodyMode && __indexOf.call(implicitMode, bodyMode) < 0) {
-                  throw new exports.ValidationError('while validating body', null, "not compatible with explicit default Media Type", bodyProperty[0].start_mark);
+                  throw new exports.ValidationError('while validating body', null, "not compatible with explicit Media Type", bodyProperty[0].start_mark);
                 }
                 if (bodyMode == null) {
                   bodyMode = "implicit";
@@ -13072,6 +12944,14 @@ function decode(str) {
             }
           }
         });
+      }
+      if ("formParameters" in bodyProperties) {
+        if (isResponseBody) {
+          throw new exports.ValidationError('while validating body', null, "formParameters cannot be used to describe response bodies", property[0].start_mark);
+        }
+        if ("schema" in bodyProperties || "example" in bodyProperties) {
+          throw new exports.ValidationError('while validating body', null, "formParameters cannot be used together with the example or schema properties", property[0].start_mark);
+        }
       }
       if (bodyMode === "implicit") {
         if (!this.get_media_type()) {
@@ -13245,19 +13125,10 @@ function decode(str) {
     };
 
     Validator.prototype.valid_absolute_uris = function(node) {
-      var i, sorted_uris, uris, _i, _ref1, _results;
+      var repeatedUri, uris;
       uris = this.get_absolute_uris(node);
-      sorted_uris = uris.sort();
-      if (sorted_uris.length > 1) {
-        _results = [];
-        for (i = _i = 0, _ref1 = sorted_uris.length; 0 <= _ref1 ? _i < _ref1 : _i > _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
-          if (sorted_uris[i + 1] === sorted_uris[i]) {
-            throw new exports.ValidationError('while validating trait consumption', null, 'two resources share same URI ' + sorted_uris[i], null);
-          } else {
-            _results.push(void 0);
-          }
-        }
-        return _results;
+      if (repeatedUri = uris.hasDuplicatesUris()) {
+        throw new exports.ValidationError('while validating trait consumption', null, "two resources share same URI " + repeatedUri.uri, repeatedUri.mark);
       }
     };
 
@@ -13279,7 +13150,10 @@ function decode(str) {
         } else {
           uri = childResource[0].value;
         }
-        response.push(uri);
+        response.push({
+          uri: uri,
+          mark: childResource[0].start_mark
+        });
         return response = response.concat(_this.get_absolute_uris(childResource[1], uri));
       });
       return response;
@@ -13333,12 +13207,24 @@ function decode(str) {
       return this.validation_errors.length === 0;
     };
 
+    Array.prototype.hasDuplicatesUris = function() {
+      var key, output, _i, _ref1;
+      output = {};
+      for (key = _i = 0, _ref1 = this.length; 0 <= _ref1 ? _i < _ref1 : _i > _ref1; key = 0 <= _ref1 ? ++_i : --_i) {
+        if (this[key].uri in output) {
+          return this[key];
+        }
+        output[this[key].uri] = this[key];
+      }
+      return false;
+    };
+
     Array.prototype.hasDuplicates = function() {
       var key, output, _i, _ref1;
       output = {};
       for (key = _i = 0, _ref1 = this.length; 0 <= _ref1 ? _i < _ref1 : _i > _ref1; key = 0 <= _ref1 ? ++_i : --_i) {
         if (this[key] in output) {
-          return true;
+          return this[key];
         }
         output[this[key]] = true;
       }
@@ -13351,7 +13237,242 @@ function decode(str) {
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"./traits":22,"uritemplate":28}],22:[function(require,module,exports){
+},{"./errors":1,"./nodes":12,"./traits":23,"uritemplate":28}],11:[function(require,module,exports){
+(function() {
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  this.composer = require('./composer');
+
+  this.constructor = require('./construct');
+
+  this.errors = require('./errors');
+
+  this.events = require('./events');
+
+  this.loader = require('./loader');
+
+  this.nodes = require('./nodes');
+
+  this.parser = require('./parser');
+
+  this.reader = require('./reader');
+
+  this.resolver = require('./resolver');
+
+  this.scanner = require('./scanner');
+
+  this.tokens = require('./tokens');
+
+  this.q = require('q');
+
+  this.FileError = (function(_super) {
+    __extends(FileError, _super);
+
+    function FileError() {
+      _ref = FileError.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return FileError;
+
+  })(this.errors.MarkedYAMLError);
+
+  /*
+  Scan a RAML stream and produce scanning tokens.
+  */
+
+
+  this.scan = function(stream, location) {
+    var loader, _results;
+    loader = new exports.loader.Loader(stream, location, false);
+    _results = [];
+    while (loader.check_token()) {
+      _results.push(loader.get_token());
+    }
+    return _results;
+  };
+
+  /*
+  Parse a RAML stream and produce parsing events.
+  */
+
+
+  this.parse = function(stream, location) {
+    var loader, _results;
+    loader = new exports.loader.Loader(stream, location, false);
+    _results = [];
+    while (loader.check_event()) {
+      _results.push(loader.get_event());
+    }
+    return _results;
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  representation tree.
+  */
+
+
+  this.compose = function(stream, validate, apply, join, location, parent) {
+    var loader;
+    if (validate == null) {
+      validate = true;
+    }
+    if (apply == null) {
+      apply = true;
+    }
+    if (join == null) {
+      join = true;
+    }
+    loader = new exports.loader.Loader(stream, location, validate, parent);
+    return loader.get_single_node(validate, apply, join);
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  Javascript object.
+  */
+
+
+  this.load = function(stream, validate, location) {
+    var _this = this;
+    if (validate == null) {
+      validate = true;
+    }
+    return this.q.fcall(function() {
+      var loader;
+      loader = new exports.loader.Loader(stream, location, validate);
+      return loader.get_single_data();
+    });
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce a list of
+  all the absolute URIs for all resources.
+  */
+
+
+  this.resources = function(stream, validate, location) {
+    var _this = this;
+    if (validate == null) {
+      validate = true;
+    }
+    return this.q.fcall(function() {
+      var loader;
+      loader = new exports.loader.Loader(stream, location, validate);
+      return loader.resources();
+    });
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  Javascript object.
+  */
+
+
+  this.loadFile = function(file, validate) {
+    var _this = this;
+    if (validate == null) {
+      validate = true;
+    }
+    return this.q.fcall(function() {
+      var stream;
+      stream = _this.readFile(file);
+      return _this.load(stream, validate, file);
+    });
+  };
+
+  /*
+  Parse the first RAML document in a file and produce the corresponding
+  representation tree.
+  */
+
+
+  this.composeFile = function(file, validate, apply, join, parent) {
+    var stream;
+    if (validate == null) {
+      validate = true;
+    }
+    if (apply == null) {
+      apply = true;
+    }
+    if (join == null) {
+      join = true;
+    }
+    stream = this.readFile(file);
+    return this.compose(stream, validate, apply, join, file, parent);
+  };
+
+  /*
+  Parse the first RAML document in a file and produce a list of
+  all the absolute URIs for all resources.
+  */
+
+
+  this.resourcesFile = function(file, validate) {
+    var stream;
+    if (validate == null) {
+      validate = true;
+    }
+    stream = this.readFile(file);
+    return this.resources(stream, validate, file);
+  };
+
+  /*
+  Read file either locally or from the network.
+  */
+
+
+  this.readFile = function(file) {
+    var fs, url;
+    url = require('url').parse(file);
+    if (url.protocol != null) {
+      if (!url.protocol.match(/^https?/i)) {
+        throw new exports.FileError('while reading ' + file, null, 'unknown protocol ' + url.protocol, this.start_mark);
+      } else {
+        return this.fetchFile(file);
+      }
+    } else {
+      if (!(typeof window !== "undefined" && window !== null)) {
+        fs = require('fs');
+        if (fs.existsSync(file)) {
+          return fs.readFileSync(file).toString();
+        } else {
+          throw new exports.FileError('while reading ' + file, null, 'cannot find ' + file, this.start_mark);
+        }
+      } else {
+        return this.fetchFile(file);
+      }
+    }
+  };
+
+  /*
+  Read file from the network.
+  */
+
+
+  this.fetchFile = function(file) {
+    var xhr;
+    if (typeof window === "undefined" || window === null) {
+      xhr = new (require("xmlhttprequest").XMLHttpRequest)();
+    } else {
+      xhr = new XMLHttpRequest();
+    }
+    xhr.open('GET', file, false);
+    xhr.setRequestHeader('Accept', 'application/raml+yaml, */*');
+    xhr.send(null);
+    if ((typeof xhr.status === 'number' && xhr.status === 200) || (typeof xhr.status === 'string' && xhr.status.match(/^200/i))) {
+      return xhr.responseText;
+    } else {
+      throw new exports.FileError('while reading ' + file, null, 'cannot fetch ' + file + ' (HTTP ' + xhr.status + ' ' + xhr.statusText + ')', this.start_mark);
+    }
+  };
+
+}).call(this);
+
+},{"./composer":10,"./construct":15,"./errors":1,"./events":2,"./loader":17,"./nodes":12,"./parser":20,"./reader":18,"./resolver":21,"./scanner":19,"./tokens":3,"fs":9,"q":6,"url":7,"xmlhttprequest":29}],23:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, inflection, nodes, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -13541,7 +13662,8 @@ function decode(str) {
     };
 
     Traits.prototype.get_parameters_from_is_key = function(resourceUri, methodName, typeKey) {
-      var parameters, result;
+      var parameters, result,
+        _this = this;
       result = {
         methodName: methodName,
         resourcePath: resourceUri.replace(/\/\/*/g, '/')
@@ -13552,7 +13674,7 @@ function decode(str) {
       parameters = this.value_or_undefined(typeKey);
       parameters[0][1].value.forEach(function(parameter) {
         var _ref2;
-        if (parameter[1].tag !== 'tag:yaml.org,2002:str') {
+        if (!_this.isScalar(parameter[1])) {
           throw new exports.TraitError('while aplying parameters', null, 'parameter value is not a scalar', parameter[1].start_mark);
         }
         if ((_ref2 = parameter[1].value) === "methodName" || _ref2 === "resourcePath" || _ref2 === "resourcePathName") {
@@ -13569,573 +13691,7 @@ function decode(str) {
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"inflection":30}],29:[function(require,module,exports){
-(function(process,Buffer){/**
- * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
- *
- * This can be used with JS designed for browsers to improve reuse of code and
- * allow the use of existing libraries.
- *
- * Usage: include("XMLHttpRequest.js") and use XMLHttpRequest per W3C specs.
- *
- * @author Dan DeFelippi <dan@driverdan.com>
- * @contributor David Ellis <d.f.ellis@ieee.org>
- * @license MIT
- */
-
-var Url = require("url")
-  , spawn = require("child_process").spawn
-  , fs = require('fs');
-
-exports.XMLHttpRequest = function() {
-  /**
-   * Private variables
-   */
-  var self = this;
-  var http = require('http');
-  var https = require('https');
-
-  // Holds http.js objects
-  var client;
-  var request;
-  var response;
-
-  // Request settings
-  var settings = {};
-
-  // Disable header blacklist.
-  // Not part of XHR specs.
-  var disableHeaderCheck = false;
-
-  // Set some default headers
-  var defaultHeaders = {
-    "User-Agent": "node-XMLHttpRequest",
-    "Accept": "*/*",
-  };
-
-  var headers = defaultHeaders;
-
-  // These headers are not user setable.
-  // The following are allowed but banned in the spec:
-  // * user-agent
-  var forbiddenRequestHeaders = [
-    "accept-charset",
-    "accept-encoding",
-    "access-control-request-headers",
-    "access-control-request-method",
-    "connection",
-    "content-length",
-    "content-transfer-encoding",
-    "cookie",
-    "cookie2",
-    "date",
-    "expect",
-    "host",
-    "keep-alive",
-    "origin",
-    "referer",
-    "te",
-    "trailer",
-    "transfer-encoding",
-    "upgrade",
-    "via"
-  ];
-
-  // These request methods are not allowed
-  var forbiddenRequestMethods = [
-    "TRACE",
-    "TRACK",
-    "CONNECT"
-  ];
-
-  // Send flag
-  var sendFlag = false;
-  // Error flag, used when errors occur or abort is called
-  var errorFlag = false;
-
-  // Event listeners
-  var listeners = {};
-
-  /**
-   * Constants
-   */
-
-  this.UNSENT = 0;
-  this.OPENED = 1;
-  this.HEADERS_RECEIVED = 2;
-  this.LOADING = 3;
-  this.DONE = 4;
-
-  /**
-   * Public vars
-   */
-
-  // Current state
-  this.readyState = this.UNSENT;
-
-  // default ready state change handler in case one is not set or is set late
-  this.onreadystatechange = null;
-
-  // Result & response
-  this.responseText = "";
-  this.responseXML = "";
-  this.status = null;
-  this.statusText = null;
-
-  /**
-   * Private methods
-   */
-
-  /**
-   * Check if the specified header is allowed.
-   *
-   * @param string header Header to validate
-   * @return boolean False if not allowed, otherwise true
-   */
-  var isAllowedHttpHeader = function(header) {
-    return disableHeaderCheck || (header && forbiddenRequestHeaders.indexOf(header.toLowerCase()) === -1);
-  };
-
-  /**
-   * Check if the specified method is allowed.
-   *
-   * @param string method Request method to validate
-   * @return boolean False if not allowed, otherwise true
-   */
-  var isAllowedHttpMethod = function(method) {
-    return (method && forbiddenRequestMethods.indexOf(method) === -1);
-  };
-
-  /**
-   * Public methods
-   */
-
-  /**
-   * Open the connection. Currently supports local server requests.
-   *
-   * @param string method Connection method (eg GET, POST)
-   * @param string url URL for the connection.
-   * @param boolean async Asynchronous connection. Default is true.
-   * @param string user Username for basic authentication (optional)
-   * @param string password Password for basic authentication (optional)
-   */
-  this.open = function(method, url, async, user, password) {
-    this.abort();
-    errorFlag = false;
-
-    // Check for valid request method
-    if (!isAllowedHttpMethod(method)) {
-      throw "SecurityError: Request method not allowed";
-      return;
-    }
-
-    settings = {
-      "method": method,
-      "url": url.toString(),
-      "async": (typeof async !== "boolean" ? true : async),
-      "user": user || null,
-      "password": password || null
-    };
-
-    setState(this.OPENED);
-  };
-
-  /**
-   * Disables or enables isAllowedHttpHeader() check the request. Enabled by default.
-   * This does not conform to the W3C spec.
-   *
-   * @param boolean state Enable or disable header checking.
-   */
-  this.setDisableHeaderCheck = function(state) {
-    disableHeaderCheck = state;
-  }
-
-  /**
-   * Sets a header for the request.
-   *
-   * @param string header Header name
-   * @param string value Header value
-   */
-  this.setRequestHeader = function(header, value) {
-    if (this.readyState != this.OPENED) {
-      throw "INVALID_STATE_ERR: setRequestHeader can only be called when state is OPEN";
-    }
-    if (!isAllowedHttpHeader(header)) {
-      console.warn('Refused to set unsafe header "' + header + '"');
-      return;
-    }
-    if (sendFlag) {
-      throw "INVALID_STATE_ERR: send flag is true";
-    }
-    headers[header] = value;
-  };
-
-  /**
-   * Gets a header from the server response.
-   *
-   * @param string header Name of header to get.
-   * @return string Text of the header or null if it doesn't exist.
-   */
-  this.getResponseHeader = function(header) {
-    if (typeof header === "string"
-      && this.readyState > this.OPENED
-      && response.headers[header.toLowerCase()]
-      && !errorFlag
-    ) {
-      return response.headers[header.toLowerCase()];
-    }
-
-    return null;
-  };
-
-  /**
-   * Gets all the response headers.
-   *
-   * @return string A string with all response headers separated by CR+LF
-   */
-  this.getAllResponseHeaders = function() {
-    if (this.readyState < this.HEADERS_RECEIVED || errorFlag) {
-      return "";
-    }
-    var result = "";
-
-    for (var i in response.headers) {
-      // Cookie headers are excluded
-      if (i !== "set-cookie" && i !== "set-cookie2") {
-        result += i + ": " + response.headers[i] + "\r\n";
-      }
-    }
-    return result.substr(0, result.length - 2);
-  };
-
-  /**
-   * Gets a request header
-   *
-   * @param string name Name of header to get
-   * @return string Returns the request header or empty string if not set
-   */
-  this.getRequestHeader = function(name) {
-    // @TODO Make this case insensitive
-    if (typeof name === "string" && headers[name]) {
-      return headers[name];
-    }
-
-    return "";
-  }
-
-  /**
-   * Sends the request to the server.
-   *
-   * @param string data Optional data to send as request body.
-   */
-  this.send = function(data) {
-    if (this.readyState != this.OPENED) {
-      throw "INVALID_STATE_ERR: connection must be opened before send() is called";
-    }
-
-    if (sendFlag) {
-      throw "INVALID_STATE_ERR: send has already been called";
-    }
-
-    var ssl = false, local = false;
-    var url = Url.parse(settings.url);
-
-    // Determine the server
-    switch (url.protocol) {
-      case 'https:':
-        ssl = true;
-        // SSL & non-SSL both need host, no break here.
-      case 'http:':
-        var host = url.hostname;
-        break;
-
-      case 'file:':
-        local = true;
-        break;
-
-      case undefined:
-      case '':
-        var host = "localhost";
-        break;
-
-      default:
-        throw "Protocol not supported.";
-    }
-
-    // Load files off the local filesystem (file://)
-    if (local) {
-      if (settings.method !== "GET") {
-        throw "XMLHttpRequest: Only GET method is supported";
-      }
-
-      if (settings.async) {
-        fs.readFile(url.pathname, 'utf8', function(error, data) {
-          if (error) {
-            self.handleError(error);
-          } else {
-            self.status = 200;
-            self.responseText = data;
-            setState(self.DONE);
-          }
-        });
-      } else {
-        try {
-          this.responseText = fs.readFileSync(url.pathname, 'utf8');
-          this.status = 200;
-          setState(self.DONE);
-        } catch(e) {
-          this.handleError(e);
-        }
-      }
-
-      return;
-    }
-
-    // Default to port 80. If accessing localhost on another port be sure
-    // to use http://localhost:port/path
-    var port = url.port || (ssl ? 443 : 80);
-    // Add query string if one is used
-    var uri = url.pathname + (url.search ? url.search : '');
-
-    // Set the Host header or the server may reject the request
-    headers["Host"] = host;
-    if (!((ssl && port === 443) || port === 80)) {
-      headers["Host"] += ':' + url.port;
-    }
-
-    // Set Basic Auth if necessary
-    if (settings.user) {
-      if (typeof settings.password == "undefined") {
-        settings.password = "";
-      }
-      var authBuf = new Buffer(settings.user + ":" + settings.password);
-      headers["Authorization"] = "Basic " + authBuf.toString("base64");
-    }
-
-    // Set content length header
-    if (settings.method === "GET" || settings.method === "HEAD") {
-      data = null;
-    } else if (data) {
-      headers["Content-Length"] = Buffer.byteLength(data);
-
-      if (!headers["Content-Type"]) {
-        headers["Content-Type"] = "text/plain;charset=UTF-8";
-      }
-    } else if (settings.method === "POST") {
-      // For a post with no data set Content-Length: 0.
-      // This is required by buggy servers that don't meet the specs.
-      headers["Content-Length"] = 0;
-    }
-
-    var options = {
-      host: host,
-      port: port,
-      path: uri,
-      method: settings.method,
-      headers: headers,
-      agent: false
-    };
-
-    // Reset error flag
-    errorFlag = false;
-
-    // Handle async requests
-    if (settings.async) {
-      // Use the proper protocol
-      var doRequest = ssl ? https.request : http.request;
-
-      // Request is being sent, set send flag
-      sendFlag = true;
-
-      // As per spec, this is called here for historical reasons.
-      self.dispatchEvent("readystatechange");
-
-      // Create the request
-      request = doRequest(options, function(resp) {
-        response = resp;
-        response.setEncoding("utf8");
-
-        setState(self.HEADERS_RECEIVED);
-        self.status = response.statusCode;
-
-        response.on('data', function(chunk) {
-          // Make sure there's some data
-          if (chunk) {
-            self.responseText += chunk;
-          }
-          // Don't emit state changes if the connection has been aborted.
-          if (sendFlag) {
-            setState(self.LOADING);
-          }
-        });
-
-        response.on('end', function() {
-          if (sendFlag) {
-            // Discard the 'end' event if the connection has been aborted
-            setState(self.DONE);
-            sendFlag = false;
-          }
-        });
-
-        response.on('error', function(error) {
-          self.handleError(error);
-        });
-      }).on('error', function(error) {
-        self.handleError(error);
-      });
-
-      // Node 0.4 and later won't accept empty data. Make sure it's needed.
-      if (data) {
-        request.write(data);
-      }
-
-      request.end();
-
-      self.dispatchEvent("loadstart");
-    } else { // Synchronous
-      // Create a temporary file for communication with the other Node process
-      var syncFile = ".node-xmlhttprequest-sync-" + process.pid;
-      fs.writeFileSync(syncFile, "", "utf8");
-      // The async request the other Node process executes
-      var execString = "var http = require('http'), https = require('https'), fs = require('fs');"
-        + "var doRequest = http" + (ssl ? "s" : "") + ".request;"
-        + "var options = " + JSON.stringify(options) + ";"
-        + "var responseText = '';"
-        + "var req = doRequest(options, function(response) {"
-        + "response.setEncoding('utf8');"
-        + "response.on('data', function(chunk) {"
-        + "responseText += chunk;"
-        + "});"
-        + "response.on('end', function() {"
-        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-STATUS:' + response.statusCode + ',' + responseText, 'utf8');"
-        + "});"
-        + "response.on('error', function(error) {"
-        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-ERROR:' + JSON.stringify(error), 'utf8');"
-        + "});"
-        + "}).on('error', function(error) {"
-        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-ERROR:' + JSON.stringify(error), 'utf8');"
-        + "});"
-        + (data ? "req.write('" + data.replace(/'/g, "\\'") + "');":"")
-        + "req.end();";
-      // Start the other Node Process, executing this string
-      syncProc = spawn(process.argv[0], ["-e", execString]);
-      while((self.responseText = fs.readFileSync(syncFile, 'utf8')) == "") {
-        // Wait while the file is empty
-      }
-      // Kill the child process once the file has data
-      syncProc.stdin.end();
-      // Remove the temporary file
-      fs.unlinkSync(syncFile);
-      if (self.responseText.match(/^NODE-XMLHTTPREQUEST-ERROR:/)) {
-        // If the file returned an error, handle it
-        var errorObj = self.responseText.replace(/^NODE-XMLHTTPREQUEST-ERROR:/, "");
-        self.handleError(errorObj);
-      } else {
-        // If the file returned okay, parse its data and move to the DONE state
-        self.status = self.responseText.replace(/^NODE-XMLHTTPREQUEST-STATUS:([0-9]*),.*/, "$1");
-        self.responseText = self.responseText.replace(/^NODE-XMLHTTPREQUEST-STATUS:[0-9]*,(.*)/, "$1");
-        setState(self.DONE);
-      }
-    }
-  };
-
-  /**
-   * Called when an error is encountered to deal with it.
-   */
-  this.handleError = function(error) {
-    this.status = 503;
-    this.statusText = error;
-    this.responseText = error.stack;
-    errorFlag = true;
-    setState(this.DONE);
-  };
-
-  /**
-   * Aborts a request.
-   */
-  this.abort = function() {
-    if (request) {
-      request.abort();
-      request = null;
-    }
-
-    headers = defaultHeaders;
-    this.responseText = "";
-    this.responseXML = "";
-
-    errorFlag = true;
-
-    if (this.readyState !== this.UNSENT
-        && (this.readyState !== this.OPENED || sendFlag)
-        && this.readyState !== this.DONE) {
-      sendFlag = false;
-      setState(this.DONE);
-    }
-    this.readyState = this.UNSENT;
-  };
-
-  /**
-   * Adds an event listener. Preferred method of binding to events.
-   */
-  this.addEventListener = function(event, callback) {
-    if (!(event in listeners)) {
-      listeners[event] = [];
-    }
-    // Currently allows duplicate callbacks. Should it?
-    listeners[event].push(callback);
-  };
-
-  /**
-   * Remove an event callback that has already been bound.
-   * Only works on the matching funciton, cannot be a copy.
-   */
-  this.removeEventListener = function(event, callback) {
-    if (event in listeners) {
-      // Filter will return a new array with the callback removed
-      listeners[event] = listeners[event].filter(function(ev) {
-        return ev !== callback;
-      });
-    }
-  };
-
-  /**
-   * Dispatch any events, including both "on" methods and events attached using addEventListener.
-   */
-  this.dispatchEvent = function(event) {
-    if (typeof self["on" + event] === "function") {
-      self["on" + event]();
-    }
-    if (event in listeners) {
-      for (var i = 0, len = listeners[event].length; i < len; i++) {
-        listeners[event][i].call(self);
-      }
-    }
-  };
-
-  /**
-   * Changes readyState and calls onreadystatechange.
-   *
-   * @param int state New state
-   */
-  var setState = function(state) {
-    if (self.readyState !== state) {
-      self.readyState = state;
-
-      if (settings.async || self.readyState < self.OPENED || self.readyState === self.DONE) {
-        self.dispatchEvent("readystatechange");
-      }
-
-      if (self.readyState === self.DONE && !errorFlag) {
-        self.dispatchEvent("load");
-        // @TODO figure out InspectorInstrumentation::didLoadXHR(cookie)
-        self.dispatchEvent("loadend");
-      }
-    }
-  };
-};
-
-})(require("__browserify_process"),require("__browserify_buffer").Buffer)
-},{"__browserify_buffer":13,"__browserify_process":5,"child_process":31,"fs":7,"http":32,"https":33,"url":8}],28:[function(require,module,exports){
+},{"./errors":1,"./nodes":12,"inflection":30}],28:[function(require,module,exports){
 (function(global){/*global unescape, module, define, window, global*/
 
 /*
@@ -15023,13 +14579,573 @@ var UriTemplate = (function () {
 ));
 
 })(window)
-},{}],30:[function(require,module,exports){
-module.exports = require( './lib/inflection' );
-},{"./lib/inflection":34}],31:[function(require,module,exports){
-exports.spawn = function () {};
-exports.exec = function () {};
+},{}],29:[function(require,module,exports){
+(function(process,Buffer){/**
+ * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
+ *
+ * This can be used with JS designed for browsers to improve reuse of code and
+ * allow the use of existing libraries.
+ *
+ * Usage: include("XMLHttpRequest.js") and use XMLHttpRequest per W3C specs.
+ *
+ * @author Dan DeFelippi <dan@driverdan.com>
+ * @contributor David Ellis <d.f.ellis@ieee.org>
+ * @license MIT
+ */
 
-},{}],33:[function(require,module,exports){
+var Url = require("url")
+  , spawn = require("child_process").spawn
+  , fs = require('fs');
+
+exports.XMLHttpRequest = function() {
+  /**
+   * Private variables
+   */
+  var self = this;
+  var http = require('http');
+  var https = require('https');
+
+  // Holds http.js objects
+  var client;
+  var request;
+  var response;
+
+  // Request settings
+  var settings = {};
+
+  // Disable header blacklist.
+  // Not part of XHR specs.
+  var disableHeaderCheck = false;
+
+  // Set some default headers
+  var defaultHeaders = {
+    "User-Agent": "node-XMLHttpRequest",
+    "Accept": "*/*",
+  };
+
+  var headers = defaultHeaders;
+
+  // These headers are not user setable.
+  // The following are allowed but banned in the spec:
+  // * user-agent
+  var forbiddenRequestHeaders = [
+    "accept-charset",
+    "accept-encoding",
+    "access-control-request-headers",
+    "access-control-request-method",
+    "connection",
+    "content-length",
+    "content-transfer-encoding",
+    "cookie",
+    "cookie2",
+    "date",
+    "expect",
+    "host",
+    "keep-alive",
+    "origin",
+    "referer",
+    "te",
+    "trailer",
+    "transfer-encoding",
+    "upgrade",
+    "via"
+  ];
+
+  // These request methods are not allowed
+  var forbiddenRequestMethods = [
+    "TRACE",
+    "TRACK",
+    "CONNECT"
+  ];
+
+  // Send flag
+  var sendFlag = false;
+  // Error flag, used when errors occur or abort is called
+  var errorFlag = false;
+
+  // Event listeners
+  var listeners = {};
+
+  /**
+   * Constants
+   */
+
+  this.UNSENT = 0;
+  this.OPENED = 1;
+  this.HEADERS_RECEIVED = 2;
+  this.LOADING = 3;
+  this.DONE = 4;
+
+  /**
+   * Public vars
+   */
+
+  // Current state
+  this.readyState = this.UNSENT;
+
+  // default ready state change handler in case one is not set or is set late
+  this.onreadystatechange = null;
+
+  // Result & response
+  this.responseText = "";
+  this.responseXML = "";
+  this.status = null;
+  this.statusText = null;
+
+  /**
+   * Private methods
+   */
+
+  /**
+   * Check if the specified header is allowed.
+   *
+   * @param string header Header to validate
+   * @return boolean False if not allowed, otherwise true
+   */
+  var isAllowedHttpHeader = function(header) {
+    return disableHeaderCheck || (header && forbiddenRequestHeaders.indexOf(header.toLowerCase()) === -1);
+  };
+
+  /**
+   * Check if the specified method is allowed.
+   *
+   * @param string method Request method to validate
+   * @return boolean False if not allowed, otherwise true
+   */
+  var isAllowedHttpMethod = function(method) {
+    return (method && forbiddenRequestMethods.indexOf(method) === -1);
+  };
+
+  /**
+   * Public methods
+   */
+
+  /**
+   * Open the connection. Currently supports local server requests.
+   *
+   * @param string method Connection method (eg GET, POST)
+   * @param string url URL for the connection.
+   * @param boolean async Asynchronous connection. Default is true.
+   * @param string user Username for basic authentication (optional)
+   * @param string password Password for basic authentication (optional)
+   */
+  this.open = function(method, url, async, user, password) {
+    this.abort();
+    errorFlag = false;
+
+    // Check for valid request method
+    if (!isAllowedHttpMethod(method)) {
+      throw "SecurityError: Request method not allowed";
+      return;
+    }
+
+    settings = {
+      "method": method,
+      "url": url.toString(),
+      "async": (typeof async !== "boolean" ? true : async),
+      "user": user || null,
+      "password": password || null
+    };
+
+    setState(this.OPENED);
+  };
+
+  /**
+   * Disables or enables isAllowedHttpHeader() check the request. Enabled by default.
+   * This does not conform to the W3C spec.
+   *
+   * @param boolean state Enable or disable header checking.
+   */
+  this.setDisableHeaderCheck = function(state) {
+    disableHeaderCheck = state;
+  }
+
+  /**
+   * Sets a header for the request.
+   *
+   * @param string header Header name
+   * @param string value Header value
+   */
+  this.setRequestHeader = function(header, value) {
+    if (this.readyState != this.OPENED) {
+      throw "INVALID_STATE_ERR: setRequestHeader can only be called when state is OPEN";
+    }
+    if (!isAllowedHttpHeader(header)) {
+      console.warn('Refused to set unsafe header "' + header + '"');
+      return;
+    }
+    if (sendFlag) {
+      throw "INVALID_STATE_ERR: send flag is true";
+    }
+    headers[header] = value;
+  };
+
+  /**
+   * Gets a header from the server response.
+   *
+   * @param string header Name of header to get.
+   * @return string Text of the header or null if it doesn't exist.
+   */
+  this.getResponseHeader = function(header) {
+    if (typeof header === "string"
+      && this.readyState > this.OPENED
+      && response.headers[header.toLowerCase()]
+      && !errorFlag
+    ) {
+      return response.headers[header.toLowerCase()];
+    }
+
+    return null;
+  };
+
+  /**
+   * Gets all the response headers.
+   *
+   * @return string A string with all response headers separated by CR+LF
+   */
+  this.getAllResponseHeaders = function() {
+    if (this.readyState < this.HEADERS_RECEIVED || errorFlag) {
+      return "";
+    }
+    var result = "";
+
+    for (var i in response.headers) {
+      // Cookie headers are excluded
+      if (i !== "set-cookie" && i !== "set-cookie2") {
+        result += i + ": " + response.headers[i] + "\r\n";
+      }
+    }
+    return result.substr(0, result.length - 2);
+  };
+
+  /**
+   * Gets a request header
+   *
+   * @param string name Name of header to get
+   * @return string Returns the request header or empty string if not set
+   */
+  this.getRequestHeader = function(name) {
+    // @TODO Make this case insensitive
+    if (typeof name === "string" && headers[name]) {
+      return headers[name];
+    }
+
+    return "";
+  }
+
+  /**
+   * Sends the request to the server.
+   *
+   * @param string data Optional data to send as request body.
+   */
+  this.send = function(data) {
+    if (this.readyState != this.OPENED) {
+      throw "INVALID_STATE_ERR: connection must be opened before send() is called";
+    }
+
+    if (sendFlag) {
+      throw "INVALID_STATE_ERR: send has already been called";
+    }
+
+    var ssl = false, local = false;
+    var url = Url.parse(settings.url);
+
+    // Determine the server
+    switch (url.protocol) {
+      case 'https:':
+        ssl = true;
+        // SSL & non-SSL both need host, no break here.
+      case 'http:':
+        var host = url.hostname;
+        break;
+
+      case 'file:':
+        local = true;
+        break;
+
+      case undefined:
+      case '':
+        var host = "localhost";
+        break;
+
+      default:
+        throw "Protocol not supported.";
+    }
+
+    // Load files off the local filesystem (file://)
+    if (local) {
+      if (settings.method !== "GET") {
+        throw "XMLHttpRequest: Only GET method is supported";
+      }
+
+      if (settings.async) {
+        fs.readFile(url.pathname, 'utf8', function(error, data) {
+          if (error) {
+            self.handleError(error);
+          } else {
+            self.status = 200;
+            self.responseText = data;
+            setState(self.DONE);
+          }
+        });
+      } else {
+        try {
+          this.responseText = fs.readFileSync(url.pathname, 'utf8');
+          this.status = 200;
+          setState(self.DONE);
+        } catch(e) {
+          this.handleError(e);
+        }
+      }
+
+      return;
+    }
+
+    // Default to port 80. If accessing localhost on another port be sure
+    // to use http://localhost:port/path
+    var port = url.port || (ssl ? 443 : 80);
+    // Add query string if one is used
+    var uri = url.pathname + (url.search ? url.search : '');
+
+    // Set the Host header or the server may reject the request
+    headers["Host"] = host;
+    if (!((ssl && port === 443) || port === 80)) {
+      headers["Host"] += ':' + url.port;
+    }
+
+    // Set Basic Auth if necessary
+    if (settings.user) {
+      if (typeof settings.password == "undefined") {
+        settings.password = "";
+      }
+      var authBuf = new Buffer(settings.user + ":" + settings.password);
+      headers["Authorization"] = "Basic " + authBuf.toString("base64");
+    }
+
+    // Set content length header
+    if (settings.method === "GET" || settings.method === "HEAD") {
+      data = null;
+    } else if (data) {
+      headers["Content-Length"] = Buffer.byteLength(data);
+
+      if (!headers["Content-Type"]) {
+        headers["Content-Type"] = "text/plain;charset=UTF-8";
+      }
+    } else if (settings.method === "POST") {
+      // For a post with no data set Content-Length: 0.
+      // This is required by buggy servers that don't meet the specs.
+      headers["Content-Length"] = 0;
+    }
+
+    var options = {
+      host: host,
+      port: port,
+      path: uri,
+      method: settings.method,
+      headers: headers,
+      agent: false
+    };
+
+    // Reset error flag
+    errorFlag = false;
+
+    // Handle async requests
+    if (settings.async) {
+      // Use the proper protocol
+      var doRequest = ssl ? https.request : http.request;
+
+      // Request is being sent, set send flag
+      sendFlag = true;
+
+      // As per spec, this is called here for historical reasons.
+      self.dispatchEvent("readystatechange");
+
+      // Create the request
+      request = doRequest(options, function(resp) {
+        response = resp;
+        response.setEncoding("utf8");
+
+        setState(self.HEADERS_RECEIVED);
+        self.status = response.statusCode;
+
+        response.on('data', function(chunk) {
+          // Make sure there's some data
+          if (chunk) {
+            self.responseText += chunk;
+          }
+          // Don't emit state changes if the connection has been aborted.
+          if (sendFlag) {
+            setState(self.LOADING);
+          }
+        });
+
+        response.on('end', function() {
+          if (sendFlag) {
+            // Discard the 'end' event if the connection has been aborted
+            setState(self.DONE);
+            sendFlag = false;
+          }
+        });
+
+        response.on('error', function(error) {
+          self.handleError(error);
+        });
+      }).on('error', function(error) {
+        self.handleError(error);
+      });
+
+      // Node 0.4 and later won't accept empty data. Make sure it's needed.
+      if (data) {
+        request.write(data);
+      }
+
+      request.end();
+
+      self.dispatchEvent("loadstart");
+    } else { // Synchronous
+      // Create a temporary file for communication with the other Node process
+      var syncFile = ".node-xmlhttprequest-sync-" + process.pid;
+      fs.writeFileSync(syncFile, "", "utf8");
+      // The async request the other Node process executes
+      var execString = "var http = require('http'), https = require('https'), fs = require('fs');"
+        + "var doRequest = http" + (ssl ? "s" : "") + ".request;"
+        + "var options = " + JSON.stringify(options) + ";"
+        + "var responseText = '';"
+        + "var req = doRequest(options, function(response) {"
+        + "response.setEncoding('utf8');"
+        + "response.on('data', function(chunk) {"
+        + "responseText += chunk;"
+        + "});"
+        + "response.on('end', function() {"
+        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-STATUS:' + response.statusCode + ',' + responseText, 'utf8');"
+        + "});"
+        + "response.on('error', function(error) {"
+        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-ERROR:' + JSON.stringify(error), 'utf8');"
+        + "});"
+        + "}).on('error', function(error) {"
+        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-ERROR:' + JSON.stringify(error), 'utf8');"
+        + "});"
+        + (data ? "req.write('" + data.replace(/'/g, "\\'") + "');":"")
+        + "req.end();";
+      // Start the other Node Process, executing this string
+      syncProc = spawn(process.argv[0], ["-e", execString]);
+      while((self.responseText = fs.readFileSync(syncFile, 'utf8')) == "") {
+        // Wait while the file is empty
+      }
+      // Kill the child process once the file has data
+      syncProc.stdin.end();
+      // Remove the temporary file
+      fs.unlinkSync(syncFile);
+      if (self.responseText.match(/^NODE-XMLHTTPREQUEST-ERROR:/)) {
+        // If the file returned an error, handle it
+        var errorObj = self.responseText.replace(/^NODE-XMLHTTPREQUEST-ERROR:/, "");
+        self.handleError(errorObj);
+      } else {
+        // If the file returned okay, parse its data and move to the DONE state
+        self.status = self.responseText.replace(/^NODE-XMLHTTPREQUEST-STATUS:([0-9]*),.*/, "$1");
+        self.responseText = self.responseText.replace(/^NODE-XMLHTTPREQUEST-STATUS:[0-9]*,(.*)/, "$1");
+        setState(self.DONE);
+      }
+    }
+  };
+
+  /**
+   * Called when an error is encountered to deal with it.
+   */
+  this.handleError = function(error) {
+    this.status = 503;
+    this.statusText = error;
+    this.responseText = error.stack;
+    errorFlag = true;
+    setState(this.DONE);
+  };
+
+  /**
+   * Aborts a request.
+   */
+  this.abort = function() {
+    if (request) {
+      request.abort();
+      request = null;
+    }
+
+    headers = defaultHeaders;
+    this.responseText = "";
+    this.responseXML = "";
+
+    errorFlag = true;
+
+    if (this.readyState !== this.UNSENT
+        && (this.readyState !== this.OPENED || sendFlag)
+        && this.readyState !== this.DONE) {
+      sendFlag = false;
+      setState(this.DONE);
+    }
+    this.readyState = this.UNSENT;
+  };
+
+  /**
+   * Adds an event listener. Preferred method of binding to events.
+   */
+  this.addEventListener = function(event, callback) {
+    if (!(event in listeners)) {
+      listeners[event] = [];
+    }
+    // Currently allows duplicate callbacks. Should it?
+    listeners[event].push(callback);
+  };
+
+  /**
+   * Remove an event callback that has already been bound.
+   * Only works on the matching funciton, cannot be a copy.
+   */
+  this.removeEventListener = function(event, callback) {
+    if (event in listeners) {
+      // Filter will return a new array with the callback removed
+      listeners[event] = listeners[event].filter(function(ev) {
+        return ev !== callback;
+      });
+    }
+  };
+
+  /**
+   * Dispatch any events, including both "on" methods and events attached using addEventListener.
+   */
+  this.dispatchEvent = function(event) {
+    if (typeof self["on" + event] === "function") {
+      self["on" + event]();
+    }
+    if (event in listeners) {
+      for (var i = 0, len = listeners[event].length; i < len; i++) {
+        listeners[event][i].call(self);
+      }
+    }
+  };
+
+  /**
+   * Changes readyState and calls onreadystatechange.
+   *
+   * @param int state New state
+   */
+  var setState = function(state) {
+    if (self.readyState !== state) {
+      self.readyState = state;
+
+      if (settings.async || self.readyState < self.OPENED || self.readyState === self.DONE) {
+        self.dispatchEvent("readystatechange");
+      }
+
+      if (self.readyState === self.DONE && !errorFlag) {
+        self.dispatchEvent("load");
+        // @TODO figure out InspectorInstrumentation::didLoadXHR(cookie)
+        self.dispatchEvent("loadend");
+      }
+    }
+  };
+};
+
+})(require("__browserify_process"),require("__browserify_buffer").Buffer)
+},{"__browserify_buffer":14,"__browserify_process":5,"child_process":31,"fs":9,"http":32,"https":33,"url":7}],33:[function(require,module,exports){
 var http = require('http');
 
 var https = module.exports;
@@ -15043,69 +15159,210 @@ https.request = function (params, cb) {
     params.scheme = 'https';
     return http.request.call(this, params, cb);
 }
-},{"http":32}],32:[function(require,module,exports){
-var http = module.exports;
-var EventEmitter = require('events').EventEmitter;
-var Request = require('./lib/request');
+},{"http":32}],31:[function(require,module,exports){
+exports.spawn = function () {};
+exports.exec = function () {};
 
-http.request = function (params, cb) {
-    if (!params) params = {};
-    if (!params.host) params.host = window.location.host.split(':')[0];
-    if (!params.port) params.port = window.location.port;
-    if (!params.scheme) params.scheme = window.location.protocol.split(':')[0];
-    
-    var req = new Request(new xhrHttp, params);
-    if (cb) req.on('response', cb);
-    return req;
+},{}],30:[function(require,module,exports){
+module.exports = require( './lib/inflection' );
+},{"./lib/inflection":34}],35:[function(require,module,exports){
+(function(process){if (!process.EventEmitter) process.EventEmitter = function () {};
+
+var EventEmitter = exports.EventEmitter = process.EventEmitter;
+var isArray = typeof Array.isArray === 'function'
+    ? Array.isArray
+    : function (xs) {
+        return Object.prototype.toString.call(xs) === '[object Array]'
+    }
+;
+function indexOf (xs, x) {
+    if (xs.indexOf) return xs.indexOf(x);
+    for (var i = 0; i < xs.length; i++) {
+        if (x === xs[i]) return i;
+    }
+    return -1;
+}
+
+// By default EventEmitters will print a warning if more than
+// 10 listeners are added to it. This is a useful default which
+// helps finding memory leaks.
+//
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+var defaultMaxListeners = 10;
+EventEmitter.prototype.setMaxListeners = function(n) {
+  if (!this._events) this._events = {};
+  this._events.maxListeners = n;
 };
 
-http.get = function (params, cb) {
-    params.method = 'GET';
-    var req = http.request(params, cb);
-    req.end();
-    return req;
+
+EventEmitter.prototype.emit = function(type) {
+  // If there is no 'error' event listener then throw.
+  if (type === 'error') {
+    if (!this._events || !this._events.error ||
+        (isArray(this._events.error) && !this._events.error.length))
+    {
+      if (arguments[1] instanceof Error) {
+        throw arguments[1]; // Unhandled 'error' event
+      } else {
+        throw new Error("Uncaught, unspecified 'error' event.");
+      }
+      return false;
+    }
+  }
+
+  if (!this._events) return false;
+  var handler = this._events[type];
+  if (!handler) return false;
+
+  if (typeof handler == 'function') {
+    switch (arguments.length) {
+      // fast cases
+      case 1:
+        handler.call(this);
+        break;
+      case 2:
+        handler.call(this, arguments[1]);
+        break;
+      case 3:
+        handler.call(this, arguments[1], arguments[2]);
+        break;
+      // slower
+      default:
+        var args = Array.prototype.slice.call(arguments, 1);
+        handler.apply(this, args);
+    }
+    return true;
+
+  } else if (isArray(handler)) {
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    var listeners = handler.slice();
+    for (var i = 0, l = listeners.length; i < l; i++) {
+      listeners[i].apply(this, args);
+    }
+    return true;
+
+  } else {
+    return false;
+  }
 };
 
-http.Agent = function () {};
-http.Agent.defaultMaxSockets = 4;
+// EventEmitter is defined in src/node_events.cc
+// EventEmitter.prototype.emit() is also defined there.
+EventEmitter.prototype.addListener = function(type, listener) {
+  if ('function' !== typeof listener) {
+    throw new Error('addListener only takes instances of Function');
+  }
 
-var xhrHttp = (function () {
-    if (typeof window === 'undefined') {
-        throw new Error('no window object present');
-    }
-    else if (window.XMLHttpRequest) {
-        return window.XMLHttpRequest;
-    }
-    else if (window.ActiveXObject) {
-        var axs = [
-            'Msxml2.XMLHTTP.6.0',
-            'Msxml2.XMLHTTP.3.0',
-            'Microsoft.XMLHTTP'
-        ];
-        for (var i = 0; i < axs.length; i++) {
-            try {
-                var ax = new(window.ActiveXObject)(axs[i]);
-                return function () {
-                    if (ax) {
-                        var ax_ = ax;
-                        ax = null;
-                        return ax_;
-                    }
-                    else {
-                        return new(window.ActiveXObject)(axs[i]);
-                    }
-                };
-            }
-            catch (e) {}
-        }
-        throw new Error('ajax not supported in this browser')
-    }
-    else {
-        throw new Error('ajax not supported in this browser');
-    }
-})();
+  if (!this._events) this._events = {};
 
-},{"./lib/request":36,"events":35}],34:[function(require,module,exports){
+  // To avoid recursion in the case that type == "newListeners"! Before
+  // adding it to the listeners, first emit "newListeners".
+  this.emit('newListener', type, listener);
+
+  if (!this._events[type]) {
+    // Optimize the case of one listener. Don't need the extra array object.
+    this._events[type] = listener;
+  } else if (isArray(this._events[type])) {
+
+    // Check for listener leak
+    if (!this._events[type].warned) {
+      var m;
+      if (this._events.maxListeners !== undefined) {
+        m = this._events.maxListeners;
+      } else {
+        m = defaultMaxListeners;
+      }
+
+      if (m && m > 0 && this._events[type].length > m) {
+        this._events[type].warned = true;
+        console.error('(node) warning: possible EventEmitter memory ' +
+                      'leak detected. %d listeners added. ' +
+                      'Use emitter.setMaxListeners() to increase limit.',
+                      this._events[type].length);
+        console.trace();
+      }
+    }
+
+    // If we've already got an array, just append.
+    this._events[type].push(listener);
+  } else {
+    // Adding the second element, need to change to array.
+    this._events[type] = [this._events[type], listener];
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.once = function(type, listener) {
+  var self = this;
+  self.on(type, function g() {
+    self.removeListener(type, g);
+    listener.apply(this, arguments);
+  });
+
+  return this;
+};
+
+EventEmitter.prototype.removeListener = function(type, listener) {
+  if ('function' !== typeof listener) {
+    throw new Error('removeListener only takes instances of Function');
+  }
+
+  // does not use listeners(), so no side effect of creating _events[type]
+  if (!this._events || !this._events[type]) return this;
+
+  var list = this._events[type];
+
+  if (isArray(list)) {
+    var i = indexOf(list, listener);
+    if (i < 0) return this;
+    list.splice(i, 1);
+    if (list.length == 0)
+      delete this._events[type];
+  } else if (this._events[type] === listener) {
+    delete this._events[type];
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.removeAllListeners = function(type) {
+  if (arguments.length === 0) {
+    this._events = {};
+    return this;
+  }
+
+  // does not use listeners(), so no side effect of creating _events[type]
+  if (type && this._events && this._events[type]) this._events[type] = null;
+  return this;
+};
+
+EventEmitter.prototype.listeners = function(type) {
+  if (!this._events) this._events = {};
+  if (!this._events[type]) this._events[type] = [];
+  if (!isArray(this._events[type])) {
+    this._events[type] = [this._events[type]];
+  }
+  return this._events[type];
+};
+
+EventEmitter.listenerCount = function(emitter, type) {
+  var ret;
+  if (!emitter._events || !emitter._events[type])
+    ret = 0;
+  else if (typeof emitter._events[type] === 'function')
+    ret = 1;
+  else
+    ret = emitter._events[type].length;
+  return ret;
+};
+
+})(require("__browserify_process"))
+},{"__browserify_process":5}],34:[function(require,module,exports){
 /*!
  * inflection
  * Copyright(c) 2011 Ben Lin <ben@dreamerslab.com>
@@ -15642,204 +15899,69 @@ module.exports = {
   }
 };
 
-},{}],35:[function(require,module,exports){
-(function(process){if (!process.EventEmitter) process.EventEmitter = function () {};
+},{}],32:[function(require,module,exports){
+var http = module.exports;
+var EventEmitter = require('events').EventEmitter;
+var Request = require('./lib/request');
 
-var EventEmitter = exports.EventEmitter = process.EventEmitter;
-var isArray = typeof Array.isArray === 'function'
-    ? Array.isArray
-    : function (xs) {
-        return Object.prototype.toString.call(xs) === '[object Array]'
+http.request = function (params, cb) {
+    if (!params) params = {};
+    if (!params.host) params.host = window.location.host.split(':')[0];
+    if (!params.port) params.port = window.location.port;
+    if (!params.scheme) params.scheme = window.location.protocol.split(':')[0];
+    
+    var req = new Request(new xhrHttp, params);
+    if (cb) req.on('response', cb);
+    return req;
+};
+
+http.get = function (params, cb) {
+    params.method = 'GET';
+    var req = http.request(params, cb);
+    req.end();
+    return req;
+};
+
+http.Agent = function () {};
+http.Agent.defaultMaxSockets = 4;
+
+var xhrHttp = (function () {
+    if (typeof window === 'undefined') {
+        throw new Error('no window object present');
     }
-;
-function indexOf (xs, x) {
-    if (xs.indexOf) return xs.indexOf(x);
-    for (var i = 0; i < xs.length; i++) {
-        if (x === xs[i]) return i;
+    else if (window.XMLHttpRequest) {
+        return window.XMLHttpRequest;
     }
-    return -1;
-}
-
-// By default EventEmitters will print a warning if more than
-// 10 listeners are added to it. This is a useful default which
-// helps finding memory leaks.
-//
-// Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-var defaultMaxListeners = 10;
-EventEmitter.prototype.setMaxListeners = function(n) {
-  if (!this._events) this._events = {};
-  this._events.maxListeners = n;
-};
-
-
-EventEmitter.prototype.emit = function(type) {
-  // If there is no 'error' event listener then throw.
-  if (type === 'error') {
-    if (!this._events || !this._events.error ||
-        (isArray(this._events.error) && !this._events.error.length))
-    {
-      if (arguments[1] instanceof Error) {
-        throw arguments[1]; // Unhandled 'error' event
-      } else {
-        throw new Error("Uncaught, unspecified 'error' event.");
-      }
-      return false;
+    else if (window.ActiveXObject) {
+        var axs = [
+            'Msxml2.XMLHTTP.6.0',
+            'Msxml2.XMLHTTP.3.0',
+            'Microsoft.XMLHTTP'
+        ];
+        for (var i = 0; i < axs.length; i++) {
+            try {
+                var ax = new(window.ActiveXObject)(axs[i]);
+                return function () {
+                    if (ax) {
+                        var ax_ = ax;
+                        ax = null;
+                        return ax_;
+                    }
+                    else {
+                        return new(window.ActiveXObject)(axs[i]);
+                    }
+                };
+            }
+            catch (e) {}
+        }
+        throw new Error('ajax not supported in this browser')
     }
-  }
-
-  if (!this._events) return false;
-  var handler = this._events[type];
-  if (!handler) return false;
-
-  if (typeof handler == 'function') {
-    switch (arguments.length) {
-      // fast cases
-      case 1:
-        handler.call(this);
-        break;
-      case 2:
-        handler.call(this, arguments[1]);
-        break;
-      case 3:
-        handler.call(this, arguments[1], arguments[2]);
-        break;
-      // slower
-      default:
-        var args = Array.prototype.slice.call(arguments, 1);
-        handler.apply(this, args);
+    else {
+        throw new Error('ajax not supported in this browser');
     }
-    return true;
+})();
 
-  } else if (isArray(handler)) {
-    var args = Array.prototype.slice.call(arguments, 1);
-
-    var listeners = handler.slice();
-    for (var i = 0, l = listeners.length; i < l; i++) {
-      listeners[i].apply(this, args);
-    }
-    return true;
-
-  } else {
-    return false;
-  }
-};
-
-// EventEmitter is defined in src/node_events.cc
-// EventEmitter.prototype.emit() is also defined there.
-EventEmitter.prototype.addListener = function(type, listener) {
-  if ('function' !== typeof listener) {
-    throw new Error('addListener only takes instances of Function');
-  }
-
-  if (!this._events) this._events = {};
-
-  // To avoid recursion in the case that type == "newListeners"! Before
-  // adding it to the listeners, first emit "newListeners".
-  this.emit('newListener', type, listener);
-
-  if (!this._events[type]) {
-    // Optimize the case of one listener. Don't need the extra array object.
-    this._events[type] = listener;
-  } else if (isArray(this._events[type])) {
-
-    // Check for listener leak
-    if (!this._events[type].warned) {
-      var m;
-      if (this._events.maxListeners !== undefined) {
-        m = this._events.maxListeners;
-      } else {
-        m = defaultMaxListeners;
-      }
-
-      if (m && m > 0 && this._events[type].length > m) {
-        this._events[type].warned = true;
-        console.error('(node) warning: possible EventEmitter memory ' +
-                      'leak detected. %d listeners added. ' +
-                      'Use emitter.setMaxListeners() to increase limit.',
-                      this._events[type].length);
-        console.trace();
-      }
-    }
-
-    // If we've already got an array, just append.
-    this._events[type].push(listener);
-  } else {
-    // Adding the second element, need to change to array.
-    this._events[type] = [this._events[type], listener];
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.once = function(type, listener) {
-  var self = this;
-  self.on(type, function g() {
-    self.removeListener(type, g);
-    listener.apply(this, arguments);
-  });
-
-  return this;
-};
-
-EventEmitter.prototype.removeListener = function(type, listener) {
-  if ('function' !== typeof listener) {
-    throw new Error('removeListener only takes instances of Function');
-  }
-
-  // does not use listeners(), so no side effect of creating _events[type]
-  if (!this._events || !this._events[type]) return this;
-
-  var list = this._events[type];
-
-  if (isArray(list)) {
-    var i = indexOf(list, listener);
-    if (i < 0) return this;
-    list.splice(i, 1);
-    if (list.length == 0)
-      delete this._events[type];
-  } else if (this._events[type] === listener) {
-    delete this._events[type];
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.removeAllListeners = function(type) {
-  if (arguments.length === 0) {
-    this._events = {};
-    return this;
-  }
-
-  // does not use listeners(), so no side effect of creating _events[type]
-  if (type && this._events && this._events[type]) this._events[type] = null;
-  return this;
-};
-
-EventEmitter.prototype.listeners = function(type) {
-  if (!this._events) this._events = {};
-  if (!this._events[type]) this._events[type] = [];
-  if (!isArray(this._events[type])) {
-    this._events[type] = [this._events[type]];
-  }
-  return this._events[type];
-};
-
-EventEmitter.listenerCount = function(emitter, type) {
-  var ret;
-  if (!emitter._events || !emitter._events[type])
-    ret = 0;
-  else if (typeof emitter._events[type] === 'function')
-    ret = 1;
-  else
-    ret = emitter._events[type].length;
-  return ret;
-};
-
-})(require("__browserify_process"))
-},{"__browserify_process":5}],37:[function(require,module,exports){
+},{"./lib/request":36,"events":35}],37:[function(require,module,exports){
 var events = require('events');
 var util = require('util');
 
@@ -16309,13 +16431,14 @@ exports.format = function(f) {
 
 },{"events":35}],39:[function(require,module,exports){
 var Stream = require('stream');
+var util = require('util');
 
 var Response = module.exports = function (res) {
     this.offset = 0;
     this.readable = true;
 };
 
-Response.prototype = new Stream;
+util.inherits(Response, Stream);
 
 var capable = {
     streaming : true,
@@ -16428,11 +16551,12 @@ var isArray = Array.isArray || function (xs) {
     return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{"stream":37}],36:[function(require,module,exports){
+},{"stream":37,"util":38}],36:[function(require,module,exports){
 var Stream = require('stream');
 var Response = require('./response');
 var concatStream = require('concat-stream');
 var Base64 = require('Base64');
+var util = require('util');
 
 var Request = module.exports = function (xhr, params) {
     var self = this;
@@ -16485,7 +16609,7 @@ var Request = module.exports = function (xhr, params) {
     };
 };
 
-Request.prototype = new Stream;
+util.inherits(Request, Stream);
 
 Request.prototype.setHeader = function (key, value) {
     if (isArray(value)) {
@@ -16561,7 +16685,7 @@ var indexOf = function (xs, x) {
     return -1;
 };
 
-},{"./response":39,"Base64":41,"concat-stream":40,"stream":37}],41:[function(require,module,exports){
+},{"./response":39,"Base64":41,"concat-stream":40,"stream":37,"util":38}],41:[function(require,module,exports){
 ;(function () {
 
   var
@@ -16690,7 +16814,20 @@ function mix(from, into) {
   }
 }
 
-},{"./copy.js":48,"./create.js":49,"./from.js":43,"./is.js":45,"./join.js":47,"./read.js":50,"./subarray.js":46,"./to.js":44,"./write.js":51}],47:[function(require,module,exports){
+},{"./copy.js":48,"./create.js":49,"./from.js":43,"./is.js":45,"./join.js":47,"./read.js":50,"./subarray.js":46,"./to.js":44,"./write.js":51}],45:[function(require,module,exports){
+
+module.exports = function(buffer) {
+  return buffer instanceof Uint8Array;
+}
+
+},{}],46:[function(require,module,exports){
+module.exports = subarray
+
+function subarray(buf, from, to) {
+  return buf.subarray(from || 0, to || buf.length)
+}
+
+},{}],47:[function(require,module,exports){
 module.exports = join
 
 function join(targets, hint) {
@@ -16726,12 +16863,6 @@ function get_length(targets) {
     size += targets[i].byteLength
   }
   return size
-}
-
-},{}],45:[function(require,module,exports){
-
-module.exports = function(buffer) {
-  return buffer instanceof Uint8Array;
 }
 
 },{}],48:[function(require,module,exports){
@@ -16788,19 +16919,100 @@ function slow_copy(from, to, j, i, jend) {
   }
 }
 
-},{}],46:[function(require,module,exports){
-module.exports = subarray
-
-function subarray(buf, from, to) {
-  return buf.subarray(from || 0, to || buf.length)
-}
-
 },{}],49:[function(require,module,exports){
 module.exports = function(size) {
   return new Uint8Array(size)
 }
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
+module.exports = {
+    writeUInt8:      write_uint8
+  , writeInt8:       write_int8
+  , writeUInt16LE:   write_uint16_le
+  , writeUInt32LE:   write_uint32_le
+  , writeInt16LE:    write_int16_le
+  , writeInt32LE:    write_int32_le
+  , writeFloatLE:    write_float_le
+  , writeDoubleLE:   write_double_le
+  , writeUInt16BE:   write_uint16_be
+  , writeUInt32BE:   write_uint32_be
+  , writeInt16BE:    write_int16_be
+  , writeInt32BE:    write_int32_be
+  , writeFloatBE:    write_float_be
+  , writeDoubleBE:   write_double_be
+}
+
+var map = require('./mapped.js')
+
+function write_uint8(target, value, at) {
+  return target[at] = value
+}
+
+function write_int8(target, value, at) {
+  return target[at] = value < 0 ? value + 0x100 : value
+}
+
+function write_uint16_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setUint16(at + target.byteOffset, value, true)
+}
+
+function write_uint32_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setUint32(at + target.byteOffset, value, true)
+}
+
+function write_int16_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setInt16(at + target.byteOffset, value, true)
+}
+
+function write_int32_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setInt32(at + target.byteOffset, value, true)
+}
+
+function write_float_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setFloat32(at + target.byteOffset, value, true)
+}
+
+function write_double_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setFloat64(at + target.byteOffset, value, true)
+}
+
+function write_uint16_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setUint16(at + target.byteOffset, value, false)
+}
+
+function write_uint32_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setUint32(at + target.byteOffset, value, false)
+}
+
+function write_int16_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setInt16(at + target.byteOffset, value, false)
+}
+
+function write_int32_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setInt32(at + target.byteOffset, value, false)
+}
+
+function write_float_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setFloat32(at + target.byteOffset, value, false)
+}
+
+function write_double_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setFloat64(at + target.byteOffset, value, false)
+}
+
+},{"./mapped.js":52}],50:[function(require,module,exports){
 module.exports = {
     readUInt8:      read_uint8
   , readInt8:       read_int8
@@ -16887,94 +17099,6 @@ function read_float_be(target, at) {
 function read_double_be(target, at) {
   var dv = map.get(target);
   return dv.getFloat64(at + target.byteOffset, false)
-}
-
-},{"./mapped.js":52}],51:[function(require,module,exports){
-module.exports = {
-    writeUInt8:      write_uint8
-  , writeInt8:       write_int8
-  , writeUInt16LE:   write_uint16_le
-  , writeUInt32LE:   write_uint32_le
-  , writeInt16LE:    write_int16_le
-  , writeInt32LE:    write_int32_le
-  , writeFloatLE:    write_float_le
-  , writeDoubleLE:   write_double_le
-  , writeUInt16BE:   write_uint16_be
-  , writeUInt32BE:   write_uint32_be
-  , writeInt16BE:    write_int16_be
-  , writeInt32BE:    write_int32_be
-  , writeFloatBE:    write_float_be
-  , writeDoubleBE:   write_double_be
-}
-
-var map = require('./mapped.js')
-
-function write_uint8(target, value, at) {
-  return target[at] = value
-}
-
-function write_int8(target, value, at) {
-  return target[at] = value < 0 ? value + 0x100 : value
-}
-
-function write_uint16_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setUint16(at + target.byteOffset, value, true)
-}
-
-function write_uint32_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setUint32(at + target.byteOffset, value, true)
-}
-
-function write_int16_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setInt16(at + target.byteOffset, value, true)
-}
-
-function write_int32_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setInt32(at + target.byteOffset, value, true)
-}
-
-function write_float_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setFloat32(at + target.byteOffset, value, true)
-}
-
-function write_double_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setFloat64(at + target.byteOffset, value, true)
-}
-
-function write_uint16_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setUint16(at + target.byteOffset, value, false)
-}
-
-function write_uint32_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setUint32(at + target.byteOffset, value, false)
-}
-
-function write_int16_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setInt16(at + target.byteOffset, value, false)
-}
-
-function write_int32_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setInt32(at + target.byteOffset, value, false)
-}
-
-function write_float_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setFloat32(at + target.byteOffset, value, false)
-}
-
-function write_double_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setFloat64(at + target.byteOffset, value, false)
 }
 
 },{"./mapped.js":52}],52:[function(require,module,exports){
@@ -17258,5 +17382,5 @@ function reduced(list) {
   return out
 }
 
-},{}]},{},[27,10,14,1,2,15,11,16,19,12,17,20,23,18,24,3,25,22,26,4,21,6])
+},{}]},{},[13,10,15,1,2,16,17,12,20,11,18,21,24,19,25,26,3,23,4,27,22,6])
 ;
