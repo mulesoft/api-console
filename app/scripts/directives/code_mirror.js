@@ -5,8 +5,11 @@
     var editor = CodeMirror(element[0], {
       mode: "text/xml",
       readOnly: "nocursor",
-      value: scope.code || ''
+      value: scope.code || '',
+      lineNumbers: true
     });
+
+    editor.setSize("100%", "100%");
 
     scope.$watch('visible', function(visible) {
       if (visible)

@@ -1,14 +1,17 @@
 <section role='documentation'>
   <p ng-show="method.description">Description: {{method.description}}</p>
 
-  <ul>
-    <li><a href='' ng-click="documentation.openTab('parameters')">Parameters</a></li>
-    <li><a href='' ng-click="documentation.openTab('requests')">Requests</a></li>
-    <li><a href='' ng-click="documentation.openTab('responses')">Responses</a></li>
+  <ul class="nav nav-tabs">
+    <li ng-class="{active: documentation.currentTab == 'parameters'}"><a href='' ng-click="documentation.openTab('parameters')">Parameters</a></li>
+    <li ng-class="{active: documentation.currentTab == 'requests'}"><a href='' ng-click="documentation.openTab('requests')">Requests</a></li>
+    <li ng-class="{active: documentation.currentTab == 'responses'}"><a href='' ng-click="documentation.openTab('responses')">Responses</a></li>
   </ul>
 
   <div ng-show="documentation.currentTab == 'requests'">
-    <div code-mirror="method.body['text/xml'].example" visible="documentation.currentTab == 'requests'"></div>
+    <div ng-if="method.body['text/xml'].example">
+      <h3>Example Request</h3>
+      <div class="code" code-mirror="method.body['text/xml'].example" visible="documentation.currentTab == 'requests'"></div>
+    </div>
   </div>
 
   <div ng-show="documentation.currentTab == 'parameters'">
