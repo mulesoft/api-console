@@ -8,6 +8,8 @@ module.directive('pathBuilder', RAML.Directives.pathBuilder);
 module.directive('ramlConsole', RAML.Directives.ramlConsole);
 module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
 module.directive('resourceSummary', RAML.Directives.resourceSummary);
+module.directive('tab', RAML.Directives.tab);
+module.directive('tabset', RAML.Directives.tabset);
 module.directive('tryIt', RAML.Directives.tryIt);
 
 module.controller('TryItController', RAML.Controllers.tryIt);
