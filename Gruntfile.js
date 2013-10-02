@@ -347,6 +347,10 @@ module.exports = function (grunt) {
         'spec:integration'
     ]);
 
+    grunt.registerTask('spec:unit', [
+        'karma:unit'
+    ]);
+
     grunt.registerTask('spec:parser', [
         'karma:parser'
     ]);
