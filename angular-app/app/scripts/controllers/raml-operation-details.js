@@ -15,14 +15,14 @@ angular.module('ramlConsoleApp')
         };
 
         $scope.initTabs = function () {
-            if (this.tabs) {
+            if ($scope.tabs) {
                 return;
             }
 
-            this.tabs = [];
+            $scope.tabs = [];
 
             if ($scope.consoleSettings && $scope.consoleSettings.displayTryIt){
-                this.tabs.push({
+                $scope.tabs.push({
                     name: 'try-it',
                     displayName: 'Try It',
                     view: 'views/raml-operation-details-try-it.tmpl.html',
@@ -32,7 +32,7 @@ angular.module('ramlConsoleApp')
                 });
             }
 
-            this.tabs.push({
+            $scope.tabs.push({
                 name: 'parameters',
                 displayName: 'Parameters',
                 view: 'views/raml-operation-details-parameters.tmpl.html',
@@ -42,7 +42,7 @@ angular.module('ramlConsoleApp')
                 }
             });
 
-            this.tabs.push({
+            $scope.tabs.push({
                 name: 'requests',
                 displayName: 'Request',
                 view: 'views/raml-operation-details-request.tmpl.html',
@@ -51,7 +51,7 @@ angular.module('ramlConsoleApp')
                 }
             });
 
-            this.tabs.push({
+            $scope.tabs.push({
                 name: 'response',
                 displayName: 'Response',
                 view: 'views/raml-operation-details-response.tmpl.html',
@@ -60,10 +60,20 @@ angular.module('ramlConsoleApp')
                 }
             });
 
-            this.tabName = this.tabs[0].name;
+            $scope.initSelectedTab();
+        };
+
+        $scope.initSelectedTab = function () {
+            $scope.tabName = null;
+            $scope.tabs.forEach(function (tab) {
+                if (!$scope.tabName && tab.show()) {
+                    $scope.tabName = tab.name;
+                }
+            });
         };
 
         $scope.$on('event:raml-method-changed', function () {
+            $scope.initSelectedTab();
             if ($scope.operation.supportedTypes && $scope.operation.supportedTypes.length) {
                 eventService.broadcast('event:raml-body-type-changed', $scope.operation.supportedTypes[0]);
             } else {
