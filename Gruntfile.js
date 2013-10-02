@@ -63,7 +63,8 @@ module.exports = function (grunt) {
                         'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js',
-                        'app/vendor/codemirror.js'
+                        'app/vendor/codemirror/codemirror.js',
+                        'app/vendor/codemirror/xml.js'
                     ],
                     'dist/index.html': ['app/index.embedded.html'],
                     'dist/index.acceptance.html': ['app/index.acceptance.html']
@@ -292,7 +293,9 @@ module.exports = function (grunt) {
                         'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js',
-                        'app/vendor/codemirror.js'
+                        'app/vendor/codemirror/codemirror.js',
+                        'app/vendor/codemirror/xml.js'
+
                     ],
                     'dist/app.js': [
                         'dist/templates.js'
