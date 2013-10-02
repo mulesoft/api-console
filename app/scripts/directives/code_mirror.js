@@ -1,13 +1,24 @@
 (function() {
   'use strict';
 
+  // https://groups.google.com/forum/#!topic/codemirror/oGeWPzZynxo
+  function indentAll(cm) {
+    var last = cm.lineCount();
+    cm.operation(function() {
+      for (var i = 0; i < last; ++i) cm.indentLine(i);
+    });
+  };
+
   var link = function(scope, element, attrs) {
     var editor = CodeMirror(element[0], {
       mode: "text/xml",
       readOnly: "nocursor",
       value: scope.code || '',
-      lineNumbers: true
+      lineNumbers: true,
+      indentUnit: 4
     });
+
+    indentAll(editor);
 
     editor.setSize("100%", "100%");
 
