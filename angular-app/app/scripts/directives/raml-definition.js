@@ -11,12 +11,10 @@ angular.module('ramlConsoleApp')
                 'id': '@',
                 'src': '@'
             },
-            controller: function ($scope, $element, $attrs, ramlParser, ramlReader) {
+            controller: function ($scope, $element, $attrs, ramlParser) {
                 ramlParser.loadFile($attrs.src)
                     .done(function (result) {
-                        var readData = ramlReader.read(result);
-                        console.log(readData);
-                        $rootScope.$emit('event:raml-parsed', readData);
+                        $rootScope.$emit('event:raml-parsed', result);
                     });
             }
         };

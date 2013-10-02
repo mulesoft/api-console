@@ -1,9 +1,9 @@
 angular.module('ramlConsoleApp')
-    .controller('ramlOperationList', function ($scope) {
+    .controller('ramlOperationList', function ($scope, ramlReader) {
         $scope.model = null;
 
         $scope.$on('event:raml-operation-list-published', function (e, eventData) {
-            $scope.resources = eventData;
+            $scope.resources = ramlReader.read(eventData).resources;
         });
 
         $scope.$on('event:raml-sidebar-clicked', function (e, eventData) {

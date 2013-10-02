@@ -16,8 +16,9 @@ angular.module('ramlConsoleApp')
                 $scope.consoleSettings = { displayTryIt: true };
 
                 $rootScope.$on('event:raml-parsed', function (e, args) {
+                    var definition = ramlReader.read(args);
                     $scope.baseUri = ramlReader.processBaseUri(args);
-                    $scope.resources = args.resources;
+                    $scope.resources = definition.resources;
                     $scope.documentation = args.documentation;
                     $scope.$apply();
                 });
