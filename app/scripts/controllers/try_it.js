@@ -40,5 +40,5 @@
     });
   };
 
-  RAML.Controllers.TryIt = TryIt;
+  RAML.Controllers.tryIt = TryIt;
 })();

@@ -1,0 +1,9 @@
+#%RAML 0.2
+---
+title: Example API
+baseUri: #{test_api_uri}
+/resource:
+  post:
+    body:
+     text/xml:
+       example: !include xml_example.xml

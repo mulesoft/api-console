@@ -1,0 +1,9 @@
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li ng-repeat="tab in tabs" ng-class="{active: tab.active, disabled: tab.disabled}">
+      <a ng-click="tabset.select(tab)">{{tab.heading}}</a>
+    </li>
+  </ul>
+
+  <div class="tab-content" ng-transclude></div>
+</div>

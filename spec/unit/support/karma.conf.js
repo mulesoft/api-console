@@ -8,6 +8,8 @@ files = [
     JASMINE,
     JASMINE_ADAPTER,
     'app/vendor/raml-parser.js',
+    'app/vendor/codemirror/codemirror.js',
+    'app/vendor/codemirror/xml.js',
     'app/scripts/**/*.js',
     'spec/matchers/**/*.js',
     'spec/support/helpers/**/*.js',

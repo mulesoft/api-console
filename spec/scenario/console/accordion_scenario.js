@@ -35,17 +35,18 @@ describe('accordion view of API', function() {
 
       getResources().then(function(resources) {
         expect(resources).toHaveLength(3);
-        var methodsPromise = resources[0].findElements(protractor.By.css('[role="methods"] li'))
+        var methodSummarySelector = protractor.By.css('[role="resourceSummary"] [role="methods"] li');
+        var methodsPromise = resources[0].findElements(methodSummarySelector);
         expect(methodsPromise).toHaveLength(1);
 
-        methodsPromise = resources[1].findElements(protractor.By.css('[role="methods"] li'))
+        methodsPromise = resources[1].findElements(methodSummarySelector);
         expect(methodsPromise).toHaveLength(2);
         methodsPromise.then(function(methods) {
           expect(methods[0].getText()).toMatch(/^get$/i);
           expect(methods[1].getText()).toMatch(/^post$/i);
         });
 
-        methodsPromise = resources[2].findElements(protractor.By.css('[role="methods"] li'))
+        methodsPromise = resources[2].findElements(methodSummarySelector);
         expect(methodsPromise).toHaveLength(1);
 
         var traitsPromise = resources[2].findElements(protractor.By.css('[role="traits"] li'))

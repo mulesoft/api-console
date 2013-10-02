@@ -62,7 +62,9 @@ module.exports = function (grunt) {
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
-                        'app/vendor/showdown.min.js'
+                        'app/vendor/showdown.min.js',
+                        'app/vendor/codemirror/codemirror.js',
+                        'app/vendor/codemirror/xml.js'
                     ],
                     'dist/index.html': ['app/index.embedded.html'],
                     'dist/index.acceptance.html': ['app/index.acceptance.html']
@@ -290,7 +292,10 @@ module.exports = function (grunt) {
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
-                        'app/vendor/showdown.min.js'
+                        'app/vendor/showdown.min.js',
+                        'app/vendor/codemirror/codemirror.js',
+                        'app/vendor/codemirror/xml.js'
+
                     ],
                     'dist/app.js': [
                         'dist/templates.js'
@@ -343,6 +348,10 @@ module.exports = function (grunt) {
     grunt.registerTask('spec', [
         'karma:unit',
         'spec:integration'
+    ]);
+
+    grunt.registerTask('spec:unit', [
+        'karma:unit'
     ]);
 
     grunt.registerTask('spec:parser', [

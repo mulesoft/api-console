@@ -1,0 +1,17 @@
+<section role='documentation'>
+  <p ng-show="method.description">Description: {{method.description}}</p>
+
+
+  <tabset>
+    <tab heading="Parameters" disabled="!resource.uriParameters && !method.queryParameters">
+      <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
+      <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
+    </tab>
+    <tab heading="Requests" active='documentation.requestsActive' disabled="!method.body['text/xml'].example">
+      <div ng-if="method.body['text/xml'].example">
+        <h3>Example Request</h3>
+        <div class="code" code-mirror="method.body['text/xml'].example" visible="methodView.expanded && documentation.requestsActive"></div>
+      </div>
+    </tab>
+  </tabset>
+</section>
