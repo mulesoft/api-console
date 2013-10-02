@@ -3,6 +3,11 @@
 
   var controller = function($scope) {
     $scope.documentation = this;
+    this.currentTab = 'parameters';
+  };
+
+  controller.prototype.openTab = function(tab) {
+    this.currentTab = tab;
   };
 
 

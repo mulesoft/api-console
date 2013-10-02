@@ -181,6 +181,31 @@ span[role=segment] {
 
 [role=documentation] {
   padding: 20px;
+
+  ul {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #CBCDCC;
+
+    li {
+      display: inline-block;
+      font-size: 20px;
+      padding: 5px 0 0 20px;
+      font: 'open sans', sans-serif;
+
+
+      &:after {
+        padding-left: 20px;
+        content: "|";
+        font-weight: normal;
+      }
+
+      &:last-child:after {
+        content: "";
+      }
+
+    }
+  }
 }
 
 .parameterTable {

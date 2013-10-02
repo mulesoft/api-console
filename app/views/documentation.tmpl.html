@@ -1,6 +1,18 @@
 <section role='documentation'>
   <p ng-show="method.description">Description: {{method.description}}</p>
 
-  <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
-  <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
+  <ul>
+    <li><a href='' ng-click="documentation.openTab('parameters')">Parameters</a></li>
+    <li><a href='' ng-click="documentation.openTab('requests')">Requests</a></li>
+    <li><a href='' ng-click="documentation.openTab('responses')">Responses</a></li>
+  </ul>
+
+  <div ng-show="documentation.currentTab == 'requests'">
+    <div code-mirror="method.body['text/xml'].example" visible="documentation.currentTab == 'requests'"></div>
+  </div>
+
+  <div ng-show="documentation.currentTab == 'parameters'">
+    <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
+    <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
+  </div>
 </section>
