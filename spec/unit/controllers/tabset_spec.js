@@ -24,24 +24,36 @@ describe("RAML.Controllers.tabset", function() {
       expect(this.controller.tabs).toEqual([tab1]);
     });
 
-    it('selects the tab if it is the only one', function() {
-      this.controller.addTab(tab1);
-      expect(this.controller.select).toHaveBeenCalledWith(tab1);
-    });
+    describe("selecting", function() {
+      describe("given no other tabs", function() {
+        it('selects the added tab', function() {
+          this.controller.addTab(tab1);
+          expect(this.controller.select).toHaveBeenCalledWith(tab1);
+        });
+      });
 
-    it('does not select the tab if there is another one', function() {
-      this.controller.tabs = [ tab1 ];
+      describe("given other tabs", function() {
+        beforeEach(function() {
+          this.controller.tabs = [ tab1 ];
+        });
 
-      this.controller.addTab(tab2);
-      expect(this.controller.select).not.toHaveBeenCalled();
-    });
+        it('does not select the added tab by default', function() {
+          this.controller.addTab(tab2);
+          expect(this.controller.select).not.toHaveBeenCalled();
+        });
 
-    it('selects the tab if it is marked active', function() {
-      this.controller.tabs = [ tab1 ];
+        it('selects the added tab if no existing tabs are enabled', function() {
+          tab1.disabled = true;
+          this.controller.addTab(tab2);
+          expect(this.controller.select).toHaveBeenCalledWith(tab2);
+        });
 
-      tab2.active = true;
-      this.controller.addTab(tab2);
-      expect(this.controller.select).toHaveBeenCalledWith(tab2);
+        it('selects the added tab if it is marked active', function() {
+          tab2.active = true;
+          this.controller.addTab(tab2);
+          expect(this.controller.select).toHaveBeenCalledWith(tab2);
+        });
+      });
     });
   });
 
@@ -64,6 +76,12 @@ describe("RAML.Controllers.tabset", function() {
     it("marks the selected tab as active", function() {
       this.controller.select(tab2);
       expect(tab2.active).toBeTruthy();
+    });
+
+    it("ignores a disabled tab", function() {
+      tab2.disabled = true;
+      this.controller.select(tab2);
+      expect(tab2.active).toBeFalsy();
     });
   });
 });

@@ -34,7 +34,8 @@
       templateUrl: 'views/tab.tmpl.html',
       scope: {
         heading: '@',
-        active: '=?'
+        active: '=?',
+        disabled: '=?'
       }
     }
 

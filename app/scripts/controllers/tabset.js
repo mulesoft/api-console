@@ -6,6 +6,9 @@
   };
 
   controller.prototype.select = function(tab) {
+    if (tab.disabled) {
+      return;
+    }
     this.tabs.forEach(function(tab) {
       tab.active = false;
     });
@@ -13,10 +16,10 @@
   };
 
   controller.prototype.addTab = function(tab) {
-    this.tabs.push(tab);
-    if (this.tabs.length === 1 || tab.active) {
+    if (this.tabs.every(function(tab) { return tab.disabled }) || tab.active) {
       this.select(tab);
     }
+    this.tabs.push(tab);
   };
 
   RAML.Controllers.tabset = controller;
