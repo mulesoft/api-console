@@ -62,7 +62,8 @@ module.exports = function (grunt) {
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
-                        'app/vendor/showdown.min.js'
+                        'app/vendor/showdown.min.js',
+                        'app/vendor/codemirror.js'
                     ],
                     'dist/index.html': ['app/index.embedded.html'],
                     'dist/index.acceptance.html': ['app/index.acceptance.html']
@@ -290,7 +291,8 @@ module.exports = function (grunt) {
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
                         'app/vendor/raml-parser.js',
-                        'app/vendor/showdown.min.js'
+                        'app/vendor/showdown.min.js',
+                        'app/vendor/codemirror.js'
                     ],
                     'dist/app.js': [
                         'dist/templates.js'
