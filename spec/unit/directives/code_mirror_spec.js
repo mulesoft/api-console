@@ -1,6 +1,10 @@
 describe("RAML.Directives.codeMirror", function() {
+  var editor;
+
   beforeEach(function() {
-    spyOn(window, 'CodeMirror');
+    editor = jasmine.createSpyObj('editor', ['setSize']);
+
+    spyOn(window, 'CodeMirror').andReturn(editor);
     this.link = new RAML.Directives.codeMirror().link;
   });
 
