@@ -10,6 +10,6 @@ module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitialize
 module.directive('resourceSummary', RAML.Directives.resourceSummary);
 module.directive('tryIt', RAML.Directives.tryIt);
 
-module.controller('TryItController', RAML.Controllers.TryIt);
+module.controller('TryItController', RAML.Controllers.tryIt);
 
 module.filter('yesNo', RAML.Filters.yesNo);

@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'views/try_it.tmpl.html',
       replace: true,
-      controller: RAML.Controllers.TryIt
+      controller: RAML.Controllers.tryIt
     }
   }
 })();

@@ -1,4 +1,4 @@
-describe("RAML.Controllers.TryIt", function() {
+describe("RAML.Controllers.tryIt", function() {
   beforeEach(function() {
     this.scope = {
       api: { baseUri: "http://example.com" },
@@ -6,7 +6,7 @@ describe("RAML.Controllers.TryIt", function() {
     };
 
     this.httpService = jasmine.createSpyObj("$http", ["get"]);
-    this.controller = new RAML.Controllers.TryIt(this.scope, this.httpService);
+    this.controller = new RAML.Controllers.tryIt(this.scope, this.httpService);
   });
 
   describe("upon initialization", function() {
@@ -22,7 +22,7 @@ describe("RAML.Controllers.TryIt", function() {
   describe("upon initialization with query params", function() {
     beforeEach(function() {
       this.scope.method.queryParameters = { query: null };
-      this.controller = new RAML.Controllers.TryIt(this.scope, this.httpService);
+      this.controller = new RAML.Controllers.tryIt(this.scope, this.httpService);
     });
 
     it("has query parameters", function() {
