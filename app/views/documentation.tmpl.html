@@ -1,21 +1,17 @@
 <section role='documentation'>
   <p ng-show="method.description">Description: {{method.description}}</p>
 
-  <ul class="nav nav-tabs">
-    <li ng-class="{active: documentation.currentTab == 'parameters'}"><a href='' ng-click="documentation.openTab('parameters')">Parameters</a></li>
-    <li ng-class="{active: documentation.currentTab == 'requests'}"><a href='' ng-click="documentation.openTab('requests')">Requests</a></li>
-    <li ng-class="{active: documentation.currentTab == 'responses'}"><a href='' ng-click="documentation.openTab('responses')">Responses</a></li>
-  </ul>
 
-  <div ng-show="documentation.currentTab == 'requests'">
-    <div ng-if="method.body['text/xml'].example">
-      <h3>Example Request</h3>
-      <div class="code" code-mirror="method.body['text/xml'].example" visible="documentation.currentTab == 'requests'"></div>
-    </div>
-  </div>
-
-  <div ng-show="documentation.currentTab == 'parameters'">
-    <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
-    <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
-  </div>
+  <tabset>
+    <tab heading="Parameters">
+      <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
+      <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
+    </tab>
+    <tab heading="Requests" active='documentation.requestsActive'>
+      <div ng-if="method.body['text/xml'].example">
+        <h3>Example Request</h3>
+        <div class="code" code-mirror="method.body['text/xml'].example" visible="documentation.requestsActive"></div>
+      </div>
+    </tab>
+  </tabset>
 </section>
