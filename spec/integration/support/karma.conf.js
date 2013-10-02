@@ -14,7 +14,7 @@ files = [
     'app/scripts/**/*.js',
     'dist/templates.js',
     'spec/integration/support/angular-mocks.js',
-    'spec/helprs/**/*.js',
+    'spec/helpers/**/*.js',
     'spec/matchers/**/*.js',
     'spec/support/helpers/**/*.js',
     'spec/integration/support/jquery.js',
