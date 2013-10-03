@@ -101,13 +101,43 @@ describe('API Documentation', function() {
 
     it("displays examples and schemas for the request body", function() {
       var resource = openResource(1);
-
       var method = openMethod(1, resource);
-
       var documentation = openDocumentationTab(2, method);
 
       expect(documentation.getText()).toMatch(/xs:schema/);
       expect(documentation.getText()).toMatch(new RegExp("<id>1511685</id>"));
+    });
+  });
+
+  describe("responses tab", function() {
+    raml = createRAML(
+      'title: Example API',
+      'baseUri: #{test_api_uri}',
+      'schemas:',
+      '  - an_xml_schema: |',
+      '      <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">',
+      '        <xs:element type="xs:int" name="id"/>',
+      '      </xs:schema>',
+      '/resource:',
+      '  get:',
+      '    responses:',
+      '      200:',
+      '        description: |',
+      '          *Success* description',
+      '      404:',
+      '        description: |',
+      '          *Error* description'
+    );
+
+    loadRamlFixture(raml);
+
+    it("displays response descriptions with markdown formatting", function() {
+      var resource = openResource(1);
+      var method = openMethod(1, resource);
+      var documentation = openDocumentationTab(3, method);
+
+      expect(documentation.getInnerHtml()).toMatch(/<em>Success<\/em> description/);
+      expect(documentation.getInnerHtml()).toMatch(/<em>Error<\/em> description/);
     });
   });
 });

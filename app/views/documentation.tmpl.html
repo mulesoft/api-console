@@ -1,9 +1,8 @@
 <section role='documentation'>
   <p ng-show="method.description">Description: {{method.description}}</p>
 
-
   <tabset>
-    <tab role='documentation-parameters' heading="Parameters" disabled="!documentation.hasRequestParameters">
+    <tab role='documentation-parameters' heading="Parameters" disabled="!documentation.hasParameterDocumentation">
       <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
       <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
     </tab>
@@ -15,6 +14,13 @@
       <div ng-if="documentation.hasRequestExample">
         <h3>Example Request</h3>
         <div class="code" code-mirror="method.body['text/xml'].example" visible="methodView.expanded && documentation.requestsActive"></div>
+      </div>
+    </tab>
+    <tab role='documentation-responses' heading="Responses" disabled='!documentation.hasResponseDocumentation'>
+      <h3>Responses</h3>
+      <div ng-repeat='(responseCode, response) in method.responses'>
+        <h4>{{responseCode}}</h4>
+        <p markdown='response.description'></p>
       </div>
     </tab>
   </tabset>

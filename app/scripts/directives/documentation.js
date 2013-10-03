@@ -8,7 +8,8 @@
   var controller = function($scope) {
     $scope.documentation = this;
 
-    this.hasRequestParameters = $scope.resource.uriParameters || $scope.method.queryParameters;
+    this.hasParameterDocumentation = $scope.resource.uriParameters || $scope.method.queryParameters;
+    this.hasResponseDocumentation = !isEmpty($scope.method.responses);
 
     if ($scope.method.body && !isEmpty($scope.method.body['text/xml'])) {
       this.hasRequestDocumentation = true;
@@ -20,7 +21,6 @@
       }
     }
   };
-
 
   RAML.Directives.documentation = function() {
     return {
