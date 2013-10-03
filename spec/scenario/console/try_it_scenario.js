@@ -8,14 +8,6 @@ describe("trying an API method", function() {
     "  get:"
   );
 
-  var openResource = function(index) {
-    var selector = protractor.By.css('[role="resource"]:nth-child(' + index + ')');
-    var resource = ptor.findElement(selector);
-    resource.findElement(protractor.By.css('.accordion-toggle')).click();
-
-    return resource;
-  };
-
   var openTryIt = function(resource) {
     var tryItTab = resource.findElement(protractor.By.css('[role="methodSummary"] button[role="try-it-tab"]'));
     tryItTab.click();
