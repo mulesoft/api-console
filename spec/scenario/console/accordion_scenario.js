@@ -117,10 +117,10 @@ describe('accordion view of API', function() {
    loadRamlFixture(raml);
 
     it('displays the description of the method', function() {
-      ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
-      ptor.findElement(protractor.By.css('[role="methodSummary"]')).click();
+      var resource = openResource(1);
+      var method = openMethod(1, resource);
 
-      var description = ptor.findElement(protractor.By.css('[role="method"] p'));
+      var description = method.findElement(protractor.By.css('p'));
       waitUntilTextEquals(description, 'Description: Get all resources');
     });
   });

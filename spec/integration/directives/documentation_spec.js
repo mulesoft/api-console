@@ -3,7 +3,7 @@ describe("RAML.Directives.documentation", function() {
 
   var scope, $el;
 
-  function createScopeForTextXML(xmlProperties) {
+  function createScopeWithXMLRequestBody(xmlProperties) {
     return createScope(function(scope) {
       scope.resource = {};
       scope.method = {
@@ -14,7 +14,7 @@ describe("RAML.Directives.documentation", function() {
     });
   };
 
-  describe('given a method and resource with no query or uri parameters', function() {
+  describe('given a method and resource with no documentation', function() {
     beforeEach( function() {
       scope = createScope(function(scope) {
         scope.resource = scope.method = {};
@@ -24,6 +24,14 @@ describe("RAML.Directives.documentation", function() {
 
     it('disables the parameters tab', function() {
       expect($el.find("[role='documentation-parameters']")).toHaveClass('disabled');
+    });
+
+    it('disables the requests tab', function() {
+      expect($el.find("[role='documentation-requests']")).toHaveClass('disabled');
+    });
+
+    it('disables the responses tab', function() {
+      expect($el.find("[role='documentation-responses']")).toHaveClass('disabled');
     });
   });
 
@@ -40,15 +48,19 @@ describe("RAML.Directives.documentation", function() {
       $el = compileTemplate("<documentation></documentation>", scope);
     });
 
-    it('does not disable the parameters tab', function() {
+    it('enables the parameters tab', function() {
       expect($el.find("[role='documentation-parameters']")).not.toHaveClass('disabled');
     });
   });
 
-  describe('given a method with an XML request body schema', function() {
+  describe('given a method with only an XML request body schema', function() {
     beforeEach( function() {
-      scope = createScopeForTextXML({ schema: "superschema"});
+      scope = createScopeWithXMLRequestBody({ schema: "superschema" });
       $el = compileTemplate("<documentation></documentation>", scope);
+    });
+
+    it('enables the requests tab', function() {
+      expect($el.find("[role='documentation-requests']")).not.toHaveClass('disabled');
     });
 
     it('displays the schema', function() {
@@ -60,10 +72,14 @@ describe("RAML.Directives.documentation", function() {
     });
   });
 
-  describe('given a method with an XML request body example', function() {
+  describe('given a method with only an XML request body example', function() {
     beforeEach( function() {
-      scope = createScopeForTextXML({ example: "someexample"});
+      scope = createScopeWithXMLRequestBody({ example: "someexample" });
       $el = compileTemplate("<documentation></documentation>", scope);
+    });
+
+    it('enables the requests tab', function() {
+      expect($el.find("[role='documentation-requests']")).not.toHaveClass('disabled');
     });
 
     it('displays the example', function() {
@@ -75,16 +91,26 @@ describe("RAML.Directives.documentation", function() {
     });
   });
 
-  describe('given a method with no XML body documentation', function() {
+  describe('given a method with response documentation', function() {
     beforeEach( function() {
-      scope = createScope();
-      scope.method = scope.resource = {};
+      scope = createScope(function(scope) {
+        scope.resource = {};
+        scope.method = {
+          responses: {
+            200: { description: 'A-Okay' },
+            500: { description: 'Ut Oh'}
+          }
+        };
+      });
       $el = compileTemplate("<documentation></documentation>", scope);
     });
 
-    it('disables the requests tab', function() {
-      expect($el.find("[role='documentation-requests']")).toHaveClass('disabled');
+    it('enables the responses tab', function() {
+      expect($el.find("[role='documentation-responses']")).not.toHaveClass('disabled');
+    });
+
+    it('displays both responses', function() {
+      expect($el.find("[role='documentation-responses'] h4").length).toEqual(2);
     });
   });
-
 });
