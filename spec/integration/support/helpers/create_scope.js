@@ -2,7 +2,9 @@ function createScope(cb) {
   var scope;
   inject(function($rootScope) {
     scope = $rootScope.$new();
-    cb(scope);
+    if (cb) {
+      cb(scope);
+    }
   });
 
   return scope
