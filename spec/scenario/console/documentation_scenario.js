@@ -24,11 +24,11 @@ describe('API Documentation', function() {
   };
 
 
-  describe('for RAML with query parameters', function() {
+  describe('parameters tab', function() {
     raml = createRAML(
       'title: Example API',
       'baseUri: #{test_api_uri}',
-      '/resource:',
+      '/resource/#{resourceId}:',
       '  get:',
       '    queryParameters:',
       '      chunk:',
@@ -68,25 +68,6 @@ describe('API Documentation', function() {
       verifyCellData(param,
         ["order", "string", "", "oldest", "No", "newest", "No", "", "", "5", "7", '["oldest","newest"]', ""]);
 
-      table = findParameterTable('uri-parameters');
-      expect(table.isDisplayed()).toBeFalsy();
-    });
-  });
-
-  describe('for raml with an implicit URI parameter', function() {
-    raml = createRAML(
-      'title: Example API',
-      'baseUri: #{test_api_uri}',
-      '/resource/#{resourceId}:',
-      '  get: !!null'
-    );
-
-    loadRamlFixture(raml);
-
-    it('displays information about the URI parameter', function() {
-      var resource = openResource(1);
-      var method = openMethod(1, resource);
-
       var table = findParameterTable('uri-parameters');
       expect(table.isDisplayed()).toBeTruthy();
 
@@ -94,8 +75,6 @@ describe('API Documentation', function() {
       verifyCellData(param,
         ["resourceId", "string", "", "", "No", "", "Yes", "", "", "", "", "", ""]);
 
-      table = findParameterTable('query-parameters');
-      expect(table.isDisplayed()).toBeFalsy();
     });
   });
 
