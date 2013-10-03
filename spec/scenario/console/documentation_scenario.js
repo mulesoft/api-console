@@ -104,7 +104,7 @@ describe('API Documentation', function() {
       var method = openMethod(1, resource);
       var documentation = openDocumentationTab(2, method);
 
-      expect(documentation.getText()).toMatch(/xs:schema/);
+      expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(documentation.getText()).toMatch(new RegExp("<id>1511685</id>"));
     });
   });
@@ -126,15 +126,23 @@ describe('API Documentation', function() {
       '          *Success* description',
       '      404:',
       '        description: |',
-      '          *Error* description'
+      '          *Error* description',
+      '        body:',
+      '          text/xml:',
+      '            example: |',
+      '              <api-response><status>Error</status></api-response>',
+      '            schema: an_xml_schema'
     );
 
     loadRamlFixture(raml);
 
-    it("displays response descriptions with markdown formatting", function() {
+    it("displays formatted xml response examples and schemas, and response descriptions with markdown formatting", function() {
       var resource = openResource(1);
       var method = openMethod(1, resource);
       var documentation = openDocumentationTab(3, method);
+
+      expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
+      expect(documentation.getText()).toMatch(new RegExp("<api-response><status>Error</status></api-response>"));
 
       expect(documentation.getInnerHtml()).toMatch(/<em>Success<\/em> description/);
       expect(documentation.getInnerHtml()).toMatch(/<em>Error<\/em> description/);
