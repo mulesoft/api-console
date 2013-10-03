@@ -3,12 +3,16 @@
 
 
   <tabset>
-    <tab heading="Parameters" disabled="!resource.uriParameters && !method.queryParameters">
+    <tab role='documentation-parameters' heading="Parameters" disabled="!documentation.hasRequestParameters">
       <parameter-table heading='URI Parameters' role='uri-parameters' parameters='resource.uriParameters'></parameter-table>
       <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
     </tab>
-    <tab heading="Requests" active='documentation.requestsActive' disabled="!method.body['text/xml'].example">
-      <div ng-if="method.body['text/xml'].example">
+    <tab role='documentation-requests' heading="Requests" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation">
+      <div ng-if="documentation.hasRequestSchema">
+        <h3>Example Schema</h3>
+        <div class="code" code-mirror="method.body['text/xml'].schema" visible="methodView.expanded && documentation.requestsActive"></div>
+      </div>
+      <div ng-if="documentation.hasRequestExample">
         <h3>Example Request</h3>
         <div class="code" code-mirror="method.body['text/xml'].example" visible="methodView.expanded && documentation.requestsActive"></div>
       </div>

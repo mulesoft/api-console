@@ -23,10 +23,9 @@ describe('API Documentation', function() {
     });
   };
 
+
   describe('for RAML with query parameters', function() {
-    raml = [
-      '#%RAML 0.2',
-      '---',
+    raml = createRAML(
       'title: Example API',
       'baseUri: #{test_api_uri}',
       '/resource:',
@@ -49,13 +48,14 @@ describe('API Documentation', function() {
       '        default: newest',
       '      query:',
       '        description: A query parameter',
-      '        repeat: true'].join('\n');
+      '        repeat: true'
+    );
 
     loadRamlFixture(raml);
 
     it('displays information about each parameter', function() {
-      ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
-      ptor.findElement(protractor.By.css('[role="methodSummary"]')).click();
+      var resource = openResource(1);
+      var method = openMethod(1, resource);
 
       var table = findParameterTable('query-parameters');
       expect(table.isDisplayed()).toBeTruthy();
@@ -74,19 +74,18 @@ describe('API Documentation', function() {
   });
 
   describe('for raml with an implicit URI parameter', function() {
-    raml = [
-      '#%RAML 0.2',
-      '---',
+    raml = createRAML(
       'title: Example API',
       'baseUri: #{test_api_uri}',
       '/resource/#{resourceId}:',
-      '  get: !!null'].join('\n');
+      '  get: !!null'
+    );
 
     loadRamlFixture(raml);
 
     it('displays information about the URI parameter', function() {
-      ptor.findElement(protractor.By.css('[role="resource"] .accordion-toggle')).click();
-      ptor.findElement(protractor.By.css('[role="methodSummary"]')).click();
+      var resource = openResource(1);
+      var method = openMethod(1, resource);
 
       var table = findParameterTable('uri-parameters');
       expect(table.isDisplayed()).toBeTruthy();
@@ -98,6 +97,38 @@ describe('API Documentation', function() {
       table = findParameterTable('query-parameters');
       expect(table.isDisplayed()).toBeFalsy();
     });
+  });
 
+  describe("requests tab", function() {
+    raml = createRAML(
+      'title: Example API',
+      'baseUri: #{test_api_uri}',
+      'schemas:',
+      '  - an_xml_schema: |',
+      '      <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">',
+      '        <xs:element type="xs:int" name="id"/>',
+      '      </xs:schema>',
+      '/resource:',
+      '  post:',
+      '    body:',
+      '     text/xml:',
+      '       schema: an_xml_schema',
+      '       example: |',
+      '         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
+      '         <id>1511685</id>'
+    );
+
+    loadRamlFixture(raml);
+
+    it("displays examples and schemas for the request body", function() {
+      var resource = openResource(1);
+
+      var method = openMethod(1, resource);
+
+      var documentation = openDocumentationTab(2, method);
+
+      expect(documentation.getText()).toMatch(/xs:schema/);
+      expect(documentation.getText()).toMatch(new RegExp("<id>1511685</id>"));
+    });
   });
 });
