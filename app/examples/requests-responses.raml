@@ -10,7 +10,6 @@ schemas:
      text/xml:
        schema: an_xml_schema
        example: !include xml_example.xml
-  get:
     responses:
       200:
         description: |
@@ -18,3 +17,8 @@ schemas:
       404:
         description: |
           *Error* description
+        body:
+          text/xml:
+            example: |
+              <api-response><status>Error</status></api-response>
+            schema: an_xml_schema

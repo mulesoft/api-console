@@ -8,7 +8,7 @@
     </tab>
     <tab role='documentation-requests' heading="Requests" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation">
       <div ng-if="documentation.hasRequestSchema">
-        <h3>Example Schema</h3>
+        <h3>Request Schema</h3>
         <div class="code" code-mirror="method.body['text/xml'].schema" visible="methodView.expanded && documentation.requestsActive"></div>
       </div>
       <div ng-if="documentation.hasRequestExample">
@@ -16,11 +16,20 @@
         <div class="code" code-mirror="method.body['text/xml'].example" visible="methodView.expanded && documentation.requestsActive"></div>
       </div>
     </tab>
-    <tab role='documentation-responses' heading="Responses" disabled='!documentation.hasResponseDocumentation'>
+    <tab role='documentation-responses' heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation'>
       <h3>Responses</h3>
       <div ng-repeat='(responseCode, response) in method.responses'>
         <h4>{{responseCode}}</h4>
         <p markdown='response.description'></p>
+        <div ng-if="response.body['text/xml'].schema">
+          <h3>Response Schema</h3>
+          <div class="code" code-mirror="response.body['text/xml'].schema" visible="methodView.expanded && documentation.responsesActive"></div>
+        </div>
+
+        <div ng-if="response.body['text/xml'].example">
+          <h3>Example Response</h3>
+          <div class="code" code-mirror="response.body['text/xml'].example" visible="methodView.expanded && documentation.responsesActive"></div>
+        </div>
       </div>
     </tab>
   </tabset>
