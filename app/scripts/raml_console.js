@@ -1,4 +1,4 @@
-var module = angular.module('ramlConsoleApp', ['raml']);
+var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize']);
 
 module.directive('codeMirror', RAML.Directives.codeMirror);
 module.directive('documentation', RAML.Directives.documentation);
