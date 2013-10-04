@@ -11,7 +11,7 @@
 
   var link = function(scope, element, attrs) {
     var editor = CodeMirror(element[0], {
-      mode: "text/xml",
+      mode: scope.mode || 'text/xml',
       readOnly: "nocursor",
       value: scope.code || '',
       lineNumbers: true,
@@ -36,7 +36,8 @@
       replace: true,
       scope: {
         code: "=codeMirror",
-        visible: "="
+        visible: "=",
+        mode: "@?"
       }
     }
   }

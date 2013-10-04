@@ -10,6 +10,7 @@ files = [
     'app/vendor/raml-parser.js',
     'app/vendor/codemirror/codemirror.js',
     'app/vendor/codemirror/xml.js',
+    'app/vendor/codemirror/javascript.js',
     'app/scripts/**/*.js',
     'spec/matchers/**/*.js',
     'spec/support/helpers/**/*.js',

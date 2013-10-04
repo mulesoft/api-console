@@ -60,7 +60,8 @@ module.exports = function (grunt) {
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js',
                         'app/vendor/codemirror/codemirror.js',
-                        'app/vendor/codemirror/xml.js'
+                        'app/vendor/codemirror/xml.js',
+                        'app/vendor/codemirror/javascript.js'
                     ],
                     'dist/index.html': ['app/index.embedded.html'],
                     'dist/index.acceptance.html': ['app/index.acceptance.html']
@@ -289,7 +290,8 @@ module.exports = function (grunt) {
                         'app/vendor/raml-parser.js',
                         'app/vendor/showdown.min.js',
                         'app/vendor/codemirror/codemirror.js',
-                        'app/vendor/codemirror/xml.js'
+                        'app/vendor/codemirror/xml.js',
+                        'app/vendor/codemirror/javascript.js'
 
                     ],
                     'dist/app.js': [
