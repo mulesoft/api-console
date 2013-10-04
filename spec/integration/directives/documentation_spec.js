@@ -1,7 +1,7 @@
 describe("RAML.Directives.documentation", function() {
   beforeEach(module('ramlConsoleApp'));
 
-  var scope, $el;
+  var scope, $el, section;
 
   function createScopeWithXMLRequestBody(xmlProperties) {
     return createScope(function(scope) {
@@ -46,10 +46,11 @@ describe("RAML.Directives.documentation", function() {
         };
       });
       $el = compileTemplate("<documentation></documentation>", scope);
+      section = $el.find("[role='documentation-parameters']");
     });
 
     it('enables the parameters tab', function() {
-      expect($el.find("[role='documentation-parameters']")).not.toHaveClass('disabled');
+      expect(section).not.toHaveClass('disabled');
     });
   });
 
@@ -57,18 +58,19 @@ describe("RAML.Directives.documentation", function() {
     beforeEach( function() {
       scope = createScopeWithXMLRequestBody({ schema: "superschema" });
       $el = compileTemplate("<documentation></documentation>", scope);
+      section = $el.find("[role='documentation-requests']");
     });
 
     it('enables the requests tab', function() {
-      expect($el.find("[role='documentation-requests']")).not.toHaveClass('disabled');
+      expect(section).not.toHaveClass('disabled');
     });
 
     it('displays the schema', function() {
-      expect($el.find("[role='documentation-requests']").text()).toMatch('superschema');
+      expect(section.text()).toMatch('superschema');
     });
 
     it('does not display the example request section', function() {
-      expect($el.find("[role='documentation-requests']").text()).not.toMatch('Example Request');
+      expect(section.text()).not.toMatch('Example Request');
     });
   });
 
@@ -76,18 +78,19 @@ describe("RAML.Directives.documentation", function() {
     beforeEach( function() {
       scope = createScopeWithXMLRequestBody({ example: "someexample" });
       $el = compileTemplate("<documentation></documentation>", scope);
+      section = $el.find("[role='documentation-requests']");
     });
 
     it('enables the requests tab', function() {
-      expect($el.find("[role='documentation-requests']")).not.toHaveClass('disabled');
+      expect(section).not.toHaveClass('disabled');
     });
 
     it('displays the example', function() {
-      expect($el.find("[role='documentation-requests']").text()).toMatch('someexample');
+      expect(section.text()).toMatch('someexample');
     });
 
     it('does not display the example schema section', function() {
-      expect($el.find("[role='documentation-requests']").text()).not.toMatch('Example Schema');
+      expect(section.text()).not.toMatch('Example Schema');
     });
   });
 
@@ -103,14 +106,38 @@ describe("RAML.Directives.documentation", function() {
         };
       });
       $el = compileTemplate("<documentation></documentation>", scope);
+      setFixtures($el);
+
+      section = $("[role='documentation-responses']");
     });
 
     it('enables the responses tab', function() {
-      expect($el.find("[role='documentation-responses']")).not.toHaveClass('disabled');
+      expect(section).not.toHaveClass('disabled');
     });
 
-    it('displays both responses', function() {
-      expect($el.find("[role='documentation-responses'] h4").length).toEqual(2);
+    it('shows the description of both responses', function() {
+      expect(section.find("h3").eq(0).text().trim()).toEqual("200");
+      expect(section.find("h3").eq(1).text().trim()).toEqual("500");
+      expect(section.find("[role='response']").eq(0).text().trim()).toEqual("A-Okay");
+      expect(section.find("[role='response']").eq(1).text().trim()).toEqual("Ut Oh");
     });
+
+    it('makes both responses visible', function() {
+      var responses = section.find("[role='response']");
+
+      expect(responses.eq(0)).toBeVisible();
+      expect(responses.eq(1)).toBeVisible();
+    });
+
+    it('hides a response on click', function() {
+      var header = $("[role='documentation-responses'] a").first();
+      header.click();
+
+      var response = $el.find("[role='response']")
+
+      expect(response.first()).not.toBeVisible();
+      expect(response.last()).toBeVisible();
+    });
+
   });
 });

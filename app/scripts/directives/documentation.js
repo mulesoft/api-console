@@ -22,6 +22,10 @@
     }
   };
 
+  controller.prototype.toggleExpansion = function(response) {
+    response.collapsed = !response.collapsed;
+  };
+
   RAML.Directives.documentation = function() {
     return {
       controller: controller,

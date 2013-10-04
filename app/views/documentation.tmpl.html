@@ -17,19 +17,26 @@
       </div>
     </tab>
     <tab role='documentation-responses' heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation'>
-      <h3>Responses</h3>
+      <h2>Responses</h2>
       <div ng-repeat='(responseCode, response) in method.responses'>
-        <h4>{{responseCode}}</h4>
-        <p markdown='response.description'></p>
-        <div ng-if="response.body['text/xml'].schema">
-          <h3>Response Schema</h3>
-          <div class="code" code-mirror="response.body['text/xml'].schema" visible="methodView.expanded && documentation.responsesActive"></div>
-        </div>
+        <h3>
+          <a href="" ng-click='documentation.toggleExpansion(response)'>
+            <i ng-class="{'icon-caret-right': response.collapsed, 'icon-caret-down': !response.collapsed}"></i>
+            {{responseCode}}
+          </a>
+        </h3>
+        <section role='response' ng-hide='response.collapsed'>
+          <p markdown='response.description'></p>
+          <div ng-if="response.body['text/xml'].schema">
+            <h4>Schema</h4>
+            <div class="code" code-mirror="response.body['text/xml'].schema" visible="methodView.expanded && documentation.responsesActive"></div>
+          </div>
 
-        <div ng-if="response.body['text/xml'].example">
-          <h3>Example Response</h3>
-          <div class="code" code-mirror="response.body['text/xml'].example" visible="methodView.expanded && documentation.responsesActive"></div>
-        </div>
+          <div ng-if="response.body['text/xml'].example">
+            <h4>Example</h4>
+            <div class="code" code-mirror="response.body['text/xml'].example" visible="methodView.expanded && documentation.responsesActive"></div>
+          </div>
+        </section>
       </div>
     </tab>
   </tabset>

@@ -68,7 +68,7 @@ describe("RAML.Controllers.tryIt", function() {
 
       httpBackend.expect('GET', 'http://www.example.com/resource', suppliedBody, headerVerifier).respond(200);
 
-      $el.find('.media-types input[value="text/xml"]').click();
+      $el.find('.media-types input[value="text/xml"]')[0].click();
       $el.find('textarea').fillIn(suppliedBody);
       $el.find('button[role="try-it"]').click();
 
