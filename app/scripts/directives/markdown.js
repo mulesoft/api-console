@@ -5,7 +5,7 @@
     var converter = new Showdown.converter();
 
     var link = function($scope, $element, $attrs) {
-      var result = converter.makeHtml($scope.markdown);
+      var result = converter.makeHtml($scope.markdown || '');
 
       $element.html($sanitize(result));
     };
