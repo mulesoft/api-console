@@ -18,13 +18,14 @@
       indentUnit: 4
     });
 
-    indentAll(editor);
-
     editor.setSize("100%", "100%");
 
     scope.$watch('visible', function(visible) {
-      if (visible)
+      if (visible) {
+        editor.setValue(scope.code);
+        indentAll(editor);
         editor.refresh();
+      }
     });
   };
 

@@ -28,7 +28,7 @@
     </div>
   </form>
 
-  <div class="response" ng-show="apiClient.response">
+  <div class="response" ng-if="apiClient.response">
     <h3>Response</h3>
     <div class="status">
       <h4>Status</h4>
@@ -46,7 +46,7 @@
     <div class="body">
       <h4>Body</h4>
       <div class="response-value">
-        {{apiClient.response.body}}
+        <div class="code" code-mirror="apiClient.response.body" visible="apiClient.response.body"></div>
       </div>
     </div>
   </div>
