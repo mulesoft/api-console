@@ -20,10 +20,6 @@ module.exports = function (grunt) {
         dist: 'dist'
     };
 
-    try {
-        yeomanConfig.app = require('./bower.json').appPath || yeomanConfig.app;
-    } catch (e) {}
-
     grunt.initConfig({
         ngtemplates: {
             consoleEmbedded: {
@@ -209,7 +205,6 @@ module.exports = function (grunt) {
                     src: [
                         '*.{ico,png,txt}',
                         '.htaccess',
-                        'bower_components/**/*',
                         'images/{,*/}*.{gif,webp,svg}',
                         'styles/fonts/*'
                     ]
