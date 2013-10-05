@@ -7,6 +7,7 @@
       <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
     </tab>
     <tab role='documentation-requests' heading="Requests" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation">
+      <h2 ng-if="method.body['text/xml']">text/xml</h2>
       <div ng-if="documentation.hasRequestSchema">
         <h3>Request Schema</h3>
         <div class="code" code-mirror="method.body['text/xml'].schema" visible="methodView.expanded && documentation.requestsActive"></div>

@@ -104,6 +104,7 @@ describe('API Documentation', function() {
       var method = openMethod(1, resource);
       var documentation = openDocumentationTab(2, method);
 
+      expect(documentation.getText()).toMatch(new RegExp('text/xml'));
       expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(documentation.getText()).toMatch(new RegExp("<id>1511685</id>"));
     });
