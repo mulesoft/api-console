@@ -7,7 +7,7 @@ describe('accordion view of API', function() {
 
   describe('top-level view', function() {
     raml = [
-      "#%RAML 0.2",
+      "#%RAML 0.8",
       "---",
       "title: Example API",
       "baseUri: #{test_api_uri}",

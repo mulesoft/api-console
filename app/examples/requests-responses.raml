@@ -1,8 +1,9 @@
-#%RAML 0.2
+#%RAML 0.8
 ---
 title: Example API
 schemas:
   - an_xml_schema: !include xml_schema.xsd
+  - a_json_schema: !include json_schema.json
 /resource:
   post:
     body:
@@ -10,6 +11,7 @@ schemas:
         schema: an_xml_schema
         example: !include xml_example.xml
       application/json:
+        schema: a_json_schema
         example: |
           {
             figure: true,

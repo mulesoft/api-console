@@ -97,7 +97,7 @@ describe("Verifying parser output", function() {
 
     describe("when reserved, inferred", function() {
       var definition = [
-        '#%RAML 0.2',
+        '#%RAML 0.8',
         '---',
         'title: MyApi',
         'baseUri: http://example.com/{version}',
@@ -117,7 +117,7 @@ describe("Verifying parser output", function() {
 
     describe("when reserved, specified", function() {
       var definition = [
-        '#%RAML 0.2',
+        '#%RAML 0.8',
         '---',
         'title: MyApi',
         'baseUri: http://example.com/{version}',
@@ -144,7 +144,7 @@ describe("Verifying parser output", function() {
   describe("with a resource that defines query parameters", function() {
     describe("which defines a new method", function() {
       var definition = [
-        '#%RAML 0.2',
+        '#%RAML 0.8',
         '---',
         'title: MyApi',
         'baseUri: http://example.com/',
@@ -168,7 +168,7 @@ describe("Verifying parser output", function() {
   describe("with a resource that includes a resource type", function() {
     describe("which defines a new method", function() {
       var definition = [
-        '#%RAML 0.2',
+        '#%RAML 0.8',
         '---',
         'title: MyApi',
         'baseUri: http://example.com/',

@@ -1,5 +1,5 @@
 (function(scope) {
-  var header = ['#%RAML 0.2','---'];
+  var header = ['#%RAML 0.8','---'];
 
   scope.createRAML = function(lines) {
     var lines = Array.prototype.slice.call(arguments, 0);
