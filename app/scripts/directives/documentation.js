@@ -9,17 +9,8 @@
     $scope.documentation = this;
 
     this.hasParameterDocumentation = $scope.resource.uriParameters || $scope.method.queryParameters;
+    this.hasRequestDocumentation = !isEmpty($scope.method.body);
     this.hasResponseDocumentation = !isEmpty($scope.method.responses);
-
-    if ($scope.method.body && !isEmpty($scope.method.body['text/xml'])) {
-      this.hasRequestDocumentation = true;
-      if ($scope.method.body['text/xml'].schema) {
-        this.hasRequestSchema = true;
-      }
-      if ($scope.method.body['text/xml'].example) {
-        this.hasRequestExample = true;
-      }
-    }
   };
 
   controller.prototype.toggleExpansion = function(response) {

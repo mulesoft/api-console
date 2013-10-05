@@ -7,14 +7,16 @@
       <parameter-table heading='Query Parameters' role='query-parameters' parameters='method.queryParameters'></parameter-table>
     </tab>
     <tab role='documentation-requests' heading="Requests" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation">
-      <h2 ng-if="method.body['text/xml']">text/xml</h2>
-      <div ng-if="documentation.hasRequestSchema">
-        <h3>Request Schema</h3>
-        <div class="code" code-mirror="method.body['text/xml'].schema" visible="methodView.expanded && documentation.requestsActive"></div>
-      </div>
-      <div ng-if="documentation.hasRequestExample">
-        <h3>Example Request</h3>
-        <div class="code" code-mirror="method.body['text/xml'].example" visible="methodView.expanded && documentation.requestsActive"></div>
+      <div ng-repeat="(mediaType, definition) in method.body track by mediaType">
+        <h2>{{mediaType}}</h2>
+        <div ng-if="definition.schema">
+          <h3>Request Schema</h3>
+          <div class="code" code-mirror="definition.schema" mode="mediaType" visible="methodView.expanded && documentation.requestsActive"></div>
+        </div>
+        <div ng-if="definition.example">
+          <h3>Example Request</h3>
+          <div class="code" code-mirror="definition.example" mode="mediaType" visible="methodView.expanded && documentation.requestsActive"></div>
+        </div>
       </div>
     </tab>
     <tab role='documentation-responses' heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation'>
