@@ -23,6 +23,7 @@
     scope.$watch('visible', function(visible) {
       if (visible) {
         editor.setValue(scope.code);
+        editor.setOption("mode", scope.mode);
         indentAll(editor);
         editor.refresh();
       }
@@ -37,7 +38,7 @@
       scope: {
         code: "=codeMirror",
         visible: "=",
-        mode: "@?"
+        mode: "=?"
       }
     }
   }

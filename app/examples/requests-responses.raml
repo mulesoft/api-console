@@ -1,15 +1,22 @@
 #%RAML 0.2
 ---
 title: Example API
-baseUri: #{test_api_uri}
 schemas:
   - an_xml_schema: !include xml_schema.xsd
 /resource:
   post:
     body:
-     text/xml:
-       schema: an_xml_schema
-       example: !include xml_example.xml
+      text/xml:
+        schema: an_xml_schema
+        example: !include xml_example.xml
+      application/json:
+        example: |
+          {
+            figure: true,
+            out: true,
+            your: true,
+            life: true
+          }
     responses:
       200:
         description: |
