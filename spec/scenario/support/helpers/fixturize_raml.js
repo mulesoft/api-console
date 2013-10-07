@@ -21,8 +21,8 @@
     beforeEach(function() {
       ptor = protractor.getInstance();
       ptor.get('http://localhost:9001');
-      ptor.findElement(protractor.By.css("input[type=text]")).sendKeys(ramlFilename);
-      ptor.findElement(protractor.By.css("input[type=submit]")).click();
+      ptor.$('input[type="text"]').sendKeys(ramlFilename);
+      ptor.$('input[type="submit"]').click();
     });
   };
 })()

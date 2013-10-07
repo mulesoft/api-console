@@ -2,14 +2,13 @@ describe('API Documentation', function() {
   var ptor = protractor.getInstance();
 
   var findParameterTable = function (identifier) {
-    var table = ptor.findElement(protractor.By.css("[role='" + identifier + "']"));
+    var table = ptor.$('[role="' + identifier + '"]');
 
     table.findRow = function (rowIndex) {
-      var selector = protractor.By.css("[role='parameter']:nth-child(" + rowIndex +")");
-      var row = table.findElement(selector);
+      var row = table.$('[role="parameter"]:nth-child(' + rowIndex + ')');
 
       row.findCell = function (cellIndex) {
-        return row.findElement(protractor.By.css("td:nth-child(" + cellIndex + ")"));
+        return row.$('td:nth-child(' + cellIndex + ')');
       }
       return row;
     };

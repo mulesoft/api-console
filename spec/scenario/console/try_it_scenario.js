@@ -9,12 +9,12 @@ describe("trying an API method", function() {
   );
 
   var openTryIt = function(resource) {
-    var tryItTab = resource.findElement(protractor.By.css('[role="methodSummary"] button[role="try-it-tab"]'));
+    var tryItTab = resource.$('[role="methodSummary"] button[role="try-it-tab"]');
     tryItTab.click();
   };
 
   var tryIt = function(resource) {
-    var tryItButton = resource.findElement(protractor.By.css('button[role="try-it"]'));
+    var tryItButton = resource.$('button[role="try-it"]');
     tryItButton.click();
   };
 
@@ -33,13 +33,13 @@ describe("trying an API method", function() {
       openTryIt(resource);
       tryIt(resource);
 
-      var responseStatus = resource.findElement(protractor.By.css('.try-it .response .status'));
+      var responseStatus = resource.$('.try-it .response .status');
       expect(responseStatus.getText()).toMatch(/200/);
 
-      var responseHeaders = resource.findElement(protractor.By.css('.try-it .response .headers'));
+      var responseHeaders = resource.$('.try-it .response .headers');
       expect(responseHeaders.getText()).toMatch(/content-length: \d+/i);
 
-      var responseBody = resource.findElement(protractor.By.css('.try-it .response .body'));
+      var responseBody = resource.$('.try-it .response .body');
       expect(responseBody.getText()).toMatch(/Hello World!/);
     });
   });
