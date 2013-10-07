@@ -27,16 +27,22 @@
     if (!isEmpty(this.queryParameters)) {
       requestOptions.params = this.queryParameters;
     }
-
     if (this.mediaType) {
       requestOptions.headers = { 'Content-Type': this.mediaType };
       requestOptions.data = this.body;
     }
 
     this.httpMethod(url, requestOptions).then(function(httpResponse) {
-      response.body = httpResponse.data,
+      if (httpResponse.data != null && typeof httpResponse.data == 'object') {
+        response.body = JSON.stringify(httpResponse.data, null, '\t');
+      } else {
+        response.body = httpResponse.data;
+      }
       response.status = httpResponse.status,
-      response.headers = httpResponse.headers()
+      response.headers = httpResponse.headers();
+      if (response.headers['content-type']) {
+        response.contentType = response.headers['content-type'].split(';')[0];
+      }
     });
   };
 

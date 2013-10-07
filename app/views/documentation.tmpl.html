@@ -11,11 +11,11 @@
         <h2>{{mediaType}}</h2>
         <div ng-if="definition.schema">
           <h3>Request Schema</h3>
-          <div class="code" code-mirror="definition.schema" mode="mediaType" visible="methodView.expanded && documentation.requestsActive"></div>
+          <div class="code" code-mirror="definition.schema" mode="{{mediaType}}" visible="methodView.expanded && documentation.requestsActive"></div>
         </div>
         <div ng-if="definition.example">
           <h3>Example Request</h3>
-          <div class="code" code-mirror="definition.example" mode="mediaType" visible="methodView.expanded && documentation.requestsActive"></div>
+          <div class="code" code-mirror="definition.example" mode="{{mediaType}}" visible="methodView.expanded && documentation.requestsActive"></div>
         </div>
       </div>
     </tab>
@@ -30,14 +30,16 @@
         </h3>
         <section role='response' ng-hide='response.collapsed'>
           <p markdown='response.description'></p>
-          <div ng-if="response.body['text/xml'].schema">
-            <h4>Schema</h4>
-            <div class="code" code-mirror="response.body['text/xml'].schema" visible="methodView.expanded && documentation.responsesActive"></div>
-          </div>
-
-          <div ng-if="response.body['text/xml'].example">
-            <h4>Example</h4>
-            <div class="code" code-mirror="response.body['text/xml'].example" visible="methodView.expanded && documentation.responsesActive"></div>
+          <div ng-repeat="(mediaType, definition) in response.body track by mediaType">
+            <h2>{{mediaType}}</h2>
+            <div ng-if="definition.schema">
+              <h3>Response Schema</h3>
+              <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && documentation.responsesActive"></div>
+            </div>
+            <div ng-if="definition.example">
+              <h3>Example Response</h3>
+              <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && documentation.responsesActive"></div>
+            </div>
           </div>
         </section>
       </div>
