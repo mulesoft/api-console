@@ -41,7 +41,7 @@
       scope: {
         code: "=codeMirror",
         visible: "=",
-        mode: "=?"
+        mode: "@?"
       }
     }
   }
