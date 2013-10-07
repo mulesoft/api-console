@@ -26,12 +26,14 @@ describe("RAML.Directives.codeMirror", function() {
     it("defaults to an empty string for value", function() {
       link(scope, elementMock, undefined);
 
+      expect(scope.code).toEqual('');
       expect(CodeMirror.mostRecentCall.args[1].value).toEqual('');
     });
 
     it("defaults to 'text/xml' for mode", function() {
       link(scope, elementMock, undefined);
 
+      expect(scope.mode).toEqual('text/xml');
       expect(CodeMirror.mostRecentCall.args[1].mode).toEqual('text/xml');
     });
 

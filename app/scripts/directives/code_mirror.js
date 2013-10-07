@@ -10,8 +10,11 @@
   };
 
   var link = function(scope, element, attrs) {
+    scope.mode = scope.mode || 'text/xml';
+    scope.code = scope.code || '';
+
     var editor = CodeMirror(element[0], {
-      mode: scope.mode || 'text/xml',
+      mode: scope.mode,
       readOnly: "nocursor",
       value: scope.code || '',
       lineNumbers: true,
