@@ -8,7 +8,7 @@
     this.pathBuilder = $scope.method.pathBuilder;
     this.method = $scope.method;
 
-    this.httpMethod = $http[$scope.method.verb];
+    this.httpMethod = $http[$scope.method.method];
     this.queryParameters = {};
     this.supportsMediaType = !isEmpty($scope.method.body);
 

@@ -8,7 +8,7 @@
   var controller = function($scope) {
     $scope.documentation = this;
 
-    this.hasParameterDocumentation = $scope.resource.uriParameters || $scope.method.queryParameters;
+    this.hasParameterDocumentation = $scope.resource.uriParameters || $scope.method.queryParameters || $scope.method.headers;
     this.hasRequestDocumentation = !isEmpty($scope.method.body);
     this.hasResponseDocumentation = !isEmpty($scope.method.responses);
   };

@@ -54,5 +54,13 @@ resourceTypes:
       query:
         description: A query parameter
         repeat: true
-
   options: !!null
+/resource-with-headers:
+  displayName: Resource With headers
+  get:
+    headers:
+      x-custom-header:
+        displayName: Custom header
+        description: This header is used to send data that...
+        type: string
+        pattern: /^\w+$/

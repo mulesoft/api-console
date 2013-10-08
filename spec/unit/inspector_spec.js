@@ -32,7 +32,7 @@ describe("RAML.Inspector.create", function() {
 
 describe("RAML.Inspector.resourceOverviewSource", function() {
   function createMethod(verb) {
-    return jasmine.createSpy(verb);
+    return verb;
   }
 
   var resource = {
@@ -47,10 +47,7 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     }
   }
 
-  var methodOverviewSourceSpy;
-
   beforeEach(function() {
-    methodOverviewSourceSpy = spyOn(RAML.Inspector, 'methodOverviewSource').andReturn('methodOverview');
     this.resourceOverview = RAML.Inspector.resourceOverviewSource(['/resource'], resource);
   });
 
@@ -75,39 +72,8 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
   });
 
   it("creates a method overview for each method", function() {
-    expect(methodOverviewSourceSpy).toHaveBeenCalledWith(resource.methods[0], 0, resource.methods);
-    expect(methodOverviewSourceSpy).toHaveBeenCalledWith(resource.methods[1], 1, resource.methods);
-    expect(this.resourceOverview.methods).toEqual(['methodOverview', 'methodOverview']);
-  });
-});
-
-describe("RAML.Inspector.methodOverviewSource", function() {
-
-  var method = {
-    method: 'post',
-    description: 'The best method in the world',
-    queryParameters: {
-      param1: {
-        displayName: 'a param',
-        type: 'string',
-        required: false
-      }
-    }
-  }
-
-  beforeEach(function() {
-    this.methodOverview = RAML.Inspector.methodOverviewSource(method);
-  });
-
-  it("returns the verb of the method", function() {
-    expect(this.methodOverview.verb).toEqual('post');
-  });
-
-  it("copies the description of the method", function() {
-    expect(this.methodOverview.description).toEqual('The best method in the world');
-  });
-
-  it("copies the query parameters of the method", function() {
-    expect(this.methodOverview.queryParameters).toEqual(method.queryParameters);
+    // expect(methodOverviewSourceSpy).toHaveBeenCalledWith(resource.methods[0], 0, resource.methods);
+    // expect(methodOverviewSourceSpy).toHaveBeenCalledWith(resource.methods[1], 1, resource.methods);
+    expect(this.resourceOverview.methods).toEqual(['get', 'post']);
   });
 });

@@ -47,32 +47,50 @@ describe('API Documentation', function() {
       '        default: newest',
       '      query:',
       '        description: A query parameter',
-      '        repeat: true'
+      '        repeat: true',
+      '    headers:',
+      '      x-custom-header:',
+      '        description: API Key',
+      '        type: string',
+      '        pattern: /^[0-9a-f]{32}$/',
+      '        example: 0a724bfa133666c5041019ef5bf5a659'
     );
 
     loadRamlFixture(raml);
 
-    it('displays information about each parameter', function() {
+    it('displays information about query parameters and headers', function() {
       var resource = openResource(1);
       var method = openMethod(1, resource);
 
-      var table = findParameterTable('query-parameters');
-      expect(table.isDisplayed()).toBeTruthy();
+      // query parameters
+      var queryParametersTable = findParameterTable('query-parameters');
+      expect(queryParametersTable.isDisplayed()).toBeTruthy();
 
-      var param = table.findRow(1);
-      verifyCellData(param,
+      var queryParam = queryParametersTable.findRow(1);
+      verifyCellData(queryParam,
         ["page", "integer", "Which page?", "1", "No", "", "Yes", "1", "100", "", "", "", ""]);
 
-      param = table.findRow(2);
-      verifyCellData(param,
+      queryParam = queryParametersTable.findRow(2);
+      verifyCellData(queryParam,
         ["order", "string", "", "oldest", "No", "newest", "No", "", "", "5", "7", '["oldest","newest"]', ""]);
 
-      var table = findParameterTable('uri-parameters');
-      expect(table.isDisplayed()).toBeTruthy();
+      var queryParametersTable = findParameterTable('uri-parameters');
+      expect(queryParametersTable.isDisplayed()).toBeTruthy();
 
-      var param = table.findRow(1);
-      verifyCellData(param,
-        ["resourceId", "string", "", "", "No", "", "Yes", "", "", "", "", "", ""]);
+      var queryParam = queryParametersTable.findRow(1);
+      verifyCellData(queryParam,
+        ["resourceId", "string", "", "", jasmine.any(String), "", jasmine.any(String), "", "", "", "", "", ""]);
+
+      // headers
+      var headersTable = findParameterTable('headers');
+      expect(headersTable.isDisplayed()).toBeTruthy();
+
+      var customHeader = headersTable.findRow(1);
+      verifyCellData(
+        customHeader,
+        ["x-custom-header", "string", "API Key", "0a724bfa133666c5041019ef5bf5a659",
+         "No", "", "Yes", "", "", "", "", "", "/^[0-9a-f]{32}$/"]
+      );
 
     });
   });
