@@ -8,7 +8,7 @@
     "lastName": {
       "type": "string"
     },
-    "age"age: {
+    "age": {
       "description": "Age in years",
       "type": "integer",
       "minimum": 0
