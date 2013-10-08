@@ -61,7 +61,8 @@ module.exports = function (grunt) {
                         'app/vendor/showdown.min.js',
                         'app/vendor/codemirror/codemirror.js',
                         'app/vendor/codemirror/xml.js',
-                        'app/vendor/codemirror/javascript.js'
+                        'app/vendor/codemirror/javascript.js',
+                        'app/vendor/vkbeautify.0.99.00.beta.js'
                     ],
                     'dist/index.html': ['app/index.embedded.html'],
                     'dist/index.acceptance.html': ['app/index.acceptance.html']
@@ -291,8 +292,8 @@ module.exports = function (grunt) {
                         'app/vendor/showdown.min.js',
                         'app/vendor/codemirror/codemirror.js',
                         'app/vendor/codemirror/xml.js',
-                        'app/vendor/codemirror/javascript.js'
-
+                        'app/vendor/codemirror/javascript.js',
+                        'app/vendor/vkbeautify.0.99.00.beta.js'
                     ],
                     'dist/app.js': [
                         'dist/templates.js'

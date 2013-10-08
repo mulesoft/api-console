@@ -16,6 +16,7 @@ files = [
     'app/vendor/codemirror/codemirror.js',
     'app/vendor/codemirror/xml.js',
     'app/vendor/codemirror/javascript.js',
+    'app/vendor/vkbeautify.0.99.00.beta.js',
     'app/scripts/**/*.js',
     'dist/templates.js',
     'spec/integration/support/angular-mocks.js',
