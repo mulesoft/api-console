@@ -1,0 +1,7 @@
+<fieldset class='labelled-inline' ng-show="parameters">
+  <legend>{{heading}}</legend>
+  <div class="control-group" ng-repeat="(parameterName, parameter) in parameters track by parameterName">
+    <label for="{{paremeterName}}">{{parameter.displayName}}</label>
+    <input type="text" name="{{parameterName}}" ng-model='requestData[parameterName]'/>
+  </div>
+</fieldset>

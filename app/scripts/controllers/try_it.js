@@ -16,14 +16,6 @@
     $scope.apiClient = this;
   };
 
-  TryIt.prototype.hasQueryParameters = function() {
-    return !isEmpty(this.method.queryParameters);
-  };
-
-  TryIt.prototype.hasCustomHeaders = function() {
-    return !isEmpty(this.method.headers);
-  };
-
   TryIt.prototype.execute = function() {
     var url = this.baseUri + this.pathBuilder(this.pathBuilder);
     var response = this.response = {};

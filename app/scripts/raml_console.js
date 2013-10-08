@@ -4,6 +4,7 @@ module.directive('codeMirror', RAML.Directives.codeMirror);
 module.directive('documentation', RAML.Directives.documentation);
 module.directive('markdown', RAML.Directives.markdown);
 module.directive('method', RAML.Directives.method);
+module.directive('namedParameters', RAML.Directives.namedParameters);
 module.directive('parameterTable', RAML.Directives.parameterTable);
 module.directive('pathBuilder', RAML.Directives.pathBuilder);
 module.directive('ramlConsole', RAML.Directives.ramlConsole);

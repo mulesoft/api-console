@@ -13,21 +13,6 @@ describe("RAML.Controllers.tryIt", function() {
     it("assigns itself as the apiClient", function() {
       expect(this.scope.apiClient).toEqual(this.controller);
     });
-
-    it("does not have query parameters", function() {
-      expect(this.controller.hasQueryParameters()).toBeFalsy();
-    });
-  });
-
-  describe("upon initialization with query params", function() {
-    beforeEach(function() {
-      this.scope.method.queryParameters = { query: null };
-      this.controller = new RAML.Controllers.tryIt(this.scope, this.httpService);
-    });
-
-    it("has query parameters", function() {
-      expect(this.controller.hasQueryParameters()).toBeTruthy();
-    });
   });
 
   describe("executing an API command", function() {
