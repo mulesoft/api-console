@@ -33,6 +33,9 @@ describe("trying an API method", function() {
       openTryIt(resource);
       tryIt(resource);
 
+      var requestUrl = resource.$('.try-it .response .request-url');
+      expect(requestUrl.getText()).toMatch(/http:\/\/localhost:9001\/resource/);
+
       var responseStatus = resource.$('.try-it .response .status');
       expect(responseStatus.getText()).toMatch(/200/);
 

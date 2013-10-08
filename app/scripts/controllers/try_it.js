@@ -38,6 +38,7 @@
       } else {
         response.body = httpResponse.data;
       }
+      response.requestUrl = url,
       response.status = httpResponse.status,
       response.headers = httpResponse.headers();
       if (response.headers['content-type']) {

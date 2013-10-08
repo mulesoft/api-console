@@ -30,6 +30,11 @@
 
   <div class="response" ng-if="apiClient.response">
     <h3>Response</h3>
+    <div class="request-url">
+      <h4>Request URL</h4>
+      <span class="response-value">{{apiClient.response.requestUrl}}</span>
+    </div>
+
     <div class="status">
       <h4>Status</h4>
       <span class="response-value">{{apiClient.response.status}}</span>

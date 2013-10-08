@@ -59,6 +59,10 @@ describe("RAML.Controllers.tryIt", function() {
         this.controller.execute();
       });
 
+      it("assigns the request URL to the response", function() {
+        expect(this.controller.response.requestUrl).toEqual('http://example.com/resources/search');
+      });
+
       it("assigns body to the response", function() {
         expect(this.controller.response.body).toEqual('Hello world.');
       });
