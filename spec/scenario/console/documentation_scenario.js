@@ -79,7 +79,7 @@ describe('API Documentation', function() {
 
       var queryParam = queryParametersTable.findRow(1);
       verifyCellData(queryParam,
-        ["resourceId", "string", "", "", jasmine.any(String), "", jasmine.any(String), "", "", "", "", "", ""]);
+        ["resourceId", "string", "", "", "No", "", "Yes", "", "", "", "", "", ""]);
 
       // headers
       var headersTable = findParameterTable('headers');
@@ -89,10 +89,9 @@ describe('API Documentation', function() {
       verifyCellData(
         customHeader,
         ["x-custom-header", "string", "API Key", "0a724bfa133666c5041019ef5bf5a659",
-         "No", "", "Yes", "", "", "", "", "", "/^[0-9a-f]{32}$/"]
+         jasmine.any(String), "", jasmine.any(String), "", "", "", "", "", "/^[0-9a-f]{32}$/"]
       );
-
-    });
+    }, 10000);
   });
 
   describe("requests tab", function() {
