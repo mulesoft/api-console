@@ -2,6 +2,14 @@
 
   <form>
     <fieldset class='labelled-inline'>
+      <legend ng-show='apiClient.hasCustomHeaders()'>Headers</legend>
+      <div class="control-group" ng-repeat="(headerName, headers) in method.headers track by paramName">
+        <label for="{{headerName}}">{{headers.displayName}}</label>
+        <input type="text" name="{{headerName}}" ng-model='apiClient.headers[headerName]'/>
+      </div>
+    </fieldset>
+
+    <fieldset class='labelled-inline'>
       <legend ng-show='apiClient.hasQueryParameters()'>Query Parameters</legend>
       <div class="control-group" ng-repeat="(paramName,paramParameters) in method.queryParameters track by paramName">
         <label for="{{paramName}}">{{paramParameters.displayName}}</label>

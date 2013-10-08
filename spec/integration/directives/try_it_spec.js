@@ -75,4 +75,36 @@ describe("RAML.Controllers.tryIt", function() {
       httpBackend.flush();
     });
   });
+
+  describe('given headers', function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      '/resource:',
+      '  get:',
+      '    headers:',
+      '      x-custom:'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      httpBackend = prepareHttpBackend();
+      scope = createScopeWithStuff(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+    });
+
+    it('executes a request with the supplied value for the custom header', function() {
+      var headerVerifier = function(headers) {
+        return headers['x-custom'] === 'whatever';
+      };
+
+      httpBackend.expect('GET', 'http://www.example.com/resource', undefined, headerVerifier).respond(200);
+
+      $el.find('input[type="text"]').fillIn("whatever");
+      $el.find('button[role="try-it"]').click();
+
+      httpBackend.flush();
+    });
+  });
 });

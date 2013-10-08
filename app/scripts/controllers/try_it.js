@@ -9,6 +9,7 @@
     this.method = $scope.method;
 
     this.httpMethod = $http[$scope.method.method];
+    this.headers = {};
     this.queryParameters = {};
     this.supportsMediaType = !isEmpty($scope.method.body);
 
@@ -16,19 +17,29 @@
   };
 
   TryIt.prototype.hasQueryParameters = function() {
-    return this.method.queryParameters && Object.keys(this.method.queryParameters).length > 0;
+    return !isEmpty(this.method.queryParameters);
+  };
+
+  TryIt.prototype.hasCustomHeaders = function() {
+    return !isEmpty(this.method.headers);
   };
 
   TryIt.prototype.execute = function() {
     var url = this.baseUri + this.pathBuilder(this.pathBuilder);
     var response = this.response = {};
-    var requestOptions = {};
+    var requestOptions = { }
 
     if (!isEmpty(this.queryParameters)) {
       requestOptions.params = this.queryParameters;
     }
+
+    if (!isEmpty(this.headers)) {
+      requestOptions.headers = this.headers;
+    }
+
     if (this.mediaType) {
-      requestOptions.headers = { 'Content-Type': this.mediaType };
+      requestOptions.headers = requestOptions || {};
+      requestOptions.headers['Content-Type'] = this.mediaType;
       requestOptions.data = this.body;
     }
 
