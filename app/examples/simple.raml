@@ -27,8 +27,28 @@ resourceTypes:
         filter:
           description: What to filter
           type: string
-    post: !!null
-
+    post:
+      body:
+        application/x-www-form-urlencoded:
+          formParameters:
+            name:
+              description: The name of the resource to create
+              type: string
+              example: Comment
+            description:
+              description: A description of the resource to create
+              type: string
+              example: User-generated content pertinent to the associated blog post
+        multipart/form-data:
+          formParameters:
+            name:
+              description: The name of the resource to create
+              type: string
+              example: Comment
+            description:
+              description: A description of the resource to create
+              type: string
+              example: User-generated content pertinent to the associated blog post
 /another/resource:
   displayName: Cats
   type: collection

@@ -1,8 +1,8 @@
 describe('API Documentation', function() {
   var ptor = protractor.getInstance();
 
-  var findParameterTable = function (identifier) {
-    var table = ptor.$('[role="' + identifier + '"]');
+  var findParameterTable = function (identifier, method) {
+    var table = method.$('[role="' + identifier + '"]');
 
     table.findRow = function (rowIndex) {
       var row = table.$('[role="parameter"]:nth-child(' + rowIndex + ')');
@@ -53,7 +53,20 @@ describe('API Documentation', function() {
       '        description: API Key',
       '        type: string',
       '        pattern: /^[0-9a-f]{32}$/',
-      '        example: 0a724bfa133666c5041019ef5bf5a659'
+      '        example: 0a724bfa133666c5041019ef5bf5a659',
+      '  post:',
+      '    body:',
+      '      application/x-www-form-urlencoded:',
+      '        formParameters:',
+      '          name:',
+      '            description: The name of the resource to create',
+      '            type: string',
+      '            example: Comment',
+      '      multipart/form-data:',
+      '        formParameters:',
+      '          file:',
+      '            description: The data to use',
+      '            type: file'
     );
 
     loadRamlFixture(raml);
@@ -63,7 +76,7 @@ describe('API Documentation', function() {
       var method = openMethod(1, resource);
 
       // query parameters
-      var queryParametersTable = findParameterTable('query-parameters');
+      var queryParametersTable = findParameterTable('query-parameters', method);
       expect(queryParametersTable.isDisplayed()).toBeTruthy();
 
       var queryParam = queryParametersTable.findRow(1);
@@ -74,15 +87,15 @@ describe('API Documentation', function() {
       verifyCellData(queryParam,
         ["order", "string", "", "oldest", "No", "newest", "No", "", "", "5", "7", '["oldest","newest"]', ""]);
 
-      var queryParametersTable = findParameterTable('uri-parameters');
-      expect(queryParametersTable.isDisplayed()).toBeTruthy();
+      var uriParametersTable = findParameterTable('uri-parameters', method);
+      expect(uriParametersTable.isDisplayed()).toBeTruthy();
 
-      var queryParam = queryParametersTable.findRow(1);
+      var queryParam = uriParametersTable.findRow(1);
       verifyCellData(queryParam,
         ["resourceId", "string", "", "", "No", "", "Yes", "", "", "", "", "", ""]);
 
       // headers
-      var headersTable = findParameterTable('headers');
+      var headersTable = findParameterTable('headers', method);
       expect(headersTable.isDisplayed()).toBeTruthy();
 
       var customHeader = headersTable.findRow(1);
@@ -91,6 +104,22 @@ describe('API Documentation', function() {
         ["x-custom-header", "string", "API Key", "0a724bfa133666c5041019ef5bf5a659",
          jasmine.any(String), "", jasmine.any(String), "", "", "", "", "", "/^[0-9a-f]{32}$/"]
       );
+
+      var method = openMethod(2, resource);
+
+      var formParameterTable = findParameterTable('form-parameters', method);
+      expect(formParameterTable.isDisplayed()).toBeTruthy();
+
+      var param = formParameterTable.findRow(1);
+      verifyCellData(param,
+        ["name", "string", "The name of the resource to create", "Comment", "No", "", "No", "", "", "", "", "", ""]);
+
+      var multipartParameterTable = findParameterTable('multipart-form-parameters', method);
+      expect(multipartParameterTable.isDisplayed()).toBeTruthy();
+
+      var param = multipartParameterTable.findRow(1);
+      verifyCellData(param,
+        ["file", "file", "The data to use", "", "No", "", "No", "", "", "", "", "", ""]);
     }, 10000);
   });
 
