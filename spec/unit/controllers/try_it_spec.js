@@ -79,20 +79,5 @@ describe("RAML.Controllers.tryIt", function() {
         expect(this.controller.response.contentType).toEqual('application/json');
       });
     });
-
-    describe("with a JSON object in the response", function() {
-      beforeEach(function() {
-        this.promise.then.andCallFake(function(success) {
-          var noHeaders = function() { return {} };
-          success({ data: { hello: 'world' }, headers: noHeaders });
-        });
-
-        this.controller.execute();
-      });
-
-      it("re-stringifies the JSON in the response data", function() {
-        expect(this.controller.response.body).toMatch(/\{\s+"hello": "world"\s+\}/);
-      });
-    });
   });
 });

@@ -33,11 +33,7 @@
     }
 
     this.httpMethod(url, requestOptions).then(function(httpResponse) {
-      if (httpResponse.data != null && typeof httpResponse.data == 'object') {
-        response.body = JSON.stringify(httpResponse.data, null, '\t');
-      } else {
-        response.body = httpResponse.data;
-      }
+      response.body = httpResponse.data;
       response.requestUrl = url,
       response.status = httpResponse.status,
       response.headers = httpResponse.headers();

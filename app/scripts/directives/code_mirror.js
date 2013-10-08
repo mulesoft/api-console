@@ -1,34 +1,53 @@
 (function() {
   'use strict';
 
-  // https://groups.google.com/forum/#!topic/codemirror/oGeWPzZynxo
-  function indentAll(cm) {
-    var last = cm.lineCount();
-    cm.operation(function() {
-      for (var i = 0; i < last; ++i) cm.indentLine(i);
-    });
+  var formatters = {
+    "application/json" : function(code) {
+      return vkbeautify.json(code);
+    },
+    "text/xml" : function(code) {
+      return vkbeautify.xml(code);
+    },
+    "default" : function(code) {
+      return code;
+    }
   };
 
-  var link = function(scope, element, attrs) {
-    scope.mode = scope.mode || 'text/xml';
-    scope.code = scope.code || '';
+  function sanitize(options) {
+    var code = options.code || '',
+        formatter = formatters[options.mode] || formatters.default;
 
-    var editor = CodeMirror(element[0], {
-      mode: scope.mode,
+    try {
+      options.code = formatter(code);
+    } catch(e) {}
+  }
+
+  var Controller = function($scope, $element) {
+    sanitize($scope);
+
+    this.editor = CodeMirror($element[0], {
+      mode: $scope.mode,
       readOnly: "nocursor",
-      value: scope.code || '',
+      value: $scope.code,
       lineNumbers: true,
       indentUnit: 4
     });
 
-    editor.setSize("100%", "100%");
+    this.editor.setSize("100%", "100%");
+  };
 
+  Controller.prototype.refresh = function(options) {
+    sanitize(options);
+    this.editor.setOption("mode", options.mode);
+    this.editor.setValue(options.code);
+
+    this.editor.refresh();
+  };
+
+  var link = function(scope, element, attrs, editor) {
     scope.$watch('visible', function(visible) {
       if (visible) {
-        editor.setValue(scope.code);
-        editor.setOption("mode", scope.mode);
-        indentAll(editor);
-        editor.refresh();
+        editor.refresh(scope);
       }
     });
   };
@@ -38,6 +57,7 @@
       link: link,
       restrict: 'A',
       replace: true,
+      controller: Controller,
       scope: {
         code: "=codeMirror",
         visible: "=",
@@ -45,4 +65,6 @@
       }
     }
   }
+
+  RAML.Directives.codeMirror.Controller = Controller;
 })();

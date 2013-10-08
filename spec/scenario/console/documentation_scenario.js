@@ -142,7 +142,7 @@ describe('API Documentation', function() {
       var documentation = openDocumentationTab(3, method);
 
       expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
-      expect(documentation.getText()).toMatch(new RegExp("<api-response><status>Error</status></api-response>"));
+      expect(documentation.getText()).toMatch(/<api-response>[\d\s]*<status>[\d\s]*Error[\d\s]*<\/status>[\d\s]*<\/api-response>/);
 
       expect(documentation.getInnerHtml()).toMatch(/<em>Success<\/em> description/);
       expect(documentation.getInnerHtml()).toMatch(/<em>Error<\/em> description/);
