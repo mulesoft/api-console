@@ -24,6 +24,7 @@ RAML.Inspector = (function() {
       verb: method.method,
       description: method.description,
       queryParameters: method.queryParameters,
+      headers: method.headers,
       body: method.body,
       responses: method.responses
     }
