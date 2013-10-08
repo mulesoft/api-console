@@ -2,7 +2,7 @@ describe("RAML.Controllers.tryIt", function() {
   beforeEach(function() {
     this.scope = {
       api: { baseUri: "http://example.com" },
-      method: { verb: "get", pathBuilder: function() { return "/resources/search" } }
+      method: { method: "get", pathBuilder: function() { return "/resources/search" } }
     };
 
     this.httpService = jasmine.createSpyObj("$http", ["get"]);

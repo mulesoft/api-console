@@ -19,22 +19,11 @@ RAML.Inspector = (function() {
     return resources;
   };
 
-  exports.methodOverviewSource = function(method) {
-    return {
-      verb: method.method,
-      description: method.description,
-      queryParameters: method.queryParameters,
-      headers: method.headers,
-      body: method.body,
-      responses: method.responses
-    }
-  };
-
   exports.resourceOverviewSource = function(pathSegments, resource) {
     return {
       pathSegments: pathSegments,
       name: resource.displayName,
-      methods: (resource.methods || []).map(exports.methodOverviewSource),
+      methods: (resource.methods || []),
       traits: resource.is,
       resourceType: resource.type,
       uriParameters: resource.uriParameters
