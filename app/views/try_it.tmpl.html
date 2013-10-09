@@ -4,17 +4,21 @@
     <named-parameters heading="Headers" parameters="method.headers" request-data="apiClient.headers"></named-parameters>
     <named-parameters heading="Query Parameters" parameters="method.queryParameters" request-data="apiClient.queryParameters"></named-parameters>
 
-    <fieldset>
-      <legend>Body</legend>
-      <fieldset class="media-types" ng-show="apiClient.supportsMediaType">
-        <span class="radio-group-label">Content Type</span>
-        <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
-          <input type="radio" name="media-type" value="{{mediaType}}" ng-model="apiClient.mediaType">
-          {{mediaType}}
-        </label>
-      </fieldset>
-      <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
+    <fieldset class="media-types" ng-show="apiClient.supportsMediaType">
+      <span class="radio-group-label">Content Type</span>
+      <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
+        <input type="radio" name="media-type" value="{{mediaType}}" ng-model="apiClient.mediaType">
+        {{mediaType}}
+      </label>
     </fieldset>
+    <div class="request-body" ng-show="method.body">
+      <fieldset ng-show="apiClient.showBody()">
+        <legend>Body</legend>
+        <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
+      </fieldset>
+      <named-parameters heading='Form Parameters' parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showUrlencodedForm()"></named-parameters>
+      <named-parameters heading='Form Parameters' parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showMultipartForm()"></named-parameters>
+    </div>
 
     <div class="form-actions">
       <button role="try-it" class="btn inverted" ng-click="apiClient.execute()">

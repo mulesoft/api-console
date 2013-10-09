@@ -101,7 +101,67 @@ describe("RAML.Controllers.tryIt", function() {
 
       httpBackend.expect('GET', 'http://www.example.com/resource', undefined, headerVerifier).respond(200);
 
-      $el.find('input[type="text"]').fillIn("whatever");
+      $el.find('input[name="x-custom"]').fillIn("whatever");
+      $el.find('button[role="try-it"]').click();
+
+      httpBackend.flush();
+    });
+  });
+
+  describe('given form parameters', function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      '/resource:',
+      '  post:',
+      '    body:',
+      '      application/x-www-form-urlencoded:',
+      '        formParameters:',
+      '          foo:'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      httpBackend = prepareHttpBackend();
+      scope = createScopeWithStuff(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+    });
+
+    it('executes a request with the supplied value for the custom header', function() {
+      httpBackend.expect('POST', 'http://www.example.com/resource', { foo: "whatever" }).respond(200);
+
+      $el.find('input[name="foo"]').fillIn("whatever");
+      $el.find('button[role="try-it"]').click();
+
+      httpBackend.flush();
+    });
+  });
+
+  describe('given form parameters', function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      '/resource:',
+      '  post:',
+      '    body:',
+      '      multipart/form-data:',
+      '        formParameters:',
+      '          foo:'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      httpBackend = prepareHttpBackend();
+      scope = createScopeWithStuff(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+    });
+
+    it('executes a request with the supplied value for the custom header', function() {
+      httpBackend.expect('POST', 'http://www.example.com/resource', { foo: "whatever" }).respond(200);
+
+      $el.find('input[name="foo"]').fillIn("whatever");
       $el.find('button[role="try-it"]').click();
 
       httpBackend.flush();

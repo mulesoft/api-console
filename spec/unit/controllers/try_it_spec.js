@@ -1,67 +1,247 @@
 describe("RAML.Controllers.tryIt", function() {
-  beforeEach(function() {
-    this.scope = {
-      api: { baseUri: "http://example.com" },
-      method: { method: "get", pathBuilder: function() { return "/resources/search" } }
-    };
+  var scope, httpService, controller;
 
-    this.httpService = jasmine.createSpyObj("$http", ["get"]);
-    this.controller = new RAML.Controllers.tryIt(this.scope, this.httpService);
+  function createMethod(method, options) {
+    method = method || "get";
+    options = options || {};
+
+    var body = {};
+    if (options.body) {
+      options.body.forEach(function(mediaType) { body[mediaType] = {} });
+    }
+
+    return {
+      method: method,
+      pathBuilder: function() { return "/resources/search" },
+      body: body
+    }
+  }
+
+  beforeEach(function() {
+    httpService = jasmine.createSpy();
   });
 
   describe("upon initialization", function() {
-    it("assigns itself as the apiClient", function() {
-      expect(this.scope.apiClient).toEqual(this.controller);
+    describe('by default', function() {
+      beforeEach(function() {
+        scope = {
+          api: { baseUri: "http://example.com" },
+          method: createMethod()
+        };
+
+        controller = new RAML.Controllers.tryIt(scope, httpService);
+      });
+
+      it("assigns itself as the apiClient", function() {
+        expect(scope.apiClient).toEqual(controller);
+      });
+    });
+
+    describe('with a custom body', function() {
+      beforeEach(function() {
+        scope = {
+          api: { baseUri: "http://example.com" },
+          method: createMethod("get", { body: ['application/json'] })
+        };
+
+        controller = new RAML.Controllers.tryIt(scope, httpService);
+      });
+
+      it("sets suppprtsMediaType", function() {
+        expect(controller.supportsMediaType).toEqual(true);
+      });
+
+      it("sets suppprtsCustomBody", function() {
+        expect(controller.supportsCustomBody).toEqual(true);
+      });
+    });
+
+    describe('with a url encoded form data', function() {
+      beforeEach(function() {
+        scope = {
+          api: { baseUri: "http://example.com" },
+          method: createMethod("get", { body: ['application/x-www-form-urlencoded'] })
+        };
+
+        controller = new RAML.Controllers.tryIt(scope, httpService);
+      });
+
+      it("sets suppprtsMediaType", function() {
+        expect(controller.supportsMediaType).toEqual(true);
+      });
+
+      it("sets suppprtsFormUrlencoded", function() {
+        expect(controller.supportsFormUrlencoded).toEqual(true);
+      });
+    });
+
+    describe('with a multipart form data', function() {
+      beforeEach(function() {
+        scope = {
+          api: { baseUri: "http://example.com" },
+          method: createMethod("get", { body: ['multipart/form-data'] })
+        };
+
+        controller = new RAML.Controllers.tryIt(scope, httpService);
+      });
+
+      it("sets suppprtsMediaType", function() {
+        expect(controller.supportsMediaType).toEqual(true);
+      });
+
+      it("sets suppprtsFormData", function() {
+        expect(controller.supportsFormData).toEqual(true);
+      });
+    });
+  });
+
+  describe("determining a body representation", function() {
+    function verifyBodyRepresentation(options) {
+      it("the body", function() {
+        expect(controller.showBody()).toBe(options.body);
+      });
+
+      it("the url encoded form data", function() {
+        expect(controller.showUrlencodedForm()).toBe(options.urlencoded);
+      });
+
+      it("the multipart form data", function() {
+        expect(controller.showMultipartForm()).toBe(options.multipart);
+      });
+    }
+
+    describe("when no media type is selected", function() {
+      describe("with a custom body and form data", function() {
+        beforeEach(function() {
+          scope = {
+            api: { baseUri: "http://example.com" },
+            method: createMethod("get", { body: ['application/json', 'application/x-www-form-urlencoded', 'multipart/form-data'] })
+          };
+
+          controller = new RAML.Controllers.tryIt(scope, httpService);
+        });
+
+        verifyBodyRepresentation({ body: true, urlencoded: false, multipart: false })
+      });
+
+      describe("with urlencoded and mutlipart form data", function() {
+        beforeEach(function() {
+          scope = {
+            api: { baseUri: "http://example.com" },
+            method: createMethod("get", { body: ['application/x-www-form-urlencoded', 'multipart/form-data'] })
+          };
+
+          controller = new RAML.Controllers.tryIt(scope, httpService);
+        });
+
+        verifyBodyRepresentation({ body: false, urlencoded: true, multipart: false })
+      });
+
+      describe("with only mutlipart form data", function() {
+        beforeEach(function() {
+          scope = {
+            api: { baseUri: "http://example.com" },
+            method: createMethod("get", { body: ['multipart/form-data'] })
+          };
+
+          controller = new RAML.Controllers.tryIt(scope, httpService);
+        });
+
+        verifyBodyRepresentation({ body: false, urlencoded: false, multipart: true })
+      });
+    });
+
+    describe("when no media type is selected", function() {
+      beforeEach(function() {
+        scope = {
+          api: { baseUri: "http://example.com" },
+          method: createMethod("get", { body: ['application/json', 'application/x-www-form-urlencoded', 'multipart/form-data'] })
+        };
+
+        controller = new RAML.Controllers.tryIt(scope, httpService);
+      });
+
+      describe("when a custom body type is selected", function() {
+        beforeEach(function() {
+          controller.mediaType = "application/json";
+        });
+
+        verifyBodyRepresentation({ body: true, urlencoded: false, multipart: false })
+      });
+
+      describe("when urlencoded form data is selected", function() {
+        beforeEach(function() {
+          controller.mediaType = "application/x-www-form-urlencoded";
+        });
+
+        verifyBodyRepresentation({ body: false, urlencoded: true, multipart: false })
+      });
+
+      describe("when multipart form data is selected", function() {
+        beforeEach(function() {
+          controller.mediaType = "multipart/form-data";
+        });
+
+        verifyBodyRepresentation({ body: false, urlencoded: false, multipart: true })
+      });
     });
   });
 
   describe("executing an API command", function() {
+    var promise;
+
     beforeEach(function() {
-      this.promise = jasmine.createSpyObj("promise", ['then']);
-      this.getSpy = this.httpService.get;
-      this.getSpy.andReturn(this.promise);
+      promise = jasmine.createSpyObj("promise", ['then']);
+      httpService.andReturn(promise);
+
+      scope = {
+        api: { baseUri: "http://example.com" },
+        method: { method: "get", pathBuilder: function() { return "/resources/search" } }
+      };
+
+      controller = new RAML.Controllers.tryIt(scope, httpService);
     });
 
     describe("by default", function() {
       beforeEach(function() {
-        this.controller.execute();
+        controller.execute();
       });
 
       it("executes the described method", function() {
-        expect(this.getSpy).toHaveBeenCalledWith("http://example.com/resources/search", { });
+        expect(httpService).toHaveBeenCalledWith({ url: "http://example.com/resources/search", method: "get" });
       });
     });
 
     describe("on success", function() {
       beforeEach(function() {
-        this.promise.then.andCallFake(function(success) {
+        promise.then.andCallFake(function(success) {
           var headers = function() {
             return { 'content-type': 'application/json; charset=utf-8', 'X-Custom-Header': 'value'};
           };
           success({ data: 'Hello world.', status: 200, headers: headers});
         });
 
-        this.controller.execute();
+        controller.execute();
       });
 
       it("assigns the request URL to the response", function() {
-        expect(this.controller.response.requestUrl).toEqual('http://example.com/resources/search');
+        expect(controller.response.requestUrl).toEqual('http://example.com/resources/search');
       });
 
       it("assigns body to the response", function() {
-        expect(this.controller.response.body).toEqual('Hello world.');
+        expect(controller.response.body).toEqual('Hello world.');
       });
 
       it("assigns status to the response", function() {
-        expect(this.controller.response.status).toEqual(200);
+        expect(controller.response.status).toEqual(200);
       });
 
       it("assigns headers to the response", function() {
-        expect(this.controller.response.headers['X-Custom-Header']).toEqual('value');
+        expect(controller.response.headers['X-Custom-Header']).toEqual('value');
       });
 
       it("assigns contentType to the response", function() {
-        expect(this.controller.response.contentType).toEqual('application/json');
+        expect(controller.response.contentType).toEqual('application/json');
       });
     });
   });

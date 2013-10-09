@@ -16,6 +16,8 @@ resourceTypes:
   displayName: First One
   get:
     description: get the first one
+    headers:
+      x-custom:
   is: [unsecured]
   /{resourceId}:
     uriParameters:
@@ -29,6 +31,7 @@ resourceTypes:
           type: string
     post:
       body:
+        application/json:
         application/x-www-form-urlencoded:
           formParameters:
             name:
@@ -49,6 +52,7 @@ resourceTypes:
               description: A description of the resource to create
               type: string
               example: User-generated content pertinent to the associated blog post
+
 /another/resource:
   displayName: Cats
   type: collection
