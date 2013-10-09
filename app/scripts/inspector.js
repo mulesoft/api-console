@@ -31,13 +31,8 @@ RAML.Inspector = (function() {
   };
 
   exports.create = function(api) {
-    var resources = extractResources([], api)
-    return {
-      title: api.title,
-      resources: resources,
-      baseUri: api.baseUri,
-      documentation: api.documentation
-    }
+    api.resources = extractResources([], api);
+    return api;
   };
 
   return exports;
