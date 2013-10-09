@@ -13,10 +13,6 @@
     this.hasResponseDocumentation = !isEmpty($scope.method.responses);
   };
 
-  controller.prototype.toggleExpansion = function(response) {
-    response.collapsed = !response.collapsed;
-  };
-
   RAML.Directives.documentation = function() {
     return {
       controller: controller,
