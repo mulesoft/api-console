@@ -5,7 +5,7 @@
 
   <h1>{{api.title}}</h1>
 
-  <div ng-switch='ramlConsole.view'>
+  <div ng-if='ramlConsole.showRootDocumentation()' ng-switch='ramlConsole.view'>
     <a ng-switch-when='rootDocumentation' role="view-api-reference" ng-click='ramlConsole.gotoView("apiReference")'>&larr; API Reference</a>
     <a ng-switch-default role="view-root-documentation" ng-click='ramlConsole.gotoView("rootDocumentation")'>Documentation &rarr;</a>
   </div>

@@ -1,12 +1,20 @@
 (function() {
   'use strict';
 
-  var Controller = function($scope) {
+  var Controller = function($scope, $attrs) {
     $scope.ramlConsole = this;
+
+    if ($attrs.hasOwnProperty('withRootDocumentation')) {
+      this.withRootDocumentation = true;
+    }
   };
 
   Controller.prototype.gotoView = function(view) {
     this.view = view;
+  };
+
+  Controller.prototype.showRootDocumentation = function() {
+    return this.withRootDocumentation && this.api && this.api.documentation && this.api.documentation.length > 0;
   };
 
   RAML.Directives.ramlConsole = function(ramlParser) {
@@ -16,7 +24,7 @@
       });
     }
 
-    var link = function ($scope, $el, $attrs) {
+    var link = function ($scope, $el, $attrs, controller) {
       var success = function(raml) {
         $scope.api = RAML.Inspector.create(raml);
         $scope.$apply();
@@ -35,6 +43,10 @@
       // FIXME: move this to the app on module('ramlConsoleApp').run...
       $scope.$on('event:raml-parsed', function(e, raml) {
         $scope.api = RAML.Inspector.create(raml);
+      });
+
+      $scope.$watch("api", function(api) {
+        controller.api = api;
       });
     }
 
