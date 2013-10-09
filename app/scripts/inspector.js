@@ -35,7 +35,8 @@ RAML.Inspector = (function() {
     return {
       title: api.title,
       resources: resources,
-      baseUri: api.baseUri
+      baseUri: api.baseUri,
+      documentation: api.documentation
     }
   };
 

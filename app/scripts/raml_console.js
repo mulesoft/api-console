@@ -1,6 +1,9 @@
 var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize']);
 
 module.directive('codeMirror', RAML.Directives.codeMirror);
+module.directive('collapsible', RAML.Directives.collapsible);
+module.directive('collapsibleContent', RAML.Directives.collapsibleContent);
+module.directive('collapsibleToggle', RAML.Directives.collapsibleToggle);
 module.directive('documentation', RAML.Directives.documentation);
 module.directive('markdown', RAML.Directives.markdown);
 module.directive('method', RAML.Directives.method);

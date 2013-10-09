@@ -1,6 +1,14 @@
 (function() {
   'use strict';
 
+  var Controller = function($scope) {
+    $scope.ramlConsole = this;
+  };
+
+  Controller.prototype.gotoView = function(view) {
+    this.view = view;
+  };
+
   RAML.Directives.ramlConsole = function(ramlParser) {
     var importAndParseRaml = function(src) {
       return ramlParser.loadFile(src).then(function (raml) {
@@ -33,6 +41,7 @@
     return {
       restrict: 'E',
       templateUrl: 'views/raml-console.tmpl.html',
+      controller: Controller,
       scope: {
         src: '@'
       },

@@ -1,0 +1,6 @@
+<div role="root-documentation">
+  <section collapsible collapsed ng-repeat="document in api.documentation">
+    <h2 collapsible-toggle>{{document.title}}</h2>
+    <div collapsible-content markdown='document.content'></div>
+  </section>
+</div>
