@@ -3,18 +3,15 @@
     {{parseError}}
   </section>
 
-  <h1>{{api.title}}</h1>
+  <h1 id="api-title">{{api.title}}</h1>
 
-  <div class='accordion' role="resources">
-    <div ng-class="{expanded: resource.isOpen}" class='accordion-group' role="resource" ng-repeat="resource in api.resources">
-      <resource-summary class='accordion-heading accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'></resource-summary>
-      <div class='accordion-body' ng-show='resource.isOpen'>
-        <div class='accordion-inner'>
-          <div class='accordion' role="methods">
-            <method ng-repeat="method in resource.methods"></method>
-          </div>
-        </div>
-      </div>
-    </div>
+  <nav id="main-nav" ng-if='ramlConsole.showRootDocumentation()' ng-switch='ramlConsole.view'>
+    <a class="btn inverted" ng-switch-when='rootDocumentation' role="view-api-reference" ng-click='ramlConsole.gotoView("apiReference")'>&larr; API Reference</a>
+    <a class="btn inverted" ng-switch-default role="view-root-documentation" ng-click='ramlConsole.gotoView("rootDocumentation")'>Documentation &rarr;</a>
+  </nav>
+
+  <div id="content" ng-switch='ramlConsole.view'>
+    <ng-include ng-switch-when='rootDocumentation' src="'views/root_documentation.tmpl.html'"></ng-include>
+    <ng-include ng-switch-default src="'views/api_resources.tmpl.html'"></ng-include>
   </div>
 </article>

@@ -7,5 +7,5 @@ function createScope(cb) {
     }
   });
 
-  return scope
+  return scope;
 }
