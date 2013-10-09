@@ -42,6 +42,8 @@
       link: function(scope, element, attrs) {
         scope.$watch('collapsed', function(collapsed) {
           element.css("display", collapsed ? "none" : "block");
+          element.parent().removeClass("collapsed expanded");
+          element.parent().addClass(collapsed ? "collapsed" : "expanded");
         });
       }
     }
