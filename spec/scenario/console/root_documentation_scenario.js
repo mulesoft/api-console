@@ -24,7 +24,7 @@ describe('Root-Level Documentation', function() {
 
     expect(heading.getText()).toEqual("Getting Started");
 
-    var content = gettingStartedSection.$("div");
+    var content = gettingStartedSection.$("div[markdown]");
     var expectedContent = "<p><em>some</em> <strong>markdown</strong> content</p>";
 
     expect(content.isDisplayed()).toBeFalsy();

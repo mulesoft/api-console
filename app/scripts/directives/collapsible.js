@@ -1,6 +1,9 @@
 (function() {
   'use strict';
 
+  // NOTE: This directive relies on the collapsible content
+  // and collapsible toggle to live in the same scope.
+
   var Controller = function() {};
 
   RAML.Directives.collapsible = function() {
@@ -37,8 +40,7 @@
       require: '^collapsible',
       restrict: 'EA',
       link: function(scope, element, attrs) {
-        // Why does this have to be scope.$parent
-        scope.$parent.$watch('collapsed', function(collapsed) {
+        scope.$watch('collapsed', function(collapsed) {
           element.css("display", collapsed ? "none" : "block");
         });
       }
