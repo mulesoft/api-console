@@ -5,10 +5,10 @@ describe('API Documentation', function() {
     var table = method.$('[role="' + identifier + '"]');
 
     table.findRow = function (rowIndex) {
-      var row = table.$('[role="parameter"]:nth-child(' + rowIndex + ')');
+      var row = {};
 
       row.findCell = function (cellIndex) {
-        return row.$('td:nth-child(' + cellIndex + ')');
+        return table.$('[role="parameter"]:nth-child(' + rowIndex + ') td:nth-child(' + cellIndex + ')');
       }
       return row;
     };
