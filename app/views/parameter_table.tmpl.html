@@ -1,5 +1,65 @@
 <section class='parameterTable' ng-show='parameters'>
   <h3>{{heading}}</h3>
+  <div role='parameter' ng-repeat='param in parameters'>
+    <h4>
+      <span role="display-name">{{param.displayName}}</span>
+    <span class="constraints">
+      <span role="required" ng-if="param.required">required, </span><!--
+      --><span role="enum" ng-if="param.enum">
+        one of
+        (<span ng-repeat="option in param.enum"><!--
+          -->{{option}}<span ng-if="!$last">, </span><!--
+        --></span>)<!--
+      --></span><!--
+      --><span ng-if="!param.enum" role="type">{{param.type}}</span><!--
+      --><span role="pattern" ng-if="param.pattern"> matching {{param.pattern}}</span><!--
+      --><span role="length" ng-if="param.minLength && param.maxLength">, {{param.minLength}}-{{param.maxLength}} characters</span><!--
+      --><span role="length" ng-if="param.minLength && !param.maxLength">, at least {{param.minLength}} characters</span><!--
+      --><span role="length" ng-if="param.maxLength && !param.minLength">, at most {{param.maxLength}} characters</span><!--
+
+      --><span role="range" ng-if="param.minimum && param.maximum"> between {{param.minimum}}-{{param.maximum}}</span><!--
+      --><span role="range" ng-if="param.minimum && !param.maximum"> ≥ {{param.minimum}}</span><!--
+      --><span role="range" ng-if="param.maximum && !param.minimum"> ≤ {{param.maximum}}</span><!--
+      --><span role="repeat" ng-if="param.repeat">, repeatable</span><!--
+      --><span ng-if="param.default">, default: <span role="default">{{param.default}}</span></span>
+
+    </span>
+    </h4>
+
+    <div class="info">
+      <div role="description" markdown="param.description"></div>
+      <div ng-if="param.example"><span class="label">Example</span> <span role="example">{{param.example}}</span></div>
+    </div>
+  </div>
+  <!--     <h4>
+      {{param.displayName}}
+      —
+      {{param.required}},
+      {{param.type}},
+      {{param.integerRange}},
+      {{param.characterRange}},
+      {{param.pattern}},
+      {{param.repeatable}}
+    </h4>
+    <div>Description: {{param.description}}</div>
+    <div>Possible values: {{param.enum}}</div>
+    <div>Example: {{param.example}}</div>
+    <div>Default: {{param.default}}</div>
+  </div> -->
+
+    <!-- <h4>
+      {{param.displayName}}
+      —
+      {{param.type}},
+      <ng-if="param.minimum && param.maximum">{{param.minimum}}-{{param.maximum}},</ng-if>
+      <ng-if="param.minLength">{{param.minLength}}-{{param.maxLength}} characters,</ng-if>
+      <ng-if="param.pattern">{{param.pattern}}</ng-if>
+    </h4>
+    <div>Description: {{param.description}}</div>
+    <div>Possible values: {{param.enum}}</div>
+    <div>Example: {{param.example}}</div>
+  </div>
+
   <table>
     <thead>
       <tr>
@@ -35,5 +95,5 @@
         <td>{{param.pattern}}</td>
       </tr>
     </tbody>
-  </table>
+  </table> -->
 </section>

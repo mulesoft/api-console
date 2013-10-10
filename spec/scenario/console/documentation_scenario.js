@@ -1,28 +1,6 @@
 describe('API Documentation', function() {
   var ptor = protractor.getInstance();
 
-  var findParameterTable = function (identifier, method) {
-    var table = method.$('[role="' + identifier + '"]');
-
-    table.findRow = function (rowIndex) {
-      var row = {};
-
-      row.findCell = function (cellIndex) {
-        return table.$('[role="parameter"]:nth-child(' + rowIndex + ') td:nth-child(' + cellIndex + ')');
-      }
-      return row;
-    };
-
-    return table;
-  };
-
-  var verifyCellData = function (row, cells) {
-    cells.forEach(function(expectedCellText, cellIndex) {
-      expect(row.findCell(cellIndex + 1).getText()).toEqual(expectedCellText);
-    });
-  };
-
-
   describe('parameters tab', function() {
     raml = createRAML(
       'title: Example API',
@@ -38,13 +16,6 @@ describe('API Documentation', function() {
       '        minimum: 1',
       '        maximum: 100',
       '        required: true',
-      '      order:',
-      '        type: string',
-      '        enum: ["oldest", "newest"]',
-      '        example: oldest',
-      '        minLength: 5',
-      '        maxLength: 7',
-      '        default: newest',
       '      query:',
       '        description: A query parameter',
       '        repeat: true',
@@ -75,52 +46,37 @@ describe('API Documentation', function() {
       var resource = openResource(1);
       var method = openMethod(1, resource);
 
-      // query parameters
-      var queryParametersTable = findParameterTable('query-parameters', method);
-      expect(queryParametersTable.isDisplayed()).toBeTruthy();
+      var queryParameters = method.$('[role="query-parameters"]');
+      var queryParam = queryParameters.$('[role="parameter"]');
+      var expectedText = new RegExp([
+        "page",
+        "required,",
+        "integer between 1-100",
+        "Which page?",
+        "Example",
+        "1",
+      ].map(escapeRegExp).join('\\s+'), "i");
+      expect(queryParam.getText()).toMatch(expectedText);
 
-      var queryParam = queryParametersTable.findRow(1);
-      verifyCellData(queryParam,
-        ["page", "integer", "Which page?", "1", "No", "", "Yes", "1", "100", "", "", "", ""]);
+      var uriParameters = method.$('[role="uri-parameters"]');
+      var uriParam = uriParameters.$('[role="parameter"]');
+      var expectedText = new RegExp([
+        "resourceId",
+      ].map(escapeRegExp).join('\\s+'), "i");
+      expect(uriParam.getText()).toMatch(expectedText);
 
-      queryParam = queryParametersTable.findRow(2);
-      verifyCellData(queryParam,
-        ["order", "string", "", "oldest", "No", "newest", "No", "", "", "5", "7", '["oldest","newest"]', ""]);
-
-      var uriParametersTable = findParameterTable('uri-parameters', method);
-      expect(uriParametersTable.isDisplayed()).toBeTruthy();
-
-      var queryParam = uriParametersTable.findRow(1);
-      verifyCellData(queryParam,
-        ["resourceId", "string", "", "", "No", "", "Yes", "", "", "", "", "", ""]);
-
-      // headers
-      var headersTable = findParameterTable('headers', method);
-      expect(headersTable.isDisplayed()).toBeTruthy();
-
-      var customHeader = headersTable.findRow(1);
-      verifyCellData(
-        customHeader,
-        ["x-custom-header", "string", "API Key", "0a724bfa133666c5041019ef5bf5a659",
-         jasmine.any(String), "", jasmine.any(String), "", "", "", "", "", "/^[0-9a-f]{32}$/"]
-      );
-
-      var method = openMethod(2, resource);
-
-      var formParameterTable = findParameterTable('form-parameters', method);
-      expect(formParameterTable.isDisplayed()).toBeTruthy();
-
-      var param = formParameterTable.findRow(1);
-      verifyCellData(param,
-        ["name", "string", "The name of the resource to create", "Comment", "No", "", "No", "", "", "", "", "", ""]);
-
-      var multipartParameterTable = findParameterTable('multipart-form-parameters', method);
-      expect(multipartParameterTable.isDisplayed()).toBeTruthy();
-
-      var param = multipartParameterTable.findRow(1);
-      verifyCellData(param,
-        ["file", "file", "The data to use", "", "No", "", "No", "", "", "", "", "", ""]);
-    }, 10000);
+      var headers = method.$('[role="headers"]');
+      var header = headers.$('[role="parameter"]');
+      var expectedText = new RegExp([
+        "x-custom-header",
+        "required,", // FIXME
+        "string matching /^[0-9a-f]{32}$/",
+        "API Key",
+        "Example",
+        "0a724bfa133666c5041019ef5bf5a659",
+      ].map(escapeRegExp).join('\\s+'), "i");
+      expect(header.getText()).toMatch(expectedText);
+    });
   });
 
   describe("requests tab", function() {
