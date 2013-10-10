@@ -26,7 +26,7 @@
     "grunt-google-cdn": "~0.2.0",
     "grunt-ngmin": "~0.0.2",
     "grunt-angular-templates": "~0.3.10",
-    "protractor": "https://github.com/shamus/protractor/tarball/features/friendlier-dsl",
+    "protractor": "*",
     "selenium-webdriver": "*",
     "nock": "*"
   },
