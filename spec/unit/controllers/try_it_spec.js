@@ -212,6 +212,24 @@ describe("RAML.Controllers.tryIt", function() {
       });
     });
 
+    function verifyResponseAssignment(options) {
+      it("assigns the request URL to the response", function() {
+        expect(controller.response.requestUrl).toEqual('http://example.com/resources/search');
+      });
+
+      it("assigns body to the response", function() {
+        expect(controller.response.body).toEqual(options.body);
+      });
+
+      it("assigns status to the response", function() {
+        expect(controller.response.status).toEqual(options.status);
+      });
+
+      it("assigns contentType to the response", function() {
+        expect(controller.response.contentType).toEqual(options.contentType);
+      });
+    }
+
     describe("on success", function() {
       beforeEach(function() {
         promise.then.andCallFake(function(success) {
@@ -224,25 +242,27 @@ describe("RAML.Controllers.tryIt", function() {
         controller.execute();
       });
 
-      it("assigns the request URL to the response", function() {
-        expect(controller.response.requestUrl).toEqual('http://example.com/resources/search');
-      });
-
-      it("assigns body to the response", function() {
-        expect(controller.response.body).toEqual('Hello world.');
-      });
-
-      it("assigns status to the response", function() {
-        expect(controller.response.status).toEqual(200);
-      });
+      verifyResponseAssignment({ body: 'Hello world.', status: 200, contentType: 'application/json' });
 
       it("assigns headers to the response", function() {
         expect(controller.response.headers['X-Custom-Header']).toEqual('value');
       });
+    });
 
-      it("assigns contentType to the response", function() {
-        expect(controller.response.contentType).toEqual('application/json');
+    describe("on error", function() {
+      beforeEach(function() {
+        promise.then.andCallFake(function(success) {
+          var headers = function() {
+            return { 'content-type': 'text/plain' };
+          };
+
+          success({ data: 'File Not Found', status: 404, headers: headers});
+        });
+
+        controller.execute();
       });
+
+      verifyResponseAssignment({ body: 'File Not Found', status: 404, contentType: 'text/plain' });
     });
   });
 });

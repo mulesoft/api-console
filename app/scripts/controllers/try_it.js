@@ -52,8 +52,8 @@
   }
 
   TryIt.prototype.execute = function() {
-    var url = this.baseUri + this.pathBuilder(this.pathBuilder);
     var response = this.response = {};
+    var url = this.response.requestUrl = this.baseUri + this.pathBuilder(this.pathBuilder);
     var requestOptions = { url: url, method: this.httpMethod }
 
     if (!isEmpty(this.queryParameters)) {
@@ -74,15 +74,19 @@
       requestOptions.data = this.body;
     }
 
-    this.http(requestOptions).then(function(httpResponse) {
-      response.body = httpResponse.data;
-      response.requestUrl = url,
-      response.status = httpResponse.status,
-      response.headers = httpResponse.headers();
-      if (response.headers['content-type']) {
-        response.contentType = response.headers['content-type'].split(';')[0];
-      }
-    });
+    this.http(requestOptions).then(
+      this.handleResponse.bind(this), this.handleResponse.bind(this)
+    );
+  };
+
+  TryIt.prototype.handleResponse = function(httpResponse) {
+    this.response.body = httpResponse.data,
+      this.response.status = httpResponse.status,
+      this.response.headers = httpResponse.headers();
+
+    if (this.response.headers['content-type']) {
+      this.response.contentType = this.response.headers['content-type'].split(';')[0];
+    }
   };
 
   RAML.Controllers.tryIt = TryIt;
