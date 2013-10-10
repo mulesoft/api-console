@@ -1,5 +1,6 @@
 var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize']);
 
+module.directive('basicAuth', RAML.Directives.basicAuth);
 module.directive('codeMirror', RAML.Directives.codeMirror);
 module.directive('collapsible', RAML.Directives.collapsible);
 module.directive('collapsibleContent', RAML.Directives.collapsibleContent);

@@ -6,16 +6,22 @@
     return Object.keys(object || {}).length == 0;
   }
 
-  TryIt = function($scope, $http) {
+  TryIt = function($scope, $http, Base64) {
     this.baseUri = $scope.api.baseUri || '';
     this.pathBuilder = $scope.method.pathBuilder;
 
     this.http = $http;
+    this.encoder = Base64;
     this.httpMethod = $scope.method.method;
     this.headers = {};
     this.queryParameters = {};
     this.formParameters = {};
     this.supportsCustomBody = this.supportsFormUrlencoded = this.supportsFormData = false;
+
+    if ($scope.method.requiresBasicAuthentication()) {
+      this.basicauth = {};
+    }
+
     for (mediaType in $scope.method.body) {
       this.supportsMediaType = true;
 
@@ -69,9 +75,15 @@
     }
 
     if (this.mediaType) {
-      requestOptions.headers = requestOptions || {};
+      requestOptions.headers = requestOptions.headers || {};
       requestOptions.headers['Content-Type'] = this.mediaType;
       requestOptions.data = this.body;
+    }
+
+    if (this.basicauth) {
+      var encoded = this.encoder.encode(this.basicauth.username + ":" + this.basicauth.password);
+      requestOptions.headers = requestOptions.headers || {};
+      requestOptions.headers['Authorization'] = "Basic " + encoded;
     }
 
     this.http(requestOptions).then(
@@ -87,7 +99,7 @@
     if (this.response.headers['content-type']) {
       this.response.contentType = this.response.headers['content-type'].split(';')[0];
     }
-  };
+  }
 
   RAML.Controllers.tryIt = TryIt;
 })();

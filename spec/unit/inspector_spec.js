@@ -3,22 +3,28 @@ describe("RAML.Inspector.create", function() {
   parseRAML(createRAML(
     'title: MyApi',
     'baseUri: http://myapi.com',
+    'securitySchemes:',
+    '  - basic:',
+    '      type: Basic Authentication',
     '/resource:',
     '  get: !!null',
     '  /{resourceId}:',
     '    get: !!null',
     '/another/resource:',
-    '  get: !!null'
+    '  get:',
+    '    securedBy: [basic]'
   ));
 
   describe("inspecting an api's resources", function() {
+    var inspector;
+
     beforeEach(function() {
-      resourceOverviewSourceSpy = spyOn(RAML.Inspector, 'resourceOverviewSource');
-      this.inspector = RAML.Inspector.create(this.api)
+      resourceOverviewSourceSpy = spyOn(RAML.Inspector, 'resourceOverviewSource').andCallThrough();
+      inspector = RAML.Inspector.create(this.api)
     });
 
     it("flattens nested resources", function() {
-      var resources = this.inspector.resources;
+      var resources = inspector.resources;
       expect(resources).toHaveLength(3);
     });
 
@@ -26,6 +32,29 @@ describe("RAML.Inspector.create", function() {
       expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/resource'], jasmine.any(Object));
       expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/resource', '/{resourceId}'], jasmine.any(Object));
       expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/another/resource' ], jasmine.any(Object));
+    });
+
+    describe("query a resource method's security schemes", function() {
+      var method;
+      describe("when a method is secured by Basic Authentication", function() {
+        beforeEach(function() {
+          method = inspector.resources[2].methods[0];
+        });
+
+        it("returns true", function() {
+          expect(method.requiresBasicAuthentication()).toBe(true);
+        });
+      });
+
+      describe("when a method is not secured by Basic Authentication", function() {
+        beforeEach(function() {
+          method = inspector.resources[0].methods[0];
+        });
+
+        it("returns false", function() {
+          expect(method.requiresBasicAuthentication()).toBe(false);
+        });
+      });
     });
   });
 });
@@ -72,8 +101,6 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
   });
 
   it("creates a method overview for each method", function() {
-    // expect(methodOverviewSourceSpy).toHaveBeenCalledWith(resource.methods[0], 0, resource.methods);
-    // expect(methodOverviewSourceSpy).toHaveBeenCalledWith(resource.methods[1], 1, resource.methods);
     expect(this.resourceOverview.methods).toEqual(['get', 'post']);
   });
 });

@@ -13,7 +13,8 @@ describe("RAML.Controllers.tryIt", function() {
     return {
       method: method,
       pathBuilder: function() { return "/resources/search" },
-      body: body
+      body: body,
+      requiresBasicAuthentication: function() { return false; }
     }
   }
 
@@ -196,7 +197,7 @@ describe("RAML.Controllers.tryIt", function() {
 
       scope = {
         api: { baseUri: "http://example.com" },
-        method: { method: "get", pathBuilder: function() { return "/resources/search" } }
+        method: createMethod()
       };
 
       controller = new RAML.Controllers.tryIt(scope, httpService);

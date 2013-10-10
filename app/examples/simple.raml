@@ -2,6 +2,9 @@
 ---
 title: Example API
 baseUri: #{test_api_uri}
+securitySchemes:
+  - basic:
+      type: Basic Authentication
 traits:
   - secured:
       description: Some requests require authentication
@@ -86,6 +89,7 @@ documentation:
         description: A query parameter
         repeat: true
   options: !!null
+
 /resource-with-headers:
   displayName: Resource With headers
   get:
@@ -95,3 +99,8 @@ documentation:
         description: This header is used to send data that...
         type: string
         pattern: /^\w+$/
+
+/secured-resource:
+  displayName: SO SECURE
+  get:
+    securedBy: [basic]

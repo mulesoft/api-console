@@ -167,4 +167,39 @@ describe("RAML.Controllers.tryIt", function() {
       httpBackend.flush();
     });
   });
+
+  describe('secured by basic auth', function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      'securitySchemes:',
+      '  - basic:',
+      '      type: Basic Authentication',
+      '/resource:',
+      '  get:',
+      '    securedBy: [basic]'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      httpBackend = prepareHttpBackend();
+      scope = createScopeWithStuff(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+    });
+
+    it('executes a request with the supplied value for the custom header', function() {
+      var headerVerifier = function(headers) {
+        return !!headers['Authorization'].match(/Basic/);
+      };
+
+      httpBackend.expect('GET', 'http://www.example.com/resource', undefined, headerVerifier).respond(200);
+
+      $el.find('input[name="username"]').fillIn("whatever");
+      $el.find('input[name="password"]').fillIn("whatever");
+      $el.find('button[role="try-it"]').click();
+
+      httpBackend.flush();
+    });
+  });
 });
