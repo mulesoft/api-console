@@ -43,22 +43,43 @@ baseUri: http://www.example.com/
           reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
           pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
           culpa qui officia deserunt mollit anim id est laborum.
-      # markdownDescription:
-      #   description: |
-      #     An explanation of the purpose of this parameter, in **Markdown**!
+      markdownDescription:
+        description: |
+          An explanation of the purpose of this parameter, in **Markdown**!
 
-      #     # We can have headers
+          # We can have headers
 
-      #     And text with *all* sorts of formatting.
+          And text with *all* sorts of formatting.
 
-      #     * Such
-      #     * as
-      #     * lists
+          * Such
+          * as
+          * lists
       example:
         example: 1a79a4d60de6718e8e5b326e338ae533
       default:
         default: 0
-      descriptionExampleAndDefault:
+      descriptionAndExample:
         description: This parameter is used to do something.
         example: 154
-        default: 1
+      required:
+        required: true
+      enum:
+        enum:
+          - one
+          - two
+          - three
+      combo:
+        required: true
+        enum:
+          - any
+          - all
+          - exact match
+        description: This parameter does something
+      anotherCombo:
+        required: true
+        type: integer
+        minimum: 5
+        maximum: 20
+        default: 5
+        example: 18
+        description: This explains the function of this parameter.
