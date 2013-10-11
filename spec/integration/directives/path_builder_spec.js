@@ -29,7 +29,7 @@ describe("RAML.Directives.pathBuilder", function() {
 
     it("renders templated path segments as input fields", function() {
       expect(el).toHaveText(/\/resource[\s\S]*/);
-      expect(el.find('input')).toHaveAttr('placeholder', '/{resourceId}');
+      expect(el.find('input')).toHaveAttr('placeholder', 'resourceId');
     });
   });
 });

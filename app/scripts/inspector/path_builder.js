@@ -14,7 +14,7 @@
   }
 
   PathSegment.prototype.toString = function() {
-    return this.text;
+    return this.templated ? this.text.replace(/[\/{}]/g, '') : this.text;
   }
 
   PathSegment.prototype.replaceWith = function(value) {
