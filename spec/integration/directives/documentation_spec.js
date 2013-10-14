@@ -14,12 +14,58 @@ describe("RAML.Directives.documentation", function() {
     });
   };
 
+  function createScopeWithFirstResourceAndMethod(parsedApi) {
+    scope = createScope(function(scope) {
+      scope.api = RAML.Inspector.create(parsedApi);
+      scope.resource = scope.api.resources[0];
+      scope.method = scope.resource.methods[0];
+      scope.method.pathBuilder = new RAML.Inspector.PathBuilder.create(scope.resource.pathSegments);
+    });
+    return scope;
+  };
+
+  function compileWithScopeFromFirstResourceAndMethodOfRAML(directive, raml, callback) {
+    var parsed = {},
+        completed = false;
+
+    runs(function() {
+      var success = function(result) {
+        for (var property in result) {
+          parsed[property] = result[property];
+        }
+        completed = true;
+      }
+
+      var error = function() {
+        console.log("could not parse: " + raml);
+        completed = true;
+      }
+
+      RAML.Parser.load(raml).then(success, error);
+    });
+
+    waitsFor(function() { return completed; }, "RAML parse took too long", 5000);
+
+    runs(function() {
+      $el = compileTemplate(directive, createScopeWithFirstResourceAndMethod(parsed));
+      if (callback) {
+        callback($el);
+      }
+    });
+  };
+
   describe('given a method and resource with no documentation', function() {
-    beforeEach( function() {
-      scope = createScope(function(scope) {
-        scope.resource = scope.method = {};
-      });
-      $el = compileTemplate("<documentation></documentation>", scope);
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/resource:',
+        '  get:'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<documentation></documentation>", raml
+      );
     });
 
     it('disables the parameters tab', function() {
@@ -36,17 +82,21 @@ describe("RAML.Directives.documentation", function() {
   });
 
   describe('given a method with query parameters', function() {
-    beforeEach( function() {
-      scope = createScope(function(scope) {
-        scope.resource = {};
-        scope.method = {
-          queryParameters: {
-            page: {}
-          }
-        };
-      });
-      $el = compileTemplate("<documentation></documentation>", scope);
-      section = $el.find("[role='documentation-parameters']");
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/resource:',
+        '  get:',
+        '    queryParameters:',
+        '      page:'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<documentation></documentation>", raml, function($el) {
+          section = $el.find("[role='documentation-parameters']");
+        }
+      );
     });
 
     it('enables the parameters tab', function() {
@@ -55,10 +105,22 @@ describe("RAML.Directives.documentation", function() {
   });
 
   describe('given a method with only an XML request body schema', function() {
-    beforeEach( function() {
-      scope = createScopeWithXMLRequestBody({ schema: "superschema" });
-      $el = compileTemplate("<documentation></documentation>", scope);
-      section = $el.find("[role='documentation-requests']");
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/resource:',
+        '  get:',
+        '    body:',
+        '      text/xml:',
+        '        schema: superschema'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<documentation></documentation>", raml, function($el) {
+          section = $el.find("[role='documentation-requests']");
+        }
+      );
     });
 
     it('enables the requests tab', function() {
@@ -75,10 +137,22 @@ describe("RAML.Directives.documentation", function() {
   });
 
   describe('given a method with only an XML request body example', function() {
-    beforeEach( function() {
-      scope = createScopeWithXMLRequestBody({ example: "someexample" });
-      $el = compileTemplate("<documentation></documentation>", scope);
-      section = $el.find("[role='documentation-requests']");
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/resource:',
+        '  get:',
+        '    body:',
+        '      text/xml:',
+        '        example: someexample'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<documentation></documentation>", raml, function($el) {
+          section = $el.find("[role='documentation-requests']");
+        }
+      );
     });
 
     it('enables the requests tab', function() {
@@ -95,20 +169,25 @@ describe("RAML.Directives.documentation", function() {
   });
 
   describe('given a method with response documentation', function() {
-    beforeEach( function() {
-      scope = createScope(function(scope) {
-        scope.resource = {};
-        scope.method = {
-          responses: {
-            200: { description: 'A-Okay' },
-            500: { description: 'Ut Oh'}
-          }
-        };
-      });
-      $el = compileTemplate("<documentation></documentation>", scope);
-      setFixtures($el);
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/resource:',
+        '  get:',
+        '    responses:',
+        '      200:',
+        '        description: A-Okay',
+        '      500:',
+        '        description: Ut Oh'
+      );
 
-      section = $("[role='documentation-responses']");
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<documentation></documentation>", raml, function($el) {
+          setFixtures($el);
+          section = $("[role='documentation-responses']");
+        }
+      );
     });
 
     it('enables the responses tab', function() {

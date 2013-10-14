@@ -9,8 +9,8 @@ describe("trying an API method", function() {
   );
 
   var openTryIt = function(resource) {
-    var tryItTab = resource.$('[role="methodSummary"] button[role="try-it-tab"]');
-    tryItTab.click();
+    resource.$('[role="methodSummary"]').click();
+    resource.$('[role="method"] .nav-tabs li:last-child').click();
   };
 
   var tryIt = function(resource) {

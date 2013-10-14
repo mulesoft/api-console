@@ -35,23 +35,27 @@
               </a>
             </h3>
           </div>
-        <div collapsible-content>
-          <section role='response'>
-            <p markdown='response.description'></p>
-            <div ng-repeat="(mediaType, definition) in response.body track by mediaType">
-              <h2>{{mediaType}}</h2>
-              <div ng-if="definition.schema">
-                <h3>Response Schema</h3>
-                <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && documentation.responsesActive"></div>
+          <div collapsible-content>
+            <section role='response'>
+              <p markdown='response.description'></p>
+              <div ng-repeat="(mediaType, definition) in response.body track by mediaType">
+                <h2>{{mediaType}}</h2>
+                <div ng-if="definition.schema">
+                  <h3>Response Schema</h3>
+                  <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && documentation.responsesActive"></div>
+                </div>
+                <div ng-if="definition.example">
+                  <h3>Example Response</h3>
+                  <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && documentation.responsesActive"></div>
+                </div>
               </div>
-              <div ng-if="definition.example">
-                <h3>Example Response</h3>
-                <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && documentation.responsesActive"></div>
-              </div>
-            </div>
-          </section>
+            </section>
+          </div>
         </div>
       </div>
+    </tab>
+    <tab heading="Try It" active="documentation.tryItActive">
+      <try-it></try-it>
     </tab>
   </tabset>
 </section>
