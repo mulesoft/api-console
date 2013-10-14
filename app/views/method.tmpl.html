@@ -3,16 +3,10 @@
     <i ng-class="{'icon-caret-right': !methodView.expanded, 'icon-caret-down': methodView.expanded}"></i>
     <span role="verb">{{method.method}}:</span>
     <path-builder></path-builder>
-    <div class="pull-right actions">
-      <button role="try-it-tab" class="btn" ng-click="methodView.openTab('tryIt', $event)">Try It</button>
-      <i class="icon-file-alt documentation" ng-click="methodView.openTab('documentation', $event)"></i>
-    </div>
   </div>
   <div class='accordion-body' ng-show='methodView.expanded'>
     <div class='accordion-inner'>
-      <documentation ng-show="methodView.currentTab == 'documentation'"></documentation>
-
-      <try-it ng-show="methodView.currentTab == 'tryIt'"></try-it>
+      <documentation></documentation>
     </div>
   </div>
 </div>

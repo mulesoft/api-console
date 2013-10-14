@@ -98,9 +98,6 @@ describe('accordion view of API', function() {
 
       var path = ptor.$('[role="resource"] [role="methodSummary"] [role="path"]');
       expect(path.getText()).toEqual('/resource')
-
-      var tryIt = ptor.$('[role="resource"] [role="methodSummary"] button[role="try-it-tab"]');
-      expect(tryIt.getText()).toMatch(/Try It/i)
     });
   });
 
