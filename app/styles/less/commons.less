@@ -37,17 +37,23 @@ section, aside {
   font-family: 'Helvetica', sans-serif;
 }
 
-a, a:visited {
-  color: #07c; text-decoration: none;
-  outline: 0;
+[role=api-console] {
+  a, a:visited {
+    color: #07c; text-decoration: none;
+    outline: 0;
+  }
+
+  a:hover, a:focus {
+    text-decoration: none;
+  }
+
+  p a, p a:visited {
+    line-height: inherit;
+  }
 }
 
-a:hover, a:focus {
-  text-decoration: none;
-}
-
-p a, p a:visited {
-  line-height: inherit;
+[collapsible-toggle] {
+  cursor: pointer;
 }
 
 .hidden {

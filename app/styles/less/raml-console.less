@@ -80,6 +80,7 @@ ul[role=methods] {
 
 [role=methodSummary] {
   padding: 15px;
+  margin-right: -5px;
   background-color: #FCFBF6;
 
   > *, .actions > * {
@@ -187,9 +188,18 @@ span[role=segment] {
       height: 7em;
     }
 
+    fieldset {
+      margin-top: 10px;
+    }
+
+    legend {
+      margin-bottom: 0;
+    }
+
     .request-body {
       margin-top: -35px;
     }
+
   }
 
   .response {
@@ -205,11 +215,12 @@ span[role=segment] {
 [role=documentation] {
   padding: 20px;
 
-  h3 {
-    color: #333;
+  h2 i[class^="icon-"] {
+    line-height: 40px;
+    vertical-align: baseline;
   }
 
-  [role=documentation-requests] {
+  [role=documentation-requests], [role=documentation-responses] {
     > div {
       margin-top: 30px;
 
@@ -223,29 +234,4 @@ span[role=segment] {
 .code {
   border: 1px solid #CDCDCC;
   padding: 10px;
-}
-.parameterTable {
-  h3 {
-    text-align: left;
-    color: black;
-    font-size: 16px;
-    margin: 0;
-  }
-
-  th {
-    background-color: #F5F6FA;
-    border: 1px solid #CBCDCC;
-    padding: 5px 20px;
-    text-transform: uppercase;
-    font-size: 10px;
-  }
-
-  tbody {
-    border: 1px solid #CBCDCC;
-  }
-
-  td {
-    border-bottom: 1px solid #CBCDCC;
-    padding: 5px 20px;
-  }
 }
