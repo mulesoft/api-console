@@ -86,12 +86,15 @@
       requestOptions.headers['Authorization'] = "Basic " + encoded;
     }
 
+    this.requestInProgress = true;
     this.http(requestOptions).then(
       this.handleResponse.bind(this), this.handleResponse.bind(this)
     );
   };
 
   TryIt.prototype.handleResponse = function(httpResponse) {
+    this.requestInProgress = false;
+
     this.response.body = httpResponse.data,
       this.response.status = httpResponse.status,
       this.response.headers = httpResponse.headers();

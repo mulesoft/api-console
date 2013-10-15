@@ -211,6 +211,10 @@ describe("RAML.Controllers.tryIt", function() {
       it("executes the described method", function() {
         expect(httpService).toHaveBeenCalledWith({ url: "http://example.com/resources/search", method: "get" });
       });
+
+      it("sets requestInProgress", function() {
+        expect(controller.requestInProgress).toBeTruthy();
+      })
     });
 
     function verifyResponseAssignment(options) {
@@ -248,6 +252,10 @@ describe("RAML.Controllers.tryIt", function() {
       it("assigns headers to the response", function() {
         expect(controller.response.headers['X-Custom-Header']).toEqual('value');
       });
+
+      it("clears requestInProgress", function() {
+        expect(controller.requestInProgress).toBeFalsy();
+      })
     });
 
     describe("on error", function() {
@@ -264,6 +272,10 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       verifyResponseAssignment({ body: 'File Not Found', status: 404, contentType: 'text/plain' });
+
+      it("clears requestInProgress", function() {
+        expect(controller.requestInProgress).toBeFalsy();
+      })
     });
   });
 });

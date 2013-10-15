@@ -22,13 +22,15 @@
     </div>
 
     <div class="form-actions">
+      <i ng-show='apiClient.requestInProgress' class="icon-spinner icon-spin icon-large"></i>
+
       <button role="try-it" class="btn inverted" ng-click="apiClient.execute()">
         Try It
       </button>
     </div>
   </form>
 
-  <div class="response" ng-if="apiClient.response">
+  <div class="response" ng-if="apiClient.response && !apiClient.requestInProgress">
     <h3>Response</h3>
     <div class="request-url">
       <h4>Request URL</h4>
