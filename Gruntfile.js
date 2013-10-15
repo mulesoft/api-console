@@ -41,6 +41,7 @@ module.exports = function (grunt) {
             embedded: {
                 files: {
                     'dist/app.js': [
+                        'app/vendor/vkbeautify.0.99.00.beta.js',
                         'app/scripts/inspector.js',
                         'app/scripts/inspector/**/*.js',
                         'app/scripts/controllers.js',
@@ -61,8 +62,7 @@ module.exports = function (grunt) {
                         'app/vendor/showdown.min.js',
                         'app/vendor/codemirror/codemirror.js',
                         'app/vendor/codemirror/xml.js',
-                        'app/vendor/codemirror/javascript.js',
-                        'app/vendor/vkbeautify.0.99.00.beta.js'
+                        'app/vendor/codemirror/javascript.js'
                     ],
                     'dist/index.html': ['app/index.embedded.html'],
                     'dist/index.acceptance.html': ['app/index.acceptance.html']
