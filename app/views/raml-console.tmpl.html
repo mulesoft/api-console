@@ -11,7 +11,11 @@
   </nav>
 
   <div id="content" ng-switch='ramlConsole.view'>
-    <ng-include ng-switch-when='rootDocumentation' src="'views/root_documentation.tmpl.html'"></ng-include>
-    <ng-include ng-switch-default src="'views/api_resources.tmpl.html'"></ng-include>
+    <div ng-switch-when='rootDocumentation'>
+      <root-documentation></root-documentation>
+    </div>
+    <div ng-switch-default>
+      <api-resources></api-resources>
+    </div>
   </div>
 </article>

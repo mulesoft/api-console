@@ -1,5 +1,6 @@
 var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize']);
 
+module.directive('apiResources', RAML.Directives.apiResources);
 module.directive('basicAuth', RAML.Directives.basicAuth);
 module.directive('codeMirror', RAML.Directives.codeMirror);
 module.directive('collapsible', RAML.Directives.collapsible);
@@ -14,6 +15,7 @@ module.directive('pathBuilder', RAML.Directives.pathBuilder);
 module.directive('ramlConsole', RAML.Directives.ramlConsole);
 module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
 module.directive('resourceSummary', RAML.Directives.resourceSummary);
+module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
 module.directive('tab', RAML.Directives.tab);
 module.directive('tabset', RAML.Directives.tabset);
 module.directive('tryIt', RAML.Directives.tryIt);
