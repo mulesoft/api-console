@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-actions">
-      <i ng-show='apiClient.requestInProgress' class="icon-spinner icon-spin icon-large"></i>
+      <i ng-show='apiClient.response.status' class="icon-spinner icon-spin icon-large"></i>
 
       <button role="try-it" class="btn inverted" ng-click="apiClient.execute()">
         Try It
@@ -30,7 +30,7 @@
     </div>
   </form>
 
-  <div class="response" ng-if="apiClient.response && !apiClient.requestInProgress">
+  <div class="response" ng-if="apiClient.response">
     <h3>Response</h3>
     <div class="request-url">
       <h4>Request URL</h4>

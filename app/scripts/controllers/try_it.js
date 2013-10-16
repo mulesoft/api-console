@@ -88,7 +88,6 @@
     var requestOptions = { url: url, type: this.httpMethod, headers: {} }
 
     function handleResponse(jqXhr) {
-      this.requestInProgress = false;
       response.body = jqXhr.responseText,
       response.status = jqXhr.status,
       response.headers = parseHeaders(jqXhr.getAllResponseHeaders());

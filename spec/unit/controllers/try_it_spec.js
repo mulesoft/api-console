@@ -186,10 +186,6 @@ describe("RAML.Controllers.TryIt", function() {
       it("executes the described method", function() {
         expect(httpService).toHaveBeenCalledWith({ url: "http://example.com/resources/search", type: "get", headers: {} });
       });
-
-      it("sets requestInProgress", function() {
-        expect(controller.requestInProgress).toBeTruthy();
-      })
     });
 
     function verifyResponseAssignment(options) {
