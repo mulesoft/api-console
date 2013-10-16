@@ -1,16 +1,38 @@
 (function() {
+  function parseHeaders(headers) {
+    var parsed = {}, key, val, i;
+
+    if (!headers) return parsed;
+
+    headers.split('\n').forEach(function(line) {
+      i = line.indexOf(':');
+      key = line.substr(0, i).trim();
+      val = line.substr(i + 1).trim();
+
+      if (key) {
+        if (parsed[key]) {
+          parsed[key] += ', ' + val;
+        } else {
+          parsed[key] = val;
+        }
+      }
+    });
+
+    return parsed;
+  }
+
   var FORM_URLENCODED = 'application/x-www-form-urlencoded';
   var FORM_DATA = 'multipart/form-data';
+  var apply;
 
   function isEmpty(object) {
     return Object.keys(object || {}).length == 0;
   }
 
-  TryIt = function($scope, $http, Base64) {
+  TryIt = function($scope, Base64) {
     this.baseUri = $scope.api.baseUri || '';
     this.pathBuilder = $scope.method.pathBuilder;
 
-    this.http = $http;
     this.encoder = Base64;
     this.httpMethod = $scope.method.method;
     this.headers = {};
@@ -35,6 +57,9 @@
     }
 
     $scope.apiClient = this;
+    apply = function() {
+      $scope.$apply.apply($scope, arguments);
+    };
   };
 
   TryIt.prototype.showBody = function() {
@@ -60,10 +85,22 @@
   TryIt.prototype.execute = function() {
     var response = this.response = {};
     var url = this.response.requestUrl = this.baseUri + this.pathBuilder(this.pathBuilder);
-    var requestOptions = { url: url, method: this.httpMethod }
+    var requestOptions = { url: url, type: this.httpMethod, headers: {} }
+
+    function handleResponse(jqXhr) {
+      this.requestInProgress = false;
+      response.body = jqXhr.responseText,
+      response.status = jqXhr.status,
+      response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
+
+      if (response.headers['Content-Type']) {
+        response.contentType = response.headers['Content-Type'].split(';')[0];
+      }
+      apply();
+    }
 
     if (!isEmpty(this.queryParameters)) {
-      requestOptions.params = this.queryParameters;
+      requestOptions.data = this.queryParameters;
     }
 
     if (!isEmpty(this.formParameters)) {
@@ -75,34 +112,20 @@
     }
 
     if (this.mediaType) {
-      requestOptions.headers = requestOptions.headers || {};
-      requestOptions.headers['Content-Type'] = this.mediaType;
+      requestOptions.contentType = this.mediaType;
       requestOptions.data = this.body;
     }
 
     if (this.basicauth) {
       var encoded = this.encoder.encode(this.basicauth.username + ":" + this.basicauth.password);
-      requestOptions.headers = requestOptions.headers || {};
       requestOptions.headers['Authorization'] = "Basic " + encoded;
     }
 
-    this.requestInProgress = true;
-    this.http(requestOptions).then(
-      this.handleResponse.bind(this), this.handleResponse.bind(this)
+    $.ajax(requestOptions).then(
+      function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+      function(jqXhr) { handleResponse(jqXhr); }
     );
   };
 
-  TryIt.prototype.handleResponse = function(httpResponse) {
-    this.requestInProgress = false;
-
-    this.response.body = httpResponse.data,
-      this.response.status = httpResponse.status,
-      this.response.headers = httpResponse.headers();
-
-    if (this.response.headers['content-type']) {
-      this.response.contentType = this.response.headers['content-type'].split(';')[0];
-    }
-  }
-
-  RAML.Controllers.tryIt = TryIt;
+  RAML.Controllers.TryIt = TryIt;
 })();

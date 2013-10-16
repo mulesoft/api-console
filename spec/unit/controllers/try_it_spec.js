@@ -1,4 +1,4 @@
-describe("RAML.Controllers.tryIt", function() {
+describe("RAML.Controllers.TryIt", function() {
   var scope, httpService, controller;
 
   function createMethod(method, options) {
@@ -18,19 +18,26 @@ describe("RAML.Controllers.tryIt", function() {
     }
   }
 
+  function createScope(method) {
+    method = method || createMethod();
+
+    return {
+      api: { baseUri: "http://example.com" },
+      method: method,
+      $apply: jasmine.createSpy()
+    };
+  }
+
   beforeEach(function() {
-    httpService = jasmine.createSpy();
+    httpService = spyOn($, 'ajax');
   });
 
   describe("upon initialization", function() {
     describe('by default', function() {
       beforeEach(function() {
-        scope = {
-          api: { baseUri: "http://example.com" },
-          method: createMethod()
-        };
+        scope = createScope();
 
-        controller = new RAML.Controllers.tryIt(scope, httpService);
+        controller = new RAML.Controllers.TryIt(scope);
       });
 
       it("assigns itself as the apiClient", function() {
@@ -40,12 +47,8 @@ describe("RAML.Controllers.tryIt", function() {
 
     describe('with a custom body', function() {
       beforeEach(function() {
-        scope = {
-          api: { baseUri: "http://example.com" },
-          method: createMethod("get", { body: ['application/json'] })
-        };
-
-        controller = new RAML.Controllers.tryIt(scope, httpService);
+        scope = createScope(createMethod("get", { body: ['application/json'] }));
+        controller = new RAML.Controllers.TryIt(scope);
       });
 
       it("sets suppprtsMediaType", function() {
@@ -59,12 +62,8 @@ describe("RAML.Controllers.tryIt", function() {
 
     describe('with a url encoded form data', function() {
       beforeEach(function() {
-        scope = {
-          api: { baseUri: "http://example.com" },
-          method: createMethod("get", { body: ['application/x-www-form-urlencoded'] })
-        };
-
-        controller = new RAML.Controllers.tryIt(scope, httpService);
+        scope = createScope(createMethod("get", { body: ['application/x-www-form-urlencoded'] }));
+        controller = new RAML.Controllers.TryIt(scope);
       });
 
       it("sets suppprtsMediaType", function() {
@@ -78,12 +77,8 @@ describe("RAML.Controllers.tryIt", function() {
 
     describe('with a multipart form data', function() {
       beforeEach(function() {
-        scope = {
-          api: { baseUri: "http://example.com" },
-          method: createMethod("get", { body: ['multipart/form-data'] })
-        };
-
-        controller = new RAML.Controllers.tryIt(scope, httpService);
+        scope = createScope(createMethod("get", { body: ['multipart/form-data'] }));
+        controller = new RAML.Controllers.TryIt(scope);
       });
 
       it("sets suppprtsMediaType", function() {
@@ -114,12 +109,8 @@ describe("RAML.Controllers.tryIt", function() {
     describe("when no media type is selected", function() {
       describe("with a custom body and form data", function() {
         beforeEach(function() {
-          scope = {
-            api: { baseUri: "http://example.com" },
-            method: createMethod("get", { body: ['application/json', 'application/x-www-form-urlencoded', 'multipart/form-data'] })
-          };
-
-          controller = new RAML.Controllers.tryIt(scope, httpService);
+          scope = createScope(createMethod("get", { body: ['application/json', 'application/x-www-form-urlencoded', 'multipart/form-data'] }));
+          controller = new RAML.Controllers.TryIt(scope);
         });
 
         verifyBodyRepresentation({ body: true, urlencoded: false, multipart: false })
@@ -127,12 +118,8 @@ describe("RAML.Controllers.tryIt", function() {
 
       describe("with urlencoded and mutlipart form data", function() {
         beforeEach(function() {
-          scope = {
-            api: { baseUri: "http://example.com" },
-            method: createMethod("get", { body: ['application/x-www-form-urlencoded', 'multipart/form-data'] })
-          };
-
-          controller = new RAML.Controllers.tryIt(scope, httpService);
+          scope = createScope(createMethod("get", { body: ['application/x-www-form-urlencoded', 'multipart/form-data'] }));
+          controller = new RAML.Controllers.TryIt(scope);
         });
 
         verifyBodyRepresentation({ body: false, urlencoded: true, multipart: false })
@@ -140,12 +127,8 @@ describe("RAML.Controllers.tryIt", function() {
 
       describe("with only mutlipart form data", function() {
         beforeEach(function() {
-          scope = {
-            api: { baseUri: "http://example.com" },
-            method: createMethod("get", { body: ['multipart/form-data'] })
-          };
-
-          controller = new RAML.Controllers.tryIt(scope, httpService);
+          scope = createScope(createMethod("get", { body: ['multipart/form-data'] }));
+          controller = new RAML.Controllers.TryIt(scope);
         });
 
         verifyBodyRepresentation({ body: false, urlencoded: false, multipart: true })
@@ -154,12 +137,8 @@ describe("RAML.Controllers.tryIt", function() {
 
     describe("when no media type is selected", function() {
       beforeEach(function() {
-        scope = {
-          api: { baseUri: "http://example.com" },
-          method: createMethod("get", { body: ['application/json', 'application/x-www-form-urlencoded', 'multipart/form-data'] })
-        };
-
-        controller = new RAML.Controllers.tryIt(scope, httpService);
+        scope = createScope(createMethod("get", { body: ['application/json', 'application/x-www-form-urlencoded', 'multipart/form-data'] }));
+        controller = new RAML.Controllers.TryIt(scope);
       });
 
       describe("when a custom body type is selected", function() {
@@ -195,12 +174,8 @@ describe("RAML.Controllers.tryIt", function() {
       promise = jasmine.createSpyObj("promise", ['then']);
       httpService.andReturn(promise);
 
-      scope = {
-        api: { baseUri: "http://example.com" },
-        method: createMethod()
-      };
-
-      controller = new RAML.Controllers.tryIt(scope, httpService);
+      scope = createScope();
+      controller = new RAML.Controllers.TryIt(scope);
     });
 
     describe("by default", function() {
@@ -209,7 +184,7 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       it("executes the described method", function() {
-        expect(httpService).toHaveBeenCalledWith({ url: "http://example.com/resources/search", method: "get" });
+        expect(httpService).toHaveBeenCalledWith({ url: "http://example.com/resources/search", type: "get", headers: {} });
       });
 
       it("sets requestInProgress", function() {
@@ -239,9 +214,9 @@ describe("RAML.Controllers.tryIt", function() {
       beforeEach(function() {
         promise.then.andCallFake(function(success) {
           var headers = function() {
-            return { 'content-type': 'application/json; charset=utf-8', 'X-Custom-Header': 'value'};
+            return 'Content-Type: application/json; charset=utf-8\nX-Custom-Header: value';
           };
-          success({ data: 'Hello world.', status: 200, headers: headers});
+          success(undefined, undefined, { responseText: 'Hello world.', status: 200, getAllResponseHeaders: headers});
         });
 
         controller.execute();
@@ -260,12 +235,12 @@ describe("RAML.Controllers.tryIt", function() {
 
     describe("on error", function() {
       beforeEach(function() {
-        promise.then.andCallFake(function(success) {
+        promise.then.andCallFake(function(success, error) {
           var headers = function() {
-            return { 'content-type': 'text/plain' };
+            return 'Content-Type: text/plain';
           };
 
-          success({ data: 'File Not Found', status: 404, headers: headers});
+          error({ responseText: 'File Not Found', status: 404, getAllResponseHeaders: headers});
         });
 
         controller.execute();

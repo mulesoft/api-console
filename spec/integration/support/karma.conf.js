@@ -8,7 +8,7 @@ files = [
     JASMINE,
     JASMINE_ADAPTER,
     'app/vendor/raml-parser.js',
-    'spec/integration/support/jquery.js',
+    'app/vendor/jquery.js',
     'app/vendor/angular.js',
     'app/vendor/angular-resource.js',
     'app/vendor/angular-sanitize.js',
@@ -23,6 +23,7 @@ files = [
     'spec/matchers/**/*.js',
     'spec/support/helpers/**/*.js',
     'spec/integration/support/jasmine-jquery.js',
+    'spec/integration/support/jquery.mockjax.js',
     'spec/integration/support/helpers/**/*.js',
     'spec/integration/**/*_spec.js'
 ];
