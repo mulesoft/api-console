@@ -256,20 +256,21 @@ describe("RAML.Controllers.tryIt", function() {
       $el = compileTemplate('<try-it></try-it>', scope);
     });
 
-    it('executes a request with the supplied value for the custom header', function() {
+    it('executes a request with the supplied value for the custom header', inject(function(Base64) {
       var headerVerifier = function(headers) {
         return !!headers['Authorization'].match(/Basic/);
       };
 
-      $el.find('input[name="username"]').fillIn("whatever");
-      $el.find('input[name="password"]').fillIn("whatever");
+      $el.find('input[name="username"]').fillIn("user");
+      $el.find('input[name="password"]').fillIn("password");
       $el.find('button[role="try-it"]').click();
 
       var mostRecent = $.mockjax.mockedAjaxCalls()[0];
       expect(mostRecent.headers['Authorization']).toMatch(/Basic/);
+      expect(mostRecent.headers['Authorization']).toMatch(Base64.encode("user:password"));
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
       });
-    });
+    }));
   });
 });
