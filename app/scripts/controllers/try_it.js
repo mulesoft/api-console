@@ -113,7 +113,7 @@
 
     if (this.mediaType) {
       requestOptions.contentType = this.mediaType;
-      requestOptions.data = this.body;
+      if (this.showBody()) { requestOptions.data = this.body; }
     }
 
     if (this.basicauth) {

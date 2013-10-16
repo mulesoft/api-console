@@ -64,33 +64,64 @@ describe("RAML.Controllers.tryIt", function() {
       '  get:',
       '    body:',
       '      text/xml:',
-      '      application/json:'
+      '      application/json:',
+      '      application/x-www-form-urlencoded:',
+       '       formParameters:',
+       '         foo:'
     )
 
     parseRAML(raml);
 
-    mockHttp(function(mock) {
-      mock
-        .when("get", 'http://www.example.com/resource', '<document type="xml" />')
+    describe("by default", function() {
+      mockHttp(function(mock) {
+        mock
+          .when("get", 'http://www.example.com/resource', '<document type="xml" />')
+          .respondWith(200, "cool");
+      });
+
+      beforeEach(function() {
+        scope = createScopeForTryIt(this.api);
+        $el = compileTemplate('<try-it></try-it>', scope);
+      });
+
+      it('executes a request with the Content-Type header set to the chosen media type', function() {
+        var suppliedBody = '<document type="xml" />';
+
+        $el.find('.media-types input[value="text/xml"]')[0].click();
+        $el.find('textarea').fillIn(suppliedBody);
+        $el.find('button[role="try-it"]').click();
+
+        var mostRecent = $.mockjax.mockedAjaxCalls()[0];
+        expect(mostRecent.contentType).toEqual("text/xml");
+        whenTryItCompletes(function() {
+          expect($el.find('.response .status .response-value')).toHaveText('200');
+        });
+      });
+    });
+
+    describe('with a prefilled xml body', function() {
+      mockHttp(function(mock) {
+        mock
+        .when("get", 'http://www.example.com/resource', { foo: "whatever" })
         .respondWith(200, "cool");
-    });
+      });
 
-    beforeEach(function() {
-      scope = createScopeForTryIt(this.api);
-      $el = compileTemplate('<try-it></try-it>', scope);
-    });
+      beforeEach(function() {
+        var suppliedBody = '<document type="xml" />';
 
-    it('executes a request with the Content-Type header set to the chosen media type', function() {
-      var suppliedBody = '<document type="xml" />';
+        $el.find('.media-types input[value="text/xml"]')[0].click();
+        $el.find('textarea').fillIn(suppliedBody);
+      });
 
-      $el.find('.media-types input[value="text/xml"]')[0].click();
-      $el.find('textarea').fillIn(suppliedBody);
-      $el.find('button[role="try-it"]').click();
+      it('executes a request with form data when the user changes modes', function() {
+        $el.find('.media-types input[value="application/x-www-form-urlencoded"]')[0].click();
 
-      var mostRecent = $.mockjax.mockedAjaxCalls()[0];
-      expect(mostRecent.contentType).toEqual("text/xml");
-      whenTryItCompletes(function() {
-        expect($el.find('.response .status .response-value')).toHaveText('200');
+        $el.find('input[name="foo"]').fillIn("whatever");
+        $el.find('button[role="try-it"]').click();
+
+        var mostRecent = $.mockjax.mockedAjaxCalls()[0];
+        expect(mostRecent.contentType).toEqual("application/x-www-form-urlencoded");
+        expect(mostRecent.data).toEqual({ foo: 'whatever' });
       });
     });
   });
