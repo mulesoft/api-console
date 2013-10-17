@@ -30,11 +30,10 @@
     return Object.keys(object || {}).length == 0;
   }
 
-  TryIt = function($scope, Base64) {
+  TryIt = function($scope) {
     this.baseUri = $scope.api.baseUri || '';
     this.pathBuilder = $scope.method.pathBuilder;
 
-    this.encoder = Base64;
     this.httpMethod = $scope.method.method;
     this.headers = {};
     this.queryParameters = {};
@@ -88,7 +87,7 @@
   TryIt.prototype.execute = function() {
     var response = this.response = {};
     var url = this.response.requestUrl = this.baseUri + this.pathBuilder(this.pathBuilder);
-    var requestOptions = { url: url, type: this.httpMethod, headers: {} }
+    var request = this.client.createRequest(url, this.httpMethod);
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -102,31 +101,32 @@
     }
 
     if (!isEmpty(this.queryParameters)) {
-      requestOptions.data = this.queryParameters;
+      request.data(this.queryParameters);
     }
 
     if (!isEmpty(this.formParameters)) {
-      requestOptions.data = this.formParameters;
+      request.data(this.formParameters);
     }
 
     if (!isEmpty(this.headers)) {
-      requestOptions.headers = this.headers;
+      request.headers(this.headers);
     }
 
     if (this.mediaType) {
-      requestOptions.contentType = this.mediaType;
-      if (this.showBody()) { requestOptions.data = this.body; }
+      request.header("Content-Type", this.mediaType);
+      if (this.showBody()) { request.data(this.body); }
     }
+
+    var authStrategy = RAML.Client.AuthStrategies.anonymous();
 
     if (this.basicauth) {
-      var encoded = this.encoder.encode(this.basicauth.username + ":" + this.basicauth.password);
-      requestOptions.headers['Authorization'] = "Basic " + encoded;
+      authStrategy = RAML.Client.AuthStrategies.basicAuth(this.basicauth);
     }
 
 
-    var authStrategy = RAML.Client.AuthStrategies.anonymous
-    authStrategy().authenticate().then(function() {
-      $.ajax(requestOptions).then(
+    authStrategy.authenticate().then(function(token) {
+      token.sign(request);
+      $.ajax(request.toOptions()).then(
         function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
         function(jqXhr) { handleResponse(jqXhr); }
       );

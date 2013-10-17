@@ -256,7 +256,7 @@ describe("RAML.Controllers.tryIt", function() {
       $el = compileTemplate('<try-it></try-it>', scope);
     });
 
-    it('executes a request with the supplied value for the custom header', inject(function(Base64) {
+    it('executes a request with the supplied value for the custom header', function() {
       var headerVerifier = function(headers) {
         return !!headers['Authorization'].match(/Basic/);
       };
@@ -267,11 +267,11 @@ describe("RAML.Controllers.tryIt", function() {
 
       var mostRecent = $.mockjax.mockedAjaxCalls()[0];
       expect(mostRecent.headers['Authorization']).toMatch(/Basic/);
-      expect(mostRecent.headers['Authorization']).toMatch(Base64.encode("user:password"));
+      expect(mostRecent.headers['Authorization']).toMatch('dXNlcjpwYXNzd29yZA==');
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
       });
-    }));
+    });
   });
 
   describe('secured by oauth', function() {
