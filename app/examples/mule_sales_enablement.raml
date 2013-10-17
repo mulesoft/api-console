@@ -1,0 +1,148 @@
+#%RAML 0.8
+---
+title: "Muse: Mule Sales Enablement API"
+version: v1
+baseUri: http://vast-coast-7974.herokuapp.com/muse
+schemas:
+  - presentation: |
+      {  "$schema": "http://json-schema.org/draft-03/schema",
+         "type": "object",
+         "description": "A product presentation",
+         "properties": {
+           "id":  { "type": "string" },
+           "title":  { "type": "string" },
+           "description":  { "type": "string" },
+           "fileUrl":  { "type": "string" },
+           "productId":  { "type": "string" }
+         },
+         "required": [ "id", "title", "fileUrl", "productId" ]
+      }
+  - product: |
+      {  "$schema": "http://json-schema.org/draft-03/schema",
+         "type": "object",
+         "description": "A Product",
+         "properties": {
+           "id":  { "type": "string" },
+           "name":  { "type": "string" },
+           "description":  { "type": "string" },
+           "imageUrl":  { "type": "string" },
+           "region": { "type": "string" }
+         },
+         "required": [ "id", "name", "region" ]
+      }
+resourceTypes:
+  - base:
+      get?:
+        responses: &standardResponses
+          200:
+            description: OK
+      put?:
+        responses: *standardResponses
+      patch?:
+        responses: *standardResponses
+      post?:
+          responses:
+            201:
+              description: Created
+      delete?:
+        responses: *standardResponses
+  - collection:
+      type: base
+      get:
+        is: [ paged ]
+      post:
+  - typedCollection:
+      type: collection
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                schema: <<schema>>
+      post:
+        body:
+          application/json:
+            schema: <<schema>>
+        responses:
+          201:
+            body:
+              application/json:
+                schema: <<schema>>
+  - member:
+      type: base
+      get:
+      put:
+      patch:
+      delete:
+  - typedMember:
+      type: member
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                schema: <<schema>>
+      put:
+        body:
+          application/json:
+            schema: <<schema>>
+        responses:
+          200:
+            body:
+              application/json:
+                schema: <<schema>>
+      patch:
+        body:
+          application/json:
+            schema: <<schema>>
+        responses:
+          200:
+            body:
+              application/json:
+                schema: <<schema>>
+      delete:
+traits:
+  - paged:
+      displayName: paged
+      queryParameters:
+        start:
+          displayName: start
+          description: The first page to return
+          type: number
+        pages:
+          displayName: pages
+          description: The number of pages to return
+          type: number
+  - secured:
+      displayName: secured
+      headers:
+        Authorization:
+          description: The auth token for this request
+      responses:
+        401:
+          description: Unauthorized
+/presentations: &presentations
+  type: { typedCollection: { schema: presentation } }
+  is: [ secured ]
+  get:
+    queryParameters:
+      title:
+        type: string
+        displayName: title
+        description: Filter by title
+  /{presentationId}:
+    type: { typedMember: { schema: presentation } }
+    is: [ secured ]
+/products:
+  type: { typedCollection: { schema: product } }
+  is: [ secured ]
+  get:
+    queryParameters:
+      region:
+        type: string
+        displayName: region
+        description: Filter by region
+  /{productId}:
+    type: { typedMember: { schema: product } }
+    is: [ secured ]
+    /presentations: *presentations
