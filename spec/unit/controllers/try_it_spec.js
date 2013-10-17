@@ -14,7 +14,8 @@ describe("RAML.Controllers.TryIt", function() {
       method: method,
       pathBuilder: function() { return "/resources/search" },
       body: body,
-      requiresBasicAuthentication: function() { return false; }
+      requiresBasicAuthentication: function() { return false; },
+      requiresOauth2: function() { return false; }
     }
   }
 

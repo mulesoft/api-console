@@ -23,7 +23,6 @@
 
   var FORM_URLENCODED = 'application/x-www-form-urlencoded';
   var FORM_DATA = 'multipart/form-data';
-  var ANONYMOUS_SECURITY_SCHEME = 'anonymous';
   var apply;
 
   function isEmpty(object) {
@@ -42,6 +41,11 @@
 
     if ($scope.method.requiresBasicAuthentication()) {
       this.basicauth = {};
+    }
+
+    if ($scope.method.requiresOauth2()) {
+      this.securityScheme = $scope.method.requiresOauth2();
+      this.oauth2 = {};
     }
 
     for (mediaType in $scope.method.body) {
@@ -80,7 +84,7 @@
     if (this.mediaType) {
       return this.mediaType == FORM_DATA
     } else  {
-      return (!this.suppoprtsCustomBody && !this.supportsFormUrlencoded && this.supportsFormData);
+      return (!this.supportsCustomBody && !this.supportsFormUrlencoded && this.supportsFormData);
     }
   }
 
@@ -121,6 +125,8 @@
 
     if (this.basicauth) {
       authStrategy = RAML.Client.AuthStrategies.basicAuth(this.basicauth);
+    } else if (this.oauth2) {
+      authStrategy = RAML.Client.AuthStrategies.oauth2(this.securityScheme, this.oauth2);
     }
 
 

@@ -281,19 +281,9 @@ describe("RAML.Controllers.tryIt", function() {
       'securitySchemes:',
       '  - oauth2:',
       '      type: OAuth 2.0',
-      '      describedBy:',
-      '        headers:',
-      '          Authorization:',
-      '            type: string',
-      '        queryParameters:',
-      '          access_token:',
-      '            type: string',
       '      settings:',
       '        authorizationUrl: https://example.com/oauth/authorize',
       '        accessTokenUrl: https://example.com/oauth/access_token',
-      '        authorizationGrants: [ code, token ]',
-      '        scopes:',
-      '          - secret_data',
       '/resource:',
       '  get:',
       '    securedBy: [oauth2]'
@@ -301,38 +291,35 @@ describe("RAML.Controllers.tryIt", function() {
 
     parseRAML(raml);
 
-    var securityScheme;
+    mockHttp(function(mock) {
+      mock
+        .when('post', 'https://example.com/oauth/access_token', {
+          client_id: 'user',
+          client_secret: 'password',
+          code: 'code',
+          grant_type: 'authorization_code',
+          redirect_uri: 'http://localhost:9000/oauth2_success.html'
+        }).respondWith(200, JSON.stringify({ access_token: 'token' }));
+    });
 
     mockHttp(function(mock) {
       mock
-        .when("get", 'http://www.example.com/resource')
-        .respondWith(200, "cool");
+        .when('get', 'http://www.example.com/resource')
+        .respondWith(200, 'cool');
     });
 
     beforeEach(function() {
       scope = createScopeForTryIt(this.api);
       $el = compileTemplate('<try-it></try-it>', scope);
-
-      securityScheme = function(keychain) {
-        var strategy = jasmine.createSpyObj('strategy', ['authenticate']);
-        var promise = jasmine.createSpyObj('promise', ['then']);
-        strategy.authenticate.andReturn(promise);
-
-        promise.then.andCallFake(function(success) {
-          var token = {}
-          success(token);
-        });
-
-        return strategy;
-      }
-
-      spyOn(scope.client, 'securityScheme').andReturn(securityScheme);
+      spyOn(window, 'open');
     });
 
     it('asks for client id and secret', function() {
       $el.find('input[name="clientId"]').fillIn("user");
       $el.find('input[name="clientSecret"]').fillIn("password");
       $el.find('button[role="try-it"]').click();
+
+      window.RAML.authorizationSuccess('code');
 
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');

@@ -26,6 +26,11 @@
       options.data = data;
     }
 
+    this.queryParam = function(name, value) {
+      options.data = options.data || {};
+      options.data[name] = value;
+    }
+
     this.header = function(name, value) {
       options.headers = options.headers || {};
       options.headers[name] = value;
