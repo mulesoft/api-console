@@ -55,6 +55,7 @@ module.exports = function (grunt) {
                         'dist/templates.js'
                     ],
                     'dist/vendor.js': [
+                        'app/vendor/jquery.js',
                         'app/vendor/angular.js',
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
@@ -285,6 +286,7 @@ module.exports = function (grunt) {
             embedded: {
                 files: {
                     'dist/vendor.js': [
+                        'app/vendor/jqueryjs',
                         'app/vendor/angular.js',
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
