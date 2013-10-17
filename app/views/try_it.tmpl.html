@@ -31,18 +31,18 @@
   </form>
 
   <div class="response" ng-if="apiClient.response">
-    <h3>Response</h3>
+    <h4>Response</h4>
     <div class="request-url">
-      <h4>Request URL</h4>
+      <h5>Request URL</h5>
       <span class="response-value">{{apiClient.response.requestUrl}}</span>
     </div>
 
     <div class="status">
-      <h4>Status</h4>
+      <h5>Status</h5>
       <span class="response-value">{{apiClient.response.status}}</span>
     </div>
     <div class="headers">
-      <h4>Headers</h4>
+      <h5>Headers</h5>
       <ul class="response-value">
         <li ng-repeat="(header, value) in apiClient.response.headers">
           <span class="header-key">{{header}}:</span>
@@ -51,7 +51,7 @@
       </ul>
     </div>
     <div class="body">
-      <h4>Body</h4>
+      <h5>Body</h5>
       <div class="response-value">
         <div class="code" mode='{{apiClient.response.contentType}}' code-mirror="apiClient.response.body" visible="apiClient.response.body"></div>
       </div>

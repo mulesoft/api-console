@@ -11,45 +11,41 @@
 
     </tab>
     <tab role='documentation-requests' heading="Requests" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation">
-      <div ng-repeat="(mediaType, definition) in method.body track by mediaType">
-        <h3>{{mediaType}}</h3>
-        <div ng-if="definition.schema">
-          <h4>Schema</h4>
+      <section ng-repeat="(mediaType, definition) in method.body track by mediaType">
+        <h4>{{mediaType}}</h4>
+        <section ng-if="definition.schema">
+          <h5>Schema</h5>
           <div class="code" code-mirror="definition.schema" mode="{{mediaType}}" visible="methodView.expanded && documentation.requestsActive"></div>
-        </div>
-        <div ng-if="definition.example">
-          <h4>Example</h4>
+        </section>
+        <section ng-if="definition.example">
+          <h5>Example</h5>
           <div class="code" code-mirror="definition.example" mode="{{mediaType}}" visible="methodView.expanded && documentation.requestsActive"></div>
-        </div>
-      </div>
+        </section>
+      </section>
     </tab>
     <tab role='documentation-responses' heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation'>
-      <div ng-repeat='(responseCode, response) in method.responses'>
-        <div collapsible>
-          <div collapsible-toggle>
-            <h2>
-              <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
-              {{responseCode}}
-            </h2>
-          </div>
-          <div collapsible-content>
-            <section role='response'>
-              <p markdown='response.description'></p>
-              <div ng-repeat="(mediaType, definition) in response.body track by mediaType">
-                <h3>{{mediaType}}</h3>
-                <div ng-if="definition.schema">
-                  <h4>Schema</h4>
-                  <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && documentation.responsesActive"></div>
-                </div>
-                <div ng-if="definition.example">
-                  <h4>Example</h4>
-                  <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && documentation.responsesActive"></div>
-                </div>
-              </div>
+      <section collapsible ng-repeat='(responseCode, response) in method.responses'>
+        <h4 collapsible-toggle>
+          <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
+          {{responseCode}}
+        </h4>
+        <div collapsible-content>
+          <section role='response'>
+            <p markdown='response.description'></p>
+            <section ng-repeat="(mediaType, definition) in response.body track by mediaType">
+              <h5>{{mediaType}}</h5>
+              <section ng-if="definition.schema">
+                <h6>Schema</h6>
+                <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && documentation.responsesActive"></div>
+              </section>
+              <section ng-if="definition.example">
+                <h6>Example</h6>
+                <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && documentation.responsesActive"></div>
+              </section>
             </section>
-          </div>
+          </section>
         </div>
-      </div>
+      </section>
     </tab>
     <tab heading="Try It" active="documentation.tryItActive">
       <try-it></try-it>
