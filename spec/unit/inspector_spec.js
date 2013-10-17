@@ -48,7 +48,7 @@ describe("RAML.Inspector.create", function() {
         });
 
         it("returns true", function() {
-          expect(method.requiresBasicAuthentication()).toBe(true);
+          expect(method.requiresBasicAuthentication()).toBeTruthy();
         });
       });
 
@@ -58,7 +58,7 @@ describe("RAML.Inspector.create", function() {
         });
 
         it("returns false", function() {
-          expect(method.requiresBasicAuthentication()).toBe(false);
+          expect(method.requiresBasicAuthentication()).toBeFalsy();
         });
       });
     });
@@ -69,7 +69,7 @@ describe("RAML.Inspector.create", function() {
       });
 
       it("returns true", function() {
-        expect(method.requiresOauth2()).toBe(true);
+        expect(method.requiresOauth2()).toBeTruthy();
       });
     });
 
@@ -79,7 +79,7 @@ describe("RAML.Inspector.create", function() {
       });
 
       it("returns false", function() {
-        expect(method.requiresOauth2()).toBe(false);
+        expect(method.requiresOauth2()).toBeFalsy();
       });
     });
   });

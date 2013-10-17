@@ -4,14 +4,14 @@ RAML.Inspector = (function() {
   function extendMethod(method, securitySchemes) {
     securitySchemes = securitySchemes || [];
 
-    var requiresSecurityScheme = function(method, schemeType) {
-      var required = false,
+    var securitySchemeFor = function(method, schemeType) {
+      var required = undefined,
           securedBy = method.securedBy || [];
 
       securitySchemes.forEach(function(scheme) {
         securedBy.forEach(function(type) {
           if (scheme[type] && scheme[type].type === schemeType) {
-            required = true;
+            required = scheme[type];
           }
         });
       });
@@ -20,11 +20,11 @@ RAML.Inspector = (function() {
     }
 
     method.requiresBasicAuthentication = function() {
-      return requiresSecurityScheme(this, "Basic Authentication");
+      return securitySchemeFor(this, "Basic Authentication");
     }
 
     method.requiresOauth2 = function() {
-      return requiresSecurityScheme(this, "OAuth 2.0");
+      return securitySchemeFor(this, "OAuth 2.0");
     }
   }
 

@@ -301,9 +301,32 @@ describe("RAML.Controllers.tryIt", function() {
 
     parseRAML(raml);
 
+    var securityScheme;
+
+    mockHttp(function(mock) {
+      mock
+        .when("get", 'http://www.example.com/resource')
+        .respondWith(200, "cool");
+    });
+
     beforeEach(function() {
       scope = createScopeForTryIt(this.api);
       $el = compileTemplate('<try-it></try-it>', scope);
+
+      securityScheme = function(keychain) {
+        var strategy = jasmine.createSpyObj('strategy', ['authenticate']);
+        var promise = jasmine.createSpyObj('promise', ['then']);
+        strategy.authenticate.andReturn(promise);
+
+        promise.then.andCallFake(function(success) {
+          var token = {}
+          success(token);
+        });
+
+        return strategy;
+      }
+
+      spyOn(scope.client, 'securityScheme').andReturn(securityScheme);
     });
 
     it('asks for client id and secret', function() {

@@ -23,6 +23,7 @@
 
   var FORM_URLENCODED = 'application/x-www-form-urlencoded';
   var FORM_DATA = 'multipart/form-data';
+  var ANONYMOUS_SECURITY_SCHEME = 'anonymous';
   var apply;
 
   function isEmpty(object) {
@@ -57,6 +58,8 @@
     }
 
     $scope.apiClient = this;
+    this.client = $scope.client = RAML.Client.create($scope.api)
+
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
@@ -120,10 +123,14 @@
       requestOptions.headers['Authorization'] = "Basic " + encoded;
     }
 
-    $.ajax(requestOptions).then(
-      function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-      function(jqXhr) { handleResponse(jqXhr); }
-    );
+
+    var authStrategy = RAML.Client.AuthStrategies.anonymous
+    authStrategy().authenticate().then(function() {
+      $.ajax(requestOptions).then(
+        function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+        function(jqXhr) { handleResponse(jqXhr); }
+      );
+    });
   };
 
   RAML.Controllers.TryIt = TryIt;

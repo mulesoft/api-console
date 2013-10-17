@@ -36,10 +36,10 @@ exclude = [];
 reporters = ['progress'];
 
 // web server port
-port = 8080;
+port = 8081;
 
 // cli runner port
-runnerPort = 9100;
+runnerPort = 9101;
 
 // enable / disable colors in the output (reporters and logs)
 colors = true;
