@@ -1,8 +1,8 @@
 <section class='parameterTable' ng-show='parameters'>
-  <h3>{{heading}}</h3>
-  <div role='parameter' ng-repeat='param in parameters'>
-    <h4>
-      <span role="display-name">{{param.displayName}}</span>
+  <h4>{{heading}}</h4>
+  <section role='parameter' ng-repeat='param in parameters'>
+    <h5>
+      <code role="display-name">{{param.displayName}}</code>
     <span class="constraints">
       <span role="required" ng-if="param.required">required, </span><!--
       --><span role="enum" ng-if="param.enum">
@@ -24,11 +24,11 @@
       --><span ng-if="param.default">, default: <span role="default">{{param.default}}</span></span>
 
     </span>
-    </h4>
+    </h5>
 
     <div class="info">
       <div role="description" markdown="param.description"></div>
       <div ng-if="param.example"><span class="label">Example</span> <span role="example">{{param.example}}</span></div>
     </div>
-  </div>
+  </section>
 </section>

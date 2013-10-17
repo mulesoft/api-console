@@ -1,5 +1,43 @@
 @import "commons";
 
+#raml-console {
+  code {
+    font-family: 'Courier New', 'Courier', monospace;
+  }
+
+  .tab-pane {
+    padding: 20px;
+  }
+
+  #api-reference {
+    section:first-of-type {
+      > h4, > h5, > h6 {
+        margin-top: 0;
+      }
+    }
+
+    h4, h5, legend {
+      font-family: 'Open Sans';
+      font-weight: 700;
+      line-height: 1.15em;
+    }
+
+    h4, legend {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    h4 {
+      margin-top: 25px;
+    }
+
+    h5 {
+      margin-top: 20px;
+      margin-bottom: 5px;
+    }
+  }
+}
+
 #api-title {
   padding-left: 10px;
   margin-bottom: 15px;
