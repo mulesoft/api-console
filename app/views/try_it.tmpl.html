@@ -34,19 +34,21 @@
     <h4>Response</h4>
     <div class="request-url">
       <h5>Request URL</h5>
-      <span class="response-value">{{apiClient.response.requestUrl}}</span>
+      <code class="response-value">{{apiClient.response.requestUrl}}</code>
     </div>
 
     <div class="status">
       <h5>Status</h5>
-      <span class="response-value">{{apiClient.response.status}}</span>
+      <code class="response-value">{{apiClient.response.status}}</code>
     </div>
     <div class="headers">
       <h5>Headers</h5>
       <ul class="response-value">
         <li ng-repeat="(header, value) in apiClient.response.headers">
-          <span class="header-key">{{header}}:</span>
-          <span class="header-value">{{value}}</span>
+          <code>
+            <span class="header-key">{{header}}:</span>
+            <span class="header-value">{{value}}</span>
+          </code>
         </li>
       </ul>
     </div>

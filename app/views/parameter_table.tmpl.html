@@ -2,7 +2,7 @@
   <h4>{{heading}}</h4>
   <section role='parameter' ng-repeat='param in parameters'>
     <h5>
-      <span role="display-name">{{param.displayName}}</span>
+      <code role="display-name">{{param.displayName}}</code>
     <span class="constraints">
       <span role="required" ng-if="param.required">required, </span><!--
       --><span role="enum" ng-if="param.enum">
