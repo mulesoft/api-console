@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,400,600italic,600,700italic,700' rel='stylesheet' type='text/css'>
   </head>
   <body ng-app="ramlConsoleApp" class="bootstrap">
     <!-- build:js({.tmp,app}) scripts/vendor.js -->
@@ -61,7 +60,7 @@
       </div>
 
       <div ng-if="consoleLoader.locationSet">
-        <raml-console id="raml-console" src='{{consoleLoader.location}}' with-root-documentation />
+        <raml-console src='{{consoleLoader.location}}' with-root-documentation />
       </div>
     </raml-console-initializer>
   </body>

@@ -1,6 +1,6 @@
 @import "commons";
 
-#raml-console {
+raml-console {
   code {
     font-family: 'Courier New', 'Courier', monospace;
   }
@@ -17,7 +17,7 @@
     }
 
     h4, h5, legend {
-      font-family: 'Open Sans';
+      font-family: 'Open Sans', sans-serif;
       font-weight: 700;
       line-height: 1.15em;
     }
@@ -229,6 +229,10 @@ span[role=segment] {
       width: 100%;
       font-family: monospace;
       height: 7em;
+    }
+
+    fieldset:first-of-type {
+      margin-top: 0;
     }
 
     fieldset {
