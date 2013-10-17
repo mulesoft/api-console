@@ -1,8 +1,8 @@
 (function() {
-  RAML.Directives.basicAuth = function() {
+  RAML.Directives.oauth2 = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/basic_auth.tmpl.html',
+      templateUrl: 'views/oauth2.tmpl.html',
       replace: true,
       scope: {
         credentials: '='

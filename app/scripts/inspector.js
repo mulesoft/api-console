@@ -1,15 +1,16 @@
 RAML.Inspector = (function() {
   var exports = {};
 
-  function extendMethod(api, method) {
-    method.requiresBasicAuthentication = function() {
+  function extendMethod(method, securitySchemes) {
+    securitySchemes = securitySchemes || [];
+
+    var requiresSecurityScheme = function(method, schemeType) {
       var required = false,
-          securitySchemes = api.securitySchemes || [],
-          securedBy = this.securedBy || [];
+          securedBy = method.securedBy || [];
 
       securitySchemes.forEach(function(scheme) {
         securedBy.forEach(function(type) {
-          if (scheme[type] && scheme[type].type === "Basic Authentication") {
+          if (scheme[type] && scheme[type].type === schemeType) {
             required = true;
           }
         });
@@ -17,22 +18,30 @@ RAML.Inspector = (function() {
 
       return required;
     }
+
+    method.requiresBasicAuthentication = function() {
+      return requiresSecurityScheme(this, "Basic Authentication");
+    }
+
+    method.requiresOauth2 = function() {
+      return requiresSecurityScheme(this, "OAuth 2.0");
+    }
   }
 
-  function extractResources(basePathSegments, api) {
+  function extractResources(basePathSegments, api, securitySchemes) {
     var resources = [];
 
     api.resources.forEach(function(resource) {
       var pathSegments = basePathSegments.concat(resource.relativeUri);
       var overview = exports.resourceOverviewSource(pathSegments, resource);
       overview.methods.forEach(function(method) {
-        extendMethod(api, method);
+        extendMethod(method, securitySchemes);
       });
 
       resources.push(overview);
 
       if (resource.resources) {
-        extracted = extractResources(pathSegments, resource);
+        extracted = extractResources(pathSegments, resource, securitySchemes);
         extracted.forEach(function(resource) {
           resources.push(resource);
         });
@@ -56,7 +65,7 @@ RAML.Inspector = (function() {
   };
 
   exports.create = function(api) {
-    api.resources = extractResources([], api);
+    api.resources = extractResources([], api, api.securitySchemes);
     return api;
   };
 

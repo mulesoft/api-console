@@ -6,13 +6,18 @@ describe("RAML.Inspector.create", function() {
     'securitySchemes:',
     '  - basic:',
     '      type: Basic Authentication',
+    '  - oauth_2:',
+    '      type: OAuth 2.0',
+    '      settings:',
+    '        accessTokenUrl: http://example.com',
+    '        authorizationUrl: http://example.com',
     '/resource:',
     '  get: !!null',
     '  /{resourceId}:',
     '    get: !!null',
     '/another/resource:',
     '  get:',
-    '    securedBy: [basic]'
+    '    securedBy: [basic, oauth_2]'
   ));
 
   describe("inspecting an api's resources", function() {
@@ -36,6 +41,7 @@ describe("RAML.Inspector.create", function() {
 
     describe("query a resource method's security schemes", function() {
       var method;
+
       describe("when a method is secured by Basic Authentication", function() {
         beforeEach(function() {
           method = inspector.resources[2].methods[0];
@@ -54,6 +60,26 @@ describe("RAML.Inspector.create", function() {
         it("returns false", function() {
           expect(method.requiresBasicAuthentication()).toBe(false);
         });
+      });
+    });
+
+    describe("when a method is secured by OAuth 2", function() {
+      beforeEach(function() {
+        method = inspector.resources[2].methods[0];
+      });
+
+      it("returns true", function() {
+        expect(method.requiresOauth2()).toBe(true);
+      });
+    });
+
+    describe("when a method is not secured by OAuth 2", function() {
+      beforeEach(function() {
+        method = inspector.resources[0].methods[0];
+      });
+
+      it("returns false", function() {
+        expect(method.requiresOauth2()).toBe(false);
       });
     });
   });

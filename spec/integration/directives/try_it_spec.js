@@ -273,4 +273,47 @@ describe("RAML.Controllers.tryIt", function() {
       });
     }));
   });
+
+  describe('secured by oauth', function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      'securitySchemes:',
+      '  - oauth2:',
+      '      type: OAuth 2.0',
+      '      describedBy:',
+      '        headers:',
+      '          Authorization:',
+      '            type: string',
+      '        queryParameters:',
+      '          access_token:',
+      '            type: string',
+      '      settings:',
+      '        authorizationUrl: https://example.com/oauth/authorize',
+      '        accessTokenUrl: https://example.com/oauth/access_token',
+      '        authorizationGrants: [ code, token ]',
+      '        scopes:',
+      '          - secret_data',
+      '/resource:',
+      '  get:',
+      '    securedBy: [oauth2]'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+    });
+
+    it('asks for client id and secret', function() {
+      $el.find('input[name="clientId"]').fillIn("user");
+      $el.find('input[name="clientSecret"]').fillIn("password");
+      $el.find('button[role="try-it"]').click();
+
+      whenTryItCompletes(function() {
+        expect($el.find('.response .status .response-value')).toHaveText('200');
+      });
+    });
+  });
 });
