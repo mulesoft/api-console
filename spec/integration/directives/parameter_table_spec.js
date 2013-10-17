@@ -1,5 +1,6 @@
 describe("RAML.Directives.parameterTable", function() {
   var directive, scope, $el;
+  var parameterHeaderSelector = '[role="parameter"] h5';
 
   beforeEach(module('ramlConsoleApp'));
 
@@ -21,7 +22,7 @@ describe("RAML.Directives.parameterTable", function() {
       });
 
       it("displays the only the displayName", function() {
-        expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+        expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
           /^displayName\s+string$/
         );
       });
@@ -30,7 +31,7 @@ describe("RAML.Directives.parameterTable", function() {
     it("displays required", function() {
       scope.parameters[0].required = true;
       $el = compileTemplate(directive, scope);
-      expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+      expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
         /^displayName\s+required,\s+string$/
       );
     });
@@ -42,7 +43,7 @@ describe("RAML.Directives.parameterTable", function() {
       });
 
       it("displays the enum options instead of type string", function() {
-        expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+        expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
           /^displayName\s+one of\s+\(one,\s+two,\s+three\)$/
         );
       });
@@ -55,7 +56,7 @@ describe("RAML.Directives.parameterTable", function() {
       });
 
       it("displays the pattern", function() {
-        expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+        expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
           /^displayName\s+string matching\s+\/some regex\/$/
         );
       });
@@ -69,7 +70,7 @@ describe("RAML.Directives.parameterTable", function() {
         });
 
         it("displays the minLength", function() {
-          expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+          expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
             /^displayName\s+string,\s+at least 8 characters$/
           );
         });
@@ -82,7 +83,7 @@ describe("RAML.Directives.parameterTable", function() {
         });
 
         it("displays the maxLength", function() {
-          expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+          expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
             /^displayName\s+string,\s+at most 8 characters$/
           );
         });
@@ -96,7 +97,7 @@ describe("RAML.Directives.parameterTable", function() {
         });
 
         it("displays the minLength and maxLength", function() {
-          expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+          expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
             /^displayName\s+string,\s+8-20 characters$/
           );
         });
@@ -112,7 +113,7 @@ describe("RAML.Directives.parameterTable", function() {
         });
 
         it("displays the minimum", function() {
-          expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+          expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
             /^displayName\s+integer\s+≥ 8$/
           );
         });
@@ -126,7 +127,7 @@ describe("RAML.Directives.parameterTable", function() {
         });
 
         it("displays the maximum", function() {
-          expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+          expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
             /^displayName\s+integer\s+≤ 8$/
           );
         });
@@ -141,7 +142,7 @@ describe("RAML.Directives.parameterTable", function() {
         });
 
         it("displays the minLength and maxLength", function() {
-          expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+          expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
             /^displayName\s+integer\s+between 8-20$/
           );
         });
@@ -156,7 +157,7 @@ describe("RAML.Directives.parameterTable", function() {
         });
 
         it("displays 'repeatable'", function() {
-          expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+          expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
             /^displayName\s+string,\s+repeatable$/
           );
         });
@@ -169,7 +170,7 @@ describe("RAML.Directives.parameterTable", function() {
         });
 
         it("displays nothing", function() {
-          expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+          expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
             /^displayName\s+string$/
           );
         });
@@ -179,7 +180,7 @@ describe("RAML.Directives.parameterTable", function() {
     it("displays default", function() {
       scope.parameters[0].default = "some default value";
       $el = compileTemplate(directive, scope);
-      expect($el.find('[role="parameter"] h4').text().trim()).toMatch(
+      expect($el.find(parameterHeaderSelector).text().trim()).toMatch(
         /^displayName\s+string, default: some default value$/
       );
     });

@@ -195,8 +195,8 @@ describe("RAML.Directives.documentation", function() {
     });
 
     it('shows the description of both responses', function() {
-      expect(section.find("h2").eq(0).text().trim()).toEqual("200");
-      expect(section.find("h2").eq(1).text().trim()).toEqual("500");
+      expect(section.find("h4").eq(0).text().trim()).toEqual("200");
+      expect(section.find("h4").eq(1).text().trim()).toEqual("500");
       expect(section.find("[role='response']").eq(0).text().trim()).toEqual("A-Okay");
       expect(section.find("[role='response']").eq(1).text().trim()).toEqual("Ut Oh");
     });
@@ -209,7 +209,7 @@ describe("RAML.Directives.documentation", function() {
     });
 
     it('hides a response on click', function() {
-      var header = $("[role='documentation-responses'] h2").first();
+      var header = $("[role='documentation-responses'] h4").first();
       header.click();
 
       var response = $el.find("[role='response']")
