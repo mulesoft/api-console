@@ -88,6 +88,9 @@
   TryIt.prototype.execute = function() {
     var response = this.response = {};
     var url = this.response.requestUrl = this.baseUri + this.pathBuilder(this.pathBuilder);
+    if (RAML.Settings.proxy) {
+      url = RAML.Settings.proxy + url;
+    }
     var requestOptions = { url: url, type: this.httpMethod, headers: {} }
 
     function handleResponse(jqXhr) {

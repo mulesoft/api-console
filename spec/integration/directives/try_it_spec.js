@@ -20,6 +20,43 @@ describe("RAML.Controllers.tryIt", function() {
     runs(cb);
   };
 
+  describe('when a proxy is set', function() {
+    mockHttp(function(mock) {
+      mock
+        .when("get", 'http://www.someproxyserver.com/proxy-path/http://www.example.com/v5/resource')
+        .respondWith(200, "OK");
+    });
+
+    beforeEach(function() {
+      RAML.Settings.proxy = 'http://www.someproxyserver.com/proxy-path/';
+
+      var raml = createRAML(
+        'title: Example API',
+        'version: v5',
+        'baseUri: http://www.example.com/{version}',
+        '/resource:',
+        '  get:'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<try-it></try-it>", raml, function(compiled) { $el = compiled; }
+      );
+    });
+
+    afterEach(function() {
+      RAML.Settings = {};
+    });
+
+    it('executes a request through the proxy', function() {
+      $el.find('button[role="try-it"]').click();
+
+      whenTryItCompletes(function() {
+        expect($el.find('.response .status .response-value')).toHaveText('200');
+        expect($el.find('.response .body .response-value')).toHaveText('OK');
+      });
+    });
+  });
+
   describe('given a version', function() {
     mockHttp(function(mock) {
       mock
