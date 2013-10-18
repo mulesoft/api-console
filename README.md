@@ -6,9 +6,9 @@ An API console for RAML documents. The RAML Console allows browsing of API docum
 
 To run the console, you'll need the following:
 
-* Node JS (http://nodejs.org/)
-* NPM (https://npmjs.org/)
-* PhantomJS for headless testing (http://phantomjs.org/)
+* [Node JS](http://nodejs.org/)
+* [NPM](https://npmjs.org/)
+* [PhantomJS](http://phantomjs.org/) for headless testing
 * Firefox installed (for in-browser scenario tests)
 
 # First Time Setup
@@ -33,4 +33,12 @@ To run only a portion of the tests, you can use
     $ grunt spec:integration
     $ grunt scenario
 
-The scenario tests use angular's protractor (https://github.com/angular/protractor), and run via selenium in firefox. Selenium is automatically downloaded, but you'll need firefox to be installed.
+The scenario tests use angular's [protractor](https://github.com/angular/protractor) framework, and run via selenium in firefox. Selenium is automatically downloaded, but you'll need firefox to be installed.
+
+# Continuous Integration and Acceptance
+
+Tests for the console are running on [Travis CI](https://magnum.travis-ci.com/restful-api-modeling-lang/console). 
+
+Acceptance URLs:
+* [Standalone](https://54.227.235.249/artifacts/console/master/index.acceptance.html)
+* [Integrated with Editor](https://54.227.235.249/artifacts/editor/chores/remove-console-dependencies/)
