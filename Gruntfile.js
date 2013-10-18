@@ -41,6 +41,7 @@ module.exports = function (grunt) {
             embedded: {
                 files: {
                     'dist/app.js': [
+                        'app/vendor/jquery.js',
                         'app/vendor/vkbeautify.0.99.00.beta.js',
                         'app/scripts/inspector.js',
                         'app/scripts/inspector/**/*.js',
@@ -56,7 +57,6 @@ module.exports = function (grunt) {
                         'dist/templates.js'
                     ],
                     'dist/vendor.js': [
-                        'app/vendor/jquery.js',
                         'app/vendor/angular.js',
                         'app/vendor/angular-sanitize.js',
                         'app/vendor/angular-resource.js',
