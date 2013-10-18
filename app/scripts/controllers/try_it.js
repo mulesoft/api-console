@@ -31,6 +31,9 @@
 
   TryIt = function($scope, Base64) {
     this.baseUri = $scope.api.baseUri || '';
+    if (this.baseUri.match(/\{version\}/) && $scope.api.version) {
+      this.baseUri = this.baseUri.replace(/\{version\}/g, $scope.api.version);
+    }
     this.pathBuilder = $scope.method.pathBuilder;
 
     this.encoder = Base64;

@@ -1,58 +1,7 @@
 describe("RAML.Directives.documentation", function() {
   beforeEach(module('ramlConsoleApp'));
 
-  var scope, $el, section;
-
-  function createScopeWithXMLRequestBody(xmlProperties) {
-    return createScope(function(scope) {
-      scope.resource = {};
-      scope.method = {
-        body: {
-          "text/xml": xmlProperties
-        }
-      };
-    });
-  };
-
-  function createScopeWithFirstResourceAndMethod(parsedApi) {
-    scope = createScope(function(scope) {
-      scope.api = RAML.Inspector.create(parsedApi);
-      scope.resource = scope.api.resources[0];
-      scope.method = scope.resource.methods[0];
-      scope.method.pathBuilder = new RAML.Inspector.PathBuilder.create(scope.resource.pathSegments);
-    });
-    return scope;
-  };
-
-  function compileWithScopeFromFirstResourceAndMethodOfRAML(directive, raml, callback) {
-    var parsed = {},
-        completed = false;
-
-    runs(function() {
-      var success = function(result) {
-        for (var property in result) {
-          parsed[property] = result[property];
-        }
-        completed = true;
-      }
-
-      var error = function() {
-        console.log("could not parse: " + raml);
-        completed = true;
-      }
-
-      RAML.Parser.load(raml).then(success, error);
-    });
-
-    waitsFor(function() { return completed; }, "RAML parse took too long", 5000);
-
-    runs(function() {
-      $el = compileTemplate(directive, createScopeWithFirstResourceAndMethod(parsed));
-      if (callback) {
-        callback($el);
-      }
-    });
-  };
+  var scope, section;
 
   describe('given a method and resource with no documentation', function() {
     beforeEach(function() {
@@ -69,15 +18,15 @@ describe("RAML.Directives.documentation", function() {
     });
 
     it('disables the parameters tab', function() {
-      expect($el.find("[role='documentation-parameters']")).toHaveClass('disabled');
+      expect(this.$el.find("[role='documentation-parameters']")).toHaveClass('disabled');
     });
 
     it('disables the requests tab', function() {
-      expect($el.find("[role='documentation-requests']")).toHaveClass('disabled');
+      expect(this.$el.find("[role='documentation-requests']")).toHaveClass('disabled');
     });
 
     it('disables the responses tab', function() {
-      expect($el.find("[role='documentation-responses']")).toHaveClass('disabled');
+      expect(this.$el.find("[role='documentation-responses']")).toHaveClass('disabled');
     });
   });
 
@@ -212,7 +161,7 @@ describe("RAML.Directives.documentation", function() {
       var header = $("[role='documentation-responses'] h4").first();
       header.click();
 
-      var response = $el.find("[role='response']")
+      var response = this.$el.find("[role='response']")
 
       expect(response.first()).not.toBeVisible();
       expect(response.last()).toBeVisible();
