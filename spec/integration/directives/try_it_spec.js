@@ -20,6 +20,37 @@ describe("RAML.Controllers.tryIt", function() {
     runs(cb);
   };
 
+  describe('given a version', function() {
+    mockHttp(function(mock) {
+      mock
+        .when("get", 'http://www.example.com/v5/resource')
+        .respondWith(200, "OK");
+    });
+
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'version: v5',
+        'baseUri: http://www.example.com/{version}',
+        '/resource:',
+        '  get:'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<try-it></try-it>", raml, function(compiled) { $el = compiled; }
+      );
+    });
+
+    it('executes a request with the version interpolated into the URL', function() {
+      $el.find('button[role="try-it"]').click();
+
+      whenTryItCompletes(function() {
+        expect($el.find('.response .status .response-value')).toHaveText('200');
+        expect($el.find('.response .body .response-value')).toHaveText('OK');
+      });
+    });
+  });
+
   describe('given query parameters', function() {
     var raml = createRAML(
       'title: Example API',
