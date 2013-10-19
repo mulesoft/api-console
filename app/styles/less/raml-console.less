@@ -115,15 +115,22 @@ ul[role=traits] {
 
 ul[role=methods] {
   float: right;
+  text-align: right;
+  margin-bottom: -2px;
 
   li {
     display: inline-block;
     background-color: #EFEBEA;
     text-transform: uppercase;
-    margin-left: 5px;
+    margin-left: 2px;
     text-align: center;
     font-size: 11px;
     padding: 3px 10px 1px;
+    margin-bottom: 2px;
+
+    &:first-child {
+      margin-left: 0;
+    }
   }
 }
 
