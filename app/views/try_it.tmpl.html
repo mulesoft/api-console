@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-actions">
-      <i ng-show='apiClient.response.status' class="icon-spinner icon-spin icon-large"></i>
+      <i ng-hide='!apiClient.response || apiClient.response.status' class="icon-spinner icon-spin icon-large"></i>
 
       <button role="try-it" class="btn inverted" ng-click="apiClient.execute()">
         Try It
