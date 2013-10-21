@@ -46,8 +46,13 @@
 
   Oauth2.accessTokenRequest = function(settings, credentialsManager) {
     return function(code) {
+      var url = settings.accessTokenUrl;
+      if (RAML.Settings.proxy) {
+        url = RAML.Settings.proxy + url;
+      }
+
       var requestOptions = {
-        url: settings.accessTokenUrl,
+        url: url,
         type: 'post',
         data: credentialsManager.accessTokenParameters(code)
       };

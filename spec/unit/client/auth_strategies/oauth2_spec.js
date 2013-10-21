@@ -45,20 +45,42 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
     beforeEach(function() {
       accessTokenResponse = jasmine.createSpyObj('promise', ['then']);
       xhrSpy = spyOn($, 'ajax').andReturn(accessTokenResponse);
-      Oauth2.accessTokenRequest(settings, credentialsManager)('code');
     });
 
-    it("requests an access token", function() {
-      expect(xhrSpy).toHaveBeenCalledWith({
-        url: settings.accessTokenUrl,
-        type: 'post',
-        data: {
-          client_id: 'ID',
-          client_secret: 'secret',
-          code: 'code',
-          grant_type: 'authorization_code',
-          redirect_uri: RAML.Settings.oauth2RedirectUri
-        }
+    describe('by default', function() {
+      beforeEach(function() {
+        Oauth2.accessTokenRequest(settings, credentialsManager)('code');
+      });
+
+      it("requests an access token", function() {
+        expect(xhrSpy).toHaveBeenCalledWith({
+          url: settings.accessTokenUrl,
+          type: 'post',
+          data: {
+            client_id: 'ID',
+            client_secret: 'secret',
+            code: 'code',
+            grant_type: 'authorization_code',
+            redirect_uri: RAML.Settings.oauth2RedirectUri
+          }
+        });
+      });
+    });
+
+    describe('with a proxy URL', function() {
+      beforeEach(function() {
+        RAML.Settings.proxy = 'http://www.someproxy.com/somepath/'
+        Oauth2.accessTokenRequest(settings, credentialsManager)('code');
+      });
+
+      afterEach(function() {
+        delete RAML.Settings.proxy;
+      });
+
+      it("proxies the request for the access token", function() {
+        expect(xhrSpy.mostRecentCall.args[0].url).toEqual(
+          RAML.Settings.proxy + settings.accessTokenUrl
+        );
       });
     });
   });
