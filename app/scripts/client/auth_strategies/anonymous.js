@@ -3,15 +3,17 @@
     sign: function() {}
   };
 
-  RAML.Client.AuthStrategies.anonymous = function() {
-    var strategy = {
-      authenticate: function() {
-        return {
-          then: function(success) { success(NO_OP_TOKEN); }
-        }
-      }
+  var Anonymous = function() {}
+  Anonymous.prototype.authenticate = function() {
+    return {
+      then: function(success) { success(NO_OP_TOKEN); }
     }
+  };
 
-    return strategy;
+  var anonymous = new Anonymous();
+
+  RAML.Client.AuthStrategies.Anonymous = Anonymous;
+  RAML.Client.AuthStrategies.anonymous = function() {
+    return anonymous;
   }
 })();

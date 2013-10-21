@@ -129,7 +129,6 @@
       authStrategy = RAML.Client.AuthStrategies.oauth2(this.securityScheme, this.oauth2);
     }
 
-
     authStrategy.authenticate().then(function(token) {
       token.sign(request);
       $.ajax(request.toOptions()).then(
