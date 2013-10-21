@@ -1,5 +1,4 @@
 describe("RAML.Client.AuthStrategies.Oauth2", function() {
-  var REDIRECT_URI = 'http://localhost:9000/oauth2_success.html';
   var Oauth2 = RAML.Client.AuthStrategies.Oauth2;
   var credentialsManager, settings;
 
@@ -21,7 +20,7 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
     });
 
     it("opens authorization resource in a new window", function() {
-      var expectedUrl = settings.authorizationUrl + '?client_id=ID&response_type=code&redirect_uri=' + REDIRECT_URI;
+      var expectedUrl = settings.authorizationUrl + '?client_id=ID&response_type=code&redirect_uri=' + RAML.Settings.oauth2RedirectUri;
       expect(window.open).toHaveBeenCalledWith(expectedUrl, 'raml-console-oauth2');
     });
 
@@ -58,7 +57,7 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
           client_secret: 'secret',
           code: 'code',
           grant_type: 'authorization_code',
-          redirect_uri: REDIRECT_URI
+          redirect_uri: RAML.Settings.oauth2RedirectUri
         }
       });
     });

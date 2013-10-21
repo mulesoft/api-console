@@ -1,5 +1,4 @@
 (function() {
-  var REDIRECT_URI = 'http://localhost:9000/oauth2_success.html';
   var WINDOW_NAME = 'raml-console-oauth2';
 
   var Oauth2 = function(scheme, credentials) {
@@ -21,7 +20,7 @@
          return baseUrl +
            '?client_id=' + credentials.clientId +
            '&response_type=code' +
-           '&redirect_uri=' + REDIRECT_URI;
+           '&redirect_uri=' + RAML.Settings.oauth2RedirectUri;
       },
 
       accessTokenParameters: function(code) {
@@ -30,7 +29,7 @@
           client_secret: credentials.clientSecret,
           code: code,
           grant_type: 'authorization_code',
-          redirect_uri: REDIRECT_URI
+          redirect_uri: RAML.Settings.oauth2RedirectUri
         }
       }
     }

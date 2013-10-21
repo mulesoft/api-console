@@ -69,8 +69,8 @@ module.exports = function (grunt) {
                         'app/vendor/codemirror/xml.js',
                         'app/vendor/codemirror/javascript.js'
                     ],
-                    'dist/index.html': ['app/index.embedded.html'],
-                    'dist/index.acceptance.html': ['app/index.acceptance.html']
+                    'dist/index.html': ['app/index.acceptance.html'],
+                    'dist/authentication/oauth2.html': ['app/authentication/oauth2.html']
                 }
             }
         },

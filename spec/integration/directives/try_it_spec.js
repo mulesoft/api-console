@@ -359,6 +359,10 @@ describe("RAML.Controllers.tryIt", function() {
 
     parseRAML(raml);
 
+    beforeEach(function() {
+      RAML.Settings.oauth2RedirectUri = "http://example.com/oauth2.html";
+    });
+
     mockHttp(function(mock) {
       mock
         .when('post', 'https://example.com/oauth/access_token', {
@@ -366,7 +370,7 @@ describe("RAML.Controllers.tryIt", function() {
           client_secret: 'password',
           code: 'code',
           grant_type: 'authorization_code',
-          redirect_uri: 'http://localhost:9000/oauth2_success.html'
+          redirect_uri: RAML.Settings.oauth2RedirectUri
         }).respondWith(200, JSON.stringify({ access_token: 'token' }));
     });
 
