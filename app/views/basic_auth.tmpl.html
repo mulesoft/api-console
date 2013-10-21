@@ -1,14 +1,12 @@
-<div>
-  <fieldset class="labelled-inline" ng-if="method.requiresBasicAuthentication()">
-    <legend>Basic Authentication</legend>
-    <div class="control-group">
-      <label for="username">username</label>
-      <input type="text" name="username" ng-model='apiClient.basicauth.username'/>
-    </div>
+<fieldset class="labelled-inline" role="basic">
+  <legend>Basic Authentication</legend>
+  <div class="control-group">
+    <label for="username">username</label>
+    <input type="text" name="username" ng-model='credentials.username'/>
+  </div>
 
-    <div class="control-group">
-      <label for="password">password</label>
-      <input type="password" name="password" ng-model='apiClient.basicauth.password'/>
-    </div>
-  </fieldset>
-</div>
+  <div class="control-group">
+    <label for="password">password</label>
+    <input type="password" name="password" ng-model='credentials.password'/>
+  </div>
+</fieldset>

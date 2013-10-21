@@ -14,7 +14,8 @@ describe("RAML.Controllers.TryIt", function() {
       method: method,
       pathBuilder: function() { return "/resources/search" },
       body: body,
-      requiresBasicAuthentication: function() { return false; }
+      requiresBasicAuthentication: function() { return false; },
+      requiresOauth2: function() { return false; }
     }
   }
 
@@ -184,7 +185,7 @@ describe("RAML.Controllers.TryIt", function() {
       });
 
       it("executes the described method", function() {
-        expect(httpService).toHaveBeenCalledWith({ url: "http://example.com/resources/search", type: "get", headers: {} });
+        expect(httpService).toHaveBeenCalledWith({ url: "http://example.com/resources/search", type: "get" });
       });
     });
 

@@ -1,0 +1,4 @@
+<div>
+  <basic-auth ng-if="method.requiresBasicAuthentication()" credentials='keychain.basicauth'></basic-auth>
+  <oauth2 ng-if="method.requiresOauth2()" credentials='keychain.oauth2'></oauth2>
+</div>

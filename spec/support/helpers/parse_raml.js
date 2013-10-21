@@ -14,8 +14,9 @@ var parseRAML = function(raml, options) {
         completed = true;
       }
 
-      var error = function() {
+      var error = function(err) {
         console.log("could not parse: " + raml);
+        console.log(err);
         completed = true;
       }
 

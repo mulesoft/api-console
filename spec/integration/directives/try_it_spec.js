@@ -324,7 +324,7 @@ describe("RAML.Controllers.tryIt", function() {
       $el = compileTemplate('<try-it></try-it>', scope);
     });
 
-    it('executes a request with the supplied value for the custom header', inject(function(Base64) {
+    it('executes a request with the supplied value for the custom header', function() {
       var headerVerifier = function(headers) {
         return !!headers['Authorization'].match(/Basic/);
       };
@@ -335,10 +335,63 @@ describe("RAML.Controllers.tryIt", function() {
 
       var mostRecent = $.mockjax.mockedAjaxCalls()[0];
       expect(mostRecent.headers['Authorization']).toMatch(/Basic/);
-      expect(mostRecent.headers['Authorization']).toMatch(Base64.encode("user:password"));
+      expect(mostRecent.headers['Authorization']).toMatch('dXNlcjpwYXNzd29yZA==');
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
       });
-    }));
+    });
+  });
+
+  describe('secured by oauth', function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      'securitySchemes:',
+      '  - oauth2:',
+      '      type: OAuth 2.0',
+      '      settings:',
+      '        authorizationUrl: https://example.com/oauth/authorize',
+      '        accessTokenUrl: https://example.com/oauth/access_token',
+      '/resource:',
+      '  get:',
+      '    securedBy: [oauth2]'
+    );
+
+    parseRAML(raml);
+
+    mockHttp(function(mock) {
+      mock
+        .when('post', 'https://example.com/oauth/access_token', {
+          client_id: 'user',
+          client_secret: 'password',
+          code: 'code',
+          grant_type: 'authorization_code',
+          redirect_uri: 'http://localhost:9000/oauth2_success.html'
+        }).respondWith(200, JSON.stringify({ access_token: 'token' }));
+    });
+
+    mockHttp(function(mock) {
+      mock
+        .when('get', 'http://www.example.com/resource')
+        .respondWith(200, 'cool');
+    });
+
+    beforeEach(function() {
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+      spyOn(window, 'open');
+    });
+
+    it('asks for client id and secret', function() {
+      $el.find('input[name="clientId"]').fillIn("user");
+      $el.find('input[name="clientSecret"]').fillIn("password");
+      $el.find('button[role="try-it"]').click();
+
+      window.RAML.authorizationSuccess('code');
+
+      whenTryItCompletes(function() {
+        expect($el.find('.response .status .response-value')).toHaveText('200');
+      });
+    });
   });
 });

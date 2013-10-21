@@ -29,14 +29,13 @@
     return Object.keys(object || {}).length == 0;
   }
 
-  TryIt = function($scope, Base64) {
+  TryIt = function($scope) {
     this.baseUri = $scope.api.baseUri || '';
     if (this.baseUri.match(/\{version\}/) && $scope.api.version) {
       this.baseUri = this.baseUri.replace(/\{version\}/g, $scope.api.version);
     }
     this.pathBuilder = $scope.method.pathBuilder;
 
-    this.encoder = Base64;
     this.httpMethod = $scope.method.method;
     this.headers = {};
     this.queryParameters = {};
@@ -45,6 +44,11 @@
 
     if ($scope.method.requiresBasicAuthentication()) {
       this.basicauth = {};
+    }
+
+    if ($scope.method.requiresOauth2()) {
+      this.securityScheme = $scope.method.requiresOauth2();
+      this.oauth2 = {};
     }
 
     for (mediaType in $scope.method.body) {
@@ -60,6 +64,8 @@
     }
 
     $scope.apiClient = this;
+    this.client = $scope.client = RAML.Client.create($scope.api)
+
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
@@ -81,7 +87,7 @@
     if (this.mediaType) {
       return this.mediaType == FORM_DATA
     } else  {
-      return (!this.suppoprtsCustomBody && !this.supportsFormUrlencoded && this.supportsFormData);
+      return (!this.supportsCustomBody && !this.supportsFormUrlencoded && this.supportsFormData);
     }
   }
 
@@ -91,7 +97,7 @@
     if (RAML.Settings.proxy) {
       url = RAML.Settings.proxy + url;
     }
-    var requestOptions = { url: url, type: this.httpMethod, headers: {} }
+    var request = this.client.createRequest(url, this.httpMethod);
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -105,31 +111,37 @@
     }
 
     if (!isEmpty(this.queryParameters)) {
-      requestOptions.data = this.queryParameters;
+      request.data(this.queryParameters);
     }
 
     if (!isEmpty(this.formParameters)) {
-      requestOptions.data = this.formParameters;
+      request.data(this.formParameters);
     }
 
     if (!isEmpty(this.headers)) {
-      requestOptions.headers = this.headers;
+      request.headers(this.headers);
     }
 
     if (this.mediaType) {
-      requestOptions.contentType = this.mediaType;
-      if (this.showBody()) { requestOptions.data = this.body; }
+      request.header("Content-Type", this.mediaType);
+      if (this.showBody()) { request.data(this.body); }
     }
+
+    var authStrategy = RAML.Client.AuthStrategies.anonymous();
 
     if (this.basicauth) {
-      var encoded = this.encoder.encode(this.basicauth.username + ":" + this.basicauth.password);
-      requestOptions.headers['Authorization'] = "Basic " + encoded;
+      authStrategy = RAML.Client.AuthStrategies.basicAuth(this.basicauth);
+    } else if (this.oauth2) {
+      authStrategy = RAML.Client.AuthStrategies.oauth2(this.securityScheme, this.oauth2);
     }
 
-    $.ajax(requestOptions).then(
-      function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-      function(jqXhr) { handleResponse(jqXhr); }
-    );
+    authStrategy.authenticate().then(function(token) {
+      token.sign(request);
+      $.ajax(request.toOptions()).then(
+        function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+        function(jqXhr) { handleResponse(jqXhr); }
+      );
+    });
   };
 
   RAML.Controllers.TryIt = TryIt;
