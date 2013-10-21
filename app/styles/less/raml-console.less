@@ -1,52 +1,54 @@
 @import "commons";
 
 raml-console {
-  margin: 0 20px 20px;
+  article {
+    margin: 0 20px 20px;
 
-  h2 {
-    line-height: 20px;
-  }
+    h2 {
+      line-height: 20px;
+    }
 
-  code {
-    font-family: 'Courier New', 'Courier', monospace;
-  }
+    code {
+      font-family: 'Courier New', 'Courier', monospace;
+    }
 
-  .tab-pane {
-    padding: 20px;
-  }
+    .tab-pane {
+      padding: 20px;
+    }
 
-  #api-title {
-    float: left;
-    font-size: 20px;
-    line-height: 1em;
-    margin: 20px 0;
-  }
+    #api-title {
+      float: left;
+      font-size: 20px;
+      line-height: 1em;
+      margin: 20px 0;
+    }
 
-  #api-reference {
-    section:first-of-type {
-      > h4, > h5, > h6 {
-        margin-top: 0;
+    #api-reference {
+      section:first-of-type {
+        > h4, > h5, > h6 {
+          margin-top: 0;
+        }
       }
-    }
 
-    h4, h5, legend {
-      font-family: 'Open Sans', sans-serif;
-      font-weight: 700;
-      line-height: 1.15em;
-    }
+      h4, h5, legend {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 700;
+        line-height: 1.15em;
+      }
 
-    h4, legend {
-      font-size: 18px;
-      margin-bottom: 5px;
-    }
+      h4, legend {
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
 
-    h4 {
-      margin-top: 25px;
-    }
+      h4 {
+        margin-top: 25px;
+      }
 
-    h5 {
-      margin-top: 20px;
-      margin-bottom: 5px;
+      h5 {
+        margin-top: 20px;
+        margin-bottom: 5px;
+      }
     }
   }
 }
@@ -136,8 +138,7 @@ ul[role=methods] {
 }
 
 [role=methodSummary] {
-  padding: 15px;
-  margin-right: -5px;
+  padding: 10px 20px;
   background-color: #FCFBF6;
 
   > *, .actions > * {
@@ -154,7 +155,8 @@ ul[role=methods] {
     font-style: italic;
   }
 
-  input {
+  input, input[type="text"] {
+    padding: 2px 4px;
     margin-bottom: 0;
     width: 6em;
     margin-left: 4px;
