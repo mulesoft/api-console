@@ -53,6 +53,67 @@ describe("RAML.Directives.documentation", function() {
     });
   });
 
+  describe('given a method with form parameters', function() {
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/resource:',
+        '  post:',
+        '    body:',
+        '      application/x-www-form-urlencoded:',
+        '        formParameters:',
+        '          contents:',
+        '            displayName: RAML File',
+        '            type: string',
+        '            description: The saved RAML File, as plaintext.',
+        '            required: true'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<documentation></documentation>", raml, function($el) {
+          section = $el.find("[role='documentation-parameters']");
+        }
+      );
+    });
+
+    it('enables the parameters tab', function() {
+      expect(section).not.toHaveClass('disabled');
+    });
+  });
+
+  describe('given a method with multipart form parameters', function() {
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/resource:',
+        '  post:',
+        '    body:',
+        '      multipart/form-data:',
+        '        formParameters:',
+        '          contents:',
+        '            displayName: RAML File',
+        '            type: string',
+        '            description: The saved RAML File, as plaintext.',
+        '            required: true'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML(
+        "<documentation></documentation>", raml, function($el) {
+          section = $el.find("[role='documentation-parameters']");
+        }
+      );
+    });
+
+    it('enables the parameters tab', function() {
+      expect(section).not.toHaveClass('disabled');
+    });
+  });
+
+
+
+
   describe('given a method with only an XML request body schema', function() {
     beforeEach(function() {
       var raml = createRAML(
