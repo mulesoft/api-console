@@ -1,6 +1,8 @@
 (function() {
   RAML.Settings = RAML.Settings || {};
 
-  var uri = document.location.href.slice(0, document.location.href.indexOf('?')) + '/authentication/oauth2.html';
+  var location = window.location;
+
+  var uri = location.protocol + '//' + location.host + location.pathname + 'authentication/oauth2.html';
   RAML.Settings.oauth2RedirectUri = RAML.Settings.oauth2RedirectUri || uri;
 })();
