@@ -27,7 +27,7 @@
 
     this.editor = CodeMirror($element[0], {
       mode: $scope.mode,
-      readOnly: "nocursor",
+      readOnly: true,
       value: $scope.code,
       lineNumbers: true,
       indentUnit: 4
