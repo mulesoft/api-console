@@ -350,8 +350,8 @@ describe("RAML.Controllers.tryIt", function() {
       '  - oauth2:',
       '      type: OAuth 2.0',
       '      settings:',
-      '        authorizationUrl: https://example.com/oauth/authorize',
-      '        accessTokenUrl: https://example.com/oauth/access_token',
+      '        authorizationUri: https://example.com/oauth/authorize',
+      '        accessTokenUri: https://example.com/oauth/access_token',
       '/resource:',
       '  get:',
       '    securedBy: [oauth2]'

@@ -4,8 +4,8 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
 
   beforeEach(function() {
     settings = {
-      authorizationUrl: 'https://example.com/oauth/authorize',
-      accessTokenUrl: 'https://example.com/oauth/access_token'
+      authorizationUri: 'https://example.com/oauth/authorize',
+      accessTokenUri: 'https://example.com/oauth/access_token'
     };
 
     credentialsManager = Oauth2.credentialsManager({ clientId: 'ID', clientSecret: 'secret' });
@@ -20,7 +20,7 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
     });
 
     it("opens authorization resource in a new window", function() {
-      var expectedUrl = settings.authorizationUrl + '?client_id=ID&response_type=code&redirect_uri=' + RAML.Settings.oauth2RedirectUri;
+      var expectedUrl = settings.authorizationUri + '?client_id=ID&response_type=code&redirect_uri=' + RAML.Settings.oauth2RedirectUri;
       expect(window.open).toHaveBeenCalledWith(expectedUrl, 'raml-console-oauth2');
     });
 
@@ -54,7 +54,7 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
 
       it("requests an access token", function() {
         expect(xhrSpy).toHaveBeenCalledWith({
-          url: settings.accessTokenUrl,
+          url: settings.accessTokenUri,
           type: 'post',
           data: {
             client_id: 'ID',
@@ -79,7 +79,7 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
 
       it("proxies the request for the access token", function() {
         expect(xhrSpy.mostRecentCall.args[0].url).toEqual(
-          RAML.Settings.proxy + settings.accessTokenUrl
+          RAML.Settings.proxy + settings.accessTokenUri
         );
       });
     });

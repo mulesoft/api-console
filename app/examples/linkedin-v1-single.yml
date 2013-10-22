@@ -173,8 +173,8 @@ securitySchemes:
               Used to send a valid OAuth 2 access token
             type: string
       settings:
-        authorizationUrl: https://www.linkedin.com/uas/oauth2/authorization
-        accessTokenUrl: https://www.linkedin.com/uas/oauth2/accessToken
+        authorizationUri: https://www.linkedin.com/uas/oauth2/authorization
+        accessTokenUri: https://www.linkedin.com/uas/oauth2/accessToken
         authorizationGrants: code
   - oauth_1_0:
       description: |

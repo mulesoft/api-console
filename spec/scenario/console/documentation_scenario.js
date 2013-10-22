@@ -4,7 +4,7 @@ describe('API Documentation', function() {
   describe('parameters tab', function() {
     raml = createRAML(
       'title: Example API',
-      'baseUri: #{test_api_uri}',
+      'baseUri: http://www.example.com',
       '/resource/#{resourceId}:',
       '  get:',
       '    queryParameters:',
@@ -82,7 +82,7 @@ describe('API Documentation', function() {
   describe("requests tab", function() {
     raml = createRAML(
       'title: Example API',
-      'baseUri: #{test_api_uri}',
+      'baseUri: http://www.example.com',
       'schemas:',
       '  - an_xml_schema: |',
       '      <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">',
@@ -114,7 +114,7 @@ describe('API Documentation', function() {
   describe("responses tab", function() {
     raml = createRAML(
       'title: Example API',
-      'baseUri: #{test_api_uri}',
+      'baseUri: http://www.example.com',
       'schemas:',
       '  - an_xml_schema: |',
       '      <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">',

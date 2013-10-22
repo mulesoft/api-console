@@ -24,8 +24,8 @@ securitySchemes:
               the "Authorization" header
             type: string
       settings:
-        authorizationUrl: https://api.instagram.com/oauth/authorize
-        accessTokenUrl: https://api.instagram.com/oauth/access_token
+        authorizationUri: https://api.instagram.com/oauth/authorize
+        accessTokenUri: https://api.instagram.com/oauth/access_token
         authorizationGrants: [ code, token ]
         scopes:
           - basic

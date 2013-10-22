@@ -36,7 +36,7 @@
   }
 
   Oauth2.authorizationRequest = function(settings, credentialsManager) {
-    var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUrl);
+    var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUri);
     window.open(authorizationUrl, WINDOW_NAME);
 
     var deferred = $.Deferred();
@@ -46,7 +46,7 @@
 
   Oauth2.accessTokenRequest = function(settings, credentialsManager) {
     return function(code) {
-      var url = settings.accessTokenUrl;
+      var url = settings.accessTokenUri;
       if (RAML.Settings.proxy) {
         url = RAML.Settings.proxy + url;
       }

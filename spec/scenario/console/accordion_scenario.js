@@ -10,7 +10,7 @@ describe('accordion view of API', function() {
       "#%RAML 0.8",
       "---",
       "title: Example API",
-      "baseUri: #{test_api_uri}",
+      "baseUri: http://www.example.com",
       "traits:",
       "  - secured:",
       "      description: Some requests require authentication",
@@ -67,7 +67,7 @@ describe('accordion view of API', function() {
   describe('resource detail view and method summaries', function() {
     raml = createRAML(
       "title: Example API",
-      "baseUri: #{test_api_uri}",
+      "baseUri: http://www.example.com",
       "/resource:",
       "  get: !!null",
       "  post: !!null",
@@ -104,7 +104,7 @@ describe('accordion view of API', function() {
   describe('method detail view', function() {
     raml = createRAML(
       'title: Example API',
-      'baseUri: #{test_api_uri}',
+      'baseUri: http://www.example.com',
       '',
       '/resource:',
       '  get:',
