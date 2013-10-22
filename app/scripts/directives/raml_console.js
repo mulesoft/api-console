@@ -9,8 +9,12 @@
     }
 
     var success = function(raml) {
-      $scope.api = this.api = RAML.Inspector.create(raml);
-      $scope.$apply();
+      try {
+        $scope.api = this.api = RAML.Inspector.create(raml);
+        $scope.$apply();
+      } catch (e) {
+        console.error(e);
+      }
     };
 
     var error = function(error) {
