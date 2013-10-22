@@ -20,6 +20,6 @@
       templateUrl: 'views/resource_summary.tmpl.html',
       replace: true,
       controller: controller
-    }
-  }
+    };
+  };
 })();

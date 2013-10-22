@@ -1,3 +1,5 @@
+'use strict';
+
 RAML.Inspector = (function() {
   var exports = {};
 
@@ -5,8 +7,7 @@ RAML.Inspector = (function() {
     securitySchemes = securitySchemes || [];
 
     var securitySchemeFor = function(method, schemeType) {
-      var required = undefined,
-          securedBy = method.securedBy || [];
+      var required, securedBy = method.securedBy || [];
 
       securitySchemes.forEach(function(scheme) {
         securedBy.forEach(function(type) {
@@ -17,15 +18,15 @@ RAML.Inspector = (function() {
       });
 
       return required;
-    }
+    };
 
     method.requiresBasicAuthentication = function() {
-      return securitySchemeFor(this, "Basic Authentication");
-    }
+      return securitySchemeFor(this, 'Basic Authentication');
+    };
 
     method.requiresOauth2 = function() {
-      return securitySchemeFor(this, "OAuth 2.0");
-    }
+      return securitySchemeFor(this, 'OAuth 2.0');
+    };
   }
 
   function extractResources(basePathSegments, api, securitySchemes) {
@@ -41,7 +42,7 @@ RAML.Inspector = (function() {
       resources.push(overview);
 
       if (resource.resources) {
-        extracted = extractResources(pathSegments, resource, securitySchemes);
+        var extracted = extractResources(pathSegments, resource, securitySchemes);
         extracted.forEach(function(resource) {
           resources.push(resource);
         });
@@ -49,7 +50,7 @@ RAML.Inspector = (function() {
     });
 
     return resources;
-  };
+  }
 
   exports.resourceOverviewSource = function(pathSegments, resource) {
     var methods = (resource.methods || []);
@@ -61,7 +62,7 @@ RAML.Inspector = (function() {
       traits: resource.is,
       resourceType: resource.type,
       uriParameters: resource.uriParameters
-    }
+    };
   };
 
   exports.create = function(api) {

@@ -7,7 +7,7 @@
   "curly": true,
   "eqeqeq": true,
   "immed": true,
-  "indent": 4,
+  "indent": 2,
   "latedef": true,
   "newcap": true,
   "noarg": true,
@@ -15,15 +15,16 @@
   "regexp": true,
   "undef": true,
   "unused": true,
-  "strict": false,
+  "strict": true,
   "trailing": true,
   "smarttabs": true,
+  "expr": true,
   "globals": {
     "angular": false,
-    "describe": false,
-    "it": false,
-    "beforeEach": false,
+    "Showdown": false,
+    "$": false,
     "RAML": false,
-    "expect": false
+    "vkbeautify": false,
+    "CodeMirror": false
   }
 }

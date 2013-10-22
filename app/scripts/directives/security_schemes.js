@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
   RAML.Directives.securitySchemes = function() {
     return {
@@ -8,6 +10,6 @@
         method: '=',
         keychain: '='
       }
-    }
-  }
+    };
+  };
 })();

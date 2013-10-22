@@ -15,6 +15,6 @@
       restrict: 'E',
       templateUrl: 'views/method.tmpl.html',
       replace: true
-    }
-  }
+    };
+  };
 })();

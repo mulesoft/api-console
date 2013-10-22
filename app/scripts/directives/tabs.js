@@ -12,7 +12,7 @@
       transclude: true,
       controller: RAML.Controllers.tabset,
       templateUrl: 'views/tabset.tmpl.html'
-    }
+    };
   };
 
   ////////////////
@@ -20,11 +20,10 @@
   ///////////////
 
   var link = function($scope, $element, $attrs, tabsetCtrl) {
-    tabsetCtrl.addTab($scope)
+    tabsetCtrl.addTab($scope);
   };
 
   RAML.Directives.tab = function() {
-
     return {
       restrict: 'E',
       require: '^tabset',
@@ -37,7 +36,6 @@
         active: '=?',
         disabled: '=?'
       }
-    }
-
+    };
   };
 })();

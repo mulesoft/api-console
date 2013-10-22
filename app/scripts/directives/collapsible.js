@@ -18,35 +18,35 @@
           }
         }
       }
-    }
+    };
   };
 
   RAML.Directives.collapsibleToggle = function() {
     return {
       require: '^collapsible',
       restrict: 'EA',
-      link: function(scope, element, attrs, controller) {
+      link: function(scope, element) {
         element.bind('click', function() {
           scope.$apply(function() {
             scope.collapsed = !scope.collapsed;
           });
         });
       }
-    }
+    };
   };
 
   RAML.Directives.collapsibleContent = function() {
     return {
       require: '^collapsible',
       restrict: 'EA',
-      link: function(scope, element, attrs) {
+      link: function(scope, element) {
         scope.$watch('collapsed', function(collapsed) {
-          element.css("display", collapsed ? "none" : "block");
-          element.parent().removeClass("collapsed expanded");
-          element.parent().addClass(collapsed ? "collapsed" : "expanded");
+          element.css('display', collapsed ? 'none' : 'block');
+          element.parent().removeClass('collapsed expanded');
+          element.parent().addClass(collapsed ? 'collapsed' : 'expanded');
         });
       }
-    }
+    };
   };
 
 })();

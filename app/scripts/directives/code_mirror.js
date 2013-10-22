@@ -2,13 +2,13 @@
   'use strict';
 
   var formatters = {
-    "application/json" : function(code) {
+    'application/json' : function(code) {
       return vkbeautify.json(code);
     },
-    "text/xml" : function(code) {
+    'text/xml' : function(code) {
       return vkbeautify.xml(code);
     },
-    "default" : function(code) {
+    'default' : function(code) {
       return code;
     }
   };
@@ -25,7 +25,7 @@
   var Controller = function($scope, $element) {
     sanitize($scope);
 
-    this.editor = CodeMirror($element[0], {
+    this.editor = new CodeMirror($element[0], {
       mode: $scope.mode,
       readOnly: true,
       value: $scope.code,
@@ -33,12 +33,12 @@
       indentUnit: 4
     });
 
-    this.editor.setSize("100%", "100%");
+    this.editor.setSize('100%', '100%');
   };
 
   Controller.prototype.refresh = function(options) {
     sanitize(options);
-    this.editor.setOption("mode", options.mode);
+    this.editor.setOption('mode', options.mode);
     this.editor.setValue(options.code);
 
     this.editor.refresh();
@@ -59,12 +59,12 @@
       replace: true,
       controller: Controller,
       scope: {
-        code: "=codeMirror",
-        visible: "=",
-        mode: "@?"
+        code: '=codeMirror',
+        visible: '=',
+        mode: '@?'
       }
-    }
-  }
+    };
+  };
 
   RAML.Directives.codeMirror.Controller = Controller;
 })();

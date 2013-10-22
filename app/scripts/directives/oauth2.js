@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
   RAML.Directives.oauth2 = function() {
     return {
@@ -7,6 +9,6 @@
       scope: {
         credentials: '='
       }
-    }
-  }
+    };
+  };
 })();

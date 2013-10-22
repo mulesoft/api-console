@@ -5,5 +5,5 @@
     return function(input) {
       return input ? 'Yes' : 'No';
     };
-  }
+  };
 })();

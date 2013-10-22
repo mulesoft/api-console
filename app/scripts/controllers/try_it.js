@@ -1,8 +1,12 @@
+'use strict';
+
 (function() {
   function parseHeaders(headers) {
     var parsed = {}, key, val, i;
 
-    if (!headers) return parsed;
+    if (!headers) {
+      return parsed;
+    }
 
     headers.split('\n').forEach(function(line) {
       i = line.indexOf(':');
@@ -26,10 +30,10 @@
   var apply;
 
   function isEmpty(object) {
-    return Object.keys(object || {}).length == 0;
+    return Object.keys(object || {}).length === 0;
   }
 
-  TryIt = function($scope) {
+  var TryIt = function($scope) {
     this.baseUri = $scope.api.baseUri || '';
     if (this.baseUri.match(/\{version\}/) && $scope.api.version) {
       this.baseUri = this.baseUri.replace(/\{version\}/g, $scope.api.version);
@@ -51,12 +55,12 @@
       this.oauth2 = {};
     }
 
-    for (mediaType in $scope.method.body) {
+    for (var mediaType in $scope.method.body) {
       this.supportsMediaType = true;
 
-      if (mediaType == FORM_URLENCODED) {
+      if (mediaType === FORM_URLENCODED) {
         this.supportsFormUrlencoded = true;
-      } else if (mediaType == FORM_DATA) {
+      } else if (mediaType === FORM_DATA) {
         this.supportsFormData = true;
       } else {
         this.supportsCustomBody = true;
@@ -64,7 +68,7 @@
     }
 
     $scope.apiClient = this;
-    this.client = $scope.client = RAML.Client.create($scope.api)
+    this.client = $scope.client = RAML.Client.create($scope.api);
 
     apply = function() {
       $scope.$apply.apply($scope, arguments);
@@ -73,23 +77,23 @@
 
   TryIt.prototype.showBody = function() {
     return this.supportsCustomBody && !this.showUrlencodedForm() && !this.showMultipartForm();
-  }
+  };
 
   TryIt.prototype.showUrlencodedForm = function() {
     if (this.mediaType) {
-      return this.mediaType == FORM_URLENCODED;
+      return this.mediaType === FORM_URLENCODED;
     } else {
       return (!this.supportsCustomBody && this.supportsFormUrlencoded);
     }
-  }
+  };
 
   TryIt.prototype.showMultipartForm = function() {
     if (this.mediaType) {
-      return this.mediaType == FORM_DATA
+      return this.mediaType === FORM_DATA;
     } else  {
       return (!this.supportsCustomBody && !this.supportsFormUrlencoded && this.supportsFormData);
     }
-  }
+  };
 
   TryIt.prototype.execute = function() {
     var response = this.response = {};
@@ -123,7 +127,7 @@
     }
 
     if (this.mediaType) {
-      request.header("Content-Type", this.mediaType);
+      request.header('Content-Type', this.mediaType);
       if (this.showBody()) { request.data(this.body); }
     }
 

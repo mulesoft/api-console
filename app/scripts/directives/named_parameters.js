@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
   RAML.Directives.namedParameters = function() {
     return {
@@ -10,6 +12,6 @@
         parameters: '=',
         requestData: '='
       }
-    }
-  }
+    };
+  };
 })();

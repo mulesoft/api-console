@@ -7,6 +7,6 @@
       restrict: 'E',
       templateUrl: 'views/api_resources.tmpl.html',
       replace: true
-    }
-  }
+    };
+  };
 })();

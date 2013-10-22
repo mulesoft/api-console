@@ -4,10 +4,10 @@
   RAML.Directives.markdown = function($sanitize) {
     var converter = new Showdown.converter();
 
-    var link = function($scope, $element, $attrs) {
-      var result = converter.makeHtml($scope.markdown || '');
+    var link = function(scope, element) {
+      var result = converter.makeHtml(scope.markdown || '');
 
-      $element.html($sanitize(result));
+      element.html($sanitize(result));
     };
 
     return {
@@ -16,6 +16,6 @@
       scope: {
         markdown: '='
       }
-    }
+    };
   };
 })();

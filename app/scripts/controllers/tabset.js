@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
 
   var controller = function($scope) {
@@ -16,7 +18,7 @@
   };
 
   controller.prototype.addTab = function(tab) {
-    if (this.tabs.every(function(tab) { return tab.disabled }) || tab.active) {
+    if (this.tabs.every(function(tab) { return tab.disabled; }) || tab.active) {
       this.select(tab);
     }
     this.tabs.push(tab);

@@ -11,19 +11,19 @@
     if (match) {
       this.parameterName = match[1];
     }
-  }
+  };
 
   PathSegment.prototype.toString = function() {
     return this.templated ? this.text.replace(/[\/{}]/g, '') : this.text;
-  }
+  };
 
   PathSegment.prototype.replaceWith = function(value) {
-     if (this.templated) {
-       return "/" + value;
-     } else {
-       return this.toString();
-     }
-  }
+    if (this.templated) {
+      return '/' + value;
+    } else {
+      return this.toString();
+    }
+  };
 
   function convertPathSegment(pathSegment) {
     return new PathSegment(pathSegment);
@@ -35,17 +35,17 @@
 
       return pathSegments.map(function(pathSegment) {
         return pathSegment.replaceWith(context[pathSegment.parameterName]);
-      }).join("");
-    }
+      }).join('');
+    };
 
     template.segments = pathSegments;
 
-    return template
+    return template;
   }
 
   RAML.Inspector.PathBuilder = {
     create: function(pathSegments) {
       return createTemplate(pathSegments.map(convertPathSegment));
     }
-  }
+  };
 })();
