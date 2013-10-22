@@ -29,9 +29,9 @@ RAML.Inspector = (function() {
   }
 
   function extractResources(basePathSegments, api, securitySchemes) {
-    var resources = [];
+    var resources = [], apiResources = api.resources || [];
 
-    api.resources.forEach(function(resource) {
+    apiResources.forEach(function(resource) {
       var pathSegments = basePathSegments.concat(resource.relativeUri);
       var overview = exports.resourceOverviewSource(pathSegments, resource);
       overview.methods.forEach(function(method) {
