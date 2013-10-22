@@ -15,6 +15,8 @@ describe("RAML.Inspector.create", function() {
     '  get: !!null',
     '  /{resourceId}:',
     '    get: !!null',
+    '/resource/search:',
+    '  get: !!null',
     '/another/resource:',
     '  get:',
     '    securedBy: [basic, oauth_2]'
@@ -28,15 +30,27 @@ describe("RAML.Inspector.create", function() {
       inspector = RAML.Inspector.create(this.api)
     });
 
-    it("flattens nested resources", function() {
-      var resources = inspector.resources;
-      expect(resources).toHaveLength(3);
+    function getGroupPaths(resourceGroup) {
+      return resourceGroup.map(function(resource) {
+        return resource.pathSegments.join('');
+      });
+    }
+
+    it("provides an array of resources grouped by initial path segments", function() {
+      var resourceGroups = inspector.resourceGroups;
+      expect(resourceGroups).toHaveLength(2);
+      expect(resourceGroups[0]).toHaveLength(3);
+      expect(resourceGroups[1]).toHaveLength(1);
+
+      var resourceGroupPaths = resourceGroups.map(getGroupPaths);
+      expect(resourceGroupPaths[0]).toEqual(['/resource', '/resource/{resourceId}', '/resource/search']);
+      expect(resourceGroupPaths[1]).toEqual(['/another/resource']);
     });
 
     it("creates a resource overview for each resource", function() {
       expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/resource'], jasmine.any(Object));
       expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/resource', '/{resourceId}'], jasmine.any(Object));
-      expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/another/resource' ], jasmine.any(Object));
+      expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/another', '/resource' ], jasmine.any(Object));
     });
 
     describe("query a resource method's security schemes", function() {
@@ -44,7 +58,7 @@ describe("RAML.Inspector.create", function() {
 
       describe("when a method is secured by Basic Authentication", function() {
         beforeEach(function() {
-          method = inspector.resources[2].methods[0];
+          method = inspector.resources[3].methods[0];
         });
 
         it("returns true", function() {
@@ -65,7 +79,7 @@ describe("RAML.Inspector.create", function() {
 
     describe("when a method is secured by OAuth 2", function() {
       beforeEach(function() {
-        method = inspector.resources[2].methods[0];
+        method = inspector.resources[3].methods[0];
       });
 
       it("returns true", function() {
