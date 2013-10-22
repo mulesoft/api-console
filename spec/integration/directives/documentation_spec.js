@@ -227,6 +227,26 @@ describe("RAML.Directives.documentation", function() {
       expect(response.first()).not.toBeVisible();
       expect(response.last()).toBeVisible();
     });
-
   });
+
+  describe("when the api does not specify a base uri", function() {
+    beforeEach(function() {
+      var raml = createRAML(
+        'title: Example API',
+        'version: v5',
+        '/resource:',
+        '  get:'
+      );
+
+      compileWithScopeFromFirstResourceAndMethodOfRAML("<documentation></documentation>", raml, function($el) {
+        setFixtures($el);
+        section = $("[role='try-it']");
+      });
+    });
+
+    it("disables the try it tab", function() {
+      expect(section).toHaveClass('disabled');
+    });
+  });
+
 });
