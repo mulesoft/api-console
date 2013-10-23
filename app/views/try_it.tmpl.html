@@ -1,11 +1,11 @@
 <section class="try-it">
 
   <form>
-    <security-schemes method="method" keychain="apiClient"></security-schemes>
+    <security-schemes ng-if="apiClient.securitySchemes" schemes="apiClient.securitySchemes" keychain="apiClient"></security-schemes>
     <named-parameters heading="Headers" parameters="method.headers" request-data="apiClient.headers"></named-parameters>
     <named-parameters heading="Query Parameters" parameters="method.queryParameters" request-data="apiClient.queryParameters"></named-parameters>
 
-    <fieldset class="media-types" ng-show="apiClient.supportsMediaType">
+    <fieldset class="radio-group media-types" ng-show="apiClient.supportsMediaType">
       <span class="radio-group-label">Content Type</span>
       <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
         <input type="radio" name="media-type" value="{{mediaType}}" ng-model="apiClient.mediaType">

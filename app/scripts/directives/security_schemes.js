@@ -7,7 +7,7 @@
       templateUrl: 'views/security_schemes.tmpl.html',
       replace: true,
       scope: {
-        method: '=',
+        schemes: '=',
         keychain: '='
       }
     };

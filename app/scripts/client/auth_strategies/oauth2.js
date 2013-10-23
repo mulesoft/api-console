@@ -76,7 +76,4 @@
   };
 
   RAML.Client.AuthStrategies.Oauth2 = Oauth2;
-  RAML.Client.AuthStrategies.oauth2 = function(scheme, credentials) {
-    return new Oauth2(scheme, credentials);
-  };
 })();

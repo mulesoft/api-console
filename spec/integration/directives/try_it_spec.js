@@ -299,6 +299,46 @@ describe("RAML.Controllers.tryIt", function() {
     });
   });
 
+  describe('unsecured usage', function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      'securitySchemes:',
+      '  - basic:',
+      '      type: Basic Authentication',
+      '/resource:',
+      '  get:',
+      '    securedBy: [basic]'
+    );
+
+    parseRAML(raml);
+
+    mockHttp(function(mock) {
+      mock
+        .when("get", 'http://www.example.com/resource')
+        .respondWith(200, "cool");
+    });
+
+    beforeEach(function() {
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+    });
+
+    it('executes a request with the supplied value for the custom header', function() {
+      var headerVerifier = function(headers) {
+        return !!headers['Authorization'].match(/Basic/);
+      };
+
+      $el.find('input[value="anonymous"]')[0].click();
+      expect($el.text()).toContain("You are using this API anonymously");
+      $el.find('button[role="try-it"]').click();
+
+      whenTryItCompletes(function() {
+        expect($el.find('.response .status .response-value')).toHaveText('200');
+      });
+    });
+  });
+
   describe('secured by basic auth', function() {
     var raml = createRAML(
       'title: Example API',
@@ -329,6 +369,7 @@ describe("RAML.Controllers.tryIt", function() {
         return !!headers['Authorization'].match(/Basic/);
       };
 
+      $el.find('input[value="basic"]')[0].click();
       $el.find('input[name="username"]').fillIn("user");
       $el.find('input[name="password"]').fillIn("password");
       $el.find('button[role="try-it"]').click();
@@ -387,6 +428,7 @@ describe("RAML.Controllers.tryIt", function() {
     });
 
     it('asks for client id and secret', function() {
+      $el.find('input[value="oauth2"]')[0].click();
       $el.find('input[name="clientId"]').fillIn("user");
       $el.find('input[name="clientSecret"]').fillIn("password");
       $el.find('button[role="try-it"]').click();

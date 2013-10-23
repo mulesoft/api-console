@@ -1,6 +1,10 @@
 'use strict';
 
 (function() {
+  function isEmpty(object) {
+    return Object.keys(object || {}).length === 0;
+  }
+
   function parseHeaders(headers) {
     var parsed = {}, key, val, i;
 
@@ -25,13 +29,23 @@
     return parsed;
   }
 
+  function securitySchemesFrom(client, method) {
+    var schemes = {}, securedBy = (method.securedBy || []).filter(function(name) { return name !== null; });
+    if (securedBy.length === 0) {
+      return;
+    }
+
+    securedBy.forEach(function(name) {
+      var scheme = client.securityScheme(name);
+      schemes[name] = scheme;
+    });
+
+    return schemes;
+  }
+
   var FORM_URLENCODED = 'application/x-www-form-urlencoded';
   var FORM_DATA = 'multipart/form-data';
   var apply;
-
-  function isEmpty(object) {
-    return Object.keys(object || {}).length === 0;
-  }
 
   var TryIt = function($scope) {
     this.baseUri = $scope.api.baseUri || '';
@@ -45,15 +59,6 @@
     this.queryParameters = {};
     this.formParameters = {};
     this.supportsCustomBody = this.supportsFormUrlencoded = this.supportsFormData = false;
-
-    if ($scope.method.requiresBasicAuthentication()) {
-      this.basicauth = {};
-    }
-
-    if ($scope.method.requiresOauth2()) {
-      this.securityScheme = $scope.method.requiresOauth2();
-      this.oauth2 = {};
-    }
 
     for (var mediaType in $scope.method.body) {
       this.supportsMediaType = true;
@@ -69,6 +74,7 @@
 
     $scope.apiClient = this;
     this.client = $scope.client = RAML.Client.create($scope.api);
+    this.securitySchemes = securitySchemesFrom(this.client, $scope.method);
 
     apply = function() {
       $scope.$apply.apply($scope, arguments);
@@ -131,12 +137,14 @@
       if (this.showBody()) { request.data(this.body); }
     }
 
-    var authStrategy = RAML.Client.AuthStrategies.anonymous();
+    var authStrategy;
 
-    if (this.basicauth) {
-      authStrategy = RAML.Client.AuthStrategies.basicAuth(this.basicauth);
-    } else if (this.oauth2) {
-      authStrategy = RAML.Client.AuthStrategies.oauth2(this.securityScheme, this.oauth2);
+    try {
+      var scheme = this.securitySchemes && this.securitySchemes[this.selectedScheme];
+      var credentials = this[this.selectedScheme];
+      authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
+    } catch (e) {
+      // custom straegies aren't supported yet.
     }
 
     authStrategy.authenticate().then(function(token) {

@@ -1,22 +1,25 @@
 describe('RAML.directives.securitySchemes', function() {
-  var keychain;
-
-  function createScopeForSecuritySchemes(method, keychain) {
+  function createScopeForSecuritySchemes(client, method, keychain) {
     return createScope(function(scope) {
       scope.keychain = keychain;
-      scope.method = method;
+      scope.schemes = {};
+
+      var securedBy = (method.securedBy || []).filter(function(name) { return name !== null; });
+      securedBy.forEach(function(name) {
+        scope.schemes[name] = client.securityScheme(name);
+      });
     });
   }
 
-  function compileAndSetFixture(method, keychain) {
-    scope = createScopeForSecuritySchemes(method, keychain);
-    $el = compileTemplate('<security-schemes method="method" keychain="keychain">', scope);
+  function compileAndSetFixture(client, method, keychain) {
+    scope = createScopeForSecuritySchemes(client, method, keychain);
+    $el = compileTemplate('<security-schemes schemes="schemes" keychain="keychain">', scope);
     setFixtures($el);
 
     return $el;
   }
 
-  var scope, $el, inspector, raml = createRAML(
+  var $el, client, inspector, keychain, scope, raml = createRAML(
     'title: Example API',
     'baseUri: http://www.example.com',
     'securitySchemes:',
@@ -44,11 +47,12 @@ describe('RAML.directives.securitySchemes', function() {
   beforeEach(function() {
     keychain = {};
     inspector = RAML.Inspector.create(this.api);
+    client = RAML.Client.create(this.api);
   });
 
   describe('given a method that is secured via Basic Auth', function() {
     beforeEach(function() {
-      $el = compileAndSetFixture(inspector.resources[0].methods[0], keychain);
+      $el = compileAndSetFixture(client, inspector.resources[0].methods[0], keychain);
     });
 
     it('renders the basic auth form', function() {
@@ -66,18 +70,18 @@ describe('RAML.directives.securitySchemes', function() {
       });
 
       it('populates username on the credentials object', function() {
-        expect(keychain.basicauth.username).toEqual('username');
+        expect(keychain.basic.username).toEqual('username');
       });
 
       it('populates password on the credentials object', function() {
-        expect(keychain.basicauth.password).toEqual('password');
+        expect(keychain.basic.password).toEqual('password');
       });
     });
   });
 
   describe('given a method that is secured via OAuth 2.0', function() {
     beforeEach(function() {
-      $el = compileAndSetFixture(inspector.resources[1].methods[0], keychain);
+      $el = compileAndSetFixture(client, inspector.resources[1].methods[0], keychain);
     });
 
     it('renders the OAuth 2.0 form', function() {
@@ -106,7 +110,7 @@ describe('RAML.directives.securitySchemes', function() {
 
   describe('given a method that is not secured', function() {
     beforeEach(function() {
-      $el = compileAndSetFixture(inspector.resources[2].methods[0], keychain);
+      $el = compileAndSetFixture(client, inspector.resources[2].methods[0], keychain);
     });
 
     it('does not render the basic auth form', function() {
