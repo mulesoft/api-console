@@ -1,11 +1,52 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700);
-@import "commons.less";
-@import "../../vendor/font-awesome/less/font-awesome.less";
-@import "../../vendor/codemirror.less";
-@import "overrides.less";
-@import "forms.less";
-@import "buttons.less";
-@import "raml-console.less";
-@import "root_documentation.less";
-@import "parameter_table.less";
 
+// Responsive
+@responsive-switch: 750px;
+
+@border-color-gray: rgb(218,220,221);
+@fill-color-dark-gray: #f4f6f8;
+@background-selected-color: rgb(251, 251, 251);
+@operation-active-background: rgb(62,80,90);
+
+// Method colors
+@get-color: rgb(0,120,202);
+@get-inactive-color: rgb(124,188,228);
+@post-color: rgb(65,210,92);
+@post-inactive-color: rgb(158,233,171);
+@put-color: rgb(219,181,29);
+@put-inactive-color: rgb(253,198,146);
+@delete-color: #f14862;
+@delete-inactive-color: rgb(247,143,150);
+@patch-color: rgb(170,85,170);
+@patch-inactive-color: rgb(170,85,170);
+@options-color: rgb(255,136,68);
+@options-inactive-color: rgb(255,136,68);
+@head-color: rgb(255,198,208);
+@head-inactive-color: rgb(255,198,208);
+@unknown-color: gray;
+@unknown-inactive-color: lightgray;
+
+body#raml-console-unembedded {
+  margin: 0;
+}
+
+#raml-console-unembedded, raml-console article {
+  font-family: 'Helvetica', sans-serif;
+  background-color: #E6E7EB;
+  color: #333;
+}
+
+raml-console article#raml-console {
+  margin: 0 20px 20px;
+
+  @import "bootstrap/less/bootstrap";
+  @import "commons.less";
+  @import "../../vendor/font-awesome/less/font-awesome.less";
+  @import "../../vendor/codemirror.less";
+  @import "overrides.less";
+  @import "forms.less";
+  @import "buttons.less";
+  @import "raml-console.less";
+  @import "root_documentation.less";
+  @import "parameter_table.less";
+}

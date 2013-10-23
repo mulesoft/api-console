@@ -1,16 +1,16 @@
-<article role="api-console">
+<article role="api-console" id="raml-console">
   <section role="error" ng-if="parseError">
     {{parseError}}
   </section>
 
-  <h1 id="api-title">{{api.title}}</h1>
+  <h1 id="raml-console-api-title">{{api.title}}</h1>
 
-  <nav id="main-nav" ng-if='ramlConsole.showRootDocumentation()' ng-switch='ramlConsole.view'>
+  <nav id="raml-console-main-nav" ng-if='ramlConsole.showRootDocumentation()' ng-switch='ramlConsole.view'>
     <a class="btn inverted" ng-switch-when='rootDocumentation' role="view-api-reference" ng-click='ramlConsole.gotoView("apiReference")'>&larr; API Reference</a>
     <a class="btn inverted" ng-switch-default role="view-root-documentation" ng-click='ramlConsole.gotoView("rootDocumentation")'>Documentation &rarr;</a>
   </nav>
 
-  <div id="content" ng-switch='ramlConsole.view'>
+  <div id="raml-console-content" ng-switch='ramlConsole.view'>
     <div ng-switch-when='rootDocumentation'>
       <root-documentation></root-documentation>
     </div>

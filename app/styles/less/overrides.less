@@ -1,90 +1,93 @@
-raml-console .CodeMirror .CodeMirror-cursor { visibility: hidden; }
+.CodeMirror .CodeMirror-cursor { visibility: hidden; }
 
-.bootstrap {
-  h2 {
-    line-height: 20px;
+[class^="icon-"], [class*=" icon-"] {
+  background-image: none;
+}
+
+
+h2 {
+  line-height: 20px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+code {
+  padding: 0;
+  color: #333;
+  background: transparent;
+  border: none;
+  font-size: inherit;
+}
+
+.accordion {
+  margin-bottom: 0;
+}
+
+.accordion-group {
+  margin-bottom: 0;
+  padding: 0;
+  border: none;
+  .border-radius(0);
+}
+
+.accordion-heading {
+  border-top: 1px solid #E4E4E6;
+  border-bottom: 1px solid #E4E4E6;
+}
+
+.accordion-inner {
+  padding: 0;
+  border: none;
+}
+
+.nav-tabs {
+  margin-bottom: 0;
+}
+
+.nav-tabs li {
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: hsl(195, 60%, 35%) !important;
+  background-repeat: repeat-x;
+  #gradient.vertical(#2d95b7, #23748e);
+  border-color: #23748e #23748e hsl(195, 60%, 32.5%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.16);
+  -webkit-font-smoothing: antialiased;
+}
+
+.icon-spinner {
+  width: auto;
+  height: auto;
+  font-size: 24px;
+  line-height: inherit;
+}
+
+form {
+  legend {
+    border-bottom: none;
+    margin-bottom: 10px;
   }
 
-  ul {
+  .form-actions {
+    padding: 15px 0 10px;
+    border: 0;
+    background-color: transparent;
     margin: 0;
-    padding: 0;
-    list-style: none;
   }
+}
 
-  code {
-    padding: 0;
-    color: #333;
-    background: transparent;
-    border: none;
-    font-size: inherit;
-  }
-
-  .accordion {
-    margin-bottom: 0;
-  }
-
-  .accordion-group {
-    margin-bottom: 0;
-    padding: 0;
-    border: none;
-    .border-radius(0);
-  }
-
-  .accordion-heading {
-    border-top: 1px solid #E4E4E6;
-    border-bottom: 1px solid #E4E4E6;
-  }
-
-  .accordion-inner {
-    padding: 0;
-    border: none;
-  }
-
-  .nav-tabs {
-    margin-bottom: 0;
-  }
-
-  .nav-tabs li {
-    cursor: pointer;
-  }
-
-  .btn-primary {
-    background-color: hsl(195, 60%, 35%) !important;
-    background-repeat: repeat-x;
-    .bootstrap #gradient.vertical(#2d95b7, #23748e);
-    border-color: #23748e #23748e hsl(195, 60%, 32.5%);
-    color: #fff !important;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.16);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .icon-spinner {
-    width: auto;
-    height: auto;
-    font-size: 24px;
-    line-height: inherit;
-  }
-
-  form {
-    legend {
-      border-bottom: none;
-      margin-bottom: 10px;
-    }
-
-    .form-actions {
-      padding: 15px 0 10px;
-      border: 0;
-      background-color: transparent;
-      margin: 0;
-    }
-  }
-
-  .label {
-    color: #bbb;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-shadow: none;
-    background: none;
-    padding: 0 5px 0 0;
-  }
+.label {
+  color: #bbb;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: none;
+  background: none;
+  padding: 0 5px 0 0;
 }

@@ -1,65 +1,53 @@
-@import "commons";
+h2 {
+  line-height: 20px;
+}
 
-raml-console {
-  article {
-    margin: 0 20px 20px;
+.tab-pane {
+  padding: 20px;
+}
 
-    h2 {
-      line-height: 20px;
+#raml-console-api-title {
+  float: left;
+  font-size: 20px;
+  line-height: 1em;
+  margin: 20px 0;
+}
+
+#raml-console-api-reference {
+  section:first-of-type {
+    > h4, > h5, > h6 {
+      margin-top: 0;
     }
+  }
 
-    code {
-      font-family: 'Courier New', 'Courier', monospace;
-    }
+  h4, h5, legend {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    line-height: 1.15em;
+  }
 
-    .tab-pane {
-      padding: 20px;
-    }
+  h4, legend {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
 
-    #api-title {
-      float: left;
-      font-size: 20px;
-      line-height: 1em;
-      margin: 20px 0;
-    }
+  h4 {
+    margin-top: 25px;
+  }
 
-    #api-reference {
-      section:first-of-type {
-        > h4, > h5, > h6 {
-          margin-top: 0;
-        }
-      }
-
-      h4, h5, legend {
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 700;
-        line-height: 1.15em;
-      }
-
-      h4, legend {
-        font-size: 18px;
-        margin-bottom: 5px;
-      }
-
-      h4 {
-        margin-top: 25px;
-      }
-
-      h5 {
-        margin-top: 20px;
-        margin-bottom: 5px;
-      }
-    }
+  h5 {
+    margin-top: 20px;
+    margin-bottom: 5px;
   }
 }
 
-#main-nav {
+#raml-console-main-nav {
   float: right;
   margin-right: 10px;
   margin-top: 13px;
 }
 
-#content {
+#raml-console-content {
   clear: both;
 }
 
@@ -89,13 +77,11 @@ ul[role=traits] {
 }
 
 [role=resource] {
-  border-top: 4px solid #e4e4e6;
-
   &:first-child {
     border: none;
   }
 
-  .expanded& {
+  &.expanded {
     border-left: 5px solid #497CA1;
   }
 
@@ -112,7 +98,7 @@ ul[role=traits] {
       margin: 0 0 10px 0;
       font-size: 16px;
     }
-    .bootstrap .clearfix()
+    .clearfix()
   }
 }
 
@@ -164,10 +150,12 @@ ul[role=methods] {
   }
 
   i {
+    display: inline-block;
     font-size: 24px;
-    line-height: 20px;
-    vertical-align: middle;
+    line-height: 14px;
+    vertical-align: text-top;
     color: #CBCDCC;
+    margin-top: 1px;
   }
 }
 
@@ -195,7 +183,6 @@ span[role=segment] {
   float: left;
   font-size: 12px;
   line-height: 24px;
-  padding-top: 5px;
 
   li {
     display: inline-block;
@@ -217,7 +204,7 @@ span[role=segment] {
 }
 
 .try-it {
-  .bootstrap .clearfix;
+  .clearfix;
 
   form {
     margin-bottom: 0;
@@ -242,7 +229,7 @@ span[role=segment] {
     }
 
     textarea[name=body] {
-      .bootstrap .box-sizing(border-box);
+      .box-sizing(border-box);
       width: 100%;
       font-family: monospace;
       height: 7em;
@@ -275,7 +262,7 @@ span[role=segment] {
       float: right;
     }
 
-    .bootstrap .clearfix
+    .clearfix
   }
 
 
