@@ -108,8 +108,8 @@ describe('API Documentation', function() {
       expect(documentation.getText()).toMatch(new RegExp('text/xml'));
       expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(documentation.getText()).toMatch(new RegExp("<id>1511685</id>"));
-    });
-  }, 10000);
+    }, 10000);
+  });
 
   describe("responses tab", function() {
     raml = createRAML(
@@ -148,6 +148,6 @@ describe('API Documentation', function() {
 
       expect(documentation.getInnerHtml()).toMatch(/<em>Success<\/em> description/);
       expect(documentation.getInnerHtml()).toMatch(/<em>Error<\/em> description/);
-    });
-  }, 10000);
+    }, 10000);
+  });
 });
