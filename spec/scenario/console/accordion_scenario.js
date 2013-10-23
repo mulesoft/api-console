@@ -81,14 +81,15 @@ describe('accordion view of API', function() {
 
     it('provides each method the resource supports', function() {
       getResources().then(function(resources) {
+        var resource = resources[0];
+        resource.$('.accordion-toggle').click();
         var resourceMethodSumaries = resources[0].$$('[role="methodSummary"]');
         expect(resourceMethodSumaries).toHaveLength(2);
 
-        var resource = resources[0];
-        resource.$('.accordion-toggle').click();
         var topLevelMethods = resource.$('[role="methods"]');
         expect(topLevelMethods.isDisplayed()).toBeFalsy()
 
+        resources[1].$('.accordion-toggle').click();
         var resourceMethodSumaries = resources[1].$$('[role="methodSummary"]');
         expect(resourceMethodSumaries).toHaveLength(3);
       });

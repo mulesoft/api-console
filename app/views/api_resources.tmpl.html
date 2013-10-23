@@ -2,7 +2,7 @@
   <div class="resourceGroup" ng-repeat="resourceGroup in api.resourceGroups">
     <div ng-class="{expanded: resource.isOpen}" class='accordion-group' role="resource" ng-repeat="resource in resourceGroup">
       <resource-summary class='accordion-heading accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'></resource-summary>
-      <div class='accordion-body' ng-show='resource.isOpen'>
+      <div class='accordion-body' ng-if='resource.isOpen'>
         <div class='accordion-inner'>
           <div class='accordion' role="methods">
             <method ng-repeat="method in resource.methods"></method>
