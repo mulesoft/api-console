@@ -1,6 +1,8 @@
 # RAML Console
 
-An API console for RAML documents. The RAML Console allows browsing of API documentation and in-browser testing of API methods.
+[![Build Status](https://travis-ci.org/mulesoft/api-console.png)](https://travis-ci.org/mulesoft/api-console)
+
+An API console for [RAML](http://raml.org) (Restful Api Modeling Language) documents. The RAML Console allows browsing of API documentation and in-browser testing of API methods.
 
 ## Configuration
 
@@ -53,10 +55,3 @@ To run only a portion of the tests, you can use
 
 The scenario tests use angular's [protractor](https://github.com/angular/protractor) framework, and run via selenium in firefox. Selenium is automatically downloaded, but you'll need firefox to be installed.
 
-### Continuous Integration and Acceptance
-
-Tests for the console are running on [Travis CI](https://magnum.travis-ci.com/restful-api-modeling-lang/console).
-
-Acceptance URLs:
-* [Standalone](https://54.227.235.249/artifacts/console/master/index.acceptance.html)
-* [Integrated with Editor](https://54.227.235.249/artifacts/editor/chores/remove-console-dependencies/)
