@@ -33,8 +33,9 @@ RAML.Inspector = (function() {
     var resources = [], apiResources = api.resources || [];
 
     apiResources.forEach(function(resource) {
-      var pathSegments = basePathSegments.concat(resource.relativeUri);
-      var overview = exports.resourceOverviewSource(pathSegments, resource);
+      var relativePathSegments = resource.relativeUri.match(/\/[^\/]*/g);
+      var resourcePathSegments = basePathSegments.concat(relativePathSegments);
+      var overview = exports.resourceOverviewSource(resourcePathSegments, resource);
       overview.methods.forEach(function(method) {
         extendMethod(method, securitySchemes);
       });
@@ -42,7 +43,7 @@ RAML.Inspector = (function() {
       resources.push(overview);
 
       if (resource.resources) {
-        var extracted = extractResources(pathSegments, resource, securitySchemes);
+        var extracted = extractResources(resourcePathSegments, resource, securitySchemes);
         extracted.forEach(function(resource) {
           resources.push(resource);
         });
@@ -50,6 +51,20 @@ RAML.Inspector = (function() {
     });
 
     return resources;
+  }
+
+  function groupResources(resources) {
+    var currentPrefix, resourceGroups = [];
+
+    (resources || []).forEach(function(resource) {
+      if (resource.pathSegments[0] !== currentPrefix) {
+        currentPrefix = resource.pathSegments[0];
+        resourceGroups.push([]);
+      }
+      resourceGroups[resourceGroups.length-1].push(resource);
+    });
+
+    return resourceGroups;
   }
 
   exports.resourceOverviewSource = function(pathSegments, resource) {
@@ -67,6 +82,8 @@ RAML.Inspector = (function() {
 
   exports.create = function(api) {
     api.resources = extractResources([], api, api.securitySchemes);
+    api.resourceGroups = groupResources(api.resources);
+
     return api;
   };
 

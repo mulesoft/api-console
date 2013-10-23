@@ -30,7 +30,11 @@ module.exports = function(grunt) {
     function runSelenium(callback) {
       var selenium = spawn('java', ['-jar', 'selenium/selenium-server-standalone-2.35.0.jar']);
 
+      grunt.log.write('Waiting for Selenium to start...');
+
       selenium.stdout.on('data', function (data) {
+        // Uncomment for selenium debugging messages
+        // grunt.log.write(data);
         if (data.toString().indexOf('Started SocketListener') !== -1) {
           grunt.log.write('\nServer started successfully!');
           grunt.log.writeln('\nStarting tests now...\n');
@@ -39,6 +43,14 @@ module.exports = function(grunt) {
             process.kill(selenium.pid, signal);
           });
           callback();
+        }
+      });
+      selenium.on('exit', function (code, signal) {
+        console.log("ERROR: Selenium exited with code: " + code);
+        if (signal) {
+          process.kill(process.pid, signal);
+        } else {
+          process.exit(code);
         }
       });
     }

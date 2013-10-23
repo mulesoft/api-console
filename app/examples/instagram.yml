@@ -2,7 +2,7 @@
 ---
 title: Instagram API
 version: v1
-baseUri: https://api.instagram.com/v1/
+baseUri: https://api.instagram.com/{version}
 securitySchemes:
   - oauth_2_0:
       description: |
@@ -3059,7 +3059,7 @@ documentation:
                   "version": "1.0",
                   "width": 612
               }
-/p/{shortcode}/media/:
+/p/{shortcode}/media:
   uriParameters:
     shortcode:
       type: string
