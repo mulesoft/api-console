@@ -36,7 +36,7 @@
     }
 
     securedBy.forEach(function(name) {
-      if (typeof name === "object") {
+      if (typeof name === 'object') {
         return;
       }
       var scheme = client.securityScheme(name);
@@ -78,6 +78,7 @@
     $scope.apiClient = this;
     this.client = $scope.client = RAML.Client.create($scope.api);
     this.securitySchemes = securitySchemesFrom(this.client, $scope.method);
+    this.keychain = $scope.ramlConsole.keychain;
 
     apply = function() {
       $scope.$apply.apply($scope, arguments);
@@ -143,8 +144,8 @@
     var authStrategy;
 
     try {
-      var scheme = this.securitySchemes && this.securitySchemes[this.selectedScheme];
-      var credentials = this[this.selectedScheme];
+      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
+      var credentials = this.keychain[this.keychain.selectedScheme];
       authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
     } catch (e) {
       // custom straegies aren't supported yet.
