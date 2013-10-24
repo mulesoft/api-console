@@ -1,0 +1,22 @@
+<section collapsible ng-repeat='(responseCode, response) in method.responses'>
+  <h4 collapsible-toggle>
+    <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
+    {{responseCode}}
+  </h4>
+  <div collapsible-content>
+    <section role='response'>
+      <p markdown='response.description'></p>
+      <section ng-repeat="(mediaType, definition) in response.body track by mediaType">
+        <h5>{{mediaType}}</h5>
+        <section ng-if="definition.schema">
+          <h6>Schema</h6>
+          <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && documentation.responsesActive"></div>
+        </section>
+        <section ng-if="definition.example">
+          <h6>Example</h6>
+          <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && documentation.responsesActive"></div>
+        </section>
+      </section>
+    </section>
+  </div>
+</section>
