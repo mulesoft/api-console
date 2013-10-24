@@ -25,6 +25,7 @@ describe("RAML.Controllers.TryIt", function() {
     return {
       api: { baseUri: "http://example.com" },
       method: method,
+      ramlConsole: { keychain: {} },
       $apply: jasmine.createSpy()
     };
   }

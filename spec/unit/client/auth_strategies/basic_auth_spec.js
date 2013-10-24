@@ -9,7 +9,7 @@ describe('RAML.Client.AuthStrategies.basicAuth', function() {
         username: "user",
         password: "pass"
       }
-      scheme = RAML.Client.AuthStrategies.basicAuth(keychain);
+      scheme = new RAML.Client.AuthStrategies.Basic(null, keychain);
 
       token = undefined;
 

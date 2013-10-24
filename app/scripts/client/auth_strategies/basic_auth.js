@@ -24,7 +24,4 @@
   };
 
   RAML.Client.AuthStrategies.Basic = Basic;
-  RAML.Client.AuthStrategies.basicAuth = function(credentials) {
-    return new Basic(null, credentials);
-  };
 })();
