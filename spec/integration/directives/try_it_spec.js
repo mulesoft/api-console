@@ -333,7 +333,6 @@ describe("RAML.Controllers.tryIt", function() {
       };
 
       $el.find('input[value="anonymous"]')[0].click();
-      expect($el.text()).toContain("You are using this API anonymously");
       $el.find('button[role="try-it"]').click();
 
       whenTryItCompletes(function() {

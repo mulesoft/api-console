@@ -1,16 +1,19 @@
-<div>
-  <fieldset class="radio-group">
+<div class="authentication">
+  <fieldset class="labelled-radio-group">
     <legend>Authentication</legend>
-    <label class="radio">
-      <input type="radio" name="scheme" value="anonymous" ng-model="keychain.selectedScheme"> Anonymous </input>
-    </label>
-    <label class="radio" ng-repeat="(name, scheme) in schemes">
-      <input type="radio" name="scheme" value="{{name}}" ng-model="keychain.selectedScheme"> {{ name }} </input>
-    </label>
+    <label for="scheme">type</label>
+
+    <div class="radio-group">
+      <label class="radio">
+        <input type="radio" name="scheme" value="anonymous" ng-model="keychain.selectedScheme"> Anonymous </input>
+      </label>
+      <label class="radio" ng-repeat="(name, scheme) in schemes">
+        <input type="radio" name="scheme" value="{{name}}" ng-model="keychain.selectedScheme"> {{ name }} </input>
+      </label>
+    </div>
   </fieldset>
 
   <fieldset>
-    <div ng-show="!keychain.selectedScheme || keychain.selectedScheme == 'anonymous'">You are using this API anonymously.</div>
     <div ng-repeat="(name, scheme) in schemes">
       <div ng-show="keychain.selectedScheme == name">
         <div ng-switch="scheme.type">
