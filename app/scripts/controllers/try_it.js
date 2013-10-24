@@ -36,6 +36,9 @@
     }
 
     securedBy.forEach(function(name) {
+      if (typeof name === "object") {
+        return;
+      }
       var scheme = client.securityScheme(name);
       schemes[name] = scheme;
     });

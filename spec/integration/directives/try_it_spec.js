@@ -384,59 +384,88 @@ describe("RAML.Controllers.tryIt", function() {
   });
 
   describe('secured by oauth', function() {
-    var raml = createRAML(
-      'title: Example API',
-      'baseUri: http://www.example.com',
-      'securitySchemes:',
-      '  - oauth2:',
-      '      type: OAuth 2.0',
-      '      settings:',
-      '        authorizationUri: https://example.com/oauth/authorize',
-      '        accessTokenUri: https://example.com/oauth/access_token',
-      '/resource:',
-      '  get:',
-      '    securedBy: [oauth2]'
-    );
+    describe("by default", function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        'securitySchemes:',
+        '  - oauth2:',
+        '      type: OAuth 2.0',
+        '      settings:',
+        '        authorizationUri: https://example.com/oauth/authorize',
+        '        accessTokenUri: https://example.com/oauth/access_token',
+        '/resource:',
+        '  get:',
+        '    securedBy: [oauth2]'
+      );
 
-    parseRAML(raml);
+      parseRAML(raml);
 
-    beforeEach(function() {
-      RAML.Settings.oauth2RedirectUri = "http://example.com/oauth2.html";
+      beforeEach(function() {
+        RAML.Settings.oauth2RedirectUri = "http://example.com/oauth2.html";
+      });
+
+      mockHttp(function(mock) {
+        mock
+          .when('post', 'https://example.com/oauth/access_token', {
+            client_id: 'user',
+            client_secret: 'password',
+            code: 'code',
+            grant_type: 'authorization_code',
+            redirect_uri: RAML.Settings.oauth2RedirectUri
+          }).respondWith(200, JSON.stringify({ access_token: 'token' }));
+      });
+
+      mockHttp(function(mock) {
+        mock
+          .when('get', 'http://www.example.com/resource')
+          .respondWith(200, 'cool');
+      });
+
+      beforeEach(function() {
+        scope = createScopeForTryIt(this.api);
+        $el = compileTemplate('<try-it></try-it>', scope);
+        spyOn(window, 'open');
+      });
+
+      it('asks for client id and secret', function() {
+        $el.find('input[value="oauth2"]')[0].click();
+        $el.find('input[name="clientId"]').fillIn("user");
+        $el.find('input[name="clientSecret"]').fillIn("password");
+        $el.find('button[role="try-it"]').click();
+
+        window.RAML.authorizationSuccess('code');
+
+        whenTryItCompletes(function() {
+          expect($el.find('.response .status .response-value')).toHaveText('200');
+        });
+      });
     });
 
-    mockHttp(function(mock) {
-      mock
-        .when('post', 'https://example.com/oauth/access_token', {
-          client_id: 'user',
-          client_secret: 'password',
-          code: 'code',
-          grant_type: 'authorization_code',
-          redirect_uri: RAML.Settings.oauth2RedirectUri
-        }).respondWith(200, JSON.stringify({ access_token: 'token' }));
-    });
+    describe("when parameterized", function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        'securitySchemes:',
+        '  - oauth2:',
+        '      type: OAuth 2.0',
+        '      settings:',
+        '        authorizationUri: https://example.com/oauth/authorize',
+        '        accessTokenUri: https://example.com/oauth/access_token',
+        '/resource:',
+        '  get:',
+        '    securedBy: [oauth2: { scopes: [ ADMINISTRATOR ] } ]'
+      );
 
-    mockHttp(function(mock) {
-      mock
-        .when('get', 'http://www.example.com/resource')
-        .respondWith(200, 'cool');
-    });
+      parseRAML(raml);
 
-    beforeEach(function() {
-      scope = createScopeForTryIt(this.api);
-      $el = compileTemplate('<try-it></try-it>', scope);
-      spyOn(window, 'open');
-    });
+      beforeEach(function() {
+        scope = createScopeForTryIt(this.api);
+        $el = compileTemplate('<try-it></try-it>', scope);
+      });
 
-    it('asks for client id and secret', function() {
-      $el.find('input[value="oauth2"]')[0].click();
-      $el.find('input[name="clientId"]').fillIn("user");
-      $el.find('input[name="clientSecret"]').fillIn("password");
-      $el.find('button[role="try-it"]').click();
-
-      window.RAML.authorizationSuccess('code');
-
-      whenTryItCompletes(function() {
-        expect($el.find('.response .status .response-value')).toHaveText('200');
+      it("is unsupported", function() {
+        expect($el).not.toContain('input[value="oauth2"]');
       });
     });
   });
