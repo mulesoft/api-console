@@ -28,20 +28,21 @@ describe("RAML.Controllers.tryIt", function() {
         .respondWith(200, "OK");
     });
 
+    var raml = createRAML(
+      'title: Example API',
+      'version: v5',
+      'baseUri: http://www.example.com/{version}',
+      '/resource:',
+      '  get:'
+    );
+
+    parseRAML(raml);
+
     beforeEach(function() {
       RAML.Settings.proxy = 'http://www.someproxyserver.com/proxy-path/';
 
-      var raml = createRAML(
-        'title: Example API',
-        'version: v5',
-        'baseUri: http://www.example.com/{version}',
-        '/resource:',
-        '  get:'
-      );
-
-      compileWithScopeFromFirstResourceAndMethodOfRAML(
-        "<try-it></try-it>", raml, function(compiled) { $el = compiled; }
-      );
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
     });
 
     afterEach(function() {
@@ -65,18 +66,19 @@ describe("RAML.Controllers.tryIt", function() {
         .respondWith(200, "OK");
     });
 
-    beforeEach(function() {
-      var raml = createRAML(
-        'title: Example API',
-        'version: v5',
-        'baseUri: http://www.example.com/{version}',
-        '/resource:',
-        '  get:'
-      );
+    var raml = createRAML(
+      'title: Example API',
+      'version: v5',
+      'baseUri: http://www.example.com/{version}',
+      '/resource:',
+      '  get:'
+    );
 
-      compileWithScopeFromFirstResourceAndMethodOfRAML(
-        "<try-it></try-it>", raml, function(compiled) { $el = compiled; }
-      );
+    parseRAML(raml);
+
+    beforeEach(function() {
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
     });
 
     it('executes a request with the version interpolated into the URL', function() {
