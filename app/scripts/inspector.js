@@ -68,16 +68,16 @@ RAML.Inspector = (function() {
   }
 
   exports.resourceOverviewSource = function(pathSegments, resource) {
-    var methods = (resource.methods || []);
+    resource.name = resource.displayName;
+    delete resource.displayName;
+    resource.traits = resource.is;
+    delete resource.is;
+    resource.resourceType = resource.type;
+    delete resource.type;
+    resource.pathSegments = pathSegments;
+    resource.methods = (resource.methods || []);
 
-    return {
-      pathSegments: pathSegments,
-      name: resource.displayName,
-      methods: methods,
-      traits: resource.is,
-      resourceType: resource.type,
-      uriParameters: resource.uriParameters
-    };
+    return resource;
   };
 
   exports.create = function(api) {

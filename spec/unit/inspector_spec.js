@@ -12,6 +12,7 @@ describe("RAML.Inspector.create", function() {
     '        accessTokenUri: http://example.com',
     '        authorizationUri: http://example.com',
     '/resource:',
+    '  description: The first resource',
     '  get: !!null',
     '  /{resourceId}:',
     '    get: !!null',
@@ -105,6 +106,7 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
   }
 
   var resource = {
+    description: "The long description about test resource",
     displayName: "Test Resource",
     is: ["secured"],
     type: "Collection",
@@ -118,6 +120,10 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
 
   beforeEach(function() {
     this.resourceOverview = RAML.Inspector.resourceOverviewSource(['/resource'], resource);
+  });
+
+  it("copies the description", function() {
+    expect(this.resourceOverview.description).toEqual(resource.description);
   });
 
   it("copies the supplied path segments", function() {
