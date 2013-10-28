@@ -1,5 +1,7 @@
 <section role='documentation'>
-  <p ng-show="method.description">Description: {{method.description}}</p>
+  <div role="description" ng-show="method.description">
+    <div markdown="method.description"></div>
+  </div>
 
   <tabset>
     <tab role='documentation-parameters' heading="Parameters" disabled="!documentation.hasParameterDocumentation">
