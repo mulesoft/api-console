@@ -118,8 +118,8 @@ describe('accordion view of API', function() {
       var resource = openResource(1);
       var method = openMethod(1, resource);
 
-      var description = method.$('p');
-      waitUntilTextEquals(description, 'Description: Get all resources');
+      var description = method.$('div[role="description"]');
+      expect(description.getText()).toEqual('Get all resources')
     });
   });
 });
