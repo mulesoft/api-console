@@ -1,4 +1,4 @@
-function compileWithScopeFromFirstResourceAndMethodOfRAML(directive, raml, callback) {
+function compileWithScopeFromFirstResourceAndMethodOfRAML(html, raml, callback) {
   var parsed = {},
       completed = false;
 
@@ -21,7 +21,7 @@ function compileWithScopeFromFirstResourceAndMethodOfRAML(directive, raml, callb
   waitsFor(function() { return completed; }, "RAML parse took too long", 5000);
 
   runs(function() {
-    this.$el = compileTemplate(directive, createScopeWithFirstResourceAndMethod(parsed));
+    this.$el = compileTemplate(html, createScopeWithFirstResourceAndMethod(parsed));
     if (callback) {
       callback(this.$el);
     }

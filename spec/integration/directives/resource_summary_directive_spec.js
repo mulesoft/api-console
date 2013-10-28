@@ -3,25 +3,49 @@ describe("RAML.Directives.resourceSummary", function() {
 
   var scope, $el;
 
-  describe('given RAML with a resourceType with parameters', function() {
-    beforeEach(function() {
-      scope = createScope(function(scope) {
-        scope.resource = {
-          resourceType: {
-            typedcollection: {
-              schema: 'someschema'
-            }
-          }
-        }
-      });
+  describe("given RAML with a resourceType with parameters", function() {
+    var raml = createRAML(
+      'title: Test',
+      'resourceTypes:',
+      '  - typedcollection: {}',
+      '/somewhere:',
+      '  type: typedcollection',
+      '  get:'
+    );
 
-     $el = compileTemplate('<resource-summary></resource-summary>', scope);
+    beforeEach(function() {
+      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource-summary></resource-summary>', raml);
    });
 
-    it('displays the name of the resourceType', function() {
-      var resourceType = $el.find("[role=resourceType]").text();
+    it("displays the name of the resourceType", function() {
+      var resourceType = this.$el.find('[role="resourceType"]').text();
       expect(resourceType).toEqual('typedcollection');
     });
+  });
+
+  describe("given RAML with a parameterized trait", function() {
+    var raml = createRAML(
+      'title: Test',
+      'traits:',
+      '  - chau:',
+      '      displayName: name',
+      '      description: <<param1>>',
+      '/h:',
+      '  is:',
+      '    - chau:',
+      '       param1: hola',
+      '  get:'
+    );
+
+    beforeEach(function() {
+      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource-summary></resource-summary>', raml);
+    });
+
+    it("displays only the name of the trait", function() {
+      var traits = this.$el.find('[role="traits"]').text().trim();
+      expect(traits).toEqual('chau');
+    });
+
 
   });
 

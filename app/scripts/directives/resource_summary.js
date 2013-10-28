@@ -1,17 +1,25 @@
 (function() {
   'use strict';
 
+  function stringForDisplay(objectOrString) {
+    if (angular.isObject(objectOrString)) {
+      return Object.keys(objectOrString)[0];
+    } else {
+      return objectOrString;
+    }
+  }
+
   var controller = function($scope) {
     $scope.resourceSummary = this;
     this.resource = $scope.resource;
   };
 
   controller.prototype.type = function() {
-    if (angular.isObject(this.resource.resourceType)) {
-      return Object.keys(this.resource.resourceType)[0];
-    } else {
-      return this.resource.resourceType;
-    }
+    return stringForDisplay(this.resource.resourceType);
+  };
+
+  controller.prototype.traits = function() {
+    return (this.resource.traits || []).map(stringForDisplay);
   };
 
   RAML.Directives.resourceSummary = function() {
