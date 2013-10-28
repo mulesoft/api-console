@@ -1,35 +1,35 @@
-describe('accordion view of API', function() {
+describe("accordion view of API", function() {
   var ptor = protractor.getInstance();
 
   var getResources = function() {
     return ptor.$$('[role="api-console"] [role="resource"]');
   }
 
-  describe('top-level view', function() {
+  describe("top-level view", function() {
     raml = [
-      "#%RAML 0.8",
-      "---",
-      "title: Example API",
-      "baseUri: http://www.example.com",
-      "traits:",
-      "  - secured:",
-      "      description: Some requests require authentication",
-      "resourceTypes:",
-      "  - collection:",
-      "      description: bunk",
-      "/resource:",
-      "  get: !!null",
-      "  /{resourceId}:",
-      "    get: !!null",
-      "    post: !!null",
-      "/another/resource:",
-      "  type: collection",
-      "  is: [secured]",
-      "  get: !!null"].join('\n');
+      '#%RAML 0.8',
+      '---',
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      'traits:',
+      '  - secured:',
+      '      description: Some requests require authentication',
+      'resourceTypes:',
+      '  - collection:',
+      '      description: bunk',
+      '/resource:',
+      '  get: !!null',
+      '  /{resourceId}:',
+      '    get: !!null',
+      '    post: !!null',
+      '/another/resource:',
+      '  type: collection',
+      '  is: [secured]',
+      '  get: !!null'].join('\n');
 
     loadRamlFixture(raml);
 
-    it('renders an overview of each API resource', function() {
+    it("renders an overview of each API resource", function() {
       var body = ptor.$('body');
       expect(body.getText()).toMatch(/Example API/);
 
@@ -64,25 +64,30 @@ describe('accordion view of API', function() {
     });
   });
 
-  describe('resource detail view and method summaries', function() {
+  describe("resource detail view and method summaries", function() {
     raml = createRAML(
-      "title: Example API",
-      "baseUri: http://www.example.com",
-      "/resource:",
-      "  get: !!null",
-      "  post: !!null",
-      "/another-resource:",
-      "  get: !!null",
-      "  put: !!null",
-      "  delete: !!null"
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      '/resource:',
+      '  description: This resource defeats all others',
+      '  get: !!null',
+      '  post: !!null',
+      '/another-resource:',
+      '  get: !!null',
+      '  put: !!null',
+      '  delete: !!null'
     );
 
     loadRamlFixture(raml);
 
-    it('provides each method the resource supports', function() {
+    it("provides description and each method the resource supports", function() {
       getResources().then(function(resources) {
         var resource = resources[0];
         resource.$('.accordion-toggle').click();
+
+        var resourceDescription = resources[0].$('[role="description"]');
+        expect(resourceDescription.getText()).toEqual('This resource defeats all others');
+
         var resourceMethodSumaries = resources[0].$$('[role="methodSummary"]');
         expect(resourceMethodSumaries).toHaveLength(2);
 
@@ -102,11 +107,10 @@ describe('accordion view of API', function() {
     });
   });
 
-  describe('method detail view', function() {
+  describe("method detail view", function() {
     raml = createRAML(
       'title: Example API',
       'baseUri: http://www.example.com',
-      '',
       '/resource:',
       '  get:',
       '    description: Get all resources'
@@ -114,7 +118,7 @@ describe('accordion view of API', function() {
 
    loadRamlFixture(raml);
 
-    it('displays the description of the method', function() {
+    it("displays the description of the method", function() {
       var resource = openResource(1);
       var method = openMethod(1, resource);
 

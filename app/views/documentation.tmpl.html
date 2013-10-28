@@ -1,6 +1,7 @@
 <section role='documentation'>
-  <div role="description" ng-show="method.description">
-    <div markdown="method.description"></div>
+  <div role="description"
+       ng-if="method.description"
+       markdown="method.description">
   </div>
 
   <tabset>
