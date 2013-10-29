@@ -65,4 +65,47 @@ describe("RAML.Client.Validator", function() {
       expect(errors).toBeUndefined();
     });
   });
+
+  describe("when the input is of type boolean", function() {
+    var errors;
+
+    describe("with valid values", function() {
+      beforeEach(function() {
+        definition = { type: 'boolean' };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      it("has no errors", function() {
+        expect(validator.validate('true')).toBeUndefined();
+        expect(validator.validate('false')).toBeUndefined();
+      });
+    });
+
+    describe("with an invalid value", function() {
+      beforeEach(function() {
+        definition = { type: 'boolean' };
+        validator = RAML.Client.Validator.from(definition);
+        errors = validator.validate('cats');
+      });
+
+      it("has errors", function() {
+        expect(errors).toBeDefined();
+      });
+
+      it("includes boolean in the errors", function() {
+        expect(errors).toContain('boolean');
+      });
+    });
+
+    describe("with an empty value", function() {
+      beforeEach(function() {
+        definition = { type: 'boolean' };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      it("has no errors", function() {
+        expect(validator.validate('')).toBeUndefined();
+      });
+    });
+  });
 });
