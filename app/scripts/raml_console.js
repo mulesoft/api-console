@@ -27,6 +27,7 @@
   module.directive('tab', RAML.Directives.tab);
   module.directive('tabset', RAML.Directives.tabset);
   module.directive('tryIt', RAML.Directives.tryIt);
+  module.directive('validatedInput', RAML.Directives.validatedInput);
 
   module.controller('TryItController', RAML.Controllers.tryIt);
 

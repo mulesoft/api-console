@@ -30,6 +30,7 @@
     <script src="scripts/client/auth_strategies/base64.js"></script>
     <script src="scripts/client/auth_strategies/basic_auth.js"></script>
     <script src="scripts/client/auth_strategies/oauth2.js"></script>
+    <script src="scripts/client/validator.js"></script>
     <script src="scripts/inspector/path_builder.js"></script>
     <script src="scripts/controllers.js"></script>
     <script src="scripts/controllers/documentation.js"></script>
@@ -57,6 +58,7 @@
     <script src="scripts/directives/security_schemes.js"></script>
     <script src="scripts/directives/tabs.js"></script>
     <script src="scripts/directives/try_it.js"></script>
+    <script src="scripts/directives/validated_input.js"></script>
     <script src="scripts/filters.js"></script>
     <script src="scripts/filters/yes_no.js"></script>
     <script src="scripts/settings.js"></script>
@@ -73,7 +75,7 @@
       </div>
 
       <div ng-if="consoleLoader.locationSet">
-        <raml-console src='{{consoleLoader.location}}' with-root-documentation />
+        <raml-console src='{{consoleLoader.location}}' with-root-documentation></raml-console>
       </div>
     </raml-console-initializer>
   </body>
