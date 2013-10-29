@@ -100,7 +100,6 @@ describe("RAML.Directives.validatedInput", function() {
       beforeEach(function() {
         input.trigger('focus');
         input.trigger('blur');
-        $('body').trigger('click');
       });
 
       it("adds a warning class", function() {
