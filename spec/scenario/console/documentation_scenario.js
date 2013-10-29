@@ -5,7 +5,7 @@ describe('API Documentation', function() {
     raml = createRAML(
       'title: Example API',
       'baseUri: http://www.example.com',
-      '/resource/#{resourceId}:',
+      '/resource/{resourceId}:',
       '  get:',
       '    queryParameters:',
       '      chunk:',
