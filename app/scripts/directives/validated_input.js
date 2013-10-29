@@ -22,6 +22,10 @@
     }
   };
 
+  Controller.prototype.reset = function() {
+    this.status = null;
+  };
+
   RAML.Directives.validatedInput = function() {
     return {
       restrict: 'E',
@@ -41,6 +45,10 @@
         var input = el.find('input');
         input.on('blur', function() {
           scope.$apply('input.validate()');
+        });
+
+        input.on('focus', function() {
+          scope.$apply('input.reset()');
         });
       }
     };
