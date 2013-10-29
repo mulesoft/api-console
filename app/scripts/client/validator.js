@@ -2,7 +2,8 @@
   'use strict';
 
   var VALIDATIONS = {
-    required: function(value) { return value !== null && value !== undefined && value !== ''; }
+    required: function(value) { return value !== null && value !== undefined && value !== ''; },
+    boolean: function(value) { return value === 'true' || value === 'false' || value === ''; }
   };
 
   function Validator(validations) {
@@ -31,6 +32,9 @@
 
     if (definition.required) {
       validations.required = VALIDATIONS.required;
+    }
+    if (definition.type === 'boolean') {
+      validations.boolean = VALIDATIONS.boolean;
     }
 
     return new Validator(validations);
