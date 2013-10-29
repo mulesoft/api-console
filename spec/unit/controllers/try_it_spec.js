@@ -209,26 +209,43 @@ describe("RAML.Controllers.TryIt", function() {
     }
 
     describe("on success", function() {
-      beforeEach(function() {
-        promise.then.andCallFake(function(success) {
-          var headers = function() {
-            return 'Content-Type: application/json; charset=utf-8\nX-Custom-Header: value';
-          };
-          success(undefined, undefined, { responseText: 'Hello world.', status: 200, getAllResponseHeaders: headers});
+      describe("by default", function() {
+        beforeEach(function() {
+          promise.then.andCallFake(function(success) {
+            var headers = function() {
+              return 'Content-Type: application/json; charset=utf-8\nX-Custom-Header: value';
+            };
+            success(undefined, undefined, { responseText: 'Hello world.', status: 200, getAllResponseHeaders: headers});
+          });
+
+          controller.execute();
         });
 
-        controller.execute();
+        verifyResponseAssignment({ body: 'Hello world.', status: 200, contentType: 'application/json' });
+
+        it("assigns headers to the response", function() {
+          expect(controller.response.headers['x-custom-header']).toEqual('value');
+        });
+
+        it("clears requestInProgress", function() {
+          expect(controller.requestInProgress).toBeFalsy();
+        });
       });
 
-      verifyResponseAssignment({ body: 'Hello world.', status: 200, contentType: 'application/json' });
+      describe("given a lowercase header", function() {
+        beforeEach(function() {
+          promise.then.andCallFake(function(success) {
+            var headers = function() {
+              return 'content-type: application/json; charset=utf-8';
+            };
+            success(undefined, undefined, { responseText: 'Hello world.', status: 200, getAllResponseHeaders: headers});
+          });
 
-      it("assigns headers to the response", function() {
-        expect(controller.response.headers['X-Custom-Header']).toEqual('value');
+          controller.execute();
+        });
+
+        verifyResponseAssignment({ body: 'Hello world.', status: 200, contentType: 'application/json' });
       });
-
-      it("clears requestInProgress", function() {
-        expect(controller.requestInProgress).toBeFalsy();
-      })
     });
 
     describe("on error", function() {

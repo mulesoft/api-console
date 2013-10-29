@@ -14,7 +14,7 @@
 
     headers.split('\n').forEach(function(line) {
       i = line.indexOf(':');
-      key = line.substr(0, i).trim();
+      key = line.substr(0, i).trim().toLowerCase();
       val = line.substr(i + 1).trim();
 
       if (key) {
@@ -118,8 +118,8 @@
       response.status = jqXhr.status,
       response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
 
-      if (response.headers['Content-Type']) {
-        response.contentType = response.headers['Content-Type'].split(';')[0];
+      if (response.headers['content-type']) {
+        response.contentType = response.headers['content-type'].split(';')[0];
       }
       apply();
     }
