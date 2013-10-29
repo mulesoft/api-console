@@ -23,7 +23,7 @@ describe("RAML.Directives.pathBuilder", function() {
 
   describe("a resource with templated parameters", function() {
     beforeEach(function() {
-      scope = createPathBuilderScope(['/resource', '/{resourceId}']);
+      scope = createPathBuilderScope(['/resource', templatedSegment('resourceId')]);
       el = compileTemplate('<path-builder></path-builder>', scope);
     });
 

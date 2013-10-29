@@ -5,7 +5,7 @@
   </ul>
 
   <h2 class="path">
-    <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}} </span>
+    <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
   </h2>
   <ul class='methods' role="methods" ng-class="{hidden: resource.isOpen}">
     <li class='method-name' ng-class='method.method' ng-repeat="method in resource.methods">{{method.method}}</li>

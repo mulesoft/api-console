@@ -1,20 +1,14 @@
 (function () {
   'use strict';
 
-  var templateMatcher = /\{(.*)\}/;
-
   var PathSegment = function(pathSegment) {
-    this.text = pathSegment;
-
-    var match = pathSegment.match(templateMatcher);
-    this.templated = !!match;
-    if (match) {
-      this.parameterName = match[1];
-    }
+    this.text = pathSegment.toString();
+    this.parameterName = pathSegment.parameterName;
+    this.templated = !!this.parameterName;
   };
 
   PathSegment.prototype.toString = function() {
-    return this.templated ? this.text.replace(/[\/{}]/g, '') : this.text;
+    return this.templated ? this.parameterName : this.text;
   };
 
   PathSegment.prototype.replaceWith = function(value) {

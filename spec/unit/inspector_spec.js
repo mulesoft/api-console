@@ -33,7 +33,7 @@ describe("RAML.Inspector.create", function() {
 
     function getGroupPaths(resourceGroup) {
       return resourceGroup.map(function(resource) {
-        return resource.pathSegments.join('');
+        return resource.pathSegments.map(function(segment) {return segment.toString();}).join('');
       });
     }
 
@@ -50,7 +50,10 @@ describe("RAML.Inspector.create", function() {
 
     it("creates a resource overview for each resource", function() {
       expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/resource'], jasmine.any(Object));
-      expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/resource', '/{resourceId}'], jasmine.any(Object));
+      expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/resource', jasmine.any(Object)], jasmine.any(Object));
+      expect(resourceOverviewSourceSpy.calls[1].args[0][1].toString()).toEqual('/{resourceId}');
+      expect(resourceOverviewSourceSpy.calls[1].args[0][1].type).toEqual('string');
+      expect(resourceOverviewSourceSpy.calls[1].args[0][1].parameterName).toEqual('resourceId');
       expect(resourceOverviewSourceSpy).toHaveBeenCalledWith(['/another', '/resource' ], jasmine.any(Object));
     });
 

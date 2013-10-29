@@ -28,7 +28,7 @@ describe("RAML.Inspector.PathBuilder", function() {
 
     describe("with a templated segment", function() {
       beforeEach(function() {
-        this.pathSegments = ["/{resource}"];
+        this.pathSegments = [templatedSegment('resource')];
         this.segment = RAML.Inspector.PathBuilder.create(this.pathSegments).segments[0];
       });
 
@@ -56,11 +56,11 @@ describe("RAML.Inspector.PathBuilder", function() {
 
     describe("with templated segments", function() {
       beforeEach(function() {
-        this.pathSegments = ["/resource", "/{resourceId}"];
+        this.pathSegments = ['/resource', templatedSegment('resourceId')];
         this.pathBuilder = RAML.Inspector.PathBuilder.create(this.pathSegments);
       });
 
-      it("substitues templated values and concatenates the path segments", function() {
+      it("substitutes templated values and concatenates the path segments", function() {
         expect(this.pathBuilder({resourceId: "1"})).toEqual("/resource/1");
       });
     });
