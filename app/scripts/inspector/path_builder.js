@@ -1,26 +1,28 @@
 (function () {
   'use strict';
 
-  var PathSegment = function(pathSegment) {
-    this.text = pathSegment.toString();
-    this.parameterName = pathSegment.parameterName;
-    this.templated = !!this.parameterName;
-  };
-
-  PathSegment.prototype.toString = function() {
-    return this.templated ? this.parameterName : this.text;
-  };
-
-  PathSegment.prototype.replaceWith = function(value) {
-    if (this.templated) {
-      return '/' + value;
-    } else {
-      return this.toString();
-    }
-  };
+  var PathSegment = function() {};
 
   function convertPathSegment(pathSegment) {
-    return new PathSegment(pathSegment);
+    PathSegment.prototype = pathSegment;
+    var clone = new PathSegment();
+
+    clone.text = pathSegment.toString();
+    clone.parameterName = pathSegment.parameterName;
+    clone.templated = !!clone.parameterName;
+    clone.toString = function() {
+      return this.templated ? this.parameterName : this.text;
+    };
+
+    clone.replaceWith = function(value) {
+      if (this.templated) {
+        return '/' + value;
+      } else {
+        return this.toString();
+      }
+    };
+
+    return clone;
   }
 
   function createTemplate(pathSegments) {
