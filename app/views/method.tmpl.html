@@ -2,7 +2,6 @@
   <div class='accordion-heading accordion-toggle' role="methodSummary" ng-class="{expanded: methodView.expanded}" ng-click='methodView.toggleExpansion()'>
     <i ng-class="{'icon-caret-right': !methodView.expanded, 'icon-caret-down': methodView.expanded}"></i>
     <span role="verb">{{method.method}}:</span>
-    <path-builder></path-builder>
   </div>
   <div class='accordion-body' ng-show='methodView.expanded'>
     <div class='accordion-inner'>

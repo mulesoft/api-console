@@ -94,6 +94,11 @@ describe("accordion view of API", function() {
         var topLevelMethods = resource.$('[role="methods"]');
         expect(topLevelMethods.isDisplayed()).toBeFalsy()
 
+        var method = openMethod(1, resource);
+
+        var path = method.$('[role="path"]');
+        expect(path.getText()).toEqual('/resource')
+
         resources[1].$('.accordion-toggle').click();
         var resourceMethodSumaries = resources[1].$$('[role="methodSummary"]');
         expect(resourceMethodSumaries).toHaveLength(3);
@@ -101,9 +106,6 @@ describe("accordion view of API", function() {
 
       var firstMethodSpan = ptor.$('[role="resource"] [role="method"]');
       expect(firstMethodSpan.getText()).toMatch(/get/i)
-
-      var path = ptor.$('[role="resource"] [role="methodSummary"] [role="path"]');
-      expect(path.getText()).toEqual('/resource')
     });
   });
 

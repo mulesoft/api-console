@@ -1,6 +1,8 @@
 <section class="try-it">
 
   <form>
+    <path-builder></path-builder>
+
     <security-schemes ng-if="apiClient.securitySchemes" schemes="apiClient.securitySchemes" keychain="ramlConsole.keychain"></security-schemes>
     <named-parameters heading="Headers" parameters="method.headers" request-data="apiClient.headers"></named-parameters>
     <named-parameters heading="Query Parameters" parameters="method.queryParameters" request-data="apiClient.queryParameters"></named-parameters>

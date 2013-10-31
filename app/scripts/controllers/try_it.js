@@ -55,7 +55,10 @@
     if (this.baseUri.match(/\{version\}/) && $scope.api.version) {
       this.baseUri = this.baseUri.replace(/\{version\}/g, $scope.api.version);
     }
-    this.pathBuilder = $scope.method.pathBuilder;
+
+    this.getPathBuilder = function() {
+      return $scope.pathBuilder;
+    };
 
     this.httpMethod = $scope.method.method;
     this.headers = {};
@@ -107,7 +110,9 @@
 
   TryIt.prototype.execute = function() {
     var response = this.response = {};
-    var url = this.response.requestUrl = this.baseUri + this.pathBuilder(this.pathBuilder);
+    var pathBuilder = this.getPathBuilder();
+
+    var url = this.response.requestUrl = this.baseUri + pathBuilder(pathBuilder);
     if (RAML.Settings.proxy) {
       url = RAML.Settings.proxy + url;
     }

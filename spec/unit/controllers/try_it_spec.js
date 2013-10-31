@@ -12,7 +12,6 @@ describe("RAML.Controllers.TryIt", function() {
 
     return {
       method: method,
-      pathBuilder: function() { return "/resources/search" },
       body: body,
       requiresBasicAuthentication: function() { return false; },
       requiresOauth2: function() { return false; }
@@ -25,6 +24,7 @@ describe("RAML.Controllers.TryIt", function() {
     return {
       api: { baseUri: "http://example.com" },
       method: method,
+      pathBuilder: function() { return "/resources/search" },
       ramlConsole: { keychain: {} },
       $apply: jasmine.createSpy()
     };
