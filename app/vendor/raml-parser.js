@@ -1,144 +1,5 @@
 ;(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
 (function() {
-  var _ref,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  this.Mark = (function() {
-    function Mark(name, line, column, buffer, pointer) {
-      this.name = name;
-      this.line = line;
-      this.column = column;
-      this.buffer = buffer;
-      this.pointer = pointer;
-    }
-
-    Mark.prototype.get_snippet = function(indent, max_length) {
-      var break_chars, end, head, start, tail, _ref, _ref1;
-      if (indent == null) {
-        indent = 4;
-      }
-      if (max_length == null) {
-        max_length = 75;
-      }
-      if (this.buffer == null) {
-        return null;
-      }
-      break_chars = '\x00\r\n\x85\u2028\u2029';
-      head = '';
-      start = this.pointer;
-      while (start > 0 && (_ref = this.buffer[start - 1], __indexOf.call(break_chars, _ref) < 0)) {
-        start--;
-        if (this.pointer - start > max_length / 2 - 1) {
-          head = ' ... ';
-          start += 5;
-          break;
-        }
-      }
-      tail = '';
-      end = this.pointer;
-      while (end < this.buffer.length && (_ref1 = this.buffer[end], __indexOf.call(break_chars, _ref1) < 0)) {
-        end++;
-        if (end - this.pointer > max_length / 2 - 1) {
-          tail = ' ... ';
-          end -= 5;
-          break;
-        }
-      }
-      return "" + ((new Array(indent)).join(' ')) + head + this.buffer.slice(start, end) + tail + "\n" + ((new Array(indent + this.pointer - start + head.length)).join(' ')) + "^";
-    };
-
-    Mark.prototype.toString = function() {
-      var snippet, where;
-      snippet = this.get_snippet();
-      where = "  in \"" + this.name + "\", line " + (this.line + 1) + ", column " + (this.column + 1);
-      if (snippet) {
-        return where;
-      } else {
-        return "" + where + ":\n" + snippet;
-      }
-    };
-
-    return Mark;
-
-  })();
-
-  this.YAMLError = (function(_super) {
-    __extends(YAMLError, _super);
-
-    function YAMLError() {
-      YAMLError.__super__.constructor.call(this);
-    }
-
-    return YAMLError;
-
-  })(Error);
-
-  this.MarkedYAMLError = (function(_super) {
-    __extends(MarkedYAMLError, _super);
-
-    function MarkedYAMLError(context, context_mark, message, problem_mark, note) {
-      this.context = context;
-      this.context_mark = context_mark;
-      this.message = message;
-      this.problem_mark = problem_mark;
-      this.note = note;
-      MarkedYAMLError.__super__.constructor.call(this);
-      if (!this.message) {
-        this.message = this.context;
-      }
-      if (!this.problem_mark) {
-        this.problem_mark = this.context_mark;
-      }
-    }
-
-    MarkedYAMLError.prototype.toString = function() {
-      var lines;
-      lines = [];
-      if (this.context != null) {
-        lines.push(this.context);
-      }
-      if ((this.context_mark != null) && ((this.message == null) || (this.problem_mark == null) || this.context_mark.name !== this.problem_mark.name || this.context_mark.line !== this.problem_mark.line || this.context_mark.column !== this.problem_mark.column)) {
-        lines.push(this.context_mark.toString());
-      }
-      if (this.message != null) {
-        lines.push(this.message);
-      }
-      if (this.problem_mark != null) {
-        lines.push(this.problem_mark.toString());
-      }
-      if (this.note != null) {
-        lines.push(this.note);
-      }
-      return lines.join('\n');
-    };
-
-    return MarkedYAMLError;
-
-  })(this.YAMLError);
-
-  /*
-  The Validator throws these.
-  */
-
-
-  this.ValidationError = (function(_super) {
-    __extends(ValidationError, _super);
-
-    function ValidationError() {
-      _ref = ValidationError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return ValidationError;
-
-  })(this.MarkedYAMLError);
-
-}).call(this);
-
-},{}],2:[function(require,module,exports){
-(function() {
   var _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -324,6 +185,145 @@
     return MappingEndEvent;
 
   })(this.CollectionEndEvent);
+
+}).call(this);
+
+},{}],2:[function(require,module,exports){
+(function() {
+  var _ref,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  this.Mark = (function() {
+    function Mark(name, line, column, buffer, pointer) {
+      this.name = name;
+      this.line = line;
+      this.column = column;
+      this.buffer = buffer;
+      this.pointer = pointer;
+    }
+
+    Mark.prototype.get_snippet = function(indent, max_length) {
+      var break_chars, end, head, start, tail, _ref, _ref1;
+      if (indent == null) {
+        indent = 4;
+      }
+      if (max_length == null) {
+        max_length = 75;
+      }
+      if (this.buffer == null) {
+        return null;
+      }
+      break_chars = '\x00\r\n\x85\u2028\u2029';
+      head = '';
+      start = this.pointer;
+      while (start > 0 && (_ref = this.buffer[start - 1], __indexOf.call(break_chars, _ref) < 0)) {
+        start--;
+        if (this.pointer - start > max_length / 2 - 1) {
+          head = ' ... ';
+          start += 5;
+          break;
+        }
+      }
+      tail = '';
+      end = this.pointer;
+      while (end < this.buffer.length && (_ref1 = this.buffer[end], __indexOf.call(break_chars, _ref1) < 0)) {
+        end++;
+        if (end - this.pointer > max_length / 2 - 1) {
+          tail = ' ... ';
+          end -= 5;
+          break;
+        }
+      }
+      return "" + ((new Array(indent)).join(' ')) + head + this.buffer.slice(start, end) + tail + "\n" + ((new Array(indent + this.pointer - start + head.length)).join(' ')) + "^";
+    };
+
+    Mark.prototype.toString = function() {
+      var snippet, where;
+      snippet = this.get_snippet();
+      where = "  in \"" + this.name + "\", line " + (this.line + 1) + ", column " + (this.column + 1);
+      if (snippet) {
+        return where;
+      } else {
+        return "" + where + ":\n" + snippet;
+      }
+    };
+
+    return Mark;
+
+  })();
+
+  this.YAMLError = (function(_super) {
+    __extends(YAMLError, _super);
+
+    function YAMLError() {
+      YAMLError.__super__.constructor.call(this);
+    }
+
+    return YAMLError;
+
+  })(Error);
+
+  this.MarkedYAMLError = (function(_super) {
+    __extends(MarkedYAMLError, _super);
+
+    function MarkedYAMLError(context, context_mark, message, problem_mark, note) {
+      this.context = context;
+      this.context_mark = context_mark;
+      this.message = message;
+      this.problem_mark = problem_mark;
+      this.note = note;
+      MarkedYAMLError.__super__.constructor.call(this);
+      if (!this.message) {
+        this.message = this.context;
+      }
+      if (!this.problem_mark) {
+        this.problem_mark = this.context_mark;
+      }
+    }
+
+    MarkedYAMLError.prototype.toString = function() {
+      var lines;
+      lines = [];
+      if (this.context != null) {
+        lines.push(this.context);
+      }
+      if ((this.context_mark != null) && ((this.message == null) || (this.problem_mark == null) || this.context_mark.name !== this.problem_mark.name || this.context_mark.line !== this.problem_mark.line || this.context_mark.column !== this.problem_mark.column)) {
+        lines.push(this.context_mark.toString());
+      }
+      if (this.message != null) {
+        lines.push(this.message);
+      }
+      if (this.problem_mark != null) {
+        lines.push(this.problem_mark.toString());
+      }
+      if (this.note != null) {
+        lines.push(this.note);
+      }
+      return lines.join('\n');
+    };
+
+    return MarkedYAMLError;
+
+  })(this.YAMLError);
+
+  /*
+  The Validator throws these.
+  */
+
+
+  this.ValidationError = (function(_super) {
+    __extends(ValidationError, _super);
+
+    function ValidationError() {
+      _ref = ValidationError.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return ValidationError;
+
+  })(this.MarkedYAMLError);
 
 }).call(this);
 
@@ -3132,6 +3132,10 @@ function parseHost(host) {
 // nothing to see here... no file methods for the browser
 
 },{}],10:[function(require,module,exports){
+window.RAML = {}
+
+window.RAML.Parser = require('../lib/raml')
+},{"../lib/raml":11}],12:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, events, nodes, raml, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -3365,7 +3369,7 @@ function parseHost(host) {
 
 }).call(this);
 
-},{"./errors":1,"./events":2,"./nodes":11,"./raml":12,"./util":4,"url":7}],13:[function(require,module,exports){
+},{"./errors":2,"./events":1,"./nodes":13,"./raml":11,"./util":4,"url":7}],14:[function(require,module,exports){
 require=(function(e,t,n,r){function i(r){if(!n[r]){if(!t[r]){if(e)return e(r);throw new Error("Cannot find module '"+r+"'")}var s=n[r]={exports:{}};t[r][0](function(e){var n=t[r][1][e];return i(n?n:e)},s,s.exports)}return n[r].exports}for(var s=0;s<r.length;s++)i(r[s]);return i})(typeof require!=="undefined"&&require,{1:[function(require,module,exports){
 exports.readIEEE754 = function(buffer, offset, isBE, mLen, nBytes) {
   var e, m,
@@ -7230,7 +7234,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 },{}]},{},[])
 ;;module.exports=require("buffer-browserify")
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function(Buffer){(function() {
   var MarkedYAMLError, nodes, util, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -7843,7 +7847,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 }).call(this);
 
 })(require("__browserify_buffer").Buffer)
-},{"./errors":1,"./nodes":11,"./util":4,"__browserify_buffer":13}],15:[function(require,module,exports){
+},{"./errors":2,"./nodes":13,"./util":4,"__browserify_buffer":14}],16:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -7953,7 +7957,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11}],16:[function(require,module,exports){
+},{"./errors":2,"./nodes":13}],17:[function(require,module,exports){
 (function() {
   var composer, construct, joiner, parser, protocols, reader, resolver, scanner, schemas, securitySchemes, traits, transformations, types, util, validator;
 
@@ -8066,7 +8070,297 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./composer":10,"./construct":14,"./joiner":15,"./parser":19,"./protocols":25,"./reader":17,"./resolver":20,"./resourceTypes":23,"./scanner":18,"./schemas":24,"./securitySchemes":26,"./traits":22,"./transformations":27,"./util":4,"./validator":21}],19:[function(require,module,exports){
+},{"./composer":12,"./construct":15,"./joiner":16,"./parser":20,"./protocols":26,"./reader":18,"./resolver":21,"./resourceTypes":24,"./scanner":19,"./schemas":25,"./securitySchemes":27,"./traits":23,"./transformations":28,"./util":4,"./validator":22}],13:[function(require,module,exports){
+(function() {
+  var MarkedYAMLError, unique_id, _ref, _ref1, _ref2,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MarkedYAMLError = require('./errors').MarkedYAMLError;
+
+  unique_id = 0;
+
+  this.ApplicationError = (function(_super) {
+    __extends(ApplicationError, _super);
+
+    function ApplicationError() {
+      _ref = ApplicationError.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return ApplicationError;
+
+  })(MarkedYAMLError);
+
+  this.Node = (function() {
+    function Node(tag, value, start_mark, end_mark) {
+      this.tag = tag;
+      this.value = value;
+      this.start_mark = start_mark;
+      this.end_mark = end_mark;
+      this.unique_id = "node_" + (unique_id++);
+    }
+
+    Node.prototype.clone = function() {
+      var temp;
+      temp = new this.constructor(this.tag, this.value, this.start_mark, this.end_mark);
+      return temp;
+    };
+
+    return Node;
+
+  })();
+
+  this.ScalarNode = (function(_super) {
+    __extends(ScalarNode, _super);
+
+    ScalarNode.prototype.id = 'scalar';
+
+    function ScalarNode(tag, value, start_mark, end_mark, style) {
+      this.tag = tag;
+      this.value = value;
+      this.start_mark = start_mark;
+      this.end_mark = end_mark;
+      this.style = style;
+      ScalarNode.__super__.constructor.apply(this, arguments);
+    }
+
+    ScalarNode.prototype.clone = function() {
+      var temp;
+      temp = new this.constructor(this.tag, this.value, this.start_mark, this.end_mark, this.style);
+      return temp;
+    };
+
+    ScalarNode.prototype.cloneRemoveIs = function() {
+      return this.clone();
+    };
+
+    ScalarNode.prototype.combine = function(node) {
+      if (this.tag === 'tag:yaml.org,2002:null' && node.tag === 'tag:yaml.org,2002:map') {
+        this.value = new exports.MappingNode('tag:yaml.org,2002:map', [], node.start_mark, node.end_mark);
+        return this.value.combine(node);
+      } else if (!(node instanceof exports.ScalarNode)) {
+        throw new exports.ApplicationError('while applying node', null, 'different YAML structures', this.start_mark);
+      }
+      return this.value = node.value;
+    };
+
+    ScalarNode.prototype.remove_question_mark_properties = function() {};
+
+    return ScalarNode;
+
+  })(this.Node);
+
+  this.CollectionNode = (function(_super) {
+    __extends(CollectionNode, _super);
+
+    function CollectionNode(tag, value, start_mark, end_mark, flow_style) {
+      this.tag = tag;
+      this.value = value;
+      this.start_mark = start_mark;
+      this.end_mark = end_mark;
+      this.flow_style = flow_style;
+      CollectionNode.__super__.constructor.apply(this, arguments);
+    }
+
+    return CollectionNode;
+
+  })(this.Node);
+
+  this.SequenceNode = (function(_super) {
+    __extends(SequenceNode, _super);
+
+    function SequenceNode() {
+      _ref1 = SequenceNode.__super__.constructor.apply(this, arguments);
+      return _ref1;
+    }
+
+    SequenceNode.prototype.id = 'sequence';
+
+    SequenceNode.prototype.clone = function() {
+      var item, items, temp, value, _i, _len, _ref2;
+      items = [];
+      _ref2 = this.value;
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        item = _ref2[_i];
+        value = item.clone();
+        items.push(value);
+      }
+      temp = new this.constructor(this.tag, items, this.start_mark, this.end_mark, this.flow_style);
+      return temp;
+    };
+
+    SequenceNode.prototype.cloneRemoveIs = function() {
+      return this.clone();
+    };
+
+    SequenceNode.prototype.combine = function(node) {
+      var property, value, _i, _len, _ref2, _results;
+      if (!(node instanceof exports.SequenceNode)) {
+        throw new exports.ApplicationError('while applying node', null, 'different YAML structures', this.start_mark);
+      }
+      _ref2 = node.value;
+      _results = [];
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        property = _ref2[_i];
+        value = property.clone();
+        _results.push(this.value.push(value));
+      }
+      return _results;
+    };
+
+    SequenceNode.prototype.remove_question_mark_properties = function() {
+      var item, _i, _len, _ref2, _results;
+      _ref2 = this.value;
+      _results = [];
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        item = _ref2[_i];
+        _results.push(item.remove_question_mark_properties());
+      }
+      return _results;
+    };
+
+    return SequenceNode;
+
+  })(this.CollectionNode);
+
+  this.MappingNode = (function(_super) {
+    __extends(MappingNode, _super);
+
+    function MappingNode() {
+      _ref2 = MappingNode.__super__.constructor.apply(this, arguments);
+      return _ref2;
+    }
+
+    MappingNode.prototype.id = 'mapping';
+
+    MappingNode.prototype.clone = function() {
+      var name, properties, property, temp, value, _i, _len, _ref3;
+      properties = [];
+      _ref3 = this.value;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        property = _ref3[_i];
+        name = property[0].clone();
+        value = property[1].clone();
+        properties.push([name, value]);
+      }
+      temp = new this.constructor(this.tag, properties, this.start_mark, this.end_mark, this.flow_style);
+      return temp;
+    };
+
+    MappingNode.prototype.cloneRemoveIs = function() {
+      var name, properties, property, temp, value, _i, _len, _ref3, _ref4;
+      properties = [];
+      _ref3 = this.value;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        property = _ref3[_i];
+        name = property[0].cloneRemoveIs();
+        value = property[1].cloneRemoveIs();
+        if ((_ref4 = name.value) !== 'is') {
+          properties.push([name, value]);
+        }
+      }
+      temp = new this.constructor(this.tag, properties, this.start_mark, this.end_mark, this.flow_style);
+      return temp;
+    };
+
+    MappingNode.prototype.cloneForTrait = function() {
+      var name, properties, property, temp, value, _i, _len, _ref3, _ref4;
+      properties = [];
+      _ref3 = this.value;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        property = _ref3[_i];
+        name = property[0].clone();
+        value = property[1].clone();
+        if ((_ref4 = name.value) !== 'usage' && _ref4 !== 'displayName') {
+          properties.push([name, value]);
+        }
+      }
+      temp = new this.constructor(this.tag, properties, this.start_mark, this.end_mark, this.flow_style);
+      return temp;
+    };
+
+    MappingNode.prototype.cloneForResourceType = function() {
+      var name, properties, property, temp, value, _i, _len, _ref3, _ref4;
+      properties = [];
+      _ref3 = this.value;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        property = _ref3[_i];
+        name = property[0].cloneRemoveIs();
+        value = property[1].cloneRemoveIs();
+        if ((_ref4 = name.value) !== 'is' && _ref4 !== 'type' && _ref4 !== 'usage' && _ref4 !== 'displayName') {
+          properties.push([name, value]);
+        }
+      }
+      temp = new this.constructor(this.tag, properties, this.start_mark, this.end_mark, this.flow_style);
+      return temp;
+    };
+
+    MappingNode.prototype.combine = function(resourceNode) {
+      var name, node_has_property, nonNullNode, ownNodeProperty, ownNodePropertyName, resourceProperty, _i, _len, _ref3, _results;
+      if (resourceNode.tag === 'tag:yaml.org,2002:null') {
+        resourceNode = new exports.MappingNode('tag:yaml.org,2002:map', [], resourceNode.start_mark, resourceNode.end_mark);
+      }
+      if (!(resourceNode instanceof exports.MappingNode)) {
+        throw new exports.ApplicationError('while applying node', null, 'different YAML structures', this.start_mark);
+      }
+      _ref3 = resourceNode.value;
+      _results = [];
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        resourceProperty = _ref3[_i];
+        name = resourceProperty[0].value;
+        node_has_property = this.value.some(function(someProperty) {
+          return (someProperty[0].value === name) || ((someProperty[0].value + '?') === name) || (someProperty[0].value === (name + '?'));
+        });
+        if (node_has_property) {
+          _results.push((function() {
+            var _j, _len1, _ref4, _results1;
+            _ref4 = this.value;
+            _results1 = [];
+            for (_j = 0, _len1 = _ref4.length; _j < _len1; _j++) {
+              ownNodeProperty = _ref4[_j];
+              ownNodePropertyName = ownNodeProperty[0].value;
+              if ((ownNodePropertyName === name) || ((ownNodePropertyName + '?') === name) || (ownNodePropertyName === (name + '?'))) {
+                if ((ownNodeProperty[1].tag === 'tag:yaml.org,2002:null') && (resourceProperty[1].tag === 'tag:yaml.org,2002:map')) {
+                  nonNullNode = new exports.MappingNode('tag:yaml.org,2002:map', [], ownNodeProperty[1].start_mark, ownNodeProperty[1].end_mark);
+                  ownNodeProperty[1] = nonNullNode;
+                }
+                ownNodeProperty[1].combine(resourceProperty[1]);
+                _results1.push(ownNodeProperty[0].value = ownNodeProperty[0].value.replace(/\?$/, ''));
+              } else {
+                _results1.push(void 0);
+              }
+            }
+            return _results1;
+          }).call(this));
+        } else {
+          _results.push(this.value.push([resourceProperty[0].clone(), resourceProperty[1].clone()]));
+        }
+      }
+      return _results;
+    };
+
+    MappingNode.prototype.remove_question_mark_properties = function() {
+      var property, _i, _len, _ref3, _results;
+      this.value = this.value.filter(function(property) {
+        return property[0].value.slice(-1) !== '?';
+      });
+      _ref3 = this.value;
+      _results = [];
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        property = _ref3[_i];
+        _results.push(property[1].remove_question_mark_properties());
+      }
+      return _results;
+    };
+
+    return MappingNode;
+
+  })(this.CollectionNode);
+
+}).call(this);
+
+},{"./errors":2}],20:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, events, tokens, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -8677,297 +8971,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./events":2,"./tokens":3}],11:[function(require,module,exports){
-(function() {
-  var MarkedYAMLError, unique_id, _ref, _ref1, _ref2,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  MarkedYAMLError = require('./errors').MarkedYAMLError;
-
-  unique_id = 0;
-
-  this.ApplicationError = (function(_super) {
-    __extends(ApplicationError, _super);
-
-    function ApplicationError() {
-      _ref = ApplicationError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return ApplicationError;
-
-  })(MarkedYAMLError);
-
-  this.Node = (function() {
-    function Node(tag, value, start_mark, end_mark) {
-      this.tag = tag;
-      this.value = value;
-      this.start_mark = start_mark;
-      this.end_mark = end_mark;
-      this.unique_id = "node_" + (unique_id++);
-    }
-
-    Node.prototype.clone = function() {
-      var temp;
-      temp = new this.constructor(this.tag, this.value, this.start_mark, this.end_mark);
-      return temp;
-    };
-
-    return Node;
-
-  })();
-
-  this.ScalarNode = (function(_super) {
-    __extends(ScalarNode, _super);
-
-    ScalarNode.prototype.id = 'scalar';
-
-    function ScalarNode(tag, value, start_mark, end_mark, style) {
-      this.tag = tag;
-      this.value = value;
-      this.start_mark = start_mark;
-      this.end_mark = end_mark;
-      this.style = style;
-      ScalarNode.__super__.constructor.apply(this, arguments);
-    }
-
-    ScalarNode.prototype.clone = function() {
-      var temp;
-      temp = new this.constructor(this.tag, this.value, this.start_mark, this.end_mark, this.style);
-      return temp;
-    };
-
-    ScalarNode.prototype.cloneRemoveIs = function() {
-      return this.clone();
-    };
-
-    ScalarNode.prototype.combine = function(node) {
-      if (this.tag === 'tag:yaml.org,2002:null' && node.tag === 'tag:yaml.org,2002:map') {
-        this.value = new exports.MappingNode('tag:yaml.org,2002:map', [], node.start_mark, node.end_mark);
-        return this.value.combine(node);
-      } else if (!(node instanceof exports.ScalarNode)) {
-        throw new exports.ApplicationError('while applying node', null, 'different YAML structures', this.start_mark);
-      }
-      return this.value = node.value;
-    };
-
-    ScalarNode.prototype.remove_question_mark_properties = function() {};
-
-    return ScalarNode;
-
-  })(this.Node);
-
-  this.CollectionNode = (function(_super) {
-    __extends(CollectionNode, _super);
-
-    function CollectionNode(tag, value, start_mark, end_mark, flow_style) {
-      this.tag = tag;
-      this.value = value;
-      this.start_mark = start_mark;
-      this.end_mark = end_mark;
-      this.flow_style = flow_style;
-      CollectionNode.__super__.constructor.apply(this, arguments);
-    }
-
-    return CollectionNode;
-
-  })(this.Node);
-
-  this.SequenceNode = (function(_super) {
-    __extends(SequenceNode, _super);
-
-    function SequenceNode() {
-      _ref1 = SequenceNode.__super__.constructor.apply(this, arguments);
-      return _ref1;
-    }
-
-    SequenceNode.prototype.id = 'sequence';
-
-    SequenceNode.prototype.clone = function() {
-      var item, items, temp, value, _i, _len, _ref2;
-      items = [];
-      _ref2 = this.value;
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        item = _ref2[_i];
-        value = item.clone();
-        items.push(value);
-      }
-      temp = new this.constructor(this.tag, items, this.start_mark, this.end_mark, this.flow_style);
-      return temp;
-    };
-
-    SequenceNode.prototype.cloneRemoveIs = function() {
-      return this.clone();
-    };
-
-    SequenceNode.prototype.combine = function(node) {
-      var property, value, _i, _len, _ref2, _results;
-      if (!(node instanceof exports.SequenceNode)) {
-        throw new exports.ApplicationError('while applying node', null, 'different YAML structures', this.start_mark);
-      }
-      _ref2 = node.value;
-      _results = [];
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        property = _ref2[_i];
-        value = property.clone();
-        _results.push(this.value.push(value));
-      }
-      return _results;
-    };
-
-    SequenceNode.prototype.remove_question_mark_properties = function() {
-      var item, _i, _len, _ref2, _results;
-      _ref2 = this.value;
-      _results = [];
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        item = _ref2[_i];
-        _results.push(item.remove_question_mark_properties());
-      }
-      return _results;
-    };
-
-    return SequenceNode;
-
-  })(this.CollectionNode);
-
-  this.MappingNode = (function(_super) {
-    __extends(MappingNode, _super);
-
-    function MappingNode() {
-      _ref2 = MappingNode.__super__.constructor.apply(this, arguments);
-      return _ref2;
-    }
-
-    MappingNode.prototype.id = 'mapping';
-
-    MappingNode.prototype.clone = function() {
-      var name, properties, property, temp, value, _i, _len, _ref3;
-      properties = [];
-      _ref3 = this.value;
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        property = _ref3[_i];
-        name = property[0].clone();
-        value = property[1].clone();
-        properties.push([name, value]);
-      }
-      temp = new this.constructor(this.tag, properties, this.start_mark, this.end_mark, this.flow_style);
-      return temp;
-    };
-
-    MappingNode.prototype.cloneRemoveIs = function() {
-      var name, properties, property, temp, value, _i, _len, _ref3, _ref4;
-      properties = [];
-      _ref3 = this.value;
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        property = _ref3[_i];
-        name = property[0].cloneRemoveIs();
-        value = property[1].cloneRemoveIs();
-        if ((_ref4 = name.value) !== 'is') {
-          properties.push([name, value]);
-        }
-      }
-      temp = new this.constructor(this.tag, properties, this.start_mark, this.end_mark, this.flow_style);
-      return temp;
-    };
-
-    MappingNode.prototype.cloneForTrait = function() {
-      var name, properties, property, temp, value, _i, _len, _ref3, _ref4;
-      properties = [];
-      _ref3 = this.value;
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        property = _ref3[_i];
-        name = property[0].clone();
-        value = property[1].clone();
-        if ((_ref4 = name.value) !== 'usage' && _ref4 !== 'displayName') {
-          properties.push([name, value]);
-        }
-      }
-      temp = new this.constructor(this.tag, properties, this.start_mark, this.end_mark, this.flow_style);
-      return temp;
-    };
-
-    MappingNode.prototype.cloneForResourceType = function() {
-      var name, properties, property, temp, value, _i, _len, _ref3, _ref4;
-      properties = [];
-      _ref3 = this.value;
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        property = _ref3[_i];
-        name = property[0].cloneRemoveIs();
-        value = property[1].cloneRemoveIs();
-        if ((_ref4 = name.value) !== 'is' && _ref4 !== 'type' && _ref4 !== 'usage' && _ref4 !== 'displayName') {
-          properties.push([name, value]);
-        }
-      }
-      temp = new this.constructor(this.tag, properties, this.start_mark, this.end_mark, this.flow_style);
-      return temp;
-    };
-
-    MappingNode.prototype.combine = function(resourceNode) {
-      var name, node_has_property, nonNullNode, ownNodeProperty, ownNodePropertyName, resourceProperty, _i, _len, _ref3, _results;
-      if (resourceNode.tag === 'tag:yaml.org,2002:null') {
-        resourceNode = new exports.MappingNode('tag:yaml.org,2002:map', [], resourceNode.start_mark, resourceNode.end_mark);
-      }
-      if (!(resourceNode instanceof exports.MappingNode)) {
-        throw new exports.ApplicationError('while applying node', null, 'different YAML structures', this.start_mark);
-      }
-      _ref3 = resourceNode.value;
-      _results = [];
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        resourceProperty = _ref3[_i];
-        name = resourceProperty[0].value;
-        node_has_property = this.value.some(function(someProperty) {
-          return (someProperty[0].value === name) || ((someProperty[0].value + '?') === name) || (someProperty[0].value === (name + '?'));
-        });
-        if (node_has_property) {
-          _results.push((function() {
-            var _j, _len1, _ref4, _results1;
-            _ref4 = this.value;
-            _results1 = [];
-            for (_j = 0, _len1 = _ref4.length; _j < _len1; _j++) {
-              ownNodeProperty = _ref4[_j];
-              ownNodePropertyName = ownNodeProperty[0].value;
-              if ((ownNodePropertyName === name) || ((ownNodePropertyName + '?') === name) || (ownNodePropertyName === (name + '?'))) {
-                if ((ownNodeProperty[1].tag === 'tag:yaml.org,2002:null') && (resourceProperty[1].tag === 'tag:yaml.org,2002:map')) {
-                  nonNullNode = new exports.MappingNode('tag:yaml.org,2002:map', [], ownNodeProperty[1].start_mark, ownNodeProperty[1].end_mark);
-                  ownNodeProperty[1] = nonNullNode;
-                }
-                ownNodeProperty[1].combine(resourceProperty[1]);
-                _results1.push(ownNodeProperty[0].value = ownNodeProperty[0].value.replace(/\?$/, ''));
-              } else {
-                _results1.push(void 0);
-              }
-            }
-            return _results1;
-          }).call(this));
-        } else {
-          _results.push(this.value.push([resourceProperty[0].clone(), resourceProperty[1].clone()]));
-        }
-      }
-      return _results;
-    };
-
-    MappingNode.prototype.remove_question_mark_properties = function() {
-      var property, _i, _len, _ref3, _results;
-      this.value = this.value.filter(function(property) {
-        return property[0].value.slice(-1) !== '?';
-      });
-      _ref3 = this.value;
-      _results = [];
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        property = _ref3[_i];
-        _results.push(property[1].remove_question_mark_properties());
-      }
-      return _results;
-    };
-
-    return MappingNode;
-
-  })(this.CollectionNode);
-
-}).call(this);
-
-},{"./errors":1}],25:[function(require,module,exports){
+},{"./errors":2,"./events":1,"./tokens":3}],26:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, url, util,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -9048,7 +9052,110 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"./util":4,"url":7}],20:[function(require,module,exports){
+},{"./errors":2,"./nodes":13,"./util":4,"url":7}],18:[function(require,module,exports){
+(function() {
+  var Mark, MarkedYAMLError, _ref, _ref1,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  _ref = require('./errors'), Mark = _ref.Mark, MarkedYAMLError = _ref.MarkedYAMLError;
+
+  this.ReaderError = (function(_super) {
+    __extends(ReaderError, _super);
+
+    function ReaderError() {
+      _ref1 = ReaderError.__super__.constructor.apply(this, arguments);
+      return _ref1;
+    }
+
+    return ReaderError;
+
+  })(MarkedYAMLError);
+
+  /*
+  Reader:
+    checks if characters are within the allowed range
+    add '\x00' to the end
+  */
+
+
+  this.Reader = (function() {
+    var NON_PRINTABLE;
+
+    NON_PRINTABLE = /[^\x09\x0A\x0D\x20-\x7E\x85\xA0-\uD7FF\uE000-\uFFFD]/;
+
+    function Reader(string, src) {
+      this.string = string;
+      this.src = src;
+      this.line = 0;
+      this.column = 0;
+      this.index = 0;
+      this.string += '\x00';
+    }
+
+    Reader.prototype.peek = function(index) {
+      if (index == null) {
+        index = 0;
+      }
+      return this.string[this.index + index];
+    };
+
+    Reader.prototype.prefix = function(length) {
+      if (length == null) {
+        length = 1;
+      }
+      return this.string.slice(this.index, this.index + length);
+    };
+
+    Reader.prototype.forward = function(length) {
+      var char, _results;
+      if (length == null) {
+        length = 1;
+      }
+      _results = [];
+      while (length) {
+        char = this.string[this.index];
+        this.index++;
+        if (__indexOf.call('\n\x85\u2082\u2029', char) >= 0 || (char === '\r' && this.string[this.index] !== '\n')) {
+          this.line++;
+          this.column = 0;
+        } else {
+          this.check_printable(char);
+          this.column++;
+        }
+        _results.push(length--);
+      }
+      return _results;
+    };
+
+    Reader.prototype.create_mark = function(line, column) {
+      if (line == null) {
+        line = this.line;
+      }
+      if (column == null) {
+        column = this.column;
+      }
+      return new Mark(this.src, line, column, this.string, this.index);
+    };
+
+    Reader.prototype.get_mark = function() {
+      return this.create_mark();
+    };
+
+    Reader.prototype.check_printable = function(char) {
+      if (NON_PRINTABLE.exec(char)) {
+        throw new exports.ReaderError('while reading file', null, "non printable characters are not allowed column: " + (this.get_mark().column), this.get_mark());
+      }
+    };
+
+    return Reader;
+
+  })();
+
+}).call(this);
+
+},{"./errors":2}],21:[function(require,module,exports){
 (function() {
   var YAMLError, nodes, util, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -9257,110 +9364,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"./util":4}],17:[function(require,module,exports){
-(function() {
-  var Mark, MarkedYAMLError, _ref, _ref1,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  _ref = require('./errors'), Mark = _ref.Mark, MarkedYAMLError = _ref.MarkedYAMLError;
-
-  this.ReaderError = (function(_super) {
-    __extends(ReaderError, _super);
-
-    function ReaderError() {
-      _ref1 = ReaderError.__super__.constructor.apply(this, arguments);
-      return _ref1;
-    }
-
-    return ReaderError;
-
-  })(MarkedYAMLError);
-
-  /*
-  Reader:
-    checks if characters are within the allowed range
-    add '\x00' to the end
-  */
-
-
-  this.Reader = (function() {
-    var NON_PRINTABLE;
-
-    NON_PRINTABLE = /[^\x09\x0A\x0D\x20-\x7E\x85\xA0-\uD7FF\uE000-\uFFFD]/;
-
-    function Reader(string, src) {
-      this.string = string;
-      this.src = src;
-      this.line = 0;
-      this.column = 0;
-      this.index = 0;
-      this.string += '\x00';
-    }
-
-    Reader.prototype.peek = function(index) {
-      if (index == null) {
-        index = 0;
-      }
-      return this.string[this.index + index];
-    };
-
-    Reader.prototype.prefix = function(length) {
-      if (length == null) {
-        length = 1;
-      }
-      return this.string.slice(this.index, this.index + length);
-    };
-
-    Reader.prototype.forward = function(length) {
-      var char, _results;
-      if (length == null) {
-        length = 1;
-      }
-      _results = [];
-      while (length) {
-        char = this.string[this.index];
-        this.index++;
-        if (__indexOf.call('\n\x85\u2082\u2029', char) >= 0 || (char === '\r' && this.string[this.index] !== '\n')) {
-          this.line++;
-          this.column = 0;
-        } else {
-          this.check_printable(char);
-          this.column++;
-        }
-        _results.push(length--);
-      }
-      return _results;
-    };
-
-    Reader.prototype.create_mark = function(line, column) {
-      if (line == null) {
-        line = this.line;
-      }
-      if (column == null) {
-        column = this.column;
-      }
-      return new Mark(this.src, line, column, this.string, this.index);
-    };
-
-    Reader.prototype.get_mark = function() {
-      return this.create_mark();
-    };
-
-    Reader.prototype.check_printable = function(char) {
-      if (NON_PRINTABLE.exec(char)) {
-        throw new exports.ReaderError('while reading file', null, "non printable characters are not allowed column: " + (this.get_mark().column), this.get_mark());
-      }
-    };
-
-    return Reader;
-
-  })();
-
-}).call(this);
-
-},{"./errors":1}],23:[function(require,module,exports){
+},{"./errors":2,"./nodes":13,"./util":4}],24:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -9521,7 +9525,8 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
       var parameter, parameters, reserved, result, _i, _len, _ref1;
       result = {};
       reserved = {
-        resourcePath: resourceUri.replace(/\/\/*/g, '/')
+        resourcePath: resourceUri.replace(/\/\/*/g, '/'),
+        resourcePathName: this.extractResourcePathName(resourceUri)
       };
       if (util.isMapping(typeKey)) {
         parameters = this.value_or_undefined(typeKey);
@@ -9545,7 +9550,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"./util":4}],18:[function(require,module,exports){
+},{"./errors":2,"./nodes":13,"./util":4}],19:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, SimpleKey, tokens, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -11051,7 +11056,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./tokens":3,"./util":4}],24:[function(require,module,exports){
+},{"./errors":2,"./tokens":3,"./util":4}],25:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -11152,7 +11157,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11}],26:[function(require,module,exports){
+},{"./errors":2,"./nodes":13}],27:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -11232,11 +11237,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11}],28:[function(require,module,exports){
-window.RAML = {}
-
-window.RAML.Parser = require('../lib/raml')
-},{"../lib/raml":12}],8:[function(require,module,exports){
+},{"./errors":2,"./nodes":13}],8:[function(require,module,exports){
 
 /**
  * Object#toString() ref for stringify().
@@ -11555,7 +11556,246 @@ function decode(str) {
   }
 }
 
-},{}],27:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
+(function() {
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  this.composer = require('./composer');
+
+  this.constructor = require('./construct');
+
+  this.errors = require('./errors');
+
+  this.events = require('./events');
+
+  this.loader = require('./loader');
+
+  this.nodes = require('./nodes');
+
+  this.parser = require('./parser');
+
+  this.reader = require('./reader');
+
+  this.resolver = require('./resolver');
+
+  this.scanner = require('./scanner');
+
+  this.tokens = require('./tokens');
+
+  this.q = require('q');
+
+  this.FileError = (function(_super) {
+    __extends(FileError, _super);
+
+    function FileError() {
+      _ref = FileError.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return FileError;
+
+  })(this.errors.MarkedYAMLError);
+
+  /*
+  Scan a RAML stream and produce scanning tokens.
+  */
+
+
+  this.scan = function(stream, location) {
+    var loader, _results;
+    loader = new exports.loader.Loader(stream, location, false);
+    _results = [];
+    while (loader.check_token()) {
+      _results.push(loader.get_token());
+    }
+    return _results;
+  };
+
+  /*
+  Parse a RAML stream and produce parsing events.
+  */
+
+
+  this.parse = function(stream, location) {
+    var loader, _results;
+    loader = new exports.loader.Loader(stream, location, false);
+    _results = [];
+    while (loader.check_event()) {
+      _results.push(loader.get_event());
+    }
+    return _results;
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  representation tree.
+  */
+
+
+  this.compose = function(stream, validate, apply, join, location, parent) {
+    var loader;
+    if (validate == null) {
+      validate = true;
+    }
+    if (apply == null) {
+      apply = true;
+    }
+    if (join == null) {
+      join = true;
+    }
+    loader = new exports.loader.Loader(stream, location, validate, parent);
+    return loader.get_single_node(validate, apply, join);
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  Javascript object.
+  */
+
+
+  this.load = function(stream, validate, location) {
+    var _this = this;
+    if (validate == null) {
+      validate = true;
+    }
+    return this.q.fcall(function() {
+      var loader;
+      loader = new exports.loader.Loader(stream, location, validate);
+      return loader.get_single_data();
+    });
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce a list of
+  all the absolute URIs for all resources.
+  */
+
+
+  this.resources = function(stream, validate, location) {
+    var _this = this;
+    if (validate == null) {
+      validate = true;
+    }
+    return this.q.fcall(function() {
+      var loader;
+      loader = new exports.loader.Loader(stream, location, validate);
+      return loader.resources();
+    });
+  };
+
+  /*
+  Parse the first RAML document in a stream and produce the corresponding
+  Javascript object.
+  */
+
+
+  this.loadFile = function(file, validate) {
+    var _this = this;
+    if (validate == null) {
+      validate = true;
+    }
+    return this.q.fcall(function() {
+      var stream;
+      stream = _this.readFile(file);
+      return _this.load(stream, validate, file);
+    });
+  };
+
+  /*
+  Parse the first RAML document in a file and produce the corresponding
+  representation tree.
+  */
+
+
+  this.composeFile = function(file, validate, apply, join, parent) {
+    var stream;
+    if (validate == null) {
+      validate = true;
+    }
+    if (apply == null) {
+      apply = true;
+    }
+    if (join == null) {
+      join = true;
+    }
+    stream = this.readFile(file);
+    return this.compose(stream, validate, apply, join, file, parent);
+  };
+
+  /*
+  Parse the first RAML document in a file and produce a list of
+  all the absolute URIs for all resources.
+  */
+
+
+  this.resourcesFile = function(file, validate) {
+    var stream;
+    if (validate == null) {
+      validate = true;
+    }
+    stream = this.readFile(file);
+    return this.resources(stream, validate, file);
+  };
+
+  /*
+  Read file either locally or from the network.
+  */
+
+
+  this.readFile = function(file) {
+    var error, url;
+    url = require('url').parse(file);
+    if (url.protocol != null) {
+      if (!url.protocol.match(/^https?/i)) {
+        throw new exports.FileError("while reading " + file, null, "unknown protocol " + url.protocol, this.start_mark);
+      } else {
+        return this.fetchFile(file);
+      }
+    } else {
+      if (typeof window !== "undefined" && window !== null) {
+        return this.fetchFile(file);
+      } else {
+        try {
+          return require('fs').readFileSync(file).toString();
+        } catch (_error) {
+          error = _error;
+          throw new exports.FileError("while reading " + file, null, "cannot read " + file + " (" + error + ")", this.start_mark);
+        }
+      }
+    }
+  };
+
+  /*
+  Read file from the network.
+  */
+
+
+  this.fetchFile = function(file) {
+    var error, xhr;
+    if (typeof window !== "undefined" && window !== null) {
+      xhr = new XMLHttpRequest();
+    } else {
+      xhr = new (require('xmlhttprequest').XMLHttpRequest)();
+    }
+    try {
+      xhr.open('GET', file, false);
+      xhr.setRequestHeader('Accept', 'application/raml+yaml, */*');
+      xhr.send(null);
+      if ((typeof xhr.status === 'number' && xhr.status === 200) || (typeof xhr.status === 'string' && xhr.status.match(/^200/i))) {
+        return xhr.responseText;
+      }
+      throw new Error("HTTP " + xhr.status + " " + xhr.statusText);
+    } catch (_error) {
+      error = _error;
+      throw new exports.FileError("while fetching " + file, null, "cannot fetch " + file + " (" + error + ")", this.start_mark);
+    }
+  };
+
+}).call(this);
+
+},{"./composer":12,"./construct":15,"./errors":2,"./events":1,"./loader":17,"./nodes":13,"./parser":20,"./reader":18,"./resolver":21,"./scanner":19,"./tokens":3,"fs":9,"q":6,"url":7,"xmlhttprequest":29}],28:[function(require,module,exports){
 (function() {
   var nodes, uritemplate, url, util,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -12060,7 +12300,7 @@ function decode(str) {
 
 }).call(this);
 
-},{"./nodes":11,"./util":4,"uritemplate":29,"url":7}],21:[function(require,module,exports){
+},{"./nodes":13,"./util":4,"uritemplate":30,"url":7}],22:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, traits, uritemplate, url, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -13551,7 +13791,7 @@ function decode(str) {
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"./traits":22,"./util":4,"uritemplate":29,"url":7}],22:[function(require,module,exports){
+},{"./errors":2,"./nodes":13,"./traits":23,"./util":4,"uritemplate":30,"url":7}],23:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, inflection, nodes, util, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -13706,6 +13946,7 @@ function decode(str) {
       var parameterName, usedParameters, _results;
       this._apply_parameters(resource, parameters, useKey, usedParameters = {
         resourcePath: true,
+        resourcePathName: true,
         methodName: true
       });
       _results = [];
@@ -13769,7 +14010,8 @@ function decode(str) {
       result = {};
       reserved = {
         methodName: methodName,
-        resourcePath: resourceUri.replace(/\/\/*/g, '/')
+        resourcePath: resourceUri.replace(/\/\/*/g, '/'),
+        resourcePathName: this.extractResourcePathName(resourceUri)
       };
       if (util.isMapping(typeKey)) {
         parameters = this.value_or_undefined(typeKey);
@@ -13787,252 +14029,590 @@ function decode(str) {
       return util.extend(result, reserved);
     };
 
+    Traits.prototype.extractResourcePathName = function(resourceUri) {
+      var pathSegments, segment;
+      pathSegments = resourceUri.split(/\//);
+      while (segment = pathSegments.pop()) {
+        if (!(typeof segment !== "undefined" && segment !== null ? segment.match(/[{}]/) : void 0)) {
+          return segment;
+        }
+      }
+      return "";
+    };
+
     return Traits;
 
   })();
 
 }).call(this);
 
-},{"./errors":1,"./nodes":11,"./util":4,"inflection":30}],12:[function(require,module,exports){
-(function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+},{"./errors":2,"./nodes":13,"./util":4,"inflection":31}],29:[function(require,module,exports){
+(function(process,Buffer){/**
+ * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
+ *
+ * This can be used with JS designed for browsers to improve reuse of code and
+ * allow the use of existing libraries.
+ *
+ * Usage: include("XMLHttpRequest.js") and use XMLHttpRequest per W3C specs.
+ *
+ * @author Dan DeFelippi <dan@driverdan.com>
+ * @contributor David Ellis <d.f.ellis@ieee.org>
+ * @license MIT
+ */
 
-  this.composer = require('./composer');
+var Url = require("url")
+  , spawn = require("child_process").spawn
+  , fs = require('fs');
 
-  this.constructor = require('./construct');
+exports.XMLHttpRequest = function() {
+  /**
+   * Private variables
+   */
+  var self = this;
+  var http = require('http');
+  var https = require('https');
 
-  this.errors = require('./errors');
+  // Holds http.js objects
+  var client;
+  var request;
+  var response;
 
-  this.events = require('./events');
+  // Request settings
+  var settings = {};
 
-  this.loader = require('./loader');
+  // Disable header blacklist.
+  // Not part of XHR specs.
+  var disableHeaderCheck = false;
 
-  this.nodes = require('./nodes');
-
-  this.parser = require('./parser');
-
-  this.reader = require('./reader');
-
-  this.resolver = require('./resolver');
-
-  this.scanner = require('./scanner');
-
-  this.tokens = require('./tokens');
-
-  this.q = require('q');
-
-  this.FileError = (function(_super) {
-    __extends(FileError, _super);
-
-    function FileError() {
-      _ref = FileError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return FileError;
-
-  })(this.errors.MarkedYAMLError);
-
-  /*
-  Scan a RAML stream and produce scanning tokens.
-  */
-
-
-  this.scan = function(stream, location) {
-    var loader, _results;
-    loader = new exports.loader.Loader(stream, location, false);
-    _results = [];
-    while (loader.check_token()) {
-      _results.push(loader.get_token());
-    }
-    return _results;
+  // Set some default headers
+  var defaultHeaders = {
+    "User-Agent": "node-XMLHttpRequest",
+    "Accept": "*/*",
   };
 
-  /*
-  Parse a RAML stream and produce parsing events.
-  */
+  var headers = defaultHeaders;
 
+  // These headers are not user setable.
+  // The following are allowed but banned in the spec:
+  // * user-agent
+  var forbiddenRequestHeaders = [
+    "accept-charset",
+    "accept-encoding",
+    "access-control-request-headers",
+    "access-control-request-method",
+    "connection",
+    "content-length",
+    "content-transfer-encoding",
+    "cookie",
+    "cookie2",
+    "date",
+    "expect",
+    "host",
+    "keep-alive",
+    "origin",
+    "referer",
+    "te",
+    "trailer",
+    "transfer-encoding",
+    "upgrade",
+    "via"
+  ];
 
-  this.parse = function(stream, location) {
-    var loader, _results;
-    loader = new exports.loader.Loader(stream, location, false);
-    _results = [];
-    while (loader.check_event()) {
-      _results.push(loader.get_event());
-    }
-    return _results;
+  // These request methods are not allowed
+  var forbiddenRequestMethods = [
+    "TRACE",
+    "TRACK",
+    "CONNECT"
+  ];
+
+  // Send flag
+  var sendFlag = false;
+  // Error flag, used when errors occur or abort is called
+  var errorFlag = false;
+
+  // Event listeners
+  var listeners = {};
+
+  /**
+   * Constants
+   */
+
+  this.UNSENT = 0;
+  this.OPENED = 1;
+  this.HEADERS_RECEIVED = 2;
+  this.LOADING = 3;
+  this.DONE = 4;
+
+  /**
+   * Public vars
+   */
+
+  // Current state
+  this.readyState = this.UNSENT;
+
+  // default ready state change handler in case one is not set or is set late
+  this.onreadystatechange = null;
+
+  // Result & response
+  this.responseText = "";
+  this.responseXML = "";
+  this.status = null;
+  this.statusText = null;
+
+  /**
+   * Private methods
+   */
+
+  /**
+   * Check if the specified header is allowed.
+   *
+   * @param string header Header to validate
+   * @return boolean False if not allowed, otherwise true
+   */
+  var isAllowedHttpHeader = function(header) {
+    return disableHeaderCheck || (header && forbiddenRequestHeaders.indexOf(header.toLowerCase()) === -1);
   };
 
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  representation tree.
-  */
-
-
-  this.compose = function(stream, validate, apply, join, location, parent) {
-    var loader;
-    if (validate == null) {
-      validate = true;
-    }
-    if (apply == null) {
-      apply = true;
-    }
-    if (join == null) {
-      join = true;
-    }
-    loader = new exports.loader.Loader(stream, location, validate, parent);
-    return loader.get_single_node(validate, apply, join);
+  /**
+   * Check if the specified method is allowed.
+   *
+   * @param string method Request method to validate
+   * @return boolean False if not allowed, otherwise true
+   */
+  var isAllowedHttpMethod = function(method) {
+    return (method && forbiddenRequestMethods.indexOf(method) === -1);
   };
 
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  Javascript object.
-  */
+  /**
+   * Public methods
+   */
 
+  /**
+   * Open the connection. Currently supports local server requests.
+   *
+   * @param string method Connection method (eg GET, POST)
+   * @param string url URL for the connection.
+   * @param boolean async Asynchronous connection. Default is true.
+   * @param string user Username for basic authentication (optional)
+   * @param string password Password for basic authentication (optional)
+   */
+  this.open = function(method, url, async, user, password) {
+    this.abort();
+    errorFlag = false;
 
-  this.load = function(stream, validate, location) {
-    var _this = this;
-    if (validate == null) {
-      validate = true;
+    // Check for valid request method
+    if (!isAllowedHttpMethod(method)) {
+      throw "SecurityError: Request method not allowed";
+      return;
     }
-    return this.q.fcall(function() {
-      var loader;
-      loader = new exports.loader.Loader(stream, location, validate);
-      return loader.get_single_data();
-    });
+
+    settings = {
+      "method": method,
+      "url": url.toString(),
+      "async": (typeof async !== "boolean" ? true : async),
+      "user": user || null,
+      "password": password || null
+    };
+
+    setState(this.OPENED);
   };
 
-  /*
-  Parse the first RAML document in a stream and produce a list of
-  all the absolute URIs for all resources.
-  */
+  /**
+   * Disables or enables isAllowedHttpHeader() check the request. Enabled by default.
+   * This does not conform to the W3C spec.
+   *
+   * @param boolean state Enable or disable header checking.
+   */
+  this.setDisableHeaderCheck = function(state) {
+    disableHeaderCheck = state;
+  }
 
-
-  this.resources = function(stream, validate, location) {
-    var _this = this;
-    if (validate == null) {
-      validate = true;
+  /**
+   * Sets a header for the request.
+   *
+   * @param string header Header name
+   * @param string value Header value
+   */
+  this.setRequestHeader = function(header, value) {
+    if (this.readyState != this.OPENED) {
+      throw "INVALID_STATE_ERR: setRequestHeader can only be called when state is OPEN";
     }
-    return this.q.fcall(function() {
-      var loader;
-      loader = new exports.loader.Loader(stream, location, validate);
-      return loader.resources();
-    });
+    if (!isAllowedHttpHeader(header)) {
+      console.warn('Refused to set unsafe header "' + header + '"');
+      return;
+    }
+    if (sendFlag) {
+      throw "INVALID_STATE_ERR: send flag is true";
+    }
+    headers[header] = value;
   };
 
-  /*
-  Parse the first RAML document in a stream and produce the corresponding
-  Javascript object.
-  */
-
-
-  this.loadFile = function(file, validate) {
-    var _this = this;
-    if (validate == null) {
-      validate = true;
+  /**
+   * Gets a header from the server response.
+   *
+   * @param string header Name of header to get.
+   * @return string Text of the header or null if it doesn't exist.
+   */
+  this.getResponseHeader = function(header) {
+    if (typeof header === "string"
+      && this.readyState > this.OPENED
+      && response.headers[header.toLowerCase()]
+      && !errorFlag
+    ) {
+      return response.headers[header.toLowerCase()];
     }
-    return this.q.fcall(function() {
-      var stream;
-      stream = _this.readFile(file);
-      return _this.load(stream, validate, file);
-    });
+
+    return null;
   };
 
-  /*
-  Parse the first RAML document in a file and produce the corresponding
-  representation tree.
-  */
-
-
-  this.composeFile = function(file, validate, apply, join, parent) {
-    var stream;
-    if (validate == null) {
-      validate = true;
+  /**
+   * Gets all the response headers.
+   *
+   * @return string A string with all response headers separated by CR+LF
+   */
+  this.getAllResponseHeaders = function() {
+    if (this.readyState < this.HEADERS_RECEIVED || errorFlag) {
+      return "";
     }
-    if (apply == null) {
-      apply = true;
-    }
-    if (join == null) {
-      join = true;
-    }
-    stream = this.readFile(file);
-    return this.compose(stream, validate, apply, join, file, parent);
-  };
+    var result = "";
 
-  /*
-  Parse the first RAML document in a file and produce a list of
-  all the absolute URIs for all resources.
-  */
-
-
-  this.resourcesFile = function(file, validate) {
-    var stream;
-    if (validate == null) {
-      validate = true;
-    }
-    stream = this.readFile(file);
-    return this.resources(stream, validate, file);
-  };
-
-  /*
-  Read file either locally or from the network.
-  */
-
-
-  this.readFile = function(file) {
-    var error, url;
-    url = require('url').parse(file);
-    if (url.protocol != null) {
-      if (!url.protocol.match(/^https?/i)) {
-        throw new exports.FileError("while reading " + file, null, "unknown protocol " + url.protocol, this.start_mark);
-      } else {
-        return this.fetchFile(file);
+    for (var i in response.headers) {
+      // Cookie headers are excluded
+      if (i !== "set-cookie" && i !== "set-cookie2") {
+        result += i + ": " + response.headers[i] + "\r\n";
       }
-    } else {
-      if (typeof window !== "undefined" && window !== null) {
-        return this.fetchFile(file);
+    }
+    return result.substr(0, result.length - 2);
+  };
+
+  /**
+   * Gets a request header
+   *
+   * @param string name Name of header to get
+   * @return string Returns the request header or empty string if not set
+   */
+  this.getRequestHeader = function(name) {
+    // @TODO Make this case insensitive
+    if (typeof name === "string" && headers[name]) {
+      return headers[name];
+    }
+
+    return "";
+  }
+
+  /**
+   * Sends the request to the server.
+   *
+   * @param string data Optional data to send as request body.
+   */
+  this.send = function(data) {
+    if (this.readyState != this.OPENED) {
+      throw "INVALID_STATE_ERR: connection must be opened before send() is called";
+    }
+
+    if (sendFlag) {
+      throw "INVALID_STATE_ERR: send has already been called";
+    }
+
+    var ssl = false, local = false;
+    var url = Url.parse(settings.url);
+
+    // Determine the server
+    switch (url.protocol) {
+      case 'https:':
+        ssl = true;
+        // SSL & non-SSL both need host, no break here.
+      case 'http:':
+        var host = url.hostname;
+        break;
+
+      case 'file:':
+        local = true;
+        break;
+
+      case undefined:
+      case '':
+        var host = "localhost";
+        break;
+
+      default:
+        throw "Protocol not supported.";
+    }
+
+    // Load files off the local filesystem (file://)
+    if (local) {
+      if (settings.method !== "GET") {
+        throw "XMLHttpRequest: Only GET method is supported";
+      }
+
+      if (settings.async) {
+        fs.readFile(url.pathname, 'utf8', function(error, data) {
+          if (error) {
+            self.handleError(error);
+          } else {
+            self.status = 200;
+            self.responseText = data;
+            setState(self.DONE);
+          }
+        });
       } else {
         try {
-          return require('fs').readFileSync(file).toString();
-        } catch (_error) {
-          error = _error;
-          throw new exports.FileError("while reading " + file, null, "cannot read " + file + " (" + error + ")", this.start_mark);
+          this.responseText = fs.readFileSync(url.pathname, 'utf8');
+          this.status = 200;
+          setState(self.DONE);
+        } catch(e) {
+          this.handleError(e);
         }
       }
+
+      return;
     }
-  };
 
-  /*
-  Read file from the network.
-  */
+    // Default to port 80. If accessing localhost on another port be sure
+    // to use http://localhost:port/path
+    var port = url.port || (ssl ? 443 : 80);
+    // Add query string if one is used
+    var uri = url.pathname + (url.search ? url.search : '');
 
-
-  this.fetchFile = function(file) {
-    var error, xhr;
-    if (typeof window !== "undefined" && window !== null) {
-      xhr = new XMLHttpRequest();
-    } else {
-      xhr = new (require('xmlhttprequest').XMLHttpRequest)();
+    // Set the Host header or the server may reject the request
+    headers["Host"] = host;
+    if (!((ssl && port === 443) || port === 80)) {
+      headers["Host"] += ':' + url.port;
     }
-    try {
-      xhr.open('GET', file, false);
-      xhr.setRequestHeader('Accept', 'application/raml+yaml, */*');
-      xhr.send(null);
-      if ((typeof xhr.status === 'number' && xhr.status === 200) || (typeof xhr.status === 'string' && xhr.status.match(/^200/i))) {
-        return xhr.responseText;
+
+    // Set Basic Auth if necessary
+    if (settings.user) {
+      if (typeof settings.password == "undefined") {
+        settings.password = "";
       }
-      throw new Error("HTTP " + xhr.status + " " + xhr.statusText);
-    } catch (_error) {
-      error = _error;
-      throw new exports.FileError("while fetching " + file, null, "cannot fetch " + file + " (" + error + ")", this.start_mark);
+      var authBuf = new Buffer(settings.user + ":" + settings.password);
+      headers["Authorization"] = "Basic " + authBuf.toString("base64");
+    }
+
+    // Set content length header
+    if (settings.method === "GET" || settings.method === "HEAD") {
+      data = null;
+    } else if (data) {
+      headers["Content-Length"] = Buffer.byteLength(data);
+
+      if (!headers["Content-Type"]) {
+        headers["Content-Type"] = "text/plain;charset=UTF-8";
+      }
+    } else if (settings.method === "POST") {
+      // For a post with no data set Content-Length: 0.
+      // This is required by buggy servers that don't meet the specs.
+      headers["Content-Length"] = 0;
+    }
+
+    var options = {
+      host: host,
+      port: port,
+      path: uri,
+      method: settings.method,
+      headers: headers,
+      agent: false
+    };
+
+    // Reset error flag
+    errorFlag = false;
+
+    // Handle async requests
+    if (settings.async) {
+      // Use the proper protocol
+      var doRequest = ssl ? https.request : http.request;
+
+      // Request is being sent, set send flag
+      sendFlag = true;
+
+      // As per spec, this is called here for historical reasons.
+      self.dispatchEvent("readystatechange");
+
+      // Create the request
+      request = doRequest(options, function(resp) {
+        response = resp;
+        response.setEncoding("utf8");
+
+        setState(self.HEADERS_RECEIVED);
+        self.status = response.statusCode;
+
+        response.on('data', function(chunk) {
+          // Make sure there's some data
+          if (chunk) {
+            self.responseText += chunk;
+          }
+          // Don't emit state changes if the connection has been aborted.
+          if (sendFlag) {
+            setState(self.LOADING);
+          }
+        });
+
+        response.on('end', function() {
+          if (sendFlag) {
+            // Discard the 'end' event if the connection has been aborted
+            setState(self.DONE);
+            sendFlag = false;
+          }
+        });
+
+        response.on('error', function(error) {
+          self.handleError(error);
+        });
+      }).on('error', function(error) {
+        self.handleError(error);
+      });
+
+      // Node 0.4 and later won't accept empty data. Make sure it's needed.
+      if (data) {
+        request.write(data);
+      }
+
+      request.end();
+
+      self.dispatchEvent("loadstart");
+    } else { // Synchronous
+      // Create a temporary file for communication with the other Node process
+      var syncFile = ".node-xmlhttprequest-sync-" + process.pid;
+      fs.writeFileSync(syncFile, "", "utf8");
+      // The async request the other Node process executes
+      var execString = "var http = require('http'), https = require('https'), fs = require('fs');"
+        + "var doRequest = http" + (ssl ? "s" : "") + ".request;"
+        + "var options = " + JSON.stringify(options) + ";"
+        + "var responseText = '';"
+        + "var req = doRequest(options, function(response) {"
+        + "response.setEncoding('utf8');"
+        + "response.on('data', function(chunk) {"
+        + "responseText += chunk;"
+        + "});"
+        + "response.on('end', function() {"
+        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-STATUS:' + response.statusCode + ',' + responseText, 'utf8');"
+        + "});"
+        + "response.on('error', function(error) {"
+        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-ERROR:' + JSON.stringify(error), 'utf8');"
+        + "});"
+        + "}).on('error', function(error) {"
+        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-ERROR:' + JSON.stringify(error), 'utf8');"
+        + "});"
+        + (data ? "req.write('" + data.replace(/'/g, "\\'") + "');":"")
+        + "req.end();";
+      // Start the other Node Process, executing this string
+      syncProc = spawn(process.argv[0], ["-e", execString]);
+      while((self.responseText = fs.readFileSync(syncFile, 'utf8')) == "") {
+        // Wait while the file is empty
+      }
+      // Kill the child process once the file has data
+      syncProc.stdin.end();
+      // Remove the temporary file
+      fs.unlinkSync(syncFile);
+      if (self.responseText.match(/^NODE-XMLHTTPREQUEST-ERROR:/)) {
+        // If the file returned an error, handle it
+        var errorObj = self.responseText.replace(/^NODE-XMLHTTPREQUEST-ERROR:/, "");
+        self.handleError(errorObj);
+      } else {
+        // If the file returned okay, parse its data and move to the DONE state
+        self.status = self.responseText.replace(/^NODE-XMLHTTPREQUEST-STATUS:([0-9]*),.*/, "$1");
+        self.responseText = self.responseText.replace(/^NODE-XMLHTTPREQUEST-STATUS:[0-9]*,(.*)/, "$1");
+        setState(self.DONE);
+      }
     }
   };
 
-}).call(this);
+  /**
+   * Called when an error is encountered to deal with it.
+   */
+  this.handleError = function(error) {
+    this.status = 503;
+    this.statusText = error;
+    this.responseText = error.stack;
+    errorFlag = true;
+    setState(this.DONE);
+  };
 
-},{"./composer":10,"./construct":14,"./errors":1,"./events":2,"./loader":16,"./nodes":11,"./parser":19,"./reader":17,"./resolver":20,"./scanner":18,"./tokens":3,"fs":9,"q":6,"url":7,"xmlhttprequest":31}],29:[function(require,module,exports){
+  /**
+   * Aborts a request.
+   */
+  this.abort = function() {
+    if (request) {
+      request.abort();
+      request = null;
+    }
+
+    headers = defaultHeaders;
+    this.responseText = "";
+    this.responseXML = "";
+
+    errorFlag = true;
+
+    if (this.readyState !== this.UNSENT
+        && (this.readyState !== this.OPENED || sendFlag)
+        && this.readyState !== this.DONE) {
+      sendFlag = false;
+      setState(this.DONE);
+    }
+    this.readyState = this.UNSENT;
+  };
+
+  /**
+   * Adds an event listener. Preferred method of binding to events.
+   */
+  this.addEventListener = function(event, callback) {
+    if (!(event in listeners)) {
+      listeners[event] = [];
+    }
+    // Currently allows duplicate callbacks. Should it?
+    listeners[event].push(callback);
+  };
+
+  /**
+   * Remove an event callback that has already been bound.
+   * Only works on the matching funciton, cannot be a copy.
+   */
+  this.removeEventListener = function(event, callback) {
+    if (event in listeners) {
+      // Filter will return a new array with the callback removed
+      listeners[event] = listeners[event].filter(function(ev) {
+        return ev !== callback;
+      });
+    }
+  };
+
+  /**
+   * Dispatch any events, including both "on" methods and events attached using addEventListener.
+   */
+  this.dispatchEvent = function(event) {
+    if (typeof self["on" + event] === "function") {
+      self["on" + event]();
+    }
+    if (event in listeners) {
+      for (var i = 0, len = listeners[event].length; i < len; i++) {
+        listeners[event][i].call(self);
+      }
+    }
+  };
+
+  /**
+   * Changes readyState and calls onreadystatechange.
+   *
+   * @param int state New state
+   */
+  var setState = function(state) {
+    if (self.readyState !== state) {
+      self.readyState = state;
+
+      if (settings.async || self.readyState < self.OPENED || self.readyState === self.DONE) {
+        self.dispatchEvent("readystatechange");
+      }
+
+      if (self.readyState === self.DONE && !errorFlag) {
+        self.dispatchEvent("load");
+        // @TODO figure out InspectorInstrumentation::didLoadXHR(cookie)
+        self.dispatchEvent("loadend");
+      }
+    }
+  };
+};
+
+})(require("__browserify_process"),require("__browserify_buffer").Buffer)
+},{"__browserify_buffer":14,"__browserify_process":5,"child_process":32,"fs":9,"http":33,"https":34,"url":7}],30:[function(require,module,exports){
 (function(global){/*global unescape, module, define, window, global*/
 
 /*
@@ -14920,575 +15500,7 @@ var UriTemplate = (function () {
 ));
 
 })(window)
-},{}],31:[function(require,module,exports){
-(function(process,Buffer){/**
- * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
- *
- * This can be used with JS designed for browsers to improve reuse of code and
- * allow the use of existing libraries.
- *
- * Usage: include("XMLHttpRequest.js") and use XMLHttpRequest per W3C specs.
- *
- * @author Dan DeFelippi <dan@driverdan.com>
- * @contributor David Ellis <d.f.ellis@ieee.org>
- * @license MIT
- */
-
-var Url = require("url")
-  , spawn = require("child_process").spawn
-  , fs = require('fs');
-
-exports.XMLHttpRequest = function() {
-  /**
-   * Private variables
-   */
-  var self = this;
-  var http = require('http');
-  var https = require('https');
-
-  // Holds http.js objects
-  var client;
-  var request;
-  var response;
-
-  // Request settings
-  var settings = {};
-
-  // Disable header blacklist.
-  // Not part of XHR specs.
-  var disableHeaderCheck = false;
-
-  // Set some default headers
-  var defaultHeaders = {
-    "User-Agent": "node-XMLHttpRequest",
-    "Accept": "*/*",
-  };
-
-  var headers = defaultHeaders;
-
-  // These headers are not user setable.
-  // The following are allowed but banned in the spec:
-  // * user-agent
-  var forbiddenRequestHeaders = [
-    "accept-charset",
-    "accept-encoding",
-    "access-control-request-headers",
-    "access-control-request-method",
-    "connection",
-    "content-length",
-    "content-transfer-encoding",
-    "cookie",
-    "cookie2",
-    "date",
-    "expect",
-    "host",
-    "keep-alive",
-    "origin",
-    "referer",
-    "te",
-    "trailer",
-    "transfer-encoding",
-    "upgrade",
-    "via"
-  ];
-
-  // These request methods are not allowed
-  var forbiddenRequestMethods = [
-    "TRACE",
-    "TRACK",
-    "CONNECT"
-  ];
-
-  // Send flag
-  var sendFlag = false;
-  // Error flag, used when errors occur or abort is called
-  var errorFlag = false;
-
-  // Event listeners
-  var listeners = {};
-
-  /**
-   * Constants
-   */
-
-  this.UNSENT = 0;
-  this.OPENED = 1;
-  this.HEADERS_RECEIVED = 2;
-  this.LOADING = 3;
-  this.DONE = 4;
-
-  /**
-   * Public vars
-   */
-
-  // Current state
-  this.readyState = this.UNSENT;
-
-  // default ready state change handler in case one is not set or is set late
-  this.onreadystatechange = null;
-
-  // Result & response
-  this.responseText = "";
-  this.responseXML = "";
-  this.status = null;
-  this.statusText = null;
-
-  /**
-   * Private methods
-   */
-
-  /**
-   * Check if the specified header is allowed.
-   *
-   * @param string header Header to validate
-   * @return boolean False if not allowed, otherwise true
-   */
-  var isAllowedHttpHeader = function(header) {
-    return disableHeaderCheck || (header && forbiddenRequestHeaders.indexOf(header.toLowerCase()) === -1);
-  };
-
-  /**
-   * Check if the specified method is allowed.
-   *
-   * @param string method Request method to validate
-   * @return boolean False if not allowed, otherwise true
-   */
-  var isAllowedHttpMethod = function(method) {
-    return (method && forbiddenRequestMethods.indexOf(method) === -1);
-  };
-
-  /**
-   * Public methods
-   */
-
-  /**
-   * Open the connection. Currently supports local server requests.
-   *
-   * @param string method Connection method (eg GET, POST)
-   * @param string url URL for the connection.
-   * @param boolean async Asynchronous connection. Default is true.
-   * @param string user Username for basic authentication (optional)
-   * @param string password Password for basic authentication (optional)
-   */
-  this.open = function(method, url, async, user, password) {
-    this.abort();
-    errorFlag = false;
-
-    // Check for valid request method
-    if (!isAllowedHttpMethod(method)) {
-      throw "SecurityError: Request method not allowed";
-      return;
-    }
-
-    settings = {
-      "method": method,
-      "url": url.toString(),
-      "async": (typeof async !== "boolean" ? true : async),
-      "user": user || null,
-      "password": password || null
-    };
-
-    setState(this.OPENED);
-  };
-
-  /**
-   * Disables or enables isAllowedHttpHeader() check the request. Enabled by default.
-   * This does not conform to the W3C spec.
-   *
-   * @param boolean state Enable or disable header checking.
-   */
-  this.setDisableHeaderCheck = function(state) {
-    disableHeaderCheck = state;
-  }
-
-  /**
-   * Sets a header for the request.
-   *
-   * @param string header Header name
-   * @param string value Header value
-   */
-  this.setRequestHeader = function(header, value) {
-    if (this.readyState != this.OPENED) {
-      throw "INVALID_STATE_ERR: setRequestHeader can only be called when state is OPEN";
-    }
-    if (!isAllowedHttpHeader(header)) {
-      console.warn('Refused to set unsafe header "' + header + '"');
-      return;
-    }
-    if (sendFlag) {
-      throw "INVALID_STATE_ERR: send flag is true";
-    }
-    headers[header] = value;
-  };
-
-  /**
-   * Gets a header from the server response.
-   *
-   * @param string header Name of header to get.
-   * @return string Text of the header or null if it doesn't exist.
-   */
-  this.getResponseHeader = function(header) {
-    if (typeof header === "string"
-      && this.readyState > this.OPENED
-      && response.headers[header.toLowerCase()]
-      && !errorFlag
-    ) {
-      return response.headers[header.toLowerCase()];
-    }
-
-    return null;
-  };
-
-  /**
-   * Gets all the response headers.
-   *
-   * @return string A string with all response headers separated by CR+LF
-   */
-  this.getAllResponseHeaders = function() {
-    if (this.readyState < this.HEADERS_RECEIVED || errorFlag) {
-      return "";
-    }
-    var result = "";
-
-    for (var i in response.headers) {
-      // Cookie headers are excluded
-      if (i !== "set-cookie" && i !== "set-cookie2") {
-        result += i + ": " + response.headers[i] + "\r\n";
-      }
-    }
-    return result.substr(0, result.length - 2);
-  };
-
-  /**
-   * Gets a request header
-   *
-   * @param string name Name of header to get
-   * @return string Returns the request header or empty string if not set
-   */
-  this.getRequestHeader = function(name) {
-    // @TODO Make this case insensitive
-    if (typeof name === "string" && headers[name]) {
-      return headers[name];
-    }
-
-    return "";
-  }
-
-  /**
-   * Sends the request to the server.
-   *
-   * @param string data Optional data to send as request body.
-   */
-  this.send = function(data) {
-    if (this.readyState != this.OPENED) {
-      throw "INVALID_STATE_ERR: connection must be opened before send() is called";
-    }
-
-    if (sendFlag) {
-      throw "INVALID_STATE_ERR: send has already been called";
-    }
-
-    var ssl = false, local = false;
-    var url = Url.parse(settings.url);
-
-    // Determine the server
-    switch (url.protocol) {
-      case 'https:':
-        ssl = true;
-        // SSL & non-SSL both need host, no break here.
-      case 'http:':
-        var host = url.hostname;
-        break;
-
-      case 'file:':
-        local = true;
-        break;
-
-      case undefined:
-      case '':
-        var host = "localhost";
-        break;
-
-      default:
-        throw "Protocol not supported.";
-    }
-
-    // Load files off the local filesystem (file://)
-    if (local) {
-      if (settings.method !== "GET") {
-        throw "XMLHttpRequest: Only GET method is supported";
-      }
-
-      if (settings.async) {
-        fs.readFile(url.pathname, 'utf8', function(error, data) {
-          if (error) {
-            self.handleError(error);
-          } else {
-            self.status = 200;
-            self.responseText = data;
-            setState(self.DONE);
-          }
-        });
-      } else {
-        try {
-          this.responseText = fs.readFileSync(url.pathname, 'utf8');
-          this.status = 200;
-          setState(self.DONE);
-        } catch(e) {
-          this.handleError(e);
-        }
-      }
-
-      return;
-    }
-
-    // Default to port 80. If accessing localhost on another port be sure
-    // to use http://localhost:port/path
-    var port = url.port || (ssl ? 443 : 80);
-    // Add query string if one is used
-    var uri = url.pathname + (url.search ? url.search : '');
-
-    // Set the Host header or the server may reject the request
-    headers["Host"] = host;
-    if (!((ssl && port === 443) || port === 80)) {
-      headers["Host"] += ':' + url.port;
-    }
-
-    // Set Basic Auth if necessary
-    if (settings.user) {
-      if (typeof settings.password == "undefined") {
-        settings.password = "";
-      }
-      var authBuf = new Buffer(settings.user + ":" + settings.password);
-      headers["Authorization"] = "Basic " + authBuf.toString("base64");
-    }
-
-    // Set content length header
-    if (settings.method === "GET" || settings.method === "HEAD") {
-      data = null;
-    } else if (data) {
-      headers["Content-Length"] = Buffer.byteLength(data);
-
-      if (!headers["Content-Type"]) {
-        headers["Content-Type"] = "text/plain;charset=UTF-8";
-      }
-    } else if (settings.method === "POST") {
-      // For a post with no data set Content-Length: 0.
-      // This is required by buggy servers that don't meet the specs.
-      headers["Content-Length"] = 0;
-    }
-
-    var options = {
-      host: host,
-      port: port,
-      path: uri,
-      method: settings.method,
-      headers: headers,
-      agent: false
-    };
-
-    // Reset error flag
-    errorFlag = false;
-
-    // Handle async requests
-    if (settings.async) {
-      // Use the proper protocol
-      var doRequest = ssl ? https.request : http.request;
-
-      // Request is being sent, set send flag
-      sendFlag = true;
-
-      // As per spec, this is called here for historical reasons.
-      self.dispatchEvent("readystatechange");
-
-      // Create the request
-      request = doRequest(options, function(resp) {
-        response = resp;
-        response.setEncoding("utf8");
-
-        setState(self.HEADERS_RECEIVED);
-        self.status = response.statusCode;
-
-        response.on('data', function(chunk) {
-          // Make sure there's some data
-          if (chunk) {
-            self.responseText += chunk;
-          }
-          // Don't emit state changes if the connection has been aborted.
-          if (sendFlag) {
-            setState(self.LOADING);
-          }
-        });
-
-        response.on('end', function() {
-          if (sendFlag) {
-            // Discard the 'end' event if the connection has been aborted
-            setState(self.DONE);
-            sendFlag = false;
-          }
-        });
-
-        response.on('error', function(error) {
-          self.handleError(error);
-        });
-      }).on('error', function(error) {
-        self.handleError(error);
-      });
-
-      // Node 0.4 and later won't accept empty data. Make sure it's needed.
-      if (data) {
-        request.write(data);
-      }
-
-      request.end();
-
-      self.dispatchEvent("loadstart");
-    } else { // Synchronous
-      // Create a temporary file for communication with the other Node process
-      var syncFile = ".node-xmlhttprequest-sync-" + process.pid;
-      fs.writeFileSync(syncFile, "", "utf8");
-      // The async request the other Node process executes
-      var execString = "var http = require('http'), https = require('https'), fs = require('fs');"
-        + "var doRequest = http" + (ssl ? "s" : "") + ".request;"
-        + "var options = " + JSON.stringify(options) + ";"
-        + "var responseText = '';"
-        + "var req = doRequest(options, function(response) {"
-        + "response.setEncoding('utf8');"
-        + "response.on('data', function(chunk) {"
-        + "responseText += chunk;"
-        + "});"
-        + "response.on('end', function() {"
-        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-STATUS:' + response.statusCode + ',' + responseText, 'utf8');"
-        + "});"
-        + "response.on('error', function(error) {"
-        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-ERROR:' + JSON.stringify(error), 'utf8');"
-        + "});"
-        + "}).on('error', function(error) {"
-        + "fs.writeFileSync('" + syncFile + "', 'NODE-XMLHTTPREQUEST-ERROR:' + JSON.stringify(error), 'utf8');"
-        + "});"
-        + (data ? "req.write('" + data.replace(/'/g, "\\'") + "');":"")
-        + "req.end();";
-      // Start the other Node Process, executing this string
-      syncProc = spawn(process.argv[0], ["-e", execString]);
-      while((self.responseText = fs.readFileSync(syncFile, 'utf8')) == "") {
-        // Wait while the file is empty
-      }
-      // Kill the child process once the file has data
-      syncProc.stdin.end();
-      // Remove the temporary file
-      fs.unlinkSync(syncFile);
-      if (self.responseText.match(/^NODE-XMLHTTPREQUEST-ERROR:/)) {
-        // If the file returned an error, handle it
-        var errorObj = self.responseText.replace(/^NODE-XMLHTTPREQUEST-ERROR:/, "");
-        self.handleError(errorObj);
-      } else {
-        // If the file returned okay, parse its data and move to the DONE state
-        self.status = self.responseText.replace(/^NODE-XMLHTTPREQUEST-STATUS:([0-9]*),.*/, "$1");
-        self.responseText = self.responseText.replace(/^NODE-XMLHTTPREQUEST-STATUS:[0-9]*,(.*)/, "$1");
-        setState(self.DONE);
-      }
-    }
-  };
-
-  /**
-   * Called when an error is encountered to deal with it.
-   */
-  this.handleError = function(error) {
-    this.status = 503;
-    this.statusText = error;
-    this.responseText = error.stack;
-    errorFlag = true;
-    setState(this.DONE);
-  };
-
-  /**
-   * Aborts a request.
-   */
-  this.abort = function() {
-    if (request) {
-      request.abort();
-      request = null;
-    }
-
-    headers = defaultHeaders;
-    this.responseText = "";
-    this.responseXML = "";
-
-    errorFlag = true;
-
-    if (this.readyState !== this.UNSENT
-        && (this.readyState !== this.OPENED || sendFlag)
-        && this.readyState !== this.DONE) {
-      sendFlag = false;
-      setState(this.DONE);
-    }
-    this.readyState = this.UNSENT;
-  };
-
-  /**
-   * Adds an event listener. Preferred method of binding to events.
-   */
-  this.addEventListener = function(event, callback) {
-    if (!(event in listeners)) {
-      listeners[event] = [];
-    }
-    // Currently allows duplicate callbacks. Should it?
-    listeners[event].push(callback);
-  };
-
-  /**
-   * Remove an event callback that has already been bound.
-   * Only works on the matching funciton, cannot be a copy.
-   */
-  this.removeEventListener = function(event, callback) {
-    if (event in listeners) {
-      // Filter will return a new array with the callback removed
-      listeners[event] = listeners[event].filter(function(ev) {
-        return ev !== callback;
-      });
-    }
-  };
-
-  /**
-   * Dispatch any events, including both "on" methods and events attached using addEventListener.
-   */
-  this.dispatchEvent = function(event) {
-    if (typeof self["on" + event] === "function") {
-      self["on" + event]();
-    }
-    if (event in listeners) {
-      for (var i = 0, len = listeners[event].length; i < len; i++) {
-        listeners[event][i].call(self);
-      }
-    }
-  };
-
-  /**
-   * Changes readyState and calls onreadystatechange.
-   *
-   * @param int state New state
-   */
-  var setState = function(state) {
-    if (self.readyState !== state) {
-      self.readyState = state;
-
-      if (settings.async || self.readyState < self.OPENED || self.readyState === self.DONE) {
-        self.dispatchEvent("readystatechange");
-      }
-
-      if (self.readyState === self.DONE && !errorFlag) {
-        self.dispatchEvent("load");
-        // @TODO figure out InspectorInstrumentation::didLoadXHR(cookie)
-        self.dispatchEvent("loadend");
-      }
-    }
-  };
-};
-
-})(require("__browserify_process"),require("__browserify_buffer").Buffer)
-},{"__browserify_buffer":13,"__browserify_process":5,"child_process":32,"fs":9,"http":33,"https":34,"url":7}],30:[function(require,module,exports){
-module.exports = require( './lib/inflection' );
-},{"./lib/inflection":35}],32:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 exports.spawn = function () {};
 exports.exec = function () {};
 
@@ -15506,7 +15518,9 @@ https.request = function (params, cb) {
     params.scheme = 'https';
     return http.request.call(this, params, cb);
 }
-},{"http":33}],36:[function(require,module,exports){
+},{"http":33}],31:[function(require,module,exports){
+module.exports = require( './lib/inflection' );
+},{"./lib/inflection":35}],36:[function(require,module,exports){
 (function(process){if (!process.EventEmitter) process.EventEmitter = function () {};
 
 var EventEmitter = exports.EventEmitter = process.EventEmitter;
@@ -15703,7 +15717,69 @@ EventEmitter.listenerCount = function(emitter, type) {
 };
 
 })(require("__browserify_process"))
-},{"__browserify_process":5}],35:[function(require,module,exports){
+},{"__browserify_process":5}],33:[function(require,module,exports){
+var http = module.exports;
+var EventEmitter = require('events').EventEmitter;
+var Request = require('./lib/request');
+
+http.request = function (params, cb) {
+    if (!params) params = {};
+    if (!params.host) params.host = window.location.host.split(':')[0];
+    if (!params.port) params.port = window.location.port;
+    if (!params.scheme) params.scheme = window.location.protocol.split(':')[0];
+    
+    var req = new Request(new xhrHttp, params);
+    if (cb) req.on('response', cb);
+    return req;
+};
+
+http.get = function (params, cb) {
+    params.method = 'GET';
+    var req = http.request(params, cb);
+    req.end();
+    return req;
+};
+
+http.Agent = function () {};
+http.Agent.defaultMaxSockets = 4;
+
+var xhrHttp = (function () {
+    if (typeof window === 'undefined') {
+        throw new Error('no window object present');
+    }
+    else if (window.XMLHttpRequest) {
+        return window.XMLHttpRequest;
+    }
+    else if (window.ActiveXObject) {
+        var axs = [
+            'Msxml2.XMLHTTP.6.0',
+            'Msxml2.XMLHTTP.3.0',
+            'Microsoft.XMLHTTP'
+        ];
+        for (var i = 0; i < axs.length; i++) {
+            try {
+                var ax = new(window.ActiveXObject)(axs[i]);
+                return function () {
+                    if (ax) {
+                        var ax_ = ax;
+                        ax = null;
+                        return ax_;
+                    }
+                    else {
+                        return new(window.ActiveXObject)(axs[i]);
+                    }
+                };
+            }
+            catch (e) {}
+        }
+        throw new Error('ajax not supported in this browser')
+    }
+    else {
+        throw new Error('ajax not supported in this browser');
+    }
+})();
+
+},{"./lib/request":37,"events":36}],35:[function(require,module,exports){
 /*!
  * inflection
  * Copyright(c) 2011 Ben Lin <ben@dreamerslab.com>
@@ -16240,69 +16316,7 @@ module.exports = {
   }
 };
 
-},{}],33:[function(require,module,exports){
-var http = module.exports;
-var EventEmitter = require('events').EventEmitter;
-var Request = require('./lib/request');
-
-http.request = function (params, cb) {
-    if (!params) params = {};
-    if (!params.host) params.host = window.location.host.split(':')[0];
-    if (!params.port) params.port = window.location.port;
-    if (!params.scheme) params.scheme = window.location.protocol.split(':')[0];
-    
-    var req = new Request(new xhrHttp, params);
-    if (cb) req.on('response', cb);
-    return req;
-};
-
-http.get = function (params, cb) {
-    params.method = 'GET';
-    var req = http.request(params, cb);
-    req.end();
-    return req;
-};
-
-http.Agent = function () {};
-http.Agent.defaultMaxSockets = 4;
-
-var xhrHttp = (function () {
-    if (typeof window === 'undefined') {
-        throw new Error('no window object present');
-    }
-    else if (window.XMLHttpRequest) {
-        return window.XMLHttpRequest;
-    }
-    else if (window.ActiveXObject) {
-        var axs = [
-            'Msxml2.XMLHTTP.6.0',
-            'Msxml2.XMLHTTP.3.0',
-            'Microsoft.XMLHTTP'
-        ];
-        for (var i = 0; i < axs.length; i++) {
-            try {
-                var ax = new(window.ActiveXObject)(axs[i]);
-                return function () {
-                    if (ax) {
-                        var ax_ = ax;
-                        ax = null;
-                        return ax_;
-                    }
-                    else {
-                        return new(window.ActiveXObject)(axs[i]);
-                    }
-                };
-            }
-            catch (e) {}
-        }
-        throw new Error('ajax not supported in this browser')
-    }
-    else {
-        throw new Error('ajax not supported in this browser');
-    }
-})();
-
-},{"./lib/request":37,"events":36}],38:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var events = require('events');
 var util = require('util');
 
@@ -16772,13 +16786,14 @@ exports.format = function(f) {
 
 },{"events":36}],40:[function(require,module,exports){
 var Stream = require('stream');
+var util = require('util');
 
 var Response = module.exports = function (res) {
     this.offset = 0;
     this.readable = true;
 };
 
-Response.prototype = new Stream;
+util.inherits(Response, Stream);
 
 var capable = {
     streaming : true,
@@ -16891,11 +16906,12 @@ var isArray = Array.isArray || function (xs) {
     return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{"stream":38}],37:[function(require,module,exports){
+},{"stream":38,"util":39}],37:[function(require,module,exports){
 var Stream = require('stream');
 var Response = require('./response');
 var concatStream = require('concat-stream');
 var Base64 = require('Base64');
+var util = require('util');
 
 var Request = module.exports = function (xhr, params) {
     var self = this;
@@ -16948,7 +16964,7 @@ var Request = module.exports = function (xhr, params) {
     };
 };
 
-Request.prototype = new Stream;
+util.inherits(Request, Stream);
 
 Request.prototype.setHeader = function (key, value) {
     if (isArray(value)) {
@@ -17024,11 +17040,11 @@ var indexOf = function (xs, x) {
     return -1;
 };
 
-},{"./response":40,"Base64":42,"concat-stream":41,"stream":38}],42:[function(require,module,exports){
+},{"./response":40,"Base64":42,"concat-stream":41,"stream":38,"util":39}],42:[function(require,module,exports){
 ;(function () {
 
   var
-    object = typeof exports != 'undefined' ? exports : window,
+    object = typeof exports != 'undefined' ? exports : this, // #8: web workers
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
     INVALID_CHARACTER_ERR = (function () {
       // fabricate a suitable error object
@@ -17153,10 +17169,17 @@ function mix(from, into) {
   }
 }
 
-},{"./copy.js":49,"./create.js":50,"./from.js":45,"./is.js":46,"./join.js":48,"./read.js":51,"./subarray.js":47,"./to.js":44,"./write.js":52}],46:[function(require,module,exports){
+},{"./copy.js":49,"./create.js":50,"./from.js":44,"./is.js":46,"./join.js":48,"./read.js":51,"./subarray.js":47,"./to.js":45,"./write.js":52}],46:[function(require,module,exports){
 
 module.exports = function(buffer) {
   return buffer instanceof Uint8Array;
+}
+
+},{}],47:[function(require,module,exports){
+module.exports = subarray
+
+function subarray(buf, from, to) {
+  return buf.subarray(from || 0, to || buf.length)
 }
 
 },{}],48:[function(require,module,exports){
@@ -17251,107 +17274,12 @@ function slow_copy(from, to, j, i, jend) {
   }
 }
 
-},{}],47:[function(require,module,exports){
-module.exports = subarray
-
-function subarray(buf, from, to) {
-  return buf.subarray(from || 0, to || buf.length)
-}
-
 },{}],50:[function(require,module,exports){
 module.exports = function(size) {
   return new Uint8Array(size)
 }
 
-},{}],52:[function(require,module,exports){
-module.exports = {
-    writeUInt8:      write_uint8
-  , writeInt8:       write_int8
-  , writeUInt16LE:   write_uint16_le
-  , writeUInt32LE:   write_uint32_le
-  , writeInt16LE:    write_int16_le
-  , writeInt32LE:    write_int32_le
-  , writeFloatLE:    write_float_le
-  , writeDoubleLE:   write_double_le
-  , writeUInt16BE:   write_uint16_be
-  , writeUInt32BE:   write_uint32_be
-  , writeInt16BE:    write_int16_be
-  , writeInt32BE:    write_int32_be
-  , writeFloatBE:    write_float_be
-  , writeDoubleBE:   write_double_be
-}
-
-var map = require('./mapped.js')
-
-function write_uint8(target, value, at) {
-  return target[at] = value
-}
-
-function write_int8(target, value, at) {
-  return target[at] = value < 0 ? value + 0x100 : value
-}
-
-function write_uint16_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setUint16(at + target.byteOffset, value, true)
-}
-
-function write_uint32_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setUint32(at + target.byteOffset, value, true)
-}
-
-function write_int16_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setInt16(at + target.byteOffset, value, true)
-}
-
-function write_int32_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setInt32(at + target.byteOffset, value, true)
-}
-
-function write_float_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setFloat32(at + target.byteOffset, value, true)
-}
-
-function write_double_le(target, value, at) {
-  var dv = map.get(target);
-  return dv.setFloat64(at + target.byteOffset, value, true)
-}
-
-function write_uint16_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setUint16(at + target.byteOffset, value, false)
-}
-
-function write_uint32_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setUint32(at + target.byteOffset, value, false)
-}
-
-function write_int16_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setInt16(at + target.byteOffset, value, false)
-}
-
-function write_int32_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setInt32(at + target.byteOffset, value, false)
-}
-
-function write_float_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setFloat32(at + target.byteOffset, value, false)
-}
-
-function write_double_be(target, value, at) {
-  var dv = map.get(target);
-  return dv.setFloat64(at + target.byteOffset, value, false)
-}
-
-},{"./mapped.js":53}],51:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 module.exports = {
     readUInt8:      read_uint8
   , readInt8:       read_int8
@@ -17440,6 +17368,94 @@ function read_double_be(target, at) {
   return dv.getFloat64(at + target.byteOffset, false)
 }
 
+},{"./mapped.js":53}],52:[function(require,module,exports){
+module.exports = {
+    writeUInt8:      write_uint8
+  , writeInt8:       write_int8
+  , writeUInt16LE:   write_uint16_le
+  , writeUInt32LE:   write_uint32_le
+  , writeInt16LE:    write_int16_le
+  , writeInt32LE:    write_int32_le
+  , writeFloatLE:    write_float_le
+  , writeDoubleLE:   write_double_le
+  , writeUInt16BE:   write_uint16_be
+  , writeUInt32BE:   write_uint32_be
+  , writeInt16BE:    write_int16_be
+  , writeInt32BE:    write_int32_be
+  , writeFloatBE:    write_float_be
+  , writeDoubleBE:   write_double_be
+}
+
+var map = require('./mapped.js')
+
+function write_uint8(target, value, at) {
+  return target[at] = value
+}
+
+function write_int8(target, value, at) {
+  return target[at] = value < 0 ? value + 0x100 : value
+}
+
+function write_uint16_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setUint16(at + target.byteOffset, value, true)
+}
+
+function write_uint32_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setUint32(at + target.byteOffset, value, true)
+}
+
+function write_int16_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setInt16(at + target.byteOffset, value, true)
+}
+
+function write_int32_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setInt32(at + target.byteOffset, value, true)
+}
+
+function write_float_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setFloat32(at + target.byteOffset, value, true)
+}
+
+function write_double_le(target, value, at) {
+  var dv = map.get(target);
+  return dv.setFloat64(at + target.byteOffset, value, true)
+}
+
+function write_uint16_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setUint16(at + target.byteOffset, value, false)
+}
+
+function write_uint32_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setUint32(at + target.byteOffset, value, false)
+}
+
+function write_int16_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setInt16(at + target.byteOffset, value, false)
+}
+
+function write_int32_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setInt32(at + target.byteOffset, value, false)
+}
+
+function write_float_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setFloat32(at + target.byteOffset, value, false)
+}
+
+function write_double_be(target, value, at) {
+  var dv = map.get(target);
+  return dv.setFloat64(at + target.byteOffset, value, false)
+}
+
 },{"./mapped.js":53}],53:[function(require,module,exports){
 var proto
   , map
@@ -17462,7 +17478,7 @@ function get(target) {
   return out
 }
 
-},{}],45:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 module.exports = from
 
 var base64 = require('base64-js')
@@ -17522,7 +17538,45 @@ function from_base64(str) {
   return new Uint8Array(base64.toByteArray(str)) 
 }
 
-},{"base64-js":54}],54:[function(require,module,exports){
+},{"base64-js":54}],45:[function(require,module,exports){
+module.exports = to
+
+var base64 = require('base64-js')
+  , toutf8 = require('to-utf8')
+
+var encoders = {
+    hex: to_hex
+  , utf8: to_utf
+  , base64: to_base64
+}
+
+function to(buf, encoding) {
+  return encoders[encoding || 'utf8'](buf)
+}
+
+function to_hex(buf) {
+  var str = ''
+    , byt
+
+  for(var i = 0, len = buf.length; i < len; ++i) {
+    byt = buf[i]
+    str += ((byt & 0xF0) >>> 4).toString(16)
+    str += (byt & 0x0F).toString(16)
+  }
+
+  return str
+}
+
+function to_utf(buf) {
+  return toutf8(buf)
+}
+
+function to_base64(buf) {
+  return base64.fromByteArray(buf)
+}
+
+
+},{"base64-js":54,"to-utf8":55}],54:[function(require,module,exports){
 (function (exports) {
 	'use strict';
 
@@ -17608,45 +17662,7 @@ function from_base64(str) {
 	module.exports.fromByteArray = uint8ToBase64;
 }());
 
-},{}],44:[function(require,module,exports){
-module.exports = to
-
-var base64 = require('base64-js')
-  , toutf8 = require('to-utf8')
-
-var encoders = {
-    hex: to_hex
-  , utf8: to_utf
-  , base64: to_base64
-}
-
-function to(buf, encoding) {
-  return encoders[encoding || 'utf8'](buf)
-}
-
-function to_hex(buf) {
-  var str = ''
-    , byt
-
-  for(var i = 0, len = buf.length; i < len; ++i) {
-    byt = buf[i]
-    str += ((byt & 0xF0) >>> 4).toString(16)
-    str += (byt & 0x0F).toString(16)
-  }
-
-  return str
-}
-
-function to_utf(buf) {
-  return toutf8(buf)
-}
-
-function to_base64(buf) {
-  return base64.fromByteArray(buf)
-}
-
-
-},{"base64-js":54,"to-utf8":55}],55:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 module.exports = to_utf8
 
 var out = []
@@ -17721,5 +17737,5 @@ function reduced(list) {
   return out
 }
 
-},{}]},{},[28,10,14,1,2,15,16,19,11,25,12,17,20,23,18,24,26,22,3,27,4,21,6])
+},{}]},{},[10,12,15,1,16,2,17,13,20,26,11,18,21,24,19,25,27,3,23,28,4,22,6])
 ;
