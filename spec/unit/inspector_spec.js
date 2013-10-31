@@ -134,8 +134,8 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     expect(this.resourceOverview.uriParameters).toEqual(resource.uriParameters);
   });
 
-  it("translates resource.displayName to name", function() {
-    expect(this.resourceOverview.name).toEqual(resource.displayName);
+  it("copies resource.displayName to displayName", function() {
+    expect(this.resourceOverview.displayName).toEqual(resource.displayName);
   });
 
   it("translates resource.is to traits", function() {

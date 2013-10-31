@@ -1,21 +1,13 @@
-<div role='resourceSummary'>
-  <ul role="traits">
-    <li role="trait" ng-repeat="trait in resourceSummary.traits()">{{trait}}</li>
+<div class='summary' role='resourceSummary'>
+  <ul class="modifiers">
+    <li class="resource-type" role="resourceType" ng-if='resourceSummary.type()'>{{resourceSummary.type()}}</li>
+    <li class="trait" role="trait" ng-repeat="trait in resourceSummary.traits()">{{trait}}</li>
   </ul>
-  <h2>
+
+  <h2 class="path">
     <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment}} </span>
   </h2>
-
-  <ul class='byline'>
-    <li ng-show='resource.name'>
-      "{{resource.name}}"
-    </li>
-    <li ng-if='resource.resourceType'>
-      Type: <span role="resourceType">{{resourceSummary.type()}}</span>
-    </li>
-  </ul>
-
-  <ul role="methods" ng-class="{hidden: resource.isOpen}">
-    <li ng-repeat="method in resource.methods">{{method.method}}</li>
+  <ul class='methods' role="methods" ng-class="{hidden: resource.isOpen}">
+    <li class='method-name' ng-class='method.method' ng-repeat="method in resource.methods">{{method.method}}</li>
   </ul>
 </div>

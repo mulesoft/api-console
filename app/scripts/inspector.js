@@ -3,6 +3,8 @@
 RAML.Inspector = (function() {
   var exports = {};
 
+  var METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
+
   function extendMethod(method, securitySchemes) {
     securitySchemes = securitySchemes || [];
 
@@ -68,8 +70,7 @@ RAML.Inspector = (function() {
   }
 
   exports.resourceOverviewSource = function(pathSegments, resource) {
-    resource.name = resource.displayName;
-    delete resource.displayName;
+
     resource.traits = resource.is;
     delete resource.is;
     resource.resourceType = resource.type;

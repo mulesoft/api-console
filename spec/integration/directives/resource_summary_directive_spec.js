@@ -42,7 +42,7 @@ describe("RAML.Directives.resourceSummary", function() {
     });
 
     it("displays only the name of the trait", function() {
-      var traits = this.$el.find('[role="traits"]').text().trim();
+      var traits = this.$el.find('[role="trait"]').text().trim();
       expect(traits).toEqual('chau');
     });
 
