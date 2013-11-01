@@ -1,11 +1,16 @@
-<div class='accordion-group' role="method">
-  <div class='accordion-heading accordion-toggle' role="methodSummary" ng-class="{expanded: methodView.expanded}" ng-click='methodView.toggleExpansion()'>
-    <i ng-class="{'icon-caret-right': !methodView.expanded, 'icon-caret-down': methodView.expanded}"></i>
-    <span role="verb">{{method.method}}:</span>
-  </div>
-  <div class='accordion-body' ng-show='methodView.expanded'>
-    <div class='accordion-inner'>
-      <documentation></documentation>
+<div class='method' role="method" ng-class="methodView.cssClass()">
+  <div class='accordion-toggle method-summary' role="methodSummary" ng-class='method.method' ng-click='methodView.toggleExpansion()'>
+    <span role="verb" class='method-name' ng-class='method.method'>{{method.method}}</span>
+    <div class='filler' ng-show='methodView.expanded' ng-class='method.method'></div>
+
+    <div class='description' role="description" ng-if="!methodView.expanded">
+       {{method.description}}
+       <i class='icon-caret-right'></i>
     </div>
+
+  </div>
+
+  <div ng-show='methodView.expanded'>
+    <documentation></documentation>
   </div>
 </div>

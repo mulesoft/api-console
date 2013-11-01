@@ -1,3 +1,5 @@
+@import "variables.less";
+
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700);
 
 body#raml-console-unembedded {
@@ -5,23 +7,26 @@ body#raml-console-unembedded {
 }
 
 #raml-console-unembedded, raml-console article {
-  font-family: 'Helvetica', sans-serif;
   background-color: #E6E7EB;
   color: #333;
+  margin: 0 20px 20px;
 }
 
 raml-console article#raml-console {
-  margin: 0 20px 20px;
+  @import "../../vendor/font-awesome/less/font-awesome.less";
+  @import "../../vendor/codemirror.less";
+  @import "overrides.less";
 
   @import "mixins.less";
   @import "commons.less";
   @import "tabs.less";
-  @import "../../vendor/font-awesome/less/font-awesome.less";
-  @import "../../vendor/codemirror.less";
-  @import "overrides.less";
   @import "forms.less";
   @import "buttons.less";
-  @import "raml-console.less";
+  @import "resources.less";
+  @import "methods.less";
   @import "root_documentation.less";
+
+  // figure out the rest
+  @import "raml-console.less";
   @import "parameter_table.less";
 }

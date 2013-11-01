@@ -1,15 +1,15 @@
 <div id="raml-console-api-reference" class='accordion' role="resources">
   <div class="resourceGroup" ng-repeat="resourceGroup in api.resourceGroups">
-    <div ng-class="{expanded: resource.isOpen}"
-         class='accordion-group'
+    <div ng-class="{expanded: resource.isOpen, collapsed: !resource.isOpen}"
+         class='resource'
          role="resource"
          ng-repeat="resource in resourceGroup">
 
-      <resource-summary class='accordion-heading accordion-toggle'
+      <resource-summary class='accordion-toggle'
                         ng-click='resource.isOpen = !resource.isOpen'>
       </resource-summary>
-      <div class='accordion-body' ng-if='resource.isOpen'>
-        <div class='accordion-inner'>
+      <div ng-if='resource.isOpen'>
+        <div>
           <div role='description'
                class='description'
                ng-if='resource.description'

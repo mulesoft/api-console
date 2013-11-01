@@ -4,8 +4,10 @@
   function stringForDisplay(objectOrString) {
     if (angular.isObject(objectOrString)) {
       return Object.keys(objectOrString)[0];
-    } else {
+    } else if (objectOrString) {
       return objectOrString;
+    } else {
+      return undefined;
     }
   }
 

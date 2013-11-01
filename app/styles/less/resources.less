@@ -1,0 +1,70 @@
+.resource {
+  background-color: @white;
+  border-radius: 5px;
+  border: 1px solid @lightGray;
+  padding: 0px;
+  margin: 5px 0;
+
+  &.collapsed:hover, &.expanded {
+    background-color: white;
+  }
+
+  .summary {
+    position: relative;
+    cursor: pointer;
+
+    .clearfix();
+  }
+
+  .description {
+    margin: 0 0 0 15px;
+  }
+
+  .path {
+    float: left;
+    margin: 10px 0 10px 15px;
+    line-height: 24px;
+    font-size: 15px;
+    color: @gray;
+    font-weight: normal;
+
+    span:last-child {
+      font-weight: bold;
+      color: @black;
+    }
+  }
+
+  .methods {
+    float: right;
+    text-align: right;
+    margin: 10px;
+
+    li {
+      line-height: 24px;
+      margin-right: 5px;
+    }
+  }
+}
+
+ul.modifiers {
+  font-size: 0px; // ignore whitespace around inline-block elements below
+
+  li {
+    display: inline-block;
+    font-family: @monospace;
+    font-size: 11px;
+    padding: 0px 6px;
+    margin-right: 5px;
+    line-height: 22px;
+
+    &.resource-type {
+      background-color: @gray;
+      color: @white;
+    }
+
+    &.trait {
+      background-color: @lightGray;
+      color: @darkGray;
+    }
+  }
+}

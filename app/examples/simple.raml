@@ -30,11 +30,22 @@ documentation:
       x-custom:
   is: [unsecured]
   /{resourceId}:
+    description: This is a resource description *with* some _markdown_ embedded in it
     uriParameters:
       resourceId:
         required: true
         description: Which resoure would you like to view
     get:
+      description: |
+        Instagram’s API uses the [OAuth 2.0 protocol](http://tools.ietf.org/html/draft-ietf-oauth-v2-12) for simple, but effective authentication and authorization. OAuth 2.0 is much easier to use than previous schemes; developers can start using the Instagram API almost immediately. The one thing to keep in mind is that all requests to the API must be made over SSL (https:// not http://)
+
+        ## Do you need to authenticate?
+
+        For the most part, Instagram’s API only requires the use of a _client_id). A client_id simply associates your server, script, or program with a specific application. However, some requests require authentication - specifically requests made on behalf of a user. Authenticated requests require an _access_token_. These tokens are unique to a user and should be stored securely. Access tokens may expire at any time in the future.
+
+        Note that in many situations, you may not need to authenticate users at all. For instance, you may request popular photos without authenticating (i.e. you do not need to provide an access_token; just use your client ID with your request). We only require authentication in cases where your application is making requests on behalf of a user (commenting, liking, browsing a user’s feed, etc.).
+
+        ## Receiving an access_token
       queryParameters:
         filter:
           description: What to filter
