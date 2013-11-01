@@ -122,7 +122,7 @@
 
   TryIt.prototype.inProgress = function() {
     return (this.response && !this.response.status && !this.missingUriParameters);
-  }
+  };
 
   TryIt.prototype.execute = function() {
     this.missingUriParameters = false;
@@ -172,7 +172,7 @@
         var credentials = this.keychain[this.keychain.selectedScheme];
         authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
       } catch (e) {
-        // custom straegies aren't supported yet.
+        // custom strategies aren't supported yet.
       }
 
       authStrategy.authenticate().then(function(token) {
