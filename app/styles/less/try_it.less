@@ -8,6 +8,14 @@
       text-align: right;
     }
 
+    input.warning {
+      border-color: @mustard;
+    }
+
+    input.error {
+      border-color: @red;
+    }
+
     textarea[name=body] {
       .box-sizing(border-box);
       width: 100%;
@@ -27,6 +35,13 @@
       margin-bottom: 0;
     }
 
+    .uri {
+      display: block;
+      div {
+        display: inline;
+      }
+    }
+
     .authentication {
       fieldset {
         margin-top: 0;
@@ -38,6 +53,7 @@
     }
 
     .form-actions {
+      float: right;
 
       .icon-spinner {
         color: #1998C6;
@@ -45,12 +61,15 @@
         vertical-align: middle;
       }
 
-      float: right;
+      .error {
+        display: inline;
+        color: @red;
+        margin-right: 10px;
+      }
     }
 
     .clearfix
   }
-
 
   .response {
     color: #333;

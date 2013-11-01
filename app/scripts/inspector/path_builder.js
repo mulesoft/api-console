@@ -1,32 +1,31 @@
 (function () {
   'use strict';
 
-  var templateMatcher = /\{(.*)\}/;
-
-  var PathSegment = function(pathSegment) {
-    this.text = pathSegment;
-
-    var match = pathSegment.match(templateMatcher);
-    this.templated = !!match;
-    if (match) {
-      this.parameterName = match[1];
-    }
-  };
-
-  PathSegment.prototype.toString = function() {
-    return this.templated ? this.text.replace(/[\/{}]/g, '') : this.text;
-  };
-
-  PathSegment.prototype.replaceWith = function(value) {
-    if (this.templated) {
-      return '/' + value;
-    } else {
-      return this.toString();
-    }
-  };
+  var PathSegment = function() {};
 
   function convertPathSegment(pathSegment) {
-    return new PathSegment(pathSegment);
+    PathSegment.prototype = pathSegment;
+    var clone = new PathSegment();
+
+    clone.text = pathSegment.toString();
+    clone.parameterName = pathSegment.parameterName;
+    clone.templated = !!clone.parameterName;
+    clone.toString = function() {
+      return this.templated ? this.parameterName : this.text;
+    };
+
+    clone.replaceWith = function(value) {
+      if (this.templated) {
+        if (value === undefined || value === '') {
+          throw new Error('Missing template data');
+        }
+        return '/' + value;
+      } else {
+        return this.toString();
+      }
+    };
+
+    return clone;
   }
 
   function createTemplate(pathSegments) {

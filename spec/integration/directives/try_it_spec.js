@@ -21,6 +21,43 @@ describe("RAML.Controllers.tryIt", function() {
     runs(cb);
   };
 
+  describe("when execute fails", function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      '/pages/{pageName}:',
+      '  get:'
+    );
+
+    parseRAML(raml);
+
+    describe("because of missing uri parameters", function() {
+      beforeEach(function() {
+        scope = createScopeForTryIt(this.api);
+        $el = compileTemplate('<try-it></try-it>', scope);
+        setFixtures($el);
+      });
+
+      beforeEach(function() {
+        expect($el).not.toContain('input.error');
+        expect($el.find('[role="error"]')).not.toBeVisible();
+        $el.find('button[role="try-it"]').click();
+      });
+
+      it("shows an error message", function() {
+        expect($el.find('[role="error"]')).toBeVisible();
+      });
+
+      it("adds an error class to the missing field", function() {
+        expect($el).toContain('input.error');
+      });
+
+      it("does not show the spinner", function() {
+        expect($el.find('.icon-spinner').css('display')).toEqual('none');
+      });
+    });
+  });
+
   describe('when a proxy is set', function() {
     mockHttp(function(mock) {
       mock

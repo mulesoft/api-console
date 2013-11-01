@@ -69,7 +69,7 @@ describe("RAML.Directives.validatedInput", function() {
     parseRAML(raml, { into: 'api' });
 
     beforeEach(function() {
-      var template = '<validated-input name="id" constraints="constraints" bind-to="model"></validated-input>';
+      var template = '<form><validated-input name="id" constraints="constraints" bind-to="model"></validated-input><button></button></form>';
       model = {}
       resource = this.api.resources[0];
 
@@ -100,7 +100,6 @@ describe("RAML.Directives.validatedInput", function() {
       beforeEach(function() {
         input.trigger('focus');
         input.trigger('blur');
-        $('body').trigger('click');
       });
 
       it("adds a warning class", function() {
@@ -115,6 +114,16 @@ describe("RAML.Directives.validatedInput", function() {
         it("clears the warning class", function() {
           expect(input).not.toHaveClass('warning');
         });
+      });
+    });
+
+    describe("on form submission", function() {
+      beforeEach(function() {
+        $el.find('button').click();
+      });
+
+      it("validates", function() {
+        expect(input).toHaveClass('warning');
       });
     });
 
