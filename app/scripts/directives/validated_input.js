@@ -30,15 +30,15 @@
     $scope.type = $attrs.type || 'text';
 
     var input = $el.find('input');
-    input.on('blur', function() {
+    input.bind('blur', function() {
       $scope.$apply('input.validate()');
     });
 
-    input.on('focus', function() {
+    input.bind('focus', function() {
       $scope.$apply('input.reset()');
     });
 
-    $el.closest('form').on('submit', function() {
+    $el.closest('form').bind('submit', function() {
       $scope.$apply('input.validate()');
     });
   };
