@@ -1,6 +1,6 @@
 (function() {
   global.openResource = function(index) {
-    var resource = ptor.$('[role="resource"]:nth-child(' + index + ')');
+    var resource = ptor.$('[role="resource"]:nth-of-type(' + index + ')');
     resource.$('.accordion-toggle').click();
 
     return resource;

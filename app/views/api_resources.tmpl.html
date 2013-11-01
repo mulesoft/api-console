@@ -1,13 +1,15 @@
-<div id="raml-console-api-reference" class='accordion' role="resources">
-  <div class="resourceGroup" ng-repeat="resourceGroup in api.resourceGroups">
+<div id="raml-console-api-reference" role="resources">
+  <div collapsible class="resource-group" ng-repeat="resourceGroup in api.resourceGroups">
+    <h2 collapsible-toggle class='path'>
+      {{resourceGroup[0].pathSegments[0]}}
+      <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
+    </h2>
+
     <div ng-class="{expanded: resource.isOpen, collapsed: !resource.isOpen}"
-         class='resource'
-         role="resource"
+         collapsible-content class='resource' role="resource"
          ng-repeat="resource in resourceGroup">
 
-      <resource-summary class='accordion-toggle'
-                        ng-click='resource.isOpen = !resource.isOpen'>
-      </resource-summary>
+      <resource-summary class='accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'></resource-summary>
       <div ng-if='resource.isOpen'>
         <div>
           <div role='description'
