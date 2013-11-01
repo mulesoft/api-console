@@ -77,7 +77,7 @@ describe("trying an API method", function() {
     var definition = createRAML(
       "title: Example API",
       "baseUri: " + BASE_URI,
-      "/things",
+      "/things:",
       "  get:",
       "    queryParameters:",
       "      page:",
