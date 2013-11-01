@@ -16,7 +16,7 @@
 
     clone.replaceWith = function(value) {
       if (this.templated) {
-        if (value === undefined) {
+        if (value === undefined || value === '') {
           throw new Error('Missing template data');
         }
         return '/' + value;

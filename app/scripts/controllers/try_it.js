@@ -183,6 +183,7 @@
         );
       });
     } catch (e) {
+      this.response = undefined;
       this.missingUriParameters = true;
     }
   };
