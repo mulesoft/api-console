@@ -1,4 +1,4 @@
-describe("Yes/No filter", function() {
+describe("RAML.Filters.yesNo", function() {
   var filter;
 
   beforeEach(function() {

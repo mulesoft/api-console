@@ -3,7 +3,7 @@
 RAML.Inspector = (function() {
   var exports = {};
 
-  // var METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
+  var METHOD_ORDERING = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
 
   function extendMethod(method, securitySchemes) {
     securitySchemes = securitySchemes || [];
@@ -76,7 +76,15 @@ RAML.Inspector = (function() {
     resource.resourceType = resource.type;
     delete resource.type;
     resource.pathSegments = pathSegments;
+
     resource.methods = (resource.methods || []);
+
+    resource.methods.sort(function(a, b) {
+      var aOrder = METHOD_ORDERING.indexOf(a.method.toUpperCase());
+      var bOrder = METHOD_ORDERING.indexOf(b.method.toUpperCase());
+
+      return aOrder > bOrder ? 1 : -1;
+    });
 
     return resource;
   };

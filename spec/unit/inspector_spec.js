@@ -102,7 +102,9 @@ describe("RAML.Inspector.create", function() {
 
 describe("RAML.Inspector.resourceOverviewSource", function() {
   function createMethod(verb) {
-    return verb;
+    return {
+      method: verb
+    };
   }
 
   var resource = {
@@ -110,7 +112,7 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     displayName: "Test Resource",
     is: ["secured"],
     type: "Collection",
-    methods: [createMethod("get"), createMethod("post")],
+    methods: [createMethod("connect"), createMethod("post"), createMethod("get"), createMethod("head")],
     uriParameters: {
       query: {
         type: 'string'
@@ -147,6 +149,12 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
   });
 
   it("creates a method overview for each method", function() {
-    expect(this.resourceOverview.methods).toEqual(['get', 'post']);
+    expect(this.resourceOverview.methods.length).toEqual(4);
+  });
+
+  it("sorts the methods according to priority", function() {
+    var methodNames = this.resourceOverview.methods.map(function(method) { return method.method; });
+
+    expect(methodNames).toEqual(['get', 'post', 'head', 'connect']);
   });
 });

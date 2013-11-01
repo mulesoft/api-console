@@ -1,0 +1,24 @@
+#%RAML 0.8
+title: myapi
+baseUri: http://localhost
+documentation:
+  - title: Features
+    content: |
+      The XXXXXXXXX Support Tools EOX Service provides the following features:
+
+      * Access to **XXXXXXXXX** product information using services that allow customers and partners to retrieve XXXXXXXXX data using product IDs (PIDs),
+        serial numbers, date ranges, or software release strings as input
+      * Secure access using AAA (authentication, authorization, and accounting)
+        - Note: EOX v4.0 of XXXXXXXXX Services Support Tools enhances security by requiring OAuth v2.0 access tokens to accompany each web service call.
+      * Secure transfer of input/output data using SSL encryption of web service endpoints
+      * Implementation in SOAP 1.1, SOAP 1.2, and REST web service standards
+      * Clear and concise user documentation with usage examples
+      * Reusable and configurable customer-consumable and partner-consumable API
+/blah:
+  post:
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+          AWSAccessKeyId:
+          acl:
+      application/json:
