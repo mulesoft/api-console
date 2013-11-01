@@ -26,6 +26,23 @@
     this.status = null;
   };
 
+  var link = function($scope, $el, $attrs) {
+    $scope.type = $attrs.type || 'text';
+
+    var input = $el.find('input');
+    input.on('blur', function() {
+      $scope.$apply('input.validate()');
+    });
+
+    input.on('focus', function() {
+      $scope.$apply('input.reset()');
+    });
+
+    $el.closest('form').on('submit', function() {
+      $scope.$apply('input.validate()');
+    });
+  };
+
   RAML.Directives.validatedInput = function() {
     return {
       restrict: 'E',
@@ -39,18 +56,7 @@
         name: '@'
       },
       controller: Controller,
-      link: function(scope, el, attrs) {
-        scope.type = attrs.type || 'text';
-
-        var input = el.find('input');
-        input.on('blur', function() {
-          scope.$apply('input.validate()');
-        });
-
-        input.on('focus', function() {
-          scope.$apply('input.reset()');
-        });
-      }
+      link: link
     };
   };
 })();
