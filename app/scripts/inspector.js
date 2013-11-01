@@ -3,7 +3,7 @@
 RAML.Inspector = (function() {
   var exports = {};
 
-  var METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
+  // var METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
 
   function extendMethod(method, securitySchemes) {
     securitySchemes = securitySchemes || [];
