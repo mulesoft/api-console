@@ -5,6 +5,18 @@
     return Object.keys(object || {}).length === 0;
   }
 
+  function filterEmpty(object) {
+    var copy = {};
+
+    Object.keys(object).forEach(function(key) {
+      if (object[key] && object[key].trim().length > 0) {
+        copy[key] = object[key];
+      }
+    });
+
+    return copy;
+  }
+
   function parseHeaders(headers) {
     var parsed = {}, key, val, i;
 
@@ -130,15 +142,15 @@
     }
 
     if (!isEmpty(this.queryParameters)) {
-      request.data(this.queryParameters);
+      request.data(filterEmpty(this.queryParameters));
     }
 
     if (!isEmpty(this.formParameters)) {
-      request.data(this.formParameters);
+      request.data(filterEmpty(this.formParameters));
     }
 
     if (!isEmpty(this.headers)) {
-      request.headers(this.headers);
+      request.headers(filterEmpty(this.headers));
     }
 
     if (this.mediaType) {
