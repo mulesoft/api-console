@@ -26,8 +26,11 @@
     </div>
 
     <div class="form-actions">
-      <i ng-hide='!apiClient.response || apiClient.response.status' class="icon-spinner icon-spin icon-large"></i>
+      <i ng-show='apiClient.inProgress()' class="icon-spinner icon-spin icon-large"></i>
 
+      <div role="error" ng-show="apiClient.missingUriParameters">
+        Required URI Parameters must be entered
+      </div>
       <button role="try-it" class="btn inverted" ng-click="apiClient.execute()">
         Try It
       </button>

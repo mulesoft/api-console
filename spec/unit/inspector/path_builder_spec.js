@@ -28,7 +28,7 @@ describe("RAML.Inspector.PathBuilder", function() {
 
     describe("with a templated segment", function() {
       beforeEach(function() {
-        this.pathSegments = [templatedSegment('resource')];
+        this.pathSegments = [templatedSegment('resource', {required: true})];
         this.segment = RAML.Inspector.PathBuilder.create(this.pathSegments).segments[0];
       });
 
@@ -38,6 +38,10 @@ describe("RAML.Inspector.PathBuilder", function() {
 
       it("is extracts the parameter name", function() {
         expect(this.segment.parameterName).toBe("resource");
+      });
+
+      it("exposes the underlying path segment's properties", function() {
+        expect(this.segment.required).toEqual(true);
       });
     });
   });
@@ -61,12 +65,21 @@ describe("RAML.Inspector.PathBuilder", function() {
         this.pathBuilder = RAML.Inspector.PathBuilder.create(this.pathSegments);
       });
 
-      it("substitutes templated values and concatenates the path segments", function() {
-        expect(this.pathBuilder({resourceId: "1"})).toEqual("/resource/1");
+      describe("with a complete template data", function() {
+        beforeEach(function() {
+          this.renderedPath = this.pathBuilder({resourceId: "1"});
+        });
+
+        it("substitutes templated values and concatenates the path segments", function() {
+          expect(this.renderedPath).toEqual("/resource/1");
+        });
       });
 
-      it("retains that property i added", function() {
-        expect(this.pathBuilder.segments[1].required).toEqual(true);
+      describe("with missing template data", function() {
+        it("throws", function() {
+          var pathBuilder = this.pathBuilder;
+          expect(function() { pathBuilder(); }).toThrow("Missing template data");
+        });
       });
     });
   });

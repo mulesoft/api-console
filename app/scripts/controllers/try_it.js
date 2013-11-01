@@ -120,15 +120,15 @@
     }
   };
 
+  TryIt.prototype.inProgress = function() {
+    return (this.response && !this.response.status && !this.missingUriParameters);
+  }
+
   TryIt.prototype.execute = function() {
+    this.missingUriParameters = false;
+
     var response = this.response = {};
     var pathBuilder = this.getPathBuilder();
-
-    var url = this.response.requestUrl = this.baseUri + pathBuilder(pathBuilder);
-    if (RAML.Settings.proxy) {
-      url = RAML.Settings.proxy + url;
-    }
-    var request = this.client.createRequest(url, this.httpMethod);
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -141,40 +141,50 @@
       apply();
     }
 
-    if (!isEmpty(this.queryParameters)) {
-      request.data(filterEmpty(this.queryParameters));
-    }
-
-    if (!isEmpty(this.formParameters)) {
-      request.data(filterEmpty(this.formParameters));
-    }
-
-    if (!isEmpty(this.headers)) {
-      request.headers(filterEmpty(this.headers));
-    }
-
-    if (this.mediaType) {
-      request.header('Content-Type', this.mediaType);
-      if (this.showBody()) { request.data(this.body); }
-    }
-
-    var authStrategy;
-
     try {
-      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
-      var credentials = this.keychain[this.keychain.selectedScheme];
-      authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
-    } catch (e) {
-      // custom straegies aren't supported yet.
-    }
+      var url = this.response.requestUrl = this.baseUri + pathBuilder(pathBuilder);
+      if (RAML.Settings.proxy) {
+        url = RAML.Settings.proxy + url;
+      }
+      var request = this.client.createRequest(url, this.httpMethod);
 
-    authStrategy.authenticate().then(function(token) {
-      token.sign(request);
-      $.ajax(request.toOptions()).then(
-        function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-        function(jqXhr) { handleResponse(jqXhr); }
-      );
-    });
+      if (!isEmpty(this.queryParameters)) {
+        request.data(filterEmpty(this.queryParameters));
+      }
+
+      if (!isEmpty(this.formParameters)) {
+        request.data(filterEmpty(this.formParameters));
+      }
+
+      if (!isEmpty(this.headers)) {
+        request.headers(filterEmpty(this.headers));
+      }
+
+      if (this.mediaType) {
+        request.header('Content-Type', this.mediaType);
+        if (this.showBody()) { request.data(this.body); }
+      }
+
+      var authStrategy;
+
+      try {
+        var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
+        var credentials = this.keychain[this.keychain.selectedScheme];
+        authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
+      } catch (e) {
+        // custom straegies aren't supported yet.
+      }
+
+      authStrategy.authenticate().then(function(token) {
+        token.sign(request);
+        $.ajax(request.toOptions()).then(
+          function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+          function(jqXhr) { handleResponse(jqXhr); }
+        );
+      });
+    } catch (e) {
+      this.missingUriParameters = true;
+    }
   };
 
   RAML.Controllers.TryIt = TryIt;

@@ -1,6 +1,6 @@
 <span role="path">
   <span role='segment' ng-repeat='segment in pathBuilder.segments'>
-    <span ng-if='segment.templated'>/<input ng-if='segment.templated' ng-click="$event.stopPropagation();" ng-model="pathBuilder[segment.parameterName]" type="text" placeholder="{{segment.toString()}}" /></span>
+    <span ng-if='segment.templated'>/<validated-input ng-if='segment.templated' name="segment.parameterName" bind-to="pathBuilder" placeholder="{{segment.toString()}}" constraints="segment" invalid-class="error"/></span>
     <span  ng-if='!segment.templated'>{{segment.toString()}}</span>
   </span>
 </span>
