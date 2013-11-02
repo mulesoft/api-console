@@ -38,7 +38,7 @@
       $scope.$apply('input.reset()');
     });
 
-    $el.closest('form').bind('submit', function() {
+    angular.element(input[0].form).bind('submit', function() {
       $scope.$apply('input.validate()');
     });
   };
