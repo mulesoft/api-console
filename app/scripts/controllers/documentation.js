@@ -18,9 +18,10 @@
 
     var method = $scope.method;
 
-    this.hasParameterDocumentation = !!($scope.resource.uriParameters ||
-      method.queryParameters || method.headers || hasFormParameters(method));
-    this.hasRequestDocumentation = !isEmpty(method.body);
+    var hasParameters = !!($scope.resource.uriParameters || method.queryParameters ||
+      method.headers || hasFormParameters(method));
+
+    this.hasRequestDocumentation = hasParameters || !isEmpty(method.body);
     this.hasResponseDocumentation = !isEmpty(method.responses);
     this.hasTryIt = !!$scope.api.baseUri;
   };

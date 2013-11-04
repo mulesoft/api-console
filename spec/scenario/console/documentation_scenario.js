@@ -1,10 +1,23 @@
 describe('API Documentation', function() {
   var ptor = protractor.getInstance();
 
-  describe('parameters tab', function() {
+  describe('request documentation', function() {
     raml = createRAML(
       'title: Example API',
       'baseUri: http://www.example.com',
+      'schemas:',
+      '  - an_xml_schema: |',
+      '      <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">',
+      '        <xs:element type="xs:int" name="id"/>',
+      '      </xs:schema>',
+      '/resource:',
+      '  post:',
+      '    body:',
+      '     text/xml:',
+      '       schema: an_xml_schema',
+      '       example: |',
+      '         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
+      '         <id>1511685</id>',
       '/resource/{resourceId}:',
       '  get:',
       '    queryParameters:',
@@ -43,7 +56,7 @@ describe('API Documentation', function() {
     loadRamlFixture(raml);
 
     it('displays information about query parameters and headers', function() {
-      var resource = openResource(1);
+      var resource = openResource(2);
       var method = openMethod(1, resource);
 
       var queryParameters = method.$('[role="query-parameters"]');
@@ -69,46 +82,21 @@ describe('API Documentation', function() {
       var header = headers.$('[role="parameter"]');
       var expectedText = new RegExp([
         "x-custom-header",
-        "required,", // FIXME
+        "required,",
         "string matching /^[0-9a-f]{32}$/",
         "API Key",
         "Example",
         "0a724bfa133666c5041019ef5bf5a659",
       ].map(escapeRegExp).join('\\s+'), "i");
       expect(header.getText()).toMatch(expectedText);
+
+      resource = openResource(1);
+      method = openMethod(1, resource);
+
+      expect(method.getText()).toMatch(new RegExp('text/xml'));
+      expect(method.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
+      expect(method.getText()).toMatch(new RegExp("<id>1511685</id>"));
     });
-  });
-
-  describe("requests tab", function() {
-    raml = createRAML(
-      'title: Example API',
-      'baseUri: http://www.example.com',
-      'schemas:',
-      '  - an_xml_schema: |',
-      '      <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">',
-      '        <xs:element type="xs:int" name="id"/>',
-      '      </xs:schema>',
-      '/resource:',
-      '  post:',
-      '    body:',
-      '     text/xml:',
-      '       schema: an_xml_schema',
-      '       example: |',
-      '         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
-      '         <id>1511685</id>'
-    );
-
-    loadRamlFixture(raml);
-
-    it("displays examples and schemas for the request body", function() {
-      var resource = openResource(1);
-      var method = openMethod(1, resource);
-      var documentation = openDocumentationTab(2, method);
-
-      expect(documentation.getText()).toMatch(new RegExp('text/xml'));
-      expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
-      expect(documentation.getText()).toMatch(new RegExp("<id>1511685</id>"));
-    }, 10000);
   });
 
   describe("responses tab", function() {
@@ -141,7 +129,7 @@ describe('API Documentation', function() {
     it("displays formatted xml response examples and schemas, and response descriptions with markdown formatting", function() {
       var resource = openResource(1);
       var method = openMethod(1, resource);
-      var documentation = openDocumentationTab(3, method);
+      var documentation = openDocumentationTab(2, method);
 
       expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(documentation.getText()).toMatch(/<api-response>[\d\s]*<status>[\d\s]*Error[\d\s]*<\/status>[\d\s]*<\/api-response>/);
