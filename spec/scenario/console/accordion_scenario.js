@@ -128,4 +128,33 @@ describe("accordion view of API", function() {
       expect(description.getText()).toEqual('Get all resources')
     });
   });
+
+  describe("resource grouping", function() {
+    raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      '/posts:',
+      '  get:',
+      '    description: Get all resources',
+      '/comments:',
+      '  post:',
+      '/comments/{commentId}:',
+      '  get:',
+      '/something{weird}:',
+      '  put:'
+    );
+
+   loadRamlFixture(raml);
+
+    it("groups resources by their first path segment", function() {
+      var resourceGroups = ptor.$$('[role="resource-group"]');
+
+      expect(resourceGroups).toHaveLength(3);
+
+      resourceGroups.then(function(groups) {
+
+        expect(groups[2].$(".path").getText()).toEqual('/something{weird}');
+      });
+    });
+  });
 });

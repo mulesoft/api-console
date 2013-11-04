@@ -77,8 +77,8 @@ RAML.Inspector = (function() {
     var currentPrefix, resourceGroups = [];
 
     (resources || []).forEach(function(resource) {
-      if (resource.pathSegments[0] !== currentPrefix) {
-        currentPrefix = resource.pathSegments[0];
+      if (resource.pathSegments[0].toString() !== currentPrefix) {
+        currentPrefix = resource.pathSegments[0].toString();
         resourceGroups.push([]);
       }
       resourceGroups[resourceGroups.length-1].push(resource);
