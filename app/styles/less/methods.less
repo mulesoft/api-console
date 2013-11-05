@@ -6,7 +6,7 @@
     background-color: @white;
 
     &:hover {
-      background-color: tint(@color, 75%);
+      background-color: tint(@color, 90%);
     };
   }
 }
@@ -48,7 +48,11 @@
   }
 
   .description {
-    margin-bottom: 20px;
+    margin-left: 0;
+
+    p:first-child {
+      margin-top: 0px;
+    }
   }
 }
 
@@ -64,7 +68,7 @@
   }
 
   .description {
-    padding: 0 10px;
+    padding: 0 20px 0 10px;
     border: 1px solid @lightGray;
     border-left: none;
     border-radius: 0 5px 5px 0;
