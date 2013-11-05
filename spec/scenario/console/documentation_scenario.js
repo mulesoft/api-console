@@ -59,36 +59,44 @@ describe('API Documentation', function() {
       var resource = openResource(2);
       var method = openMethod(1, resource);
 
-      var queryParameters = method.$('[role="query-parameters"]');
-      var queryParam = queryParameters.$('[role="parameter"]');
-      var expectedText = new RegExp([
-        "page",
-        "required,",
-        "integer between 1-100",
-        "Example:",
-        "1",
-        "Which page?"
-      ].map(escapeRegExp).join('\\s+'), "i");
-      expect(queryParam.getText()).toMatch(expectedText);
+      method.$$('[role="parameter-group"]').then(function(parameterGroups) {
+        var headers = parameterGroups[0];
+        expect(headers.$("h2").getText()).toEqual("Headers");
 
-      var uriParameters = method.$('[role="uri-parameters"]');
-      var uriParam = uriParameters.$('[role="parameter"]');
-      var expectedText = new RegExp([
-        "resourceId",
-      ].map(escapeRegExp).join('\\s+'), "i");
-      expect(uriParam.getText()).toMatch(expectedText);
+        var header = headers.$('[role="parameter"]');
+        var expectedText = new RegExp([
+          "x-custom-header",
+          "required,",
+          "string matching /^[0-9a-f]{32}$/",
+          "Example:",
+          "0a724bfa133666c5041019ef5bf5a659",
+          "API Key"
+        ].map(escapeRegExp).join('\\s+'), "i");
+        expect(header.getText()).toMatch(expectedText);
 
-      var headers = method.$('[role="headers"]');
-      var header = headers.$('[role="parameter"]');
-      var expectedText = new RegExp([
-        "x-custom-header",
-        "required,",
-        "string matching /^[0-9a-f]{32}$/",
-        "Example:",
-        "0a724bfa133666c5041019ef5bf5a659",
-        "API Key"
-      ].map(escapeRegExp).join('\\s+'), "i");
-      expect(header.getText()).toMatch(expectedText);
+        var uriParameters = parameterGroups[1];
+        expect(uriParameters.$("h2").getText()).toEqual("URI Parameters");
+
+        var uriParam = uriParameters.$('[role="parameter"]');
+        var expectedText = new RegExp([
+          "resourceId",
+        ].map(escapeRegExp).join('\\s+'), "i");
+        expect(uriParam.getText()).toMatch(expectedText);
+
+        var queryParameters = parameterGroups[2];
+        expect(queryParameters.$("h2").getText()).toEqual("Query Parameters");
+
+        var queryParam = queryParameters.$('[role="parameter"]');
+        var expectedText = new RegExp([
+          "page",
+          "required,",
+          "integer between 1-100",
+          "Example:",
+          "1",
+          "Which page?"
+        ].map(escapeRegExp).join('\\s+'), "i");
+        expect(queryParam.getText()).toMatch(expectedText);
+      });
 
       resource = openResource(1);
       method = openMethod(1, resource);
