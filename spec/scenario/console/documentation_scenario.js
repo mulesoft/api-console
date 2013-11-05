@@ -65,9 +65,9 @@ describe('API Documentation', function() {
         "page",
         "required,",
         "integer between 1-100",
-        "Which page?",
-        "Example",
+        "Example:",
         "1",
+        "Which page?"
       ].map(escapeRegExp).join('\\s+'), "i");
       expect(queryParam.getText()).toMatch(expectedText);
 
@@ -84,9 +84,9 @@ describe('API Documentation', function() {
         "x-custom-header",
         "required,",
         "string matching /^[0-9a-f]{32}$/",
-        "API Key",
-        "Example",
+        "Example:",
         "0a724bfa133666c5041019ef5bf5a659",
+        "API Key"
       ].map(escapeRegExp).join('\\s+'), "i");
       expect(header.getText()).toMatch(expectedText);
 
