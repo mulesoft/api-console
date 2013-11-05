@@ -1,14 +1,12 @@
-<section role='documentation'>
-  <div role="description"
+<section class='documentation' role='documentation'>
+  <div role="description" class="description"
        ng-if="method.description"
        markdown="method.description">
   </div>
 
   <tabset>
-    <tab role='documentation-parameters' heading="Parameters" disabled="!documentation.hasParameterDocumentation">
+    <tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation">
       <parameters></parameters>
-    </tab>
-    <tab role='documentation-requests' heading="Requests" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation">
       <requests></requests>
     </tab>
     <tab role='documentation-responses' heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation'>

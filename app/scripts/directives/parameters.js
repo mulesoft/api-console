@@ -4,7 +4,8 @@
   RAML.Directives.parameters = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/parameters.tmpl.html'
+      templateUrl: 'views/parameters.tmpl.html',
+      controller: RAML.Controllers.Parameters
     };
   };
 })();

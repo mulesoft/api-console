@@ -1,0 +1,50 @@
+.documentation {
+  .description {
+    margin-bottom: 20px;
+  }
+
+  .named-parameters {
+    border-bottom: 1px solid @white;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    > h2 {
+      margin-top: 25px;
+    }
+
+    .parameter {
+      margin-bottom: 25px;
+
+      [markdown] {
+        p:first-child {
+          margin: -2px 0 0 0;
+        }
+
+        p:last-child {
+          margin: 0 0 1px 0;
+        }
+      }
+
+      .constraints {
+        color: @gray;
+        font-weight: normal;
+        font-style: italic;
+        margin-left: 5px;
+        font-size: 13px;
+      }
+
+      .info {
+        margin-left: 0px;
+        line-height: 21px;
+        vertical-align: middle;
+
+        [markdown] {
+          margin: 5px 0 0 0;
+        }
+      }
+    }
+  }
+
+}

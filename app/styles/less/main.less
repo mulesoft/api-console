@@ -1,6 +1,6 @@
 @import "variables.less";
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,300,400,600,700);
 
 body#raml-console-unembedded {
   margin: 0;
@@ -19,15 +19,16 @@ raml-console article#raml-console {
 
   @import "mixins.less";
   @import "commons.less";
+  @import "markdown.less";
   @import "tabs.less";
   @import "forms.less";
   @import "buttons.less";
   @import "resources.less";
   @import "methods.less";
+  @import "documentation.less";
   @import "root_documentation.less";
   @import "try_it.less";
 
   // figure out the rest
   @import "raml-console.less";
-  @import "parameter_table.less";
 }

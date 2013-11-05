@@ -23,10 +23,6 @@ describe("RAML.Controllers.Documentation", function() {
       controller = new RAML.Controllers.Documentation(scope);
     });
 
-    it('does not have parameters documentation', function() {
-      expect(controller.hasParameterDocumentation).toBe(false);
-    });
-
     it('does not have requests documentation', function() {
       expect(controller.hasRequestDocumentation).toBe(false);
     });
@@ -52,8 +48,8 @@ describe("RAML.Controllers.Documentation", function() {
       controller = new RAML.Controllers.Documentation(scope);
     });
 
-    it('has parameters documentation', function() {
-      expect(controller.hasParameterDocumentation).toBe(true);
+    it('has request documentation', function() {
+      expect(controller.hasRequestDocumentation).toBe(true);
     });
   });
 
@@ -75,8 +71,8 @@ describe("RAML.Controllers.Documentation", function() {
       controller = new RAML.Controllers.Documentation(scope);
     });
 
-    it('has parameters documentation', function() {
-      expect(controller.hasParameterDocumentation).toBe(true);
+    it('has request documentation', function() {
+      expect(controller.hasRequestDocumentation).toBe(true);
     });
   });
 
@@ -98,8 +94,8 @@ describe("RAML.Controllers.Documentation", function() {
       controller = new RAML.Controllers.Documentation(scope);
     });
 
-    it('has parameters documentation', function() {
-      expect(controller.hasParameterDocumentation).toBe(true);
+    it('has request documentation', function() {
+      expect(controller.hasRequestDocumentation).toBe(true);
     });
   });
 
