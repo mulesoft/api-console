@@ -146,7 +146,7 @@
       if (RAML.Settings.proxy) {
         url = RAML.Settings.proxy + url;
       }
-      var request = this.client.createRequest(url, this.httpMethod);
+      var request = RAML.Client.Request.create(url, this.httpMethod);
 
       if (!isEmpty(this.queryParameters)) {
         request.data(filterEmpty(this.queryParameters));

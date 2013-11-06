@@ -31,29 +31,11 @@ RAML.Inspector = (function() {
     };
   }
 
-  var PARAMETER_EXTRACTOR = /\{([^}]*)\}/;
-  function toAnnotatedPathSegments(uriParameters) {
-    return function uriParametersFrom(segment) {
-      var match = PARAMETER_EXTRACTOR.exec(segment);
-      if (!match) {
-        return segment;
-      }
-
-      var uriParameter = uriParameters[match[1]];
-      uriParameter.parameterName = match[1];
-      uriParameter.toString = function() { return segment; };
-
-      return uriParameter;
-    };
-  }
-
   function extractResources(basePathSegments, api, securitySchemes) {
     var resources = [], apiResources = api.resources || [];
 
     apiResources.forEach(function(resource) {
-      var annotater = toAnnotatedPathSegments(resource.uriParameters);
-      var segments = resource.relativeUri.match(/\/[^\/]*/g).map(annotater);
-      var resourcePathSegments = basePathSegments.concat(segments);
+      var resourcePathSegments = basePathSegments.concat(RAML.Client.PathSegment.fromRAML(resource));
       var overview = exports.resourceOverviewSource(resourcePathSegments, resource);
 
       overview.methods.forEach(function(method) {
@@ -77,7 +59,7 @@ RAML.Inspector = (function() {
     var currentPrefix, resourceGroups = [];
 
     (resources || []).forEach(function(resource) {
-      if (resource.pathSegments[0].toString() !== currentPrefix) {
+      if (resource.pathSegments[0].toString().indexOf(currentPrefix) !== 0) {
         currentPrefix = resource.pathSegments[0].toString();
         resourceGroups.push([]);
       }

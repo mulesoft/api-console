@@ -7,7 +7,7 @@ describe("RAML.Controllers.tryIt", function() {
       scope.resource = scope.api.resources[0];
       scope.ramlConsole = { keychain: {} };
       scope.method = scope.resource.methods[0];
-      scope.method.pathBuilder = new RAML.Inspector.PathBuilder.create(scope.resource.pathSegments);
+      scope.method.pathBuilder = new RAML.Client.PathBuilder.create(scope.resource.pathSegments);
     });
   }
 

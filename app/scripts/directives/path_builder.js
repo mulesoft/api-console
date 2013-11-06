@@ -2,7 +2,7 @@
   'use strict';
 
   var Controller = function($scope) {
-    $scope.pathBuilder = new RAML.Inspector.PathBuilder.create($scope.resource.pathSegments);
+    $scope.pathBuilder = new RAML.Client.PathBuilder.create($scope.resource.pathSegments);
   };
 
   RAML.Directives.pathBuilder = function() {
