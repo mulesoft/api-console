@@ -8,9 +8,13 @@ describe("RAML.Client.PathSegment", function() {
     };
   };
 
-  function fakeUriParameter() {
+  function fakeUriParameter(required) {
+    if (required === undefined) {
+      required = true;
+    }
+
     return {
-      required: true
+      required: required
     };
   };
 
@@ -43,7 +47,7 @@ describe("RAML.Client.PathSegment", function() {
     beforeEach(function() {
       uriParameters = {
         templated: fakeUriParameter(),
-        resource: fakeUriParameter()
+        resource: fakeUriParameter(false)
       };
 
       raml = fakeResourceRAML("/{templated}-{resource}", uriParameters)
@@ -63,14 +67,20 @@ describe("RAML.Client.PathSegment", function() {
     });
 
     describe("rendering template", function() {
-      describe("by default", function() {
+      describe("when all required parameter values are supplied", function() {
         it("replaces the segments with the supplied values when rendered", function() {
           expect(pathSegment.render({ templated: '1', resource: '2' })).toEqual("/1-2");
         });
       });
 
-      describe("when all parameters aren't present", function() {
-        it("substitutes an empty string", function() {
+      describe("when required parameter values are missing", function() {
+        it("throws", function() {
+          expect(function() { pathSegment.render() }).toThrow('Missing required uri parameter: templated');
+        });
+      });
+
+      describe("when optional parameter values are missing", function() {
+        it("throws", function() {
           expect(pathSegment.render({ templated: '1' })).toEqual("/1-");
         });
       });
