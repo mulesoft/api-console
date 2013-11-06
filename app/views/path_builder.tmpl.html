@@ -1,4 +1,4 @@
-<span role="path" class="uri">
+<span role="path" class="path">
   <span role='segment' ng-repeat='segment in pathBuilder.segments'>
     <span ng-if='segment.templated'>/<validated-input ng-if='segment.templated' name="{{segment.parameterName}}" bind-to="pathBuilder" placeholder="{{segment.toString()}}" constraints="segment" invalid-class="error"/></span>
     <span  ng-if='!segment.templated'>{{segment.toString()}}</span>
