@@ -31,8 +31,8 @@
       <div role="error" class="error" ng-show="apiClient.missingUriParameters">
         Required URI Parameters must be entered
       </div>
-      <button role="try-it" class="btn inverted" ng-click="apiClient.execute()">
-        Try It
+      <button role="try-it" ng-class="'btn-' + method.method" ng-click="apiClient.execute()">
+        {{method.method}}
       </button>
     </div>
   </form>
