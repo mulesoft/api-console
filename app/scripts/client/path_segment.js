@@ -20,7 +20,6 @@
       context = context || {};
 
       requiredParameters.forEach(function(name) {
-        console.log(name);
         if (!context[name]) {
           throw new Error('Missing required uri parameter: ' + name);
         }

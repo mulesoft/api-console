@@ -1,23 +1,6 @@
 describe("RAML.Client.PathSegment", function() {
   var pathSegment, raml;
 
-  function fakeResourceRAML(uri, uriParameters) {
-    return {
-      relativeUri: uri,
-      uriParameters: uriParameters
-    };
-  };
-
-  function fakeUriParameter(required) {
-    if (required === undefined) {
-      required = true;
-    }
-
-    return {
-      required: required
-    };
-  };
-
   describe("creating from a relative uri", function() {
     beforeEach(function() {
       raml = fakeResourceRAML("/resource")
