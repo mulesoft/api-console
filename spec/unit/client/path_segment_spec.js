@@ -36,8 +36,12 @@ describe("RAML.Client.PathSegment", function() {
       expect(pathSegment.parameters).toBeUndefined();
     });
 
+    it("tokenizes the uri", function() {
+      expect(pathSegment.tokens).toEqual(['resource']);
+    });
+
     it("renturns the original segment when rendered", function() {
-      expect(pathSegment.render()).toEqual("/resource");
+      expect(pathSegment.render()).toEqual('/resource');
     });
   });
 
@@ -64,6 +68,10 @@ describe("RAML.Client.PathSegment", function() {
 
     it("stores the parameter definitions for each templated section", function() {
       expect(pathSegment.parameters).toBe(uriParameters);
+    });
+
+    it("tokenizes the uri", function() {
+      expect(pathSegment.tokens).toEqual(['templated', '-', 'resource']);
     });
 
     describe("rendering template", function() {

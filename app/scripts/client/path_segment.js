@@ -3,6 +3,14 @@
 
   var templateMatcher = /\{([^}]*)\}/g;
 
+  function tokenize(template) {
+    var tokens = template.slice(1).split(templateMatcher);
+
+    return tokens.filter(function(token) {
+      return token.length > 0;
+    });
+  }
+
   function rendererFor(template, uriParameters) {
     var requiredParameters = Object.keys(uriParameters || {}).filter(function(name) {
       return uriParameters[name].required;
@@ -32,7 +40,9 @@
     this.name = name.replace(templateMatcher, '$1');
     this.templated = this.name !== name;
     this.parameters = uriParameters;
+    this.tokens = tokenize(template);
     this.render = rendererFor(template, uriParameters);
+    this.toString = function() { return template; };
   };
 
   RAML.Client.PathSegment = {
