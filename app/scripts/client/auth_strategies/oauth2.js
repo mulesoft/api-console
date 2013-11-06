@@ -1,18 +1,17 @@
-/* jshint camelcase: false */
-
-'use strict';
-
 (function() {
+  /* jshint camelcase: false */
+  'use strict';
+
   var WINDOW_NAME = 'raml-console-oauth2';
 
   var Oauth2 = function(scheme, credentials) {
-    this.settings = scheme.settings;
+    this.scheme = scheme;
     this.credentialsManager = Oauth2.credentialsManager(credentials);
   };
 
   Oauth2.prototype.authenticate = function() {
-    var authorizationRequest = Oauth2.authorizationRequest(this.settings, this.credentialsManager);
-    var accessTokenRequest = Oauth2.accessTokenRequest(this.settings, this.credentialsManager);
+    var authorizationRequest = Oauth2.authorizationRequest(this.scheme, this.credentialsManager);
+    var accessTokenRequest = Oauth2.accessTokenRequest(this.scheme, this.credentialsManager);
 
     return authorizationRequest.then(accessTokenRequest);
   };
@@ -38,7 +37,8 @@
     };
   };
 
-  Oauth2.authorizationRequest = function(settings, credentialsManager) {
+  Oauth2.authorizationRequest = function(scheme, credentialsManager) {
+    var settings = scheme.settings;
     var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUri);
     window.open(authorizationUrl, WINDOW_NAME);
 
@@ -47,7 +47,8 @@
     return deferred.promise();
   };
 
-  Oauth2.accessTokenRequest = function(settings, credentialsManager) {
+  Oauth2.accessTokenRequest = function(scheme, credentialsManager) {
+    var settings = scheme.settings;
     return function(code) {
       var url = settings.accessTokenUri;
       if (RAML.Settings.proxy) {
@@ -61,17 +62,17 @@
       };
 
       var createToken = function(data) {
-        return new Oauth2.Token(data.access_token);
+        return new Oauth2.QueryParameterToken(data.access_token);
       };
       return $.ajax(requestOptions).then(createToken);
     };
   };
 
-  Oauth2.Token = function(token) {
+  Oauth2.QueryParameterToken = function(token) {
     this.accessToken = token;
   };
 
-  Oauth2.Token.prototype.sign = function(request) {
+  Oauth2.QueryParameterToken.prototype.sign = function(request) {
     request.queryParam('access_token', this.accessToken);
   };
 

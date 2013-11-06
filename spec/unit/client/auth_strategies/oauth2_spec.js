@@ -1,11 +1,13 @@
 describe("RAML.Client.AuthStrategies.Oauth2", function() {
   var Oauth2 = RAML.Client.AuthStrategies.Oauth2;
-  var credentialsManager, settings;
+  var credentialsManager, scheme;
 
   beforeEach(function() {
-    settings = {
-      authorizationUri: 'https://example.com/oauth/authorize',
-      accessTokenUri: 'https://example.com/oauth/access_token'
+    scheme = {
+      settings: {
+        authorizationUri: 'https://example.com/oauth/authorize',
+        accessTokenUri: 'https://example.com/oauth/access_token'
+      }
     };
 
     credentialsManager = Oauth2.credentialsManager({ clientId: 'ID', clientSecret: 'secret' });
@@ -16,11 +18,11 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
 
     beforeEach(function() {
       spyOn(window, 'open');
-      request = Oauth2.authorizationRequest(settings, credentialsManager);
+      request = Oauth2.authorizationRequest(scheme, credentialsManager);
     });
 
     it("opens authorization resource in a new window", function() {
-      var expectedUrl = settings.authorizationUri + '?client_id=ID&response_type=code&redirect_uri=' + RAML.Settings.oauth2RedirectUri;
+      var expectedUrl = scheme.settings.authorizationUri + '?client_id=ID&response_type=code&redirect_uri=' + RAML.Settings.oauth2RedirectUri;
       expect(window.open).toHaveBeenCalledWith(expectedUrl, 'raml-console-oauth2');
     });
 
@@ -49,12 +51,12 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
 
     describe('by default', function() {
       beforeEach(function() {
-        Oauth2.accessTokenRequest(settings, credentialsManager)('code');
+        Oauth2.accessTokenRequest(scheme, credentialsManager)('code');
       });
 
       it("requests an access token", function() {
         expect(xhrSpy).toHaveBeenCalledWith({
-          url: settings.accessTokenUri,
+          url: scheme.settings.accessTokenUri,
           type: 'post',
           data: {
             client_id: 'ID',
@@ -70,7 +72,7 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
     describe('with a proxy URL', function() {
       beforeEach(function() {
         RAML.Settings.proxy = 'http://www.someproxy.com/somepath/'
-        Oauth2.accessTokenRequest(settings, credentialsManager)('code');
+        Oauth2.accessTokenRequest(scheme, credentialsManager)('code');
       });
 
       afterEach(function() {
@@ -79,7 +81,7 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
 
       it("proxies the request for the access token", function() {
         expect(xhrSpy.mostRecentCall.args[0].url).toEqual(
-          RAML.Settings.proxy + settings.accessTokenUri
+          RAML.Settings.proxy + scheme.settings.accessTokenUri
         );
       });
     });
