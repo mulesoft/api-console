@@ -12,7 +12,10 @@ describe("RAML.Directives.pathBuilder", function() {
 
   describe("a resource with no templated parameters", function() {
     beforeEach(function() {
-      scope = createPathBuilderScope(['/resource', '/search']);
+      var parent = createPathSegment('/resource');
+      var child = createPathSegment('/search');
+
+      scope = createPathBuilderScope([parent, child]);
       el = compileTemplate('<path-builder></path-builder>', scope);
     });
 
@@ -23,13 +26,22 @@ describe("RAML.Directives.pathBuilder", function() {
 
   describe("a resource with templated parameters", function() {
     beforeEach(function() {
-      scope = createPathBuilderScope(['/resource', templatedSegment('resourceId')]);
+      var parent = createPathSegment('/resource');
+      var child = createPathSegment("/{resourceId}list{format}", {
+        resourceId: fakeUriParameter(),
+        format: fakeUriParameter(),
+      });
+
+      scope = createPathBuilderScope([parent, child]);
       el = compileTemplate('<path-builder></path-builder>', scope);
     });
 
     it("renders templated path segments as input fields", function() {
-      expect(el).toHaveText(/\/resource[\s\S]*/);
-      expect(el.find('input')).toHaveAttr('placeholder', 'resourceId');
+      expect(el).toHaveText(/\/resource[\s\S]*list/);
+
+      var inputs = el.find('input');
+      expect(inputs[0]).toHaveAttr('placeholder', 'resourceId');
+      expect(inputs[1]).toHaveAttr('placeholder', 'format');
     });
   });
 });
