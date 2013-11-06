@@ -2,6 +2,17 @@
   /* jshint camelcase: false */
   'use strict';
 
+  function tokenConstructorFor(scheme) {
+    var describedBy = scheme.describedBy || {},
+        queryParameters = describedBy.queryParameters || {};
+
+    if (queryParameters.access_token) {
+      return Oauth2.QueryParameterToken;
+    }
+
+    return Oauth2.HeaderToken;
+  }
+
   var WINDOW_NAME = 'raml-console-oauth2';
 
   var Oauth2 = function(scheme, credentials) {
@@ -49,6 +60,7 @@
 
   Oauth2.accessTokenRequest = function(scheme, credentialsManager) {
     var settings = scheme.settings;
+    var TokenConstructor = tokenConstructorFor(scheme);
     return function(code) {
       var url = settings.accessTokenUri;
       if (RAML.Settings.proxy) {
@@ -62,7 +74,7 @@
       };
 
       var createToken = function(data) {
-        return new Oauth2.QueryParameterToken(data.access_token);
+        return new TokenConstructor(data.access_token);
       };
       return $.ajax(requestOptions).then(createToken);
     };
@@ -74,6 +86,14 @@
 
   Oauth2.QueryParameterToken.prototype.sign = function(request) {
     request.queryParam('access_token', this.accessToken);
+  };
+
+  Oauth2.HeaderToken = function(token) {
+    this.accessToken = token;
+  };
+
+  Oauth2.HeaderToken.prototype.sign = function(request) {
+    request.header('Authorization', 'Bearer ' + this.accessToken);
   };
 
   RAML.Client.AuthStrategies.Oauth2 = Oauth2;

@@ -69,6 +69,54 @@ describe("RAML.Client.AuthStrategies.Oauth2", function() {
       });
     });
 
+    describe('when configured to use the authorization header', function() {
+      var token, requestSpy;
+
+      beforeEach(function() {
+        scheme.describedBy = {
+          headers: {
+            Authorization: {}
+          }
+        }
+        Oauth2.accessTokenRequest(scheme, credentialsManager)('code');
+      });
+
+      beforeEach(function() {
+        token = accessTokenResponse.then.mostRecentCall.args[0]({ access_token: 'fake' });
+        requestSpy = jasmine.createSpyObj('request', ['queryParam', 'header']);
+
+        token.sign(requestSpy);
+      });
+
+      it("supplies the header", function() {
+        expect(requestSpy.header).toHaveBeenCalledWith('Authorization', 'Bearer fake');
+      });
+    });
+
+    describe('when configured to use the access_token query parameter', function() {
+      var token, requestSpy;
+
+      beforeEach(function() {
+        scheme.describedBy = {
+          queryParameters: {
+            access_token: {}
+          }
+        }
+        Oauth2.accessTokenRequest(scheme, credentialsManager)('code');
+      });
+
+      beforeEach(function() {
+        token = accessTokenResponse.then.mostRecentCall.args[0]({ access_token: 'fake' });
+        requestSpy = jasmine.createSpyObj('request', ['queryParam', 'header']);
+
+        token.sign(requestSpy);
+      });
+
+      it("supplies the query param", function() {
+        expect(requestSpy.queryParam).toHaveBeenCalledWith('access_token', 'fake');
+      });
+    });
+
     describe('with a proxy URL', function() {
       beforeEach(function() {
         RAML.Settings.proxy = 'http://www.someproxy.com/somepath/'
