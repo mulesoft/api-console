@@ -7,22 +7,24 @@
     <named-parameters heading="Headers" parameters="method.headers" request-data="apiClient.headers"></named-parameters>
     <named-parameters heading="Query Parameters" parameters="method.queryParameters" request-data="apiClient.queryParameters"></named-parameters>
 
-    <fieldset class="labelled-radio-group media-types" ng-show="apiClient.supportsMediaType">
-      <label>Content Type</label>
-      <div class="radio-group">
-        <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
-          <input type="radio" name="media-type" value="{{mediaType}}" ng-model="apiClient.mediaType">
-          {{mediaType}}
-        </label>
-      </div>
-    </fieldset>
     <div class="request-body" ng-show="method.body">
-      <fieldset ng-show="apiClient.showBody()">
+      <fieldset class="bordered labelled-inline">
         <legend>Body</legend>
-        <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
+
+        <fieldset class="labelled-radio-group media-types" ng-show="apiClient.supportsMediaType">
+          <label>Content Type</label>
+          <div class="radio-group">
+            <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
+              <input type="radio" name="media-type" value="{{mediaType}}" ng-model="apiClient.mediaType">
+              {{mediaType}}
+            </label>
+          </div>
+        </fieldset>
+
+        <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body" ng-if="apiClient.showBody()"></textarea>
+        <parameter-fields parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showUrlencodedForm()"></parameter-fields>
+        <parameter-fields parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showMultipartForm()"></parameter-fields>
       </fieldset>
-      <named-parameters heading='Form Parameters' parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showUrlencodedForm()"></named-parameters>
-      <named-parameters heading='Form Parameters' parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showMultipartForm()"></named-parameters>
     </div>
 
     <div class="form-actions">
