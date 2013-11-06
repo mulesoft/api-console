@@ -105,7 +105,7 @@ describe('API Documentation', function() {
       expect(method.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(method.getText()).toMatch(new RegExp("<id>1511685</id>"));
     });
-  });
+  }, 10000);
 
   describe("responses tab", function() {
     raml = createRAML(
