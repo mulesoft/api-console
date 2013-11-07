@@ -1,9 +1,4 @@
-<fieldset class='labelled-inline' ng-show="parameters">
+<fieldset class='labelled-inline bordered' ng-show="parameters">
   <legend>{{heading}}</legend>
-  <div class="control-group" ng-repeat="(parameterName, parameter) in parameters track by parameterName">
-    <label for="{{parameterName}}">{{parameter.displayName}}</label>
-
-    <validated-input name="{{parameterName}}" bind-to='requestData' constraints='parameter'></validated-input>
-
-  </div>
+  <parameter-fields parameters="parameters" request-data="requestData"></parameter-fields>
 </fieldset>

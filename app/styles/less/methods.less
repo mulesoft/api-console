@@ -3,7 +3,7 @@
   border-color: @color;
 
   &.method-summary {
-    background-color: @white;
+    background-color: @veryLightGray;
 
     &:hover {
       background-color: tint(@color, 90%);
@@ -11,20 +11,20 @@
   }
 }
 
-.get { .method-color(@cornflower); }
-.post { .method-color(@green); }
-.put { .method-color(@aqua); }
-.patch { .method-color(@mustard); }
-.delete { .method-color(@red); }
-.head { .method-color(@purple); }
-.options { .method-color(@limeGreen); }
-.trace { .method-color(@skyBlue); }
-.connect { .method-color(@gold); }
+.get      { .method-color(@cornflower); }
+.post     { .method-color(@green);      }
+.put      { .method-color(@aqua);       }
+.patch    { .method-color(@mustard);    }
+.delete   { .method-color(@red);        }
+.head     { .method-color(@purple);     }
+.options  { .method-color(@limeGreen);  }
+.trace    { .method-color(@skyBlue);    }
+.connect  { .method-color(@gold);       }
 
 .method-name {
   font-size: 11px;
   text-transform: uppercase;
-  color: @white;
+  color: @veryLightGray;
   text-align: center;
   display: inline-block;
   padding: 0px 10px;

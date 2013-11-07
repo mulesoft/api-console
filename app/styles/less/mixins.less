@@ -12,9 +12,13 @@
 }
 
 .box-sizing(@boxmodel) {
-  -webkit-box-sizing: @boxmodel;
-     -moz-box-sizing: @boxmodel;
-          box-sizing: @boxmodel;
+  -moz-box-sizing: @boxmodel;
+       box-sizing: @boxmodel;
+}
+
+.transition(@transition) {
+  -webkit-transition: @transition;
+          transition: @transition;
 }
 
 .clearfix {

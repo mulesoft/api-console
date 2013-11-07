@@ -6,8 +6,8 @@
   <header id="raml-console-api-title">{{api.title}}</header>
 
   <nav id="raml-console-main-nav" ng-if='ramlConsole.showRootDocumentation()' ng-switch='ramlConsole.view'>
-    <a class="btn inverted" ng-switch-when='rootDocumentation' role="view-api-reference" ng-click='ramlConsole.gotoView("apiReference")'>&larr; API Reference</a>
-    <a class="btn inverted" ng-switch-default role="view-root-documentation" ng-click='ramlConsole.gotoView("rootDocumentation")'>Documentation &rarr;</a>
+    <a class="btn" ng-switch-when='rootDocumentation' role="view-api-reference" ng-click='ramlConsole.gotoView("apiReference")'>&larr; API Reference</a>
+    <a class="btn" ng-switch-default role="view-root-documentation" ng-click='ramlConsole.gotoView("rootDocumentation")'>Documentation &rarr;</a>
   </nav>
 
   <div id="raml-console-content" ng-switch='ramlConsole.view'>
