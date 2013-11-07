@@ -5,7 +5,8 @@
   </h4>
   <div collapsible-content>
     <section role='response'>
-      <p markdown='response.description'></p>
+      <div markdown='response.description'></div>
+      <named-parameters-documentation heading='Headers' role='parameter-group' parameters='response.headers'></named-parameters-documentation>
       <section ng-repeat="(mediaType, definition) in response.body track by mediaType">
         <h5>{{mediaType}}</h5>
         <section ng-if="definition.schema">

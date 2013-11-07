@@ -22,6 +22,11 @@ schemas:
       200:
         description: |
           *Success* description
+        headers:
+          X-Some-Header:
+            type: integer
+            example: 5
+            description: A *description* of some header sent as part of the **response**.
       404:
         description: |
           *Error* description

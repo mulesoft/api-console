@@ -122,6 +122,10 @@ describe('API Documentation', function() {
       '      200:',
       '        description: |',
       '          *Success* description',
+      '        headers:',
+      '          SomeHeader:',
+      '            type: integer',
+      '            example: 5',
       '      404:',
       '        description: |',
       '          *Error* description',
@@ -134,11 +138,14 @@ describe('API Documentation', function() {
 
     loadRamlFixture(raml);
 
-    it("displays formatted xml response examples and schemas, and response descriptions with markdown formatting", function() {
+    it("displays headers, formatted xml response examples and schemas, and response descriptions with markdown formatting", function() {
       var resource = openResource(1);
       var method = openMethod(1, resource);
       var documentation = openDocumentationTab(2, method);
+      var header = documentation.$('[role="parameter"]');
 
+      expect(header.getText()).toMatch('SomeHeader');
+      expect(header.getText()).toMatch(/Example: 5/i);
       expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(documentation.getText()).toMatch(/<api-response>[\d\s]*<status>[\d\s]*Error[\d\s]*<\/status>[\d\s]*<\/api-response>/);
 

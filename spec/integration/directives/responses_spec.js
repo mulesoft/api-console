@@ -24,8 +24,8 @@ describe("RAML.Directives.responses", function() {
     it('shows the description of both responses', function() {
       expect(this.$el.find("h4").eq(0).text().trim()).toEqual("200");
       expect(this.$el.find("h4").eq(1).text().trim()).toEqual("500");
-      expect(this.$el.find("[role='response']").eq(0).text().trim()).toEqual("A-Okay");
-      expect(this.$el.find("[role='response']").eq(1).text().trim()).toEqual("Ut Oh");
+      expect(this.$el.find("[role='response']").eq(0).find('p').text().trim()).toEqual("A-Okay");
+      expect(this.$el.find("[role='response']").eq(1).find('p').text().trim()).toEqual("Ut Oh");
     });
 
     it('makes both responses visible', function() {
