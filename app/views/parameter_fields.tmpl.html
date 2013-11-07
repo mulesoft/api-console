@@ -1,6 +1,6 @@
 <fieldset>
   <div class="control-group" ng-repeat="(parameterName, parameter) in parameters track by parameterName">
     <label for="{{parameterName}}">{{parameter.displayName}}:</label>
-    <validated-input name="{{parameterName}}" bind-to='requestData' constraints='parameter'></validated-input>
+    <validated-input name="{{parameterName}}" bind-to='requestData' placeholder='{{parameter.example}}'constraints='parameter'></validated-input>
   </div>
 </fieldset>
