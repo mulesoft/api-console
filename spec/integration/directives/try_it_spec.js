@@ -508,4 +508,36 @@ describe("RAML.Controllers.tryIt", function() {
       });
     });
   });
+
+  describe("given uriParameters", function() {
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      '/{resource}/{subresource}:',
+      '  get:'
+    );
+
+    parseRAML(raml);
+
+    mockHttp(function(mock) {
+      mock
+        .when("get", 'http://www.example.com/posts/andstuff')
+        .respondWith(200, "cool");
+    });
+
+    beforeEach(function() {
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+    });
+
+    it('executes a request to the parameterized URI', function() {
+      $el.find('input[name="resource"]').fillIn('posts');
+      $el.find('input[name="subresource"]').fillIn('andstuff');
+      $el.find('button[role="try-it"]').click();
+
+      whenTryItCompletes(function() {
+        expect($el.find('.response .status .response-value')).toHaveText('200');
+      });
+    });
+  });
 });

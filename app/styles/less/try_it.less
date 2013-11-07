@@ -3,11 +3,16 @@
 
   .path {
     display: block;
-    font-size: 15px;
+    font-size: 0px;
     margin-bottom: 30px;
 
+    .segment {
+      font-size: 15px;
+    }
     input {
-      width: 8em;
+      margin: 0 5px 0 2px;
+      font-size: 15px;
+      width: 9em;
     }
   }
 }
@@ -34,13 +39,6 @@
       width: 100%;
       font-family: monospace;
       height: 7em;
-    }
-
-    .uri {
-      display: block;
-      div {
-        display: inline;
-      }
     }
 
     .request-body {

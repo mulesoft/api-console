@@ -1,17 +1,15 @@
 <span role="path" class="path">
-  <span role='segment' ng-repeat='segment in resource.pathSegments'>
-    <span ng-if='segment.templated'>
-      /<span ng-repeat='token in segment.tokens'>
-          <validated-input ng-if='segment.parameters[token]'
-                            name="{{token}}"
-                            bind-to="pathBuilder"
-                            placeholder="{{token}}"
-                            constraints="segment.parameters[token]"
-                            invalid-class="error">
-          </validated-input>
-          <span ng-if="!segment.parameters[token]">{{token}}</span>
-        </span>
-      </span>
-    <span  ng-if='!segment.templated'>{{segment.toString()}}</span>
+  <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init="$segmentIndex = $index">
+    <span class="segment">/</span>
+    <span ng-repeat='token in segment.tokens'>
+      <validated-input ng-if='segment.parameters[token]'
+                        name="{{token}}"
+                        bind-to="pathBuilder.contexts[$segmentIndex]"
+                        placeholder="{{token}}"
+                        constraints="segment.parameters[token]"
+                        invalid-class="error">
+      </validated-input>
+      <span class="segment" ng-if="!segment.parameters[token]">{{token}}</span>
+    </span>
   </span>
 </span>

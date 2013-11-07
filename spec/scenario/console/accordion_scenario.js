@@ -97,7 +97,7 @@ describe("accordion view of API", function() {
         var method = openMethod(1, resource);
 
         var path = method.$('[role="path"]');
-        expect(path.getText()).toEqual('/resource')
+        expect(path.getText()).toMatch(/\/[\s\S]*resource/);
 
         resources[1].$('.accordion-toggle').click();
         var resourceMethodSumaries = resources[1].$$('[role="methodSummary"]');

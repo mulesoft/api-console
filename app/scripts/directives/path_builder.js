@@ -3,6 +3,9 @@
 
   var Controller = function($scope) {
     $scope.pathBuilder = new RAML.Client.PathBuilder.create($scope.resource.pathSegments);
+    $scope.pathBuilder.contexts = $scope.resource.pathSegments.map(function() {
+      return {};
+    });
   };
 
   RAML.Directives.pathBuilder = function() {

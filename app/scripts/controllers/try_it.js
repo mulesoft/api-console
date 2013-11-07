@@ -142,7 +142,7 @@
     }
 
     try {
-      var url = this.response.requestUrl = this.baseUri + pathBuilder(pathBuilder);
+      var url = this.response.requestUrl = this.baseUri + pathBuilder(pathBuilder.contexts);
       if (RAML.Settings.proxy) {
         url = RAML.Settings.proxy + url;
       }
