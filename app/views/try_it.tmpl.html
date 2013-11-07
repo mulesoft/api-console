@@ -8,7 +8,7 @@
     <named-parameters heading="Query Parameters" parameters="method.queryParameters" request-data="apiClient.queryParameters"></named-parameters>
 
     <div class="request-body" ng-show="method.body">
-      <fieldset class="bordered labelled-inline">
+      <fieldset class="bordered">
         <legend>Body</legend>
 
         <fieldset class="labelled-radio-group media-types" ng-show="apiClient.supportsMediaType">
@@ -22,8 +22,10 @@
         </fieldset>
 
         <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body" ng-if="apiClient.showBody()"></textarea>
-        <parameter-fields parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showUrlencodedForm()"></parameter-fields>
-        <parameter-fields parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showMultipartForm()"></parameter-fields>
+        <div class="labelled-inline">
+          <parameter-fields parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showUrlencodedForm()"></parameter-fields>
+          <parameter-fields parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showMultipartForm()"></parameter-fields>
+        </div>
       </fieldset>
     </div>
 
