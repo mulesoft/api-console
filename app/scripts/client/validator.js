@@ -12,8 +12,35 @@
       };
     },
     integer: function(value) { return !!/^-?(0|[1-9][0-9]*)$/.exec(value); },
-    number: function(value) { return !!/^-?(0|[1-9][0-9]*)(\.[0-9]*)?([eE][-+]?[0-9]+)?$/.exec(value); }
+    number: function(value) { return !!/^-?(0|[1-9][0-9]*)(\.[0-9]*)?([eE][-+]?[0-9]+)?$/.exec(value); },
+    minimum: function(minimum) {
+      return function(value) {
+        return value >= minimum;
+      };
+    },
+    maximum: function(maximum) {
+      return function(value) {
+        return value <= maximum;
+      };
+    },
+    minLength: function(minimum) {
+      return function(value) {
+        if (!value || value.length === undefined) {
+          return false;
+        }
 
+        return value.length >= minimum;
+      };
+    },
+    maxLength: function(maximum) {
+      return function(value) {
+        if (!value || value.length === undefined) {
+          return false;
+        }
+
+        return value.length <= maximum;
+      };
+    }
   };
 
   function baseValidations(definition) {
@@ -26,11 +53,33 @@
     return validations;
   }
 
+  function numberValidations(validations, definition) {
+    if (definition.minimum) {
+      validations.minimum = VALIDATIONS.minimum(definition.minimum);
+    }
+
+    if (definition.maximum) {
+      validations.maximum = VALIDATIONS.maximum(definition.maximum);
+    }
+  }
+
+  // function copyValidations(validations, types) {
+  //   Object.keys(types).forEach(function(type) {
+  //     validations[type] = VALIDATIONS[type](types[type]);
+  //   });
+  // }
+
   var VALIDATIONS_FOR_TYPE = {
     string: function(definition) {
       var validations = baseValidations(definition);
       if (definition.enum) {
         validations.enum = VALIDATIONS.enum(definition.enum);
+      }
+      if (definition.minLength) {
+        validations.minLength = VALIDATIONS.minLength(definition.minLength);
+      }
+      if (definition.maxLength) {
+        validations.maxLength = VALIDATIONS.maxLength(definition.maxLength);
       }
       return validations;
     },
@@ -38,12 +87,14 @@
     integer: function(definition) {
       var validations = baseValidations(definition);
       validations.integer = VALIDATIONS.integer;
+      numberValidations(validations, definition);
       return validations;
     },
 
     number: function(definition) {
       var validations = baseValidations(definition);
       validations.number = VALIDATIONS.number;
+      numberValidations(validations, definition);
       return validations;
     },
 

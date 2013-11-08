@@ -7,6 +7,13 @@ describe("RAML.Client.Validator", function() {
         return (this.actual || []).some(function(error) {
           return error === expected;
         });
+      },
+      toAcceptValues: function() {
+        var validator = this.actual;
+        var values = Array.prototype.slice.call(arguments, 0);
+        return values.every(function(value) {
+          return validator.validate(value) === undefined;
+        })
       }
     });
   });
@@ -63,6 +70,65 @@ describe("RAML.Client.Validator", function() {
     });
   });
 
+  describe("when the input is of type string", function() {
+    describe("when the input is an enum", function() {
+      beforeEach(function() {
+        definition = { type: 'string', enum: ['cats', 'dogs'] };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      describe("with values listed in the enum", function() {
+        it("has no errors", function() {
+          expect(validator.validate('cats')).toBeUndefined();
+        });
+      });
+
+      describe("with values not listed in the enum", function() {
+        it("includes enum in the errors", function() {
+          expect(validator.validate('horses')).toContainError('enum');
+        });
+      });
+    });
+
+    describe("with a minLength", function() {
+      beforeEach(function() {
+        definition = { type: 'string', minLength: 3 };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      describe("with an string longer or the same as minLength", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('dog', 'cats');
+        });
+      });
+
+      describe("with an string shorter than the minLength", function() {
+        it("includes minLength in the errors", function() {
+          expect(validator.validate('ox')).toContainError('minLength');
+        });
+      });
+    });
+
+    describe("with a maxLength", function() {
+      beforeEach(function() {
+        definition = { type: 'string', maxLength: 5 };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      describe("with a string shorter or the same as maxLength", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('horse', 'goat');
+        });
+      });
+
+      describe("with a string longer than the maxLength", function() {
+        it("includes maxLength in the errors", function() {
+          expect(validator.validate('gopher')).toContainError('maxLength');
+        });
+      });
+    });
+  });
+
   describe("when the input is of type boolean", function() {
     beforeEach(function() {
       definition = { type: 'boolean' };
@@ -89,52 +155,65 @@ describe("RAML.Client.Validator", function() {
     });
   });
 
-  describe("when the input is an enum", function() {
-    beforeEach(function() {
-      definition = { type: 'string', enum: ['cats', 'dogs'] };
-      validator = RAML.Client.Validator.from(definition);
-    });
-
-    describe("with values listed in the enum", function() {
-      it("has no errors", function() {
-        expect(validator.validate('cats')).toBeUndefined();
-      });
-    });
-
-    describe("with values not listed in the enum", function() {
-      it("includes enum in the errors", function() {
-        expect(validator.validate('horses')).toContainError('enum');
-      });
-    });
-  });
-
   describe("when the input is an integer", function() {
-    beforeEach(function() {
-      definition = { type: 'integer' };
-      validator = RAML.Client.Validator.from(definition);
-    });
+    describe("by default", function() {
+      beforeEach(function() {
+        definition = { type: 'integer' };
+        validator = RAML.Client.Validator.from(definition);
+      });
 
-    describe("with an integer", function() {
-      it("has no errors", function() {
-        expect(validator.validate('2')).toBeUndefined();
+      describe("with a valid integer", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('2', '-2', '0');
+        });
+      });
+
+      describe("with an invalid integer", function() {
+        it("has errors", function() {
+          expect(validator).not.toAcceptValues('2.0', '02');
+        });
+
+        it("includes integer in the errors", function() {
+          expect(validator.validate('02')).toContainError('integer');
+        });
       });
     });
 
-    describe("with a negative integer", function() {
-      it("has no errors", function() {
-        expect(validator.validate('-2')).toBeUndefined();
+    describe("with a minimum", function() {
+      beforeEach(function() {
+        definition = { type: 'integer', minimum: 3 };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      describe("with an integer greater than or equal to the minimum", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('3', '4');
+        });
+      });
+
+      describe("with an integer less than the minimum", function() {
+        it("includes minimum in the errors", function() {
+          expect(validator.validate('2')).toContainError('minimum');
+        });
       });
     });
 
-    describe("with a floating point", function() {
-      it("includes integer in the errors", function() {
-        expect(validator.validate('2.0')).toContainError('integer');
+    describe("with a maximum", function() {
+      beforeEach(function() {
+        definition = { type: 'integer', maximum: 3 };
+        validator = RAML.Client.Validator.from(definition);
       });
-    });
 
-    describe("with a 0-prefixed integer", function() {
-      it("includes integer in the errors", function() {
-        expect(validator.validate('02')).toContainError('integer');
+      describe("with an integer less than or equal to the maximum", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('2', '3');
+        });
+      });
+
+      describe("with an integer greater than the maximum", function() {
+        it("includes maximum in the errors", function() {
+          expect(validator.validate('4')).toContainError('maximum');
+        });
       });
     });
   });
@@ -145,27 +224,57 @@ describe("RAML.Client.Validator", function() {
       validator = RAML.Client.Validator.from(definition);
     });
 
-    describe("with an number", function() {
+    describe("with a valid number", function() {
       it("has no errors", function() {
-        expect(validator.validate('2')).toBeUndefined();
+        expect(validator).toAcceptValues('2', '-2', '2.0');
       });
     });
 
-    describe("with a negative number", function() {
-      it("has no errors", function() {
-        expect(validator.validate('-2')).toBeUndefined();
+    describe("with an invalid number", function() {
+      it("has errors", function() {
+        expect(validator).not.toAcceptValues('02', '2.0.2');
       });
-    });
 
-    describe("with a floating point", function() {
-      it("has no errors", function() {
-        expect(validator.validate('2.0')).toBeUndefined();
-      });
-    });
-
-    describe("with a 0-prefixed number", function() {
       it("includes number in the errors", function() {
         expect(validator.validate('02')).toContainError('number');
+      });
+    });
+
+    describe("with a minimum", function() {
+      beforeEach(function() {
+        definition = { type: 'number', minimum: 3.5 };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      describe("with an number greater than or equal to the minimum", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('3.5', '3.6');
+        });
+      });
+
+      describe("with an number less than the minimum", function() {
+        it("includes minimum in the errors", function() {
+          expect(validator.validate('3.4')).toContainError('minimum');
+        });
+      });
+    });
+
+    describe("with a maximum", function() {
+      beforeEach(function() {
+        definition = { type: 'number', maximum: 3.5 };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      describe("with a number less than or equal to the maximum", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('3.4', '3.5');
+        });
+      });
+
+      describe("with a number greater than the maximum", function() {
+        it("includes maximum in the errors", function() {
+          expect(validator.validate('3.6')).toContainError('maximum');
+        });
       });
     });
   });
