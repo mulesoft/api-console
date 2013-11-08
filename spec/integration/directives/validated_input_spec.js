@@ -1,12 +1,5 @@
 describe("RAML.Directives.validatedInput", function() {
-  var $el, input, scope, raml = createRAML(
-    'title: Example API',
-    'baseUri: http://www.example.com',
-    '/resource/{id}:',
-    '  get:',
-    '    queryParameters:',
-    '      page:'
-  );
+  var $el, input, scope;
 
   function createScopeForValidatedInput(constraints, model) {
     constraints = constraints || { type: 'string' };
@@ -64,7 +57,14 @@ describe("RAML.Directives.validatedInput", function() {
   });
 
   describe("validating the input", function() {
-    var model, resource;
+    var model, resource, raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      '/resource/{id}:',
+      '  get:',
+      '    queryParameters:',
+      '      page:'
+    );
 
     parseRAML(raml, { into: 'api' });
 
@@ -83,12 +83,12 @@ describe("RAML.Directives.validatedInput", function() {
       beforeEach(function() {
         expect(model.id).toBeUndefined();
         input.trigger('focus');
-        input.fillIn('the thing i typed');
+        input.fillIn('  the thing i typed  ');
         input.trigger('blur');
       });
 
       it("binds the input value to the model", function() {
-        expect(model.id).toEqual('the thing i typed');
+        expect(model.id).toEqual('  the thing i typed  ');
       });
 
       it("does not decorate the input", function() {

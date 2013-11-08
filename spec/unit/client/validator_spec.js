@@ -41,7 +41,7 @@ describe("RAML.Client.Validator", function() {
 
   describe("when the input is required", function() {
     beforeEach(function() {
-      definition = { type: 'string', required: true };
+      definition = { type: 'string', required: true, minLength: 5 };
       validator = RAML.Client.Validator.from(definition);
     });
 
@@ -54,6 +54,7 @@ describe("RAML.Client.Validator", function() {
     describe("without data", function() {
       it("includes required in the errors", function() {
         expect(validator.validate('')).toContainError('required');
+        expect(validator.validate('')).not.toContainError('minLength');
       });
     });
   });
