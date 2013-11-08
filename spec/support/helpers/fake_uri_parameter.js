@@ -4,6 +4,7 @@ function fakeUriParameter(required) {
   }
 
   return {
+    type: 'string',
     required: required
   };
 };

@@ -9,7 +9,7 @@ describe("RAML.Directives.validatedInput", function() {
   );
 
   function createScopeForValidatedInput(constraints, model) {
-    constraints = constraints || {};
+    constraints = constraints || { type: 'string' };
     model = model || {};
 
     return createScope(function(scope) {

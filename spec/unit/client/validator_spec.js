@@ -1,10 +1,20 @@
 describe("RAML.Client.Validator", function() {
   var definition, errors, validator;
 
+  beforeEach(function() {
+    this.addMatchers({
+      toContainError: function(expected) {
+        return (this.actual || []).some(function(error) {
+          return error === expected;
+        });
+      }
+    });
+  });
+
   describe("creating a validator from a RAML definition", function() {
     describe("by default", function() {
       beforeEach(function() {
-        definition = { required: true };
+        definition = { type: 'string', required: true };
         validator = RAML.Client.Validator.from(definition);
       });
 
@@ -23,38 +33,27 @@ describe("RAML.Client.Validator", function() {
   });
 
   describe("when the input is required", function() {
-    describe("with data", function() {
-      beforeEach(function() {
-        definition = { required: true };
-        validator = RAML.Client.Validator.from(definition);
-        errors = validator.validate("present");
-      });
+    beforeEach(function() {
+      definition = { type: 'string', required: true };
+      validator = RAML.Client.Validator.from(definition);
+    });
 
+    describe("with data", function() {
       it("has no errors", function() {
-        expect(errors).toBeUndefined();
+        expect(validator.validate("present")).toBeUndefined();
       });
     });
 
     describe("without data", function() {
-      beforeEach(function() {
-        definition = { required: true };
-        validator = RAML.Client.Validator.from(definition);
-        errors = validator.validate("");
-      });
-
-      it("has errors", function() {
-        expect(errors).toBeDefined();
-      });
-
       it("includes required in the errors", function() {
-        expect(errors).toContain('required');
+        expect(validator.validate("")).toContainError('required');
       });
     });
   });
 
   describe("when the input is optional", function() {
     beforeEach(function() {
-      definition = { required: false };
+      definition = { type: 'string', required: false };
       validator = RAML.Client.Validator.from(definition);
       errors = validator.validate("");
     });
@@ -65,12 +64,12 @@ describe("RAML.Client.Validator", function() {
   });
 
   describe("when the input is of type boolean", function() {
-    describe("with valid values", function() {
-      beforeEach(function() {
-        definition = { type: 'boolean' };
-        validator = RAML.Client.Validator.from(definition);
-      });
+    beforeEach(function() {
+      definition = { type: 'boolean' };
+      validator = RAML.Client.Validator.from(definition);
+    });
 
+    describe("with valid values", function() {
       it("has no errors", function() {
         expect(validator.validate('true')).toBeUndefined();
         expect(validator.validate('false')).toBeUndefined();
@@ -78,27 +77,12 @@ describe("RAML.Client.Validator", function() {
     });
 
     describe("with an invalid value", function() {
-      beforeEach(function() {
-        definition = { type: 'boolean' };
-        validator = RAML.Client.Validator.from(definition);
-        errors = validator.validate('cats');
-      });
-
-      it("has errors", function() {
-        expect(errors).toBeDefined();
-      });
-
       it("includes boolean in the errors", function() {
-        expect(errors).toContain('boolean');
+        expect(validator.validate('cats')).toContainError('boolean');
       });
     });
 
     describe("with an empty value", function() {
-      beforeEach(function() {
-        definition = { type: 'boolean' };
-        validator = RAML.Client.Validator.from(definition);
-      });
-
       it("has no errors", function() {
         expect(validator.validate('')).toBeUndefined();
       });
@@ -106,31 +90,20 @@ describe("RAML.Client.Validator", function() {
   });
 
   describe("when the input is an enum", function() {
-    describe("with values listed in the enum", function() {
-      beforeEach(function() {
-        definition = { type: 'string', enum: ['cats', 'dogs'] };
-        validator = RAML.Client.Validator.from(definition);
-        errors = validator.validate('cats');
-      });
+    beforeEach(function() {
+      definition = { type: 'string', enum: ['cats', 'dogs'] };
+      validator = RAML.Client.Validator.from(definition);
+    });
 
+    describe("with values listed in the enum", function() {
       it("has no errors", function() {
-        expect(errors).toBeUndefined();
+        expect(validator.validate('cats')).toBeUndefined();
       });
     });
 
     describe("with values not listed in the enum", function() {
-      beforeEach(function() {
-        definition = { type: 'string', enum: ['cats', 'dogs'] };
-        validator = RAML.Client.Validator.from(definition);
-        errors = validator.validate('horses');
-      });
-
-      it("has errors", function() {
-        expect(errors).toBeDefined();
-      });
-
       it("includes enum in the errors", function() {
-        expect(errors).toContain('enum');
+        expect(validator.validate('horses')).toContainError('enum');
       });
     });
   });
@@ -142,132 +115,77 @@ describe("RAML.Client.Validator", function() {
     });
 
     describe("with an integer", function() {
-      beforeEach(function() {
-        errors = validator.validate('2');
-      });
-
       it("has no errors", function() {
-        expect(errors).toBeUndefined();
+        expect(validator.validate('2')).toBeUndefined();
       });
     });
 
     describe("with a negative integer", function() {
-      beforeEach(function() {
-        errors = validator.validate('-2');
-      });
-
       it("has no errors", function() {
-        expect(errors).toBeUndefined();
+        expect(validator.validate('-2')).toBeUndefined();
       });
     });
 
     describe("with a floating point", function() {
-      beforeEach(function() {
-        errors = validator.validate('2.0');
-      });
-
-      it("has errors", function() {
-        expect(errors).toBeDefined();
-      });
-
       it("includes integer in the errors", function() {
-        expect(errors).toContain('integer');
+        expect(validator.validate('2.0')).toContainError('integer');
       });
     });
 
     describe("with a 0-prefixed integer", function() {
-      beforeEach(function() {
-        errors = validator.validate('02');
-      });
-
-      it("has errors", function() {
-        expect(errors).toBeDefined();
-      });
-
       it("includes integer in the errors", function() {
-        expect(errors).toContain('integer');
+        expect(validator.validate('02')).toContainError('integer');
       });
     });
   });
 
-describe("when the input is an enum", function() {
-  describe("with values listed in the enum", function() {
+  describe("when the input is a number", function() {
     beforeEach(function() {
-      definition = { type: 'string', enum: ['cats', 'dogs'] };
+      definition = { type: 'number' };
       validator = RAML.Client.Validator.from(definition);
-      errors = validator.validate('cats');
     });
 
-    it("has no errors", function() {
-      expect(errors).toBeUndefined();
+    describe("with an number", function() {
+      it("has no errors", function() {
+        expect(validator.validate('2')).toBeUndefined();
+      });
+    });
+
+    describe("with a negative number", function() {
+      it("has no errors", function() {
+        expect(validator.validate('-2')).toBeUndefined();
+      });
+    });
+
+    describe("with a floating point", function() {
+      it("has no errors", function() {
+        expect(validator.validate('2.0')).toBeUndefined();
+      });
+    });
+
+    describe("with a 0-prefixed number", function() {
+      it("includes number in the errors", function() {
+        expect(validator.validate('02')).toContainError('number');
+      });
     });
   });
 
-  describe("with values not listed in the enum", function() {
+  describe("when the input is an unknown type", function() {
     beforeEach(function() {
-      definition = { type: 'string', enum: ['cats', 'dogs'] };
-      validator = RAML.Client.Validator.from(definition);
-      errors = validator.validate('horses');
+      definition = { type: 'explode' };
     });
 
-    it("has errors", function() {
-      expect(errors).toBeDefined();
+    it("ignores it", function() {
+      expect(function() {
+        RAML.Client.Validator.from(definition);
+      }).not.toThrow();
     });
 
-    it("includes enum in the errors", function() {
-      expect(errors).toContain('enum');
+
+    it("returns a thing with a validate function", function() {
+      var validator = RAML.Client.Validator.from(definition);
+      expect(typeof validator.validate).toBe('function');
     });
+
   });
-});
-
-describe("when the input is a number", function() {
-  beforeEach(function() {
-    definition = { type: 'number' };
-    validator = RAML.Client.Validator.from(definition);
-  });
-
-  describe("with an number", function() {
-    beforeEach(function() {
-      errors = validator.validate('2');
-    });
-
-    it("has no errors", function() {
-      expect(errors).toBeUndefined();
-    });
-  });
-
-  describe("with a negative number", function() {
-    beforeEach(function() {
-      errors = validator.validate('-2');
-    });
-
-    it("has no errors", function() {
-      expect(errors).toBeUndefined();
-    });
-  });
-
-  describe("with a floating point", function() {
-    beforeEach(function() {
-      errors = validator.validate('2.0');
-    });
-
-    it("has no errors", function() {
-      expect(errors).toBeUndefined();
-    });
-  });
-
-  describe("with a 0-prefixed number", function() {
-    beforeEach(function() {
-      errors = validator.validate('02');
-    });
-
-    it("has errors", function() {
-      expect(errors).toBeDefined();
-    });
-
-    it("includes number in the errors", function() {
-      expect(errors).toContain('number');
-    });
-  });
-});
 });

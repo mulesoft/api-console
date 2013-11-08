@@ -16,6 +16,44 @@
 
   };
 
+  function baseValidations(definition) {
+    var validations = {};
+
+    if (definition.required) {
+      validations.required = VALIDATIONS.required;
+    }
+
+    return validations;
+  }
+
+  var VALIDATIONS_FOR_TYPE = {
+    string: function(definition) {
+      var validations = baseValidations(definition);
+      if (definition.enum) {
+        validations.enum = VALIDATIONS.enum(definition.enum);
+      }
+      return validations;
+    },
+
+    integer: function(definition) {
+      var validations = baseValidations(definition);
+      validations.integer = VALIDATIONS.integer;
+      return validations;
+    },
+
+    number: function(definition) {
+      var validations = baseValidations(definition);
+      validations.number = VALIDATIONS.number;
+      return validations;
+    },
+
+    boolean: function(definition) {
+      var validations = baseValidations(definition);
+      validations.boolean = VALIDATIONS.boolean;
+      return validations;
+    }
+  };
+
   function Validator(validations) {
     this.validations = validations;
   }
@@ -38,21 +76,12 @@
       throw new Error('definition is required!');
     }
 
-    var validations = {};
+    var validations;
 
-    if (definition.required) {
-      validations.required = VALIDATIONS.required;
-    }
-    if (definition.type === 'boolean') {
-      validations.boolean = VALIDATIONS.boolean;
-    } else if (definition.type === 'integer') {
-      validations.integer = VALIDATIONS.integer;
-    } else if (definition.type === 'number') {
-      validations.number = VALIDATIONS.number;
-    }
-
-    if (definition.enum) {
-      validations.enum = VALIDATIONS.enum(definition.enum);
+    if (VALIDATIONS_FOR_TYPE[definition.type]) {
+      validations = VALIDATIONS_FOR_TYPE[definition.type](definition);
+    } else {
+      validations = {};
     }
 
     return new Validator(validations);
