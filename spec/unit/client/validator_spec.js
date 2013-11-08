@@ -316,4 +316,29 @@ describe("RAML.Client.Validator", function() {
     });
 
   });
+
+  describe("when the input is a date", function() {
+    beforeEach(function() {
+      definition = { type: 'date' };
+      validator = RAML.Client.Validator.from(definition);
+    });
+
+    describe("with a valid RFC1123 date", function() {
+      it("has no errors", function() {
+        expect(validator).toAcceptValues('Sun, 06 Nov 1994 08:49:37 GMT');
+      });
+    });
+
+    describe("with some non-RFC1123 date formats ", function() {
+      it("has errors", function() {
+        expect(validator).not.toAcceptValues('Sunday, 06-Nov-94 08:49:37 GMT', 'Sun Nov  6 08:49:37 1994', '11/29/84');
+      });
+    });
+
+    describe("with an invalid date", function() {
+      it("includes date in the errors", function() {
+        expect(validator.validate('not a date')).toContainError('date');
+      });
+    });
+  });
 });

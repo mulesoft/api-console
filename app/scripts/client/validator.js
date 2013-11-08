@@ -3,6 +3,8 @@
 
   // number regular expressions from http://yaml.org/spec/1.2/spec.html#id2804092
 
+  var RFC1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} GMT$/;
+
   var VALIDATIONS = {
     required: function(value) { return value !== null && value !== undefined && value !== ''; },
     boolean: function(value) { return value === 'true' || value === 'false' || value === ''; },
@@ -47,7 +49,8 @@
       return function(value) {
         return regex.exec(value);
       };
-    }
+    },
+    date: function(value) { return !!RFC1123.exec(value); }
   };
 
   function baseValidations(definition) {
@@ -111,6 +114,12 @@
     boolean: function(definition) {
       var validations = baseValidations(definition);
       validations.boolean = VALIDATIONS.boolean;
+      return validations;
+    },
+
+    date: function(definition) {
+      var validations = baseValidations(definition);
+      validations.date = VALIDATIONS.date;
       return validations;
     }
   };
