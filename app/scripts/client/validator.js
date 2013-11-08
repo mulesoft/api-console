@@ -10,47 +10,39 @@
     boolean: function(value) { return value === 'true' || value === 'false' || value === ''; },
     enum: function(enumeration) {
       return function(value) {
-        return enumeration.some(function(item) { return item === value; });
+        return value === '' || enumeration.some(function(item) { return item === value; });
       };
     },
-    integer: function(value) { return !!/^-?(0|[1-9][0-9]*)$/.exec(value); },
-    number: function(value) { return !!/^-?(0|[1-9][0-9]*)(\.[0-9]*)?([eE][-+]?[0-9]+)?$/.exec(value); },
+    integer: function(value) { return value === '' || !!/^-?(0|[1-9][0-9]*)$/.exec(value); },
+    number: function(value) { return value === '' || !!/^-?(0|[1-9][0-9]*)(\.[0-9]*)?([eE][-+]?[0-9]+)?$/.exec(value); },
     minimum: function(minimum) {
       return function(value) {
-        return value >= minimum;
+        return value === '' || value >= minimum;
       };
     },
     maximum: function(maximum) {
       return function(value) {
-        return value <= maximum;
+        return value === '' || value <= maximum;
       };
     },
     minLength: function(minimum) {
       return function(value) {
-        if (!value || value.length === undefined) {
-          return false;
-        }
-
-        return value.length >= minimum;
+        return value === '' || value.length >= minimum;
       };
     },
     maxLength: function(maximum) {
       return function(value) {
-        if (!value || value.length === undefined) {
-          return false;
-        }
-
-        return value.length <= maximum;
+        return value === '' || value.length <= maximum;
       };
     },
     pattern: function(pattern) {
       var regex = new RegExp(pattern);
 
       return function(value) {
-        return regex.exec(value);
+        return value === '' || !!regex.exec(value);
       };
     },
-    date: function(value) { return !!RFC1123.exec(value); }
+    date: function(value) { return value === '' || !!RFC1123.exec(value); }
   };
 
   function baseValidations(definition) {

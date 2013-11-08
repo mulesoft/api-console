@@ -47,13 +47,13 @@ describe("RAML.Client.Validator", function() {
 
     describe("with data", function() {
       it("has no errors", function() {
-        expect(validator.validate("present")).toBeUndefined();
+        expect(validator.validate('present')).toBeUndefined();
       });
     });
 
     describe("without data", function() {
       it("includes required in the errors", function() {
-        expect(validator.validate("")).toContainError('required');
+        expect(validator.validate('')).toContainError('required');
       });
     });
   });
@@ -62,7 +62,7 @@ describe("RAML.Client.Validator", function() {
     beforeEach(function() {
       definition = { type: 'string', required: false };
       validator = RAML.Client.Validator.from(definition);
-      errors = validator.validate("");
+      errors = validator.validate('');
     });
 
     it("has no errors", function() {
@@ -77,9 +77,9 @@ describe("RAML.Client.Validator", function() {
         validator = RAML.Client.Validator.from(definition);
       });
 
-      describe("with values listed in the enum", function() {
+      describe("with values listed in the enum or an empty string", function() {
         it("has no errors", function() {
-          expect(validator.validate('cats')).toBeUndefined();
+          expect(validator).toAcceptValues('cats', 'dogs', '');
         });
       });
 
@@ -96,9 +96,9 @@ describe("RAML.Client.Validator", function() {
         validator = RAML.Client.Validator.from(definition);
       });
 
-      describe("with a value that matches the expression", function() {
+      describe("with a value that matches the expression or an empty string", function() {
         it("has no errors", function() {
-          expect(validator.validate('cats')).toBeUndefined();
+          expect(validator).toAcceptValues('cats', '');
         });
       });
 
@@ -117,7 +117,7 @@ describe("RAML.Client.Validator", function() {
 
       describe("with an string longer or the same as minLength", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('dog', 'cats');
+          expect(validator).toAcceptValues('dog', 'cats', '');
         });
       });
 
@@ -136,7 +136,7 @@ describe("RAML.Client.Validator", function() {
 
       describe("with a string shorter or the same as maxLength", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('horse', 'goat');
+          expect(validator).toAcceptValues('horse', 'goat', '');
         });
       });
 
@@ -156,20 +156,13 @@ describe("RAML.Client.Validator", function() {
 
     describe("with valid values", function() {
       it("has no errors", function() {
-        expect(validator.validate('true')).toBeUndefined();
-        expect(validator.validate('false')).toBeUndefined();
+        expect(validator).toAcceptValues('true', 'false', '');
       });
     });
 
     describe("with an invalid value", function() {
       it("includes boolean in the errors", function() {
         expect(validator.validate('cats')).toContainError('boolean');
-      });
-    });
-
-    describe("with an empty value", function() {
-      it("has no errors", function() {
-        expect(validator.validate('')).toBeUndefined();
       });
     });
   });
@@ -183,7 +176,7 @@ describe("RAML.Client.Validator", function() {
 
       describe("with a valid integer", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('2', '-2', '0');
+          expect(validator).toAcceptValues('2', '-2', '0', '');
         });
       });
 
@@ -206,7 +199,7 @@ describe("RAML.Client.Validator", function() {
 
       describe("with an integer greater than or equal to the minimum", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('3', '4');
+          expect(validator).toAcceptValues('3', '4', '');
         });
       });
 
@@ -225,7 +218,7 @@ describe("RAML.Client.Validator", function() {
 
       describe("with an integer less than or equal to the maximum", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('2', '3');
+          expect(validator).toAcceptValues('2', '3', '');
         });
       });
 
@@ -245,7 +238,7 @@ describe("RAML.Client.Validator", function() {
 
     describe("with a valid number", function() {
       it("has no errors", function() {
-        expect(validator).toAcceptValues('2', '-2', '2.0');
+        expect(validator).toAcceptValues('2', '-2', '2.0', '');
       });
     });
 
@@ -267,7 +260,7 @@ describe("RAML.Client.Validator", function() {
 
       describe("with an number greater than or equal to the minimum", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('3.5', '3.6');
+          expect(validator).toAcceptValues('3.5', '3.6', '');
         });
       });
 
@@ -286,7 +279,7 @@ describe("RAML.Client.Validator", function() {
 
       describe("with a number less than or equal to the maximum", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('3.4', '3.5');
+          expect(validator).toAcceptValues('3.4', '3.5', '');
         });
       });
 
@@ -325,7 +318,7 @@ describe("RAML.Client.Validator", function() {
 
     describe("with a valid RFC1123 date", function() {
       it("has no errors", function() {
-        expect(validator).toAcceptValues('Sun, 06 Nov 1994 08:49:37 GMT');
+        expect(validator).toAcceptValues('Sun, 06 Nov 1994 08:49:37 GMT', '');
       });
     });
 
