@@ -40,6 +40,13 @@
 
         return value.length <= maximum;
       };
+    },
+    pattern: function(pattern) {
+      var regex = new RegExp(pattern);
+
+      return function(value) {
+        return regex.exec(value);
+      };
     }
   };
 
@@ -80,6 +87,9 @@
       }
       if (definition.maxLength) {
         validations.maxLength = VALIDATIONS.maxLength(definition.maxLength);
+      }
+      if (definition.pattern) {
+        validations.pattern = VALIDATIONS.pattern(definition.pattern);
       }
       return validations;
     },

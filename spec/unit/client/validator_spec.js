@@ -90,6 +90,25 @@ describe("RAML.Client.Validator", function() {
       });
     });
 
+    describe("with a pattern specified", function() {
+      beforeEach(function() {
+        definition = { type: 'string', pattern: "^\\w+$" };
+        validator = RAML.Client.Validator.from(definition);
+      });
+
+      describe("with a value that matches the expression", function() {
+        it("has no errors", function() {
+          expect(validator.validate('cats')).toBeUndefined();
+        });
+      });
+
+      describe("with a value that does not match the expression", function() {
+        it("includes enum in the errors", function() {
+          expect(validator.validate('^%$%')).toContainError('pattern');
+        });
+      });
+    });
+
     describe("with a minLength", function() {
       beforeEach(function() {
         definition = { type: 'string', minLength: 3 };
