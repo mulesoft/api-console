@@ -6,6 +6,9 @@ schemas:
   - a_json_schema: !include json_schema.json
 /resource:
   post:
+    headers:
+      X-Some-Header:
+        description: This is an example header
     body:
       text/xml:
         schema: an_xml_schema
