@@ -54,6 +54,8 @@ module.exports = function (grunt) {
             'app/scripts/directives/**/*.js',
             'app/scripts/filters.js',
             'app/scripts/filters/**/*.js',
+            'app/scripts/services.js',
+            'app/scripts/services/**/*.js',
             'app/scripts/settings.js',
             'app/scripts/raml.js',
             'app/scripts/raml_console.js',
