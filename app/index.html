@@ -38,6 +38,7 @@
     <script src="scripts/controllers/documentation.js"></script>
     <script src="scripts/controllers/named_parameters_documentation.js"></script>
     <script src="scripts/controllers/parameters.js"></script>
+    <script src="scripts/controllers/raml_console.js"></script>
     <script src="scripts/controllers/tabset.js"></script>
     <script src="scripts/controllers/try_it.js"></script>
     <script src="scripts/directives.js"></script>
@@ -66,22 +67,40 @@
     <script src="scripts/directives/validated_input.js"></script>
     <script src="scripts/filters.js"></script>
     <script src="scripts/filters/yes_no.js"></script>
+    <script src="scripts/services.js"></script>
+    <script src="scripts/services/raml_parser_wrapper.js"></script>
     <script src="scripts/settings.js"></script>
     <script src="scripts/raml.js"></script>
     <script src="scripts/raml_console.js"></script>
     <!-- endbuild -->
 
-    <raml-console-initializer>
-      <div ng-if="!consoleLoader.locationSet">
+    <raml-console-initializer id="raml-console-loader">
+      <div ng-if="!consoleLoader.finished">
         <form>
-          location of RAML <input type="text" name='raml_location' ng-model="consoleLoader.location"/>
-        <input type='submit' name='submit' ng-click="consoleLoader.load()" value='GO'>
+          <h1>Initialize RAML Console</h1>
+          <fieldset>
+              <div class="control-group">
+                <label for="raml_location">Enter the URL of a RAML file:</label>
+                <input type="text" name='raml_location' ng-model="consoleLoader.location"/>
+              </div>
+          </fieldset>
+          <button role='load_from_url' class="btn" ng-click="consoleLoader.load()">
+            Load from URL
+          </button>
+          <fieldset>
+              <div class="control-group">
+                <label for="data">Or paste RAML in here</label>
+                <textarea type="text" name='data' ng-model="consoleLoader.raml"></textarea>
+              </div>
+          </fieldset>
+          <button role='parse_raml' class="btn" ng-click="consoleLoader.parse()">
+            Load RAML
+          </button>
         </form>
       </div>
-
-      <div ng-if="consoleLoader.locationSet">
-        <raml-console src='{{consoleLoader.location}}' with-root-documentation></raml-console>
-      </div>
     </raml-console-initializer>
+
+    <raml-console with-root-documentation></raml-console>
+
   </body>
 </html>
