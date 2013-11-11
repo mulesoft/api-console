@@ -8,6 +8,16 @@ var lrSnippet = require('connect-livereload')({
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
+function stripFontPathPrefix(connect) {
+  return function(req, res, next) {
+    var pathname = connect.utils.parseUrl(req).pathname;
+    var fontPrefix = '/font';
+    if (pathname.slice(0, fontPrefix.length) === fontPrefix) {
+      req.url = req.url.slice(fontPrefix.length);
+    }
+    next();
+  };
+}
 
 module.exports = function (grunt) {
   // load all grunt tasks
@@ -103,20 +113,12 @@ module.exports = function (grunt) {
       livereload: {
         options: {
           middleware: function (connect) {
-            function stripFontPathPrefix(req, res, next) {
-              var pathname = connect.utils.parseUrl(req).pathname;
-              var fontPrefix = '/font';
-              if (pathname.slice(0, fontPrefix.length) === fontPrefix) {
-                req.url = req.url.slice(fontPrefix.length);
-              }
-              next();
-            }
             return [
               lrSnippet,
               mountFolder(connect, '.tmp'),
               // For dist, fonts are copied to dist/font/ and hosted at /font
               // For dev, strip /font from path and host fonts at root
-              stripFontPathPrefix,
+              stripFontPathPrefix(connect),
               mountFolder(connect, 'app/vendor/font-awesome/font'),
               mountFolder(connect, 'app/vendor/open-sans'),
               mountFolder(connect, yeomanConfig.app)
@@ -131,6 +133,9 @@ module.exports = function (grunt) {
             return [
               mountFolder(connect, '.tmp'),
               mountFolder(connect, 'test'),
+              stripFontPathPrefix(connect),
+              mountFolder(connect, 'app/vendor/font-awesome/font'),
+              mountFolder(connect, 'app/vendor/open-sans'),
               mountFolder(connect, yeomanConfig.app)
             ];
           }
