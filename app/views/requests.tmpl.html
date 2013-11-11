@@ -1,3 +1,4 @@
+<h2 ng-if="method.body">Body</h2>
 <section ng-repeat="(mediaType, definition) in method.body track by mediaType">
   <h4>{{mediaType}}</h4>
   <section ng-if="definition.schema">
