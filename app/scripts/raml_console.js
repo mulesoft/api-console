@@ -32,5 +32,7 @@
 
   module.controller('TryItController', RAML.Controllers.tryIt);
 
+  module.service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
+
   module.filter('yesNo', RAML.Filters.yesNo);
 })();

@@ -12,7 +12,21 @@ body#raml-console-unembedded {
   margin: 0 20px 20px;
 }
 
-raml-console article#raml-console {
+#raml-console-loader form {
+  margin: 25px;
+
+  label {
+    display: block;
+  }
+  input[type="text"], textarea {
+    width: 98%;
+  }
+  textarea {
+    height: 300px;
+  }
+}
+
+raml-console article#raml-console, #raml-console-loader {
   @import "../../vendor/font-awesome/less/font-awesome.less";
   @import "../../vendor/codemirror.less";
   @import "overrides.less";

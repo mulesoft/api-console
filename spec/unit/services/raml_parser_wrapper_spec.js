@@ -2,7 +2,7 @@ describe('RAML.Services.RAMLParserWrapper', function() {
   var service, rootScopeStub, parserStub;
 
   beforeEach(function() {
-    rootScopeStub = jasmine.createSpyObj('$rootScope', ['$broadcast']);
+    rootScopeStub = jasmine.createSpyObj('$rootScope', ['$on', '$digest']);
     parserStub = jasmine.createSpyObj('ramlParser', ['load', 'loadFile']);
     service = new RAML.Services.RAMLParserWrapper(rootScopeStub, parserStub);
   });
@@ -21,22 +21,34 @@ describe('RAML.Services.RAMLParserWrapper', function() {
     });
 
     describe('when the parser succeeds', function() {
-      beforeEach(function() {
-        promise.then.mostRecentCall.args[0]('success');
-      });
+      describe("with a callback", function() {
+        var successSpy;
 
-      it('broadcasts an event', function() {
-        expect(rootScopeStub.$broadcast).toHaveBeenCalledWith('event:raml-parsed', 'success');
+        beforeEach(function() {
+          successSpy = jasmine.createSpy();
+          service.onParseSuccess(successSpy);
+          promise.then.mostRecentCall.args[0]('success');
+        });
+
+        it("it yields the raml", function() {
+          expect(successSpy).toHaveBeenCalledWith('success');
+        });
       });
     });
 
     describe('when the parser fails', function() {
-      beforeEach(function() {
-        promise.then.mostRecentCall.args[1]('failure');
-      });
+      describe("with a callback", function() {
+        var failureSpy;
 
-      it('broadcasts an event', function() {
-        expect(rootScopeStub.$broadcast).toHaveBeenCalledWith('event:raml-invalid', 'failure');
+        beforeEach(function() {
+          failureSpy = jasmine.createSpy();
+          service.onParseError(failureSpy);
+          promise.then.mostRecentCall.args[1]('fail');
+        });
+
+        it("yields the failure", function() {
+          expect(failureSpy).toHaveBeenCalledWith('fail');
+        });
       });
     });
   });
@@ -53,22 +65,24 @@ describe('RAML.Services.RAMLParserWrapper', function() {
     });
 
     describe('when the parser succeeds', function() {
-      beforeEach(function() {
-        promise.then.mostRecentCall.args[0]('success');
-      });
+      describe("with a callback", function() {
+        var successSpy;
 
-      it('broadcasts an event', function() {
-        expect(rootScopeStub.$broadcast).toHaveBeenCalledWith('event:raml-parsed', 'success');
+        beforeEach(function() {
+          successSpy = jasmine.createSpy();
+          service.onParseSuccess(successSpy);
+          promise.then.mostRecentCall.args[0]('success');
+        });
+
+        it("it yields the raml", function() {
+          expect(successSpy).toHaveBeenCalledWith('success');
+        });
       });
     });
 
     describe('when the parser fails', function() {
       beforeEach(function() {
         promise.then.mostRecentCall.args[1]('failure');
-      });
-
-      it('broadcasts an event', function() {
-        expect(rootScopeStub.$broadcast).toHaveBeenCalledWith('event:raml-invalid', 'failure');
       });
     });
   });

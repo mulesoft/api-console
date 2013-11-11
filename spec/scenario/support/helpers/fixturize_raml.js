@@ -22,7 +22,7 @@
       ptor = protractor.getInstance();
       ptor.get('http://localhost:9001');
       ptor.$('input[type="text"]').sendKeys(ramlFilename);
-      ptor.$('input[type="submit"]').click();
+      ptor.$('button[role="load_from_url"]').click();
     });
   };
 })()
