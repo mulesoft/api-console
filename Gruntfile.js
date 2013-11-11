@@ -235,6 +235,12 @@ module.exports = function (grunt) {
           cwd: 'app/vendor/font-awesome/font',
           src: ['*'],
           dest: 'dist/font/'
+        },
+        {
+          expand: true,
+          cwd: 'app/vendor/open-sans',
+          src: ['*'],
+          dest: 'dist/font/'
         }
         ]
       }
