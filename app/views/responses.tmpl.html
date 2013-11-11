@@ -1,5 +1,5 @@
 <section collapsible ng-repeat='(responseCode, response) in method.responses'>
-  <h2 collapsible-toggle>
+  <h2 role="response-code" collapsible-toggle>
     <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
     {{responseCode}}
   </h2>
