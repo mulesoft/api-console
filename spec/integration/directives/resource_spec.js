@@ -1,4 +1,4 @@
-describe("RAML.Directives.resourceSummary", function() {
+describe("RAML.Directives.resource", function() {
   beforeEach(module('ramlConsoleApp'));
 
   var scope, $el;
@@ -14,11 +14,11 @@ describe("RAML.Directives.resourceSummary", function() {
     );
 
     beforeEach(function() {
-      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource-summary></resource-summary>', raml);
+      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource></resource>', raml);
    });
 
     it("displays the name of the resourceType", function() {
-      var resourceType = this.$el.find('[role="resourceType"]').text();
+      var resourceType = this.$el.find('[role="resource-type"]').text();
       expect(resourceType).toEqual('typedcollection');
     });
   });
@@ -38,7 +38,7 @@ describe("RAML.Directives.resourceSummary", function() {
     );
 
     beforeEach(function() {
-      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource-summary></resource-summary>', raml);
+      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource></resource>', raml);
     });
 
     it("displays only the name of the trait", function() {

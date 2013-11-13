@@ -30,7 +30,7 @@ describe("trying an API method", function() {
     var fixturePath = loadRamlFixture(definition);
 
     it("executes the request and displays the results", function() {
-      var resource = openResource(1);
+      var resource = toggleResource(1);
       openTryIt(resource);
       tryIt(resource);
 
@@ -59,7 +59,7 @@ describe("trying an API method", function() {
     var fixturePath = loadRamlFixture(definition);
 
     it("does not execute the request", function() {
-      var resource = openResource(1);
+      var resource = toggleResource(1);
       openTryIt(resource);
       tryIt(resource);
 
@@ -87,7 +87,7 @@ describe("trying an API method", function() {
     var fixturePath = loadRamlFixture(definition);
 
     it("does execute the request", function() {
-      var resource = openResource(1);
+      var resource = toggleResource(1);
       openTryIt(resource);
       tryIt(resource);
 

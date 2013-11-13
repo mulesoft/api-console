@@ -35,7 +35,7 @@ describe("accordion view of API", function() {
 
       getResources().then(function(resources) {
         expect(resources).toHaveLength(3);
-        var methodSummarySelector = '[role="resourceSummary"] [role="methods"] li';
+        var methodSummarySelector = '[role="resource-summary"] [role="methods"] li';
         var methodsPromise = resources[0].$$(methodSummarySelector);
         expect(methodsPromise).toHaveLength(1);
 
@@ -55,7 +55,7 @@ describe("accordion view of API", function() {
           expect(traits[0].getText()).toEqual('secured');
         });
 
-        var resourceTypesPromise = resources[2].$$('[role="resourceType"]');
+        var resourceTypesPromise = resources[2].$$('[role="resource-type"]');
         expect(resourceTypesPromise).toHaveLength(1);
         resourceTypesPromise.then(function(resourceType) {
           expect(resourceType[0].getText()).toMatch(/^collection$/i);
@@ -109,7 +109,7 @@ describe("accordion view of API", function() {
     });
   });
 
-  describe("method detail view", function() {
+  describe("method expansion (direct and through method summaries)", function() {
     raml = createRAML(
       'title: Example API',
       'baseUri: http://www.example.com',
@@ -121,10 +121,16 @@ describe("accordion view of API", function() {
    loadRamlFixture(raml);
 
     it("displays the description of the method", function() {
-      var resource = openResource(1);
+      var resource = toggleResource(1);
       var method = openMethod(1, resource);
+      var description = resource.$('[role="method"] [role="full-description"]');
 
-      var description = method.$('div[role="description"]');
+      expect(description.getText()).toEqual('Get all resources')
+
+      resource = toggleResource(1);
+      resource.$('[role="resource-summary"] [role="methods"] li:first-child').click();
+      description = resource.$('[role="method"] [role="full-description"]');
+
       expect(description.getText()).toEqual('Get all resources')
     });
   });

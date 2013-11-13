@@ -5,23 +5,8 @@
       <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
     </h1>
 
-    <div ng-class="{expanded: resource.isOpen, collapsed: !resource.isOpen}"
-         collapsible-content class='resource' role="resource"
-         ng-repeat="resource in resourceGroup">
-
-      <resource-summary class='accordion-toggle' ng-click='resource.isOpen = !resource.isOpen'></resource-summary>
-      <div ng-if='resource.isOpen'>
-        <div>
-          <div role='description'
-               class='description'
-               ng-if='resource.description'
-               markdown='resource.description'>
-          </div>
-          <div class='accordion' role="methods">
-            <method ng-repeat="method in resource.methods"></method>
-          </div>
-        </div>
-      </div>
+    <div collapsible-content>
+      <resource ng-repeat="resource in resourceGroup"></resource>
     </div>
   </div>
 </div>

@@ -1,0 +1,31 @@
+<div ng-class="{expanded: resourceView.expanded, collapsed: !resourceView.expanded}"
+     class='resource' role="resource">
+
+  <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>
+    <ul class="modifiers">
+      <li class="resource-type" role="resource-type" ng-if='resourceView.type()'>{{resourceView.type()}}</li>
+      <li class="trait" role="trait" ng-repeat="trait in resourceView.traits()">{{trait}}</li>
+    </ul>
+
+    <h3 class="path">
+      <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
+    </h3>
+    <ul class='methods' role="methods" ng-hide="resourceView.expanded">
+      <li class='method-name' ng-class='method.method'
+          ng-click='resourceView.expandMethod(method)' ng-repeat="method in resource.methods">{{method.method}}</li>
+    </ul>
+  </div>
+
+  <div ng-if='resourceView.expanded'>
+    <div>
+      <div role='description'
+           class='description'
+           ng-if='resource.description'
+           markdown='resource.description'>
+      </div>
+      <div class='accordion' role="methods">
+        <method ng-repeat="method in resource.methods"></method>
+      </div>
+    </div>
+  </div>
+</div>

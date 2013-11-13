@@ -56,7 +56,7 @@ describe('API Documentation', function() {
     loadRamlFixture(raml);
 
     it('displays information about query parameters and headers', function() {
-      var resource = openResource(2);
+      var resource = toggleResource(2);
       var method = openMethod(1, resource);
 
       method.$$('[role="parameter-group"]').then(function(parameterGroups) {
@@ -98,7 +98,7 @@ describe('API Documentation', function() {
         expect(queryParam.getText()).toMatch(expectedText);
       });
 
-      resource = openResource(1);
+      resource = toggleResource(1);
       method = openMethod(1, resource);
 
       expect(method.getText()).toMatch(new RegExp('text/xml'));
@@ -139,7 +139,7 @@ describe('API Documentation', function() {
     loadRamlFixture(raml);
 
     it("displays headers, formatted xml response examples and schemas, and response descriptions with markdown formatting", function() {
-      var resource = openResource(1);
+      var resource = toggleResource(1);
       var method = openMethod(1, resource);
       var documentation = openDocumentationTab(2, method);
       var header = documentation.$('[role="parameter"]');

@@ -1,5 +1,5 @@
 (function() {
-  global.openResource = function(index) {
+  global.toggleResource = function(index) {
     var resource = ptor.$('[role="resource"]:nth-of-type(' + index + ')');
     resource.$('.accordion-toggle').click();
 
