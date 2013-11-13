@@ -128,6 +128,38 @@ describe("RAML.Controllers.tryIt", function() {
     });
   });
 
+  describe('given some other base uri parameter', function() {
+    mockHttp(function(mock) {
+      mock
+        .when("get", 'http://some-host.example.com/resource')
+        .respondWith(200, "OK");
+    });
+
+    var raml = createRAML(
+      'title: Example API',
+      'baseUri: http://{host}.example.com',
+      '/resource:',
+      '  get:'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+    });
+
+    it('executes a request with the version interpolated into the URL', function() {
+      $el.find('input[name="host"]').fillIn('some-host')
+      $el.find('button[role="try-it"]').click();
+
+      whenTryItCompletes(function() {
+        expect($el.find('.response .status .response-value')).toHaveText('200');
+        expect($el.find('.response .body .response-value')).toHaveText('OK');
+      });
+    });
+  });
+
   describe('given query parameters', function() {
     var raml = createRAML(
       'title: Example API',

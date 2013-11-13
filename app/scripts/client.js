@@ -12,7 +12,7 @@
 
     return {
       baseUriParameters: function(baseUriParameters) {
-        config.baseUriParameters = baseUriParameters;
+        config.baseUriParameters = baseUriParameters || {};
       },
 
       getBaseUri: function() {
@@ -36,7 +36,8 @@
     },
 
     createBaseUri: function(rootRAML) {
-      return new RAML.Client.ParameterizedString(rootRAML.baseUri, rootRAML.baseUriParameters);
+      var baseUri = rootRAML.baseUri.toString();
+      return new RAML.Client.ParameterizedString(baseUri, rootRAML.baseUriParameters, { parameterValues: {version: rootRAML.version} });
     },
 
     createPathSegment: function(resourceRAML) {

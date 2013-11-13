@@ -85,6 +85,10 @@ RAML.Inspector = (function() {
   };
 
   exports.create = function(api) {
+    if (api.baseUri) {
+      api.baseUri = RAML.Client.createBaseUri(api);
+    }
+
     api.resources = extractResources([], api, api.securitySchemes);
     api.resourceGroups = groupResources(api.resources);
 

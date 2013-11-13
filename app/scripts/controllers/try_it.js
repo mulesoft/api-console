@@ -106,8 +106,6 @@
     this.missingUriParameters = false;
 
     var response = this.response = {};
-    var pathBuilder = this.getPathBuilder();
-    var client = RAML.Client.create(this.parsed);
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -121,7 +119,11 @@
     }
 
     try {
-      var url = this.response.requestUrl = client.baseUri + pathBuilder(pathBuilder.contexts);
+      var pathBuilder = this.getPathBuilder();
+      var client = RAML.Client.create(this.parsed, function(client) {
+        client.baseUriParameters(pathBuilder.baseUriContext);
+      });
+      var url = this.response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
       if (RAML.Settings.proxy) {
         url = RAML.Settings.proxy + url;
       }

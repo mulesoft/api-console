@@ -1,9 +1,15 @@
 describe("RAML.Directives.pathBuilder", function() {
   var scope, el;
 
-  function createPathBuilderScope(pathSegments) {
+  function createBaseUri(uri, baseUriParameters) {
+    var raml = { baseUri: uri, baseUriParameters: baseUriParameters };
+    return RAML.Client.createBaseUri(raml);
+  }
+
+  function createPathBuilderScope(baseUri, pathSegments) {
     return createScope(function(scope) {
       scope.method = {};
+      scope.api = { baseUri: baseUri };
       scope.resource = { pathSegments: pathSegments };
     });
   }
@@ -12,48 +18,54 @@ describe("RAML.Directives.pathBuilder", function() {
 
   describe("a resource with no templated parameters", function() {
     beforeEach(function() {
+      var baseUri = createBaseUri("http://example.com");
       var parent = createParameterizedString('/resource');
       var child = createParameterizedString('/search');
 
-      scope = createPathBuilderScope([parent, child]);
+      scope = createPathBuilderScope(baseUri, [parent, child]);
       el = compileTemplate('<path-builder></path-builder>', scope);
     });
 
     it("renders the path segments", function() {
-      expect(el).toHaveText(/\/[\s\S]*resource[\s\S]*\/[\s\S]*search/)
+      expect(el).toHaveText(/http:\/\/example.com[\s\S]*\/resource[\s\S]*\/[\s\S]*search/)
     });
   });
 
   describe("a resource with templated parameters", function() {
     beforeEach(function() {
+      var baseUri = createBaseUri("http://example.com/{thing}", {
+        thing: fakeUriParameter()
+      });
       var parent = createParameterizedString('/resource');
       var child = createParameterizedString("/{resourceId}list{format}", {
         resourceId: fakeUriParameter(),
         format: fakeUriParameter(),
       });
 
-      scope = createPathBuilderScope([parent, child]);
+      scope = createPathBuilderScope(baseUri, [parent, child]);
       el = compileTemplate('<path-builder></path-builder>', scope);
     });
 
     it("renders templated path segments as input fields", function() {
-      expect(el).toHaveText(/\/[\s\S]*resource[\s\S]*list/);
+      expect(el).toHaveText(/http:\/\/example.com[\s\S]*\/resource[\s\S]*list/);
 
       var inputs = el.find('input');
-      expect(inputs[0]).toHaveAttr('placeholder', 'resourceId');
-      expect(inputs[1]).toHaveAttr('placeholder', 'format');
+      expect(inputs[0]).toHaveAttr('placeholder', 'thing');
+      expect(inputs[1]).toHaveAttr('placeholder', 'resourceId');
+      expect(inputs[2]).toHaveAttr('placeholder', 'format');
     });
   });
 
   describe("a resource and a sub-resource with templated parameters that have the same name", function() {
     beforeEach(function() {
+      var baseUri = createBaseUri("http://www.example.com");
       var resource1 = createParameterizedString('/{resource}', {
         resource: fakeUriParameter()
       });
       var resource2 = createParameterizedString('/{resource}', {
         resource: fakeUriParameter()
       });
-      scope = createPathBuilderScope([resource1, resource2]);
+      scope = createPathBuilderScope(baseUri, [resource1, resource2]);
       el = compileTemplate('<path-builder></path-builder>', scope);
 
     });
