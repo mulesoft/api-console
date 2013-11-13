@@ -2,12 +2,7 @@ describe('RAML.directives.securitySchemes', function() {
   function createScopeForSecuritySchemes(client, method, keychain) {
     return createScope(function(scope) {
       scope.keychain = keychain;
-      scope.schemes = {};
-
-      var securedBy = (method.securedBy || []).filter(function(name) { return name !== null; });
-      securedBy.forEach(function(name) {
-        scope.schemes[name] = client.securityScheme(name);
-      });
+      scope.schemes = method.securitySchemes();
     });
   }
 

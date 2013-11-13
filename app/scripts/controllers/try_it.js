@@ -41,33 +41,11 @@
     return parsed;
   }
 
-  function securitySchemesFrom(client, method) {
-    var schemes = {}, securedBy = (method.securedBy || []).filter(function(name) { return name !== null; });
-    if (securedBy.length === 0) {
-      return;
-    }
-
-    securedBy.forEach(function(name) {
-      if (typeof name === 'object') {
-        return;
-      }
-      var scheme = client.securityScheme(name);
-      schemes[name] = scheme;
-    });
-
-    return schemes;
-  }
-
   var FORM_URLENCODED = 'application/x-www-form-urlencoded';
   var FORM_DATA = 'multipart/form-data';
   var apply;
 
   var TryIt = function($scope) {
-    this.baseUri = $scope.api.baseUri || '';
-    if (this.baseUri.match(/\{version\}/) && $scope.api.version) {
-      this.baseUri = this.baseUri.replace(/\{version\}/g, $scope.api.version);
-    }
-
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
     };
@@ -91,8 +69,8 @@
     }
 
     $scope.apiClient = this;
-    this.client = $scope.client = RAML.Client.create($scope.api);
-    this.securitySchemes = securitySchemesFrom(this.client, $scope.method);
+    this.parsed = $scope.api;
+    this.securitySchemes = $scope.method.securitySchemes();
     this.keychain = $scope.ramlConsole.keychain;
 
     apply = function() {
@@ -129,6 +107,7 @@
 
     var response = this.response = {};
     var pathBuilder = this.getPathBuilder();
+    var client = RAML.Client.create(this.parsed);
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -142,7 +121,7 @@
     }
 
     try {
-      var url = this.response.requestUrl = this.baseUri + pathBuilder(pathBuilder.contexts);
+      var url = this.response.requestUrl = client.baseUri + pathBuilder(pathBuilder.contexts);
       if (RAML.Settings.proxy) {
         url = RAML.Settings.proxy + url;
       }

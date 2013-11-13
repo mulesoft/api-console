@@ -1,6 +1,6 @@
-'use strict';
-
 RAML.Inspector = (function() {
+  'use strict';
+
   var exports = {};
 
   var METHOD_ORDERING = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
@@ -8,26 +8,21 @@ RAML.Inspector = (function() {
   function extendMethod(method, securitySchemes) {
     securitySchemes = securitySchemes || [];
 
-    var securitySchemeFor = function(method, schemeType) {
-      var required, securedBy = method.securedBy || [];
+    method.securitySchemes = function() {
+      var securedBy, selectedSchemes = {};
+      securedBy = (this.securedBy || []).filter(function(name) {
+        return name !== null && typeof name !== 'object';
+      });
 
       securitySchemes.forEach(function(scheme) {
-        securedBy.forEach(function(type) {
-          if (scheme[type] && scheme[type].type === schemeType) {
-            required = scheme[type];
+        securedBy.forEach(function(name) {
+          if (scheme[name]) {
+            selectedSchemes[name] = scheme[name];
           }
         });
       });
 
-      return required;
-    };
-
-    method.requiresBasicAuthentication = function() {
-      return securitySchemeFor(this, 'Basic Authentication');
-    };
-
-    method.requiresOauth2 = function() {
-      return securitySchemeFor(this, 'OAuth 2.0');
+      return selectedSchemes;
     };
   }
 

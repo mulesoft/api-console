@@ -36,7 +36,7 @@ describe("RAML.Inspector.create", function() {
     '  get: !!null',
     '/another/resource:',
     '  get:',
-    '    securedBy: [basic, oauth_2]'
+    '    securedBy: [null, basic, oauth_2: { scopes: [ comments ] } ]'
   ));
 
   describe("inspecting an api's resources", function() {
@@ -70,47 +70,35 @@ describe("RAML.Inspector.create", function() {
       expect(resourceOverviewSourceSpy).toHaveCreatedResourceOverviewFrom(['/another/resource']);
     });
 
-    describe("query a resource method's security schemes", function() {
-      var method;
+    describe("retrieving security scheme definitions for a method", function() {
+      var securitySchemes;
 
-      describe("when a method is secured by Basic Authentication", function() {
+      describe("by default", function() {
         beforeEach(function() {
-          method = inspector.resources[3].methods[0];
+          securitySchemes = inspector.resources[3].methods[0].securitySchemes();
         });
 
-        it("returns true", function() {
-          expect(method.requiresBasicAuthentication()).toBeTruthy();
+        it("returns an object of scheme definitions", function() {
+          expect(securitySchemes['basic']).toBeDefined()
+        });
+
+        it("filters null security scheme", function() {
+          expect(securitySchemes['null']).toBeUndefined()
+        });
+
+        it("filters parameterized security schemes", function() {
+          expect(securitySchemes['oauth_2']).toBeUndefined()
         });
       });
 
-      describe("when a method is not secured by Basic Authentication", function() {
+      describe("with no security schemes", function() {
         beforeEach(function() {
-          method = inspector.resources[0].methods[0];
+          securitySchemes = inspector.resources[0].methods[0].securitySchemes();
         });
 
-        it("returns false", function() {
-          expect(method.requiresBasicAuthentication()).toBeFalsy();
+        it("returns an empty object when there are no security schemes", function() {
+          expect(securitySchemes).toBeDefined();
         });
-      });
-    });
-
-    describe("when a method is secured by OAuth 2", function() {
-      beforeEach(function() {
-        method = inspector.resources[3].methods[0];
-      });
-
-      it("returns true", function() {
-        expect(method.requiresOauth2()).toBeTruthy();
-      });
-    });
-
-    describe("when a method is not secured by OAuth 2", function() {
-      beforeEach(function() {
-        method = inspector.resources[0].methods[0];
-      });
-
-      it("returns false", function() {
-        expect(method.requiresOauth2()).toBeFalsy();
       });
     });
   });

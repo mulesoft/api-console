@@ -91,7 +91,7 @@ describe("trying an API method", function() {
       openTryIt(resource);
       tryIt(resource);
 
-      var queryParameterInput = resource.$('input');
+      var queryParameterInput = resource.$('input[name="page"]');
       expect(queryParameterInput.getAttribute('class')).toContain('warning');
     });
   });

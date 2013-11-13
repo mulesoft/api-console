@@ -13,8 +13,7 @@ describe("RAML.Controllers.TryIt", function() {
     return {
       method: method,
       body: body,
-      requiresBasicAuthentication: function() { return false; },
-      requiresOauth2: function() { return false; }
+      securitySchemes: function() { return {}; }
     }
   }
 

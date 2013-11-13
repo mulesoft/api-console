@@ -1,29 +1,42 @@
 'use strict';
 
 (function() {
-  var Client = function(parsed) {
-    this.securitySchemes = parsed.securitySchemes;
+  var Client = function(configuration) {
+    this.baseUri = configuration.getBaseUri();
   };
 
-  Client.prototype.securityScheme = function(name) {
-    var result;
+  function createConfiguration(parsed) {
+    var config = {
+      baseUriParameters: {}
+    };
 
-    this.securitySchemes.forEach(function(scheme) {
-      if (scheme[name]) {
-        result = scheme[name];
+    return {
+      baseUriParameters: function(baseUriParameters) {
+        config.baseUriParameters = baseUriParameters;
+      },
+
+      getBaseUri: function() {
+        var template = RAML.Client.createBaseUri(parsed);
+        config.baseUriParameters.version = parsed.version;
+
+        return template.render(config.baseUriParameters);
       }
-    });
-
-    if (result !== undefined) {
-      return result;
-    } else {
-      throw new Error('Undefined Security Scheme: ' + name);
-    }
-  };
+    };
+  }
 
   RAML.Client = {
-    create: function(parsed) {
-      return new Client(parsed);
+    create: function(parsed, configure) {
+      var configuration = createConfiguration(parsed);
+
+      if (configure) {
+        configure(configuration);
+      }
+
+      return new Client(configuration);
+    },
+
+    createBaseUri: function(rootRAML) {
+      return new RAML.Client.ParameterizedString(rootRAML.baseUri, rootRAML.baseUriParameters);
     },
 
     createPathSegment: function(resourceRAML) {

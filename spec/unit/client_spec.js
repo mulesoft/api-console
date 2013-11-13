@@ -1,41 +1,60 @@
-describe('RAML.Client.create', function() {
-  var client, raml = createRAML(
-    'title: Example API',
-    'baseUri: http://www.example.com',
-    'securitySchemes:',
-    '  - basic:',
-    '      type: Basic Authentication',
-    '  - oauth2:',
-    '      type: OAuth 2.0',
-    '      settings:',
-    '        authorizationUri: https://example.com/oauth/authorize',
-    '        accessTokenUri: https://example.com/oauth/access_token'
-    );
+describe('RAML.Client', function() {
+  var client, raml;
 
-  parseRAML(raml);
+  describe("creation", function() {
+    describe("by default", function() {
+      describe("when the configuration can be automatically completed", function() {
+        raml = createRAML(
+          'title: Example API',
+          'baseUri: http://example.com/api/{version}',
+          'version: 2.5'
+          );
 
-  beforeEach(function() {
-    client = RAML.Client.create(this.api);
-  });
+        parseRAML(raml);
 
-  describe("securityScheme", function() {
-    var scheme;
+        beforeEach(function() {
+          client = RAML.Client.create(this.api);
+        });
 
-    describe("when requesting a defined scheme", function() {
-      beforeEach(function() {
-        scheme = client.securityScheme('oauth2');
+        it("populates the version in the baseUri", function() {
+          expect(client.baseUri).toEqual('http://example.com/api/2.5');
+        });
       });
 
-      it("returns the requested scheme", function() {
-        expect(scheme.type).toEqual('OAuth 2.0');
+      describe("when the configuration is more complicated", function() {
+        raml = createRAML(
+          'title: Example API',
+          'baseUri: http://{not_provided}.example.com/api/{version}',
+          'version: 2.5'
+          );
+
+        parseRAML(raml);
+
+        it("throws", function() {
+          expect(function() {
+            RAML.Client.create(this.api);
+          }).toThrow();
+        });
       });
     });
 
-    describe("when requesting an undefined scheme", function() {
-      var getUndefinedScheme = function() { return client.securityScheme('nothing'); }
+    describe("when configuring the base uri", function() {
+      raml = createRAML(
+        'title: Example API',
+        'baseUri: http://{bucket}.example.com/api/{version}',
+        'version: 2.5'
+        );
 
-      it("throws an error", function() {
-        expect(getUndefinedScheme).toThrow();
+      parseRAML(raml);
+
+      beforeEach(function() {
+        client = RAML.Client.create(this.api, function(config) {
+          config.baseUriParameters({ bucket: 'some_bucket'});
+        });
+      });
+
+      it("sets the baseUri on the client", function() {
+        expect(client.baseUri).toEqual('http://some_bucket.example.com/api/2.5');
       });
     });
   });
