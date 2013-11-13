@@ -24,6 +24,10 @@
   RAML.Client = {
     create: function(parsed) {
       return new Client(parsed);
+    },
+
+    createPathSegment: function(resourceRAML) {
+      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri, resourceRAML.uriParameters);
     }
   };
 })();

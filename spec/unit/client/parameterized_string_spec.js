@@ -1,10 +1,10 @@
-describe("RAML.Client.PathSegment", function() {
+describe("RAML.Client.ParameterizedString", function() {
   var pathSegment, raml;
 
   describe("creating from a relative uri", function() {
     beforeEach(function() {
       raml = fakeResourceRAML("/resource")
-      pathSegment = RAML.Client.PathSegment.fromRAML(raml);
+      pathSegment = new RAML.Client.ParameterizedString(raml.relativeUri, raml.uriParameters);
     });
 
     it("sets name to the relative uri stripped of the leading slash", function() {
@@ -38,7 +38,7 @@ describe("RAML.Client.PathSegment", function() {
       };
 
       raml = fakeResourceRAML("/{templated}-{resource}", uriParameters)
-      pathSegment = RAML.Client.PathSegment.fromRAML(raml);
+      pathSegment = new RAML.Client.ParameterizedString(raml.relativeUri, raml.uriParameters);
     });
 
     it("sets name to the relative uri stripped of the leading slash and braces", function() {

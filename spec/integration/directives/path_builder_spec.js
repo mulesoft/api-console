@@ -12,8 +12,8 @@ describe("RAML.Directives.pathBuilder", function() {
 
   describe("a resource with no templated parameters", function() {
     beforeEach(function() {
-      var parent = createPathSegment('/resource');
-      var child = createPathSegment('/search');
+      var parent = createParameterizedString('/resource');
+      var child = createParameterizedString('/search');
 
       scope = createPathBuilderScope([parent, child]);
       el = compileTemplate('<path-builder></path-builder>', scope);
@@ -26,8 +26,8 @@ describe("RAML.Directives.pathBuilder", function() {
 
   describe("a resource with templated parameters", function() {
     beforeEach(function() {
-      var parent = createPathSegment('/resource');
-      var child = createPathSegment("/{resourceId}list{format}", {
+      var parent = createParameterizedString('/resource');
+      var child = createParameterizedString("/{resourceId}list{format}", {
         resourceId: fakeUriParameter(),
         format: fakeUriParameter(),
       });
@@ -47,10 +47,10 @@ describe("RAML.Directives.pathBuilder", function() {
 
   describe("a resource and a sub-resource with templated parameters that have the same name", function() {
     beforeEach(function() {
-      var resource1 = createPathSegment('/{resource}', {
+      var resource1 = createParameterizedString('/{resource}', {
         resource: fakeUriParameter()
       });
-      var resource2 = createPathSegment('/{resource}', {
+      var resource2 = createParameterizedString('/{resource}', {
         resource: fakeUriParameter()
       });
       scope = createPathBuilderScope([resource1, resource2]);

@@ -33,7 +33,7 @@
     };
   }
 
-  var PathSegment = function(template, uriParameters) {
+  RAML.Client.ParameterizedString = function(template, uriParameters) {
     var name = template.slice(1);
 
     this.name = name.replace(templateMatcher, '$1');
@@ -42,11 +42,5 @@
     this.tokens = tokenize(template);
     this.render = rendererFor(template, uriParameters);
     this.toString = function() { return template; };
-  };
-
-  RAML.Client.PathSegment = {
-    fromRAML: function(raml) {
-      return new PathSegment(raml.relativeUri, raml.uriParameters);
-    }
   };
 })();

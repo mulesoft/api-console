@@ -35,7 +35,7 @@ RAML.Inspector = (function() {
     var resources = [], apiResources = api.resources || [];
 
     apiResources.forEach(function(resource) {
-      var resourcePathSegments = basePathSegments.concat(RAML.Client.PathSegment.fromRAML(resource));
+      var resourcePathSegments = basePathSegments.concat(RAML.Client.createPathSegment(resource));
       var overview = exports.resourceOverviewSource(resourcePathSegments, resource);
 
       overview.methods.forEach(function(method) {

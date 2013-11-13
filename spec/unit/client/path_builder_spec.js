@@ -3,11 +3,11 @@ describe("RAML.Client.PathBuilder", function() {
 
   describe("creating a template function from an array of path segments", function() {
     beforeEach(function() {
-      var parent = createPathSegment("/{resource}", {
+      var parent = createParameterizedString("/{resource}", {
         resource: fakeUriParameter()
       });
 
-      var child = createPathSegment("/{resourceId}", {
+      var child = createParameterizedString("/{resourceId}", {
         resourceId: fakeUriParameter()
       });
 
