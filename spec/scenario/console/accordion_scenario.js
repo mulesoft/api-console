@@ -121,7 +121,7 @@ describe("accordion view of API", function() {
    loadRamlFixture(raml);
 
     it("displays the description of the method", function() {
-      var resource = openResource(1);
+      var resource = toggleResource(1);
       var method = openMethod(1, resource);
 
       var description = method.$('div[role="description"]');
