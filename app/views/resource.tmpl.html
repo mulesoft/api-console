@@ -1,0 +1,30 @@
+<div ng-class="{expanded: resource.isOpen, collapsed: !resource.isOpen}"
+     class='resource' role="resource">
+
+  <div class='summary accordion-toggle' role='resource-summary' ng-click='resource.isOpen = !resource.isOpen'>
+    <ul class="modifiers">
+      <li class="resource-type" role="resource-type" ng-if='resourceView.type()'>{{resourceView.type()}}</li>
+      <li class="trait" role="trait" ng-repeat="trait in resourceView.traits()">{{trait}}</li>
+    </ul>
+
+    <h3 class="path">
+      <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
+    </h3>
+    <ul class='methods' role="methods" ng-hide="resource.isOpen">
+      <li class='method-name' ng-class='method.method' ng-repeat="method in resource.methods">{{method.method}}</li>
+    </ul>
+  </div>
+
+  <div ng-if='resource.isOpen'>
+    <div>
+      <div role='description'
+           class='description'
+           ng-if='resource.description'
+           markdown='resource.description'>
+      </div>
+      <div class='accordion' role="methods">
+        <method ng-repeat="method in resource.methods"></method>
+      </div>
+    </div>
+  </div>
+</div>

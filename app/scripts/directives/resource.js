@@ -12,7 +12,7 @@
   }
 
   var controller = function($scope) {
-    $scope.resourceSummary = this;
+    $scope.resourceView = this;
     this.resource = $scope.resource;
   };
 
@@ -24,10 +24,10 @@
     return (this.resource.traits || []).map(stringForDisplay);
   };
 
-  RAML.Directives.resourceSummary = function() {
+  RAML.Directives.resource = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/resource_summary.tmpl.html',
+      templateUrl: 'views/resource.tmpl.html',
       replace: true,
       controller: controller
     };

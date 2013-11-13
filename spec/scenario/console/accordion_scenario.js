@@ -35,7 +35,7 @@ describe("accordion view of API", function() {
 
       getResources().then(function(resources) {
         expect(resources).toHaveLength(3);
-        var methodSummarySelector = '[role="resourceSummary"] [role="methods"] li';
+        var methodSummarySelector = '[role="resource-summary"] [role="methods"] li';
         var methodsPromise = resources[0].$$(methodSummarySelector);
         expect(methodsPromise).toHaveLength(1);
 
@@ -55,7 +55,7 @@ describe("accordion view of API", function() {
           expect(traits[0].getText()).toEqual('secured');
         });
 
-        var resourceTypesPromise = resources[2].$$('[role="resourceType"]');
+        var resourceTypesPromise = resources[2].$$('[role="resource-type"]');
         expect(resourceTypesPromise).toHaveLength(1);
         resourceTypesPromise.then(function(resourceType) {
           expect(resourceType[0].getText()).toMatch(/^collection$/i);
