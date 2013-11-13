@@ -33,7 +33,15 @@
     };
   }
 
-  RAML.Client.ParameterizedString = function(template, uriParameters) {
+  RAML.Client.ParameterizedString = function(template, uriParameters, options) {
+    options = options || {parameterValues: {} };
+    template = template.replace(templateMatcher, function(match, parameterName) {
+      if (options.parameterValues[parameterName]) {
+        return options.parameterValues[parameterName];
+      }
+      return '{' + parameterName + '}';
+    });
+
     this.parameters = uriParameters;
     this.tokens = tokenize(template);
     this.render = rendererFor(template, uriParameters);

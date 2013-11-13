@@ -1,7 +1,7 @@
 describe("RAML.Client.ParameterizedString", function() {
   var pathSegment, raml;
 
-  describe("creating from a relative uri", function() {
+  describe("creating from a string with no parameters", function() {
     beforeEach(function() {
       raml = fakeResourceRAML("/resource")
       pathSegment = new RAML.Client.ParameterizedString(raml.relativeUri, raml.uriParameters);
@@ -20,7 +20,7 @@ describe("RAML.Client.ParameterizedString", function() {
     });
   });
 
-  describe("creating a path segment from a templated relative uri", function() {
+  describe("creating from a string with parameters", function() {
     var uriParameters;
 
     beforeEach(function() {
@@ -59,6 +59,31 @@ describe("RAML.Client.ParameterizedString", function() {
           expect(pathSegment.render({ templated: '1' })).toEqual("/1-");
         });
       });
+    });
+  });
+
+  describe("optionally prefilling some parameters", function() {
+    var uriParameters;
+
+    beforeEach(function() {
+      uriParameters = {
+        templated: fakeUriParameter()
+      };
+
+      raml = fakeResourceRAML("/{templated}-{resource}", uriParameters)
+      pathSegment = new RAML.Client.ParameterizedString(raml.relativeUri, raml.uriParameters, { parameterValues: { resource: 'things'}});
+    });
+
+    it("stores the parameter definitions for each templated section", function() {
+      expect(pathSegment.parameters).toBe(uriParameters);
+    });
+
+    it("tokenizes the uri", function() {
+      expect(pathSegment.tokens).toEqual(['/', 'templated', '-things']);
+    });
+
+    it("", function() {
+      expect(pathSegment.toString()).toEqual("/{templated}-things");
     });
   });
 })
