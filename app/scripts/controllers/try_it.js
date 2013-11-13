@@ -50,6 +50,7 @@
       return $scope.pathBuilder;
     };
 
+    this.method = $scope.method;
     this.httpMethod = $scope.method.method;
     this.headers = {};
     this.queryParameters = {};
@@ -100,6 +101,15 @@
 
   TryIt.prototype.inProgress = function() {
     return (this.response && !this.response.status && !this.missingUriParameters);
+  };
+
+  TryIt.prototype.fillBody = function($event) {
+    $event.preventDefault();
+    this.body = this.method.body[this.mediaType].example;
+  };
+
+  TryIt.prototype.bodyHasExample = function() {
+    return !!this.method.body[this.mediaType];
   };
 
   TryIt.prototype.execute = function() {

@@ -21,7 +21,10 @@
           </div>
         </fieldset>
 
-        <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body" ng-if="apiClient.showBody()"></textarea>
+        <div ng-if="apiClient.showBody()">
+          <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
+          <a href="#" class="body-prefill" ng-show="apiClient.bodyHasExample()" ng-click=apiClient.fillBody($event)>Prefill with example</a>
+        </div>
         <div class="labelled-inline">
           <parameter-fields parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showUrlencodedForm()"></parameter-fields>
           <parameter-fields parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showMultipartForm()"></parameter-fields>
