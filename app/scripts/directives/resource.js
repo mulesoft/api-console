@@ -16,6 +16,18 @@
     this.resource = $scope.resource;
   };
 
+  controller.prototype.expandInitially = function(method) {
+    if (method.method === this.methodToExpand) {
+      delete this.methodToExpand;
+      return true;
+    }
+    return false;
+  };
+
+  controller.prototype.expandMethod = function(method) {
+    this.methodToExpand = method.method;
+  };
+
   controller.prototype.toggleExpansion = function() {
     this.expanded = !this.expanded;
   };

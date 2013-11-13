@@ -109,7 +109,7 @@ describe("accordion view of API", function() {
     });
   });
 
-  describe("method detail view", function() {
+  describe("method expansion (direct and through method summaries)", function() {
     raml = createRAML(
       'title: Example API',
       'baseUri: http://www.example.com',
@@ -123,8 +123,14 @@ describe("accordion view of API", function() {
     it("displays the description of the method", function() {
       var resource = toggleResource(1);
       var method = openMethod(1, resource);
+      var description = resource.$('[role="method"] [role="full-description"]');
 
-      var description = method.$('div[role="description"]');
+      expect(description.getText()).toEqual('Get all resources')
+
+      resource = toggleResource(1);
+      resource.$('[role="resource-summary"] [role="methods"] li:first-child').click();
+      description = resource.$('[role="method"] [role="full-description"]');
+
       expect(description.getText()).toEqual('Get all resources')
     });
   });
