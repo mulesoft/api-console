@@ -16,6 +16,10 @@
     this.resource = $scope.resource;
   };
 
+  controller.prototype.toggleExpansion = function() {
+    this.expanded = !this.expanded;
+  };
+
   controller.prototype.type = function() {
     return stringForDisplay(this.resource.resourceType);
   };
