@@ -7,20 +7,12 @@ describe("RAML.Client.ParameterizedString", function() {
       pathSegment = new RAML.Client.ParameterizedString(raml.relativeUri, raml.uriParameters);
     });
 
-    it("sets name to the relative uri stripped of the leading slash", function() {
-      expect(pathSegment.name).toEqual("resource");
-    });
-
-    it("is not templated", function() {
-      expect(pathSegment.templated).toBe(false);
-    });
-
     it("has no parameters", function() {
       expect(pathSegment.parameters).toBeUndefined();
     });
 
     it("tokenizes the uri", function() {
-      expect(pathSegment.tokens).toEqual(['resource']);
+      expect(pathSegment.tokens).toEqual(['/resource']);
     });
 
     it("renturns the original segment when rendered", function() {
@@ -41,20 +33,12 @@ describe("RAML.Client.ParameterizedString", function() {
       pathSegment = new RAML.Client.ParameterizedString(raml.relativeUri, raml.uriParameters);
     });
 
-    it("sets name to the relative uri stripped of the leading slash and braces", function() {
-      expect(pathSegment.name).toEqual("templated-resource");
-    });
-
-    it("is templated", function() {
-      expect(pathSegment.templated).toBe(true);
-    });
-
     it("stores the parameter definitions for each templated section", function() {
       expect(pathSegment.parameters).toBe(uriParameters);
     });
 
     it("tokenizes the uri", function() {
-      expect(pathSegment.tokens).toEqual(['templated', '-', 'resource']);
+      expect(pathSegment.tokens).toEqual(['/', 'templated', '-', 'resource']);
     });
 
     describe("rendering template", function() {

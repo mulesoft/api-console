@@ -1,7 +1,6 @@
 <span role="path" class="path">
   <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init="$segmentIndex = $index">
-    <span class="segment">/</span>
-    <span ng-repeat='token in segment.tokens'>
+    <span ng-repeat='token in segment.tokens track by $index'>
       <validated-input ng-if='segment.parameters[token]'
                         name="{{token}}"
                         bind-to="pathBuilder.contexts[$segmentIndex]"
