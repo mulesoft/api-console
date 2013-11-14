@@ -9,7 +9,7 @@
     var copy = {};
 
     Object.keys(object).forEach(function(key) {
-      if (object[key] && object[key].trim().length > 0) {
+      if (object[key] && (typeof object[key] !== 'string' || object[key].trim().length > 0)) {
         copy[key] = object[key];
       }
     });
