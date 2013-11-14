@@ -1,4 +1,8 @@
 <section class='documentation' role='documentation'>
+  <ul role="traits" class="modifiers">
+    <li class="trait" ng-repeat="trait in documentation.traits()">{{trait}}</li>
+  </ul>
+
   <div role="full-description" class="description"
        ng-if="method.description"
        markdown="method.description">

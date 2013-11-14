@@ -16,14 +16,18 @@
   var controller = function($scope) {
     $scope.documentation = this;
 
-    var method = $scope.method;
+    this.method = $scope.method;
 
-    var hasParameters = !!($scope.resource.uriParameters || method.queryParameters ||
-      method.headers || hasFormParameters(method));
+    var hasParameters = !!($scope.resource.uriParameters || this.method.queryParameters ||
+      this.method.headers || hasFormParameters(this.method));
 
-    this.hasRequestDocumentation = hasParameters || !isEmpty(method.body);
-    this.hasResponseDocumentation = !isEmpty(method.responses);
+    this.hasRequestDocumentation = hasParameters || !isEmpty(this.method.body);
+    this.hasResponseDocumentation = !isEmpty(this.method.responses);
     this.hasTryIt = !!$scope.api.baseUri;
+  };
+
+  controller.prototype.traits = function() {
+    return (this.method.is || []);
   };
 
   RAML.Controllers.Documentation = controller;
