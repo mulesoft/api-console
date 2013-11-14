@@ -1,6 +1,9 @@
 <fieldset>
   <div class="control-group" ng-repeat="(parameterName, parameter) in parameters track by parameterName">
     <label for="{{parameterName}}">{{parameter.displayName}}:</label>
-    <input validated-input name="{{parameterName}}" type='text' ng-model='requestData[parameterName]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
+    <ng-switch on='parameter.type'>
+      <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='requestData[parameterName]'/>
+      <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='requestData[parameterName]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
+    </ng-switch>
   </div>
 </fieldset>
