@@ -18,7 +18,7 @@ describe("RAML.Directives.resource", function() {
    });
 
     it("displays the name of the resourceType", function() {
-      var resourceType = this.$el.find('[role="resource-type"]').text();
+      var resourceType = this.$el.find('[role="resource-type"]').text().trim();
       expect(resourceType).toEqual('typedcollection');
     });
   });
