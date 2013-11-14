@@ -368,6 +368,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'less',
       'connect:livereload',
       'open',
       'watch'
