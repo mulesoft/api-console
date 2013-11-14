@@ -16,6 +16,8 @@ traits:
   - andAnotherTrait: {}
   - andYetAnotherTrait: {}
   - aFinalTrait: {}
+  - someParameterizedTrait:
+      description: <<someParameterName>>
 resourceTypes:
   - collection:
       description: bunk
@@ -30,7 +32,6 @@ documentation:
   displayName: First One
   is: [secured]
   get:
-    is: [unsecured, catpictures, anotherTrait, andAnotherTrait, andYetAnotherTrait, aFinalTrait]
     description: get the first one
     headers:
       x-custom:
@@ -121,3 +122,10 @@ documentation:
   displayName: SO SECURE
   get:
     securedBy: [basic]
+/resource-with-method-level-traits:
+  displayName: First One
+  is: [secured]
+  get:
+    is: [unsecured, catpictures, anotherTrait, andAnotherTrait, andYetAnotherTrait, aFinalTrait, {someParameterizedTrait: { someParameterName: someParameterValue }}]
+    description: get the first one
+

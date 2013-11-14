@@ -34,5 +34,6 @@
 
   module.service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
 
+  module.filter('nameFromParameterizable', RAML.Filters.nameFromParameterizable);
   module.filter('yesNo', RAML.Filters.yesNo);
 })();

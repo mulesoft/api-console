@@ -6,10 +6,12 @@ describe("RAML.Directives.documentation", function() {
     'traits:',
     '  - someTraitOnAResource: {}',
     '  - someTraitOnAMethod: {}',
+    '  - someParameterizedTrait:',
+    '      description: <<someParameterName>>',
     '/someResource:',
     '  is: ["someTraitOnAResource"]',
     '  get:',
-    '    is: ["someTraitOnAMethod"]'
+    '    is: ["someTraitOnAMethod", {someParameterizedTrait: { someParameterName: someParameterValue }}]'
   );
 
   parseRAML(raml);
@@ -29,5 +31,7 @@ describe("RAML.Directives.documentation", function() {
     expect(traits.text()).not.toMatch('someTraitOnAResource');
   });
 
-  it("displays just the trait name of parameterized traits");
+  it("displays just the trait name of parameterized traits", function() {
+    expect(traits.text()).not.toMatch('someParameterName');
+  });
 });

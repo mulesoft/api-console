@@ -1,16 +1,6 @@
 (function() {
   'use strict';
 
-  function stringForDisplay(objectOrString) {
-    if (angular.isObject(objectOrString)) {
-      return Object.keys(objectOrString)[0];
-    } else if (objectOrString) {
-      return objectOrString;
-    } else {
-      return undefined;
-    }
-  }
-
   var controller = function($scope) {
     $scope.resourceView = this;
     this.resource = $scope.resource;
@@ -33,11 +23,11 @@
   };
 
   controller.prototype.type = function() {
-    return stringForDisplay(this.resource.resourceType);
+    return this.resource.resourceType;
   };
 
   controller.prototype.traits = function() {
-    return (this.resource.traits || []).map(stringForDisplay);
+    return this.resource.traits || [];
   };
 
   RAML.Directives.resource = function() {

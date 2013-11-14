@@ -1,6 +1,6 @@
-'use strict';
-
 (function() {
+  'use strict';
+
   function isEmpty(object) {
     return Object.keys(object || {}).length === 0;
   }
