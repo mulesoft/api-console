@@ -1,6 +1,16 @@
 .method-color(@color) {
-  background-color: @color;
-  border-color: @color;
+  background-color: tint(@color, 15%);
+  border-color:     tint(@color, 15%);
+
+  &:hover {
+    background-color: @color;
+  }
+
+  &.method {
+    .method-name:hover, .filler:hover {
+      background-color: tint(@color, 15%);
+    }
+  }
 
   &.method-summary {
     background-color: @veryLightGray;
@@ -27,8 +37,8 @@
   color: @veryLightGray;
   text-align: center;
   display: inline-block;
-  padding: 0px 10px;
-  width: 50px;
+
+  width: 64px;
 }
 
 .method {
