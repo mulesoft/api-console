@@ -52,7 +52,7 @@ describe('RAML.Client.Request', function() {
         });
 
         it("removes the old contentType", function() {
-          expect(options.contentType).toBeUndefined()
+          expect(options.contentType).toBeFalsy()
         });
       });
 
@@ -70,13 +70,42 @@ describe('RAML.Client.Request', function() {
       describe("setting data", function() {
         var data = { "foo": 'bar' };
 
-        beforeEach(function() {
-          request.data(data);
-          options = request.toOptions();
+        describe("by default", function() {
+          beforeEach(function() {
+            request.data(data);
+            options = request.toOptions();
+          });
+
+          it('assigns the data', function() {
+            expect(options.data).toEqual(data);
+          });
+
+          it('enables processingData', function() {
+            expect(options.processData).toBeTruthy();
+          });
+
         });
 
-        it('assigns the data', function() {
-          expect(options.data).toEqual(data)
+        describe("when requesting options for a multipart form", function() {
+          var formDataSpy;
+
+          beforeEach(function() {
+            formDataSpy = jasmine.createSpyObj('formData', ['append']);
+            spyOn(window, 'FormData').andReturn(formDataSpy);
+
+            request.data(data);
+            request.header('Content-Type', 'multipart/form-data');
+            options = request.toOptions();
+          });
+
+          it('assigns the data', function() {
+            expect(options.data).toEqual(formDataSpy);
+            expect(formDataSpy.append).toHaveBeenCalledWith('foo', 'bar');
+          });
+
+          it('disables processingData', function() {
+            expect(options.processData).toBeFalsy();
+          });
         });
       });
     });

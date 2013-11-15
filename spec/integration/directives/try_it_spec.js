@@ -224,6 +224,10 @@ describe("RAML.Controllers.tryIt", function() {
         $el = compileTemplate('<try-it></try-it>', scope);
       });
 
+      it('selects a mime type', function() {
+        expect($el.find('.media-types input:checked').length).toEqual(1);
+      });
+
       it('executes a request with the Content-Type header set to the chosen media type', function() {
         var suppliedBody = '<document type="xml" />';
 
@@ -317,7 +321,7 @@ describe("RAML.Controllers.tryIt", function() {
 
     mockHttp(function(mock) {
       mock
-        .when("post", 'http://www.example.com/resource', { foo: 'whatever'})
+        .when("post", 'http://www.example.com/resource', { foo: 'whatever' })
         .respondWith(200, "cool");
     });
 
@@ -329,6 +333,9 @@ describe("RAML.Controllers.tryIt", function() {
     it('executes a request with the supplied value for the custom header', function() {
       $el.find('input[name="foo"]').fillIn("whatever");
       $el.find('button[role="try-it"]').click();
+
+      var mostRecent = $.mockjax.mockedAjaxCalls()[0];
+      expect(mostRecent.contentType).toEqual("application/x-www-form-urlencoded");
 
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
@@ -350,9 +357,19 @@ describe("RAML.Controllers.tryIt", function() {
 
     parseRAML(raml);
 
+    function constructMultipartFormData(object) {
+      var formData = new FormData();
+
+      for (var key in object) {
+        formData.append(key, object[key]);
+      }
+
+      return formData;
+    }
+
     mockHttp(function(mock) {
       mock
-        .when("post", 'http://www.example.com/resource', { foo: 'whatever'})
+        .when("post", 'http://www.example.com/resource', constructMultipartFormData({ foo: 'whatever' }))
         .respondWith(200, "cool");
     });
 
@@ -364,6 +381,10 @@ describe("RAML.Controllers.tryIt", function() {
     it('executes a request with the supplied value for the custom header', function() {
       $el.find('input[name="foo"]').fillIn("whatever");
       $el.find('button[role="try-it"]').click();
+
+
+      var mostRecent = $.mockjax.mockedAjaxCalls()[0];
+      expect(mostRecent.contentType).toBeFalsy();
 
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
