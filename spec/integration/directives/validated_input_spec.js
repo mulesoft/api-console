@@ -1,5 +1,5 @@
 describe("RAML.Directives.validatedInput", function() {
-  var $el, input, scope;
+  var input, scope;
 
   function createScopeForValidatedInput(constraints, model) {
     constraints = constraints || { type: 'string' };
@@ -13,54 +13,11 @@ describe("RAML.Directives.validatedInput", function() {
 
   beforeEach(module('ramlConsoleApp'));
 
-  describe("rendering the control", function() {
-    beforeEach(function() {
-      scope = createScopeForValidatedInput();
-    });
-
-    describe("by default", function() {
-      beforeEach(function() {
-        $el = compileTemplate('<validated-input bind-to="model" constraints="constraints"></validated-input>', scope);
-        input = $el.find('input');
-      });
-
-      it("generates an input of type text", function() {
-        expect(input.attr('type')).toEqual('text');
-      });
-
-      it("has no placeholder", function() {
-        expect(input.attr('placeholder')).toBe('');
-      });
-    });
-
-    describe("a password field", function() {
-      beforeEach(function() {
-        $el = compileTemplate('<validated-input type="password" bind-to="model" constraints="constraints"></validated-input>', scope);
-        input = $el.find('input');
-      });
-
-      it("generates an input of type password", function() {
-        expect(input.attr('type')).toEqual('password');
-      });
-    });
-
-    describe("with a placeholder", function() {
-      beforeEach(function() {
-        $el = compileTemplate('<validated-input placeholder="test" bind-to="model" constraints="constraints"></validated-input>', scope);
-        input = $el.find('input');
-      });
-
-      it("generates an input with the specified placeholder", function() {
-        expect(input.attr('placeholder')).toEqual('test');
-      });
-    });
-  });
-
   describe("validating the input", function() {
-    var model, resource, raml = createRAML(
+    var $el, model, resource, raml = createRAML(
       'title: Example API',
       'baseUri: http://www.example.com',
-      '/resource/{id}:',
+      '/resource/{resourceId}:',
       '  get:',
       '    queryParameters:',
       '      page:'
@@ -69,11 +26,11 @@ describe("RAML.Directives.validatedInput", function() {
     parseRAML(raml, { into: 'api' });
 
     beforeEach(function() {
-      var template = '<form><validated-input name="id" constraints="constraints" bind-to="model"></validated-input><button></button></form>';
+      var template = '<form><input validated-input ng-model="model.resourceId" constraints="constraints"/><button></button></form>';
       model = {}
       resource = this.api.resources[0];
 
-      scope = createScopeForValidatedInput(resource.uriParameters.id, model);
+      scope = createScopeForValidatedInput(resource.uriParameters.resourceId, model);
       $el = compileTemplate(template, scope);
       setFixtures($el)
       input = $el.find('input');
@@ -81,14 +38,10 @@ describe("RAML.Directives.validatedInput", function() {
 
     describe("with valid input", function() {
       beforeEach(function() {
-        expect(model.id).toBeUndefined();
+        expect(model.resourceId).toBeUndefined();
         input.trigger('focus');
-        input.fillIn('  the thing i typed  ');
+        input.fillIn('the thing i typed');
         input.trigger('blur');
-      });
-
-      it("binds the input value to the model", function() {
-        expect(model.id).toEqual('  the thing i typed  ');
       });
 
       it("does not decorate the input", function() {
@@ -127,16 +80,15 @@ describe("RAML.Directives.validatedInput", function() {
       });
     });
 
-    describe("when configured to disallow missing input", function() {
-      var template = '<validated-input name="id" constraints="constraints" bind-to="model" invalid-class="error"></validated-input>';
+    describe("when configured with a custom error class", function() {
+      var template = '<input validated-input ng-model="model.resourceId" name="id" constraints="constraints" invalid-class="error"/>';
       beforeEach(function() {
-        $el = compileTemplate(template, scope);
-        input = $el.find('input');
+        input = compileTemplate(template, scope);
         input.trigger('focus');
         input.trigger('blur');
       });
 
-      it("adds an error class", function() {
+      it("adds the custom class", function() {
         expect(input).toHaveClass('error');
       });
     });

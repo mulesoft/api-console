@@ -1,60 +1,49 @@
 (function() {
   'use strict';
 
-  var Controller = function($scope) {
-    this.model = $scope.bindTo;
-    this.name = $scope.name;
-    this.invalidClass = $scope.invalidClass || 'warning';
-    this.validator = RAML.Client.Validator.from($scope.constraints);
-
-    $scope.input = this;
+  var Controller = function($scope, $attrs, $parse) {
+    var constraints = $parse($attrs.constraints)($scope);
+    this.validator = RAML.Client.Validator.from(constraints);
   };
 
-  Controller.prototype.currentValue = function() {
-    return this.model[this.name];
+  Controller.prototype.validate = function(value) {
+    return this.validator.validate(value);
   };
 
-  Controller.prototype.validate = function() {
-    var errors = this.validator.validate(this.currentValue());
+  var link = function($scope, $el, $attrs, controllers) {
+    var modelController    = controllers[0],
+        validateController = controllers[1],
+        errorClass = $attrs.invalidClass || 'warning';
 
-    if (errors) {
-      this.status = this.invalidClass;
+    function validateField() {
+      var errors = validateController.validate(modelController.$modelValue);
+
+      if (errors) {
+        $el.addClass(errorClass);
+      } else {
+        $el.removeClass(errorClass);
+      }
     }
-  };
 
-  Controller.prototype.reset = function() {
-    this.status = null;
-  };
-
-  var link = function($scope, $el, $attrs) {
-    $scope.type = $attrs.type || 'text';
-
-    var input = $el.find('input');
-    input.bind('blur', function() {
-      $scope.$apply('input.validate()');
+    $el.bind('blur', function() {
+      $scope.$apply(validateField);
     });
 
-    input.bind('focus', function() {
-      $scope.$apply('input.reset()');
+    $el.bind('focus', function() {
+      $scope.$apply(function() {
+        $el.removeClass(errorClass);
+      });
     });
 
-    angular.element(input[0].form).bind('submit', function() {
-      $scope.$apply('input.validate()');
+    angular.element($el[0].form).bind('submit', function() {
+      $scope.$apply(validateField);
     });
   };
 
   RAML.Directives.validatedInput = function() {
     return {
-      restrict: 'E',
-      templateUrl: 'views/validated_input.tmpl.html',
-      replace: true,
-      scope: {
-        bindTo: '=',
-        constraints: '=',
-        placeholder: '@',
-        invalidClass: '@?',
-        name: '@'
-      },
+      restrict: 'A',
+      require: ['ngModel', 'validatedInput'],
       controller: Controller,
       link: link
     };

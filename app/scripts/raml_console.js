@@ -10,6 +10,7 @@
   module.directive('collapsibleContent', RAML.Directives.collapsibleContent);
   module.directive('collapsibleToggle', RAML.Directives.collapsibleToggle);
   module.directive('documentation', RAML.Directives.documentation);
+  module.directive('input', RAML.Directives.input);
   module.directive('markdown', RAML.Directives.markdown);
   module.directive('method', RAML.Directives.method);
   module.directive('namedParameters', RAML.Directives.namedParameters);

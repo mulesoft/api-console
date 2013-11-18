@@ -2,14 +2,18 @@
 
 (function() {
   function isEmpty(object) {
-    return Object.keys(object || {}).length === 0;
+    if (object) {
+      return Object.keys(filterEmpty(object)).length === 0;
+    } else {
+      return true;
+    }
   }
 
   function filterEmpty(object) {
     var copy = {};
 
     Object.keys(object).forEach(function(key) {
-      if (object[key] && object[key].trim().length > 0) {
+      if (object[key] && (typeof object[key] !== 'string' || object[key].trim().length > 0)) {
         copy[key] = object[key];
       }
     });
@@ -58,6 +62,7 @@
     this.supportsCustomBody = this.supportsFormUrlencoded = this.supportsFormData = false;
 
     for (var mediaType in $scope.method.body) {
+      this.mediaType = this.mediaType || mediaType;
       this.supportsMediaType = true;
 
       if (mediaType === FORM_URLENCODED) {
@@ -153,7 +158,10 @@
 
       if (this.mediaType) {
         request.header('Content-Type', this.mediaType);
-        if (this.showBody()) { request.data(this.body); }
+      }
+
+      if (this.showBody()) {
+        request.data(this.body);
       }
 
       var authStrategy;
