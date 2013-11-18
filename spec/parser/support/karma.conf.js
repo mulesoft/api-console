@@ -7,7 +7,7 @@ basePath = '../../..';
 files = [
     JASMINE,
     JASMINE_ADAPTER,
-    'app/vendor/bower_components/raml-parser/dist/raml-parser.js',
+    'app/vendor/bower_components/raml-js-parser/dist/raml-parser.js',
     'spec/matchers/**/*.js',
     'spec/support/helpers/**/*.js',
     'spec/parser/support/helpers/**/*.js',
