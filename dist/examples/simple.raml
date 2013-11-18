@@ -1,0 +1,131 @@
+#%RAML 0.8
+---
+title: Example API
+baseUri: http://example.com
+securitySchemes:
+  - basic:
+      type: Basic Authentication
+traits:
+  - secured:
+      description: Some requests require authentication
+  - unsecured:
+      description: This is not secured
+  - catpictures:
+      description: requires cat headers
+  - anotherTrait: {}
+  - andAnotherTrait: {}
+  - andYetAnotherTrait: {}
+  - aFinalTrait: {}
+  - someParameterizedTrait:
+      description: <<someParameterName>>
+resourceTypes:
+  - collection:
+      description: bunk
+documentation:
+  - title: Getting Started
+    content: |
+      # Header
+      Content
+      ## Subheader
+      **Bolded content**
+/resource:
+  displayName: First One
+  is: [secured]
+  get:
+    description: get the first one
+    headers:
+      x-custom:
+  /{resourceId}:
+    description: This is a resource description *with* some _markdown_ embedded in it
+    uriParameters:
+      resourceId:
+        required: true
+        description: Which resoure would you like to view
+    get:
+      description: |
+        Instagram’s API uses the [OAuth 2.0 protocol](http://tools.ietf.org/html/draft-ietf-oauth-v2-12) for simple, but effective authentication and authorization. OAuth 2.0 is much easier to use than previous schemes; developers can start using the Instagram API almost immediately. The one thing to keep in mind is that all requests to the API must be made over SSL (https:// not http://)
+
+        ## Do you need to authenticate?
+
+        For the most part, Instagram’s API only requires the use of a _client_id). A client_id simply associates your server, script, or program with a specific application. However, some requests require authentication - specifically requests made on behalf of a user. Authenticated requests require an _access_token_. These tokens are unique to a user and should be stored securely. Access tokens may expire at any time in the future.
+
+        Note that in many situations, you may not need to authenticate users at all. For instance, you may request popular photos without authenticating (i.e. you do not need to provide an access_token; just use your client ID with your request). We only require authentication in cases where your application is making requests on behalf of a user (commenting, liking, browsing a user’s feed, etc.).
+
+        ## Receiving an access_token
+      queryParameters:
+        filter:
+          description: What to filter
+          type: string
+    post:
+      body:
+        application/json:
+        application/x-www-form-urlencoded:
+          formParameters:
+            name:
+              description: The name of the resource to create
+              type: string
+              example: Comment
+            description:
+              description: A description of the resource to create
+              type: string
+              example: User-generated content pertinent to the associated blog post
+        multipart/form-data:
+          formParameters:
+            name:
+              description: The name of the resource to create
+              type: string
+              example: Comment
+            description:
+              description: A description of the resource to create
+              type: string
+              example: User-generated content pertinent to the associated blog post
+
+/another/resource:
+  displayName: Cats
+  type: collection
+  is: [secured, catpictures]
+  connect: !!null
+  head: !!null
+  get:
+    queryParameters:
+      chunk:
+        displayName: page
+        description: Which page to display
+        type: integer
+        example: 1
+        minimum: 1
+        maximum: 100
+        required: true
+      order:
+        description: The sort order of resources
+        type: string
+        enum: ["oldest", "newest"]
+        example: oldest
+        minLength: 5
+        maxLength: 7
+        default: newest
+      query:
+        description: A query parameter
+        repeat: true
+
+/resource-with-headers:
+  displayName: Resource With headers
+  get:
+    headers:
+      x-custom-header:
+        displayName: Custom header
+        description: This header is used to send data that...
+        type: string
+        pattern: ^\w+$
+
+/secured-resource:
+  displayName: SO SECURE
+  get:
+    securedBy: [basic]
+/resource-with-method-level-traits:
+  displayName: First One
+  is: [secured]
+  get:
+    is: [unsecured, catpictures, anotherTrait, andAnotherTrait, andYetAnotherTrait, aFinalTrait, {someParameterizedTrait: { someParameterName: someParameterValue }}]
+    description: get the first one
+

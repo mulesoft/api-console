@@ -75,7 +75,7 @@ module.exports = function (grunt) {
             'app/vendor/angular.js',
             'app/vendor/angular-sanitize.js',
             'app/vendor/angular-resource.js',
-            'app/vendor/raml-parser.js',
+            'app/vendor/bower_components/raml-parser/dist/raml-parser.js',
             'app/vendor/showdown.min.js',
             'app/vendor/codemirror/codemirror.js',
             'app/vendor/codemirror/xml.js',
@@ -315,11 +315,11 @@ module.exports = function (grunt) {
       embedded: {
         files: {
           'dist/vendor.js': [
-            'app/vendor/jqueryjs',
+            'app/vendor/jquery.js',
             'app/vendor/angular.js',
             'app/vendor/angular-sanitize.js',
             'app/vendor/angular-resource.js',
-            'app/vendor/raml-parser.js',
+            'app/vendor/bower_components/raml-parser/dist/raml-parser.js',
             'app/vendor/showdown.min.js',
             'app/vendor/codemirror/codemirror.js',
             'app/vendor/codemirror/xml.js',

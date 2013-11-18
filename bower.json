@@ -1,0 +1,32 @@
+{
+  "name": "console",
+  "version": "0.8.0",
+  "homepage": "https://github.com/mulesoft/api-console",
+  "authors": [],
+  "main": [
+    "dist/app.js",
+    "dist/vendor.js",
+    "dist/styles/app.css",
+    "dist/font/**/*.*",
+    "dist/authentication/oauth2.html"
+  ],
+  "description": "RAML API Console",
+  "license": "CPAL-1.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "app",
+    "bower_components",
+    "Gruntfile.js",
+    "node_modules",
+    "package.json",
+    "selenium",
+    "spec",
+    "tasks",
+    "test"
+
+  ],
+  "dependencies": {
+    "raml-parser": "raml-org/raml-js-parser#8308aea2839a6683ee026228e7a2177fe834a6c0"
+  }
+}
