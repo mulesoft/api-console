@@ -32,58 +32,22 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     ngtemplates: {
-      consoleEmbedded: {
+      dist: {
+        options: {
+          base: 'app',
+          module: 'ramlConsoleApp',
+          concat: 'dist/app.js'
+        },
+        src: 'app/views/**.html',
+        dest: 'dist/templates.js'
+      },
+      test: {
         options: {
           base: 'app',
           module: 'ramlConsoleApp'
         },
         src: 'app/views/**.html',
-        dest: 'dist/templates.js'
-      }
-    },
-
-    concat: {
-      embeddedMin: {
-        files: {
-          'dist/index.html': ['app/index.embedded.html']
-        }
-      },
-      embedded: {
-        files: {
-          'dist/app.js': [
-            'app/vendor/jquery.js',
-            'app/vendor/vkbeautify.0.99.00.beta.js',
-            'app/scripts/inspector.js',
-            'app/scripts/inspector/**/*.js',
-            'app/scripts/client.js',
-            'app/scripts/client/auth_strategies.js',
-            'app/scripts/client/**/*.js',
-            'app/scripts/controllers.js',
-            'app/scripts/controllers/**/*.js',
-            'app/scripts/directives.js',
-            'app/scripts/directives/**/*.js',
-            'app/scripts/filters.js',
-            'app/scripts/filters/**/*.js',
-            'app/scripts/services.js',
-            'app/scripts/services/**/*.js',
-            'app/scripts/settings.js',
-            'app/scripts/raml.js',
-            'app/scripts/raml_console.js',
-            'dist/templates.js'
-          ],
-          'dist/vendor.js': [
-            'app/vendor/angular.js',
-            'app/vendor/angular-sanitize.js',
-            'app/vendor/angular-resource.js',
-            'app/vendor/bower_components/raml-js-parser/dist/raml-parser.js',
-            'app/vendor/showdown.min.js',
-            'app/vendor/codemirror/codemirror.js',
-            'app/vendor/codemirror/xml.js',
-            'app/vendor/codemirror/javascript.js'
-          ],
-          'dist/index.html': ['app/index.acceptance.html'],
-          'dist/authentication/oauth2.html': ['app/authentication/oauth2.html']
-        }
+        dest: 'dist/templates.js' // FIXME: put this into a test directory
       }
     },
 
@@ -167,9 +131,6 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      embedded: {
-        src: ['dist/**/*.*']
-      },
       postCompilation: {
         src: ['dist/templates.js']
       },
@@ -221,6 +182,10 @@ module.exports = function (grunt) {
     },
 
     // Put files not handled in other tasks here
+    // add to copy:
+    //       'dist/index.html': ['app/index.acceptance.html'],
+    //       'dist/authentication/oauth2.html': ['app/authentication/oauth2.html']
+
     copy: {
       dist: {
         files: [{
@@ -312,25 +277,25 @@ module.exports = function (grunt) {
         mangle: false
       },
 
-      embedded: {
-        files: {
-          'dist/vendor.js': [
-            'app/vendor/jquery.js',
-            'app/vendor/angular.js',
-            'app/vendor/angular-sanitize.js',
-            'app/vendor/angular-resource.js',
-            'app/vendor/bower_components/raml-js-parser/dist/raml-parser.js',
-            'app/vendor/showdown.min.js',
-            'app/vendor/codemirror/codemirror.js',
-            'app/vendor/codemirror/xml.js',
-            'app/vendor/codemirror/javascript.js',
-            'app/vendor/vkbeautify.0.99.00.beta.js'
-          ],
-          'dist/app.js': [
-            'dist/templates.js'
-          ]
-        }
-      }
+      // embedded: {
+      //   files: {
+      //     'dist/vendor.js': [
+      //       'app/vendor/jquery.js',
+      //       'app/vendor/angular.js',
+      //       'app/vendor/angular-sanitize.js',
+      //       'app/vendor/angular-resource.js',
+      //       'app/vendor/bower_components/raml-js-parser/dist/raml-parser.js',
+      //       'app/vendor/showdown.min.js',
+      //       'app/vendor/codemirror/codemirror.js',
+      //       'app/vendor/codemirror/xml.js',
+      //       'app/vendor/codemirror/javascript.js',
+      //       'app/vendor/vkbeautify.0.99.00.beta.js'
+      //     ],
+      //     'dist/app.js': [
+      //       'dist/templates.js'
+      //     ]
+      //   }
+      // }
     },
     less: {
       development: {
@@ -357,9 +322,6 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-contrib-concat');
-
-  grunt.registerTask('raml-console-embedded-debug', ['clean:embedded', 'ngtemplates:consoleEmbedded', 'concat:embedded', 'copy:embedded', 'less:embedded', 'clean:postCompilation']);
-  grunt.registerTask('raml-console-embedded', ['clean:embedded', 'ngtemplates:consoleEmbedded', 'concat:embeddedMin', 'uglify:embedded', 'copy:embedded', 'less:embedded', 'clean:postCompilation']);
 
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
@@ -389,7 +351,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('spec:integration', [
-    'ngtemplates',
+    'ngtemplates:test',
     'karma:integration',
     'clean:postCompilation'
   ]);
@@ -409,15 +371,13 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'clean:dist',
+    'clean',
     'useminPrepare',
-    'copy',
-    'cdnify',
-    'ngmin',
-    'uglify',
-    'rev',
-    'usemin',
-    'less'
+    'ngtemplates:dist',
+    'concat',
+    'copy:embedded',
+    'less:embedded',
+    'clean:postCompilation'
   ]);
 
   grunt.registerTask('default', [
