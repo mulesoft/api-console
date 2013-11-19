@@ -16,12 +16,6 @@ securitySchemes:
               Used to send a valid OAuth 2 access token. Do not use together with 
               the "access_token" query string parameter.
             type: string
-        queryParameters:
-          access_token:
-            description: |
-              Used to send a valid OAuth 2 access token. Do not use together with 
-              the "Authorization" header
-            type: string
       settings:
         authorizationUri: https://www.box.com/api/oauth2/authorize
         accessTokenUri: https://www.box.com/api/oauth2/token
