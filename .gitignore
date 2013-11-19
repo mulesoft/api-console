@@ -1,6 +1,6 @@
 node_modules
 .tmp
 .sass-cache
-app/styles/main.css
+app/styles/app.css
 selenium
 app/vendor/bower_components

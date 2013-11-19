@@ -55,7 +55,7 @@ module.exports = function (grunt) {
     watch: {
       less: {
         files: ['app/styles/less/**/*.less'],
-        tasks: ['less']
+        tasks: ['less:development']
       },
       livereload: {
         options: {
@@ -181,11 +181,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // Put files not handled in other tasks here
-    // add to copy:
-    //       'dist/index.html': ['app/index.acceptance.html'],
-    //       'dist/authentication/oauth2.html': ['app/authentication/oauth2.html']
-
     copy: {
       dist: {
         files: [{
@@ -194,26 +189,13 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>',
           dest: '<%= yeoman.dist %>',
           src: [
+            'index.html',
             '*.{ico,png,txt}',
-            '.htaccess',
+            'examples/*',
+            'authentication/oauth2.html',
             'images/{,*/}*.{gif,webp,svg}',
             'styles/fonts/*'
           ]
-        }, {
-          expand: true,
-          cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/images',
-          src: [
-            'generated/*'
-          ]
-        }]
-      },
-      embedded: {
-        files: [{
-          expand: true,
-          cwd: 'app/examples',
-          src: ['*'],
-          dest: 'dist/examples/'
         },
         {
           expand: true,
@@ -226,8 +208,7 @@ module.exports = function (grunt) {
           cwd: 'app/vendor/open-sans',
           src: ['*'],
           dest: 'dist/font/'
-        }
-        ]
+        }]
       }
     },
     protractor: {
@@ -301,19 +282,17 @@ module.exports = function (grunt) {
       development: {
         options: {
           paths: ['app/styles/less']
-
         },
         files: {
-          'app/styles/main.css': 'app/styles/less/main.less'
+          'app/styles/app.css': 'app/styles/less/app.less'
         }
       },
-      embedded: {
+      dist: {
         options: {
           paths: ['app/styles/less']
-
         },
         files: {
-          'dist/styles/app.css': 'app/styles/less/main.less'
+          'dist/styles/app.css': 'app/styles/less/app.less'
         }
       }
     }
@@ -330,7 +309,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'less',
+      'less:development',
       'connect:livereload',
       'open',
       'watch'
@@ -358,14 +337,14 @@ module.exports = function (grunt) {
 
   grunt.registerTask('scenario', [
     'clean:server',
-    'less',
+    'less:development',
     'connect:test',
     'protractor'
   ]);
 
   grunt.registerTask('scenario:debug', [
     'clean:server',
-    'less',
+    'less:development',
     'connect:test',
     'protractor:debug'
   ]);
@@ -375,8 +354,9 @@ module.exports = function (grunt) {
     'useminPrepare',
     'ngtemplates:dist',
     'concat',
-    'copy:embedded',
-    'less:embedded',
+    'copy',
+    'less:dist',
+    'usemin',
     'clean:postCompilation'
   ]);
 
