@@ -414,19 +414,27 @@ describe("RAML.Controllers.tryIt", function() {
 
     beforeEach(function() {
       scope = createScopeForTryIt(this.api);
+      console.log(scope.method.allowsAnonymousAccess());
       $el = compileTemplate('<try-it></try-it>', scope);
+      setFixtures($el);
     });
 
-    it('executes a request with the supplied value for the custom header', function() {
-      var headerVerifier = function(headers) {
-        return !!headers['Authorization'].match(/Basic/);
-      };
-
+    it('executes the request', function() {
       $el.find('input[value="anonymous"]')[0].click();
       $el.find('button[role="try-it"]').click();
 
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
+      });
+    });
+
+    it('warns that authentication is required', function() {
+      $el.find('input[value="anonymous"]')[0].click();
+      $el.find('button[role="try-it"]').click();
+
+      whenTryItCompletes(function() {
+        expect($el.find('form [role="warning"]')).toBeVisible();
+        expect($el.find('form [role="warning"]')).toHaveText('Successful responses require authentication');
       });
     });
   });
@@ -457,10 +465,6 @@ describe("RAML.Controllers.tryIt", function() {
     });
 
     it('executes a request with the supplied value for the custom header', function() {
-      var headerVerifier = function(headers) {
-        return !!headers['Authorization'].match(/Basic/);
-      };
-
       $el.find('input[value="basic"]')[0].click();
       $el.find('input[name="username"]').fillIn("user");
       $el.find('input[name="password"]').fillIn("password");

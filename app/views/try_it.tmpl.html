@@ -38,6 +38,9 @@
       <div role="error" class="error" ng-show="apiClient.missingUriParameters">
         Required URI Parameters must be entered
       </div>
+      <div role="warning" class="warning" ng-show="apiClient.disallowedAnonymousRequest">
+        Successful responses require authentication
+      </div>
       <button role="try-it" ng-class="'btn-' + method.method" ng-click="apiClient.execute()">
         {{method.method}}
       </button>

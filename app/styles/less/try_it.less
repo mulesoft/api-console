@@ -58,10 +58,16 @@
         vertical-align: middle;
       }
 
-      .error {
+      .error, .warning {
         display: inline;
-        color: @red;
         margin-right: 10px;
+      }
+
+      .error {
+        color: @red;
+      }
+      .warning {
+        color: @mustard;
       }
     }
 

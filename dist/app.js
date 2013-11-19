@@ -8058,6 +8058,10 @@ RAML.Inspector = (function() {
 
       return selectedSchemes;
     };
+
+    method.allowsAnonymousAccess = function() {
+      return (this.securedBy || []).some(function(name) { return name === null; });
+    };
   }
 
   function extractResources(basePathSegments, api, securitySchemes) {
@@ -9055,6 +9059,7 @@ RAML.Client.AuthStrategies.base64 = (function () {
 
   TryIt.prototype.execute = function() {
     this.missingUriParameters = false;
+    this.disallowedAnonymousRequest = false;
 
     var response = this.response = {};
 
@@ -9103,6 +9108,10 @@ RAML.Client.AuthStrategies.base64 = (function () {
       var authStrategy;
 
       try {
+        if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
+          this.disallowedAnonymousRequest = true;
+        }
+
         var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
         var credentials = this.keychain[this.keychain.selectedScheme];
         authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
@@ -10268,6 +10277,9 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "\n" +
     "      <div role=\"error\" class=\"error\" ng-show=\"apiClient.missingUriParameters\">\n" +
     "        Required URI Parameters must be entered\n" +
+    "      </div>\n" +
+    "      <div role=\"warning\" class=\"warning\" ng-show=\"apiClient.disallowedAnonymousRequest\">\n" +
+    "        Successful responses require authentication\n" +
     "      </div>\n" +
     "      <button role=\"try-it\" ng-class=\"'btn-' + method.method\" ng-click=\"apiClient.execute()\">\n" +
     "        {{method.method}}\n" +

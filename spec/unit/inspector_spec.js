@@ -29,7 +29,8 @@ describe("RAML.Inspector.create", function() {
     '        authorizationUri: http://example.com',
     '/resource:',
     '  description: The first resource',
-    '  get: !!null',
+    '  get:',
+    '    securedBy: [basic]',
     '  /{resourceId}:',
     '    get: !!null',
     '/resource/search:',
@@ -71,11 +72,12 @@ describe("RAML.Inspector.create", function() {
     });
 
     describe("retrieving security scheme definitions for a method", function() {
-      var securitySchemes;
+      var method, securitySchemes;
 
       describe("by default", function() {
         beforeEach(function() {
-          securitySchemes = inspector.resources[3].methods[0].securitySchemes();
+          method = inspector.resources[3].methods[0];
+          securitySchemes = method.securitySchemes();
         });
 
         it("returns an object of scheme definitions", function() {
@@ -86,6 +88,10 @@ describe("RAML.Inspector.create", function() {
           expect(securitySchemes['null']).toBeUndefined()
         });
 
+        it("marks the method as allowing anonymous access", function() {
+          expect(method.allowsAnonymousAccess()).toBeTruthy();
+        });
+
         it("filters parameterized security schemes", function() {
           expect(securitySchemes['oauth_2']).toBeUndefined()
         });
@@ -93,11 +99,16 @@ describe("RAML.Inspector.create", function() {
 
       describe("with no security schemes", function() {
         beforeEach(function() {
-          securitySchemes = inspector.resources[0].methods[0].securitySchemes();
+          method = inspector.resources[0].methods[0];
+          securitySchemes = method.securitySchemes();
         });
 
         it("returns an empty object when there are no security schemes", function() {
           expect(securitySchemes).toBeDefined();
+        });
+
+        it("marks the method as not allowing anonymous access", function() {
+          expect(method.allowsAnonymousAccess()).toBeFalsy();
         });
       });
     });
