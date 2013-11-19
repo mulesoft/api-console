@@ -36,7 +36,7 @@ module.exports = function (grunt) {
         options: {
           base: 'app',
           module: 'ramlConsoleApp',
-          concat: 'dist/app.js'
+          concat: 'dist/scripts/app.js'
         },
         src: 'app/views/**.html',
         dest: 'dist/templates.js'
@@ -150,9 +150,7 @@ module.exports = function (grunt) {
         files: {
           src: [
             '<%= yeoman.dist %>/scripts/{,*/}*.js',
-            '<%= yeoman.dist %>/styles/{,*/}*.css',
-            '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/styles/fonts/*'
+            '<%= yeoman.dist %>/styles/{,*/}*.css'
           ]
         }
       }
@@ -190,11 +188,8 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             'index.html',
-            '*.{ico,png,txt}',
             'examples/*',
-            'authentication/oauth2.html',
-            'images/{,*/}*.{gif,webp,svg}',
-            'styles/fonts/*'
+            'authentication/oauth2.html'
           ]
         },
         {
@@ -208,6 +203,18 @@ module.exports = function (grunt) {
           cwd: 'app/vendor/open-sans',
           src: ['*'],
           dest: 'dist/font/'
+        }]
+      },
+      unrev: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.dist %>',
+          dest: '<%= yeoman.dist %>',
+          src: ['scripts/*.*.js', 'styles/*.*.css'],
+          rename: function(dest, src) {
+            var regex = /[0-9a-f]{8}\.(.*)/;
+            return dest + '/' + src.replace(regex, '$1');
+          }
         }]
       }
     },
@@ -256,27 +263,7 @@ module.exports = function (grunt) {
       },
       options: {
         mangle: false
-      },
-
-      // embedded: {
-      //   files: {
-      //     'dist/vendor.js': [
-      //       'app/vendor/jquery.js',
-      //       'app/vendor/angular.js',
-      //       'app/vendor/angular-sanitize.js',
-      //       'app/vendor/angular-resource.js',
-      //       'app/vendor/bower_components/raml-js-parser/dist/raml-parser.js',
-      //       'app/vendor/showdown.min.js',
-      //       'app/vendor/codemirror/codemirror.js',
-      //       'app/vendor/codemirror/xml.js',
-      //       'app/vendor/codemirror/javascript.js',
-      //       'app/vendor/vkbeautify.0.99.00.beta.js'
-      //     ],
-      //     'dist/app.js': [
-      //       'dist/templates.js'
-      //     ]
-      //   }
-      // }
+      }
     },
     less: {
       development: {
@@ -354,8 +341,10 @@ module.exports = function (grunt) {
     'useminPrepare',
     'ngtemplates:dist',
     'concat',
-    'copy',
+    'copy:dist',
     'less:dist',
+    'rev',
+    'copy:unrev',
     'usemin',
     'clean:postCompilation'
   ]);
