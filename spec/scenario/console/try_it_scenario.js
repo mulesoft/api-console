@@ -2,6 +2,12 @@ describe("trying an API method", function() {
   var BASE_URI = 'http://localhost:9001';
   fakeApiEndpoint("resource", "Hello World!");
 
+  var disableProxy = function() {
+    beforeEach(function() {
+      ptor.driver.executeScript("RAML.Settings.proxy = '';");
+    });
+  }
+
   var definition = createRAML(
     "title: Example API",
     "baseUri: " + BASE_URI,
@@ -28,6 +34,7 @@ describe("trying an API method", function() {
     );
 
     var fixturePath = loadRamlFixture(definition);
+    disableProxy();
 
     it("executes the request and displays the results", function() {
       var resource = toggleResource(1);
@@ -57,6 +64,7 @@ describe("trying an API method", function() {
     );
 
     var fixturePath = loadRamlFixture(definition);
+    disableProxy();
 
     it("does not execute the request", function() {
       var resource = toggleResource(1);
@@ -85,6 +93,7 @@ describe("trying an API method", function() {
     );
 
     var fixturePath = loadRamlFixture(definition);
+    disableProxy();
 
     it("does execute the request", function() {
       var resource = toggleResource(1);

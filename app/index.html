@@ -2,7 +2,11 @@
 <html>
   <head>
     <title>api:Console</title>
+
+    <!-- build:css({.tmp,app}) styles/app.min.css -->
     <link rel="stylesheet" href="styles/app.css" type="text/css" />
+    <!-- endbuild -->
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="">
@@ -37,7 +41,7 @@
 
     <raml-console with-root-documentation></raml-console>
 
-    <!-- build:js({.tmp,app}) scripts/vendor.js -->
+    <!-- build:js({.tmp,app}) scripts/vendor.min.js -->
     <script src="vendor/angular.js"></script>
     <script src="vendor/angular-resource.js"></script>
     <script src="vendor/angular-sanitize.js"></script>
@@ -48,7 +52,7 @@
     <script src="vendor/codemirror/javascript.js"></script>
     <!-- endbuild -->
 
-    <!-- build:js({.tmp,app}) scripts/app.js -->
+    <!-- build:js({.tmp,app}) scripts/app.min.js -->
     <script src="vendor/jquery.js"></script>
     <script src="vendor/vkbeautify.0.99.00.beta.js"></script>
     <script src="scripts/inspector.js"></script>
@@ -103,5 +107,8 @@
     <script src="scripts/raml.js"></script>
     <script src="scripts/raml_console.js"></script>
     <!-- endbuild -->
+    <script>
+      RAML.Settings.proxy = '/proxy/';
+    </script>
   </body>
 </html>

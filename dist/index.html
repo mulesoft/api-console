@@ -2,7 +2,9 @@
 <html>
   <head>
     <title>api:Console</title>
-    <link rel="stylesheet" href="styles/64f62f43.app.css" type="text/css" />
+
+    <link rel="stylesheet" href="styles/5ef8c095.app.min.css">
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="">
@@ -37,8 +39,11 @@
 
     <raml-console with-root-documentation></raml-console>
 
-    <script src="scripts/90de249d.vendor.js"></script>
+    <script src="scripts/4517855e.vendor.min.js"></script>
 
-    <script src="scripts/b46ce37e.app.js"></script>
+    <script src="scripts/c55c3997.app.min.js"></script>
+    <script>
+      RAML.Settings.proxy = '/proxy/';
+    </script>
   </body>
 </html>

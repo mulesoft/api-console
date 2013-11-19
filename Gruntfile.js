@@ -36,7 +36,7 @@ module.exports = function (grunt) {
         options: {
           base: 'app',
           module: 'ramlConsoleApp',
-          concat: 'dist/scripts/app.js'
+          concat: 'dist/scripts/app.min.js'
         },
         src: 'app/views/**.html',
         dest: 'dist/templates.js'
@@ -50,7 +50,18 @@ module.exports = function (grunt) {
         dest: 'dist/templates.js' // FIXME: put this into a test directory
       }
     },
-
+    cssmin: {
+      dist: {
+        files: {
+          '<%= yeoman.dist %>/styles/app.min.css': [
+            '<%= yeoman.dist %>/styles/app.min.css'
+          ]
+        },
+        options: {
+          keepSpecialComments: '0'
+        }
+      }
+    },
     yeoman: yeomanConfig,
     watch: {
       less: {
@@ -104,15 +115,6 @@ module.exports = function (grunt) {
             ];
           }
         }
-      },
-      dist: {
-        options: {
-          middleware: function (connect) {
-            return [
-              mountFolder(connect, yeomanConfig.dist)
-            ];
-          }
-        }
       }
     },
     open: {
@@ -149,8 +151,8 @@ module.exports = function (grunt) {
       dist: {
         files: {
           src: [
-            '<%= yeoman.dist %>/scripts/{,*/}*.js',
-            '<%= yeoman.dist %>/styles/{,*/}*.css'
+            '<%= yeoman.dist %>/scripts/*.min.js',
+            '<%= yeoman.dist %>/styles/*.min.css'
           ]
         }
       }
@@ -168,17 +170,6 @@ module.exports = function (grunt) {
         dirs: ['<%= yeoman.dist %>']
       }
     },
-    htmlmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>',
-          src: ['*.html', 'views/*.html'],
-          dest: '<%= yeoman.dist %>'
-        }]
-      }
-    },
-
     copy: {
       dist: {
         files: [{
@@ -205,15 +196,15 @@ module.exports = function (grunt) {
           dest: 'dist/font/'
         }]
       },
-      unrev: {
+      backupOriginal: {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
           dest: '<%= yeoman.dist %>',
-          src: ['scripts/*.*.js', 'styles/*.*.css'],
+          src: ['scripts/*.min.js', 'styles/*.min.css'],
           rename: function(dest, src) {
-            var regex = /[0-9a-f]{8}\.(.*)/;
-            return dest + '/' + src.replace(regex, '$1');
+            var regex = /(.*)\.min(.*)/;
+            return dest + '/' + src.replace(regex, '$1$2');
           }
         }]
       }
@@ -238,29 +229,7 @@ module.exports = function (grunt) {
         configFile: 'spec/integration/support/karma.conf.js'
       }
     },
-    cdnify: {
-      dist: {
-        html: ['<%= yeoman.dist %>/*.html']
-      }
-    },
-    ngmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.dist %>/scripts',
-          src: '*.js',
-          dest: '<%= yeoman.dist %>/scripts'
-        }]
-      }
-    },
     uglify: {
-      dist: {
-        files: {
-          '<%= yeoman.dist %>/scripts/scripts.js': [
-            '<%= yeoman.dist %>/scripts/scripts.js'
-          ]
-        }
-      },
       options: {
         mangle: false
       }
@@ -279,36 +248,38 @@ module.exports = function (grunt) {
           paths: ['app/styles/less']
         },
         files: {
-          'dist/styles/app.css': 'app/styles/less/app.less'
+          'dist/styles/app.min.css': 'app/styles/less/app.less'
         }
       }
     }
 
   });
 
-  grunt.loadNpmTasks('grunt-angular-templates');
-  grunt.loadNpmTasks('grunt-contrib-concat');
+  var linted = false;
 
-  grunt.registerTask('server', function (target) {
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+  grunt.registerTask('lint', function() {
+    if (!linted) {
+      linted = true;
+      grunt.task.run(['jshint']);
     }
-
-    grunt.task.run([
-      'clean:server',
-      'less:development',
-      'connect:livereload',
-      'open',
-      'watch'
-    ]);
   });
 
+  grunt.registerTask('server', [
+    'clean:server',
+    'less:development',
+    'connect:livereload',
+    'open',
+    'watch'
+  ]);
+
   grunt.registerTask('spec', [
+    'lint',
     'karma:unit',
     'spec:integration'
   ]);
 
   grunt.registerTask('spec:unit', [
+    'lint',
     'karma:unit'
   ]);
 
@@ -317,12 +288,14 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('spec:integration', [
+    'lint',
     'ngtemplates:test',
     'karma:integration',
     'clean:postCompilation'
   ]);
 
   grunt.registerTask('scenario', [
+    'lint',
     'clean:server',
     'less:development',
     'connect:test',
@@ -343,20 +316,22 @@ module.exports = function (grunt) {
     'concat',
     'copy:dist',
     'less:dist',
+    'copy:backupOriginal',
+    'uglify',
+    'cssmin',
     'rev',
-    'copy:unrev',
     'usemin',
     'clean:postCompilation'
   ]);
 
   grunt.registerTask('default', [
-    'jshint',
+    'lint',
     'test',
     'build'
   ]);
 
   grunt.registerTask('test', [
-    'jshint',
+    'lint',
     'spec',
     'scenario'
   ]);

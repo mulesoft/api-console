@@ -9863,7 +9863,7 @@ RAML.Filters = {};
 
   var uri = location.protocol + '//' + location.host + location.pathname + 'authentication/oauth2.html';
   RAML.Settings.oauth2RedirectUri = RAML.Settings.oauth2RedirectUri || uri;
-  RAML.Settings.proxy = RAML.Settings.proxy || '/proxy/';
+  // RAML.Settings.proxy = RAML.Settings.proxy || '/proxy/';
 })();
 
 'use strict';
