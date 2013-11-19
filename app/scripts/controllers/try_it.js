@@ -119,6 +119,7 @@
 
   TryIt.prototype.execute = function() {
     this.missingUriParameters = false;
+    this.disallowedAnonymousRequest = false;
 
     var response = this.response = {};
 
@@ -167,6 +168,10 @@
       var authStrategy;
 
       try {
+        if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
+          this.disallowedAnonymousRequest = true;
+        }
+
         var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
         var credentials = this.keychain[this.keychain.selectedScheme];
         authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);

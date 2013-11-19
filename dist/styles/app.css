@@ -3650,10 +3650,19 @@ raml-console article#raml-console .try-it form .form-actions .icon-spinner,
   vertical-align: middle;
 }
 raml-console article#raml-console .try-it form .form-actions .error,
-#raml-console-loader .try-it form .form-actions .error {
+#raml-console-loader .try-it form .form-actions .error,
+raml-console article#raml-console .try-it form .form-actions .warning,
+#raml-console-loader .try-it form .form-actions .warning {
   display: inline;
-  color: #d26460;
   margin-right: 10px;
+}
+raml-console article#raml-console .try-it form .form-actions .error,
+#raml-console-loader .try-it form .form-actions .error {
+  color: #d26460;
+}
+raml-console article#raml-console .try-it form .form-actions .warning,
+#raml-console-loader .try-it form .form-actions .warning {
+  color: #cd9356;
 }
 raml-console article#raml-console .try-it form:before,
 #raml-console-loader .try-it form:before,

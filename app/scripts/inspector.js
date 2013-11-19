@@ -24,6 +24,10 @@ RAML.Inspector = (function() {
 
       return selectedSchemes;
     };
+
+    method.allowsAnonymousAccess = function() {
+      return (this.securedBy || []).some(function(name) { return name === null; });
+    };
   }
 
   function extractResources(basePathSegments, api, securitySchemes) {
