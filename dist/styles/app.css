@@ -3534,6 +3534,10 @@ raml-console article#raml-console .documentation .named-parameters .parameter .i
 #raml-console-loader .documentation .named-parameters .parameter .info [markdown] {
   margin: 5px 0 0 0;
 }
+raml-console article#raml-console .documentation .responses h2 a,
+#raml-console-loader .documentation .responses h2 a {
+  color: #a2a4aa;
+}
 raml-console article#raml-console .documentation .responses .named-parameters h2,
 #raml-console-loader .documentation .responses .named-parameters h2 {
   font-size: 15px;

@@ -10154,10 +10154,12 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
   );
 
   $templateCache.put("views/responses.tmpl.html",
-    "<section collapsible ng-repeat='(responseCode, response) in method.responses'>\n" +
+    "<section collapsible collapsed ng-repeat='(responseCode, response) in method.responses'>\n" +
     "  <h2 role=\"response-code\" collapsible-toggle>\n" +
-    "    <i ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
-    "    {{responseCode}}\n" +
+    "    <a href=''>\n" +
+    "      <i ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
+    "      {{responseCode}}\n" +
+    "    </a>\n" +
     "  </h2>\n" +
     "  <div collapsible-content>\n" +
     "    <section role='response'>\n" +
@@ -10168,11 +10170,11 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "        <h4>{{mediaType}}</h4>\n" +
     "        <section ng-if=\"definition.schema\">\n" +
     "          <h5>Schema</h5>\n" +
-    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.schema\" visible=\"methodView.expanded && documentation.responsesActive\"></div>\n" +
+    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.schema\" visible=\"methodView.expanded && !collapsed\"></div>\n" +
     "        </section>\n" +
     "        <section ng-if=\"definition.example\">\n" +
     "          <h5>Example</h5>\n" +
-    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"methodView.expanded && documentation.responsesActive\"></div>\n" +
+    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"methodView.expanded && !collapsed\"></div>\n" +
     "        </section>\n" +
     "      </section>\n" +
     "    </section>\n" +
