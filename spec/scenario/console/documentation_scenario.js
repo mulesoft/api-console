@@ -142,6 +142,10 @@ describe('API Documentation', function() {
       var resource = toggleResource(1);
       var method = openMethod(1, resource);
       var documentation = openDocumentationTab(2, method);
+
+      documentation.findElement(protractor.By.linkText('200')).click();
+      documentation.findElement(protractor.By.linkText('404')).click();
+
       var header = documentation.$('[role="parameter"]');
 
       expect(header.getText()).toMatch('SomeHeader');

@@ -1,7 +1,9 @@
-<section collapsible ng-repeat='(responseCode, response) in method.responses'>
+<section collapsible collapsed ng-repeat='(responseCode, response) in method.responses'>
   <h2 role="response-code" collapsible-toggle>
-    <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
-    {{responseCode}}
+    <a href=''>
+      <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
+      {{responseCode}}
+    </a>
   </h2>
   <div collapsible-content>
     <section role='response'>
@@ -12,11 +14,11 @@
         <h4>{{mediaType}}</h4>
         <section ng-if="definition.schema">
           <h5>Schema</h5>
-          <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && documentation.responsesActive"></div>
+          <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && !collapsed"></div>
         </section>
         <section ng-if="definition.example">
           <h5>Example</h5>
-          <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && documentation.responsesActive"></div>
+          <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && !collapsed"></div>
         </section>
       </section>
     </section>
