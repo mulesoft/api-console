@@ -12,7 +12,7 @@ files = [
     'app/vendor/angular.js',
     'app/vendor/angular-resource.js',
     'app/vendor/angular-sanitize.js',
-    'app/vendor/showdown.min.js',
+    'app/vendor/bower_components/showdown/src/showdown.js',
     'app/vendor/bower_components/codemirror/lib/codemirror.js',
     'app/vendor/bower_components/codemirror/mode/xml/xml.js',
     'app/vendor/bower_components/codemirror/mode/javascript/javascript.js',

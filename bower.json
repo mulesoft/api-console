@@ -27,6 +27,7 @@
   "dependencies": {
     "raml-js-parser": "raml-org/raml-js-parser#8308aea2839a6683ee026228e7a2177fe834a6c0",
     "codemirror": "3.15.0",
+    "showdown": "0.3.1",
     "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29"
   }
 }
