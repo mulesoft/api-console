@@ -94,7 +94,7 @@ module.exports = function (grunt) {
               // For dist, fonts are copied to dist/font/ and hosted at /font
               // For dev, strip /font from path and host fonts at root
               stripFontPathPrefix(connect),
-              mountFolder(connect, 'app/vendor/font-awesome/font'),
+              mountFolder(connect, 'app/vendor/bower_components/font-awesome/font'),
               mountFolder(connect, 'app/vendor/open-sans'),
               mountFolder(connect, yeomanConfig.app)
             ];
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
               mountFolder(connect, '.tmp'),
               mountFolder(connect, 'test'),
               stripFontPathPrefix(connect),
-              mountFolder(connect, 'app/vendor/font-awesome/font'),
+              mountFolder(connect, 'app/vendor/bower_components/font-awesome/font'),
               mountFolder(connect, 'app/vendor/open-sans'),
               mountFolder(connect, yeomanConfig.app)
             ];
@@ -185,7 +185,7 @@ module.exports = function (grunt) {
         },
         {
           expand: true,
-          cwd: 'app/vendor/font-awesome/font',
+          cwd: 'app/vendor/bower_components/font-awesome/font',
           src: ['*'],
           dest: 'dist/font/'
         },
