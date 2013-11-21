@@ -1884,9 +1884,9 @@ RAML.Filters = {};
   module.filter('yesNo', RAML.Filters.yesNo);
 })();
 
-angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache) {
+angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
 
-  $templateCache.put("views/api_resources.tmpl.html",
+  $templateCache.put('views/api_resources.tmpl.html',
     "<div id=\"raml-console-api-reference\" role=\"resources\">\n" +
     "  <div collapsible role=\"resource-group\" class=\"resource-group\" ng-repeat=\"resourceGroup in api.resourceGroups\">\n" +
     "    <h1 collapsible-toggle class='path'>\n" +
@@ -1901,7 +1901,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</div>\n"
   );
 
-  $templateCache.put("views/basic_auth.tmpl.html",
+
+  $templateCache.put('views/basic_auth.tmpl.html',
     "<fieldset class=\"labelled-inline\" role=\"basic\">\n" +
     "  <div class=\"control-group\">\n" +
     "    <label for=\"username\">Username:</label>\n" +
@@ -1915,7 +1916,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</fieldset>\n"
   );
 
-  $templateCache.put("views/documentation.tmpl.html",
+
+  $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
     "  <ul role=\"traits\" class=\"modifiers\">\n" +
     "    <li class=\"trait\" ng-repeat=\"trait in documentation.traits()\">\n" +
@@ -1943,7 +1945,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</section>\n"
   );
 
-  $templateCache.put("views/method.tmpl.html",
+
+  $templateCache.put('views/method.tmpl.html',
     "<div class='method' role=\"method\" ng-class=\"methodView.cssClass()\">\n" +
     "  <div class='accordion-toggle method-summary' role=\"methodSummary\" ng-class='method.method' ng-click='methodView.toggleExpansion()'>\n" +
     "    <span role=\"verb\" class='method-name' ng-class='method.method'>{{method.method}}</span>\n" +
@@ -1962,14 +1965,16 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</div>\n"
   );
 
-  $templateCache.put("views/named_parameters.tmpl.html",
+
+  $templateCache.put('views/named_parameters.tmpl.html',
     "<fieldset class='labelled-inline bordered' ng-show=\"parameters\">\n" +
     "  <legend>{{heading}}</legend>\n" +
     "  <parameter-fields parameters=\"parameters\" request-data=\"requestData\"></parameter-fields>\n" +
     "</fieldset>\n"
   );
 
-  $templateCache.put("views/named_parameters_documentation.tmpl.html",
+
+  $templateCache.put('views/named_parameters_documentation.tmpl.html',
     "<section class='named-parameters' ng-show='parameters'>\n" +
     "  <h2>{{heading}}</h2>\n" +
     "  <section role='parameter' class='parameter' ng-repeat='param in parameters'>\n" +
@@ -1986,7 +1991,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</section>\n"
   );
 
-  $templateCache.put("views/oauth2.tmpl.html",
+
+  $templateCache.put('views/oauth2.tmpl.html',
     "<fieldset class=\"labelled-inline\" role=\"oauth2\">\n" +
     "  <div class=\"control-group\">\n" +
     "    <label for=\"clientId\">Client ID:</label>\n" +
@@ -2000,7 +2006,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</fieldset>\n"
   );
 
-  $templateCache.put("views/parameter_fields.tmpl.html",
+
+  $templateCache.put('views/parameter_fields.tmpl.html',
     "<fieldset>\n" +
     "  <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters track by parameterName\">\n" +
     "    <label for=\"{{parameterName}}\">{{parameter.displayName}}:</label>\n" +
@@ -2012,11 +2019,13 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</fieldset>\n"
   );
 
-  $templateCache.put("views/parameters.tmpl.html",
+
+  $templateCache.put('views/parameters.tmpl.html',
     "<named-parameters-documentation ng-repeat='parameterGroup in parameterGroups' heading='{{parameterGroup[0]}}' role='parameter-group' parameters='parameterGroup[1]'></named-parameters-documentation>\n"
   );
 
-  $templateCache.put("views/path_builder.tmpl.html",
+
+  $templateCache.put('views/path_builder.tmpl.html',
     "<span role=\"path\" class=\"path\">\n" +
     "  <span clsas=\"segment\">\n" +
     "    <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
@@ -2042,7 +2051,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</span>\n"
   );
 
-  $templateCache.put("views/raml-console.tmpl.html",
+
+  $templateCache.put('views/raml-console.tmpl.html',
     "<article role=\"api-console\" id=\"raml-console\">\n" +
     "  <div role=\"error\" ng-if=\"parseError\">\n" +
     "    {{parseError}}\n" +
@@ -2066,7 +2076,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</article>\n"
   );
 
-  $templateCache.put("views/requests.tmpl.html",
+
+  $templateCache.put('views/requests.tmpl.html',
     "<h2 ng-if=\"method.body\">Body</h2>\n" +
     "<section ng-repeat=\"(mediaType, definition) in method.body track by mediaType\">\n" +
     "  <h4>{{mediaType}}</h4>\n" +
@@ -2081,7 +2092,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</section>\n"
   );
 
-  $templateCache.put("views/resource.tmpl.html",
+
+  $templateCache.put('views/resource.tmpl.html',
     "<div ng-class=\"{expanded: resourceView.expanded, collapsed: !resourceView.expanded}\"\n" +
     "     class='resource' role=\"resource\">\n" +
     "\n" +
@@ -2119,7 +2131,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</div>\n"
   );
 
-  $templateCache.put("views/responses.tmpl.html",
+
+  $templateCache.put('views/responses.tmpl.html',
     "<section collapsible collapsed ng-repeat='(responseCode, response) in method.responses'>\n" +
     "  <h2 role=\"response-code\" collapsible-toggle>\n" +
     "    <a href=''>\n" +
@@ -2148,7 +2161,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</section>\n"
   );
 
-  $templateCache.put("views/root_documentation.tmpl.html",
+
+  $templateCache.put('views/root_documentation.tmpl.html',
     "<div role=\"root-documentation\">\n" +
     "  <section collapsible collapsed ng-repeat=\"document in api.documentation\">\n" +
     "    <h2 collapsible-toggle>{{document.title}}</h2>\n" +
@@ -2159,7 +2173,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</div>\n"
   );
 
-  $templateCache.put("views/security_schemes.tmpl.html",
+
+  $templateCache.put('views/security_schemes.tmpl.html',
     "<div class=\"authentication\">\n" +
     "  <fieldset class=\"labelled-radio-group bordered\">\n" +
     "    <legend>Authentication</legend>\n" +
@@ -2188,13 +2203,15 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</div>\n"
   );
 
-  $templateCache.put("views/tab.tmpl.html",
+
+  $templateCache.put('views/tab.tmpl.html',
     "<div class=\"tab-pane\" ng-class=\"{active: active, disabled: disabled}\" ng-show=\"active\" ng-transclude>\n" +
     "\n" +
     "</div>\n"
   );
 
-  $templateCache.put("views/tabset.tmpl.html",
+
+  $templateCache.put('views/tabset.tmpl.html',
     "<div class=\"tabbable\">\n" +
     "  <ul class=\"nav nav-tabs\">\n" +
     "    <li ng-repeat=\"tab in tabs\" ng-class=\"{active: tab.active, disabled: tab.disabled}\">\n" +
@@ -2206,7 +2223,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</div>\n"
   );
 
-  $templateCache.put("views/try_it.tmpl.html",
+
+  $templateCache.put('views/try_it.tmpl.html',
     "<section class=\"try-it\">\n" +
     "\n" +
     "  <form>\n" +

@@ -1,12 +1,29 @@
 'use strict';
 
-console.log('loading copy_vendor.js');
-
-exports.name = 'copyVendor';
+exports.name = 'copy';
 
 exports.createConfig = function(context, block) {
-  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-  console.log(context);
-  console.log(block);
-  console.log(block.dest);
+  if (block.type === 'js' && /vendor/.exec(block.dest)) {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    console.log(context);
+    console.log(block);
+    var cfg = {
+      files: [{
+        expand: true,
+        dot: true,
+        cwd: 'app',
+        dest: 'dist/scripts/vendor',
+        flatten: true,
+        src: []
+      }]
+    };
+
+    block.src.forEach(function(file) {
+      cfg.files[0].src.push(file);
+    });
+
+    return cfg;
+  } else {
+    return {};
+  }
 };

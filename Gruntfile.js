@@ -1,6 +1,5 @@
 // Generated on 2013-07-08 using generator-angular 0.3.0
 'use strict';
-var copyVendor = require('./tasks/copy_vendor');
 
 var LIVERELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({
@@ -35,19 +34,18 @@ module.exports = function (grunt) {
     ngtemplates: {
       dist: {
         options: {
-          base: 'app',
-          module: 'ramlConsoleApp',
-          concat: 'dist/scripts/app.min.js'
+          module: 'ramlConsoleApp'
         },
-        src: 'app/views/**.html',
-        dest: 'dist/templates.js'
+        cwd: 'app',
+        src: 'views/**.html',
+        dest: '.tmp/templates.js'
       },
       test: {
         options: {
-          base: 'app',
           module: 'ramlConsoleApp'
         },
-        src: 'app/views/**.html',
+        cwd: 'app',
+        src: 'views/**.html',
         dest: 'dist/templates.js' // FIXME: put this into a test directory
       }
     },
@@ -164,8 +162,10 @@ module.exports = function (grunt) {
         dest: '<%= yeoman.dist %>',
         flow: {
           steps: {
-            js: [copyVendor, 'concat', 'uglifyjs']
-          }
+            js: ['concat', 'uglifyjs', require('./tasks/copy_vendor')],
+            css: ['concat', 'cssmin'],
+          },
+          post: []
         }
       }
     },
@@ -174,6 +174,12 @@ module.exports = function (grunt) {
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
         dirs: ['<%= yeoman.dist %>']
+      }
+    },
+    concat: {
+      addTemplate: {
+        src: [ '.tmp/concat/scripts/app.min.js', '.tmp/templates.js' ],
+        dest: '.tmp/concat/scripts/app.min.js'
       }
     },
     copy: {
@@ -205,7 +211,7 @@ module.exports = function (grunt) {
       backupOriginal: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.dist %>',
+          cwd: '.tmp/concat',
           dest: '<%= yeoman.dist %>',
           src: ['scripts/*.min.js', 'styles/*.min.css'],
           rename: function(dest, src) {
@@ -319,9 +325,11 @@ module.exports = function (grunt) {
     'clean',
     'useminPrepare',
     'ngtemplates:dist',
-    'concat',
-    'copy:dist',
     'less:dist',
+    'concat:generated',
+    'concat:addTemplate',
+    'copy:dist',
+    'copy:generated',
     'copy:backupOriginal',
     'uglify',
     'cssmin',
