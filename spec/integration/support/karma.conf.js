@@ -16,7 +16,7 @@ files = [
     'app/vendor/bower_components/codemirror/lib/codemirror.js',
     'app/vendor/bower_components/codemirror/mode/xml/xml.js',
     'app/vendor/bower_components/codemirror/mode/javascript/javascript.js',
-    'app/vendor/vkbeautify.0.99.00.beta.js',
+    'app/vendor/bower_components/vkbeautify/vkbeautify.js',
     'app/scripts/services.js',
     'app/scripts/**/*.js',
     'dist/templates.js',
