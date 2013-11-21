@@ -25,6 +25,7 @@
     "test"
   ],
   "dependencies": {
-    "raml-js-parser": "raml-org/raml-js-parser#8308aea2839a6683ee026228e7a2177fe834a6c0"
+    "raml-js-parser": "raml-org/raml-js-parser#8308aea2839a6683ee026228e7a2177fe834a6c0",
+    "codemirror": "3.15.0"
   }
 }
