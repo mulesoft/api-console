@@ -80,7 +80,7 @@ raml-console article#raml-console,
  *  Author - Dave Gandy
  *  ------------------------------------------------------------------------------
  *  Email: dave@fontawesome.io
- *  Twitter: http://twitter.com/davegandy
+ *  Twitter: http://twitter.com/byscuits
  *  Work: Lead Product Designer @ Kyruus - http://kyruus.com
  */
 
@@ -2181,10 +2181,6 @@ raml-console article#raml-console .cm-s-default .cm-meta,
 #raml-console-loader .cm-s-default .cm-meta {
   color: #555;
 }
-raml-console article#raml-console .cm-s-default .cm-error,
-#raml-console-loader .cm-s-default .cm-error {
-  color: #f00;
-}
 raml-console article#raml-console .cm-s-default .cm-qualifier,
 #raml-console-loader .cm-s-default .cm-qualifier {
   color: #555;
@@ -2243,6 +2239,10 @@ raml-console article#raml-console .cm-link,
 #raml-console-loader .cm-link {
   text-decoration: underline;
 }
+raml-console article#raml-console .cm-s-default .cm-error,
+#raml-console-loader .cm-s-default .cm-error {
+  color: #f00;
+}
 raml-console article#raml-console .cm-invalidchar,
 #raml-console-loader .cm-invalidchar {
   color: #f00;
@@ -2254,6 +2254,10 @@ raml-console article#raml-console div.CodeMirror span.CodeMirror-matchingbracket
 raml-console article#raml-console div.CodeMirror span.CodeMirror-nonmatchingbracket,
 #raml-console-loader div.CodeMirror span.CodeMirror-nonmatchingbracket {
   color: #f22;
+}
+raml-console article#raml-console .CodeMirror-activeline-background,
+#raml-console-loader .CodeMirror-activeline-background {
+  background: #e8f2ff;
 }
 raml-console article#raml-console .CodeMirror,
 #raml-console-loader .CodeMirror {
@@ -2278,6 +2282,8 @@ raml-console article#raml-console .CodeMirror-scroll,
   /* Prevent dragging from highlighting the element */
 
   position: relative;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
 raml-console article#raml-console .CodeMirror-sizer,
 #raml-console-loader .CodeMirror-sizer {
@@ -2331,6 +2337,8 @@ raml-console article#raml-console .CodeMirror-gutter,
 #raml-console-loader .CodeMirror-gutter {
   white-space: normal;
   height: 100%;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
   padding-bottom: 30px;
   margin-bottom: -32px;
   display: inline-block;
@@ -2375,6 +2383,18 @@ raml-console article#raml-console .CodeMirror-wrap pre,
   white-space: pre-wrap;
   word-break: normal;
 }
+raml-console article#raml-console .CodeMirror-code pre,
+#raml-console-loader .CodeMirror-code pre {
+  border-right: 30px solid transparent;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+raml-console article#raml-console .CodeMirror-wrap .CodeMirror-code pre,
+#raml-console-loader .CodeMirror-wrap .CodeMirror-code pre {
+  border-right: none;
+  width: auto;
+}
 raml-console article#raml-console .CodeMirror-linebackground,
 #raml-console-loader .CodeMirror-linebackground {
   position: absolute;
@@ -2398,7 +2418,7 @@ raml-console article#raml-console .CodeMirror-measure,
 #raml-console-loader .CodeMirror-measure {
   position: absolute;
   width: 100%;
-  height: 0px;
+  height: 0;
   overflow: hidden;
   visibility: hidden;
 }

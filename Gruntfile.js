@@ -1,5 +1,6 @@
 // Generated on 2013-07-08 using generator-angular 0.3.0
 'use strict';
+var copyVendor = require('./tasks/copy_vendor');
 
 var LIVERELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({
@@ -160,7 +161,12 @@ module.exports = function (grunt) {
     useminPrepare: {
       html: '<%= yeoman.app %>/index.html',
       options: {
-        dest: '<%= yeoman.dist %>'
+        dest: '<%= yeoman.dist %>',
+        flow: {
+          steps: {
+            js: [copyVendor, 'concat', 'uglifyjs']
+          }
+        }
       }
     },
     usemin: {
