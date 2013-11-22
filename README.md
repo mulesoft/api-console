@@ -12,15 +12,15 @@ There are two ways you can include the console: directly, or within an iframe. T
 
 1. Include the packaged CSS and JS in your document
 
-       <head>
-         …
-         <link rel="stylesheet" href="path/to/dist/styles/app.css" type="text/css" />
-       </head>
-       <body>
-         …
-         <script src="path/to/dist/scripts/vendor.js"></script>
-         <script src="path/to/dist/scripts/app.js"></script>
-       </body>
+        <head>
+          …
+          <link rel="stylesheet" href="path/to/dist/styles/app.css" type="text/css" />
+        </head>
+        <body>
+          …
+          <script src="path/to/dist/scripts/vendor.js"></script>
+          <script src="path/to/dist/scripts/app.js"></script>
+        </body>
 
 2. Include the `<raml-console>` directive, specifying your RAML as a `src` attribute.
 
@@ -40,7 +40,7 @@ The console's javascript includes various dependencies, for example [AngularJS](
 
 1. Within the page that you would like to include the console into, add the following:
 
-       <iframe src="path/to/dist/index.html?raml=path/to/your.api.raml"/>
+        <iframe src="path/to/dist/index.html?raml=path/to/your.api.raml"/>
 
 #### Caveats
 
