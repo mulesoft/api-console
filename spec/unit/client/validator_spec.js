@@ -157,9 +157,10 @@ describe("RAML.Client.Validator", function() {
 
     describe("with valid values", function() {
       it("has no errors", function() {
-        expect(validator).toAcceptValues('true', 'false', '');
+        expect(validator).toAcceptValues('true', 'false', '', undefined, null);
       });
     });
+
 
     describe("with an invalid value", function() {
       it("includes boolean in the errors", function() {
