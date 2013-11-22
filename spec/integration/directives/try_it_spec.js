@@ -489,6 +489,7 @@ describe("RAML.Controllers.tryIt", function() {
         '      settings:',
         '        authorizationUri: https://example.com/oauth/authorize',
         '        accessTokenUri: https://example.com/oauth/access_token',
+        '        authorizationGrants: [code]',
         '/resource:',
         '  get:',
         '    securedBy: [oauth2]'
@@ -547,6 +548,7 @@ describe("RAML.Controllers.tryIt", function() {
         '      settings:',
         '        authorizationUri: https://example.com/oauth/authorize',
         '        accessTokenUri: https://example.com/oauth/access_token',
+        '        authorizationGrants: [code]',
         '/resource:',
         '  get:',
         '    securedBy: [oauth2: { scopes: [ ADMINISTRATOR ] } ]'

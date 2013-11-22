@@ -8349,40 +8349,40 @@ RAML.Client.AuthStrategies.base64 = (function () {
 })();
 
 (function() {
-  /* jshint camelcase: false */
   'use strict';
 
-  function tokenConstructorFor(scheme) {
-    var describedBy = scheme.describedBy || {},
-        queryParameters = describedBy.queryParameters || {};
-
-    if (queryParameters.access_token) {
-      return Oauth2.QueryParameterToken;
-    }
-
-    return Oauth2.HeaderToken;
-  }
-
-  var WINDOW_NAME = 'raml-console-oauth2';
-
   var Oauth2 = function(scheme, credentials) {
-    this.scheme = scheme;
-    this.credentialsManager = Oauth2.credentialsManager(credentials);
+    this.grant = RAML.Client.AuthStrategies.Oauth2.Grant.create(scheme.settings, credentials);
+    this.tokenFactory = RAML.Client.AuthStrategies.Oauth2.Token.createFactory(scheme);
   };
 
   Oauth2.prototype.authenticate = function() {
-    var authorizationRequest = Oauth2.authorizationRequest(this.scheme, this.credentialsManager);
-    var accessTokenRequest = Oauth2.accessTokenRequest(this.scheme, this.credentialsManager);
-
-    return authorizationRequest.then(accessTokenRequest);
+    return this.grant.request().then(Oauth2.createToken(this.tokenFactory));
   };
 
-  Oauth2.credentialsManager = function(credentials) {
+  RAML.Client.AuthStrategies.Oauth2 = Oauth2;
+})();
+
+(function() {
+  'use strict';
+
+  RAML.Client.AuthStrategies.Oauth2.createToken = function(tokenFactory) {
+    return function(token) {
+      return tokenFactory(token);
+    };
+  };
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  RAML.Client.AuthStrategies.Oauth2.credentialsManager = function(credentials, responseType) {
     return {
       authorizationUrl : function(baseUrl) {
         return baseUrl +
           '?client_id=' + credentials.clientId +
-          '&response_type=code' +
+          '&response_type=' + responseType +
           '&redirect_uri=' + RAML.Settings.oauth2RedirectUri;
       },
 
@@ -8397,25 +8397,75 @@ RAML.Client.AuthStrategies.base64 = (function () {
       }
     };
   };
+})();
 
-  Oauth2.authorizationRequest = function(scheme, credentialsManager) {
-    var settings = scheme.settings;
-    var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUri);
-    window.open(authorizationUrl, WINDOW_NAME);
+(function() {
+  'use strict';
 
-    var deferred = $.Deferred();
-    window.RAML.authorizationSuccess = function(code) { deferred.resolve(code); };
-    return deferred.promise();
+  var GRANTS = [ 'code', 'token' ], IMPLICIT_GRANT = 'token';
+  var Oauth2 = RAML.Client.AuthStrategies.Oauth2;
+
+  function grantTypeFrom(settings) {
+    var authorizationGrants = settings.authorizationGrants || [];
+    var filtered = authorizationGrants.filter(function(grant) { return grant === IMPLICIT_GRANT; });
+    var specifiedGrant = filtered[0] || authorizationGrants[0];
+
+    if (!GRANTS.some(function(grant) { return grant === specifiedGrant; })) {
+      throw new Error('Unknown grant type: ' + specifiedGrant);
+    }
+
+    return specifiedGrant;
+  }
+
+  var Grant = {
+    create: function(settings, credentials) {
+      var type = grantTypeFrom(settings);
+      var credentialsManager = Oauth2.credentialsManager(credentials, type);
+
+      var className = type.charAt(0).toUpperCase() + type.slice(1);
+      return new this[className](settings, credentialsManager);
+    }
   };
 
-  Oauth2.accessTokenRequest = function(scheme, credentialsManager) {
-    var settings = scheme.settings;
-    var TokenConstructor = tokenConstructorFor(scheme);
+  Grant.Code = function(settings, credentialsManager) {
+    this.settings = settings;
+    this.credentialsManager = credentialsManager;
+  };
+
+  Grant.Code.prototype.request = function() {
+    var requestAuthorization = Oauth2.requestAuthorization(this.settings, this.credentialsManager);
+    var requestAccessToken = Oauth2.requestAccessToken(this.settings, this.credentialsManager);
+
+    return requestAuthorization.then(requestAccessToken);
+  };
+
+  Grant.Token = function(settings, credentialsManager) {
+    this.settings = settings;
+    this.credentialsManager = credentialsManager;
+  };
+
+  Grant.Token.prototype.request = function() {
+    return Oauth2.requestAuthorization(this.settings, this.credentialsManager);
+  };
+
+  Oauth2.Grant = Grant;
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  function proxyRequest(url) {
+    if (RAML.Settings.proxy) {
+      url = RAML.Settings.proxy + url;
+    }
+
+    return url;
+  }
+
+  RAML.Client.AuthStrategies.Oauth2.requestAccessToken = function(settings, credentialsManager) {
     return function(code) {
-      var url = settings.accessTokenUri;
-      if (RAML.Settings.proxy) {
-        url = RAML.Settings.proxy + url;
-      }
+      var url = proxyRequest(settings.accessTokenUri);
 
       var requestOptions = {
         url: url,
@@ -8423,30 +8473,73 @@ RAML.Client.AuthStrategies.base64 = (function () {
         data: credentialsManager.accessTokenParameters(code)
       };
 
-      var createToken = function(data) {
-        return new TokenConstructor(data.access_token);
-      };
-      return $.ajax(requestOptions).then(createToken);
+      return $.ajax(requestOptions).then(function(data) {
+        return data.access_token;
+      });
     };
   };
+})();
 
-  Oauth2.QueryParameterToken = function(token) {
-    this.accessToken = token;
+(function() {
+  'use strict';
+
+  var WINDOW_NAME = 'raml-console-oauth2';
+
+  RAML.Client.AuthStrategies.Oauth2.requestAuthorization = function(settings, credentialsManager) {
+    var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUri),
+        deferred = $.Deferred();
+
+    window.RAML.authorizationSuccess = function(code) { deferred.resolve(code); };
+    window.open(authorizationUrl, WINDOW_NAME);
+    return deferred.promise();
+  };
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  function tokenConstructorFor(scheme) {
+    var describedBy = scheme.describedBy || {},
+        headers = describedBy.headers || {},
+        queryParameters = describedBy.queryParameters || {};
+
+    if (headers.Authorization) {
+      return Header;
+    }
+
+    if (queryParameters.access_token) {
+      return QueryParameter;
+    }
+
+    return Header;
+  }
+
+  var Header = function(accessToken) {
+    this.accessToken = accessToken;
   };
 
-  Oauth2.QueryParameterToken.prototype.sign = function(request) {
-    request.queryParam('access_token', this.accessToken);
-  };
-
-  Oauth2.HeaderToken = function(token) {
-    this.accessToken = token;
-  };
-
-  Oauth2.HeaderToken.prototype.sign = function(request) {
+  Header.prototype.sign = function(request) {
     request.header('Authorization', 'Bearer ' + this.accessToken);
   };
 
-  RAML.Client.AuthStrategies.Oauth2 = Oauth2;
+  var QueryParameter = function(accessToken) {
+    this.accessToken = accessToken;
+  };
+
+  QueryParameter.prototype.sign = function(request) {
+    request.queryParam('access_token', this.accessToken);
+  };
+
+  RAML.Client.AuthStrategies.Oauth2.Token = {
+    createFactory: function(scheme) {
+      var TokenConstructor = tokenConstructorFor(scheme);
+
+      return function createToken(value) {
+        return new TokenConstructor(value);
+      };
+    }
+  };
 })();
 
 (function() {
