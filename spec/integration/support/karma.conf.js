@@ -13,6 +13,7 @@ files = [
     'app/vendor/angular-resource.js',
     'app/vendor/angular-sanitize.js',
     'app/vendor/showdown.min.js',
+    'app/vendor/showdown-table.min.js',
     'app/vendor/codemirror/codemirror.js',
     'app/vendor/codemirror/xml.js',
     'app/vendor/codemirror/javascript.js',

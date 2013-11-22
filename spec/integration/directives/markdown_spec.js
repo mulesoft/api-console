@@ -5,7 +5,6 @@ describe("RAML.Directives.markdown", function() {
 
   beforeEach(function() {
     converter = jasmine.createSpyObj('converter', ['makeHtml']);
-    spyOn(Showdown, 'converter').andReturn(converter);
     scope = createScope();
     scope.markdownText = "input";
   });
@@ -13,6 +12,7 @@ describe("RAML.Directives.markdown", function() {
   describe("by default", function() {
     beforeEach(function() {
       converter.makeHtml.andReturn('<strong>result</strong>');
+      spyOn(Showdown, 'converter').andReturn(converter);
       $el = compileTemplate("<div markdown='markdownText'></div>", scope);
     });
 
@@ -28,6 +28,7 @@ describe("RAML.Directives.markdown", function() {
   describe("when Showdown returns unsafe HTML", function() {
     beforeEach(function() {
       converter.makeHtml.andReturn('<strong>unsaferesult</strong><style>body { color: red; }</style>');
+      spyOn(Showdown, 'converter').andReturn(converter);
       $el = compileTemplate("<div markdown='markdownText'></div>", scope);
     });
 
@@ -35,5 +36,22 @@ describe("RAML.Directives.markdown", function() {
       expect($el.html()).toEqual("<strong>unsaferesult</strong>");
     });
 
+  });
+
+  describe("given a markdown table", function() {
+    beforeEach(function() {
+      scope.markdownText = [
+        '|Some Table Column           |Another Column    |Col|',
+        '|----------------------------|------------------|---|',
+        '|some *markdown* value       | another **value**|yes|',
+        '|some `code` value           | just text        |no |'
+      ].join("\n");
+      $el = compileTemplate("<div markdown='markdownText'></div>", scope);
+    });
+
+    it("converts the passed text to HTML", function() {
+      expect($el.html()).toContain("<table>");
+      expect($el.html()).toContain("<code>code</code>");
+    });
   });
 });
