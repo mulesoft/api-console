@@ -8954,8 +8954,19 @@ RAML.Client.AuthStrategies.base64 = (function () {
     if (!isEmpty(method.headers)) {
       parameterGroups.push(['Headers', method.headers]);
     }
-    if (!isEmpty(resource.uriParameters)) {
-      parameterGroups.push(['URI Parameters', resource.uriParameters]);
+
+    var uriParameters = resource.pathSegments
+      .map(function(segment) { return segment.parameters; })
+      .filter(function(params) { return !!params; })
+      .reduce(function(accum, parameters) {
+        for (var key in parameters) {
+          accum[key] = parameters[key];
+        }
+        return accum;
+      }, {});
+
+    if (!isEmpty(uriParameters)) {
+      parameterGroups.push(['URI Parameters', uriParameters]);
     }
     if (!isEmpty(method.queryParameters)) {
       parameterGroups.push(['Query Parameters', method.queryParameters]);

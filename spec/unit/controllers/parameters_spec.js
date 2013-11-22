@@ -1,9 +1,12 @@
 describe("RAML.Controllers.Parameters", function() {
   var controller, scope;
 
-  function createControllerForParameters(parsedApi) {
+  function createControllerForParameters(parsedApi, options) {
     scope = {};
-    scope.resource = RAML.Inspector.create(parsedApi).resources[0];
+    options = options || {};
+    options.resourceIndex = options.resourceIndex || 0;
+
+    scope.resource = RAML.Inspector.create(parsedApi).resources[options.resourceIndex];
     scope.method = scope.resource.methods[0];
 
     return new RAML.Controllers.Parameters(scope);
@@ -72,6 +75,30 @@ describe("RAML.Controllers.Parameters", function() {
       it("adds Query Parameters to parameterGroups on scope", function() {
         expect(scope.parameterGroups[1][0]).toEqual('Query Parameters');
         expect(scope.parameterGroups[1][1]['queryParam']).toBeDefined();
+      });
+    });
+
+    describe("with URI Parameters from a parent resource", function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/resource:',
+        '  /{resourceId}:',
+        '    /comments:',
+        '      /{commentId}:',
+        '        get:'
+      );
+
+      parseRAML(raml);
+
+      beforeEach(function() {
+        controller = createControllerForParameters(this.api, { resourceIndex: 3 });
+      });
+
+      it("adds URI Parameters to parameterGroups on scope", function() {
+        expect(scope.parameterGroups[0][0]).toEqual('URI Parameters');
+        expect(scope.parameterGroups[0][1]['resourceId']).toBeDefined();
+        expect(scope.parameterGroups[0][1]['commentId']).toBeDefined();
       });
     });
 
