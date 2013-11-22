@@ -20,18 +20,6 @@
       parameterGroups.push(['Query Parameters', method.queryParameters]);
     }
 
-    if (method.body) {
-      var normalForm = method.body['application/x-www-form-urlencoded'];
-      var multipartForm = method.body['multipart/form-data'];
-
-      if (normalForm && !isEmpty(normalForm.formParameters)) {
-        parameterGroups.push(['Form Parameters', normalForm.formParameters]);
-      }
-      if (multipartForm && !isEmpty(multipartForm.formParameters)) {
-        parameterGroups.push(['Multipart Form Parameters', multipartForm.formParameters]);
-      }
-    }
-
     $scope.parameterGroups = parameterGroups;
   };
 

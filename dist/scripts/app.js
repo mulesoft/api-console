@@ -8868,18 +8868,6 @@ RAML.Client.AuthStrategies.base64 = (function () {
       parameterGroups.push(['Query Parameters', method.queryParameters]);
     }
 
-    if (method.body) {
-      var normalForm = method.body['application/x-www-form-urlencoded'];
-      var multipartForm = method.body['multipart/form-data'];
-
-      if (normalForm && !isEmpty(normalForm.formParameters)) {
-        parameterGroups.push(['Form Parameters', normalForm.formParameters]);
-      }
-      if (multipartForm && !isEmpty(multipartForm.formParameters)) {
-        parameterGroups.push(['Multipart Form Parameters', multipartForm.formParameters]);
-      }
-    }
-
     $scope.parameterGroups = parameterGroups;
   };
 
@@ -10110,14 +10098,20 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "<h2 ng-if=\"method.body\">Body</h2>\n" +
     "<section ng-repeat=\"(mediaType, definition) in method.body track by mediaType\">\n" +
     "  <h4>{{mediaType}}</h4>\n" +
-    "  <section ng-if=\"definition.schema\">\n" +
-    "    <h5>Schema</h5>\n" +
-    "    <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
-    "  </section>\n" +
-    "  <section ng-if=\"definition.example\">\n" +
-    "    <h5>Example</h5>\n" +
-    "    <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
-    "  </section>\n" +
+    "  <div ng-switch=\"mediaType\">\n" +
+    "    <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
+    "    <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
+    "    <div ng-switch-default>\n" +
+    "      <section ng-if=\"definition.schema\">\n" +
+    "        <h5>Schema</h5>\n" +
+    "        <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
+    "      </section>\n" +
+    "      <section ng-if=\"definition.example\">\n" +
+    "        <h5>Example</h5>\n" +
+    "        <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
+    "      </section>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "</section>\n"
   );
 
