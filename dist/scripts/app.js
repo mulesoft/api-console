@@ -8065,18 +8065,12 @@ RAML.Inspector = (function() {
     };
   }
 
-  var firstResource;
   function extractResources(basePathSegments, api, securitySchemes) {
     var resources = [], apiResources = api.resources || [];
 
     apiResources.forEach(function(resource) {
-      console.log(resource.pathSegments);
       var resourcePathSegments = basePathSegments.concat(RAML.Client.createPathSegment(resource));
       var overview = exports.resourceOverviewSource(resourcePathSegments, resource);
-      if (!firstResource) {
-        firstResource = overview;
-      }
-      //console.log(resource.relativeUri, firstResource.pathSegments[0].toString());
 
       overview.methods.forEach(function(method) {
         extendMethod(method, securitySchemes);
@@ -9344,7 +9338,7 @@ RAML.Client.AuthStrategies.base64 = (function () {
   'use strict';
 
   RAML.Directives.markdown = function($sanitize, $parse) {
-    var converter = new Showdown.converter();
+    var converter = new Showdown.converter({ extensions: ['table'] });
 
     var link = function(scope, element, attrs) {
       var markdown = $parse(attrs.markdown)(scope);

@@ -2651,6 +2651,23 @@ raml-console article#raml-console [markdown] h6,
   text-transform: uppercase;
   font-weight: 700;
 }
+raml-console article#raml-console [markdown] table,
+#raml-console-loader [markdown] table {
+  border-collapse: collapse;
+}
+raml-console article#raml-console [markdown] table th,
+#raml-console-loader [markdown] table th,
+raml-console article#raml-console [markdown] table td,
+#raml-console-loader [markdown] table td {
+  border: 1px solid #c0c2c9;
+  padding: 5px 10px;
+}
+raml-console article#raml-console [markdown] table th p,
+#raml-console-loader [markdown] table th p,
+raml-console article#raml-console [markdown] table td p,
+#raml-console-loader [markdown] table td p {
+  margin: 0 !important;
+}
 raml-console article#raml-console .tabbable,
 #raml-console-loader .tabbable,
 raml-console article#raml-console .nav,
