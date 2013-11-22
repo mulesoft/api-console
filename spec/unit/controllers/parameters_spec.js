@@ -19,14 +19,7 @@ describe("RAML.Controllers.Parameters", function() {
         '    headers:',
         '      headerParam:',
         '    queryParameters:',
-        '      queryParam:',
-        '    body:',
-        '      application/x-www-form-urlencoded:',
-        '        formParameters:',
-        '          normalFormParam:',
-        '      multipart/form-data:',
-        '        formParameters:',
-        '          multipartFormParam:'
+        '      queryParam:'
       );
 
       parseRAML(raml);
@@ -48,16 +41,6 @@ describe("RAML.Controllers.Parameters", function() {
       it("adds Query Parameters to parameterGroups on scope", function() {
         expect(scope.parameterGroups[2][0]).toEqual('Query Parameters');
         expect(scope.parameterGroups[2][1]['queryParam']).toBeDefined();
-      });
-
-      it("adds single-part Form Parameters to parameterGroups on scope", function() {
-        expect(scope.parameterGroups[3][0]).toEqual('Form Parameters');
-        expect(scope.parameterGroups[3][1]['normalFormParam']).toBeDefined();
-      });
-
-      it("adds multi-part Form Parameters to parameterGroups on scope", function() {
-        expect(scope.parameterGroups[4][0]).toEqual('Multipart Form Parameters');
-        expect(scope.parameterGroups[4][1]['multipartFormParam']).toBeDefined();
       });
     });
 
