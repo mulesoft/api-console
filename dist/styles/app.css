@@ -3140,7 +3140,7 @@ raml-console article#raml-console .resource .summary,
 raml-console article#raml-console .resource .summary .path,
 #raml-console-loader .resource .summary .path {
   float: left;
-  margin: 10px 0 10px 15px;
+  margin: 14px 0 14px 15px;
 }
 raml-console article#raml-console .resource .summary .path span:last-child,
 #raml-console-loader .resource .summary .path span:last-child {
@@ -3189,19 +3189,19 @@ raml-console article#raml-console ul.modifiers li,
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   font-size: 11px;
   padding: 0px 6px;
-  margin-top: 1px;
-  margin-right: 1px;
+  margin-bottom: 3px;
+  margin-right: 3px;
   line-height: 18px;
 }
 raml-console article#raml-console ul.modifiers li.resource-type,
 #raml-console-loader ul.modifiers li.resource-type {
-  background-color: #a2a4aa;
+  background-color: #bbbbbb;
   color: #f3f3f6;
 }
 raml-console article#raml-console ul.modifiers li.trait,
 #raml-console-loader ul.modifiers li.trait {
   background-color: #dee0e7;
-  color: #96989f;
+  color: #a2a4aa;
 }
 raml-console article#raml-console .get,
 #raml-console-loader .get {
