@@ -3451,25 +3451,60 @@ raml-console article#raml-console .method-summary,
   position: relative;
   *zoom: 1;
 }
-raml-console article#raml-console .method-summary .filler,
-#raml-console-loader .method-summary .filler {
-  display: block;
-  height: 30px;
-  width: auto;
-}
-raml-console article#raml-console .method-summary .description,
-#raml-console-loader .method-summary .description {
+raml-console article#raml-console .method-summary .abbreviated-description,
+#raml-console-loader .method-summary .abbreviated-description {
   padding: 0 20px 0 10px;
-  border: 1px solid #c0c2c9;
-  border-left: none;
-  border-radius: 0 5px 5px 0;
-  height: 28px;
-  line-height: 28px;
   display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
+}
+raml-console article#raml-console .method-summary .abbreviated-description *,
+#raml-console-loader .method-summary .abbreviated-description * {
+  color: #18191d;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline;
+  line-height: 28px;
+}
+raml-console article#raml-console .method-summary .abbreviated-description ul,
+#raml-console-loader .method-summary .abbreviated-description ul,
+raml-console article#raml-console .method-summary .abbreviated-description li,
+#raml-console-loader .method-summary .abbreviated-description li {
+  margin: 0;
+  padding: 0;
+}
+raml-console article#raml-console .method-summary .abbreviated-description table,
+#raml-console-loader .method-summary .abbreviated-description table,
+raml-console article#raml-console .method-summary .abbreviated-description hr,
+#raml-console-loader .method-summary .abbreviated-description hr {
+  display: none;
+}
+raml-console article#raml-console .method-summary .abbreviated-description h1,
+#raml-console-loader .method-summary .abbreviated-description h1,
+raml-console article#raml-console .method-summary .abbreviated-description h2,
+#raml-console-loader .method-summary .abbreviated-description h2,
+raml-console article#raml-console .method-summary .abbreviated-description h3,
+#raml-console-loader .method-summary .abbreviated-description h3,
+raml-console article#raml-console .method-summary .abbreviated-description h4,
+#raml-console-loader .method-summary .abbreviated-description h4,
+raml-console article#raml-console .method-summary .abbreviated-description h5,
+#raml-console-loader .method-summary .abbreviated-description h5,
+raml-console article#raml-console .method-summary .abbreviated-description h6,
+#raml-console-loader .method-summary .abbreviated-description h6,
+raml-console article#raml-console .method-summary .abbreviated-description code,
+#raml-console-loader .method-summary .abbreviated-description code {
+  display: inline-block;
+}
+raml-console article#raml-console .method-summary .filler,
+#raml-console-loader .method-summary .filler {
+  display: block;
+  height: 30px;
+  width: auto;
 }
 raml-console article#raml-console .method-summary .method-name,
 #raml-console-loader .method-summary .method-name {
@@ -3551,9 +3586,76 @@ raml-console article#raml-console .documentation .named-parameters .parameter .i
 #raml-console-loader .documentation .named-parameters .parameter .info [markdown] {
   margin: 5px 0 0 0;
 }
+raml-console article#raml-console .documentation .responses h2,
+#raml-console-loader .documentation .responses h2 {
+  *zoom: 1;
+}
 raml-console article#raml-console .documentation .responses h2 a,
 #raml-console-loader .documentation .responses h2 a {
+  display: block;
+  float: left;
   color: #a2a4aa;
+  font-size: 19px;
+}
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description,
+#raml-console-loader .documentation .responses h2 .abbreviated-description {
+  padding: 0 10px 0 20px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description *,
+#raml-console-loader .documentation .responses h2 .abbreviated-description * {
+  color: #18191d;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline;
+  line-height: 40px;
+}
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description ul,
+#raml-console-loader .documentation .responses h2 .abbreviated-description ul,
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description li,
+#raml-console-loader .documentation .responses h2 .abbreviated-description li {
+  margin: 0;
+  padding: 0;
+}
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description table,
+#raml-console-loader .documentation .responses h2 .abbreviated-description table,
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description hr,
+#raml-console-loader .documentation .responses h2 .abbreviated-description hr {
+  display: none;
+}
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description h1,
+#raml-console-loader .documentation .responses h2 .abbreviated-description h1,
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description h2,
+#raml-console-loader .documentation .responses h2 .abbreviated-description h2,
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description h3,
+#raml-console-loader .documentation .responses h2 .abbreviated-description h3,
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description h4,
+#raml-console-loader .documentation .responses h2 .abbreviated-description h4,
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description h5,
+#raml-console-loader .documentation .responses h2 .abbreviated-description h5,
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description h6,
+#raml-console-loader .documentation .responses h2 .abbreviated-description h6,
+raml-console article#raml-console .documentation .responses h2 .abbreviated-description code,
+#raml-console-loader .documentation .responses h2 .abbreviated-description code {
+  display: inline-block;
+}
+raml-console article#raml-console .documentation .responses h2:before,
+#raml-console-loader .documentation .responses h2:before,
+raml-console article#raml-console .documentation .responses h2:after,
+#raml-console-loader .documentation .responses h2:after {
+  display: table;
+  content: "";
+}
+raml-console article#raml-console .documentation .responses h2:after,
+#raml-console-loader .documentation .responses h2:after {
+  clear: both;
 }
 raml-console article#raml-console .documentation .responses .named-parameters h2,
 #raml-console-loader .documentation .responses .named-parameters h2 {

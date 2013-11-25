@@ -71,24 +71,15 @@
   cursor: pointer;
   position: relative;
 
+  .abbreviated-description {
+    padding: 0 20px 0 10px;
+    .inline-markdown(28px);
+  }
+
   .filler {
     display: block;
     height: 30px;
     width: auto;
-  }
-
-  .description {
-    padding: 0 20px 0 10px;
-    border: 1px solid @lightGray;
-    border-left: none;
-    border-radius: 0 5px 5px 0;
-    height: 28px;
-    line-height: 28px;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
   }
 
   .method-name {

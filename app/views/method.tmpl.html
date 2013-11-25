@@ -3,8 +3,8 @@
     <span role="verb" class='method-name' ng-class='method.method'>{{method.method}}</span>
     <div class='filler' ng-show='methodView.expanded' ng-class='method.method'></div>
 
-    <div class='description' role="description" ng-if="!methodView.expanded">
-       {{method.description}}
+    <div role="description" ng-if="!methodView.expanded">
+       <div class='abbreviated-description' markdown='method.description'></div>
        <i class='icon-caret-right'></i>
     </div>
 
