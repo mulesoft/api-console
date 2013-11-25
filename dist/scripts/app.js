@@ -10081,8 +10081,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "    <span role=\"verb\" class='method-name' ng-class='method.method'>{{method.method}}</span>\n" +
     "    <div class='filler' ng-show='methodView.expanded' ng-class='method.method'></div>\n" +
     "\n" +
-    "    <div class='description' role=\"description\" ng-if=\"!methodView.expanded\">\n" +
-    "       {{method.description}}\n" +
+    "    <div role=\"description\" ng-if=\"!methodView.expanded\">\n" +
+    "       <div class='abbreviated-description' markdown='method.description'></div>\n" +
     "       <i class='icon-caret-right'></i>\n" +
     "    </div>\n" +
     "\n" +
@@ -10264,6 +10264,7 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "      <i ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
     "      {{responseCode}}\n" +
     "    </a>\n" +
+    "    <div class=\"abbreviated-description\" markdown='response.description'></div>\n" +
     "  </h2>\n" +
     "  <div collapsible-content>\n" +
     "    <section role='response'>\n" +
