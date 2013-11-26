@@ -2840,7 +2840,14 @@ raml-console article#raml-console input[type="password"],
 }
 raml-console article#raml-console input.warning,
 #raml-console-loader input.warning {
-  border-color: #c09853;
+  border-color: #daa520;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px #daa520, 0 0 3px #daa520;
+  box-shadow: inset 0 1px 1px #daa520, 0 0 3px #daa520;
+}
+raml-console article#raml-console .required,
+#raml-console-loader .required {
+  color: #daa520;
 }
 raml-console article#raml-console input.error,
 #raml-console-loader input.error {
@@ -3101,21 +3108,21 @@ raml-console article#raml-console .btn-connect,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #ccac15;
+  border: 1px solid #daa520;
   color: #f3f3f6;
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   text-transform: uppercase;
   text-shadow: 0 1px 1px rgba(86, 88, 93, 0.5);
-  background-color: #cbad20;
-  background-image: -moz-linear-gradient(top, #e9c82b, #9e8510);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#e9c82b), to(#9e8510));
-  background-image: -webkit-linear-gradient(top, #e9c82b, #9e8510);
-  background-image: -o-linear-gradient(top, #e9c82b, #9e8510);
-  background-image: linear-gradient(to bottom, #e9c82b, #9e8510);
+  background-color: #cea336;
+  background-image: -moz-linear-gradient(top, #e4b849, #ae8319);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#e4b849), to(#ae8319));
+  background-image: -webkit-linear-gradient(top, #e4b849, #ae8319);
+  background-image: -o-linear-gradient(top, #e4b849, #ae8319);
+  background-image: linear-gradient(to bottom, #e4b849, #ae8319);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe9c82b', endColorstr='#ff9e8510', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe4b849', endColorstr='#ffae8319', GradientType=0);
 }
 raml-console article#raml-console .resource,
 #raml-console-loader .resource {
@@ -3389,18 +3396,18 @@ raml-console article#raml-console .trace.method-summary:hover,
 }
 raml-console article#raml-console .connect,
 #raml-console-loader .connect {
-  background-color: #d4b838;
-  border-color: #d4b838;
+  background-color: #e0b341;
+  border-color: #e0b341;
 }
 raml-console article#raml-console .connect:hover,
 #raml-console-loader .connect:hover {
-  background-color: #ccac15;
+  background-color: #daa520;
 }
 raml-console article#raml-console .connect.method .method-name:hover,
 #raml-console-loader .connect.method .method-name:hover,
 raml-console article#raml-console .connect.method .filler:hover,
 #raml-console-loader .connect.method .filler:hover {
-  background-color: #d4b838;
+  background-color: #e0b341;
 }
 raml-console article#raml-console .connect.method-summary,
 #raml-console-loader .connect.method-summary {
@@ -3408,7 +3415,7 @@ raml-console article#raml-console .connect.method-summary,
 }
 raml-console article#raml-console .connect.method-summary:hover,
 #raml-console-loader .connect.method-summary:hover {
-  background-color: #faf7e8;
+  background-color: #fbf6e9;
 }
 raml-console article#raml-console .method-name,
 #raml-console-loader .method-name {
@@ -3737,14 +3744,6 @@ raml-console article#raml-console .try-it form,
 raml-console article#raml-console .try-it form .media-types,
 #raml-console-loader .try-it form .media-types {
   text-align: right;
-}
-raml-console article#raml-console .try-it form input.warning,
-#raml-console-loader .try-it form input.warning {
-  border-color: #cd9356;
-}
-raml-console article#raml-console .try-it form input.error,
-#raml-console-loader .try-it form input.error {
-  border-color: #d26460;
 }
 raml-console article#raml-console .try-it form textarea[name=body],
 #raml-console-loader .try-it form textarea[name=body] {

@@ -168,7 +168,8 @@ describe("RAML.Controllers.tryIt", function() {
       '  get:',
       '    queryParameters:',
       '      page:',
-      '      order:'
+      '      order:',
+      '        required: true'
     )
 
     parseRAML(raml);
@@ -193,6 +194,11 @@ describe("RAML.Controllers.tryIt", function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
         expect($el.find('.response .body .response-value')).toHaveText('cool');
       });
+    });
+
+    it("gives a visual cue for required parameters", function() {
+      expect($el.find('label[for="order"]')).toContain("*");
+      expect($el.find('label[for="page"]')).not.toContain("*");
     });
   });
 
