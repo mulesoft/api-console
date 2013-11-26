@@ -9459,7 +9459,8 @@ RAML.Client.AuthStrategies.base64 = (function () {
     this.method = $scope.method;
   };
 
-  controller.prototype.toggleExpansion = function() {
+  controller.prototype.toggleExpansion = function(evt) {
+    evt.preventDefault();
     this.expanded = !this.expanded;
   };
 
@@ -9483,7 +9484,7 @@ RAML.Client.AuthStrategies.base64 = (function () {
             methodView   = controllers[1];
 
         if (resourceView.expandInitially(scope.method)) {
-          methodView.toggleExpansion();
+          methodView.expanded = true;
         }
       }
     };
@@ -10077,7 +10078,7 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
 
   $templateCache.put("views/method.tmpl.html",
     "<div class='method' role=\"method\" ng-class=\"methodView.cssClass()\">\n" +
-    "  <div class='accordion-toggle method-summary' role=\"methodSummary\" ng-class='method.method' ng-click='methodView.toggleExpansion()'>\n" +
+    "  <div class='accordion-toggle method-summary' role=\"methodSummary\" ng-class='method.method' ng-click='methodView.toggleExpansion($event)'>\n" +
     "    <span role=\"verb\" class='method-name' ng-class='method.method'>{{method.method}}</span>\n" +
     "    <div class='filler' ng-show='methodView.expanded' ng-class='method.method'></div>\n" +
     "\n" +

@@ -6,7 +6,8 @@
     this.method = $scope.method;
   };
 
-  controller.prototype.toggleExpansion = function() {
+  controller.prototype.toggleExpansion = function(evt) {
+    evt.preventDefault();
     this.expanded = !this.expanded;
   };
 
@@ -30,7 +31,7 @@
             methodView   = controllers[1];
 
         if (resourceView.expandInitially(scope.method)) {
-          methodView.toggleExpansion();
+          methodView.expanded = true;
         }
       }
     };
