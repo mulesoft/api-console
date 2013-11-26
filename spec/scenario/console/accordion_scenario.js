@@ -49,12 +49,6 @@ describe("accordion view of API", function() {
         methodsPromise = resources[2].$$(methodSummarySelector);
         expect(methodsPromise).toHaveLength(1);
 
-        var traitsPromise = resources[2].$$('li[role="trait"]')
-        expect(traitsPromise).toHaveLength(1);
-        traitsPromise.then(function(traits) {
-          expect(traits[0].getText()).toEqual('secured');
-        });
-
         var resourceTypesPromise = resources[2].$$('[role="resource-type"]');
         expect(resourceTypesPromise).toHaveLength(1);
         resourceTypesPromise.then(function(resourceType) {

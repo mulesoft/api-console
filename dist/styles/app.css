@@ -3182,13 +3182,14 @@ raml-console article#raml-console .resource .methods,
 raml-console article#raml-console .resource .methods li,
 #raml-console-loader .resource .methods li {
   float: right;
-  line-height: 23px;
+  line-height: 22px;
   margin-right: 5px;
 }
 raml-console article#raml-console ul.modifiers,
 #raml-console-loader ul.modifiers {
   font-size: 0px;
   margin-left: 15px;
+  text-align: right;
 }
 raml-console article#raml-console ul.modifiers li,
 #raml-console-loader ul.modifiers li {
@@ -3419,12 +3420,12 @@ raml-console article#raml-console .connect.method-summary:hover,
 }
 raml-console article#raml-console .method-name,
 #raml-console-loader .method-name {
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   color: #f3f3f6;
   text-align: center;
   display: inline-block;
-  width: 64px;
+  width: 60px;
 }
 raml-console article#raml-console .method,
 #raml-console-loader .method {
@@ -3510,7 +3511,7 @@ raml-console article#raml-console .method-summary .abbreviated-description code,
 raml-console article#raml-console .method-summary .filler,
 #raml-console-loader .method-summary .filler {
   display: block;
-  height: 30px;
+  height: 32px;
   width: auto;
 }
 raml-console article#raml-console .method-summary .method-name,
@@ -3524,7 +3525,7 @@ raml-console article#raml-console .method-summary i,
   top: 0;
   right: 10px;
   color: #c0c2c9;
-  line-height: 30px;
+  line-height: 32px;
   font-size: 19px;
 }
 raml-console article#raml-console .method-summary:before,

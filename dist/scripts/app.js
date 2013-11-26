@@ -10234,11 +10234,11 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "\n" +
     "  <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
     "    <ul class=\"modifiers\">\n" +
+    "      <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resourceView.traits()\">\n" +
+    "        {{trait|nameFromParameterizable}}\n" +
+    "      </li>\n" +
     "      <li class=\"resource-type\" role=\"resource-type\" ng-if='resourceView.type()'>\n" +
     "        {{resourceView.type()|nameFromParameterizable}}\n" +
-    "      </li>\n" +
-    "      <li class=\"trait\" role=\"trait\" ng-repeat=\"trait in resourceView.traits()\">\n" +
-    "        {{trait|nameFromParameterizable}}\n" +
     "      </li>\n" +
     "    </ul>\n" +
     "\n" +
