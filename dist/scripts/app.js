@@ -10135,7 +10135,10 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
   $templateCache.put("views/parameter_fields.tmpl.html",
     "<fieldset>\n" +
     "  <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters track by parameterName\">\n" +
-    "    <label for=\"{{parameterName}}\">{{parameter.displayName}}:</label>\n" +
+    "    <label for=\"{{parameterName}}\">\n" +
+    "      <span class=\"required\" ng-if=\"parameter.required\">*</span>\n" +
+    "      {{parameter.displayName}}:\n" +
+    "    </label>\n" +
     "    <ng-switch on='parameter.type'>\n" +
     "      <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='requestData[parameterName]'/>\n" +
     "      <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='requestData[parameterName]' placeholder='{{parameter.example}}' ng-trim=\"false\" constraints='parameter'/>\n" +
