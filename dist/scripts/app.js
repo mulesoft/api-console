@@ -8587,6 +8587,7 @@ RAML.Client.AuthStrategies.base64 = (function () {
     });
 
     this.parameters = uriParameters;
+    this.templated = Object.keys(this.parameters || {}).length > 0;
     this.tokens = tokenize(template);
     this.render = rendererFor(template, uriParameters);
     this.toString = function() { return template; };
@@ -8869,7 +8870,11 @@ RAML.Client.AuthStrategies.base64 = (function () {
 
     this.method = $scope.method;
 
-    var hasParameters = !!($scope.resource.uriParameters || this.method.queryParameters ||
+    var hasUriParameters = $scope.resource.pathSegments.some(function(segment) {
+      return segment.templated;
+    });
+
+    var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
       this.method.headers || hasFormParameters(this.method));
 
     this.hasRequestDocumentation = hasParameters || !isEmpty(this.method.body);
@@ -10062,7 +10067,7 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <tabset>\n" +
-    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation\">\n" +
+    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation \">\n" +
     "      <parameters></parameters>\n" +
     "      <requests></requests>\n" +
     "    </tab>\n" +

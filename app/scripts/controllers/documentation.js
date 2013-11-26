@@ -18,7 +18,11 @@
 
     this.method = $scope.method;
 
-    var hasParameters = !!($scope.resource.uriParameters || this.method.queryParameters ||
+    var hasUriParameters = $scope.resource.pathSegments.some(function(segment) {
+      return segment.templated;
+    });
+
+    var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
       this.method.headers || hasFormParameters(this.method));
 
     this.hasRequestDocumentation = hasParameters || !isEmpty(this.method.body);

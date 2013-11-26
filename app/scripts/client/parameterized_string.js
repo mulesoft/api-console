@@ -43,6 +43,7 @@
     });
 
     this.parameters = uriParameters;
+    this.templated = Object.keys(this.parameters || {}).length > 0;
     this.tokens = tokenize(template);
     this.render = rendererFor(template, uriParameters);
     this.toString = function() { return template; };

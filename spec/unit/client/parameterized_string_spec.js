@@ -11,6 +11,10 @@ describe("RAML.Client.ParameterizedString", function() {
       expect(pathSegment.parameters).toBeUndefined();
     });
 
+    it("is not templated", function() {
+      expect(pathSegment.templated).toBe(false);
+    });
+
     it("tokenizes the uri", function() {
       expect(pathSegment.tokens).toEqual(['/resource']);
     });
@@ -32,6 +36,11 @@ describe("RAML.Client.ParameterizedString", function() {
       raml = fakeResourceRAML("/{templated}-{resource}", uriParameters)
       pathSegment = new RAML.Client.ParameterizedString(raml.relativeUri, raml.uriParameters);
     });
+
+    it("is templated", function() {
+      expect(pathSegment.templated).toBe(true);
+    });
+
 
     it("stores the parameter definitions for each templated section", function() {
       expect(pathSegment.parameters).toBe(uriParameters);

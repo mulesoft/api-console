@@ -1,11 +1,12 @@
 describe("RAML.Controllers.Documentation", function() {
   var controller, scope;
 
-  function createScopeForDocumentationController(parsedApi) {
+  function createScopeForDocumentationController(parsedApi, options) {
+    options = options || {resourceIndex: 0, methodIndex: 0}
     var result = {}
     result.api = RAML.Inspector.create(parsedApi);
-    result.resource = result.api.resources[0];
-    result.method = result.resource.methods[0];
+    result.resource = result.api.resources[options.resourceIndex];
+    result.method = result.resource.methods[options.methodIndex];
     return result;
   }
 
@@ -45,6 +46,26 @@ describe("RAML.Controllers.Documentation", function() {
 
     beforeEach(function() {
       scope = createScopeForDocumentationController(this.api);
+      controller = new RAML.Controllers.Documentation(scope);
+    });
+
+    it('has request documentation', function() {
+      expect(controller.hasRequestDocumentation).toBe(true);
+    });
+  });
+
+  describe('given a method with URI parameters', function() {
+    var raml = createRAML(
+      'title: Example API',
+      '/{resource}:',
+      '  /lock:',
+      '    get:'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      scope = createScopeForDocumentationController(this.api, {resourceIndex: 1, methodIndex: 0});
       controller = new RAML.Controllers.Documentation(scope);
     });
 
