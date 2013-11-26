@@ -10268,7 +10268,7 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "      <i ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
     "      {{responseCode}}\n" +
     "    </a>\n" +
-    "    <div class=\"abbreviated-description\" markdown='response.description'></div>\n" +
+    "    <div ng-if=\"collapsed\" class=\"abbreviated-description\" markdown='response.description'></div>\n" +
     "  </h2>\n" +
     "  <div collapsible-content>\n" +
     "    <section role='response'>\n" +

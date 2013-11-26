@@ -3653,6 +3653,11 @@ raml-console article#raml-console .documentation .responses h2 .abbreviated-desc
 #raml-console-loader .documentation .responses h2 .abbreviated-description code {
   display: inline-block;
 }
+raml-console article#raml-console .documentation .responses h2 i,
+#raml-console-loader .documentation .responses h2 i {
+  width: 11px;
+  display: inline-block;
+}
 raml-console article#raml-console .documentation .responses h2:before,
 #raml-console-loader .documentation .responses h2:before,
 raml-console article#raml-console .documentation .responses h2:after,
