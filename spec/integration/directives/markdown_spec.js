@@ -1,32 +1,34 @@
 describe("RAML.Directives.markdown", function() {
-  var scope, $el, converter;
+  var scope, $el;
 
   beforeEach(module('ramlConsoleApp'));
 
   beforeEach(function() {
-    converter = jasmine.createSpyObj('converter', ['makeHtml']);
     scope = createScope();
-    scope.markdownText = "input";
+    scope.markdownText = "__result__";
   });
 
   describe("by default", function() {
     beforeEach(function() {
-      converter.makeHtml.andReturn('<strong>result</strong>');
-      spyOn(Showdown, 'converter').andReturn(converter);
       $el = compileTemplate("<div markdown='markdownText'></div>", scope);
     });
 
     it("converts the passed text to HTML", function() {
-      expect($el.html()).toEqual("<strong>result</strong>");
+      expect($el.html()).toEqual("<p><strong>result</strong></p>");
     });
 
-    it("passes the input markdownText to the Showdown.converter's makeHtml method", function() {
-      expect(converter.makeHtml).toHaveBeenCalledWith("input");
+    it("refreshes the display when the markdown changes", function() {
+      scope.markdownText = "_result_";
+      scope.$digest();
+      expect($el.html()).toEqual("<p><em>result</em></p>");
     });
   });
 
   describe("when Showdown returns unsafe HTML", function() {
+    var converter;
+
     beforeEach(function() {
+      converter = jasmine.createSpyObj('converter', ['makeHtml']);
       converter.makeHtml.andReturn('<strong>unsaferesult</strong><style>body { color: red; }</style>');
       spyOn(Showdown, 'converter').andReturn(converter);
       $el = compileTemplate("<div markdown='markdownText'></div>", scope);

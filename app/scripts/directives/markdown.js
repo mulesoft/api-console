@@ -1,20 +1,24 @@
 (function() {
   'use strict';
 
-  RAML.Directives.markdown = function($sanitize, $parse) {
+  RAML.Directives.markdown = function($sanitize) {
     var converter = new Showdown.converter({ extensions: ['table'] });
 
-    var link = function(scope, element, attrs) {
-      var markdown = $parse(attrs.markdown)(scope);
+    var link = function(scope, element) {
+      var processMarkdown = function(markdown) {
+        var result = converter.makeHtml(markdown || '');
+        element.html($sanitize(result));
+      };
 
-      var result = converter.makeHtml(markdown || '');
-
-      element.html($sanitize(result));
+      scope.$watch('markdown', processMarkdown);
     };
 
     return {
       restrict: 'A',
-      link: link
+      link: link,
+      scope: {
+        markdown: '='
+      }
     };
   };
 })();

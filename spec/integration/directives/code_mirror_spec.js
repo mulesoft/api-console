@@ -24,7 +24,7 @@ describe("RAML.Directives.codeMirror", function() {
         expect($el.text()).toMatch(/DaVinci code[\d\s]*/);
       });
 
-      it('refreshes code mirror when visible evaluates to true', function() {
+      it('refreshes code mirror when the code changes', function() {
         scope.code = "Something Else";
         scope.$digest();
         expect($el.text()).toMatch(/Something Else[\d\s]*/);
