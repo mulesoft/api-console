@@ -34,9 +34,18 @@ describe("RAML.Client.AuthStrategies.Oauth2.requestAccessToken", function() {
         });
       });
 
-      it("extracts and returns the access token from the response", function() {
-        var extracted = promiseStub.then.mostRecentCall.args[0]({ "access_token": "token" })
-        expect(extracted).toEqual('token');
+      describe("when the response is an object", function() {
+        it("extracts and returns the access token from the response", function() {
+          var extracted = promiseStub.then.mostRecentCall.args[0]({ "access_token": "token" })
+          expect(extracted).toEqual('token');
+        });
+      });
+
+      describe("when the response is a string", function() {
+        it("extracts and returns the access token from the response", function() {
+          var extracted = promiseStub.then.mostRecentCall.args[0]("access_token=a%20token&apiKey=BITLY_API_KEY");
+          expect(extracted).toEqual('a token');
+        });
       });
     });
 
