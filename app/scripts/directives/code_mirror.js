@@ -45,10 +45,12 @@
   };
 
   var link = function(scope, element, attrs, editor) {
-    scope.$watch('visible', function(visible) {
-      if (visible) {
-        editor.refresh(scope);
-      }
+    var watchCode = function() {
+      return scope.visible && scope.code;
+    };
+
+    scope.$watch(watchCode, function(visible) {
+      if (visible) { editor.refresh(scope); }
     });
   };
 
