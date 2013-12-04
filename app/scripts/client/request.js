@@ -63,6 +63,7 @@
     };
 
     this.toOptions = function() {
+      var o = clone(options);
       if (rawData) {
         if (isMultipartRequest) {
           var data = new FormData();
@@ -71,19 +72,19 @@
             data.append(key, rawData[key]);
           }
 
-          options.processData = false;
-          options.data = data;
+          o.processData = false;
+          o.data = data;
         } else {
-          options.processData = true;
-          options.data = rawData;
+          o.processData = true;
+          o.data = rawData;
         }
       }
       if (queryParams) {
         var separator = (options.url.match('\\?') ? '&' : '?');
-        options.url += separator + $.param(queryParams);
+        o.url = options.url + separator + $.param(queryParams);
       }
 
-      return options;
+      return o;
     };
   };
 

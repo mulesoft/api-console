@@ -78,6 +78,11 @@ describe('RAML.Client.Request', function() {
           it("encodes the query parameters in the URL", function() {
             expect(options.url).toEqual('http://api.example.com?foo=b%26r')
           });
+
+          it("is idempotent", function() {
+            request.toOptions();
+            expect(options.url).toEqual('http://api.example.com?foo=b%26r')
+          });
         });
 
         describe("with parameters already set", function() {
