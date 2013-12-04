@@ -268,10 +268,12 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token", function() {
       });
 
       it("includes OAuth 'Authorization' parameters", function() {
-        spyOn(Date, 'now').andReturn(1000);
+        var oauthParameters = {
+          oauth_whocares: 'done'
+        }
 
-        var result = tokenFactory().encodeParameters(request);
-        expect(result).toMatch(/^oauth_consumer_key=consumer_key%21&oauth_nonce=[a-f0-9]{32}&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1&oauth_version=1.0$/);
+        var result = tokenFactory().encodeParameters(request, oauthParameters);
+        expect(result).toMatch(/^oauth_whocares=done$/);
       });
 
       it("includes single-part form body parameters", function() {
