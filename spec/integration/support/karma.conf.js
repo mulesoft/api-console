@@ -8,6 +8,8 @@ files = [
     JASMINE,
     JASMINE_ADAPTER,
     'app/vendor/bower_components/raml-js-parser/dist/raml-parser.js',
+    'app/vendor/bower_components/crypto-js/rollups/hmac-sha1.js',
+    'app/vendor/bower_components/crypto-js/components/enc-base64.js',
     'app/vendor/jquery.js',
     'app/vendor/angular.js',
     'app/vendor/angular-resource.js',
