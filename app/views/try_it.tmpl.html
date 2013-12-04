@@ -61,7 +61,7 @@
     <div class="headers">
       <h5>Headers</h5>
       <ul class="response-value">
-        <li ng-repeat="(header, value) in apiClient.response.headers">
+        <li ng-repeat="(header, value) in apiClient.response.headers track by header">
           <code>
             <span class="header-key">{{header}}:</span>
             <span class="header-value">{{value}}</span>
