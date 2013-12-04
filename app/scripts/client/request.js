@@ -4,17 +4,36 @@
   var CONTENT_TYPE = 'content-type';
   var FORM_DATA = 'multipart/form-data';
 
+  function Clone() {}
+  function clone(obj) {
+    Clone.prototype = obj;
+    return new Clone();
+  }
+
   var RequestDsl = function(options) {
     var rawData;
+    var queryParams;
     var isMultipartRequest;
 
     this.data = function(data) {
-      rawData = data;
+      if (data === undefined) {
+        return clone(rawData);
+      } else {
+        rawData = data;
+      }
+    };
+
+    this.queryParams = function(parameters) {
+      if (parameters === undefined) {
+        return clone(queryParams);
+      } else {
+        queryParams = parameters;
+      }
     };
 
     this.queryParam = function(name, value) {
-      rawData = rawData || {};
-      rawData[name] = value;
+      queryParams = queryParams || {};
+      queryParams[name] = value;
     };
 
     this.header = function(name, value) {
@@ -58,6 +77,10 @@
           options.processData = true;
           options.data = rawData;
         }
+      }
+      if (queryParams) {
+        var separator = (options.url.match('\\?') ? '&' : '?');
+        options.url += separator + $.param(queryParams);
       }
 
       return options;
