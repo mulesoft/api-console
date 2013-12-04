@@ -180,6 +180,7 @@ module.exports = function (grunt) {
           src: [
             'index.html',
             'examples/*',
+            'authentication/oauth1.html',
             'authentication/oauth2.html'
           ]
         },
