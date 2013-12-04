@@ -20,6 +20,7 @@ files = [
     'spec/matchers/**/*.js',
     'spec/support/helpers/**/*.js',
     'spec/unit/support/helpers/**/*.js',
+    'spec/unit/support/matchers/**/*.js',
     'spec/unit/**/*_spec.js'
 ];
 

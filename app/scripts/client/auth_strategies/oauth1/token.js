@@ -5,6 +5,8 @@
   var Token = RAML.Client.AuthStrategies.Oauth1.Token = {};
 
   Token.createFactory = function(settings, consumerCredentials) {
+    settings = settings || {};
+
     return function createToken(tokenCredentials) {
       switch (settings.signatureMethod) {
       case 'PLAINTEXT':
