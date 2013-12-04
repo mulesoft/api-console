@@ -6,31 +6,6 @@ RAML.Inspector = (function() {
 
   var METHOD_ORDERING = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
 
-  function extendMethod(method, securitySchemes) {
-    securitySchemes = securitySchemes || [];
-
-    method.securitySchemes = function() {
-      var securedBy, selectedSchemes = {};
-      securedBy = (this.securedBy || []).filter(function(name) {
-        return name !== null && typeof name !== 'object';
-      });
-
-      securitySchemes.forEach(function(scheme) {
-        securedBy.forEach(function(name) {
-          if (scheme[name]) {
-            selectedSchemes[name] = scheme[name];
-          }
-        });
-      });
-
-      return selectedSchemes;
-    };
-
-    method.allowsAnonymousAccess = function() {
-      return (this.securedBy || []).some(function(name) { return name === null; });
-    };
-  }
-
   function extractResources(basePathSegments, api, securitySchemes) {
     var resources = [], apiResources = api.resources || [];
 
@@ -38,8 +13,8 @@ RAML.Inspector = (function() {
       var resourcePathSegments = basePathSegments.concat(RAML.Client.createPathSegment(resource));
       var overview = exports.resourceOverviewSource(resourcePathSegments, resource);
 
-      overview.methods.forEach(function(method) {
-        extendMethod(method, securitySchemes);
+      overview.methods = overview.methods.map(function(method) {
+        return RAML.Inspector.Method.create(method, securitySchemes);
       });
 
       resources.push(overview);

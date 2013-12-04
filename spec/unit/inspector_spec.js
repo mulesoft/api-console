@@ -70,48 +70,6 @@ describe("RAML.Inspector.create", function() {
       expect(resourceOverviewSourceSpy).toHaveCreatedResourceOverviewFrom(['/resource', '/{resourceId}']);
       expect(resourceOverviewSourceSpy).toHaveCreatedResourceOverviewFrom(['/another/resource']);
     });
-
-    describe("retrieving security scheme definitions for a method", function() {
-      var method, securitySchemes;
-
-      describe("by default", function() {
-        beforeEach(function() {
-          method = inspector.resources[3].methods[0];
-          securitySchemes = method.securitySchemes();
-        });
-
-        it("returns an object of scheme definitions", function() {
-          expect(securitySchemes['basic']).toBeDefined()
-        });
-
-        it("filters null security scheme", function() {
-          expect(securitySchemes['null']).toBeUndefined()
-        });
-
-        it("marks the method as allowing anonymous access", function() {
-          expect(method.allowsAnonymousAccess()).toBeTruthy();
-        });
-
-        it("filters parameterized security schemes", function() {
-          expect(securitySchemes['oauth_2']).toBeUndefined()
-        });
-      });
-
-      describe("with no security schemes", function() {
-        beforeEach(function() {
-          method = inspector.resources[0].methods[0];
-          securitySchemes = method.securitySchemes();
-        });
-
-        it("returns an empty object when there are no security schemes", function() {
-          expect(securitySchemes).toBeDefined();
-        });
-
-        it("marks the method as not allowing anonymous access", function() {
-          expect(method.allowsAnonymousAccess()).toBeFalsy();
-        });
-      });
-    });
   });
 });
 
