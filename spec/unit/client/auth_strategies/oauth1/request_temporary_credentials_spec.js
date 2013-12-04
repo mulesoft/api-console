@@ -1,5 +1,5 @@
-describe("RAML.Client.AuthStrategies.Oauth1.requestToken", function() {
-  var settings, token, tokenFactory, requestToken;
+describe("RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials", function() {
+  var settings, token, tokenFactory, requestTemporaryCredentials;
 
   beforeEach(function() {
     token = jasmine.createSpyObj('token', ['sign']);
@@ -9,7 +9,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.requestToken", function() {
       requestTokenUri: 'https://example.com/oauth/request_token'
     }
 
-    requestToken = RAML.Client.AuthStrategies.Oauth1.requestToken(settings, tokenFactory);
+    requestTemporaryCredentials = RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials(settings, tokenFactory);
 
   });
 
@@ -23,7 +23,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.requestToken", function() {
 
     describe('by default', function() {
       beforeEach(function() {
-        requestToken();
+        requestTemporaryCredentials();
       });
 
       it("requests an access token", function() {
@@ -56,7 +56,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.requestToken", function() {
     describe('with a proxy URL', function() {
       beforeEach(function() {
         RAML.Settings.proxy = 'http://www.someproxy.com/somepath/'
-        requestToken();
+        requestTemporaryCredentials();
       });
 
       afterEach(function() {

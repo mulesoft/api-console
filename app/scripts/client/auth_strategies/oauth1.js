@@ -3,7 +3,7 @@
 
   var Oauth1 = function(scheme, credentials) {
     var tokenFactory = RAML.Client.AuthStrategies.Oauth1.Token.createFactory(scheme.settings, credentials);
-    this.requestToken = RAML.Client.AuthStrategies.Oauth1.requestToken(scheme.settings, tokenFactory);
+    this.requestTemporaryCredentials = RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials(scheme.settings, tokenFactory);
     this.requestAuthorization = RAML.Client.AuthStrategies.Oauth1.requestAuthorization(scheme.settings);
     this.requestTokenCredentials = RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials(scheme.settings, tokenFactory);
   };
@@ -28,7 +28,7 @@
   };
 
   Oauth1.prototype.authenticate = function() {
-    return this.requestToken().then(this.requestAuthorization).then(this.requestTokenCredentials);
+    return this.requestTemporaryCredentials().then(this.requestAuthorization).then(this.requestTokenCredentials);
   };
 
   RAML.Client.AuthStrategies.Oauth1 = Oauth1;
