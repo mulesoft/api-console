@@ -8,7 +8,9 @@
     };
 
     controller.prototype.supports = function(scheme) {
-      return (scheme.type === 'OAuth 2.0' || scheme.type === 'Basic Authentication');
+      return scheme.type === 'OAuth 2.0' ||
+        scheme.type === 'OAuth 1.0' ||
+        scheme.type === 'Basic Authentication';
     };
 
     return {
