@@ -1,6 +1,7 @@
 RAML.Inspector = (function() {
   'use strict';
 
+  function Clone() {}
   var exports = {};
 
   var METHOD_ORDERING = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
@@ -69,23 +70,24 @@ RAML.Inspector = (function() {
   }
 
   exports.resourceOverviewSource = function(pathSegments, resource) {
+    Clone.prototype = resource;
+    var clone = new Clone();
 
-    resource.traits = resource.is;
-    delete resource.is;
-    resource.resourceType = resource.type;
-    delete resource.type;
-    resource.pathSegments = pathSegments;
+    clone.traits = resource.is;
+    clone.resourceType = resource.type;
+    clone.type = clone.is = undefined;
+    clone.pathSegments = pathSegments;
 
-    resource.methods = (resource.methods || []);
+    clone.methods = (resource.methods || []);
 
-    resource.methods.sort(function(a, b) {
+    clone.methods.sort(function(a, b) {
       var aOrder = METHOD_ORDERING.indexOf(a.method.toUpperCase());
       var bOrder = METHOD_ORDERING.indexOf(b.method.toUpperCase());
 
       return aOrder > bOrder ? 1 : -1;
     });
 
-    return resource;
+    return clone;
   };
 
   exports.create = function(api) {

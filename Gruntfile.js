@@ -223,10 +223,10 @@ module.exports = function (grunt) {
     },
     protractor: {
       scenario: {
-        configFile: 'spec/scenario/support/protractor.conf.js'
+        configFile: 'spec/scenario/support/protractor.<%= process.env.TRAVIS ? "ci" : "dev"%>.conf.js'
       },
       debug: {
-        configFile: 'spec/scenario/support/protractor.conf.js',
+        configFile: 'spec/scenario/support/protractor.dev.conf.js',
         debug: true
       }
     },

@@ -12,6 +12,7 @@ files = [
     'app/vendor/bower_components/angular/angular.js',
     'app/vendor/bower_components/angular-sanitize/angular-sanitize.js',
     'app/vendor/bower_components/showdown/src/showdown.js',
+    'app/vendor/bower_components/showdown/src/extensions/table.js',
     'app/vendor/bower_components/codemirror/lib/codemirror.js',
     'app/vendor/bower_components/codemirror/mode/xml/xml.js',
     'app/vendor/bower_components/codemirror/mode/javascript/javascript.js',

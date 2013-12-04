@@ -45,4 +45,49 @@
     text-transform: uppercase;
     font-weight: 700;
   }
+
+  table {
+    border-collapse: collapse;
+
+    th, td {
+      border: 1px solid @lightGray;
+      padding: 5px 10px;
+
+      p {
+        margin: 0 !important;
+      }
+    }
+  }
+}
+
+.inline-markdown(@height) {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+
+  * {
+    color: @black;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline;
+    line-height: @height;
+  }
+
+  ul, li {
+    margin: 0;
+    padding: 0;
+  }
+
+  table, hr {
+    display: none;
+  }
+
+  h1, h2, h3, h4, h5, h6, code {
+    display: inline-block;
+  }
 }

@@ -31,6 +31,12 @@ documentation:
 /resource:
   displayName: First One
   is: [secured]
+  options:
+  connect:
+  trace:
+  patch:
+  delete:
+  put:
   get:
     description: get the first one
     headers:
@@ -128,4 +134,36 @@ documentation:
   get:
     is: [unsecured, catpictures, anotherTrait, andAnotherTrait, andYetAnotherTrait, aFinalTrait, {someParameterizedTrait: { someParameterName: someParameterValue }}]
     description: get the first one
+/resource-with-form-and-multipart-form-parameters:
+  get:
+    queryParameters:
+      some_query_param:
+            displayName: Some Query Param
+            description: Your value for some thing.
+            type: string
+            required: true
+            example: "my value"
+    body:
+      application/json:
+        example: |
+            {
+              "api_key": "c4f820f0420a013ea143230c290fbf99",
+              ...
+            }
+      application/x-www-form-urlencoded:
+        formParameters:
+          api_key:
+            displayName: API Key
+            description: Your license key for the application. Please contact developer@nzpost.co.nz for a license key
+            type: string
+            required: true
+            example: "c4f820f0420a013ea143230c290fbf99"
+      multipart/form-data:
+        formParameters:
+          api_key:
+            displayName: API Key
+            description: Your license key for the application. Please contact developer@nzpost.co.nz for a license key
+            type: string
+            required: true
+            example: "c4f820f0420a013ea143230c290fbf99"
 

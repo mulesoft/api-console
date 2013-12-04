@@ -54,8 +54,24 @@
   }
 
   .responses {
-    h2 a {
-      color: @gray;
+    h2 {
+      a {
+        display: block;
+        float: left;
+        color: @gray;
+        font-size: 19px;
+      }
+
+      .abbreviated-description {
+        padding: 0 10px 0 20px;
+        .inline-markdown(40px);
+      }
+
+      i {
+        width: 11px;
+        display: inline-block;
+      }
+      .clearfix;
     }
 
     .named-parameters {

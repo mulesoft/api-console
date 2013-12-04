@@ -13,23 +13,22 @@
     if (!isEmpty(method.headers)) {
       parameterGroups.push(['Headers', method.headers]);
     }
-    if (!isEmpty(resource.uriParameters)) {
-      parameterGroups.push(['URI Parameters', resource.uriParameters]);
+
+    var uriParameters = resource.pathSegments
+      .map(function(segment) { return segment.parameters; })
+      .filter(function(params) { return !!params; })
+      .reduce(function(accum, parameters) {
+        for (var key in parameters) {
+          accum[key] = parameters[key];
+        }
+        return accum;
+      }, {});
+
+    if (!isEmpty(uriParameters)) {
+      parameterGroups.push(['URI Parameters', uriParameters]);
     }
     if (!isEmpty(method.queryParameters)) {
       parameterGroups.push(['Query Parameters', method.queryParameters]);
-    }
-
-    if (method.body) {
-      var normalForm = method.body['application/x-www-form-urlencoded'];
-      var multipartForm = method.body['multipart/form-data'];
-
-      if (normalForm && !isEmpty(normalForm.formParameters)) {
-        parameterGroups.push(['Form Parameters', normalForm.formParameters]);
-      }
-      if (multipartForm && !isEmpty(multipartForm.formParameters)) {
-        parameterGroups.push(['Multipart Form Parameters', multipartForm.formParameters]);
-      }
     }
 
     $scope.parameterGroups = parameterGroups;

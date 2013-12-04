@@ -47,4 +47,44 @@ describe("RAML.Directives.requests", function() {
       expect(this.$el.text()).not.toMatch('Example Schema');
     });
   });
+
+  describe('given a method with form data', function() {
+    var raml = createRAML(
+      'title: Example API',
+      '/resource:',
+      '  get:',
+      '    body:',
+      '      application/x-www-form-urlencoded:',
+      '        formParameters:',
+      '          some_form_parameter: '
+    );
+
+    beforeEach(function() {
+      compileWithScopeFromFirstResourceAndMethodOfRAML("<requests></requests>", raml);
+    });
+
+    it('displays the form parameters', function() {
+      expect(this.$el.text()).toMatch('some_form_parameter');
+    });
+  });
+
+  describe('given a method with multi-part form data', function() {
+    var raml = createRAML(
+      'title: Example API',
+      '/resource:',
+      '  get:',
+      '    body:',
+      '      multipart/form-data:',
+      '        formParameters:',
+      '          some_form_parameter: '
+    );
+
+    beforeEach(function() {
+      compileWithScopeFromFirstResourceAndMethodOfRAML("<requests></requests>", raml);
+    });
+
+    it('displays the form parameters', function() {
+      expect(this.$el.text()).toMatch('some_form_parameter');
+    });
+  });
 });

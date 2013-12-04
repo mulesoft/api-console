@@ -15,7 +15,7 @@
 
     .path {
       float: left;
-      margin: 10px 0 10px 15px;
+      margin: 14px 0 14px 15px;
 
       span:last-child {
         font-weight: bold;
@@ -41,7 +41,7 @@
 
     li {
       float: right;
-      line-height: 23px;
+      line-height: 22px;
       margin-right: 5px;
     }
   }
@@ -50,24 +50,25 @@
 ul.modifiers {
   font-size: 0px; // ignore whitespace around inline-block elements below
   margin-left: 15px;
+  text-align: right;
 
   li {
     display: inline-block;
     font-family: @monospace;
     font-size: 11px;
     padding: 0px 6px;
-    margin-top: 1px;
-    margin-right: 1px;
+    margin-bottom: 3px;
+    margin-right: 3px;
     line-height: 18px;
 
     &.resource-type {
-      background-color: @gray;
+      background-color: @grayB;
       color: @veryLightGray;
     }
 
     &.trait {
       background-color: @grayD;
-      color: @gray9;
+      color: @gray;
     }
   }
 }

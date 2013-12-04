@@ -25,7 +25,7 @@
     "test"
   ],
   "dependencies": {
-    "raml-js-parser": "raml-org/raml-js-parser#8308aea2839a6683ee026228e7a2177fe834a6c0",
+    "raml-js-parser": "raml-org/raml-js-parser#bbb0a9b383cb9a88b3f32c32eba81d9b1897bf1e",
     "angular": "1.2.x",
     "angular-sanitize": "1.2.x",
     "codemirror": "3.x",

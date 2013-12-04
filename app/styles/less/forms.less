@@ -75,7 +75,14 @@ input[type="text"], input[type="password"] {
 }
 
 input.warning {
-  border-color: #c09853;
+  border-color: @gold;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px @gold, 0 0 3px @gold;
+  box-shadow: inset 0 1px 1px @gold, 0 0 3px @gold;
+}
+
+.required {
+  color: @gold;
 }
 
 input.error {
@@ -88,7 +95,7 @@ input.error {
 
 .labelled-inline label, .labelled-radio-group > label {
   display: inline-block;
-  width: 150px;
+  min-width: 150px;
   text-align: right;
   font-weight: bold;
   margin-right: 2px;

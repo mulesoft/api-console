@@ -1,6 +1,7 @@
 RAML.Inspector = (function() {
   'use strict';
 
+  function Clone() {}
   var exports = {};
 
   var METHOD_ORDERING = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
@@ -69,23 +70,24 @@ RAML.Inspector = (function() {
   }
 
   exports.resourceOverviewSource = function(pathSegments, resource) {
+    Clone.prototype = resource;
+    var clone = new Clone();
 
-    resource.traits = resource.is;
-    delete resource.is;
-    resource.resourceType = resource.type;
-    delete resource.type;
-    resource.pathSegments = pathSegments;
+    clone.traits = resource.is;
+    clone.resourceType = resource.type;
+    clone.type = clone.is = undefined;
+    clone.pathSegments = pathSegments;
 
-    resource.methods = (resource.methods || []);
+    clone.methods = (resource.methods || []);
 
-    resource.methods.sort(function(a, b) {
+    clone.methods.sort(function(a, b) {
       var aOrder = METHOD_ORDERING.indexOf(a.method.toUpperCase());
       var bOrder = METHOD_ORDERING.indexOf(b.method.toUpperCase());
 
       return aOrder > bOrder ? 1 : -1;
     });
 
-    return resource;
+    return clone;
   };
 
   exports.create = function(api) {
@@ -313,40 +315,40 @@ RAML.Client.AuthStrategies.base64 = (function () {
 })();
 
 (function() {
-  /* jshint camelcase: false */
   'use strict';
 
-  function tokenConstructorFor(scheme) {
-    var describedBy = scheme.describedBy || {},
-        queryParameters = describedBy.queryParameters || {};
-
-    if (queryParameters.access_token) {
-      return Oauth2.QueryParameterToken;
-    }
-
-    return Oauth2.HeaderToken;
-  }
-
-  var WINDOW_NAME = 'raml-console-oauth2';
-
   var Oauth2 = function(scheme, credentials) {
-    this.scheme = scheme;
-    this.credentialsManager = Oauth2.credentialsManager(credentials);
+    this.grant = RAML.Client.AuthStrategies.Oauth2.Grant.create(scheme.settings, credentials);
+    this.tokenFactory = RAML.Client.AuthStrategies.Oauth2.Token.createFactory(scheme);
   };
 
   Oauth2.prototype.authenticate = function() {
-    var authorizationRequest = Oauth2.authorizationRequest(this.scheme, this.credentialsManager);
-    var accessTokenRequest = Oauth2.accessTokenRequest(this.scheme, this.credentialsManager);
-
-    return authorizationRequest.then(accessTokenRequest);
+    return this.grant.request().then(Oauth2.createToken(this.tokenFactory));
   };
 
-  Oauth2.credentialsManager = function(credentials) {
+  RAML.Client.AuthStrategies.Oauth2 = Oauth2;
+})();
+
+(function() {
+  'use strict';
+
+  RAML.Client.AuthStrategies.Oauth2.createToken = function(tokenFactory) {
+    return function(token) {
+      return tokenFactory(token);
+    };
+  };
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  RAML.Client.AuthStrategies.Oauth2.credentialsManager = function(credentials, responseType) {
     return {
       authorizationUrl : function(baseUrl) {
         return baseUrl +
           '?client_id=' + credentials.clientId +
-          '&response_type=code' +
+          '&response_type=' + responseType +
           '&redirect_uri=' + RAML.Settings.oauth2RedirectUri;
       },
 
@@ -361,25 +363,91 @@ RAML.Client.AuthStrategies.base64 = (function () {
       }
     };
   };
+})();
 
-  Oauth2.authorizationRequest = function(scheme, credentialsManager) {
-    var settings = scheme.settings;
-    var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUri);
-    window.open(authorizationUrl, WINDOW_NAME);
+(function() {
+  'use strict';
 
-    var deferred = $.Deferred();
-    window.RAML.authorizationSuccess = function(code) { deferred.resolve(code); };
-    return deferred.promise();
+  var GRANTS = [ 'code', 'token' ], IMPLICIT_GRANT = 'token';
+  var Oauth2 = RAML.Client.AuthStrategies.Oauth2;
+
+  function grantTypeFrom(settings) {
+    var authorizationGrants = settings.authorizationGrants || [];
+    var filtered = authorizationGrants.filter(function(grant) { return grant === IMPLICIT_GRANT; });
+    var specifiedGrant = filtered[0] || authorizationGrants[0];
+
+    if (!GRANTS.some(function(grant) { return grant === specifiedGrant; })) {
+      throw new Error('Unknown grant type: ' + specifiedGrant);
+    }
+
+    return specifiedGrant;
+  }
+
+  var Grant = {
+    create: function(settings, credentials) {
+      var type = grantTypeFrom(settings);
+      var credentialsManager = Oauth2.credentialsManager(credentials, type);
+
+      var className = type.charAt(0).toUpperCase() + type.slice(1);
+      return new this[className](settings, credentialsManager);
+    }
   };
 
-  Oauth2.accessTokenRequest = function(scheme, credentialsManager) {
-    var settings = scheme.settings;
-    var TokenConstructor = tokenConstructorFor(scheme);
-    return function(code) {
-      var url = settings.accessTokenUri;
-      if (RAML.Settings.proxy) {
-        url = RAML.Settings.proxy + url;
+  Grant.Code = function(settings, credentialsManager) {
+    this.settings = settings;
+    this.credentialsManager = credentialsManager;
+  };
+
+  Grant.Code.prototype.request = function() {
+    var requestAuthorization = Oauth2.requestAuthorization(this.settings, this.credentialsManager);
+    var requestAccessToken = Oauth2.requestAccessToken(this.settings, this.credentialsManager);
+
+    return requestAuthorization.then(requestAccessToken);
+  };
+
+  Grant.Token = function(settings, credentialsManager) {
+    this.settings = settings;
+    this.credentialsManager = credentialsManager;
+  };
+
+  Grant.Token.prototype.request = function() {
+    return Oauth2.requestAuthorization(this.settings, this.credentialsManager);
+  };
+
+  Oauth2.Grant = Grant;
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  function proxyRequest(url) {
+    if (RAML.Settings.proxy) {
+      url = RAML.Settings.proxy + url;
+    }
+
+    return url;
+  }
+
+  function accessTokenFromObject(data) {
+    return data.access_token;
+  }
+
+  function accessTokenFromString(data) {
+    var vars = data.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (decodeURIComponent(pair[0]) === 'access_token') {
+        return decodeURIComponent(pair[1]);
       }
+    }
+
+    return undefined;
+  }
+
+  RAML.Client.AuthStrategies.Oauth2.requestAccessToken = function(settings, credentialsManager) {
+    return function(code) {
+      var url = proxyRequest(settings.accessTokenUri);
 
       var requestOptions = {
         url: url,
@@ -387,30 +455,78 @@ RAML.Client.AuthStrategies.base64 = (function () {
         data: credentialsManager.accessTokenParameters(code)
       };
 
-      var createToken = function(data) {
-        return new TokenConstructor(data.access_token);
-      };
-      return $.ajax(requestOptions).then(createToken);
+      return $.ajax(requestOptions).then(function(data) {
+        var extract = accessTokenFromString;
+        if (typeof data === 'object') {
+          extract = accessTokenFromObject;
+        }
+
+        return extract(data);
+      });
     };
   };
+})();
 
-  Oauth2.QueryParameterToken = function(token) {
-    this.accessToken = token;
+(function() {
+  'use strict';
+
+  var WINDOW_NAME = 'raml-console-oauth2';
+
+  RAML.Client.AuthStrategies.Oauth2.requestAuthorization = function(settings, credentialsManager) {
+    var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUri),
+        deferred = $.Deferred();
+
+    window.RAML.authorizationSuccess = function(code) { deferred.resolve(code); };
+    window.open(authorizationUrl, WINDOW_NAME);
+    return deferred.promise();
+  };
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  function tokenConstructorFor(scheme) {
+    var describedBy = scheme.describedBy || {},
+        headers = describedBy.headers || {},
+        queryParameters = describedBy.queryParameters || {};
+
+    if (headers.Authorization) {
+      return Header;
+    }
+
+    if (queryParameters.access_token) {
+      return QueryParameter;
+    }
+
+    return Header;
+  }
+
+  var Header = function(accessToken) {
+    this.accessToken = accessToken;
   };
 
-  Oauth2.QueryParameterToken.prototype.sign = function(request) {
-    request.queryParam('access_token', this.accessToken);
-  };
-
-  Oauth2.HeaderToken = function(token) {
-    this.accessToken = token;
-  };
-
-  Oauth2.HeaderToken.prototype.sign = function(request) {
+  Header.prototype.sign = function(request) {
     request.header('Authorization', 'Bearer ' + this.accessToken);
   };
 
-  RAML.Client.AuthStrategies.Oauth2 = Oauth2;
+  var QueryParameter = function(accessToken) {
+    this.accessToken = accessToken;
+  };
+
+  QueryParameter.prototype.sign = function(request) {
+    request.queryParam('access_token', this.accessToken);
+  };
+
+  RAML.Client.AuthStrategies.Oauth2.Token = {
+    createFactory: function(scheme) {
+      var TokenConstructor = tokenConstructorFor(scheme);
+
+      return function createToken(value) {
+        return new TokenConstructor(value);
+      };
+    }
+  };
 })();
 
 (function() {
@@ -458,6 +574,7 @@ RAML.Client.AuthStrategies.base64 = (function () {
     });
 
     this.parameters = uriParameters;
+    this.templated = Object.keys(this.parameters || {}).length > 0;
     this.tokens = tokenize(template);
     this.render = rendererFor(template, uriParameters);
     this.toString = function() { return template; };
@@ -563,9 +680,13 @@ RAML.Client.AuthStrategies.base64 = (function () {
 
   var RFC1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} GMT$/;
 
+  function isEmpty(value) {
+    return value === null || value === undefined || value === '';
+  }
+
   var VALIDATIONS = {
-    required: function(value) { return value !== null && value !== undefined && value !== ''; },
-    boolean: function(value) { return value === 'true' || value === 'false' || value === ''; },
+    required: function(value) { return !isEmpty(value); },
+    boolean: function(value) { return value === 'true' || value === 'false' || isEmpty(value); },
     enum: function(enumeration) {
       return function(value) {
         return value === '' || enumeration.some(function(item) { return item === value; });
@@ -736,7 +857,11 @@ RAML.Client.AuthStrategies.base64 = (function () {
 
     this.method = $scope.method;
 
-    var hasParameters = !!($scope.resource.uriParameters || this.method.queryParameters ||
+    var hasUriParameters = $scope.resource.pathSegments.some(function(segment) {
+      return segment.templated;
+    });
+
+    var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
       this.method.headers || hasFormParameters(this.method));
 
     this.hasRequestDocumentation = hasParameters || !isEmpty(this.method.body);
@@ -821,23 +946,22 @@ RAML.Client.AuthStrategies.base64 = (function () {
     if (!isEmpty(method.headers)) {
       parameterGroups.push(['Headers', method.headers]);
     }
-    if (!isEmpty(resource.uriParameters)) {
-      parameterGroups.push(['URI Parameters', resource.uriParameters]);
+
+    var uriParameters = resource.pathSegments
+      .map(function(segment) { return segment.parameters; })
+      .filter(function(params) { return !!params; })
+      .reduce(function(accum, parameters) {
+        for (var key in parameters) {
+          accum[key] = parameters[key];
+        }
+        return accum;
+      }, {});
+
+    if (!isEmpty(uriParameters)) {
+      parameterGroups.push(['URI Parameters', uriParameters]);
     }
     if (!isEmpty(method.queryParameters)) {
       parameterGroups.push(['Query Parameters', method.queryParameters]);
-    }
-
-    if (method.body) {
-      var normalForm = method.body['application/x-www-form-urlencoded'];
-      var multipartForm = method.body['multipart/form-data'];
-
-      if (normalForm && !isEmpty(normalForm.formParameters)) {
-        parameterGroups.push(['Form Parameters', normalForm.formParameters]);
-      }
-      if (multipartForm && !isEmpty(multipartForm.formParameters)) {
-        parameterGroups.push(['Multipart Form Parameters', multipartForm.formParameters]);
-      }
     }
 
     $scope.parameterGroups = parameterGroups;
@@ -1182,10 +1306,12 @@ RAML.Client.AuthStrategies.base64 = (function () {
   };
 
   var link = function(scope, element, attrs, editor) {
-    scope.$watch('visible', function(visible) {
-      if (visible) {
-        editor.refresh(scope);
-      }
+    var watchCode = function() {
+      return scope.visible && scope.code;
+    };
+
+    scope.$watch(watchCode, function(visible) {
+      if (visible) { editor.refresh(scope); }
     });
   };
 
@@ -1301,20 +1427,24 @@ RAML.Client.AuthStrategies.base64 = (function () {
 (function() {
   'use strict';
 
-  RAML.Directives.markdown = function($sanitize, $parse) {
-    var converter = new Showdown.converter();
+  RAML.Directives.markdown = function($sanitize) {
+    var converter = new Showdown.converter({ extensions: ['table'] });
 
-    var link = function(scope, element, attrs) {
-      var markdown = $parse(attrs.markdown)(scope);
+    var link = function(scope, element) {
+      var processMarkdown = function(markdown) {
+        var result = converter.makeHtml(markdown || '');
+        element.html($sanitize(result));
+      };
 
-      var result = converter.makeHtml(markdown || '');
-
-      element.html($sanitize(result));
+      scope.$watch('markdown', processMarkdown);
     };
 
     return {
       restrict: 'A',
-      link: link
+      link: link,
+      scope: {
+        markdown: '='
+      }
     };
   };
 })();
@@ -1327,7 +1457,8 @@ RAML.Client.AuthStrategies.base64 = (function () {
     this.method = $scope.method;
   };
 
-  controller.prototype.toggleExpansion = function() {
+  controller.prototype.toggleExpansion = function(evt) {
+    evt.preventDefault();
     this.expanded = !this.expanded;
   };
 
@@ -1351,7 +1482,7 @@ RAML.Client.AuthStrategies.base64 = (function () {
             methodView   = controllers[1];
 
         if (resourceView.expandInitially(scope.method)) {
-          methodView.toggleExpansion();
+          methodView.expanded = true;
         }
       }
     };
@@ -1361,10 +1492,18 @@ RAML.Client.AuthStrategies.base64 = (function () {
 'use strict';
 
 (function() {
+  var Controller = function($scope) {
+    var parameters = $scope.parameters || {};
+
+    $scope.displayParameters = function() {
+      return Object.keys(parameters).length > 0;
+    };
+  };
+
   RAML.Directives.namedParameters = function() {
     return {
       restrict: 'E',
-      link: function() {},
+      controller: Controller,
       templateUrl: 'views/named_parameters.tmpl.html',
       replace: true,
       scope: {
@@ -1885,6 +2024,7 @@ RAML.Filters = {};
 })();
 
 angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
+  'use strict';
 
   $templateCache.put('views/api_resources.tmpl.html',
     "<div id=\"raml-console-api-reference\" role=\"resources\">\n" +
@@ -1931,7 +2071,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <tabset>\n" +
-    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation\">\n" +
+    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation \">\n" +
     "      <parameters></parameters>\n" +
     "      <requests></requests>\n" +
     "    </tab>\n" +
@@ -1948,12 +2088,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/method.tmpl.html',
     "<div class='method' role=\"method\" ng-class=\"methodView.cssClass()\">\n" +
-    "  <div class='accordion-toggle method-summary' role=\"methodSummary\" ng-class='method.method' ng-click='methodView.toggleExpansion()'>\n" +
+    "  <div class='accordion-toggle method-summary' role=\"methodSummary\" ng-class='method.method' ng-click='methodView.toggleExpansion($event)'>\n" +
     "    <span role=\"verb\" class='method-name' ng-class='method.method'>{{method.method}}</span>\n" +
     "    <div class='filler' ng-show='methodView.expanded' ng-class='method.method'></div>\n" +
     "\n" +
-    "    <div class='description' role=\"description\" ng-if=\"!methodView.expanded\">\n" +
-    "       {{method.description}}\n" +
+    "    <div role=\"description\" ng-if=\"!methodView.expanded\">\n" +
+    "       <div class='abbreviated-description' markdown='method.description'></div>\n" +
     "       <i class='icon-caret-right'></i>\n" +
     "    </div>\n" +
     "\n" +
@@ -1967,7 +2107,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/named_parameters.tmpl.html',
-    "<fieldset class='labelled-inline bordered' ng-show=\"parameters\">\n" +
+    "<fieldset class='labelled-inline bordered' ng-show=\"displayParameters()\">\n" +
     "  <legend>{{heading}}</legend>\n" +
     "  <parameter-fields parameters=\"parameters\" request-data=\"requestData\"></parameter-fields>\n" +
     "</fieldset>\n"
@@ -2010,7 +2150,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/parameter_fields.tmpl.html',
     "<fieldset>\n" +
     "  <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters track by parameterName\">\n" +
-    "    <label for=\"{{parameterName}}\">{{parameter.displayName}}:</label>\n" +
+    "    <label for=\"{{parameterName}}\">\n" +
+    "      <span class=\"required\" ng-if=\"parameter.required\">*</span>\n" +
+    "      {{parameter.displayName}}:\n" +
+    "    </label>\n" +
     "    <ng-switch on='parameter.type'>\n" +
     "      <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='requestData[parameterName]'/>\n" +
     "      <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='requestData[parameterName]' placeholder='{{parameter.example}}' ng-trim=\"false\" constraints='parameter'/>\n" +
@@ -2081,14 +2224,20 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<h2 ng-if=\"method.body\">Body</h2>\n" +
     "<section ng-repeat=\"(mediaType, definition) in method.body track by mediaType\">\n" +
     "  <h4>{{mediaType}}</h4>\n" +
-    "  <section ng-if=\"definition.schema\">\n" +
-    "    <h5>Schema</h5>\n" +
-    "    <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
-    "  </section>\n" +
-    "  <section ng-if=\"definition.example\">\n" +
-    "    <h5>Example</h5>\n" +
-    "    <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
-    "  </section>\n" +
+    "  <div ng-switch=\"mediaType\">\n" +
+    "    <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
+    "    <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
+    "    <div ng-switch-default>\n" +
+    "      <section ng-if=\"definition.schema\">\n" +
+    "        <h5>Schema</h5>\n" +
+    "        <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
+    "      </section>\n" +
+    "      <section ng-if=\"definition.example\">\n" +
+    "        <h5>Example</h5>\n" +
+    "        <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
+    "      </section>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "</section>\n"
   );
 
@@ -2099,11 +2248,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "  <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
     "    <ul class=\"modifiers\">\n" +
+    "      <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resourceView.traits()\">\n" +
+    "        {{trait|nameFromParameterizable}}\n" +
+    "      </li>\n" +
     "      <li class=\"resource-type\" role=\"resource-type\" ng-if='resourceView.type()'>\n" +
     "        {{resourceView.type()|nameFromParameterizable}}\n" +
-    "      </li>\n" +
-    "      <li class=\"trait\" role=\"trait\" ng-repeat=\"trait in resourceView.traits()\">\n" +
-    "        {{trait|nameFromParameterizable}}\n" +
     "      </li>\n" +
     "    </ul>\n" +
     "\n" +
@@ -2139,6 +2288,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <i ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
     "      {{responseCode}}\n" +
     "    </a>\n" +
+    "    <div ng-if=\"collapsed\" class=\"abbreviated-description\" markdown='response.description'></div>\n" +
     "  </h2>\n" +
     "  <div collapsible-content>\n" +
     "    <section role='response'>\n" +

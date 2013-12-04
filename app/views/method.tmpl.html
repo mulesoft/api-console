@@ -1,10 +1,10 @@
 <div class='method' role="method" ng-class="methodView.cssClass()">
-  <div class='accordion-toggle method-summary' role="methodSummary" ng-class='method.method' ng-click='methodView.toggleExpansion()'>
+  <div class='accordion-toggle method-summary' role="methodSummary" ng-class='method.method' ng-click='methodView.toggleExpansion($event)'>
     <span role="verb" class='method-name' ng-class='method.method'>{{method.method}}</span>
     <div class='filler' ng-show='methodView.expanded' ng-class='method.method'></div>
 
-    <div class='description' role="description" ng-if="!methodView.expanded">
-       {{method.description}}
+    <div role="description" ng-if="!methodView.expanded">
+       <div class='abbreviated-description' markdown='method.description'></div>
        <i class='icon-caret-right'></i>
     </div>
 

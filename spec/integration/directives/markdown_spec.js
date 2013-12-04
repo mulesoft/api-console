@@ -1,33 +1,36 @@
 describe("RAML.Directives.markdown", function() {
-  var scope, $el, converter;
+  var scope, $el;
 
   beforeEach(module('ramlConsoleApp'));
 
   beforeEach(function() {
-    converter = jasmine.createSpyObj('converter', ['makeHtml']);
-    spyOn(Showdown, 'converter').andReturn(converter);
     scope = createScope();
-    scope.markdownText = "input";
+    scope.markdownText = "__result__";
   });
 
   describe("by default", function() {
     beforeEach(function() {
-      converter.makeHtml.andReturn('<strong>result</strong>');
       $el = compileTemplate("<div markdown='markdownText'></div>", scope);
     });
 
     it("converts the passed text to HTML", function() {
-      expect($el.html()).toEqual("<strong>result</strong>");
+      expect($el.html()).toEqual("<p><strong>result</strong></p>");
     });
 
-    it("passes the input markdownText to the Showdown.converter's makeHtml method", function() {
-      expect(converter.makeHtml).toHaveBeenCalledWith("input");
+    it("refreshes the display when the markdown changes", function() {
+      scope.markdownText = "_result_";
+      scope.$digest();
+      expect($el.html()).toEqual("<p><em>result</em></p>");
     });
   });
 
   describe("when Showdown returns unsafe HTML", function() {
+    var converter;
+
     beforeEach(function() {
+      converter = jasmine.createSpyObj('converter', ['makeHtml']);
       converter.makeHtml.andReturn('<strong>unsaferesult</strong><style>body { color: red; }</style>');
+      spyOn(Showdown, 'converter').andReturn(converter);
       $el = compileTemplate("<div markdown='markdownText'></div>", scope);
     });
 
@@ -35,5 +38,22 @@ describe("RAML.Directives.markdown", function() {
       expect($el.html()).toEqual("<strong>unsaferesult</strong>");
     });
 
+  });
+
+  describe("given a markdown table", function() {
+    beforeEach(function() {
+      scope.markdownText = [
+        '|Some Table Column           |Another Column    |Col|',
+        '|----------------------------|------------------|---|',
+        '|some *markdown* value       | another **value**|yes|',
+        '|some `code` value           | just text        |no |'
+      ].join("\n");
+      $el = compileTemplate("<div markdown='markdownText'></div>", scope);
+    });
+
+    it("converts the passed text to HTML", function() {
+      expect($el.html()).toContain("<table>");
+      expect($el.html()).toContain("<code>code</code>");
+    });
   });
 });

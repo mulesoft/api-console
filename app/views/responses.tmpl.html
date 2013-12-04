@@ -4,6 +4,7 @@
       <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
       {{responseCode}}
     </a>
+    <div ng-if="collapsed" class="abbreviated-description" markdown='response.description'></div>
   </h2>
   <div collapsible-content>
     <section role='response'>
