@@ -15,7 +15,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Plaintext", function() {
 
         request = RAML.Client.Request.create('http://example.com', 'GET');
 
-        token = new RAML.Client.AuthStrategies.Oauth1.Token.Plaintext(credentials);
+        token = new RAML.Client.AuthStrategies.Oauth1.Token.Plaintext.Temporary(credentials);
         token.sign(request);
       });
 
@@ -49,7 +49,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Plaintext", function() {
         };
 
         request = RAML.Client.Request.create('http://example.com', 'GET');
-        token = new RAML.Client.AuthStrategies.Oauth1.Token.Plaintext(credentials, tokenCredentials);
+        token = new RAML.Client.AuthStrategies.Oauth1.Token.Plaintext.Token(credentials, tokenCredentials);
         token.sign(request);
       });
 

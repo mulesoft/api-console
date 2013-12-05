@@ -8,13 +8,36 @@
     settings = settings || {};
 
     return function createToken(tokenCredentials) {
-      switch (settings.signatureMethod) {
-      case 'PLAINTEXT':
-        return new Token.Plaintext(consumerCredentials, tokenCredentials);
-      default:
-        return new Token.Hmac(consumerCredentials, tokenCredentials);
-      }
+      var type = settings.signatureMethod === 'PLAINTEXT' ? 'Plaintext' : 'Hmac';
+      var mode = tokenCredentials === undefined ? 'Temporary' : 'Token';
+
+      return new Token[type][mode](consumerCredentials, tokenCredentials);
     };
+  };
+
+  function baseParameters(consumerCredentials) {
+    return {
+      oauth_consumer_key: consumerCredentials.consumerKey,
+      oauth_version: '1.0'
+    };
+  }
+
+  Token.generateTemporaryCredentialParameters = function(consumerCredentials) {
+    var result = baseParameters(consumerCredentials);
+    result.oauth_callback = RAML.Settings.oauth1RedirectUri;
+
+    return result;
+  };
+
+  Token.generateTokenCredentialParameters = function(consumerCredentials, tokenCredentials) {
+    var result = baseParameters(consumerCredentials);
+
+    result.oauth_token = tokenCredentials.token;
+    if (tokenCredentials.verifier) {
+      result.oauth_verifier = tokenCredentials.verifier;
+    }
+
+    return result;
   };
 
 })();

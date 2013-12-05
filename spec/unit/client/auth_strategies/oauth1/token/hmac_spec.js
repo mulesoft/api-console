@@ -22,7 +22,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
         spyOn(Date, 'now').andReturn(1001);
         request = RAML.Client.Request.create('http://example.com', 'POST');
 
-        token = new RAML.Client.AuthStrategies.Oauth1.Token.Hmac(credentials);
+        token = new RAML.Client.AuthStrategies.Oauth1.Token.Hmac.Temporary(credentials);
         token.sign(request);
       });
 
@@ -71,7 +71,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
           token: 'kkk9d7dh3k39sjv7',
           tokenSecret: 'tokenSecret'
         }
-        token = new RAML.Client.AuthStrategies.Oauth1.Token.Hmac(credentials, tokenCredentials);
+        token = new RAML.Client.AuthStrategies.Oauth1.Token.Hmac.Token(credentials, tokenCredentials);
         token.sign(request);
       });
 
@@ -84,19 +84,21 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
 
   // testing a private method, feel free to delete if they cause pain during refactor
   describe("encoding a URI", function() {
+    var encodeURI;
+
     beforeEach(function() {
-      token = new RAML.Client.AuthStrategies.Oauth1.Token.Hmac(credentials);
+      encodeURI = RAML.Client.AuthStrategies.Oauth1.Token.Hmac.encodeURI;
     });
 
     describe("by default", function() {
       it("does not include the port", function() {
-        var result = token.encodeURI("https://example.com/")
+        var result = encodeURI("https://example.com/")
 
         expect(result).toEqual('https%3A%2F%2Fexample.com%2F')
       });
 
       it("downcases host and scheme", function() {
-        var result = token.encodeURI("HTTPS://EXAMPLE.COM/")
+        var result = encodeURI("HTTPS://EXAMPLE.COM/")
 
         expect(result).toEqual('https%3A%2F%2Fexample.com%2F')
       });
@@ -112,7 +114,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
       });
 
       it('strips the proxy when encoding the URI', function() {
-        var result = token.encodeURI(RAML.Settings.proxy + "https://example.com/")
+        var result = encodeURI(RAML.Settings.proxy + "https://example.com/")
         expect(result).toEqual('https%3A%2F%2Fexample.com%2F')
       });
     });
@@ -120,13 +122,13 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
 
     describe("with a standard port", function() {
       it("does not include the non-ssl port", function() {
-        var result = token.encodeURI("http://example.com:80/")
+        var result = encodeURI("http://example.com:80/")
 
         expect(result).toEqual('http%3A%2F%2Fexample.com%2F')
       });
 
       it("does not include the ssl port", function() {
-        var result = token.encodeURI("https://example.com:443/")
+        var result = encodeURI("https://example.com:443/")
 
         expect(result).toEqual('https%3A%2F%2Fexample.com%2F')
       });
@@ -134,7 +136,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
 
     describe("with a non-standard port", function() {
       it("includes the port", function() {
-        var result = token.encodeURI("https://example.com:442/")
+        var result = encodeURI("https://example.com:442/")
 
         expect(result).toEqual('https%3A%2F%2Fexample.com%3A442%2F')
       });
@@ -143,22 +145,22 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
 
   // testing a private method, feel free to delete if they cause pain during refactor
   describe("encoding parameters", function() {
-    var request;
+    var request, encodeParameters;
 
     beforeEach(function() {
+      encodeParameters = RAML.Client.AuthStrategies.Oauth1.Token.Hmac.encodeParameters;
       request = RAML.Client.Request.create('http://example.com', 'GET');
-      token = new RAML.Client.AuthStrategies.Oauth1.Token.Hmac(credentials);
     });
 
     it("encodes the name and value of each parameter", function() {
       request.queryParams({ 'aQu=ryParam': 'aV&lue' });
-      var result = token.encodeParameters(request);
+      var result = encodeParameters(request);
       expect(result).toMatch('aQu%3DryParam=aV%26lue');
     });
 
     it("sorts them in ascending byte value ordering", function() {
       request.queryParams({ 'c': '3', 'e': '5', 'a': '1', 'd': '4', 'b': '2' });
-      var result = token.encodeParameters(request);
+      var result = encodeParameters(request);
       expect(result).toMatch('a=1&b=2&c=3&d=4&e=5');
     });
 
@@ -167,7 +169,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
       request.queryParams({ 'c': '3', 'e': '5', 'a': '1', 'd': '4', 'b': '2', 'a b': 'percent' });
       request.data({ 'c': '03', 'e': '05', 'a': '01', 'd': '04', 'b': '02' });
 
-      var result = token.encodeParameters(request);
+      var result = encodeParameters(request);
       expect(result).toMatch('a=01&a=1&a%20b=percent&b=02&b=2&c=03&c=3&d=04&d=4&e=05&e=5');
     });
 
@@ -176,7 +178,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
         oauth_whocares: 'done'
       }
 
-      var result = token.encodeParameters(request, oauthParameters);
+      var result = encodeParameters(request, oauthParameters);
       expect(result).toMatch(/^oauth_whocares=done$/);
     });
 
@@ -184,7 +186,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
       request.header('Content-Type', 'application/x-www-form-urlencoded');
       request.data({ 'f%rm': 'p@ram' });
 
-      var result = token.encodeParameters(request);
+      var result = encodeParameters(request);
       expect(result).toMatch('f%25rm=p%40ram');
     });
 
@@ -192,7 +194,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
       request.header('Content-Type', 'multipart/form-data');
       request.data({ 'f%rm': 'p@ram' });
 
-      var result = token.encodeParameters(request);
+      var result = encodeParameters(request);
       expect(result).not.toMatch('f%25rm=p%40ram');
     });
   });
