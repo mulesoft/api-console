@@ -23,7 +23,7 @@
     });
 
     var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
-      this.method.headers || hasFormParameters(this.method));
+      !isEmpty(this.method.headers) || hasFormParameters(this.method));
 
     this.hasRequestDocumentation = hasParameters || !isEmpty(this.method.body);
     this.hasResponseDocumentation = !isEmpty(this.method.responses);

@@ -36,12 +36,25 @@
     return securedBy.some(function(name) { return name === null; });
   }
 
+  var PLACEHOLDER = /\{\*\}/;
+  function filterHeadersWithPlaceholders(headers) {
+    var filtered = {};
+    Object.keys(headers || {}).forEach(function(key) {
+      if (!key.match(PLACEHOLDER)) {
+        filtered[key] = headers[key];
+      }
+    });
+
+    return filtered;
+  }
+
   RAML.Inspector.Method = {
     create: function(raml, securitySchemes) {
       var method = clone(raml);
+
       method.securitySchemes = securitySchemesExtractor(securitySchemes);
       method.allowsAnonymousAccess = allowsAnonymousAccess;
-
+      method.headers = filterHeadersWithPlaceholders(method.headers);
       return method;
     }
   };

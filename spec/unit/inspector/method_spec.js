@@ -15,12 +15,32 @@ describe("RAML.Inspector.Method", function() {
     '/resource:',
     '  description: The first resource',
     '  get:',
+    '    headers:',
+    '      example:',
+    '      x-placeholder-{*}:',
     '    securedBy: [null, basic, oauth_2: { scopes: [ comments ] } ]',
     '  post:',
     '    securedBy: [basic, oauth_2: { scopes: [ comments ] } ]',
     '/another/resource:',
     '  get:'
   ));
+
+  describe("creation", function() {
+    describe("by default", function() {
+      beforeEach(function() {
+        method = RAML.Inspector.Method.create(this.api.resources[0].methods[0], this.api.securitySchemes);
+        securitySchemes = method.securitySchemes();
+      });
+
+      it("includes headers without placeholders", function() {
+        expect(method.headers['example']).toBeDefined()
+      });
+
+      it("filters out headers with placeholders", function() {
+        expect(method.headers['x-placeholder-{*}']).not.toBeDefined()
+      });
+    });
+  });
 
   describe("retrieving security scheme definitions for a method", function() {
     var securitySchemes;
