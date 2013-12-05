@@ -2,8 +2,9 @@
   background-color: @veryLightGray;
   border-radius: 5px;
   border: 1px solid @lightGray;
-  padding: 0px;
   margin: 5px 0;
+  padding: 15px;
+  padding-bottom: 0;
 
   &.collapsed:hover, &.expanded {
     background-color: white;
@@ -13,9 +14,25 @@
     position: relative;
     cursor: pointer;
 
+    ul.modifiers {
+      margin: -15px -18px 8px 0;
+      min-height: 7px;
+
+      li {
+        &:last-child {
+          border-top-right-radius: 4px;
+        }
+      }
+    }
+
     .path {
       float: left;
-      margin: 14px 0 14px 15px;
+      margin: 0;
+      margin-top: 1px;
+      margin-bottom: 15px;
+      line-height: 18px;
+      max-width: 100%;
+      word-wrap: break-word;
 
       span:last-child {
         font-weight: bold;
@@ -27,30 +44,34 @@
   }
 
   .description {
-    margin-left: 15px;
-
     p:first-child {
-      margin: 10px 0 20px 0;
+      margin-top: 5px;
+    }
+
+    p:last-child {
+      margin-bottom: 20px;
     }
   }
 
   .methods {
     float: right;
     text-align: right;
-    margin: 10px;
+    margin-top: -1px;
+    margin-bottom: 10px;
 
     li {
       float: right;
       line-height: 22px;
       margin-right: 5px;
+      margin-bottom: 5px;
     }
   }
 }
 
 ul.modifiers {
   font-size: 0px; // ignore whitespace around inline-block elements below
-  margin-left: 15px;
   text-align: right;
+  margin-right: -3px;
 
   li {
     display: inline-block;
