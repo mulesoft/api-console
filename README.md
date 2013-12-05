@@ -16,7 +16,7 @@ There are two ways you can include the console: directly, or within an iframe. T
           …
           <link rel="stylesheet" href="path/to/dist/styles/app.css" type="text/css" />
         </head>
-        <body>
+        <body ng-app="ramlConsoleApp" ng-cloak id="raml-console-unembedded">
           …
           <script src="path/to/dist/scripts/vendor.js"></script>
           <script src="path/to/dist/scripts/app.js"></script>
