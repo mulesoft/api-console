@@ -3,22 +3,9 @@
   'use strict';
 
   var generateTemporaryCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Token.generateTemporaryCredentialParameters,
-      generateTokenCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Token.generateTokenCredentialParameters;
-
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
-  function rfc3986Encode(str) {
-    return encodeURIComponent(str).replace(/[!'()]/g, window.escape).replace(/\*/g, '%2A');
-  }
-
-  function setRequestHeader(params, request) {
-    params.oauth_signature_method = 'PLAINTEXT';
-
-    var header = Object.keys(params).map(function(key) {
-      return key + '="' + rfc3986Encode(params[key]) + '"';
-    }).join(', ');
-
-    request.header('Authorization', 'OAuth ' + header);
-  }
+      generateTokenCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Token.generateTokenCredentialParameters,
+      rfc3986Encode = RAML.Client.AuthStrategies.Oauth1.Token.rfc3986Encode,
+      setRequestHeader = RAML.Client.AuthStrategies.Oauth1.Token.setRequestHeader;
 
   var Plaintext = {};
 
@@ -29,6 +16,7 @@
   Plaintext.Temporary.prototype.sign = function(request) {
     var params = generateTemporaryCredentialParameters(this.consumerCredentials);
     params.oauth_signature = rfc3986Encode(this.consumerCredentials.consumerSecret) + '&';
+    params.oauth_signature_method = 'PLAINTEXT';
 
     setRequestHeader(params, request);
   };
@@ -41,6 +29,7 @@
   Plaintext.Token.prototype.sign = function(request) {
     var params = generateTokenCredentialParameters(this.consumerCredentials, this.tokenCredentials);
     params.oauth_signature = rfc3986Encode(this.consumerCredentials.consumerSecret) + '&' + rfc3986Encode(this.tokenCredentials.tokenSecret);
+    params.oauth_signature_method = 'PLAINTEXT';
 
     setRequestHeader(params, request);
   };

@@ -40,4 +40,16 @@
     return result;
   };
 
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+  Token.rfc3986Encode = function(str) {
+    return encodeURIComponent(str).replace(/[!'()]/g, window.escape).replace(/\*/g, '%2A');
+  };
+
+  Token.setRequestHeader = function(params, request) {
+    var header = Object.keys(params).map(function(key) {
+      return key + '="' + Token.rfc3986Encode(params[key]) + '"';
+    }).join(', ');
+
+    request.header('Authorization', 'OAuth ' + header);
+  };
 })();
