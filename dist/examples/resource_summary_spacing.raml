@@ -1,0 +1,42 @@
+#%RAML 0.8
+# Use this RAML with a very narrow console to see how the resource summary wraps
+# given the length/presence/absence of various elements
+title: Example
+resourceTypes:
+  - someType: {}
+traits:
+  - someTrait: {}
+/resource/with/a/very/long/name/that/causes/it/to/wrap/which/looks/bad/because:
+  /short:
+    /short:
+      /short:
+  /the/line/height/is/small:
+    get:
+  /some/more/with/ascenders:
+    type: someType
+  /and/padaqalag/with/methods:
+    type: someType
+    is: [someTrait]
+    get:
+    post:
+    put:
+    delete:
+  /and/padaqalaga/with/description:
+    type: someType
+    is: [someTrait]
+    description: |
+      Some text I wrote
+
+      And some more text
+
+      Plus suppose I wrote a bunch of long text that wraps and makes it look like a real paragraph
+    get:
+    post:
+    put:
+    delete:
+/short:
+  type: someType
+/short-with-methods:
+  type: someType
+  get:
+  post:

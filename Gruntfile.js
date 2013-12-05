@@ -34,19 +34,18 @@ module.exports = function (grunt) {
     ngtemplates: {
       dist: {
         options: {
-          base: 'app',
-          module: 'ramlConsoleApp',
-          concat: 'dist/scripts/app.min.js'
+          module: 'ramlConsoleApp'
         },
-        src: 'app/views/**.html',
-        dest: 'dist/templates.js'
+        cwd: 'app',
+        src: 'views/**.html',
+        dest: '.tmp/templates.js'
       },
       test: {
         options: {
-          base: 'app',
           module: 'ramlConsoleApp'
         },
-        src: 'app/views/**.html',
+        cwd: 'app',
+        src: 'views/**.html',
         dest: 'dist/templates.js' // FIXME: put this into a test directory
       }
     },
@@ -94,7 +93,7 @@ module.exports = function (grunt) {
               // For dist, fonts are copied to dist/font/ and hosted at /font
               // For dev, strip /font from path and host fonts at root
               stripFontPathPrefix(connect),
-              mountFolder(connect, 'app/vendor/font-awesome/font'),
+              mountFolder(connect, 'app/vendor/bower_components/font-awesome/font'),
               mountFolder(connect, 'app/vendor/open-sans'),
               mountFolder(connect, yeomanConfig.app)
             ];
@@ -109,7 +108,7 @@ module.exports = function (grunt) {
               mountFolder(connect, '.tmp'),
               mountFolder(connect, 'test'),
               stripFontPathPrefix(connect),
-              mountFolder(connect, 'app/vendor/font-awesome/font'),
+              mountFolder(connect, 'app/vendor/bower_components/font-awesome/font'),
               mountFolder(connect, 'app/vendor/open-sans'),
               mountFolder(connect, yeomanConfig.app)
             ];
@@ -160,7 +159,14 @@ module.exports = function (grunt) {
     useminPrepare: {
       html: '<%= yeoman.app %>/index.html',
       options: {
-        dest: '<%= yeoman.dist %>'
+        dest: '<%= yeoman.dist %>',
+        flow: {
+          steps: {
+            js: ['concat', 'uglifyjs', require('./tasks/copy_vendor')],
+            css: ['concat', 'cssmin'],
+          },
+          post: []
+        }
       }
     },
     usemin: {
@@ -168,6 +174,12 @@ module.exports = function (grunt) {
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
         dirs: ['<%= yeoman.dist %>']
+      }
+    },
+    concat: {
+      addTemplate: {
+        src: [ '.tmp/concat/scripts/app.min.js', '.tmp/templates.js' ],
+        dest: '.tmp/concat/scripts/app.min.js'
       }
     },
     copy: {
@@ -186,7 +198,7 @@ module.exports = function (grunt) {
         },
         {
           expand: true,
-          cwd: 'app/vendor/font-awesome/font',
+          cwd: 'app/vendor/bower_components/font-awesome/font',
           src: ['*'],
           dest: 'dist/font/'
         },
@@ -200,7 +212,7 @@ module.exports = function (grunt) {
       backupOriginal: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.dist %>',
+          cwd: '.tmp/concat',
           dest: '<%= yeoman.dist %>',
           src: ['scripts/*.min.js', 'styles/*.min.css'],
           rename: function(dest, src) {
@@ -314,9 +326,11 @@ module.exports = function (grunt) {
     'clean',
     'useminPrepare',
     'ngtemplates:dist',
-    'concat',
-    'copy:dist',
     'less:dist',
+    'concat:generated',
+    'concat:addTemplate',
+    'copy:dist',
+    'copy:generated',
     'copy:backupOriginal',
     'uglify',
     'cssmin',

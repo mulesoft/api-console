@@ -42,22 +42,21 @@
     <raml-console with-root-documentation></raml-console>
 
     <!-- build:js({.tmp,app}) scripts/vendor.min.js -->
-    <script src="vendor/angular.js"></script>
-    <script src="vendor/angular-resource.js"></script>
-    <script src="vendor/angular-sanitize.js"></script>
+    <script src="vendor/bower_components/vkbeautify/vkbeautify.js"></script>
+    <script src="vendor/bower_components/angular/angular.js"></script>
+    <script src="vendor/bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="vendor/jquery.js"></script>
     <script src="vendor/bower_components/raml-js-parser/dist/raml-parser.js"></script>
     <script src="vendor/bower_components/crypto-js/rollups/hmac-sha1.js"></script>
     <script src="vendor/bower_components/crypto-js/components/enc-base64.js"></script>
-    <script src="vendor/showdown.min.js"></script>
-    <script src="vendor/showdown-table.min.js"></script>
-    <script src="vendor/codemirror/codemirror.js"></script>
-    <script src="vendor/codemirror/xml.js"></script>
-    <script src="vendor/codemirror/javascript.js"></script>
+    <script src="vendor/bower_components/showdown/src/showdown.js"></script>
+    <script src="vendor/bower_components/showdown/src/extensions/table.js"></script>
+    <script src="vendor/bower_components/codemirror/lib/codemirror.js"></script>
+    <script src="vendor/bower_components/codemirror/mode/xml/xml.js"></script>
+    <script src="vendor/bower_components/codemirror/mode/javascript/javascript.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/app.min.js -->
-    <script src="vendor/jquery.js"></script>
-    <script src="vendor/vkbeautify.0.99.00.beta.js"></script>
     <script src="scripts/inspector.js"></script>
     <script src="scripts/client.js"></script>
     <script src="scripts/client/auth_strategies.js"></script>
