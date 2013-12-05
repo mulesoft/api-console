@@ -8200,6 +8200,8 @@ RAML.Inspector = (function() {
         return new RAML.Client.AuthStrategies.Basic(scheme, credentials);
       case 'OAuth 2.0':
         return new RAML.Client.AuthStrategies.Oauth2(scheme, credentials);
+      case 'OAuth 1.0':
+        return new RAML.Client.AuthStrategies.Oauth1(scheme, credentials);
       default:
         throw new Error('Unknown authentication strategy: ' + scheme.type);
       }
@@ -8230,101 +8232,9 @@ RAML.Inspector = (function() {
   };
 })();
 
-/* jshint bitwise: false */
-
-'use strict';
-
-RAML.Client.AuthStrategies.base64 = (function () {
-  var keyStr = 'ABCDEFGHIJKLMNOP' +
-    'QRSTUVWXYZabcdef' +
-    'ghijklmnopqrstuv' +
-    'wxyz0123456789+/' +
-    '=';
-
-  return {
-    encode: function (input) {
-      var output = '';
-      var chr1, chr2, chr3 = '';
-      var enc1, enc2, enc3, enc4 = '';
-      var i = 0;
-
-      do {
-        chr1 = input.charCodeAt(i++);
-        chr2 = input.charCodeAt(i++);
-        chr3 = input.charCodeAt(i++);
-
-        enc1 = chr1 >> 2;
-        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-        enc4 = chr3 & 63;
-
-        if (isNaN(chr2)) {
-          enc3 = enc4 = 64;
-        } else if (isNaN(chr3)) {
-          enc4 = 64;
-        }
-
-        output = output +
-        keyStr.charAt(enc1) +
-        keyStr.charAt(enc2) +
-        keyStr.charAt(enc3) +
-        keyStr.charAt(enc4);
-        chr1 = chr2 = chr3 = '';
-        enc1 = enc2 = enc3 = enc4 = '';
-      } while (i < input.length);
-
-      return output;
-    },
-
-    decode: function (input) {
-      var output = '';
-      var chr1, chr2, chr3 = '';
-      var enc1, enc2, enc3, enc4 = '';
-      var i = 0;
-
-      // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
-      var base64test = /[^A-Za-z0-9\+\/\=]/g;
-      if (base64test.exec(input)) {
-        window.alert('There were invalid base64 characters in the input text.\n' +
-          'Valid base64 characters are A-Z, a-z, 0-9, '+', \'/\',and \'=\'\n' +
-          'Expect errors in decoding.');
-      }
-      input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
-
-      do {
-        enc1 = keyStr.indexOf(input.charAt(i++));
-        enc2 = keyStr.indexOf(input.charAt(i++));
-        enc3 = keyStr.indexOf(input.charAt(i++));
-        enc4 = keyStr.indexOf(input.charAt(i++));
-
-        chr1 = (enc1 << 2) | (enc2 >> 4);
-        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-        chr3 = ((enc3 & 3) << 6) | enc4;
-
-        output = output + String.fromCharCode(chr1);
-
-        if (enc3 !== 64) {
-          output = output + String.fromCharCode(chr2);
-        }
-        if (enc4 !== 64) {
-          output = output + String.fromCharCode(chr3);
-        }
-
-        chr1 = chr2 = chr3 = '';
-        enc1 = enc2 = enc3 = enc4 = '';
-
-      } while (i < input.length);
-
-      return output;
-    }
-  };
-})();
-
 'use strict';
 
 (function() {
-  var base64 = RAML.Client.AuthStrategies.base64;
-
   var Basic = function(scheme, credentials) {
     this.token = new Basic.Token(credentials);
   };
@@ -8338,7 +8248,8 @@ RAML.Client.AuthStrategies.base64 = (function () {
   };
 
   Basic.Token = function(credentials) {
-    this.encoded = base64.encode(credentials.username + ':' + credentials.password);
+    var words = CryptoJS.enc.Utf8.parse(credentials.username + ':' + credentials.password);
+    this.encoded = CryptoJS.enc.Base64.stringify(words);
   };
 
   Basic.Token.prototype.sign = function(request) {
@@ -8346,6 +8257,312 @@ RAML.Client.AuthStrategies.base64 = (function () {
   };
 
   RAML.Client.AuthStrategies.Basic = Basic;
+})();
+
+(function() {
+  'use strict';
+
+  var Oauth1 = function(scheme, credentials) {
+    var signerFactory = RAML.Client.AuthStrategies.Oauth1.Signer.createFactory(scheme.settings, credentials);
+    this.requestTemporaryCredentials = RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials(scheme.settings, signerFactory);
+    this.requestAuthorization = RAML.Client.AuthStrategies.Oauth1.requestAuthorization(scheme.settings);
+    this.requestTokenCredentials = RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials(scheme.settings, signerFactory);
+  };
+
+  Oauth1.proxyRequest = function(url) {
+    if (RAML.Settings.proxy) {
+      url = RAML.Settings.proxy + url;
+    }
+
+    return url;
+  };
+
+  Oauth1.parseUrlEncodedData = function(data) {
+    var result = {};
+
+    data.split('&').forEach(function(param) {
+      var keyAndValue = param.split('=');
+      result[keyAndValue[0]] = keyAndValue[1];
+    });
+
+    return result;
+  };
+
+  Oauth1.prototype.authenticate = function() {
+    return this.requestTemporaryCredentials().then(this.requestAuthorization).then(this.requestTokenCredentials);
+  };
+
+  RAML.Client.AuthStrategies.Oauth1 = Oauth1;
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  var WINDOW_NAME = 'raml-console-oauth1';
+
+  RAML.Client.AuthStrategies.Oauth1.requestAuthorization = function(settings) {
+    return function requestAuthorization(temporaryCredentials) {
+      var authorizationUrl = settings.authorizationUri + '?oauth_token=' + temporaryCredentials.token,
+      deferred = $.Deferred();
+
+      window.RAML.authorizationSuccess = function(authResult) {
+        temporaryCredentials.verifier = authResult.verifier;
+        deferred.resolve(temporaryCredentials);
+      };
+      window.open(authorizationUrl, WINDOW_NAME);
+      return deferred.promise();
+    };
+  };
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials = function(settings, signerFactory) {
+    return function requestTemporaryCredentials() {
+      var url = RAML.Client.AuthStrategies.Oauth1.proxyRequest(settings.requestTokenUri);
+      var request = RAML.Client.Request.create(url, 'post');
+
+      signerFactory().sign(request);
+
+      return $.ajax(request.toOptions()).then(function(rawFormData) {
+        var data = RAML.Client.AuthStrategies.Oauth1.parseUrlEncodedData(rawFormData);
+
+        return {
+          token: data.oauth_token,
+          tokenSecret: data.oauth_token_secret
+        };
+      });
+    };
+  };
+
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials = function(settings, signerFactory) {
+    return function requestTokenCredentials(temporaryCredentials) {
+      var url = RAML.Client.AuthStrategies.Oauth1.proxyRequest(settings.tokenCredentialsUri);
+      var request = RAML.Client.Request.create(url, 'post');
+
+      signerFactory(temporaryCredentials).sign(request);
+
+      return $.ajax(request.toOptions()).then(function(rawFormData) {
+        var credentials = RAML.Client.AuthStrategies.Oauth1.parseUrlEncodedData(rawFormData);
+
+        return signerFactory({
+          token: credentials.oauth_token,
+          tokenSecret: credentials.oauth_token_secret
+        });
+      });
+    };
+  };
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  var Signer = RAML.Client.AuthStrategies.Oauth1.Signer = {};
+
+  Signer.createFactory = function(settings, consumerCredentials) {
+    settings = settings || {};
+
+    return function createSigner(tokenCredentials) {
+      var type = settings.signatureMethod === 'PLAINTEXT' ? 'Plaintext' : 'Hmac';
+      var mode = tokenCredentials === undefined ? 'Temporary' : 'Token';
+
+      return new Signer[type][mode](consumerCredentials, tokenCredentials);
+    };
+  };
+
+  function baseParameters(consumerCredentials) {
+    return {
+      oauth_consumer_key: consumerCredentials.consumerKey,
+      oauth_version: '1.0'
+    };
+  }
+
+  Signer.generateTemporaryCredentialParameters = function(consumerCredentials) {
+    var result = baseParameters(consumerCredentials);
+    result.oauth_callback = RAML.Settings.oauth1RedirectUri;
+
+    return result;
+  };
+
+  Signer.generateTokenCredentialParameters = function(consumerCredentials, tokenCredentials) {
+    var result = baseParameters(consumerCredentials);
+
+    result.oauth_token = tokenCredentials.token;
+    if (tokenCredentials.verifier) {
+      result.oauth_verifier = tokenCredentials.verifier;
+    }
+
+    return result;
+  };
+
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+  Signer.rfc3986Encode = function(str) {
+    return encodeURIComponent(str).replace(/[!'()]/g, window.escape).replace(/\*/g, '%2A');
+  };
+
+  Signer.setRequestHeader = function(params, request) {
+    var header = Object.keys(params).map(function(key) {
+      return key + '="' + Signer.rfc3986Encode(params[key]) + '"';
+    }).join(', ');
+
+    request.header('Authorization', 'OAuth ' + header);
+  };
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  var generateTemporaryCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Signer.generateTemporaryCredentialParameters,
+      generateTokenCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Signer.generateTokenCredentialParameters,
+      rfc3986Encode = RAML.Client.AuthStrategies.Oauth1.Signer.rfc3986Encode,
+      setRequestHeader = RAML.Client.AuthStrategies.Oauth1.Signer.setRequestHeader;
+
+  function uriWithoutProxy(url) {
+    if (RAML.Settings.proxy) {
+      url = url.replace(RAML.Settings.proxy, '');
+    }
+    return url;
+  }
+
+  function generateSignature(params, request, key) {
+    params.oauth_signature_method = 'HMAC-SHA1';
+    params.oauth_timestamp = Math.floor(Date.now() / 1000);
+    params.oauth_nonce = CryptoJS.lib.WordArray.random(16).toString();
+
+    var data = Hmac.constructHmacText(request, params);
+    var hash = CryptoJS.HmacSHA1(data, key);
+    params.oauth_signature = hash.toString(CryptoJS.enc.Base64);
+  }
+
+  var Hmac = {
+    constructHmacText: function(request, oauthParams) {
+      var options = request.toOptions();
+
+      return [
+        options.type.toUpperCase(),
+        this.encodeURI(options.url),
+        rfc3986Encode(this.encodeParameters(request, oauthParams))
+      ].join('&');
+    },
+
+    encodeURI: function(uri) {
+      var parser = document.createElement('a');
+      parser.href = uriWithoutProxy(uri);
+
+      var hostname = '';
+      if (parser.protocol === 'https:' && parser.port === 443 || parser.protocol === 'http:' && parser.port === 80) {
+        hostname = parser.hostname.toLowerCase();
+      } else {
+        hostname = parser.host.toLowerCase();
+      }
+
+      return rfc3986Encode(parser.protocol + '//' + hostname + parser.pathname);
+    },
+
+    encodeParameters: function(request, oauthParameters) {
+      var params = request.queryParams();
+      var formParams = {};
+      if (request.toOptions().contentType === 'application/x-www-form-urlencoded') {
+        formParams = request.data();
+      }
+
+      var result = [];
+      for (var key in params) {
+        result.push([rfc3986Encode(key), rfc3986Encode(params[key])]);
+      }
+
+      for (var formKey in formParams) {
+        result.push([rfc3986Encode(formKey), rfc3986Encode(formParams[formKey])]);
+      }
+
+      for (var oauthKey in oauthParameters) {
+        result.push([rfc3986Encode(oauthKey), rfc3986Encode(oauthParameters[oauthKey])]);
+      }
+
+      result.sort(function(a, b) {
+        return (a[0] === b[0] ? a[1].localeCompare(b[1]) : a[0].localeCompare(b[0]));
+      });
+
+      return result.map(function(tuple) { return tuple.join('='); }).join('&');
+    }
+  };
+
+  Hmac.Temporary = function(consumerCredentials) {
+    this.consumerCredentials = consumerCredentials;
+  };
+
+  Hmac.Temporary.prototype.sign = function(request) {
+    var params = generateTemporaryCredentialParameters(this.consumerCredentials);
+    var key = rfc3986Encode(this.consumerCredentials.consumerSecret) + '&';
+
+    generateSignature(params, request, key);
+    setRequestHeader(params, request);
+  };
+
+  Hmac.Token = function(consumerCredentials, tokenCredentials) {
+    this.consumerCredentials = consumerCredentials;
+    this.tokenCredentials = tokenCredentials;
+  };
+
+  Hmac.Token.prototype.sign = function(request) {
+    var params = generateTokenCredentialParameters(this.consumerCredentials, this.tokenCredentials);
+    var key = rfc3986Encode(this.consumerCredentials.consumerSecret) + '&' + rfc3986Encode(this.tokenCredentials.tokenSecret);
+
+    generateSignature(params, request, key);
+    setRequestHeader(params, request);
+  };
+
+  RAML.Client.AuthStrategies.Oauth1.Signer.Hmac = Hmac;
+})();
+
+(function() {
+  /* jshint camelcase: false */
+  'use strict';
+
+  var generateTemporaryCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Signer.generateTemporaryCredentialParameters,
+      generateTokenCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Signer.generateTokenCredentialParameters,
+      rfc3986Encode = RAML.Client.AuthStrategies.Oauth1.Signer.rfc3986Encode,
+      setRequestHeader = RAML.Client.AuthStrategies.Oauth1.Signer.setRequestHeader;
+
+  var Plaintext = {};
+
+  Plaintext.Temporary = function(consumerCredentials) {
+    this.consumerCredentials = consumerCredentials;
+  };
+
+  Plaintext.Temporary.prototype.sign = function(request) {
+    var params = generateTemporaryCredentialParameters(this.consumerCredentials);
+    params.oauth_signature = rfc3986Encode(this.consumerCredentials.consumerSecret) + '&';
+    params.oauth_signature_method = 'PLAINTEXT';
+
+    setRequestHeader(params, request);
+  };
+
+  Plaintext.Token = function(consumerCredentials, tokenCredentials) {
+    this.consumerCredentials = consumerCredentials;
+    this.tokenCredentials = tokenCredentials;
+  };
+
+  Plaintext.Token.prototype.sign = function(request) {
+    var params = generateTokenCredentialParameters(this.consumerCredentials, this.tokenCredentials);
+    params.oauth_signature = rfc3986Encode(this.consumerCredentials.consumerSecret) + '&' + rfc3986Encode(this.tokenCredentials.tokenSecret);
+    params.oauth_signature_method = 'PLAINTEXT';
+
+    setRequestHeader(params, request);
+  };
+
+  RAML.Client.AuthStrategies.Oauth1.Signer.Plaintext = Plaintext;
 })();
 
 (function() {
@@ -8637,17 +8854,36 @@ RAML.Client.AuthStrategies.base64 = (function () {
   var CONTENT_TYPE = 'content-type';
   var FORM_DATA = 'multipart/form-data';
 
+  function Clone() {}
+  function clone(obj) {
+    Clone.prototype = obj;
+    return new Clone();
+  }
+
   var RequestDsl = function(options) {
     var rawData;
+    var queryParams;
     var isMultipartRequest;
 
     this.data = function(data) {
-      rawData = data;
+      if (data === undefined) {
+        return clone(rawData);
+      } else {
+        rawData = data;
+      }
+    };
+
+    this.queryParams = function(parameters) {
+      if (parameters === undefined) {
+        return clone(queryParams);
+      } else {
+        queryParams = parameters;
+      }
     };
 
     this.queryParam = function(name, value) {
-      rawData = rawData || {};
-      rawData[name] = value;
+      queryParams = queryParams || {};
+      queryParams[name] = value;
     };
 
     this.header = function(name, value) {
@@ -8677,6 +8913,7 @@ RAML.Client.AuthStrategies.base64 = (function () {
     };
 
     this.toOptions = function() {
+      var o = clone(options);
       if (rawData) {
         if (isMultipartRequest) {
           var data = new FormData();
@@ -8685,15 +8922,19 @@ RAML.Client.AuthStrategies.base64 = (function () {
             data.append(key, rawData[key]);
           }
 
-          options.processData = false;
-          options.data = data;
+          o.processData = false;
+          o.data = data;
         } else {
-          options.processData = true;
-          options.data = rawData;
+          o.processData = true;
+          o.data = rawData;
         }
       }
+      if (queryParams) {
+        var separator = (options.url.match('\\?') ? '&' : '?');
+        o.url = options.url + separator + $.param(queryParams);
+      }
 
-      return options;
+      return o;
     };
   };
 
@@ -9210,7 +9451,7 @@ RAML.Client.AuthStrategies.base64 = (function () {
       var request = RAML.Client.Request.create(url, this.httpMethod);
 
       if (!isEmpty(this.queryParameters)) {
-        request.data(filterEmpty(this.queryParameters));
+        request.queryParams(filterEmpty(this.queryParameters));
       }
 
       if (!isEmpty(this.formParameters)) {
@@ -9569,6 +9810,21 @@ RAML.Client.AuthStrategies.base64 = (function () {
 'use strict';
 
 (function() {
+  RAML.Directives.oauth1 = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'views/oauth1.tmpl.html',
+      replace: true,
+      scope: {
+        credentials: '='
+      }
+    };
+  };
+})();
+
+'use strict';
+
+(function() {
   RAML.Directives.oauth2 = function() {
     return {
       restrict: 'E',
@@ -9772,7 +10028,9 @@ RAML.Client.AuthStrategies.base64 = (function () {
     };
 
     controller.prototype.supports = function(scheme) {
-      return (scheme.type === 'OAuth 2.0' || scheme.type === 'Basic Authentication');
+      return scheme.type === 'OAuth 2.0' ||
+        scheme.type === 'OAuth 1.0' ||
+        scheme.type === 'Basic Authentication';
     };
 
     return {
@@ -10002,6 +10260,8 @@ RAML.Filters = {};
 
   var uri = location.protocol + '//' + location.host + location.pathname + 'authentication/oauth2.html';
   RAML.Settings.oauth2RedirectUri = RAML.Settings.oauth2RedirectUri || uri;
+  RAML.Settings.oauth1RedirectUri = RAML.Settings.oauth1RedirectUri || uri.replace(/oauth2\.html$/, 'oauth1.html');
+
   // RAML.Settings.proxy = RAML.Settings.proxy || '/proxy/';
 })();
 
@@ -10033,6 +10293,7 @@ RAML.Filters = {};
   module.directive('method', RAML.Directives.method);
   module.directive('namedParameters', RAML.Directives.namedParameters);
   module.directive('namedParametersDocumentation', RAML.Directives.namedParametersDocumentation);
+  module.directive('oauth1', RAML.Directives.oauth1);
   module.directive('oauth2', RAML.Directives.oauth2);
   module.directive('parameterFields', RAML.Directives.parameterFields);
   module.directive('parameters', RAML.Directives.parameters);
@@ -10157,6 +10418,20 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "    </div>\n" +
     "  </section>\n" +
     "</section>\n"
+  );
+
+  $templateCache.put("views/oauth1.tmpl.html",
+    "<fieldset class=\"labelled-inline\" role=\"oauth1\">\n" +
+    "  <div class=\"control-group\">\n" +
+    "    <label for=\"consumerKey\">Consumer Key:</label>\n" +
+    "    <input type=\"text\" name=\"consumerKey\" ng-model='credentials.consumerKey'/>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"control-group\">\n" +
+    "    <label for=\"consumerSecret\">Consumer Secret:</label>\n" +
+    "    <input type=\"password\" name=\"consumerSecret\" ng-model='credentials.consumerSecret'/>\n" +
+    "  </div>\n" +
+    "</fieldset>\n"
   );
 
   $templateCache.put("views/oauth2.tmpl.html",
@@ -10364,6 +10639,7 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "    <div ng-show=\"keychain.selectedScheme == name\">\n" +
     "      <div ng-switch=\"scheme.type\">\n" +
     "        <basic-auth ng-switch-when=\"Basic Authentication\" credentials='keychain[name]'></basic-auth>\n" +
+    "        <oauth1 ng-switch-when=\"OAuth 1.0\" credentials='keychain[name]'></oauth1>\n" +
     "        <oauth2 ng-switch-when=\"OAuth 2.0\" credentials='keychain[name]'></oauth2>\n" +
     "      </div>\n" +
     "    </div>\n" +
@@ -10453,7 +10729,7 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "    <div class=\"headers\">\n" +
     "      <h5>Headers</h5>\n" +
     "      <ul class=\"response-value\">\n" +
-    "        <li ng-repeat=\"(header, value) in apiClient.response.headers\">\n" +
+    "        <li ng-repeat=\"(header, value) in apiClient.response.headers track by header\">\n" +
     "          <code>\n" +
     "            <span class=\"header-key\">{{header}}:</span>\n" +
     "            <span class=\"header-value\">{{value}}</span>\n" +
