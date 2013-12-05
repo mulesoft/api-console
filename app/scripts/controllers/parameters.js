@@ -1,16 +1,12 @@
 'use strict';
 
 (function() {
-  function isEmpty(object) {
-    return Object.keys(object || {}).length === 0;
-  }
-
   var controller = function($scope) {
     var method = $scope.method;
     var resource = $scope.resource;
     var parameterGroups = [];
 
-    if (!isEmpty(method.headers)) {
+    if (!RAML.Utils.isEmpty(method.headers)) {
       parameterGroups.push(['Headers', method.headers]);
     }
 
@@ -24,10 +20,10 @@
         return accum;
       }, {});
 
-    if (!isEmpty(uriParameters)) {
+    if (!RAML.Utils.isEmpty(uriParameters)) {
       parameterGroups.push(['URI Parameters', uriParameters]);
     }
-    if (!isEmpty(method.queryParameters)) {
+    if (!RAML.Utils.isEmpty(method.queryParameters)) {
       parameterGroups.push(['Query Parameters', method.queryParameters]);
     }
 

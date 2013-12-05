@@ -1,13 +1,6 @@
 'use strict';
 
 (function() {
-  function isEmpty(object) {
-    if (object) {
-      return Object.keys(filterEmpty(object)).length === 0;
-    } else {
-      return true;
-    }
-  }
 
   function filterEmpty(object) {
     var copy = {};
@@ -112,18 +105,18 @@
       }
       var request = RAML.Client.Request.create(url, this.httpMethod);
 
-      if (!isEmpty(this.queryParameters)) {
+      if (!RAML.Utils.isEmpty(filterEmpty(this.queryParameters))) {
         request.queryParams(filterEmpty(this.queryParameters));
       }
 
-      if (!isEmpty(this.headers)) {
+      if (!RAML.Utils.isEmpty(filterEmpty(this.headers))) {
         request.headers(filterEmpty(this.headers));
       }
 
       if (this.mediaType) {
         request.header('Content-Type', this.mediaType);
         if (this.mediaType === FORM_DATA || this.mediaType === FORM_URLENCODED) {
-          if (!isEmpty(this.formParameters)) {
+          if (!RAML.Utils.isEmpty(filterEmpty(this.formParameters))) {
             request.data(filterEmpty(this.formParameters));
           }
         } else {

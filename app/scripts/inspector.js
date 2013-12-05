@@ -1,7 +1,6 @@
 RAML.Inspector = (function() {
   'use strict';
 
-  function Clone() {}
   var exports = {};
 
   var METHOD_ORDERING = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
@@ -45,8 +44,7 @@ RAML.Inspector = (function() {
   }
 
   exports.resourceOverviewSource = function(pathSegments, resource) {
-    Clone.prototype = resource;
-    var clone = new Clone();
+    var clone = RAML.Utils.clone(resource);
 
     clone.traits = resource.is;
     clone.resourceType = resource.type;

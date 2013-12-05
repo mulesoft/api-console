@@ -1,12 +1,6 @@
 (function() {
   'use strict';
 
-  function Clone() {}
-  function clone(object) {
-    Clone.prototype = object;
-    return new Clone();
-  }
-
   function securitySchemesExtractor(securitySchemes) {
     securitySchemes = securitySchemes || [];
 
@@ -50,7 +44,7 @@
 
   RAML.Inspector.Method = {
     create: function(raml, securitySchemes) {
-      var method = clone(raml);
+      var method = RAML.Utils.clone(raml);
 
       method.securitySchemes = securitySchemesExtractor(securitySchemes);
       method.allowsAnonymousAccess = allowsAnonymousAccess;
