@@ -12,7 +12,7 @@ describe("RAML.Client.AuthStrategies.Oauth2.Grant", function() {
       credentialsManagerSpy.andReturn("credentials manager");
     });
 
-    describe("when the authroricationGrant includes token", function() {
+    describe("when the authorizationGrant includes token", function() {
       var tokenSpy;
 
       beforeEach(function() {
@@ -30,7 +30,7 @@ describe("RAML.Client.AuthStrategies.Oauth2.Grant", function() {
       });
     });
 
-    describe("when the authroricationGrant includes code", function() {
+    describe("when the authorizationGrant includes code", function() {
       var codeSpy;
 
       beforeEach(function() {
@@ -48,7 +48,7 @@ describe("RAML.Client.AuthStrategies.Oauth2.Grant", function() {
       });
     });
 
-    describe("with an unknown authroricationGrant", function() {
+    describe("with an unknown authorizationGrant", function() {
       beforeEach(function() {
         settings = { authorizationGrants: ['unknown'] };
       });
@@ -60,7 +60,7 @@ describe("RAML.Client.AuthStrategies.Oauth2.Grant", function() {
       });
     });
 
-    describe("when no authroricationGrant is present", function() {
+    describe("when no authorizationGrant is present", function() {
       beforeEach(function() {
         settings = {};
       });

@@ -25,6 +25,7 @@
     "$": false,
     "RAML": false,
     "vkbeautify": false,
-    "CodeMirror": false
+    "CodeMirror": false,
+    "CryptoJS": false
   }
 }

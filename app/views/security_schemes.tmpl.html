@@ -19,6 +19,7 @@
     <div ng-show="keychain.selectedScheme == name">
       <div ng-switch="scheme.type">
         <basic-auth ng-switch-when="Basic Authentication" credentials='keychain[name]'></basic-auth>
+        <oauth1 ng-switch-when="OAuth 1.0" credentials='keychain[name]'></oauth1>
         <oauth2 ng-switch-when="OAuth 2.0" credentials='keychain[name]'></oauth2>
       </div>
     </div>

@@ -15,6 +15,7 @@
   module.directive('method', RAML.Directives.method);
   module.directive('namedParameters', RAML.Directives.namedParameters);
   module.directive('namedParametersDocumentation', RAML.Directives.namedParametersDocumentation);
+  module.directive('oauth1', RAML.Directives.oauth1);
   module.directive('oauth2', RAML.Directives.oauth2);
   module.directive('parameterFields', RAML.Directives.parameterFields);
   module.directive('parameters', RAML.Directives.parameters);

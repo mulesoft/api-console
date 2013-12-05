@@ -7,6 +7,7 @@
     "dist/scripts/**/*.*",
     "dist/styles/**/*.*",
     "dist/font/**/*.*",
+    "dist/authentication/oauth1.html",
     "dist/authentication/oauth2.html"
   ],
   "description": "RAML API Console",
@@ -25,6 +26,7 @@
     "test"
   ],
   "dependencies": {
-    "raml-js-parser": "raml-org/raml-js-parser#bbb0a9b383cb9a88b3f32c32eba81d9b1897bf1e"
+    "raml-js-parser": "raml-org/raml-js-parser#bbb0a9b383cb9a88b3f32c32eba81d9b1897bf1e",
+    "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip"
   }
 }

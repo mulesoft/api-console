@@ -67,6 +67,61 @@ describe('RAML.Client.Request', function() {
         });
       });
 
+      describe("setting query parameters", function() {
+        describe("by default", function() {
+          beforeEach(function() {
+            request = RAML.Client.Request.create('http://api.example.com', 'GET');
+            request.queryParams({ foo: 'b&r' });
+            options = request.toOptions();
+          });
+
+          it("encodes the query parameters in the URL", function() {
+            expect(options.url).toEqual('http://api.example.com?foo=b%26r')
+          });
+
+          it("is idempotent", function() {
+            request.toOptions();
+            expect(options.url).toEqual('http://api.example.com?foo=b%26r')
+          });
+        });
+
+        describe("with parameters already set", function() {
+          beforeEach(function() {
+            request = RAML.Client.Request.create('http://api.example.com', 'GET');
+            request.queryParams({ foo: 'b&r' });
+            request.queryParam('one', 'more');
+            options = request.toOptions();
+          });
+
+          it("adds the new parameter", function() {
+            expect(options.url).toEqual('http://api.example.com?foo=b%26r&one=more')
+          });
+        });
+
+        describe("with an URL with an existing query parameter", function() {
+          beforeEach(function() {
+            request = RAML.Client.Request.create('http://api.example.com/?existing=param', 'GET');
+
+            request.queryParams({ foo: 'b&r' });
+            options = request.toOptions();
+          });
+
+          it("appends the new query parameters properly", function() {
+            expect(options.url).toEqual('http://api.example.com/?existing=param&foo=b%26r')
+          });
+        });
+      });
+
+      describe('fetching query parameters', function() {
+        beforeEach(function() {
+          request.queryParams({ q: 'mySearch' });
+        });
+
+        it('returns the parameters', function() {
+           expect(request.queryParams()).toEqual({ q: 'mySearch' });
+        });
+      });
+
       describe("setting data", function() {
         var data = { "foo": 'bar' };
 
@@ -108,6 +163,17 @@ describe('RAML.Client.Request', function() {
           });
         });
       });
+
+      describe('fetching data', function() {
+        beforeEach(function() {
+          request.data({ name: 'fred' });
+        });
+
+        it('returns the data', function() {
+           expect(request.data()).toEqual({ name: 'fred' });
+        });
+      });
+
     });
   });
 });

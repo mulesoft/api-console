@@ -25,12 +25,8 @@ describe('RAML.directives.securitySchemes', function() {
     '      settings:',
     '        authorizationUri: https://example.com/oauth/authorize',
     '        accessTokenUri: https://example.com/oauth/access_token',
-    '  - oauth1:',
-    '     type: OAuth 1.0',
-    '     settings:',
-    '       requestTokenUri: https://api.twitter.com/oauth/request_token',
-    '       authorizationUri: https://api.twitter.com/oauth/authorize',
-    '       tokenCredentialsUri: https://api.twitter.com/oauth/access_token    ',
+    '  - digest:',
+    '     type: Digest Authentication',
     '/resource:',
     '  get:',
     '    securedBy: [basic]',
@@ -39,9 +35,9 @@ describe('RAML.directives.securitySchemes', function() {
     '    securedBy: [oauth2]',
     '/insecure:',
     '  get:',
-    '/oauth1_scheme:',
+    '/digest_scheme:',
     '  get:',
-    '    securedBy: [oauth1]'
+    '    securedBy: [digest]'
   );
 
   parseRAML(raml);
@@ -56,7 +52,7 @@ describe('RAML.directives.securitySchemes', function() {
 
   it("ignores unsupported security schemes", function() {
     $el = compileAndSetFixture(client, inspector.resources[3].methods[0], keychain);
-    expect($el).not.toContain('input[value="oauth1"]');
+    expect($el).not.toContain('input[value="digest"]');
   });
 
   describe('given a method that is secured via Basic Auth', function() {

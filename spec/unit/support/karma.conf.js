@@ -8,6 +8,9 @@ files = [
     JASMINE,
     JASMINE_ADAPTER,
     'app/vendor/bower_components/raml-js-parser/dist/raml-parser.js',
+    'app/vendor/bower_components/raml-js-parser/dist/raml-parser.js',
+    'app/vendor/bower_components/crypto-js/rollups/hmac-sha1.js',
+    'app/vendor/bower_components/crypto-js/components/enc-base64.js',
     'app/vendor/jquery.js',
     'app/vendor/codemirror/codemirror.js',
     'app/vendor/codemirror/xml.js',
@@ -17,6 +20,7 @@ files = [
     'spec/matchers/**/*.js',
     'spec/support/helpers/**/*.js',
     'spec/unit/support/helpers/**/*.js',
+    'spec/unit/support/matchers/**/*.js',
     'spec/unit/**/*_spec.js'
 ];
 

@@ -176,7 +176,7 @@ describe("RAML.Controllers.tryIt", function() {
 
     mockHttp(function(mock) {
       mock
-        .when("get", 'http://www.example.com/resource', { page: "1", order: "newest" })
+        .when("get", 'http://www.example.com/resource?order=newest')
         .respondWith(200, "cool");
     });
 
@@ -186,7 +186,6 @@ describe("RAML.Controllers.tryIt", function() {
     });
 
     it('executes a request with the provided values', function() {
-      $el.find('input[name=page]').fillIn('1');
       $el.find('input[name=order]').fillIn('newest');
       $el.find('button[role="try-it"]').click();
 

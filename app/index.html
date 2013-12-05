@@ -46,6 +46,8 @@
     <script src="vendor/angular-resource.js"></script>
     <script src="vendor/angular-sanitize.js"></script>
     <script src="vendor/bower_components/raml-js-parser/dist/raml-parser.js"></script>
+    <script src="vendor/bower_components/crypto-js/rollups/hmac-sha1.js"></script>
+    <script src="vendor/bower_components/crypto-js/components/enc-base64.js"></script>
     <script src="vendor/showdown.min.js"></script>
     <script src="vendor/showdown-table.min.js"></script>
     <script src="vendor/codemirror/codemirror.js"></script>
@@ -60,8 +62,14 @@
     <script src="scripts/client.js"></script>
     <script src="scripts/client/auth_strategies.js"></script>
     <script src="scripts/client/auth_strategies/anonymous.js"></script>
-    <script src="scripts/client/auth_strategies/base64.js"></script>
     <script src="scripts/client/auth_strategies/basic_auth.js"></script>
+    <script src="scripts/client/auth_strategies/oauth1.js"></script>
+    <script src="scripts/client/auth_strategies/oauth1/request_authorization.js"></script>
+    <script src="scripts/client/auth_strategies/oauth1/request_temporary_credentials.js"></script>
+    <script src="scripts/client/auth_strategies/oauth1/request_token_credentials.js"></script>
+    <script src="scripts/client/auth_strategies/oauth1/signer.js"></script>
+    <script src="scripts/client/auth_strategies/oauth1/signer/hmac.js"></script>
+    <script src="scripts/client/auth_strategies/oauth1/signer/plaintext.js"></script>
     <script src="scripts/client/auth_strategies/oauth2.js"></script>
     <script src="scripts/client/auth_strategies/oauth2/create_token.js"></script>
     <script src="scripts/client/auth_strategies/oauth2/credentials_manager.js"></script>
@@ -91,6 +99,7 @@
     <script src="scripts/directives/method.js"></script>
     <script src="scripts/directives/named_parameters.js"></script>
     <script src="scripts/directives/named_parameters_documentation.js"></script>
+    <script src="scripts/directives/oauth1.js"></script>
     <script src="scripts/directives/oauth2.js"></script>
     <script src="scripts/directives/parameter_fields.js"></script>
     <script src="scripts/directives/parameters.js"></script>
