@@ -1,4 +1,4 @@
-describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
+describe("RAML.Client.AuthStrategies.Oauth1.Signer.Hmac", function() {
   var token, request, credentials;
 
   beforeEach(function() {
@@ -22,7 +22,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
         spyOn(Date, 'now').andReturn(1001);
         request = RAML.Client.Request.create('http://example.com', 'POST');
 
-        token = new RAML.Client.AuthStrategies.Oauth1.Token.Hmac.Temporary(credentials);
+        token = new RAML.Client.AuthStrategies.Oauth1.Signer.Hmac.Temporary(credentials);
         token.sign(request);
       });
 
@@ -71,7 +71,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
           token: 'kkk9d7dh3k39sjv7',
           tokenSecret: 'tokenSecret'
         }
-        token = new RAML.Client.AuthStrategies.Oauth1.Token.Hmac.Token(credentials, tokenCredentials);
+        token = new RAML.Client.AuthStrategies.Oauth1.Signer.Hmac.Token(credentials, tokenCredentials);
         token.sign(request);
       });
 
@@ -87,7 +87,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
     var encodeURI;
 
     beforeEach(function() {
-      encodeURI = RAML.Client.AuthStrategies.Oauth1.Token.Hmac.encodeURI;
+      encodeURI = RAML.Client.AuthStrategies.Oauth1.Signer.Hmac.encodeURI;
     });
 
     describe("by default", function() {
@@ -148,7 +148,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Hmac", function() {
     var request, encodeParameters;
 
     beforeEach(function() {
-      encodeParameters = RAML.Client.AuthStrategies.Oauth1.Token.Hmac.encodeParameters;
+      encodeParameters = RAML.Client.AuthStrategies.Oauth1.Signer.Hmac.encodeParameters;
       request = RAML.Client.Request.create('http://example.com', 'GET');
     });
 

@@ -2,10 +2,10 @@
   'use strict';
 
   var Oauth1 = function(scheme, credentials) {
-    var tokenFactory = RAML.Client.AuthStrategies.Oauth1.Token.createFactory(scheme.settings, credentials);
-    this.requestTemporaryCredentials = RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials(scheme.settings, tokenFactory);
+    var signerFactory = RAML.Client.AuthStrategies.Oauth1.Signer.createFactory(scheme.settings, credentials);
+    this.requestTemporaryCredentials = RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials(scheme.settings, signerFactory);
     this.requestAuthorization = RAML.Client.AuthStrategies.Oauth1.requestAuthorization(scheme.settings);
-    this.requestTokenCredentials = RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials(scheme.settings, tokenFactory);
+    this.requestTokenCredentials = RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials(scheme.settings, signerFactory);
   };
 
   Oauth1.proxyRequest = function(url) {

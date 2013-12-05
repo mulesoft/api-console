@@ -1,9 +1,9 @@
 describe("RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials", function() {
-  var requestTokenCredentials, settings, token, tokenFactory, xhrStub, promiseStub;
+  var requestTokenCredentials, settings, token, signerFactory, xhrStub, promiseStub;
 
   beforeEach(function() {
     token = jasmine.createSpyObj('token', ['sign']);
-    tokenFactory = jasmine.createSpy('tokenFactory').andReturn(token);
+    signerFactory = jasmine.createSpy('signerFactory').andReturn(token);
     promiseStub = jasmine.createSpyObj('promise', ['then']);
     xhrStub = spyOn($, 'ajax').andReturn(promiseStub);
 
@@ -11,7 +11,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials", function()
       tokenCredentialsUri: 'https://example.com/oauth/access_token'
     }
 
-    requestTokenCredentials = RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials(settings, tokenFactory);
+    requestTokenCredentials = RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials(settings, signerFactory);
   });
 
   describe('by default', function() {
@@ -28,11 +28,11 @@ describe("RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials", function()
     });
 
     it("passes the temporary credentials to the token factory", function() {
-      expect(tokenFactory).toHaveBeenCalledWith({ token: 'tempToken', tokenSecret: 'tempTokenSecret', verifier: 'verifier' });
+      expect(signerFactory).toHaveBeenCalledWith({ token: 'tempToken', tokenSecret: 'tempTokenSecret', verifier: 'verifier' });
     });
 
     it("signs the request with a token from the factory", function() {
-      expect(tokenFactory).toHaveBeenCalled();
+      expect(signerFactory).toHaveBeenCalled();
       expect(token.sign).toHaveBeenCalled();
     });
 

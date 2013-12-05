@@ -1,4 +1,4 @@
-describe("RAML.Client.AuthStrategies.Oauth1.Token.Plaintext", function() {
+describe("RAML.Client.AuthStrategies.Oauth1.Signer.Plaintext", function() {
   var token, request, credentials;
 
   beforeEach(function() {
@@ -15,7 +15,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Plaintext", function() {
 
         request = RAML.Client.Request.create('http://example.com', 'GET');
 
-        token = new RAML.Client.AuthStrategies.Oauth1.Token.Plaintext.Temporary(credentials);
+        token = new RAML.Client.AuthStrategies.Oauth1.Signer.Plaintext.Temporary(credentials);
         token.sign(request);
       });
 
@@ -49,7 +49,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Token.Plaintext", function() {
         };
 
         request = RAML.Client.Request.create('http://example.com', 'GET');
-        token = new RAML.Client.AuthStrategies.Oauth1.Token.Plaintext.Token(credentials, tokenCredentials);
+        token = new RAML.Client.AuthStrategies.Oauth1.Signer.Plaintext.Token(credentials, tokenCredentials);
         token.sign(request);
       });
 

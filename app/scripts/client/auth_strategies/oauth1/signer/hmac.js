@@ -2,10 +2,10 @@
   /* jshint camelcase: false */
   'use strict';
 
-  var generateTemporaryCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Token.generateTemporaryCredentialParameters,
-      generateTokenCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Token.generateTokenCredentialParameters,
-      rfc3986Encode = RAML.Client.AuthStrategies.Oauth1.Token.rfc3986Encode,
-      setRequestHeader = RAML.Client.AuthStrategies.Oauth1.Token.setRequestHeader;
+  var generateTemporaryCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Signer.generateTemporaryCredentialParameters,
+      generateTokenCredentialParameters = RAML.Client.AuthStrategies.Oauth1.Signer.generateTokenCredentialParameters,
+      rfc3986Encode = RAML.Client.AuthStrategies.Oauth1.Signer.rfc3986Encode,
+      setRequestHeader = RAML.Client.AuthStrategies.Oauth1.Signer.setRequestHeader;
 
   function uriWithoutProxy(url) {
     if (RAML.Settings.proxy) {
@@ -102,5 +102,5 @@
     setRequestHeader(params, request);
   };
 
-  RAML.Client.AuthStrategies.Oauth1.Token.Hmac = Hmac;
+  RAML.Client.AuthStrategies.Oauth1.Signer.Hmac = Hmac;
 })();

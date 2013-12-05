@@ -1,15 +1,15 @@
 describe("RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials", function() {
-  var settings, token, tokenFactory, requestTemporaryCredentials;
+  var settings, token, signerFactory, requestTemporaryCredentials;
 
   beforeEach(function() {
     token = jasmine.createSpyObj('token', ['sign']);
-    tokenFactory = jasmine.createSpy('tokenFactory').andReturn(token);
+    signerFactory = jasmine.createSpy('signerFactory').andReturn(token);
 
     settings = {
       requestTokenUri: 'https://example.com/oauth/request_token'
     }
 
-    requestTemporaryCredentials = RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials(settings, tokenFactory);
+    requestTemporaryCredentials = RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials(settings, signerFactory);
 
   });
 
@@ -35,7 +35,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials", functi
       });
 
       it("signs the request with a token from the factory", function() {
-        expect(tokenFactory).toHaveBeenCalled();
+        expect(signerFactory).toHaveBeenCalled();
         expect(token.sign).toHaveBeenCalled();
       });
 

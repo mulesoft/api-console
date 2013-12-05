@@ -2,16 +2,16 @@
   /* jshint camelcase: false */
   'use strict';
 
-  var Token = RAML.Client.AuthStrategies.Oauth1.Token = {};
+  var Signer = RAML.Client.AuthStrategies.Oauth1.Signer = {};
 
-  Token.createFactory = function(settings, consumerCredentials) {
+  Signer.createFactory = function(settings, consumerCredentials) {
     settings = settings || {};
 
-    return function createToken(tokenCredentials) {
+    return function createSigner(tokenCredentials) {
       var type = settings.signatureMethod === 'PLAINTEXT' ? 'Plaintext' : 'Hmac';
       var mode = tokenCredentials === undefined ? 'Temporary' : 'Token';
 
-      return new Token[type][mode](consumerCredentials, tokenCredentials);
+      return new Signer[type][mode](consumerCredentials, tokenCredentials);
     };
   };
 
@@ -22,14 +22,14 @@
     };
   }
 
-  Token.generateTemporaryCredentialParameters = function(consumerCredentials) {
+  Signer.generateTemporaryCredentialParameters = function(consumerCredentials) {
     var result = baseParameters(consumerCredentials);
     result.oauth_callback = RAML.Settings.oauth1RedirectUri;
 
     return result;
   };
 
-  Token.generateTokenCredentialParameters = function(consumerCredentials, tokenCredentials) {
+  Signer.generateTokenCredentialParameters = function(consumerCredentials, tokenCredentials) {
     var result = baseParameters(consumerCredentials);
 
     result.oauth_token = tokenCredentials.token;
@@ -41,13 +41,13 @@
   };
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
-  Token.rfc3986Encode = function(str) {
+  Signer.rfc3986Encode = function(str) {
     return encodeURIComponent(str).replace(/[!'()]/g, window.escape).replace(/\*/g, '%2A');
   };
 
-  Token.setRequestHeader = function(params, request) {
+  Signer.setRequestHeader = function(params, request) {
     var header = Object.keys(params).map(function(key) {
-      return key + '="' + Token.rfc3986Encode(params[key]) + '"';
+      return key + '="' + Signer.rfc3986Encode(params[key]) + '"';
     }).join(', ');
 
     request.header('Authorization', 'OAuth ' + header);
