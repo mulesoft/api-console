@@ -42,11 +42,19 @@
 }
 
 .method {
-  margin: 10px 15px;
+  margin: 10px 0px;
   border-radius: 0 5px 5px 0;
   overflow: hidden;
   border-width: 1px;
   border-style: solid;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 15px;
+  }
 
   &.collapsed {
     border: none;
