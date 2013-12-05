@@ -59,20 +59,7 @@
     this.headers = {};
     this.queryParameters = {};
     this.formParameters = {};
-    this.supportsCustomBody = this.supportsFormUrlencoded = this.supportsFormData = false;
-
-    for (var mediaType in $scope.method.body) {
-      this.mediaType = this.mediaType || mediaType;
-      this.supportsMediaType = true;
-
-      if (mediaType === FORM_URLENCODED) {
-        this.supportsFormUrlencoded = true;
-      } else if (mediaType === FORM_DATA) {
-        this.supportsFormData = true;
-      } else {
-        this.supportsCustomBody = true;
-      }
-    }
+    this.mediaType = Object.keys($scope.method.body || {})[0];
 
     $scope.apiClient = this;
     this.parsed = $scope.api;
@@ -82,26 +69,6 @@
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
-  };
-
-  TryIt.prototype.showBody = function() {
-    return this.supportsCustomBody && !this.showUrlencodedForm() && !this.showMultipartForm();
-  };
-
-  TryIt.prototype.showUrlencodedForm = function() {
-    if (this.mediaType) {
-      return this.mediaType === FORM_URLENCODED;
-    } else {
-      return (!this.supportsCustomBody && this.supportsFormUrlencoded);
-    }
-  };
-
-  TryIt.prototype.showMultipartForm = function() {
-    if (this.mediaType) {
-      return this.mediaType === FORM_DATA;
-    } else  {
-      return (!this.supportsCustomBody && !this.supportsFormUrlencoded && this.supportsFormData);
-    }
   };
 
   TryIt.prototype.inProgress = function() {
@@ -149,20 +116,19 @@
         request.queryParams(filterEmpty(this.queryParameters));
       }
 
-      if (!isEmpty(this.formParameters)) {
-        request.data(filterEmpty(this.formParameters));
-      }
-
       if (!isEmpty(this.headers)) {
         request.headers(filterEmpty(this.headers));
       }
 
       if (this.mediaType) {
         request.header('Content-Type', this.mediaType);
-      }
-
-      if (this.showBody()) {
-        request.data(this.body);
+        if (this.mediaType === FORM_DATA || this.mediaType === FORM_URLENCODED) {
+          if (!isEmpty(this.formParameters)) {
+            request.data(filterEmpty(this.formParameters));
+          }
+        } else {
+          request.data(this.body);
+        }
       }
 
       var authStrategy;
