@@ -26,8 +26,8 @@
   ],
   "dependencies": {
     "raml-js-parser": "raml-org/raml-js-parser#09300797e6bfe0769091fa8d272af7f0b0ca4563",
-    "angular": "1.2.x",
-    "angular-sanitize": "1.2.x",
+    "angular": "1.2.2",
+    "angular-sanitize": "1.2.2",
     "codemirror": "3.x",
     "font-awesome": "3.x",
     "showdown": "0.3.1",
