@@ -162,7 +162,7 @@ module.exports = function (grunt) {
         dest: '<%= yeoman.dist %>',
         flow: {
           steps: {
-            js: ['concat', 'uglifyjs', require('./tasks/copy_vendor')],
+            js: [require('./tasks/copy_vendor'), 'concat', 'uglifyjs'],
             css: ['concat', 'cssmin'],
           },
           post: []
