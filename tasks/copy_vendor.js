@@ -22,6 +22,9 @@ exports.createConfig = function(context, block) {
       cfg.files[0].src.push(file);
     });
 
+    context.outDir = context.inDir;
+    context.outFiles = context.inFiles;
+
     return cfg;
   } else {
     return {};

@@ -165,7 +165,7 @@ module.exports = function (grunt) {
             js: [require('./tasks/copy_vendor'), 'concat', 'uglifyjs'],
             css: ['concat', 'cssmin'],
           },
-          post: []
+          post: {}
         }
       }
     },
