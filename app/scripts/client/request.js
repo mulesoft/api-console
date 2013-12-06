@@ -73,7 +73,7 @@
           o.data = rawData;
         }
       }
-      if (queryParams) {
+      if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.url.match('\\?') ? '&' : '?');
         o.url = options.url + separator + $.param(queryParams);
       }
