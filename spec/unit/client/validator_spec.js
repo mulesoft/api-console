@@ -63,11 +63,11 @@ describe("RAML.Client.Validator", function() {
     beforeEach(function() {
       definition = { type: 'string', required: false };
       validator = RAML.Client.Validator.from(definition);
-      errors = validator.validate('');
     });
 
     it("has no errors", function() {
-      expect(errors).toBeUndefined();
+      expect(validator.validate('')).toBeUndefined();
+      expect(validator.validate(undefined)).toBeUndefined();
     });
   });
 
@@ -116,9 +116,15 @@ describe("RAML.Client.Validator", function() {
         validator = RAML.Client.Validator.from(definition);
       });
 
+      describe("with no value", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('', undefined);
+        });
+      });
+
       describe("with an string longer or the same as minLength", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('dog', 'cats', '');
+          expect(validator).toAcceptValues('dog', 'cats');
         });
       });
 
@@ -135,9 +141,15 @@ describe("RAML.Client.Validator", function() {
         validator = RAML.Client.Validator.from(definition);
       });
 
+      describe("with no value", function() {
+        it("has no errors", function() {
+          expect(validator).toAcceptValues('', undefined);
+        });
+      });
+
       describe("with a string shorter or the same as maxLength", function() {
         it("has no errors", function() {
-          expect(validator).toAcceptValues('horse', 'goat', '');
+          expect(validator).toAcceptValues('horse', 'goat');
         });
       });
 
