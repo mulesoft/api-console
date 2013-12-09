@@ -4,12 +4,6 @@
   var CONTENT_TYPE = 'content-type';
   var FORM_DATA = 'multipart/form-data';
 
-  function Clone() {}
-  function clone(obj) {
-    Clone.prototype = obj;
-    return new Clone();
-  }
-
   var RequestDsl = function(options) {
     var rawData;
     var queryParams;
@@ -17,7 +11,7 @@
 
     this.data = function(data) {
       if (data === undefined) {
-        return clone(rawData);
+        return RAML.Utils.clone(rawData);
       } else {
         rawData = data;
       }
@@ -25,7 +19,7 @@
 
     this.queryParams = function(parameters) {
       if (parameters === undefined) {
-        return clone(queryParams);
+        return RAML.Utils.clone(queryParams);
       } else {
         queryParams = parameters;
       }
@@ -63,7 +57,7 @@
     };
 
     this.toOptions = function() {
-      var o = clone(options);
+      var o = RAML.Utils.clone(options);
       if (rawData) {
         if (isMultipartRequest) {
           var data = new FormData();
@@ -79,7 +73,7 @@
           o.data = rawData;
         }
       }
-      if (queryParams) {
+      if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.url.match('\\?') ? '&' : '?');
         o.url = options.url + separator + $.param(queryParams);
       }

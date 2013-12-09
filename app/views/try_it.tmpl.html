@@ -4,14 +4,14 @@
     <path-builder></path-builder>
 
     <security-schemes ng-if="apiClient.securitySchemes" schemes="apiClient.securitySchemes" keychain="ramlConsole.keychain"></security-schemes>
-    <named-parameters heading="Headers" parameters="method.headers" request-data="apiClient.headers"></named-parameters>
-    <named-parameters heading="Query Parameters" parameters="method.queryParameters" request-data="apiClient.queryParameters"></named-parameters>
+    <named-parameters heading="Headers" parameters="context.headers"></named-parameters>
+    <named-parameters heading="Query Parameters" parameters="context.queryParameters"></named-parameters>
 
     <div class="request-body" ng-show="method.body">
       <fieldset class="bordered">
         <legend>Body</legend>
 
-        <fieldset class="labelled-radio-group media-types" ng-show="apiClient.supportsMediaType">
+        <fieldset class="labelled-radio-group media-types" ng-show="method.body">
           <label>Content Type</label>
           <div class="radio-group">
             <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
@@ -21,13 +21,17 @@
           </div>
         </fieldset>
 
-        <div ng-if="apiClient.showBody()">
-          <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
-          <a href="#" class="body-prefill" ng-show="apiClient.bodyHasExample()" ng-click=apiClient.fillBody($event)>Prefill with example</a>
-        </div>
-        <div class="labelled-inline">
-          <parameter-fields parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showUrlencodedForm()"></parameter-fields>
-          <parameter-fields parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters" ng-if="apiClient.showMultipartForm()"></parameter-fields>
+        <div ng-if='apiClient.mediaType' ng-switch="apiClient.mediaType">
+          <div class="labelled-inline" ng-switch-when='application/x-www-form-urlencoded'>
+            <parameter-fields parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters"></parameter-fields>
+          </div>
+          <div class="labelled-inline" ng-switch-when='multipart/form-data'>
+            <parameter-fields parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters"></parameter-fields>
+          </div>
+          <div ng-switch-default>
+            <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
+            <a href="#" class="body-prefill" ng-show="apiClient.bodyHasExample()" ng-click=apiClient.fillBody($event)>Prefill with example</a>
+          </div>
         </div>
       </fieldset>
     </div>

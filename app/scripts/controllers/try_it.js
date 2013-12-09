@@ -1,13 +1,6 @@
 'use strict';
 
 (function() {
-  function isEmpty(object) {
-    if (object) {
-      return Object.keys(filterEmpty(object)).length === 0;
-    } else {
-      return true;
-    }
-  }
 
   function filterEmpty(object) {
     var copy = {};
@@ -50,29 +43,18 @@
   var apply;
 
   var TryIt = function($scope) {
+    this.context = $scope.context = {};
+    this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
+    this.context.queryParameters = new RAML.Controllers.TryIt.NamedParameters($scope.method.queryParameters);
+
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
     };
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-    this.headers = {};
-    this.queryParameters = {};
     this.formParameters = {};
-    this.supportsCustomBody = this.supportsFormUrlencoded = this.supportsFormData = false;
-
-    for (var mediaType in $scope.method.body) {
-      this.mediaType = this.mediaType || mediaType;
-      this.supportsMediaType = true;
-
-      if (mediaType === FORM_URLENCODED) {
-        this.supportsFormUrlencoded = true;
-      } else if (mediaType === FORM_DATA) {
-        this.supportsFormData = true;
-      } else {
-        this.supportsCustomBody = true;
-      }
-    }
+    this.mediaType = Object.keys($scope.method.body || {})[0];
 
     $scope.apiClient = this;
     this.parsed = $scope.api;
@@ -82,26 +64,6 @@
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
-  };
-
-  TryIt.prototype.showBody = function() {
-    return this.supportsCustomBody && !this.showUrlencodedForm() && !this.showMultipartForm();
-  };
-
-  TryIt.prototype.showUrlencodedForm = function() {
-    if (this.mediaType) {
-      return this.mediaType === FORM_URLENCODED;
-    } else {
-      return (!this.supportsCustomBody && this.supportsFormUrlencoded);
-    }
-  };
-
-  TryIt.prototype.showMultipartForm = function() {
-    if (this.mediaType) {
-      return this.mediaType === FORM_DATA;
-    } else  {
-      return (!this.supportsCustomBody && !this.supportsFormUrlencoded && this.supportsFormData);
-    }
   };
 
   TryIt.prototype.inProgress = function() {
@@ -145,24 +107,23 @@
       }
       var request = RAML.Client.Request.create(url, this.httpMethod);
 
-      if (!isEmpty(this.queryParameters)) {
-        request.queryParams(filterEmpty(this.queryParameters));
+      if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {
+        request.queryParams(this.context.queryParameters.data());
       }
 
-      if (!isEmpty(this.formParameters)) {
-        request.data(filterEmpty(this.formParameters));
-      }
-
-      if (!isEmpty(this.headers)) {
-        request.headers(filterEmpty(this.headers));
+      if (!RAML.Utils.isEmpty(this.context.headers.data())) {
+        request.headers(this.context.headers.data());
       }
 
       if (this.mediaType) {
         request.header('Content-Type', this.mediaType);
-      }
-
-      if (this.showBody()) {
-        request.data(this.body);
+        if (this.mediaType === FORM_DATA || this.mediaType === FORM_URLENCODED) {
+          if (!RAML.Utils.isEmpty(filterEmpty(this.formParameters))) {
+            request.data(filterEmpty(this.formParameters));
+          }
+        } else {
+          request.data(this.body);
+        }
       }
 
       var authStrategy;

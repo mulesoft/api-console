@@ -1,15 +1,11 @@
 (function() {
   'use strict';
 
-  function isEmpty(object) {
-    return Object.keys(object || {}).length === 0;
-  }
-
   var FORM_MIME_TYPES = ['application/x-www-form-urlencoded', 'multipart/form-data'];
 
   function hasFormParameters(method) {
     return FORM_MIME_TYPES.some(function(type) {
-      return method.body && method.body[type] && !isEmpty(method.body[type].formParameters);
+      return method.body && method.body[type] && !RAML.Utils.isEmpty(method.body[type].formParameters);
     });
   }
 
@@ -23,10 +19,10 @@
     });
 
     var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
-      this.method.headers || hasFormParameters(this.method));
+      !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
 
-    this.hasRequestDocumentation = hasParameters || !isEmpty(this.method.body);
-    this.hasResponseDocumentation = !isEmpty(this.method.responses);
+    this.hasRequestDocumentation = hasParameters || !RAML.Utils.isEmpty(this.method.body);
+    this.hasResponseDocumentation = !RAML.Utils.isEmpty(this.method.responses);
     this.hasTryIt = !!$scope.api.baseUri;
   };
 

@@ -1,35 +1,9 @@
 RAML.Inspector = (function() {
   'use strict';
 
-  function Clone() {}
   var exports = {};
 
   var METHOD_ORDERING = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
-
-  function extendMethod(method, securitySchemes) {
-    securitySchemes = securitySchemes || [];
-
-    method.securitySchemes = function() {
-      var securedBy, selectedSchemes = {};
-      securedBy = (this.securedBy || []).filter(function(name) {
-        return name !== null && typeof name !== 'object';
-      });
-
-      securitySchemes.forEach(function(scheme) {
-        securedBy.forEach(function(name) {
-          if (scheme[name]) {
-            selectedSchemes[name] = scheme[name];
-          }
-        });
-      });
-
-      return selectedSchemes;
-    };
-
-    method.allowsAnonymousAccess = function() {
-      return (this.securedBy || []).some(function(name) { return name === null; });
-    };
-  }
 
   function extractResources(basePathSegments, api, securitySchemes) {
     var resources = [], apiResources = api.resources || [];
@@ -38,8 +12,8 @@ RAML.Inspector = (function() {
       var resourcePathSegments = basePathSegments.concat(RAML.Client.createPathSegment(resource));
       var overview = exports.resourceOverviewSource(resourcePathSegments, resource);
 
-      overview.methods.forEach(function(method) {
-        extendMethod(method, securitySchemes);
+      overview.methods = overview.methods.map(function(method) {
+        return RAML.Inspector.Method.create(method, securitySchemes);
       });
 
       resources.push(overview);
@@ -70,8 +44,7 @@ RAML.Inspector = (function() {
   }
 
   exports.resourceOverviewSource = function(pathSegments, resource) {
-    Clone.prototype = resource;
-    var clone = new Clone();
+    var clone = RAML.Utils.clone(resource);
 
     clone.traits = resource.is;
     clone.resourceType = resource.type;
@@ -102,6 +75,101 @@ RAML.Inspector = (function() {
   };
 
   return exports;
+})();
+
+(function() {
+  'use strict';
+
+  var PARAMETER = /\{\*\}/;
+  function filterHeaders(headers) {
+    var filtered = {
+      plain: {},
+      parameterized: {}
+    };
+
+    Object.keys(headers || {}).forEach(function(key) {
+      if (key.match(PARAMETER)) {
+        filtered.parameterized[key] = RAML.Inspector.ParameterizedHeader.fromRAML(key, headers[key]);
+      } else {
+        filtered.plain[key] = headers[key];
+      }
+    });
+
+    return filtered;
+  }
+
+  function securitySchemesExtractor(securitySchemes) {
+    securitySchemes = securitySchemes || [];
+
+    return function() {
+      var securedBy = this.securedBy || [],
+          selectedSchemes = {};
+
+      securedBy = securedBy.filter(function(name) {
+        return name !== null && typeof name !== 'object';
+      });
+
+      securitySchemes.forEach(function(scheme) {
+        securedBy.forEach(function(name) {
+          if (scheme[name]) {
+            selectedSchemes[name] = scheme[name];
+          }
+        });
+      });
+
+      return selectedSchemes;
+    };
+  }
+
+  function allowsAnonymousAccess() {
+    /*jshint validthis: true */
+    var securedBy = this.securedBy || [null];
+    return securedBy.some(function(name) { return name === null; });
+  }
+
+  RAML.Inspector.Method = {
+    create: function(raml, securitySchemes) {
+      var method = RAML.Utils.clone(raml);
+
+      method.securitySchemes = securitySchemesExtractor(securitySchemes);
+      method.allowsAnonymousAccess = allowsAnonymousAccess;
+      method.headers = filterHeaders(method.headers);
+      return method;
+    }
+  };
+})();
+
+(function () {
+  'use strict';
+
+  function validate(value) {
+    value = value ? value.trim() : '';
+
+    if (value === '') {
+      throw new Error();
+    }
+
+    return value;
+  }
+
+  function fromRAML(name, definition) {
+    var parameterizedString = new RAML.Client.ParameterizedString(name, definition);
+
+    return {
+      create: function(value) {
+        value = validate(value);
+
+        var header = RAML.Utils.clone(definition);
+        header.displayName = parameterizedString.render({'*': value});
+
+        return header;
+      }
+    };
+  }
+
+  RAML.Inspector.ParameterizedHeader = {
+    fromRAML: fromRAML
+  };
 })();
 
 'use strict';
@@ -820,12 +888,6 @@ RAML.Inspector = (function() {
   var CONTENT_TYPE = 'content-type';
   var FORM_DATA = 'multipart/form-data';
 
-  function Clone() {}
-  function clone(obj) {
-    Clone.prototype = obj;
-    return new Clone();
-  }
-
   var RequestDsl = function(options) {
     var rawData;
     var queryParams;
@@ -833,7 +895,7 @@ RAML.Inspector = (function() {
 
     this.data = function(data) {
       if (data === undefined) {
-        return clone(rawData);
+        return RAML.Utils.clone(rawData);
       } else {
         rawData = data;
       }
@@ -841,7 +903,7 @@ RAML.Inspector = (function() {
 
     this.queryParams = function(parameters) {
       if (parameters === undefined) {
-        return clone(queryParams);
+        return RAML.Utils.clone(queryParams);
       } else {
         queryParams = parameters;
       }
@@ -879,7 +941,7 @@ RAML.Inspector = (function() {
     };
 
     this.toOptions = function() {
-      var o = clone(options);
+      var o = RAML.Utils.clone(options);
       if (rawData) {
         if (isMultipartRequest) {
           var data = new FormData();
@@ -895,7 +957,7 @@ RAML.Inspector = (function() {
           o.data = rawData;
         }
       }
-      if (queryParams) {
+      if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.url.match('\\?') ? '&' : '?');
         o.url = options.url + separator + $.param(queryParams);
       }
@@ -1081,15 +1143,11 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  function isEmpty(object) {
-    return Object.keys(object || {}).length === 0;
-  }
-
   var FORM_MIME_TYPES = ['application/x-www-form-urlencoded', 'multipart/form-data'];
 
   function hasFormParameters(method) {
     return FORM_MIME_TYPES.some(function(type) {
-      return method.body && method.body[type] && !isEmpty(method.body[type].formParameters);
+      return method.body && method.body[type] && !RAML.Utils.isEmpty(method.body[type].formParameters);
     });
   }
 
@@ -1103,10 +1161,10 @@ RAML.Inspector = (function() {
     });
 
     var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
-      this.method.headers || hasFormParameters(this.method));
+      !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
 
-    this.hasRequestDocumentation = hasParameters || !isEmpty(this.method.body);
-    this.hasResponseDocumentation = !isEmpty(this.method.responses);
+    this.hasRequestDocumentation = hasParameters || !RAML.Utils.isEmpty(this.method.body);
+    this.hasResponseDocumentation = !RAML.Utils.isEmpty(this.method.responses);
     this.hasTryIt = !!$scope.api.baseUri;
   };
 
@@ -1175,17 +1233,13 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
-  function isEmpty(object) {
-    return Object.keys(object || {}).length === 0;
-  }
-
   var controller = function($scope) {
     var method = $scope.method;
     var resource = $scope.resource;
     var parameterGroups = [];
 
-    if (!isEmpty(method.headers)) {
-      parameterGroups.push(['Headers', method.headers]);
+    if (!RAML.Utils.isEmpty(method.headers.plain)) {
+      parameterGroups.push(['Headers', method.headers.plain]);
     }
 
     var uriParameters = resource.pathSegments
@@ -1198,10 +1252,10 @@ RAML.Inspector = (function() {
         return accum;
       }, {});
 
-    if (!isEmpty(uriParameters)) {
+    if (!RAML.Utils.isEmpty(uriParameters)) {
       parameterGroups.push(['URI Parameters', uriParameters]);
     }
-    if (!isEmpty(method.queryParameters)) {
+    if (!RAML.Utils.isEmpty(method.queryParameters)) {
       parameterGroups.push(['Query Parameters', method.queryParameters]);
     }
 
@@ -1272,13 +1326,6 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
-  function isEmpty(object) {
-    if (object) {
-      return Object.keys(filterEmpty(object)).length === 0;
-    } else {
-      return true;
-    }
-  }
 
   function filterEmpty(object) {
     var copy = {};
@@ -1321,29 +1368,18 @@ RAML.Inspector = (function() {
   var apply;
 
   var TryIt = function($scope) {
+    this.context = $scope.context = {};
+    this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
+    this.context.queryParameters = new RAML.Controllers.TryIt.NamedParameters($scope.method.queryParameters);
+
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
     };
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-    this.headers = {};
-    this.queryParameters = {};
     this.formParameters = {};
-    this.supportsCustomBody = this.supportsFormUrlencoded = this.supportsFormData = false;
-
-    for (var mediaType in $scope.method.body) {
-      this.mediaType = this.mediaType || mediaType;
-      this.supportsMediaType = true;
-
-      if (mediaType === FORM_URLENCODED) {
-        this.supportsFormUrlencoded = true;
-      } else if (mediaType === FORM_DATA) {
-        this.supportsFormData = true;
-      } else {
-        this.supportsCustomBody = true;
-      }
-    }
+    this.mediaType = Object.keys($scope.method.body || {})[0];
 
     $scope.apiClient = this;
     this.parsed = $scope.api;
@@ -1353,26 +1389,6 @@ RAML.Inspector = (function() {
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
-  };
-
-  TryIt.prototype.showBody = function() {
-    return this.supportsCustomBody && !this.showUrlencodedForm() && !this.showMultipartForm();
-  };
-
-  TryIt.prototype.showUrlencodedForm = function() {
-    if (this.mediaType) {
-      return this.mediaType === FORM_URLENCODED;
-    } else {
-      return (!this.supportsCustomBody && this.supportsFormUrlencoded);
-    }
-  };
-
-  TryIt.prototype.showMultipartForm = function() {
-    if (this.mediaType) {
-      return this.mediaType === FORM_DATA;
-    } else  {
-      return (!this.supportsCustomBody && !this.supportsFormUrlencoded && this.supportsFormData);
-    }
   };
 
   TryIt.prototype.inProgress = function() {
@@ -1416,24 +1432,23 @@ RAML.Inspector = (function() {
       }
       var request = RAML.Client.Request.create(url, this.httpMethod);
 
-      if (!isEmpty(this.queryParameters)) {
-        request.queryParams(filterEmpty(this.queryParameters));
+      if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {
+        request.queryParams(this.context.queryParameters.data());
       }
 
-      if (!isEmpty(this.formParameters)) {
-        request.data(filterEmpty(this.formParameters));
-      }
-
-      if (!isEmpty(this.headers)) {
-        request.headers(filterEmpty(this.headers));
+      if (!RAML.Utils.isEmpty(this.context.headers.data())) {
+        request.headers(this.context.headers.data());
       }
 
       if (this.mediaType) {
         request.header('Content-Type', this.mediaType);
-      }
-
-      if (this.showBody()) {
-        request.data(this.body);
+        if (this.mediaType === FORM_DATA || this.mediaType === FORM_URLENCODED) {
+          if (!RAML.Utils.isEmpty(filterEmpty(this.formParameters))) {
+            request.data(filterEmpty(this.formParameters));
+          }
+        } else {
+          request.data(this.body);
+        }
       }
 
       var authStrategy;
@@ -1464,6 +1479,54 @@ RAML.Inspector = (function() {
   };
 
   RAML.Controllers.TryIt = TryIt;
+})();
+
+(function() {
+  'use strict';
+
+  function copy(object) {
+    var shallow = {};
+    if (object) {
+      Object.keys(object).forEach(function(key) {
+        shallow[key] = object[key];
+      });
+    }
+
+    return shallow;
+  }
+
+  function filterEmpty(object) {
+    var copy = {};
+
+    Object.keys(object).forEach(function(key) {
+      if (object[key] && (typeof object[key] !== 'string' || object[key].trim().length > 0)) {
+        copy[key] = object[key];
+      }
+    });
+
+    return copy;
+  }
+
+  var NamedParameters = function(plain, parameterized) {
+    this.plain = copy(plain);
+    this.parameterized = copy(parameterized);
+    this.values = {};
+  };
+
+  NamedParameters.prototype.create = function(name, value) {
+    var header = this.parameterized[name].create(value);
+    this.plain[header.displayName] = header;
+  };
+
+  NamedParameters.prototype.remove = function(name) {
+    return delete this.plain[name];
+  };
+
+  NamedParameters.prototype.data = function() {
+    return filterEmpty(this.values);
+  };
+
+  RAML.Controllers.TryIt.NamedParameters = NamedParameters;
 })();
 
 'use strict';
@@ -1734,10 +1797,13 @@ RAML.Inspector = (function() {
 
 (function() {
   var Controller = function($scope) {
-    var parameters = $scope.parameters || {};
+    var parameters = $scope.parameters || {
+      plain: {},
+      parameterized: {}
+    };
 
     $scope.displayParameters = function() {
-      return Object.keys(parameters).length > 0;
+      return Object.keys(parameters.plain).length > 0;
     };
   };
 
@@ -1810,10 +1876,50 @@ RAML.Inspector = (function() {
     return {
       restrict: 'E',
       templateUrl: 'views/parameter_fields.tmpl.html',
-      // replace: true,
       scope: {
         parameters: '=',
         requestData: '='
+      }
+    };
+  };
+})();
+
+(function() {
+  'use strict';
+
+  var Controller = function($scope) {
+    $scope.parameterFactory = this;
+
+    this.parameterName = $scope.parameterName;
+    this.parameters = $scope.parameters;
+  };
+
+  Controller.prototype.open = function($event) {
+    $event.preventDefault();
+    this.opened = true;
+  };
+
+  Controller.prototype.create = function($event) {
+    $event.preventDefault();
+
+    try {
+      this.parameters.create(this.parameterName, this.value);
+      this.opened = false;
+      this.value = this.status = '';
+    } catch (e) {
+      this.status = 'error';
+    }
+  };
+
+  RAML.Directives.parameterizedParameter = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'views/parameterized_parameter.tmpl.html',
+      replace: true,
+      controller: Controller,
+      scope: {
+        parameters: '=',
+        parameterName: '='
       }
     };
   };
@@ -2231,6 +2337,27 @@ RAML.Filters = {};
   // RAML.Settings.proxy = RAML.Settings.proxy || '/proxy/';
 })();
 
+(function() {
+  'use strict';
+
+  function Clone() {}
+
+  RAML.Utils = {
+    clone: function(object) {
+      Clone.prototype = object;
+      return new Clone();
+    },
+
+    isEmpty: function(object) {
+      if (object) {
+        return Object.keys(object).length === 0;
+      } else {
+        return true;
+      }
+    }
+  };
+})();
+
 'use strict';
 
 (function() {
@@ -2262,6 +2389,7 @@ RAML.Filters = {};
   module.directive('oauth1', RAML.Directives.oauth1);
   module.directive('oauth2', RAML.Directives.oauth2);
   module.directive('parameterFields', RAML.Directives.parameterFields);
+  module.directive('parameterizedParameter', RAML.Directives.parameterizedParameter);
   module.directive('parameters', RAML.Directives.parameters);
   module.directive('pathBuilder', RAML.Directives.pathBuilder);
   module.directive('ramlConsole', RAML.Directives.ramlConsole);
@@ -2370,7 +2498,22 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/named_parameters.tmpl.html',
     "<fieldset class='labelled-inline bordered' ng-show=\"displayParameters()\">\n" +
     "  <legend>{{heading}}</legend>\n" +
-    "  <parameter-fields parameters=\"parameters\" request-data=\"requestData\"></parameter-fields>\n" +
+    "  <fieldset>\n" +
+    "    <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters.plain track by parameterName\">\n" +
+    "      <label for=\"{{parameterName}}\">\n" +
+    "        <span class=\"required\" ng-if=\"parameter.required\">*</span>\n" +
+    "        {{parameter.displayName}}:\n" +
+    "      </label>\n" +
+    "      <ng-switch on='parameter.type'>\n" +
+    "        <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='parameters.values[parameterName]'/>\n" +
+    "        <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='parameters.values[parameterName]' placeholder='{{parameter.example}}' ng-trim=\"false\" constraints='parameter'/>\n" +
+    "      </ng-switch>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"parameter-factory\" ng-repeat='(name, _) in parameters.parameterized'>\n" +
+    "      <parameterized-parameter parameter-name=\"name\" parameters=\"parameters\"></parameterized-parameter>\n" +
+    "    </div>\n" +
+    "  </fieldset>\n" +
     "</fieldset>\n"
   );
 
@@ -2436,6 +2579,18 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </ng-switch>\n" +
     "  </div>\n" +
     "</fieldset>\n"
+  );
+
+
+  $templateCache.put('views/parameterized_parameter.tmpl.html',
+    "<div class=\"labelled-inline\">\n" +
+    "  <label for=\"{{parameterName}}\">{{parameterName}}:</label>\n" +
+    "  <a href='#' role=\"open-factory\" ng-click=\"parameterFactory.open($event)\" ng-hide=\"parameterFactory.opened\">Add</a>\n" +
+    "  <span ng-show=\"parameterFactory.opened\">\n" +
+    "    <input type=\"text\" name=\"{{parameterName}}\" ng-model=\"parameterFactory.value\" ng-class=\"parameterFactory.status\"/>\n" +
+    "    <a href='#' role='create-parameter' ng-click=\"parameterFactory.create($event)\"><i class='icon icon-plus'></i></a>\n" +
+    "  </span>\n" +
+    "</div>\n"
   );
 
 
@@ -2658,14 +2813,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <path-builder></path-builder>\n" +
     "\n" +
     "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\"></security-schemes>\n" +
-    "    <named-parameters heading=\"Headers\" parameters=\"method.headers\" request-data=\"apiClient.headers\"></named-parameters>\n" +
-    "    <named-parameters heading=\"Query Parameters\" parameters=\"method.queryParameters\" request-data=\"apiClient.queryParameters\"></named-parameters>\n" +
+    "    <named-parameters heading=\"Headers\" parameters=\"context.headers\"></named-parameters>\n" +
+    "    <named-parameters heading=\"Query Parameters\" parameters=\"context.queryParameters\"></named-parameters>\n" +
     "\n" +
     "    <div class=\"request-body\" ng-show=\"method.body\">\n" +
     "      <fieldset class=\"bordered\">\n" +
     "        <legend>Body</legend>\n" +
     "\n" +
-    "        <fieldset class=\"labelled-radio-group media-types\" ng-show=\"apiClient.supportsMediaType\">\n" +
+    "        <fieldset class=\"labelled-radio-group media-types\" ng-show=\"method.body\">\n" +
     "          <label>Content Type</label>\n" +
     "          <div class=\"radio-group\">\n" +
     "            <label class=\"radio\" ng-repeat=\"(mediaType, _) in method.body track by mediaType\">\n" +
@@ -2675,13 +2830,17 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          </div>\n" +
     "        </fieldset>\n" +
     "\n" +
-    "        <div ng-if=\"apiClient.showBody()\">\n" +
-    "          <textarea name=\"body\" ng-model='apiClient.body' ng-model=\"apiClient.body\"></textarea>\n" +
-    "          <a href=\"#\" class=\"body-prefill\" ng-show=\"apiClient.bodyHasExample()\" ng-click=apiClient.fillBody($event)>Prefill with example</a>\n" +
-    "        </div>\n" +
-    "        <div class=\"labelled-inline\">\n" +
-    "          <parameter-fields parameters='method.body[\"application/x-www-form-urlencoded\"].formParameters' request-data=\"apiClient.formParameters\" ng-if=\"apiClient.showUrlencodedForm()\"></parameter-fields>\n" +
-    "          <parameter-fields parameters='method.body[\"multipart/form-data\"].formParameters' request-data=\"apiClient.formParameters\" ng-if=\"apiClient.showMultipartForm()\"></parameter-fields>\n" +
+    "        <div ng-if='apiClient.mediaType' ng-switch=\"apiClient.mediaType\">\n" +
+    "          <div class=\"labelled-inline\" ng-switch-when='application/x-www-form-urlencoded'>\n" +
+    "            <parameter-fields parameters='method.body[\"application/x-www-form-urlencoded\"].formParameters' request-data=\"apiClient.formParameters\"></parameter-fields>\n" +
+    "          </div>\n" +
+    "          <div class=\"labelled-inline\" ng-switch-when='multipart/form-data'>\n" +
+    "            <parameter-fields parameters='method.body[\"multipart/form-data\"].formParameters' request-data=\"apiClient.formParameters\"></parameter-fields>\n" +
+    "          </div>\n" +
+    "          <div ng-switch-default>\n" +
+    "            <textarea name=\"body\" ng-model='apiClient.body' ng-model=\"apiClient.body\"></textarea>\n" +
+    "            <a href=\"#\" class=\"body-prefill\" ng-show=\"apiClient.bodyHasExample()\" ng-click=apiClient.fillBody($event)>Prefill with example</a>\n" +
+    "          </div>\n" +
     "        </div>\n" +
     "      </fieldset>\n" +
     "    </div>\n" +
