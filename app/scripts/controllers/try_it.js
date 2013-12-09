@@ -43,13 +43,15 @@
   var apply;
 
   var TryIt = function($scope) {
+    this.context = $scope.context = {};
+    this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
+
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
     };
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-    this.headers = {};
     this.queryParameters = {};
     this.formParameters = {};
     this.mediaType = Object.keys($scope.method.body || {})[0];
@@ -109,8 +111,8 @@
         request.queryParams(filterEmpty(this.queryParameters));
       }
 
-      if (!RAML.Utils.isEmpty(filterEmpty(this.headers))) {
-        request.headers(filterEmpty(this.headers));
+      if (!RAML.Utils.isEmpty(this.context.headers.data())) {
+        request.headers(this.context.headers.data());
       }
 
       if (this.mediaType) {

@@ -13,6 +13,10 @@ describe("RAML.Controllers.TryIt", function() {
     return {
       method: method,
       body: body,
+      headers: {
+        plain: {},
+        parameterized: {}
+      },
       securitySchemes: function() { return {}; }
     }
   }

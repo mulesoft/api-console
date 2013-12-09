@@ -3751,6 +3751,10 @@ raml-console article#raml-console .try-it form .media-types,
 #raml-console-loader .try-it form .media-types {
   text-align: right;
 }
+raml-console article#raml-console .try-it form .parameter-factory,
+#raml-console-loader .try-it form .parameter-factory {
+  margin-top: 25px;
+}
 raml-console article#raml-console .try-it form textarea[name=body],
 #raml-console-loader .try-it form textarea[name=body] {
   -moz-box-sizing: border-box;

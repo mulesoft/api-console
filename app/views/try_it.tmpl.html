@@ -4,7 +4,13 @@
     <path-builder></path-builder>
 
     <security-schemes ng-if="apiClient.securitySchemes" schemes="apiClient.securitySchemes" keychain="ramlConsole.keychain"></security-schemes>
-    <named-parameters heading="Headers" parameters="method.headers.plain" request-data="apiClient.headers"></named-parameters>
+    <div>
+      <named-parameters heading="Headers" parameters="context.headers.plain" request-data="context.headers.values"></named-parameters>
+
+      <div class="parameter-factory" ng-repeat='(name, _) in context.headers.parameterized'>
+        <parameterized-header header-name="name" headers="context.headers"></parameterized-header>
+      </div>
+    </div>
     <named-parameters heading="Query Parameters" parameters="method.queryParameters" request-data="apiClient.queryParameters"></named-parameters>
 
     <div class="request-body" ng-show="method.body">

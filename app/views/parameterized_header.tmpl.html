@@ -1,0 +1,8 @@
+<div class="labelled-inline">
+  <label for="{{headerName}}">{{headerName}}:</label>
+  <a href='#' role="open-factory" ng-click="headerFactory.open($event)" ng-hide="headerFactory.opened">Add</a>
+  <span ng-show="headerFactory.opened">
+    <input type="text" name="{{headerName}}" ng-model="headerFactory.value" ng-class="headerFactory.status"/>
+    <a href='#' role='create-parameter' ng-click="headerFactory.create($event)"><i class='icon icon-plus'></i></a>
+  </span>
+</div>
