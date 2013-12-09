@@ -1,6 +1,24 @@
 (function() {
   'use strict';
 
+  var PARAMETER = /\{\*\}/;
+  function filterHeaders(headers) {
+    var filtered = {
+      plain: {},
+      parameterized: {}
+    };
+
+    Object.keys(headers || {}).forEach(function(key) {
+      if (key.match(PARAMETER)) {
+        filtered.parameterized[key] = RAML.Inspector.ParameterizedHeader.fromRAML(key, headers[key]);
+      } else {
+        filtered.plain[key] = headers[key];
+      }
+    });
+
+    return filtered;
+  }
+
   function securitySchemesExtractor(securitySchemes) {
     securitySchemes = securitySchemes || [];
 
@@ -30,25 +48,13 @@
     return securedBy.some(function(name) { return name === null; });
   }
 
-  var PLACEHOLDER = /\{\*\}/;
-  function filterHeadersWithPlaceholders(headers) {
-    var filtered = {};
-    Object.keys(headers || {}).forEach(function(key) {
-      if (!key.match(PLACEHOLDER)) {
-        filtered[key] = headers[key];
-      }
-    });
-
-    return filtered;
-  }
-
   RAML.Inspector.Method = {
     create: function(raml, securitySchemes) {
       var method = RAML.Utils.clone(raml);
 
       method.securitySchemes = securitySchemesExtractor(securitySchemes);
       method.allowsAnonymousAccess = allowsAnonymousAccess;
-      method.headers = filterHeadersWithPlaceholders(method.headers);
+      method.headers = filterHeaders(method.headers);
       return method;
     }
   };

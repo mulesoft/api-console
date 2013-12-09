@@ -19,7 +19,7 @@
     });
 
     var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
-      !RAML.Utils.isEmpty(this.method.headers) || hasFormParameters(this.method));
+      !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
 
     this.hasRequestDocumentation = hasParameters || !RAML.Utils.isEmpty(this.method.body);
     this.hasResponseDocumentation = !RAML.Utils.isEmpty(this.method.responses);

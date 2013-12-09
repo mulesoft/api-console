@@ -11,13 +11,23 @@ describe("RAML.Inspector.ParameterizedHeader", function() {
   describe("creating a header", function() {
     var header;
 
-    beforeEach(function() {
-      header = parameterizedHeader.create("test");
+    describe("by default", function() {
+      beforeEach(function() {
+        header = parameterizedHeader.create("test");
+      });
+
+      it("returns a new header definition", function() {
+        expect(header.displayName).toEqual('X-Custom-test');
+        expect(header.type).toEqual(definition.type);
+      });
     });
 
-    it("returns a new header definition", function() {
-      expect(header.displayName).toEqual('X-Custom-test');
-      expect(header.type).toEqual(definition.type);
+    describe("with an empty string", function() {
+      it("throws", function() {
+        expect(function() {
+          parameterizedHeader.create('');
+        }).toThrow();
+      });
     });
   });
 });

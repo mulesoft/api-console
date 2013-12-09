@@ -6,8 +6,8 @@
     var resource = $scope.resource;
     var parameterGroups = [];
 
-    if (!RAML.Utils.isEmpty(method.headers)) {
-      parameterGroups.push(['Headers', method.headers]);
+    if (!RAML.Utils.isEmpty(method.headers.plain)) {
+      parameterGroups.push(['Headers', method.headers.plain]);
     }
 
     var uriParameters = resource.pathSegments

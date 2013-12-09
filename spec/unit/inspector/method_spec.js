@@ -17,7 +17,7 @@ describe("RAML.Inspector.Method", function() {
     '  get:',
     '    headers:',
     '      example:',
-    '      x-placeholder-{*}:',
+    '      x-parameterized-{*}:',
     '    securedBy: [null, basic, oauth_2: { scopes: [ comments ] } ]',
     '  post:',
     '    securedBy: [basic, oauth_2: { scopes: [ comments ] } ]',
@@ -32,12 +32,14 @@ describe("RAML.Inspector.Method", function() {
         securitySchemes = method.securitySchemes();
       });
 
-      it("includes headers without placeholders", function() {
-        expect(method.headers['example']).toBeDefined()
+      it("includes header without parameters as headers.plain", function() {
+        expect(method.headers.plain['example']).toBeDefined()
+        expect(method.headers.plain['x-parameterized-{*}']).not.toBeDefined()
       });
 
-      it("filters out headers with placeholders", function() {
-        expect(method.headers['x-placeholder-{*}']).not.toBeDefined()
+      it("includes parameterized headers as headers.parameterized", function() {
+        expect(method.headers.parameterized['x-parameterized-{*}']).toBeDefined()
+        expect(method.headers.parameterized['example']).not.toBeDefined()
       });
     });
   });
