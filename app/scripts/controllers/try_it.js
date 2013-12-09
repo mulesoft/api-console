@@ -45,6 +45,7 @@
   var TryIt = function($scope) {
     this.context = $scope.context = {};
     this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
+    this.context.queryParameters = new RAML.Controllers.TryIt.NamedParameters($scope.method.queryParameters);
 
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
@@ -52,7 +53,6 @@
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-    this.queryParameters = {};
     this.formParameters = {};
     this.mediaType = Object.keys($scope.method.body || {})[0];
 
@@ -107,8 +107,8 @@
       }
       var request = RAML.Client.Request.create(url, this.httpMethod);
 
-      if (!RAML.Utils.isEmpty(filterEmpty(this.queryParameters))) {
-        request.queryParams(filterEmpty(this.queryParameters));
+      if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {
+        request.queryParams(this.context.queryParameters.data());
       }
 
       if (!RAML.Utils.isEmpty(this.context.headers.data())) {

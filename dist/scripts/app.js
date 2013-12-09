@@ -9404,6 +9404,7 @@ RAML.Inspector = (function() {
   var TryIt = function($scope) {
     this.context = $scope.context = {};
     this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
+    this.context.queryParameters = new RAML.Controllers.TryIt.NamedParameters($scope.method.queryParameters);
 
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
@@ -9411,7 +9412,6 @@ RAML.Inspector = (function() {
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-    this.queryParameters = {};
     this.formParameters = {};
     this.mediaType = Object.keys($scope.method.body || {})[0];
 
@@ -9466,8 +9466,8 @@ RAML.Inspector = (function() {
       }
       var request = RAML.Client.Request.create(url, this.httpMethod);
 
-      if (!RAML.Utils.isEmpty(filterEmpty(this.queryParameters))) {
-        request.queryParams(filterEmpty(this.queryParameters));
+      if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {
+        request.queryParams(this.context.queryParameters.data());
       }
 
       if (!RAML.Utils.isEmpty(this.context.headers.data())) {
@@ -9831,10 +9831,13 @@ RAML.Inspector = (function() {
 
 (function() {
   var Controller = function($scope) {
-    var parameters = $scope.parameters || {};
+    var parameters = $scope.parameters || {
+      plain: {},
+      parameterized: {}
+    };
 
     $scope.displayParameters = function() {
-      return Object.keys(parameters).length > 0;
+      return Object.keys(parameters.plain).length > 0;
     };
   };
 
@@ -9919,10 +9922,10 @@ RAML.Inspector = (function() {
   'use strict';
 
   var Controller = function($scope) {
-    $scope.headerFactory = this;
+    $scope.parameterFactory = this;
 
-    this.headerName = $scope.headerName;
-    this.headers = $scope.headers;
+    this.parameterName = $scope.parameterName;
+    this.parameters = $scope.parameters;
   };
 
   Controller.prototype.open = function($event) {
@@ -9934,7 +9937,7 @@ RAML.Inspector = (function() {
     $event.preventDefault();
 
     try {
-      this.headers.create(this.headerName, this.value);
+      this.parameters.create(this.parameterName, this.value);
       this.opened = false;
       this.value = this.status = '';
     } catch (e) {
@@ -9942,15 +9945,15 @@ RAML.Inspector = (function() {
     }
   };
 
-  RAML.Directives.parameterizedHeader = function() {
+  RAML.Directives.parameterizedParameter = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/parameterized_header.tmpl.html',
+      templateUrl: 'views/parameterized_parameter.tmpl.html',
       replace: true,
       controller: Controller,
       scope: {
-        headers: '=',
-        headerName: '='
+        parameters: '=',
+        parameterName: '='
       }
     };
   };
@@ -10420,7 +10423,7 @@ RAML.Filters = {};
   module.directive('oauth1', RAML.Directives.oauth1);
   module.directive('oauth2', RAML.Directives.oauth2);
   module.directive('parameterFields', RAML.Directives.parameterFields);
-  module.directive('parameterizedHeader', RAML.Directives.parameterizedHeader);
+  module.directive('parameterizedParameter', RAML.Directives.parameterizedParameter);
   module.directive('parameters', RAML.Directives.parameters);
   module.directive('pathBuilder', RAML.Directives.pathBuilder);
   module.directive('ramlConsole', RAML.Directives.ramlConsole);
@@ -10524,7 +10527,22 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
   $templateCache.put("views/named_parameters.tmpl.html",
     "<fieldset class='labelled-inline bordered' ng-show=\"displayParameters()\">\n" +
     "  <legend>{{heading}}</legend>\n" +
-    "  <parameter-fields parameters=\"parameters\" request-data=\"requestData\"></parameter-fields>\n" +
+    "  <fieldset>\n" +
+    "    <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters.plain track by parameterName\">\n" +
+    "      <label for=\"{{parameterName}}\">\n" +
+    "        <span class=\"required\" ng-if=\"parameter.required\">*</span>\n" +
+    "        {{parameter.displayName}}:\n" +
+    "      </label>\n" +
+    "      <ng-switch on='parameter.type'>\n" +
+    "        <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='parameters.values[parameterName]'/>\n" +
+    "        <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='parameters.values[parameterName]' placeholder='{{parameter.example}}' ng-trim=\"false\" constraints='parameter'/>\n" +
+    "      </ng-switch>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"parameter-factory\" ng-repeat='(name, _) in parameters.parameterized'>\n" +
+    "      <parameterized-parameter parameter-name=\"name\" parameters=\"parameters\"></parameterized-parameter>\n" +
+    "    </div>\n" +
+    "  </fieldset>\n" +
     "</fieldset>\n"
   );
 
@@ -10588,13 +10606,13 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "</fieldset>\n"
   );
 
-  $templateCache.put("views/parameterized_header.tmpl.html",
+  $templateCache.put("views/parameterized_parameter.tmpl.html",
     "<div class=\"labelled-inline\">\n" +
-    "  <label for=\"{{headerName}}\">{{headerName}}:</label>\n" +
-    "  <a href='#' role=\"open-factory\" ng-click=\"headerFactory.open($event)\" ng-hide=\"headerFactory.opened\">Add</a>\n" +
-    "  <span ng-show=\"headerFactory.opened\">\n" +
-    "    <input type=\"text\" name=\"{{headerName}}\" ng-model=\"headerFactory.value\" ng-class=\"headerFactory.status\"/>\n" +
-    "    <a href='#' role='create-parameter' ng-click=\"headerFactory.create($event)\"><i class='icon icon-plus'></i></a>\n" +
+    "  <label for=\"{{parameterName}}\">{{parameterName}}:</label>\n" +
+    "  <a href='#' role=\"open-factory\" ng-click=\"parameterFactory.open($event)\" ng-hide=\"parameterFactory.opened\">Add</a>\n" +
+    "  <span ng-show=\"parameterFactory.opened\">\n" +
+    "    <input type=\"text\" name=\"{{parameterName}}\" ng-model=\"parameterFactory.value\" ng-class=\"parameterFactory.status\"/>\n" +
+    "    <a href='#' role='create-parameter' ng-click=\"parameterFactory.create($event)\"><i class='icon icon-plus'></i></a>\n" +
     "  </span>\n" +
     "</div>\n"
   );
@@ -10808,14 +10826,8 @@ angular.module("ramlConsoleApp").run(["$templateCache", function($templateCache)
     "    <path-builder></path-builder>\n" +
     "\n" +
     "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\"></security-schemes>\n" +
-    "    <div>\n" +
-    "      <named-parameters heading=\"Headers\" parameters=\"context.headers.plain\" request-data=\"context.headers.values\"></named-parameters>\n" +
-    "\n" +
-    "      <div class=\"parameter-factory\" ng-repeat='(name, _) in context.headers.parameterized'>\n" +
-    "        <parameterized-header header-name=\"name\" headers=\"context.headers\"></parameterized-header>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <named-parameters heading=\"Query Parameters\" parameters=\"method.queryParameters\" request-data=\"apiClient.queryParameters\"></named-parameters>\n" +
+    "    <named-parameters heading=\"Headers\" parameters=\"context.headers\"></named-parameters>\n" +
+    "    <named-parameters heading=\"Query Parameters\" parameters=\"context.queryParameters\"></named-parameters>\n" +
     "\n" +
     "    <div class=\"request-body\" ng-show=\"method.body\">\n" +
     "      <fieldset class=\"bordered\">\n" +

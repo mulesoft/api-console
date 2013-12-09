@@ -2,10 +2,13 @@
 
 (function() {
   var Controller = function($scope) {
-    var parameters = $scope.parameters || {};
+    var parameters = $scope.parameters || {
+      plain: {},
+      parameterized: {}
+    };
 
     $scope.displayParameters = function() {
-      return Object.keys(parameters).length > 0;
+      return Object.keys(parameters.plain).length > 0;
     };
   };
 

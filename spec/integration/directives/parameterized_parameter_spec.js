@@ -1,8 +1,8 @@
-describe("RAML.Directives.parameterizedHeader", function() {
-  function createScopeForParameterizedHeader(headerName, method) {
+describe("RAML.Directives.parameterizedParameter", function() {
+  function createScopeForParameterizedParameter(parameterName, method) {
     return createScope(function(scope) {
-      scope.headerName = headerName;
-      scope.headers = new RAML.Controllers.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
+      scope.parameterName = parameterName;
+      scope.parameters = new RAML.Controllers.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
     });
   }
 
@@ -21,30 +21,30 @@ describe("RAML.Directives.parameterizedHeader", function() {
 
   beforeEach(function() {
     var inspected = RAML.Inspector.create(this.api);
-    scope = createScopeForParameterizedHeader("x-custom-{*}", inspected.resources[0].methods[0]);
-    $el = compileTemplate('<parameterized-header header-name="headerName" headers="headers"></parameterized-header>', scope);
+    scope = createScopeForParameterizedParameter("x-custom-{*}", inspected.resources[0].methods[0]);
+    $el = compileTemplate('<parameterized-parameter parameter-name="parameterName" parameters="parameters"></parameterized-parameter>', scope);
     setFixtures($el);
   });
 
-  describe('given parameterizable headers', function() {
-    var openFactory, headerValue, submit;
+  describe('given parameterizable parameters', function() {
+    var openFactory, parameterValue, submit;
 
     beforeEach(function() {
       openFactory = $el.find('[role="open-factory"]');
-      headerValue = $el.find('input[name="x-custom-{*}"]');
+      parameterValue = $el.find('input[name="x-custom-{*}"]');
       submit = $el.find('[role="create-parameter"]');
 
       openFactory.click();
       expect(openFactory).not.toBeVisible();
-      expect(headerValue).toBeVisible();
+      expect(parameterValue).toBeVisible();
     });
 
     describe("creating a valid header", function() {
       it("closes the creation form", function() {
-        headerValue.fillIn('test');
+        parameterValue.fillIn('test');
         submit.click();
 
-        expect(headerValue).not.toBeVisible();
+        expect(parameterValue).not.toBeVisible();
         expect(openFactory).toBeVisible();
       });
     });
@@ -53,8 +53,8 @@ describe("RAML.Directives.parameterizedHeader", function() {
       it("decorates the input with an error", function() {
         $el.find('[role="create-parameter"]').click();
 
-        expect(headerValue).toBeVisible();
-        expect(headerValue).toHaveClass("error");
+        expect(parameterValue).toBeVisible();
+        expect(parameterValue).toHaveClass("error");
       });
     });
   });

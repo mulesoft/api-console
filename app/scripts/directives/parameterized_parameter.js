@@ -2,10 +2,10 @@
   'use strict';
 
   var Controller = function($scope) {
-    $scope.headerFactory = this;
+    $scope.parameterFactory = this;
 
-    this.headerName = $scope.headerName;
-    this.headers = $scope.headers;
+    this.parameterName = $scope.parameterName;
+    this.parameters = $scope.parameters;
   };
 
   Controller.prototype.open = function($event) {
@@ -17,7 +17,7 @@
     $event.preventDefault();
 
     try {
-      this.headers.create(this.headerName, this.value);
+      this.parameters.create(this.parameterName, this.value);
       this.opened = false;
       this.value = this.status = '';
     } catch (e) {
@@ -25,15 +25,15 @@
     }
   };
 
-  RAML.Directives.parameterizedHeader = function() {
+  RAML.Directives.parameterizedParameter = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/parameterized_header.tmpl.html',
+      templateUrl: 'views/parameterized_parameter.tmpl.html',
       replace: true,
       controller: Controller,
       scope: {
-        headers: '=',
-        headerName: '='
+        parameters: '=',
+        parameterName: '='
       }
     };
   };
