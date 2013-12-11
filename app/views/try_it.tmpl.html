@@ -7,30 +7,27 @@
     <named-parameters heading="Headers" parameters="context.headers"></named-parameters>
     <named-parameters heading="Query Parameters" parameters="context.queryParameters"></named-parameters>
 
-    <div class="request-body" ng-show="method.body">
+    <div class="request-body" ng-show="context.bodyContent">
       <fieldset class="bordered">
         <legend>Body</legend>
 
-        <fieldset class="labelled-radio-group media-types" ng-show="method.body">
+        <fieldset class="labelled-radio-group media-types">
           <label>Content Type</label>
           <div class="radio-group">
-            <label class="radio" ng-repeat="(mediaType, _) in method.body track by mediaType">
-              <input type="radio" name="media-type" value="{{mediaType}}" ng-model="apiClient.mediaType">
-              {{mediaType}}
+            <label class="radio" ng-repeat="contentType in context.bodyContent.contentTypes">
+              <input type="radio" name="media-type" value="{{contentType}}" ng-model="context.bodyContent.selected">
+              {{contentType}}
             </label>
           </div>
         </fieldset>
 
-        <div ng-if='apiClient.mediaType' ng-switch="apiClient.mediaType">
-          <div class="labelled-inline" ng-switch-when='application/x-www-form-urlencoded'>
-            <parameter-fields parameters='method.body["application/x-www-form-urlencoded"].formParameters' request-data="apiClient.formParameters"></parameter-fields>
+        <div ng-repeat="contentType in context.bodyContent.contentTypes">
+          <div class="labelled-inline" ng-if='context.bodyContent.isForm(contentType)' ng-show="context.bodyContent.isSelected(contentType)">
+            <parameter-fields parameters='context.bodyContent.definitions[contentType]'></parameter-fields>
           </div>
-          <div class="labelled-inline" ng-switch-when='multipart/form-data'>
-            <parameter-fields parameters='method.body["multipart/form-data"].formParameters' request-data="apiClient.formParameters"></parameter-fields>
-          </div>
-          <div ng-switch-default>
-            <textarea name="body" ng-model='apiClient.body' ng-model="apiClient.body"></textarea>
-            <a href="#" class="body-prefill" ng-show="apiClient.bodyHasExample()" ng-click=apiClient.fillBody($event)>Prefill with example</a>
+          <div ng-if="!context.bodyContent.isForm(contentType)" ng-show="context.bodyContent.isSelected(contentType)">
+            <textarea name="{{contentType}}" ng-model="context.bodyContent.definitions[contentType].value"></textarea>
+            <a href="#" class="body-prefill" ng-show="context.bodyContent.hasExample(contentType)" ng-click="context.bodyContent.fillWithExample($event)">Prefill with example</a>
           </div>
         </div>
       </fieldset>

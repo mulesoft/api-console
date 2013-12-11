@@ -20,8 +20,7 @@
       replace: true,
       scope: {
         heading: '@',
-        parameters: '=',
-        requestData: '='
+        parameters: '='
       }
     };
   };
