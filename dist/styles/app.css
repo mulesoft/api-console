@@ -80,7 +80,7 @@ raml-console article#raml-console,
  *  Author - Dave Gandy
  *  ------------------------------------------------------------------------------
  *  Email: dave@fontawesome.io
- *  Twitter: http://twitter.com/davegandy
+ *  Twitter: http://twitter.com/byscuits
  *  Work: Lead Product Designer @ Kyruus - http://kyruus.com
  */
 
@@ -2181,10 +2181,6 @@ raml-console article#raml-console .cm-s-default .cm-meta,
 #raml-console-loader .cm-s-default .cm-meta {
   color: #555;
 }
-raml-console article#raml-console .cm-s-default .cm-error,
-#raml-console-loader .cm-s-default .cm-error {
-  color: #f00;
-}
 raml-console article#raml-console .cm-s-default .cm-qualifier,
 #raml-console-loader .cm-s-default .cm-qualifier {
   color: #555;
@@ -2243,6 +2239,10 @@ raml-console article#raml-console .cm-link,
 #raml-console-loader .cm-link {
   text-decoration: underline;
 }
+raml-console article#raml-console .cm-s-default .cm-error,
+#raml-console-loader .cm-s-default .cm-error {
+  color: #f00;
+}
 raml-console article#raml-console .cm-invalidchar,
 #raml-console-loader .cm-invalidchar {
   color: #f00;
@@ -2254,6 +2254,10 @@ raml-console article#raml-console div.CodeMirror span.CodeMirror-matchingbracket
 raml-console article#raml-console div.CodeMirror span.CodeMirror-nonmatchingbracket,
 #raml-console-loader div.CodeMirror span.CodeMirror-nonmatchingbracket {
   color: #f22;
+}
+raml-console article#raml-console .CodeMirror-activeline-background,
+#raml-console-loader .CodeMirror-activeline-background {
+  background: #e8f2ff;
 }
 raml-console article#raml-console .CodeMirror,
 #raml-console-loader .CodeMirror {
@@ -2278,6 +2282,8 @@ raml-console article#raml-console .CodeMirror-scroll,
   /* Prevent dragging from highlighting the element */
 
   position: relative;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
 raml-console article#raml-console .CodeMirror-sizer,
 #raml-console-loader .CodeMirror-sizer {
@@ -2331,6 +2337,8 @@ raml-console article#raml-console .CodeMirror-gutter,
 #raml-console-loader .CodeMirror-gutter {
   white-space: normal;
   height: 100%;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
   padding-bottom: 30px;
   margin-bottom: -32px;
   display: inline-block;
@@ -2375,6 +2383,18 @@ raml-console article#raml-console .CodeMirror-wrap pre,
   white-space: pre-wrap;
   word-break: normal;
 }
+raml-console article#raml-console .CodeMirror-code pre,
+#raml-console-loader .CodeMirror-code pre {
+  border-right: 30px solid transparent;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+raml-console article#raml-console .CodeMirror-wrap .CodeMirror-code pre,
+#raml-console-loader .CodeMirror-wrap .CodeMirror-code pre {
+  border-right: none;
+  width: auto;
+}
 raml-console article#raml-console .CodeMirror-linebackground,
 #raml-console-loader .CodeMirror-linebackground {
   position: absolute;
@@ -2398,7 +2418,7 @@ raml-console article#raml-console .CodeMirror-measure,
 #raml-console-loader .CodeMirror-measure {
   position: absolute;
   width: 100%;
-  height: 0px;
+  height: 0;
   overflow: hidden;
   visibility: hidden;
 }
@@ -3129,8 +3149,9 @@ raml-console article#raml-console .resource,
   background-color: #f3f3f6;
   border-radius: 5px;
   border: 1px solid #c0c2c9;
-  padding: 0px;
   margin: 5px 0;
+  padding: 15px;
+  padding-bottom: 0;
 }
 raml-console article#raml-console .resource.collapsed:hover,
 #raml-console-loader .resource.collapsed:hover,
@@ -3144,10 +3165,24 @@ raml-console article#raml-console .resource .summary,
   cursor: pointer;
   *zoom: 1;
 }
+raml-console article#raml-console .resource .summary ul.modifiers,
+#raml-console-loader .resource .summary ul.modifiers {
+  margin: -15px -18px 8px 0;
+  min-height: 7px;
+}
+raml-console article#raml-console .resource .summary ul.modifiers li:last-child,
+#raml-console-loader .resource .summary ul.modifiers li:last-child {
+  border-top-right-radius: 4px;
+}
 raml-console article#raml-console .resource .summary .path,
 #raml-console-loader .resource .summary .path {
   float: left;
-  margin: 14px 0 14px 15px;
+  margin: 0;
+  margin-top: 1px;
+  margin-bottom: 15px;
+  line-height: 18px;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 raml-console article#raml-console .resource .summary .path span:last-child,
 #raml-console-loader .resource .summary .path span:last-child {
@@ -3165,31 +3200,33 @@ raml-console article#raml-console .resource .summary:after,
 #raml-console-loader .resource .summary:after {
   clear: both;
 }
-raml-console article#raml-console .resource .description,
-#raml-console-loader .resource .description {
-  margin-left: 15px;
-}
 raml-console article#raml-console .resource .description p:first-child,
 #raml-console-loader .resource .description p:first-child {
-  margin: 10px 0 20px 0;
+  margin-top: 5px;
+}
+raml-console article#raml-console .resource .description p:last-child,
+#raml-console-loader .resource .description p:last-child {
+  margin-bottom: 20px;
 }
 raml-console article#raml-console .resource .methods,
 #raml-console-loader .resource .methods {
   float: right;
   text-align: right;
-  margin: 10px;
+  margin-top: -1px;
+  margin-bottom: 10px;
 }
 raml-console article#raml-console .resource .methods li,
 #raml-console-loader .resource .methods li {
   float: right;
   line-height: 22px;
   margin-right: 5px;
+  margin-bottom: 5px;
 }
 raml-console article#raml-console ul.modifiers,
 #raml-console-loader ul.modifiers {
   font-size: 0px;
-  margin-left: 15px;
   text-align: right;
+  margin-right: -3px;
 }
 raml-console article#raml-console ul.modifiers li,
 #raml-console-loader ul.modifiers li {
@@ -3429,11 +3466,19 @@ raml-console article#raml-console .method-name,
 }
 raml-console article#raml-console .method,
 #raml-console-loader .method {
-  margin: 10px 15px;
+  margin: 10px 0px;
   border-radius: 0 5px 5px 0;
   overflow: hidden;
   border-width: 1px;
   border-style: solid;
+}
+raml-console article#raml-console .method:first-child,
+#raml-console-loader .method:first-child {
+  margin-top: 0;
+}
+raml-console article#raml-console .method:last-child,
+#raml-console-loader .method:last-child {
+  margin-bottom: 15px;
 }
 raml-console article#raml-console .method.collapsed,
 #raml-console-loader .method.collapsed {
