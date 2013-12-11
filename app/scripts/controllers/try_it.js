@@ -1,19 +1,6 @@
 'use strict';
 
 (function() {
-
-  function filterEmpty(object) {
-    var copy = {};
-
-    Object.keys(object).forEach(function(key) {
-      if (object[key] && (typeof object[key] !== 'string' || object[key].trim().length > 0)) {
-        copy[key] = object[key];
-      }
-    });
-
-    return copy;
-  }
-
   function parseHeaders(headers) {
     var parsed = {}, key, val, i;
 
@@ -38,14 +25,15 @@
     return parsed;
   }
 
-  var FORM_URLENCODED = 'application/x-www-form-urlencoded';
-  var FORM_DATA = 'multipart/form-data';
   var apply;
 
   var TryIt = function($scope) {
     this.context = $scope.context = {};
     this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
     this.context.queryParameters = new RAML.Controllers.TryIt.NamedParameters($scope.method.queryParameters);
+    if ($scope.method.body) {
+      this.context.bodyContent = new RAML.Controllers.TryIt.BodyContent($scope.method.body);
+    }
 
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
@@ -53,8 +41,6 @@
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-    this.formParameters = {};
-    this.mediaType = Object.keys($scope.method.body || {})[0];
 
     $scope.apiClient = this;
     this.parsed = $scope.api;
@@ -68,15 +54,6 @@
 
   TryIt.prototype.inProgress = function() {
     return (this.response && !this.response.status && !this.missingUriParameters);
-  };
-
-  TryIt.prototype.fillBody = function($event) {
-    $event.preventDefault();
-    this.body = this.method.body[this.mediaType].example;
-  };
-
-  TryIt.prototype.bodyHasExample = function() {
-    return !!this.method.body[this.mediaType];
   };
 
   TryIt.prototype.execute = function() {
@@ -115,15 +92,9 @@
         request.headers(this.context.headers.data());
       }
 
-      if (this.mediaType) {
-        request.header('Content-Type', this.mediaType);
-        if (this.mediaType === FORM_DATA || this.mediaType === FORM_URLENCODED) {
-          if (!RAML.Utils.isEmpty(filterEmpty(this.formParameters))) {
-            request.data(filterEmpty(this.formParameters));
-          }
-        } else {
-          request.data(this.body);
-        }
+      if (this.context.bodyContent) {
+        request.header('Content-Type', this.context.bodyContent.selected);
+        request.data(this.context.bodyContent.data());
       }
 
       var authStrategy;

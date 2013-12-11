@@ -7,7 +7,6 @@
       templateUrl: 'views/parameter_fields.tmpl.html',
       scope: {
         parameters: '=',
-        requestData: '='
       }
     };
   };

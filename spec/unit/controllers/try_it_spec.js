@@ -5,7 +5,7 @@ describe("RAML.Controllers.TryIt", function() {
     method = method || "get";
     options = options || {};
 
-    var body = {};
+    var body = options.body ? {} : undefined;
     if (options.body) {
       options.body.forEach(function(mediaType) { body[mediaType] = {} });
     }

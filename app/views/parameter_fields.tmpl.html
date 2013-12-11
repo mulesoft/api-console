@@ -1,12 +1,16 @@
 <fieldset>
-  <div class="control-group" ng-repeat="(parameterName, parameter) in parameters track by parameterName">
+  <div class="control-group" ng-repeat="(parameterName, parameter) in parameters.plain track by parameterName">
     <label for="{{parameterName}}">
       <span class="required" ng-if="parameter.required">*</span>
       {{parameter.displayName}}:
     </label>
     <ng-switch on='parameter.type'>
-      <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='requestData[parameterName]'/>
-      <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='requestData[parameterName]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
+      <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='parameters.values[parameterName]'/>
+      <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='parameters.values[parameterName]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
     </ng-switch>
+  </div>
+
+  <div class="parameter-factory" ng-repeat='(name, _) in parameters.parameterized'>
+    <parameterized-parameter parameter-name="name" parameters="parameters"></parameterized-parameter>
   </div>
 </fieldset>

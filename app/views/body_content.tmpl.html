@@ -1,0 +1,25 @@
+<div class="request-body" ng-show="body">
+  <fieldset class="bordered">
+    <legend>Body</legend>
+
+    <fieldset class="labelled-radio-group media-types">
+      <label>Content Type</label>
+      <div class="radio-group">
+        <label class="radio" ng-repeat="contentType in body.contentTypes">
+          <input type="radio" name="media-type" value="{{contentType}}" ng-model="body.selected">
+          {{contentType}}
+        </label>
+      </div>
+    </fieldset>
+
+    <div ng-repeat="contentType in body.contentTypes">
+      <div class="labelled-inline" ng-if='body.isForm(contentType)' ng-show="body.isSelected(contentType)">
+        <parameter-fields parameters='body.definitions[contentType]'></parameter-fields>
+      </div>
+      <div ng-if="!body.isForm(contentType)" ng-show="body.isSelected(contentType)">
+        <textarea name="{{contentType}}" ng-model="body.definitions[contentType].value"></textarea>
+        <a href="#" class="body-prefill" ng-show="body.hasExample(contentType)" ng-click="body.fillWithExample($event)">Prefill with example</a>
+      </div>
+    </div>
+  </fieldset>
+</div>
