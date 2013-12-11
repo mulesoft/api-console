@@ -1,8 +1,8 @@
 <div class="labelled-inline">
   <label for="{{parameterName}}">{{parameterName}}:</label>
-  <a href='#' role="open-factory" ng-click="parameterFactory.open($event)" ng-hide="parameterFactory.opened">Add</a>
+  <a href='#' role="open-factory" ng-click="parameterFactory.open($event)" ng-hide="parameterFactory.opened">Add Header<i class='icon icon-plus-sign-alt'></i></a>
   <span ng-show="parameterFactory.opened">
     <input type="text" name="{{parameterName}}" ng-model="parameterFactory.value" ng-class="parameterFactory.status"/>
-    <a href='#' role='create-parameter' ng-click="parameterFactory.create($event)"><i class='icon icon-plus'></i></a>
+    <a href='#' role='create-parameter' ng-click="parameterFactory.create($event)"><i class='icon icon-plus-sign-alt'></i></a>
   </span>
 </div>

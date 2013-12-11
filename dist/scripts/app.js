@@ -2661,10 +2661,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/parameterized_parameter.tmpl.html',
     "<div class=\"labelled-inline\">\n" +
     "  <label for=\"{{parameterName}}\">{{parameterName}}:</label>\n" +
-    "  <a href='#' role=\"open-factory\" ng-click=\"parameterFactory.open($event)\" ng-hide=\"parameterFactory.opened\">Add</a>\n" +
+    "  <a href='#' role=\"open-factory\" ng-click=\"parameterFactory.open($event)\" ng-hide=\"parameterFactory.opened\">Add Header<i class='icon icon-plus-sign-alt'></i></a>\n" +
     "  <span ng-show=\"parameterFactory.opened\">\n" +
     "    <input type=\"text\" name=\"{{parameterName}}\" ng-model=\"parameterFactory.value\" ng-class=\"parameterFactory.status\"/>\n" +
-    "    <a href='#' role='create-parameter' ng-click=\"parameterFactory.create($event)\"><i class='icon icon-plus'></i></a>\n" +
+    "    <a href='#' role='create-parameter' ng-click=\"parameterFactory.create($event)\"><i class='icon icon-plus-sign-alt'></i></a>\n" +
     "  </span>\n" +
     "</div>\n"
   );
