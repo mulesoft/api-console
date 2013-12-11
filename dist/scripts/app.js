@@ -1326,19 +1326,6 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
-
-  function filterEmpty(object) {
-    var copy = {};
-
-    Object.keys(object).forEach(function(key) {
-      if (object[key] && (typeof object[key] !== 'string' || object[key].trim().length > 0)) {
-        copy[key] = object[key];
-      }
-    });
-
-    return copy;
-  }
-
   function parseHeaders(headers) {
     var parsed = {}, key, val, i;
 
@@ -1363,14 +1350,15 @@ RAML.Inspector = (function() {
     return parsed;
   }
 
-  var FORM_URLENCODED = 'application/x-www-form-urlencoded';
-  var FORM_DATA = 'multipart/form-data';
   var apply;
 
   var TryIt = function($scope) {
     this.context = $scope.context = {};
     this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
     this.context.queryParameters = new RAML.Controllers.TryIt.NamedParameters($scope.method.queryParameters);
+    if ($scope.method.body) {
+      this.context.bodyContent = new RAML.Controllers.TryIt.BodyContent($scope.method.body);
+    }
 
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
@@ -1378,8 +1366,6 @@ RAML.Inspector = (function() {
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-    this.formParameters = {};
-    this.mediaType = Object.keys($scope.method.body || {})[0];
 
     $scope.apiClient = this;
     this.parsed = $scope.api;
@@ -1393,15 +1379,6 @@ RAML.Inspector = (function() {
 
   TryIt.prototype.inProgress = function() {
     return (this.response && !this.response.status && !this.missingUriParameters);
-  };
-
-  TryIt.prototype.fillBody = function($event) {
-    $event.preventDefault();
-    this.body = this.method.body[this.mediaType].example;
-  };
-
-  TryIt.prototype.bodyHasExample = function() {
-    return !!this.method.body[this.mediaType];
   };
 
   TryIt.prototype.execute = function() {
@@ -1440,15 +1417,9 @@ RAML.Inspector = (function() {
         request.headers(this.context.headers.data());
       }
 
-      if (this.mediaType) {
-        request.header('Content-Type', this.mediaType);
-        if (this.mediaType === FORM_DATA || this.mediaType === FORM_URLENCODED) {
-          if (!RAML.Utils.isEmpty(filterEmpty(this.formParameters))) {
-            request.data(filterEmpty(this.formParameters));
-          }
-        } else {
-          request.data(this.body);
-        }
+      if (this.context.bodyContent) {
+        request.header('Content-Type', this.context.bodyContent.selected);
+        request.data(this.context.bodyContent.data());
       }
 
       var authStrategy;
@@ -1479,6 +1450,78 @@ RAML.Inspector = (function() {
   };
 
   RAML.Controllers.TryIt = TryIt;
+})();
+
+(function() {
+  'use strict';
+
+  var FORM_URLENCODED = 'application/x-www-form-urlencoded';
+  var FORM_DATA = 'multipart/form-data';
+
+  var BodyContent = function(contentTypes) {
+    this.contentTypes = Object.keys(contentTypes);
+    this.selected = this.contentTypes[0];
+
+    var definitions = this.definitions = {};
+    this.contentTypes.forEach(function(contentType) {
+      switch (contentType) {
+      case FORM_URLENCODED:
+      case FORM_DATA:
+        definitions[contentType] = new RAML.Controllers.TryIt.NamedParameters(contentTypes[contentType].formParameters);
+        break;
+      default:
+        definitions[contentType] = new RAML.Controllers.TryIt.BodyType(contentTypes[contentType]);
+      }
+    });
+  };
+
+  BodyContent.prototype.isForm = function(contentType) {
+    return contentType === FORM_URLENCODED || contentType === FORM_DATA;
+  };
+
+  BodyContent.prototype.isSelected = function(contentType) {
+    return contentType === this.selected;
+  };
+
+  BodyContent.prototype.fillWithExample = function($event) {
+    $event.preventDefault();
+    this.definitions[this.selected].fillWithExample();
+  };
+
+  BodyContent.prototype.hasExample = function(contentType) {
+    return this.definitions[contentType].hasExample();
+  };
+
+  BodyContent.prototype.data = function() {
+    if (this.selected) {
+      return this.definitions[this.selected].data();
+    }
+  };
+
+  RAML.Controllers.TryIt.BodyContent = BodyContent;
+})();
+
+(function() {
+  'use strict';
+
+  var BodyType = function(contentType) {
+    this.contentType = contentType || {};
+    this.value = undefined;
+  };
+
+  BodyType.prototype.fillWithExample = function() {
+    this.value = this.contentType.example;
+  };
+
+  BodyType.prototype.hasExample = function() {
+    return !!this.contentType.example;
+  };
+
+  BodyType.prototype.data = function() {
+    return this.value;
+  };
+
+  RAML.Controllers.TryIt.BodyType = BodyType;
 })();
 
 (function() {
@@ -1558,6 +1601,22 @@ RAML.Inspector = (function() {
       replace: true,
       scope: {
         credentials: '='
+      }
+    };
+  };
+})();
+
+(function() {
+  'use strict';
+
+  RAML.Directives.bodyContent = function() {
+
+    return {
+      restrict: 'E',
+      templateUrl: 'views/body_content.tmpl.html',
+      replace: true,
+      scope: {
+        body: '='
       }
     };
   };
@@ -1815,8 +1874,7 @@ RAML.Inspector = (function() {
       replace: true,
       scope: {
         heading: '@',
-        parameters: '=',
-        requestData: '='
+        parameters: '='
       }
     };
   };
@@ -1878,7 +1936,6 @@ RAML.Inspector = (function() {
       templateUrl: 'views/parameter_fields.tmpl.html',
       scope: {
         parameters: '=',
-        requestData: '='
       }
     };
   };
@@ -2376,6 +2433,7 @@ RAML.Filters = {};
 
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
+  module.directive('bodyContent', RAML.Directives.bodyContent);
   module.directive('codeMirror', RAML.Directives.codeMirror);
   module.directive('collapsible', RAML.Directives.collapsible);
   module.directive('collapsibleContent', RAML.Directives.collapsibleContent);
@@ -2446,6 +2504,35 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('views/body_content.tmpl.html',
+    "<div class=\"request-body\" ng-show=\"body\">\n" +
+    "  <fieldset class=\"bordered\">\n" +
+    "    <legend>Body</legend>\n" +
+    "\n" +
+    "    <fieldset class=\"labelled-radio-group media-types\">\n" +
+    "      <label>Content Type</label>\n" +
+    "      <div class=\"radio-group\">\n" +
+    "        <label class=\"radio\" ng-repeat=\"contentType in body.contentTypes\">\n" +
+    "          <input type=\"radio\" name=\"media-type\" value=\"{{contentType}}\" ng-model=\"body.selected\">\n" +
+    "          {{contentType}}\n" +
+    "        </label>\n" +
+    "      </div>\n" +
+    "    </fieldset>\n" +
+    "\n" +
+    "    <div ng-repeat=\"contentType in body.contentTypes\">\n" +
+    "      <div class=\"labelled-inline\" ng-if='body.isForm(contentType)' ng-show=\"body.isSelected(contentType)\">\n" +
+    "        <parameter-fields parameters='body.definitions[contentType]'></parameter-fields>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"!body.isForm(contentType)\" ng-show=\"body.isSelected(contentType)\">\n" +
+    "        <textarea name=\"{{contentType}}\" ng-model=\"body.definitions[contentType].value\"></textarea>\n" +
+    "        <a href=\"#\" class=\"body-prefill\" ng-show=\"body.hasExample(contentType)\" ng-click=\"body.fillWithExample($event)\">Prefill with example</a>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </fieldset>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
     "  <ul role=\"traits\" class=\"modifiers\">\n" +
@@ -2498,22 +2585,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/named_parameters.tmpl.html',
     "<fieldset class='labelled-inline bordered' ng-show=\"displayParameters()\">\n" +
     "  <legend>{{heading}}</legend>\n" +
-    "  <fieldset>\n" +
-    "    <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters.plain track by parameterName\">\n" +
-    "      <label for=\"{{parameterName}}\">\n" +
-    "        <span class=\"required\" ng-if=\"parameter.required\">*</span>\n" +
-    "        {{parameter.displayName}}:\n" +
-    "      </label>\n" +
-    "      <ng-switch on='parameter.type'>\n" +
-    "        <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='parameters.values[parameterName]'/>\n" +
-    "        <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='parameters.values[parameterName]' placeholder='{{parameter.example}}' ng-trim=\"false\" constraints='parameter'/>\n" +
-    "      </ng-switch>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"parameter-factory\" ng-repeat='(name, _) in parameters.parameterized'>\n" +
-    "      <parameterized-parameter parameter-name=\"name\" parameters=\"parameters\"></parameterized-parameter>\n" +
-    "    </div>\n" +
-    "  </fieldset>\n" +
+    "  <parameter-fields parameters=\"parameters\"></parameter-fields>\n" +
     "</fieldset>\n"
   );
 
@@ -2568,15 +2640,19 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/parameter_fields.tmpl.html',
     "<fieldset>\n" +
-    "  <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters track by parameterName\">\n" +
+    "  <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters.plain track by parameterName\">\n" +
     "    <label for=\"{{parameterName}}\">\n" +
     "      <span class=\"required\" ng-if=\"parameter.required\">*</span>\n" +
     "      {{parameter.displayName}}:\n" +
     "    </label>\n" +
     "    <ng-switch on='parameter.type'>\n" +
-    "      <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='requestData[parameterName]'/>\n" +
-    "      <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='requestData[parameterName]' placeholder='{{parameter.example}}' ng-trim=\"false\" constraints='parameter'/>\n" +
+    "      <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='parameters.values[parameterName]'/>\n" +
+    "      <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='parameters.values[parameterName]' placeholder='{{parameter.example}}' ng-trim=\"false\" constraints='parameter'/>\n" +
     "    </ng-switch>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"parameter-factory\" ng-repeat='(name, _) in parameters.parameterized'>\n" +
+    "    <parameterized-parameter parameter-name=\"name\" parameters=\"parameters\"></parameterized-parameter>\n" +
     "  </div>\n" +
     "</fieldset>\n"
   );
@@ -2815,35 +2891,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\"></security-schemes>\n" +
     "    <named-parameters heading=\"Headers\" parameters=\"context.headers\"></named-parameters>\n" +
     "    <named-parameters heading=\"Query Parameters\" parameters=\"context.queryParameters\"></named-parameters>\n" +
+    "    <body-content body=\"context.bodyContent\"></body-content>\n" +
     "\n" +
-    "    <div class=\"request-body\" ng-show=\"method.body\">\n" +
-    "      <fieldset class=\"bordered\">\n" +
-    "        <legend>Body</legend>\n" +
-    "\n" +
-    "        <fieldset class=\"labelled-radio-group media-types\" ng-show=\"method.body\">\n" +
-    "          <label>Content Type</label>\n" +
-    "          <div class=\"radio-group\">\n" +
-    "            <label class=\"radio\" ng-repeat=\"(mediaType, _) in method.body track by mediaType\">\n" +
-    "              <input type=\"radio\" name=\"media-type\" value=\"{{mediaType}}\" ng-model=\"apiClient.mediaType\">\n" +
-    "              {{mediaType}}\n" +
-    "            </label>\n" +
-    "          </div>\n" +
-    "        </fieldset>\n" +
-    "\n" +
-    "        <div ng-if='apiClient.mediaType' ng-switch=\"apiClient.mediaType\">\n" +
-    "          <div class=\"labelled-inline\" ng-switch-when='application/x-www-form-urlencoded'>\n" +
-    "            <parameter-fields parameters='method.body[\"application/x-www-form-urlencoded\"].formParameters' request-data=\"apiClient.formParameters\"></parameter-fields>\n" +
-    "          </div>\n" +
-    "          <div class=\"labelled-inline\" ng-switch-when='multipart/form-data'>\n" +
-    "            <parameter-fields parameters='method.body[\"multipart/form-data\"].formParameters' request-data=\"apiClient.formParameters\"></parameter-fields>\n" +
-    "          </div>\n" +
-    "          <div ng-switch-default>\n" +
-    "            <textarea name=\"body\" ng-model='apiClient.body' ng-model=\"apiClient.body\"></textarea>\n" +
-    "            <a href=\"#\" class=\"body-prefill\" ng-show=\"apiClient.bodyHasExample()\" ng-click=apiClient.fillBody($event)>Prefill with example</a>\n" +
-    "          </div>\n" +
-    "        </div>\n" +
-    "      </fieldset>\n" +
-    "    </div>\n" +
     "\n" +
     "    <div class=\"form-actions\">\n" +
     "      <i ng-show='apiClient.inProgress()' class=\"icon-spinner icon-spin icon-large\"></i>\n" +
