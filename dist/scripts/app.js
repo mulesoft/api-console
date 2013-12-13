@@ -2509,7 +2509,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <fieldset class=\"bordered\">\n" +
     "    <legend>Body</legend>\n" +
     "\n" +
-    "    <fieldset class=\"labelled-radio-group media-types\">\n" +
+    "    <fieldset class=\"labelled-radio-group\">\n" +
     "      <label>Content Type</label>\n" +
     "      <div class=\"radio-group\">\n" +
     "        <label class=\"radio\" ng-repeat=\"contentType in body.contentTypes\">\n" +
