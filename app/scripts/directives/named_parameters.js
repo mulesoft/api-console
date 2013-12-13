@@ -8,7 +8,7 @@
     };
 
     $scope.displayParameters = function() {
-      return Object.keys(parameters.plain).length > 0;
+      return Object.keys(parameters.plain).length > 0 || Object.keys(parameters.parameterized).length > 0;
     };
   };
 
