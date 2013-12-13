@@ -3797,10 +3797,6 @@ raml-console article#raml-console .try-it form,
   margin-bottom: 0;
   *zoom: 1;
 }
-raml-console article#raml-console .try-it form .media-types,
-#raml-console-loader .try-it form .media-types {
-  text-align: right;
-}
 raml-console article#raml-console .try-it form .parameter-factory,
 #raml-console-loader .try-it form .parameter-factory {
   margin-top: 50px;

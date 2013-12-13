@@ -1862,7 +1862,7 @@ RAML.Inspector = (function() {
     };
 
     $scope.displayParameters = function() {
-      return Object.keys(parameters.plain).length > 0;
+      return Object.keys(parameters.plain).length > 0 || Object.keys(parameters.parameterized).length > 0;
     };
   };
 
@@ -2509,7 +2509,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <fieldset class=\"bordered\">\n" +
     "    <legend>Body</legend>\n" +
     "\n" +
-    "    <fieldset class=\"labelled-radio-group\">\n" +
+    "    <fieldset class=\"labelled-radio-group\" role=\"media-types\">\n" +
     "      <label>Content Type</label>\n" +
     "      <div class=\"radio-group\">\n" +
     "        <label class=\"radio\" ng-repeat=\"contentType in body.contentTypes\">\n" +
