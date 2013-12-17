@@ -2830,8 +2830,40 @@ raml-console article#raml-console .label,
   padding: 0 5px 0 0;
 }
 raml-console article#raml-console input,
-#raml-console-loader input {
+#raml-console-loader input,
+raml-console article#raml-console .autocomplete,
+#raml-console-loader .autocomplete {
   display: inline-block;
+}
+raml-console article#raml-console .autocomplete,
+#raml-console-loader .autocomplete {
+  position: relative;
+}
+raml-console article#raml-console .autocomplete ul,
+#raml-console-loader .autocomplete ul {
+  width: 100%;
+  background-color: white;
+  position: absolute;
+  top: 35px;
+  left: 0;
+  border-radius: 4px;
+  border: 1px solid #c0c2c9;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.33);
+  box-sizing: border-box;
+}
+raml-console article#raml-console .autocomplete ul li,
+#raml-console-loader .autocomplete ul li {
+  border-top: 1px solid #c0c2c9;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+raml-console article#raml-console .autocomplete ul li.selected,
+#raml-console-loader .autocomplete ul li.selected {
+  background-color: #f3f3f6;
+}
+raml-console article#raml-console .autocomplete ul li:first-child,
+#raml-console-loader .autocomplete ul li:first-child {
+  border-top: none;
 }
 raml-console article#raml-console input,
 #raml-console-loader input,

@@ -1846,6 +1846,96 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
+  RAML.Directives.enum = function($timeout, $filter) {
+    var KEY_DOWN  = 40,
+        KEY_UP    = 38,
+        KEY_ENTER = 13;
+
+    var link = function($scope, $el) {
+      var filterEnumElements = function() {
+        $scope.filteredEnum = $filter('filter')($scope.options, $scope.model);
+      };
+
+      $scope.$watch(function enumFilterWatch() {
+        return $scope.model;
+      }, filterEnumElements);
+
+      $scope.selectItem = function(item) {
+        $scope.model = item;
+        $scope.focused = false;
+      };
+
+      filterEnumElements();
+
+      $el.find('input').bind('focus', function() {
+        $scope.$apply(function() {
+          $scope.selectedIndex = -1;
+          $scope.focused = true;
+        });
+      });
+
+      $el.find('input').bind('blur', function() {
+        $scope.$apply(function() {
+          $scope.focused = false;
+        });
+      });
+
+      $el.bind('mousedown', function(event) {
+        if (event.target.tagName === 'LI') {
+          event.preventDefault();
+        }
+      });
+
+      $el.find('input').bind('input', function() {
+        $scope.$apply(function() {
+          $scope.focused = true;
+          $scope.selectedIndex = 0;
+        });
+      });
+
+      $el.find('input').bind('keydown', function(e) {
+        switch (e.keyCode) {
+        case KEY_UP:
+          $scope.selectedIndex = $scope.selectedIndex - 1;
+          $scope.selectedIndex = Math.max(0, $scope.selectedIndex);
+          e.preventDefault();
+
+          break;
+        case KEY_DOWN:
+          $scope.selectedIndex = $scope.selectedIndex + 1;
+          $scope.selectedIndex = Math.min($scope.filteredEnum.length - 1, $scope.selectedIndex);
+          e.preventDefault();
+          break;
+        case KEY_ENTER:
+          var selection = $scope.filteredEnum[$scope.selectedIndex];
+
+          if (selection) {
+            $scope.model = selection;
+            $scope.focused = false;
+          }
+          e.preventDefault();
+          break;
+        }
+        $scope.$apply();
+      });
+    };
+
+    return {
+      restrict: 'E',
+      transclude: true,
+      link: link,
+      templateUrl: 'views/enum.tmpl.html',
+      scope: {
+        options: '=',
+        model: '='
+      }
+    };
+  };
+})();
+
+(function() {
+  'use strict';
+
   // enhancement to ng-model for input[type="file"]
   // code for this directive taken from:
   // https://github.com/marcenuc/angular.js/commit/2bfff4668c341ddcfec0120c9a5018b0c2463982
@@ -2010,10 +2100,26 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
+
+  var Controller = function($scope) {
+    $scope.parameterFields = this;
+  };
+
+  Controller.prototype.inputView = function(parameter) {
+    if (parameter.type === 'file') {
+      return 'file';
+    } else if (!!parameter.enum) {
+      return 'enum';
+    } else {
+      return 'default';
+    }
+  };
+
   RAML.Directives.parameterFields = function() {
     return {
       restrict: 'E',
       templateUrl: 'views/parameter_fields.tmpl.html',
+      controller: Controller,
       scope: {
         parameters: '=',
       }
@@ -2600,6 +2706,7 @@ RAML.Filters = {};
   module.directive('collapsibleContent', RAML.Directives.collapsibleContent);
   module.directive('collapsibleToggle', RAML.Directives.collapsibleToggle);
   module.directive('documentation', RAML.Directives.documentation);
+  module.directive('enum', RAML.Directives.enum);
   module.directive('input', RAML.Directives.input);
   module.directive('markdown', RAML.Directives.markdown);
   module.directive('method', RAML.Directives.method);
@@ -2726,6 +2833,18 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('views/enum.tmpl.html',
+    "<div class=\"autocomplete\">\n" +
+    "  <span ng-transclude></span>\n" +
+    "  <ul ng-show=\"focused\">\n" +
+    "    <li ng-click='selectItem(item)' ng-class=\"{ selected: $index == selectedIndex }\" ng-repeat=\"item in filteredEnum\">\n" +
+    "      {{item}}\n" +
+    "    </li>\n" +
+    "  </ul>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('views/method.tmpl.html',
     "<div class='method' role=\"method\" ng-class=\"methodView.cssClass()\">\n" +
     "  <div class='accordion-toggle method-summary' role=\"methodSummary\" ng-class='method.method' ng-click='methodView.toggleExpansion($event)'>\n" +
@@ -2814,9 +2933,18 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <span class=\"required\" ng-if=\"definition.required\">*</span>\n" +
     "            {{definition.displayName}}:\n" +
     "          </label>\n" +
-    "          <ng-switch on='definition.type'>\n" +
-    "            <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='repeatableModel[$index]'/>\n" +
-    "            <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
+    "          <ng-switch on='parameterFields.inputView(definition)'>\n" +
+    "            <span ng-switch-when=\"file\">\n" +
+    "              <input name=\"{{parameterName}}\" type='file' ng-model='repeatableModel[$index]'/>\n" +
+    "            </span>\n" +
+    "            <span ng-switch-when=\"enum\">\n" +
+    "              <enum options='definition.enum' model='repeatableModel[$index]'>\n" +
+    "                <input validated-input name=\"{{parameterName}}\" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
+    "              </enum>\n" +
+    "           </span>\n" +
+    "            <span ng-switch-default>\n" +
+    "              <input validated-input name=\"{{parameterName}}\" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
+    "            </span>\n" +
     "          </ng-switch>\n" +
     "          <repeatable-remove></repeatable-remove>\n" +
     "          <repeatable-add></repeatable-add>\n" +

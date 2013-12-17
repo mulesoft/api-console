@@ -15,10 +15,7 @@ documentation:
       * Clear and concise user documentation with usage examples
       * Reusable and configurable customer-consumable and partner-consumable API
 /blah:
-  post:
-    body:
-      application/x-www-form-urlencoded:
-        formParameters:
-          AWSAccessKeyId:
-          acl:
-      application/json:
+  get:
+    queryParameters:
+      foo:
+        enum: [a, b, c]

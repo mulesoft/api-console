@@ -37,7 +37,7 @@ describe("RAML.Directives.repeatable", function() {
 
       describe("when add is clicked", function() {
         beforeEach(function() {
-          el.find('repeatable-add i').click();
+          click(el.find('repeatable-add i'))
         });
 
         it("repeats", function() {
@@ -58,10 +58,10 @@ describe("RAML.Directives.repeatable", function() {
 
       describe("when remove is clicked", function() {
         beforeEach(function() {
-          el.find('repeatable-add i').eq(0).click();
-          el.find('repeatable-add i').eq(0).click();
+          click(el.find('repeatable-add i').eq(0))
+          click(el.find('repeatable-add i').eq(0))
 
-          el.find('repeatable-remove i').eq(1).click();
+          click(el.find('repeatable-remove i').eq(1))
         });
 
         it("removes the repeated item", function() {
@@ -69,7 +69,7 @@ describe("RAML.Directives.repeatable", function() {
         });
 
         it("hides the remove button when only one item is left", function() {
-          el.find('repeatable-remove i').eq(0).click();
+          click(el.find('repeatable-remove i').eq(0))
           expect(el.find('repeatable-remove i')).not.toBeVisible();
         });
       });
@@ -114,8 +114,8 @@ describe("RAML.Directives.repeatable", function() {
       el = compileTemplate(html, scope);
       setFixtures(el);
 
-      el.find('repeatable-add i').eq(0).click();
-      el.find('repeatable-add i').eq(0).click();
+      click(el.find('repeatable-add i').eq(0))
+      click(el.find('repeatable-add i').eq(0))
 
       el.find('input').eq(0).fillIn('firstValue');
       el.find('input').eq(1).fillIn('secondValue');
@@ -127,7 +127,7 @@ describe("RAML.Directives.repeatable", function() {
     });
 
     it('removes the correct item', function() {
-      el.find('repeatable-remove i').eq(1).click();
+      click(el.find('repeatable-remove i').eq(1))
       expect(scope.someModel).toEqual(['firstValue', 'thirdValue']);
       expect(el.find('input').eq(0).val()).toEqual('firstValue');
       expect(el.find('input').eq(1).val()).toEqual('thirdValue');

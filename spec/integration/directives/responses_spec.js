@@ -35,17 +35,14 @@ describe("RAML.Directives.responses", function() {
 
     describe('when the responses codes are clicked', function() {
       beforeEach(function() {
-        this.$el.find("[role=response-code]").click();
+        click(this.$el.find("[role=response-code]").eq(0));
       });
 
       it('expands the responses', function() {
         expect(this.$el.find("[role='response']")).toBeVisible();
         expect(this.$el.find("[role='response']").eq(0).find('p').text().trim()).toContain("A-Okay");
-        expect(this.$el.find("[role='response']").eq(1).find('p').text().trim()).toContain("Ut Oh");
-        expect(this.$el.find("[role='response-code'] .abbreviated-description")).not.toBeVisible();
+        expect(this.$el.find("[role='response-code']").eq(0).find(".abbreviated-description")).not.toBeVisible();
       });
-
     });
   });
-
 });

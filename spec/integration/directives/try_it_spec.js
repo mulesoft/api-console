@@ -227,6 +227,7 @@ describe("RAML.Controllers.tryIt", function() {
       beforeEach(function() {
         scope = createScopeForTryIt(this.api);
         $el = compileTemplate('<try-it></try-it>', scope);
+        setFixtures($el);
       });
 
       it('selects a mime type', function() {
@@ -256,14 +257,17 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       beforeEach(function() {
+        scope = createScopeForTryIt(this.api);
+        $el = compileTemplate('<try-it></try-it>', scope);
+        setFixtures($el);
         var suppliedBody = '<document type="xml" />';
 
-        $el.find('[role="media-types"] input[value="text/xml"]')[0].click();
+        click($('[role="media-types"] input[value="text/xml"]'))
         $el.find('textarea').fillIn(suppliedBody);
       });
 
       it('executes a request with form data when the user changes modes', function() {
-        $el.find('[role="media-types"] input[value="application/x-www-form-urlencoded"]')[0].click();
+        click($('[role="media-types"] input[value="application/x-www-form-urlencoded"]'))
 
         $el.find('input[name="foo"]').fillIn("whatever");
         $el.find('button[role="try-it"]').click();
@@ -644,9 +648,9 @@ describe("RAML.Controllers.tryIt", function() {
 
       it('executes a request to the parameterized URI', function() {
         $el.find('input[name=someParam]').eq(0).fillIn('1');
-        $el.find('input[name=someParam]').eq(0).closest('.control-group').find('repeatable-add .icon').click();
+        click($el.find('input[name=someParam]').eq(0).closest('.control-group').find('repeatable-add .icon'))
         $el.find('input[name=someParam]').eq(1).fillIn('2');
-        $el.find('button[role="try-it"]').click();
+        click($el.find('button[role="try-it"]'))
 
         whenTryItCompletes(function() {
           expect($el.find('.response .status .response-value')).toHaveText('200');
@@ -662,11 +666,11 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       it('executes a request to the parameterized URI', function() {
-        $el.find('.media-types input[value="application/x-www-form-urlencoded"]').click();
+        click($el.find('[role="media-types"] input[value="application/x-www-form-urlencoded"]'))
         $el.find('input[name=someFormParam]').eq(0).fillIn('1');
-        $el.find('input[name=someFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon').click();
+        click($el.find('input[name=someFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon'))
         $el.find('input[name=someFormParam]').eq(1).fillIn('2');
-        $el.find('button[role="try-it"]').click();
+        click($el.find('button[role="try-it"]'))
 
         whenTryItCompletes(function() {
           expect($el.find('.response .status .response-value')).toHaveText('200');
@@ -692,12 +696,12 @@ describe("RAML.Controllers.tryIt", function() {
         var multipartInput = $el.find('[role="media-types"] input[value="multipart/form-data"]');
         urlencodedInput.prop('checked', false);
         multipartInput.prop('checked', true);
-        multipartInput.click();
+        click(multipartInput)
 
         $el.find('input[name=someMultipartFormParam]').eq(0).fillIn('1');
-        $el.find('input[name=someMultipartFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon').click();
+        click($el.find('input[name=someMultipartFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon'))
         $el.find('input[name=someMultipartFormParam]').eq(1).fillIn('2');
-        $el.find('button[role="try-it"]').click();
+        click($el.find('button[role="try-it"]'))
 
         whenTryItCompletes(function() {
           var mostRecent = $.mockjax.mockedAjaxCalls()[0];
@@ -721,9 +725,9 @@ describe("RAML.Controllers.tryIt", function() {
 
       it('executes a request to the parameterized URI', function() {
         $el.find('input[name=someHeader]').eq(0).fillIn('1');
-        $el.find('input[name=someHeader]').eq(0).closest('.control-group').find('repeatable-add .icon').click();
+        click($el.find('input[name=someHeader]').eq(0).closest('.control-group').find('repeatable-add .icon'))
         $el.find('input[name=someHeader]').eq(1).fillIn('2');
-        $el.find('button[role="try-it"]').click();
+        click($el.find('button[role="try-it"]'));
 
         var mostRecent = $.mockjax.mockedAjaxCalls()[0];
         expect(mostRecent.headers['someHeader']).toEqual(['1', '2']);

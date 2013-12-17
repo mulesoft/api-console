@@ -34,7 +34,7 @@ describe("RAML.Directives.parameterizedParameter", function() {
       parameterValue = $el.find('input[name="x-custom-{*}"]');
       submit = $el.find('[role="create-parameter"]');
 
-      openFactory.click();
+      click(openFactory);
       expect(openFactory).not.toBeVisible();
       expect(parameterValue).toBeVisible();
     });
@@ -42,7 +42,7 @@ describe("RAML.Directives.parameterizedParameter", function() {
     describe("creating a valid header", function() {
       it("closes the creation form", function() {
         parameterValue.fillIn('test');
-        submit.click();
+        click(submit);
 
         expect(parameterValue).not.toBeVisible();
         expect(openFactory).toBeVisible();
@@ -51,7 +51,7 @@ describe("RAML.Directives.parameterizedParameter", function() {
 
     describe("creating an invalid header", function() {
       it("decorates the input with an error", function() {
-        $el.find('[role="create-parameter"]').click();
+        click(submit);
 
         expect(parameterValue).toBeVisible();
         expect(parameterValue).toHaveClass("error");

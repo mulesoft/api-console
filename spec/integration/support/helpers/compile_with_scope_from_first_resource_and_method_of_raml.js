@@ -21,7 +21,7 @@ function compileWithScopeFromFirstResourceAndMethodOfRAML(html, raml, callback) 
   waitsFor(function() { return completed; }, "RAML parse took too long", 5000);
 
   runs(function() {
-    this.$el = compileTemplate(html, createScopeWithFirstResourceAndMethod(parsed));
+    this.$el = $(compileTemplate(html, createScopeWithFirstResourceAndMethod(parsed)));
     if (callback) {
       callback(this.$el);
     }

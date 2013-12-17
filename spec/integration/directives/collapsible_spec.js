@@ -20,7 +20,7 @@ describe("RAML.Directives.collapsible", function() {
     });
 
     it("hides the content on clicking the heading", function() {
-      $(".heading").click();
+      click($(".heading"));
       expect($(".content")).not.toBeVisible();
     });
   });

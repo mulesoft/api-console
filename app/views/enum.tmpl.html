@@ -1,0 +1,8 @@
+<div class="autocomplete">
+  <span ng-transclude></span>
+  <ul ng-show="focused">
+    <li ng-click='selectItem(item)' ng-class="{ selected: $index == selectedIndex }" ng-repeat="item in filteredEnum">
+      {{item}}
+    </li>
+  </ul>
+</div>

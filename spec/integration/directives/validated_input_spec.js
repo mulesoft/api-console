@@ -72,7 +72,7 @@ describe("RAML.Directives.validatedInput", function() {
 
     describe("on form submission", function() {
       beforeEach(function() {
-        $el.find('button').click();
+        click($el.find('button'))
       });
 
       it("validates", function() {
@@ -84,8 +84,9 @@ describe("RAML.Directives.validatedInput", function() {
       var template = '<input validated-input ng-model="model.resourceId" name="id" constraints="constraints" invalid-class="error"/>';
       beforeEach(function() {
         input = compileTemplate(template, scope);
+        setFixtures(input);
         input.trigger('focus');
-        input.trigger('blur');
+        input.trigger('blur')
       });
 
       it("adds the custom class", function() {
