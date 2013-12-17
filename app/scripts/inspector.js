@@ -16,6 +16,7 @@ RAML.Inspector = (function() {
         return RAML.Inspector.Method.create(method, securitySchemes);
       });
 
+
       resources.push(overview);
 
       if (resource.resources) {
@@ -59,6 +60,20 @@ RAML.Inspector = (function() {
 
       return aOrder > bOrder ? 1 : -1;
     });
+
+    clone.uriParametersForDocumentation = pathSegments
+      .map(function(segment) { return segment.parameters; })
+      .filter(function(params) { return !!params; })
+      .reduce(function(accum, parameters) {
+        for (var key in parameters) {
+          var parameter = parameters[key];
+          if (parameter) {
+            parameter = (parameter instanceof Array) ? parameter : [ parameter ];
+          }
+          accum[key] = parameter;
+        }
+        return accum;
+      }, {});
 
     return clone;
   };

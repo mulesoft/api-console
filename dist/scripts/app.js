@@ -16,6 +16,7 @@ RAML.Inspector = (function() {
         return RAML.Inspector.Method.create(method, securitySchemes);
       });
 
+
       resources.push(overview);
 
       if (resource.resources) {
@@ -59,6 +60,20 @@ RAML.Inspector = (function() {
 
       return aOrder > bOrder ? 1 : -1;
     });
+
+    clone.uriParametersForDocumentation = pathSegments
+      .map(function(segment) { return segment.parameters; })
+      .filter(function(params) { return !!params; })
+      .reduce(function(accum, parameters) {
+        for (var key in parameters) {
+          var parameter = parameters[key];
+          if (parameter) {
+            parameter = (parameter instanceof Array) ? parameter : [ parameter ];
+          }
+          accum[key] = parameter;
+        }
+        return accum;
+      }, {});
 
     return clone;
   };
@@ -1237,6 +1252,10 @@ RAML.Inspector = (function() {
     $scope.namedParametersDocumentation = this;
   };
 
+  controller.prototype.isEmpty = function(params) {
+    return RAML.Utils.isEmpty(params);
+  };
+
   controller.prototype.constraints = function(parameter) {
     var result = '';
 
@@ -1283,45 +1302,6 @@ RAML.Inspector = (function() {
   };
 
   RAML.Controllers.NamedParametersDocumentation = controller;
-})();
-
-'use strict';
-
-(function() {
-  var controller = function($scope) {
-    var method = $scope.method;
-    var resource = $scope.resource;
-    var parameterGroups = [];
-
-    if (!RAML.Utils.isEmpty(method.headers.plain)) {
-      parameterGroups.push(['Headers', method.headers.plain]);
-    }
-
-    var uriParameters = resource.pathSegments
-      .map(function(segment) { return segment.parameters; })
-      .filter(function(params) { return !!params; })
-      .reduce(function(accum, parameters) {
-        for (var key in parameters) {
-          var parameter = parameters[key];
-          if (parameter) {
-            parameter = (parameter instanceof Array) ? parameter : [ parameter ];
-          }
-          accum[key] = parameter;
-        }
-        return accum;
-      }, {});
-
-    if (!RAML.Utils.isEmpty(uriParameters)) {
-      parameterGroups.push(['URI Parameters', uriParameters]);
-    }
-    if (!RAML.Utils.isEmpty(method.queryParameters)) {
-      parameterGroups.push(['Query Parameters', method.queryParameters]);
-    }
-
-    $scope.parameterGroups = parameterGroups;
-  };
-
-  RAML.Controllers.Parameters = controller;
 })();
 
 (function() {
@@ -1972,7 +1952,6 @@ RAML.Inspector = (function() {
       restrict: 'E',
       controller: RAML.Controllers.NamedParametersDocumentation,
       templateUrl: 'views/named_parameters_documentation.tmpl.html',
-      replace: true,
       scope: {
         heading: '@',
         parameters: '='
@@ -2072,8 +2051,7 @@ RAML.Inspector = (function() {
   RAML.Directives.parameters = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/parameters.tmpl.html',
-      controller: RAML.Controllers.Parameters
+      templateUrl: 'views/parameters.tmpl.html'
     };
   };
 })();
@@ -2675,7 +2653,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/named_parameters_documentation.tmpl.html',
-    "<section class='named-parameters' ng-show='parameters'>\n" +
+    "<section class='named-parameters' ng-if='!namedParametersDocumentation.isEmpty(parameters)'>\n" +
     "  <h2>{{heading}}</h2>\n" +
     "  <section role='parameter' class='parameter' ng-repeat='parameter in parameters'>\n" +
     "    <div ng-repeat=\"definition in parameter\">\n" +
@@ -2764,7 +2742,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/parameters.tmpl.html',
-    "<named-parameters-documentation ng-repeat='parameterGroup in parameterGroups' heading='{{parameterGroup[0]}}' role='parameter-group' parameters='parameterGroup[1]'></named-parameters-documentation>\n"
+    "<named-parameters-documentation heading='Headers' role='parameter-group' parameters='method.headers.plain'></named-parameters-documentation>\n" +
+    "\n" +
+    "<named-parameters-documentation heading='URI Parameters' role='parameter-group' parameters='resource.uriParametersForDocumentation'></named-parameters-documentation>\n" +
+    "\n" +
+    "<named-parameters-documentation heading='Query Parameters' role='parameter-group' parameters='method.queryParameters'></named-parameters-documentation>\n"
   );
 
 

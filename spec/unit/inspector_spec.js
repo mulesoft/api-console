@@ -80,54 +80,67 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     };
   }
 
-  var resource = {
-    description: "The long description about test resource",
-    displayName: "Test Resource",
-    is: ["secured"],
-    type: "Collection",
-    methods: [createMethod("connect"), createMethod("post"), createMethod("get"), createMethod("head")],
-    uriParameters: {
-      query: {
-        type: 'string'
-      }
-    }
-  }
+  parseRAML(createRAML(
+    'title: MyApi',
+    'traits:',
+    '  -  secured:',
+    '       description: traity',
+    'resourceTypes:',
+    '  - collection:',
+    '      displayName: a collection',
+    '/resource:',
+    '  /{resourceId}:',
+    '    get: ',
+    '    /{filter}:',
+    '      type: collection',
+    '      is: [secured]',
+    '      get: ',
+    '      connect: ',
+    '      post:',
+    '      head:'
+  ));
+
+  var resource, resourceOverview, pathSegments;
 
   beforeEach(function() {
-    this.resourceOverview = RAML.Inspector.resourceOverviewSource(['/resource'], resource);
-  });
+    var allResources = [
+      this.api.resources[0],
+      this.api.resources[0].resources[0],
+      this.api.resources[0].resources[0].resources[0]
+    ];
 
-  it("copies the description", function() {
-    expect(this.resourceOverview.description).toEqual(resource.description);
+    pathSegments = allResources.map(RAML.Client.createPathSegment);
+    resource = allResources[2];
+
+    resourceOverview = RAML.Inspector.resourceOverviewSource(pathSegments, resource);
   });
 
   it("copies the supplied path segments", function() {
-    expect(this.resourceOverview.pathSegments).toEqual(['/resource']);
-  });
-
-  it("copies URI parameters", function() {
-    expect(this.resourceOverview.uriParameters).toEqual(resource.uriParameters);
-  });
-
-  it("copies resource.displayName to displayName", function() {
-    expect(this.resourceOverview.displayName).toEqual(resource.displayName);
+    expect(resourceOverview.pathSegments).toEqual(pathSegments);
   });
 
   it("translates resource.is to traits", function() {
-    expect(this.resourceOverview.traits).toEqual(resource.is);
+    expect(resourceOverview.traits).toEqual(resource.is);
+    expect(resourceOverview.is).toBeUndefined();
   });
 
   it("translates resource.type to resourceType", function() {
-    expect(this.resourceOverview.resourceType).toEqual(resource.type);
+    expect(resourceOverview.resourceType).toEqual(resource.type);
+    expect(resourceOverview.type).toBeUndefined();
   });
 
   it("creates a method overview for each method", function() {
-    expect(this.resourceOverview.methods.length).toEqual(4);
+    expect(resourceOverview.methods.length).toEqual(4);
   });
 
   it("sorts the methods according to priority", function() {
-    var methodNames = this.resourceOverview.methods.map(function(method) { return method.method; });
+    var methodNames = resourceOverview.methods.map(function(method) { return method.method; });
 
     expect(methodNames).toEqual(['get', 'post', 'head', 'connect']);
+  });
+
+  it('merges parent uriParameters onto the uriParametersForDocumentation property', function() {
+    expect(resourceOverview.uriParametersForDocumentation.resourceId).toBeDefined();
+    expect(resourceOverview.uriParametersForDocumentation.filter).toBeDefined();
   });
 });

@@ -1,4 +1,4 @@
-<section class='named-parameters' ng-show='parameters'>
+<section class='named-parameters' ng-if='!namedParametersDocumentation.isEmpty(parameters)'>
   <h2>{{heading}}</h2>
   <section role='parameter' class='parameter' ng-repeat='parameter in parameters'>
     <div ng-repeat="definition in parameter">
