@@ -1,24 +1,19 @@
 <fieldset>
-  <div class="control-group" ng-repeat="(parameterName, parameter) in parameters.plain track by parameterName">
-    <label for="{{parameterName}}">
-      <span class="required" ng-if="parameter.required">*</span>
-      {{parameter.displayName}}:
-    </label>
-    <ng-switch on='parameter.type'>
-      <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='parameters.values[parameterName]'/>
-      <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='parameters.values[parameterName][0]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
-    </ng-switch>
-  </div>
-
-  <div class="control-group" ng-repeat="(parameterName, parameter) in parameters.plain track by parameterName">
-    <label for="{{parameterName}}">
-      <span class="required" ng-if="parameter.required">*</span>
-      {{parameter.displayName}}:
-    </label>
-    <ng-switch on='parameter.type'>
-      <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='parameters.values[parameterName]'/>
-      <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='parameters.values[parameterName][1]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
-    </ng-switch>
+  <div ng-repeat="(parameterName, parameter) in parameters.plain track by parameterName">
+    <div repeatable="parameter.repeat" repeatable-model="parameters.values[parameterName]">
+      <div class="control-group">
+        <label for="{{parameterName}}">
+          <span class="required" ng-if="parameter.required">*</span>
+          {{parameter.displayName}}:
+        </label>
+        <ng-switch on='parameter.type'>
+          <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='repeatableModel[$index]'/>
+          <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='repeatableModel[$index]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
+        </ng-switch>
+        <i class='icon icon-remove-sign' ng-hide="!repeatable || ($last && $first)" ng-click="remove($index)"></i>
+        <i class='icon icon-plus-sign-alt' ng-show="repeatable && $last" ng-click="new()"></i>
+      </div>
+    </div>
   </div>
 
   <div class="parameter-factory" ng-repeat='(name, _) in parameters.parameterized'>
