@@ -20,6 +20,7 @@ describe("RAML.Controllers.TryIt.NamedParameters", function() {
 
     it("adds the new header to the plain collection", function() {
       expect(parameters.plain["X-test"]).toBeDefined();
+      expect(parameters.values["X-test"]).toEqual(['test']);
     });
 
     it("does not modify the backing  plain collection", function() {
@@ -33,20 +34,25 @@ describe("RAML.Controllers.TryIt.NamedParameters", function() {
       parameters.remove("X-test")
     });
 
-    it("adds the new header to the plain collection", function() {
+    it("removes the header from the plain collection", function() {
       expect(parameters.plain["X-test"]).not.toBeDefined();
+      expect(parameters.values["X-test"]).not.toBeDefined();
     });
   });
 
   describe("retrieving data", function() {
     var data;
 
-    beforeEach(function() {
-      parameters.values['Accept'] = "";
+    it("initializes values as arrays", function() {
+      parameters.values['Accept'].push('application/json');
+      parameters.values['Accept'] = parameters.values['Accept'].concat(['text/plain', 'text/xml']);
       data = parameters.data();
+      expect(data["Accept"]).toEqual(['application/json', 'text/plain', 'text/xml']);
     });
 
     it("filters empty values", function() {
+      parameters.values['Accept'].push("");
+      data = parameters.data();
       expect(data["Accept"]).not.toBeDefined();
     });
   });

@@ -251,7 +251,7 @@ describe("RAML.Controllers.tryIt", function() {
     describe('with a prefilled xml body', function() {
       mockHttp(function(mock) {
         mock
-        .when("get", 'http://www.example.com/resource', { foo: "whatever" })
+        .when("get", 'http://www.example.com/resource')
         .respondWith(200, "cool");
       });
 
@@ -270,7 +270,7 @@ describe("RAML.Controllers.tryIt", function() {
 
         var mostRecent = $.mockjax.mockedAjaxCalls()[0];
         expect(mostRecent.contentType).toEqual("application/x-www-form-urlencoded");
-        expect(mostRecent.data).toEqual({ foo: 'whatever' });
+        expect(mostRecent.data).toEqual({ foo: ['whatever'] });
       });
     });
   });
@@ -303,7 +303,7 @@ describe("RAML.Controllers.tryIt", function() {
       $el.find('button[role="try-it"]').click();
 
       var mostRecent = $.mockjax.mockedAjaxCalls()[0];
-      expect(mostRecent.headers['x-custom']).toEqual("whatever");
+      expect(mostRecent.headers['x-custom']).toEqual(["whatever"]);
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
       });
@@ -326,7 +326,7 @@ describe("RAML.Controllers.tryIt", function() {
 
     mockHttp(function(mock) {
       mock
-        .when("post", 'http://www.example.com/resource', { foo: 'whatever' })
+        .when("post", 'http://www.example.com/resource')
         .respondWith(200, "cool");
     });
 
@@ -341,6 +341,7 @@ describe("RAML.Controllers.tryIt", function() {
 
       var mostRecent = $.mockjax.mockedAjaxCalls()[0];
       expect(mostRecent.contentType).toEqual("application/x-www-form-urlencoded");
+      expect(mostRecent.data).toEqual({ foo: ['whatever'] });
 
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
@@ -362,19 +363,9 @@ describe("RAML.Controllers.tryIt", function() {
 
     parseRAML(raml);
 
-    function constructMultipartFormData(object) {
-      var formData = new FormData();
-
-      for (var key in object) {
-        formData.append(key, object[key]);
-      }
-
-      return formData;
-    }
-
     mockHttp(function(mock) {
       mock
-        .when("post", 'http://www.example.com/resource', constructMultipartFormData({ foo: 'whatever' }))
+        .when("post", 'http://www.example.com/resource')
         .respondWith(200, "cool");
     });
 
@@ -384,12 +375,19 @@ describe("RAML.Controllers.tryIt", function() {
     });
 
     it('executes a request with the supplied value for the custom header', function() {
+      formDataSpy = jasmine.createSpy('formData');
+      formDataSpy.append = jasmine.createSpy();
+      spyOn(window, 'FormData').andReturn(formDataSpy);
+
       $el.find('input[name="foo"]').fillIn("whatever");
       $el.find('button[role="try-it"]').click();
 
 
       var mostRecent = $.mockjax.mockedAjaxCalls()[0];
       expect(mostRecent.contentType).toBeFalsy();
+      expect(mostRecent.data).toEqual(formDataSpy);
+      expect(formDataSpy.append).toHaveBeenCalledWith('foo', 'whatever');
+      expect(formDataSpy.append.callCount).toEqual(1);
 
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
@@ -600,6 +598,138 @@ describe("RAML.Controllers.tryIt", function() {
 
       whenTryItCompletes(function() {
         expect($el.find('.response .status .response-value')).toHaveText('200');
+      });
+    });
+  });
+
+  describe("given repeatable parameters", function() {
+    var raml = createRAML(
+      'title: API With Parameters Where Repeat=True',
+      'baseUri: http://www.example.com',
+      '/resource:',
+      '  post:',
+      '    queryParameters:',
+      '      someParam:',
+      '        repeat: true',
+      '    body:',
+      '      application/x-www-form-urlencoded:',
+      '        formParameters:',
+      '          someFormParam:',
+      '            repeat: true',
+      '      multipart/form-data:',
+      '        formParameters:',
+      '          someMultipartFormParam:',
+      '            repeat: true',
+      '    headers:',
+      '      someHeader:',
+      '        repeat: true'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+      setFixtures($el);
+    });
+
+    // does not apply to URI parameters
+
+    describe("for queryParameters", function() {
+      mockHttp(function(mock) {
+        mock
+          .when("post", 'http://www.example.com/resource?someParam=1&someParam=2')
+          .respondWith(200, "cool");
+      });
+
+      it('executes a request to the parameterized URI', function() {
+        $el.find('input[name=someParam]').eq(0).fillIn('1');
+        // TODO Click to add second
+        $el.find('input[name=someParam]').eq(1).fillIn('2');
+        $el.find('button[role="try-it"]').click();
+
+        whenTryItCompletes(function() {
+          expect($el.find('.response .status .response-value')).toHaveText('200');
+        });
+      });
+    });
+
+    describe("for formParameters", function() {
+      mockHttp(function(mock) {
+        mock
+          .when("post", 'http://www.example.com/resource', { someFormParam: [1, 2] })
+          .respondWith(200, "cool");
+      });
+
+      it('executes a request to the parameterized URI', function() {
+        $el.find('.media-types input[value="application/x-www-form-urlencoded"]').click();
+        $el.find('input[name=someFormParam]').eq(0).fillIn('1');
+        // TODO Click to add second
+        $el.find('input[name=someFormParam]').eq(1).fillIn('2');
+        $el.find('button[role="try-it"]').click();
+
+        whenTryItCompletes(function() {
+          expect($el.find('.response .status .response-value')).toHaveText('200');
+        });
+      });
+    });
+
+    describe("for multipart formParameters", function() {
+      var formDataSpy;
+
+      mockHttp(function(mock) {
+        mock
+          .when("post", 'http://www.example.com/resource')
+          .respondWith(200, "cool");
+      });
+
+      it('executes a request to the parameterized URI', function() {
+        formDataSpy = jasmine.createSpy('formData');
+        formDataSpy.append = jasmine.createSpy();
+        spyOn(window, 'FormData').andReturn(formDataSpy);
+
+        var urlencodedInput = $el.find('.media-types input[value="application/x-www-form-urlencoded"]');
+        var multipartInput = $el.find('.media-types input[value="multipart/form-data"]');
+        urlencodedInput.prop('checked', false);
+        multipartInput.prop('checked', true);
+        multipartInput.click();
+
+        $el.find('input[name=someMultipartFormParam]').eq(0).fillIn('1');
+        // TODO Click to add second
+        $el.find('input[name=someMultipartFormParam]').eq(1).fillIn('2');
+        $el.find('button[role="try-it"]').click();
+
+        whenTryItCompletes(function() {
+          var mostRecent = $.mockjax.mockedAjaxCalls()[0];
+          expect(mostRecent.data).toEqual(formDataSpy);
+
+          expect(formDataSpy.append).toHaveBeenCalledWith('someMultipartFormParam', '1');
+          expect(formDataSpy.append).toHaveBeenCalledWith('someMultipartFormParam', '2');
+          expect(formDataSpy.append.callCount).toEqual(2);
+
+          expect($el.find('.response .status .response-value')).toHaveText('200');
+        });
+      });
+    });
+
+    describe("for headers", function() {
+      mockHttp(function(mock) {
+        mock
+          .when("post", 'http://www.example.com/resource')
+          .respondWith(200, "cool");
+      });
+
+      it('executes a request to the parameterized URI', function() {
+        $el.find('input[name=someHeader]').eq(0).fillIn('1');
+        // TODO Click to add second
+        $el.find('input[name=someHeader]').eq(1).fillIn('2');
+        $el.find('button[role="try-it"]').click();
+
+        var mostRecent = $.mockjax.mockedAjaxCalls()[0];
+        expect(mostRecent.headers['someHeader']).toEqual(['1', '2']);
+        whenTryItCompletes(function() {
+          expect($el.find('.response .status .response-value')).toHaveText('200');
+        });
       });
     });
   });
