@@ -19,6 +19,10 @@
     this.view = view;
   };
 
+  controller.prototype.tryItEnabled = function() {
+    return !!(this.api && this.api.baseUri);
+  };
+
   controller.prototype.showRootDocumentation = function() {
     return this.withRootDocumentation && this.api && this.api.documentation && this.api.documentation.length > 0;
   };

@@ -11,14 +11,14 @@
   </div>
 
   <tabset>
-    <tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation ">
+    <tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
       <parameters></parameters>
       <requests></requests>
     </tab>
-    <tab role='documentation-responses' class="responses" heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation'>
+    <tab role='documentation-responses' class="responses" heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>
       <responses></responses>
     </tab>
-    <tab role="try-it" heading="Try It" active="documentation.tryItActive" disabled="!documentation.hasTryIt">
+    <tab role="try-it" heading="Try It" active="documentation.tryItActive" disabled="!ramlConsole.tryItEnabled()">
       <try-it></try-it>
     </tab>
   </tabset>

@@ -30,7 +30,36 @@ describe('RAML.Controllers.RAMLConsole', function() {
     });
   });
 
-  describe('root documentaiton', function() {
+  describe('try it', function() {
+    describe('by default', function() {
+      beforeEach(function() {
+        controller = new RAML.Controllers.RAMLConsole({}, {}, parserWrapperStub);
+      });
+
+      it('is disabled', function() {
+        expect(controller.tryItEnabled()).toBe(false);
+      });
+    });
+
+    describe('with a baseUri in the provided RAML', function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com'
+        );
+      parseRAML(raml);
+
+      beforeEach(function() {
+        controller = new RAML.Controllers.RAMLConsole({}, { withRootDocumentation: true });
+        controller.api = RAML.Inspector.create(this.api);
+      });
+
+      it('is enabled', function() {
+        expect(controller.tryItEnabled()).toBe(true);
+      });
+    });
+  });
+
+  describe('root documentation', function() {
     describe("when disabled", function() {
       beforeEach(function() {
         controller = new RAML.Controllers.RAMLConsole({}, {}, parserWrapperStub);
@@ -40,16 +69,14 @@ describe('RAML.Controllers.RAMLConsole', function() {
         expect(controller.showRootDocumentation()).toBeFalsy();
       });
     });
+
     describe("when enabled", function() {
       describe("with root documentation", function() {
         var raml = createRAML(
           'title: Example API',
-          'baseUri: http://www.example.com',
           'documentation:',
           '  - title: Sample Doc',
-          '    content: Sample documentation content',
-          '/resource:',
-          '  get:'
+          '    content: Sample documentation content'
           );
         parseRAML(raml);
 

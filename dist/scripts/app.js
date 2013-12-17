@@ -1200,18 +1200,27 @@ RAML.Inspector = (function() {
   var controller = function($scope) {
     $scope.documentation = this;
 
+    this.resource = $scope.resource;
     this.method = $scope.method;
+  };
 
-    var hasUriParameters = $scope.resource.pathSegments.some(function(segment) {
+  controller.prototype.hasUriParameters = function() {
+    return this.resource.pathSegments.some(function(segment) {
       return segment.templated;
     });
+  };
 
-    var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
+  controller.prototype.hasParameters = function() {
+    return !!(this.hasUriParameters() || this.method.queryParameters ||
       !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
+  };
 
-    this.hasRequestDocumentation = hasParameters || !RAML.Utils.isEmpty(this.method.body);
-    this.hasResponseDocumentation = !RAML.Utils.isEmpty(this.method.responses);
-    this.hasTryIt = !!$scope.api.baseUri;
+  controller.prototype.hasRequestDocumentation = function() {
+    return this.hasParameters() || !RAML.Utils.isEmpty(this.method.body);
+  };
+
+  controller.prototype.hasResponseDocumentation = function() {
+    return !RAML.Utils.isEmpty(this.method.responses);
   };
 
   controller.prototype.traits = function() {
@@ -1334,6 +1343,10 @@ RAML.Inspector = (function() {
 
   controller.prototype.gotoView = function(view) {
     this.view = view;
+  };
+
+  controller.prototype.tryItEnabled = function() {
+    return !!(this.api && this.api.baseUri);
   };
 
   controller.prototype.showRootDocumentation = function() {
@@ -2618,14 +2631,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <tabset>\n" +
-    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation \">\n" +
+    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
     "      <parameters></parameters>\n" +
     "      <requests></requests>\n" +
     "    </tab>\n" +
-    "    <tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation'>\n" +
+    "    <tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
     "      <responses></responses>\n" +
     "    </tab>\n" +
-    "    <tab role=\"try-it\" heading=\"Try It\" active=\"documentation.tryItActive\" disabled=\"!documentation.hasTryIt\">\n" +
+    "    <tab role=\"try-it\" heading=\"Try It\" active=\"documentation.tryItActive\" disabled=\"!ramlConsole.tryItEnabled()\">\n" +
     "      <try-it></try-it>\n" +
     "    </tab>\n" +
     "  </tabset>\n" +

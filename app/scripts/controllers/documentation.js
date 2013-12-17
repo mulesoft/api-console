@@ -12,18 +12,27 @@
   var controller = function($scope) {
     $scope.documentation = this;
 
+    this.resource = $scope.resource;
     this.method = $scope.method;
+  };
 
-    var hasUriParameters = $scope.resource.pathSegments.some(function(segment) {
+  controller.prototype.hasUriParameters = function() {
+    return this.resource.pathSegments.some(function(segment) {
       return segment.templated;
     });
+  };
 
-    var hasParameters = !!(hasUriParameters || this.method.queryParameters ||
+  controller.prototype.hasParameters = function() {
+    return !!(this.hasUriParameters() || this.method.queryParameters ||
       !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
+  };
 
-    this.hasRequestDocumentation = hasParameters || !RAML.Utils.isEmpty(this.method.body);
-    this.hasResponseDocumentation = !RAML.Utils.isEmpty(this.method.responses);
-    this.hasTryIt = !!$scope.api.baseUri;
+  controller.prototype.hasRequestDocumentation = function() {
+    return this.hasParameters() || !RAML.Utils.isEmpty(this.method.body);
+  };
+
+  controller.prototype.hasResponseDocumentation = function() {
+    return !RAML.Utils.isEmpty(this.method.responses);
   };
 
   controller.prototype.traits = function() {
