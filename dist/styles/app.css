@@ -2847,6 +2847,7 @@ raml-console article#raml-console textarea,
 #raml-console-loader textarea {
   border-radius: 4px;
   border: 1px solid #c0c2c9;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 raml-console article#raml-console input[type="text"],
@@ -2858,12 +2859,24 @@ raml-console article#raml-console input[type="password"],
   height: 20px;
   line-height: 20px;
 }
+raml-console article#raml-console select[multiple],
+#raml-console-loader select[multiple],
+raml-console article#raml-console select[size],
+#raml-console-loader select[size] {
+  height: auto;
+}
+raml-console article#raml-console select optgroup,
+#raml-console-loader select optgroup {
+  font-size: inherit;
+  font-style: inherit;
+  font-family: inherit;
+}
 raml-console article#raml-console input.warning,
 #raml-console-loader input.warning {
   border-color: #daa520;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px #daa520, 0 0 3px #daa520;
-  box-shadow: inset 0 1px 1px #daa520, 0 0 3px #daa520;
+  -webkit-box-shadow: inset 0 1px 1px @gold, 0 0 3px @gold;
+  box-shadow: inset 0 1px 1px @gold, 0 0 3px @gold;
 }
 raml-console article#raml-console .required,
 #raml-console-loader .required {
@@ -2903,6 +2916,35 @@ raml-console article#raml-console .labelled-radio-group label,
   vertical-align: middle;
   margin-right: 5px;
   color: #333;
+}
+raml-console article#raml-console .form-control,
+#raml-console-loader .form-control {
+  display: inline-block;
+  height: 32px;
+  padding: 6px 12px;
+  line-height: 1.428571429;
+  color: #56585d;
+  background-color: #f3f3f6;
+  background-image: none;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+raml-console article#raml-console .form-control[disabled],
+#raml-console-loader .form-control[disabled],
+raml-console article#raml-console .form-control[readonly],
+#raml-console-loader .form-control[readonly],
+fieldset[disabled] raml-console article#raml-console .form-control,
+fieldset[disabled] #raml-console-loader .form-control {
+  cursor: not-allowed;
+  background-color: #c0c2c9;
+}
+textarearaml-console article#raml-console .form-control,
+textarea#raml-console-loader .form-control {
+  height: auto;
 }
 raml-console article#raml-console .btn,
 #raml-console-loader .btn {
@@ -3841,6 +3883,11 @@ raml-console article#raml-console .try-it form .form-actions .error,
 raml-console article#raml-console .try-it form .form-actions .warning,
 #raml-console-loader .try-it form .form-actions .warning {
   color: #cd9356;
+}
+raml-console article#raml-console .try-it form .parameter-field,
+#raml-console-loader .try-it form .parameter-field {
+  float: left;
+  margin-right: 10px;
 }
 raml-console article#raml-console .try-it form:before,
 #raml-console-loader .try-it form:before,
