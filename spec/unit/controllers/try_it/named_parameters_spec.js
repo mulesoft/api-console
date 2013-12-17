@@ -3,11 +3,11 @@ describe("RAML.Controllers.TryIt.NamedParameters", function() {
 
   beforeEach(function() {
     plain = {
-      "Accept" : { type: "string" }
+      "Accept" : [ { type: "string" } ]
     }
 
     parameterized = {
-      "X-{*}" : RAML.Inspector.ParameterizedHeader.fromRAML("X-{*}", { type: "string" })
+      "X-{*}" : [ RAML.Inspector.ParameterizedHeader.fromRAML("X-{*}", { type: "string" }) ]
     }
 
     parameters = new RAML.Controllers.TryIt.NamedParameters(plain, parameterized)

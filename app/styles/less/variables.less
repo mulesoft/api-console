@@ -27,3 +27,20 @@
 @mustard: #CD9356;
 @purple: #9f5594;
 @gold: goldenrod;
+
+@line-height-base:        1.428571429; // 20/14
+@line-height-computed:    floor((13px * @line-height-base)); // ~20px
+
+@padding-base-vertical:          6px;
+@padding-base-horizontal:        12px;
+@input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 2);
+
+@input-border:                   #ccc;
+@input-border-radius:            @border-radius-base;
+
+@border-radius-base:             4px;
+@border-radius-large:            6px;
+@border-radius-small:            3px;
+
+@line-height-large:              1.33;
+@line-height-small:              1.5;

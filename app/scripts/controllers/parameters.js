@@ -15,7 +15,11 @@
       .filter(function(params) { return !!params; })
       .reduce(function(accum, parameters) {
         for (var key in parameters) {
-          accum[key] = parameters[key];
+          var parameter = parameters[key];
+          if (parameter) {
+            parameter = (parameter instanceof Array) ? parameter : [ parameter ];
+          }
+          accum[key] = parameter;
         }
         return accum;
       }, {});

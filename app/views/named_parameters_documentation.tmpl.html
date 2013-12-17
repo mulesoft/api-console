@@ -1,14 +1,16 @@
 <section class='named-parameters' ng-show='parameters'>
   <h2>{{heading}}</h2>
-  <section role='parameter' class='parameter' ng-repeat='param in parameters'>
-    <h4 class='strip-whitespace'>
-      <span role="display-name">{{param.displayName}}</span>
-      <span class="constraints">{{namedParametersDocumentation.constraints(param)}}</span>
-    </h4>
+  <section role='parameter' class='parameter' ng-repeat='parameter in parameters'>
+    <div ng-repeat="definition in parameter">
+      <h4 class='strip-whitespace'>
+        <span role="display-name">{{definition.displayName}}</span>
+        <span class="constraints">{{namedParametersDocumentation.constraints(definition)}}</span>
+      </h4>
 
-    <div class="info">
-      <div ng-if="param.example"><span class="label">Example:</span> <code class="well" role="example">{{param.example}}</code></div>
-      <div role="description" markdown="param.description"></div>
+      <div class="info">
+        <div ng-if="definition.example"><span class="label">Example:</span> <code class="well" role="example">{{definition.example}}</code></div>
+        <div role="description" markdown="definition.description"></div>
+      </div>
     </div>
   </section>
 </section>
