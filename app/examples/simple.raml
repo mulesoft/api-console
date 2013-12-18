@@ -182,7 +182,12 @@ documentation:
       multipart/form-data:
         formParameters:
           someMultipartFormParam:
+            type: file
             repeat: true
+          someMultipartFormParamWithMultipleTypes:
+            - type: file
+            - type: string
+              repeat: true
     headers:
       someHeader:
         repeat: true

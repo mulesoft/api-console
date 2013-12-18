@@ -28,7 +28,7 @@
         if (attrs.repeatableModel) {
           scope.$watch('repeatableModel', function(value) {
             $parse(attrs.repeatableModel).assign(scope, value);
-          });
+          }, true);
         }
       }
     };
