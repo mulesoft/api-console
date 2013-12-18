@@ -168,4 +168,24 @@ documentation:
             type: string
             required: true
             example: "c4f820f0420a013ea143230c290fbf99"
+/resource-with-repeatable-params:
+  post:
+    queryParameters:
+      someParam:
+        repeat: true
+      notRepeatable:
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+          someFormParam:
+            repeat: true
+      multipart/form-data:
+        formParameters:
+          someMultipartFormParam:
+            repeat: true
+    headers:
+      someHeader:
+        repeat: true
+      x-meta-{*}:
+        repeat: true
 
