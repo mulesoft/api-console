@@ -2500,13 +2500,15 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var Controller = function($scope, $attrs, $parse) {
-    var constraints = $parse($attrs.constraints)($scope);
-    this.validator = RAML.Client.Validator.from(constraints);
+  var Controller = function($attrs, $parse) {
+    this.constraints = $parse($attrs.constraints);
   };
 
-  Controller.prototype.validate = function(value) {
-    return this.validator.validate(value);
+  Controller.prototype.validate = function(scope, value) {
+    var constraints = this.constraints(scope);
+    var validator = RAML.Client.Validator.from(constraints);
+
+    return validator.validate(value);
   };
 
   var link = function($scope, $el, $attrs, controllers) {
@@ -2515,7 +2517,7 @@ RAML.Inspector = (function() {
         errorClass = $attrs.invalidClass || 'warning';
 
     function validateField() {
-      var errors = validateController.validate(modelController.$modelValue);
+      var errors = validateController.validate($scope, modelController.$modelValue);
 
       if (errors) {
         $el.addClass(errorClass);
