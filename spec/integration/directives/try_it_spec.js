@@ -230,13 +230,13 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       it('selects a mime type', function() {
-        expect($el.find('.media-types input:checked').length).toEqual(1);
+        expect($el.find('[role="media-types"] input:checked').length).toEqual(1);
       });
 
       it('executes a request with the Content-Type header set to the chosen media type', function() {
         var suppliedBody = '<document type="xml" />';
 
-        $el.find('.media-types input[value="text/xml"]')[0].click();
+        $el.find('[role="media-types"] input[value="text/xml"]')[0].click();
         $el.find('textarea').fillIn(suppliedBody);
         $el.find('button[role="try-it"]').click();
 
@@ -258,12 +258,12 @@ describe("RAML.Controllers.tryIt", function() {
       beforeEach(function() {
         var suppliedBody = '<document type="xml" />';
 
-        $el.find('.media-types input[value="text/xml"]')[0].click();
+        $el.find('[role="media-types"] input[value="text/xml"]')[0].click();
         $el.find('textarea').fillIn(suppliedBody);
       });
 
       it('executes a request with form data when the user changes modes', function() {
-        $el.find('.media-types input[value="application/x-www-form-urlencoded"]')[0].click();
+        $el.find('[role="media-types"] input[value="application/x-www-form-urlencoded"]')[0].click();
 
         $el.find('input[name="foo"]').fillIn("whatever");
         $el.find('button[role="try-it"]').click();

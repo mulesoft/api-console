@@ -1,18 +1,25 @@
 <fieldset>
   <div ng-repeat="(parameterName, parameter) in parameters.plain track by parameterName">
-    <div repeatable="parameter.repeat" repeatable-model="parameters.values[parameterName]">
-      <div class="control-group">
-        <label for="{{parameterName}}">
-          <span class="required" ng-if="parameter.required">*</span>
-          {{parameter.displayName}}:
-        </label>
-        <ng-switch on='parameter.type'>
-          <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='repeatableModel[$index]'/>
-          <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='repeatableModel[$index]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
-        </ng-switch>
-        <repeatable-remove></repeatable-remove>
-        <repeatable-add></repeatable-add>
+    <div class="parameter-field" ng-repeat="definition in parameter.definitions" ng-show="parameter.isSelected(definition)">
+      <div repeatable="definition.repeat" repeatable-model="parameters.values[parameterName]">
+        <div class="control-group">
+          <label for="{{parameterName}}">
+            <span class="required" ng-if="definition.required">*</span>
+            {{definition.displayName}}:
+          </label>
+          <ng-switch on='definition.type'>
+            <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='repeatableModel[$index]'/>
+            <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim="false" constraints='definition'/>
+          </ng-switch>
+          <repeatable-remove></repeatable-remove>
+          <repeatable-add></repeatable-add>
+        </div>
       </div>
+    </div>
+
+    <div class="parameter-type" ng-if="parameter.hasMultipleTypes()">
+      as
+      <select class="form-control" ng-model="parameter.selected" ng-options="definition.type as definition.type for definition in parameter.definitions"></select>
     </div>
   </div>
 

@@ -2,6 +2,27 @@
   'use strict';
 
   var PARAMETER = /\{\*\}/;
+
+  function ensureArray(value) {
+    if (value === undefined || value === null) {
+      return;
+    }
+
+    return (value instanceof Array) ? value : [ value ];
+  }
+
+  function normalizeNamedParameters(parameters) {
+    Object.keys(parameters || {}).forEach(function(key) {
+      parameters[key] = ensureArray(parameters[key]);
+    });
+  }
+
+  function wrapWithParameterizedHeader(name, definitions) {
+    return definitions.map(function(definition) {
+      return RAML.Inspector.ParameterizedHeader.fromRAML(name, definition);
+    });
+  }
+
   function filterHeaders(headers) {
     var filtered = {
       plain: {},
@@ -10,13 +31,32 @@
 
     Object.keys(headers || {}).forEach(function(key) {
       if (key.match(PARAMETER)) {
-        filtered.parameterized[key] = RAML.Inspector.ParameterizedHeader.fromRAML(key, headers[key]);
+        filtered.parameterized[key] = wrapWithParameterizedHeader(key, headers[key]);
       } else {
         filtered.plain[key] = headers[key];
       }
     });
 
     return filtered;
+  }
+
+  function processBody(body) {
+    var content = body['application/x-www-form-urlencoded'];
+    if (content) {
+      normalizeNamedParameters(content.formParameters);
+    }
+
+    content = body['multipart/form-data'];
+    if (content) {
+      normalizeNamedParameters(content.formParameters);
+    }
+  }
+
+  function processResponses(responses) {
+    Object.keys(responses).forEach(function(status) {
+      var response = responses[status];
+      normalizeNamedParameters(response.headers);
+    });
   }
 
   function securitySchemesExtractor(securitySchemes) {
@@ -54,7 +94,13 @@
 
       method.securitySchemes = securitySchemesExtractor(securitySchemes);
       method.allowsAnonymousAccess = allowsAnonymousAccess;
+      normalizeNamedParameters(method.headers);
+      normalizeNamedParameters(method.queryParameters);
+
       method.headers = filterHeaders(method.headers);
+      processBody(method.body || {});
+      processResponses(method.responses || {});
+
       return method;
     }
   };

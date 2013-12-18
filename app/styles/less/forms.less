@@ -64,7 +64,7 @@ textarea {
 input[type="text"], input[type="password"], textarea {
   border-radius: 4px;
   border: 1px solid @lightGray;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  .box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075));
 }
 
 input[type="text"], input[type="password"] {
@@ -74,11 +74,21 @@ input[type="text"], input[type="password"] {
   line-height: 20px;
 }
 
+select[multiple],
+select[size] {
+  height: auto;
+}
+
+select optgroup {
+  font-size: inherit;
+  font-style: inherit;
+  font-family: inherit;
+}
+
 input.warning {
   border-color: @gold;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px @gold, 0 0 3px @gold;
-  box-shadow: inset 0 1px 1px @gold, 0 0 3px @gold;
+  .box-shadow(~'inset 0 1px 1px @gold, 0 0 3px @gold');
 }
 
 .required {
@@ -117,5 +127,35 @@ input.error {
     vertical-align: middle;
     margin-right: 5px;
     color: #333;
+  }
+}
+
+.form-control {
+  display: inline-block;
+  height: @input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
+  padding: @padding-base-vertical @padding-base-horizontal;
+  line-height: @line-height-base;
+  color: @darkGray;
+  background-color: @veryLightGray;
+  background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+  border: 1px solid @input-border;
+  border-radius: @input-border-radius;
+  .box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+  .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
+
+  // Disabled and read-only inputs
+  // Note: HTML5 says that controls under a fieldset > legend:first-child won't
+  // be disabled if the fieldset is disabled. Due to implementation difficulty,
+  // we don't honor that edge case; we style them as disabled anyway.
+  &[disabled],
+  &[readonly],
+  fieldset[disabled] & {
+    cursor: not-allowed;
+    background-color: @lightGray;
+  }
+
+  // Reset height for `textarea`s
+  textarea& {
+    height: auto;
   }
 }

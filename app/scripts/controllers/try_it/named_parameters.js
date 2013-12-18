@@ -3,11 +3,9 @@
 
   function copy(object) {
     var shallow = {};
-    if (object) {
-      Object.keys(object).forEach(function(key) {
-        shallow[key] = object[key];
-      });
-    }
+    Object.keys(object || {}).forEach(function(key) {
+      shallow[key] = new RAML.Controllers.TryIt.NamedParameter(object[key]);
+    });
 
     return shallow;
   }
@@ -30,7 +28,7 @@
 
   var NamedParameters = function(plain, parameterized) {
     this.plain = copy(plain);
-    this.parameterized = copy(parameterized);
+    this.parameterized = parameterized;
     this.values = {};
     Object.keys(this.plain).forEach(function(key) {
       this.values[key] = [];
@@ -38,9 +36,14 @@
   };
 
   NamedParameters.prototype.create = function(name, value) {
-    var header = this.parameterized[name].create(value);
-    this.plain[header.displayName] = header;
-    this.values[header.displayName] = [value];
+    var parameters = this.parameterized[name];
+
+    var definition = Object.keys(parameters).map(function(key) {
+      return parameters[key].create(value);
+    });
+
+    this.plain[definition[0].displayName] = new RAML.Controllers.TryIt.NamedParameter(definition);
+    this.values[definition[0].displayName] = [value];
   };
 
   NamedParameters.prototype.remove = function(name) {

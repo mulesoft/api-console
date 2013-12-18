@@ -15,10 +15,23 @@ describe("RAML.Inspector.Method", function() {
     '/resource:',
     '  description: The first resource',
     '  get:',
+    '    securedBy: [null, basic, oauth_2: { scopes: [ comments ] } ]',
     '    headers:',
     '      example:',
     '      x-parameterized-{*}:',
-    '    securedBy: [null, basic, oauth_2: { scopes: [ comments ] } ]',
+    '    queryParameters:',
+    '      foo:',
+    '    body:',
+    '      application/x-www-form-urlencoded:',
+    '        formParameters:',
+    '          foo:',
+    '      multipart/form-data:',
+    '        formParameters:',
+    '          foo:',
+    '    responses:',
+    '      200:',
+    '        headers:',
+    '          foo:',
     '  post:',
     '    securedBy: [basic, oauth_2: { scopes: [ comments ] } ]',
     '/another/resource:',
@@ -40,6 +53,24 @@ describe("RAML.Inspector.Method", function() {
       it("includes parameterized headers as headers.parameterized", function() {
         expect(method.headers.parameterized['x-parameterized-{*}']).toBeDefined()
         expect(method.headers.parameterized['example']).not.toBeDefined()
+      });
+
+      it("wraps query parameter types in an array", function() {
+        expect(method.queryParameters['foo'] instanceof Array).toBe(true);
+      });
+
+      it("wraps url encoded form parameter types in an array", function() {
+        var formParameters = method.body['application/x-www-form-urlencoded'].formParameters;
+        expect(formParameters['foo'] instanceof Array).toBe(true);
+      });
+
+      it("wraps multipart form parameter types in an array", function() {
+        var formParameters = method.body['multipart/form-data'].formParameters;
+        expect(formParameters['foo'] instanceof Array).toBe(true);
+      });
+
+      it("wraps response header types in an array", function() {
+        expect(method.responses['200'].headers['foo'] instanceof Array).toBe(true);
       });
     });
   });
