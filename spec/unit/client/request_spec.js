@@ -18,6 +18,11 @@ describe('RAML.Client.Request', function() {
       it("assigns the method", function() {
         expect(options.type).toEqual('POST')
       });
+
+      it("sets traditional = true", function() {
+        // prevents adding [] to params with multiple values
+        expect(options.traditional).toEqual(true);
+      });
     });
 
     describe("setting headers", function() {
@@ -71,7 +76,7 @@ describe('RAML.Client.Request', function() {
         describe("by default", function() {
           beforeEach(function() {
             request = RAML.Client.Request.create('http://api.example.com', 'GET');
-            request.queryParams({ foo: 'b&r' });
+            request.queryParams({ foo: ['b&r'] });
             options = request.toOptions();
           });
 
@@ -88,7 +93,7 @@ describe('RAML.Client.Request', function() {
         describe("with parameters already set", function() {
           beforeEach(function() {
             request = RAML.Client.Request.create('http://api.example.com', 'GET');
-            request.queryParams({ foo: 'b&r' });
+            request.queryParams({ foo: ['b&r'] });
             request.queryParam('one', 'more');
             options = request.toOptions();
           });
@@ -102,7 +107,7 @@ describe('RAML.Client.Request', function() {
           beforeEach(function() {
             request = RAML.Client.Request.create('http://api.example.com/?existing=param', 'GET');
 
-            request.queryParams({ foo: 'b&r' });
+            request.queryParams({ foo: ['b&r'] });
             options = request.toOptions();
           });
 
@@ -114,16 +119,16 @@ describe('RAML.Client.Request', function() {
 
       describe('fetching query parameters', function() {
         beforeEach(function() {
-          request.queryParams({ q: 'mySearch' });
+          request.queryParams({ q: ['mySearch'] });
         });
 
         it('returns the parameters', function() {
-           expect(request.queryParams()).toEqual({ q: 'mySearch' });
+           expect(request.queryParams()).toEqual({ q: ['mySearch'] });
         });
       });
 
       describe("setting data", function() {
-        var data = { "foo": 'bar' };
+        var data = { "foo": ['bar'] };
 
         describe("by default", function() {
           beforeEach(function() {

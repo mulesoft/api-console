@@ -14,8 +14,12 @@
     var copy = {};
 
     Object.keys(object).forEach(function(key) {
-      if (object[key] && (typeof object[key] !== 'string' || object[key].trim().length > 0)) {
-        copy[key] = object[key];
+      var values = object[key].filter(function(value) {
+        return value !== undefined && value !== null && (typeof value !== 'string' || value.trim().length > 0);
+      });
+
+      if (values.length > 0) {
+        copy[key] = values;
       }
     });
 
@@ -26,6 +30,9 @@
     this.plain = copy(plain);
     this.parameterized = parameterized;
     this.values = {};
+    Object.keys(this.plain).forEach(function(key) {
+      this.values[key] = [];
+    }.bind(this));
   };
 
   NamedParameters.prototype.create = function(name, value) {
@@ -36,10 +43,13 @@
     });
 
     this.plain[definition[0].displayName] = new RAML.Controllers.TryIt.NamedParameter(definition);
+    this.values[definition[0].displayName] = [value];
   };
 
   NamedParameters.prototype.remove = function(name) {
-    return delete this.plain[name];
+    delete this.plain[name];
+    delete this.values[name];
+    return;
   };
 
   NamedParameters.prototype.data = function() {

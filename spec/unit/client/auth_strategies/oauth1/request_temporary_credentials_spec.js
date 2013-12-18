@@ -27,11 +27,10 @@ describe("RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials", functi
       });
 
       it("requests an access token", function() {
-        expect(xhrStub).toHaveBeenCalledWith({
-          url: settings.requestTokenUri,
-          type: 'post',
-          contentType: false
-        });
+        var calledWith = xhrStub.mostRecentCall.args[0];
+        expect(calledWith.url).toEqual(settings.requestTokenUri);
+        expect(calledWith.type).toEqual('post');
+        expect(calledWith.contentType).toEqual(false);
       });
 
       it("signs the request with a token from the factory", function() {

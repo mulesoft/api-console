@@ -58,12 +58,19 @@
 
     this.toOptions = function() {
       var o = RAML.Utils.clone(options);
+      o.traditional = true;
       if (rawData) {
         if (isMultipartRequest) {
           var data = new FormData();
 
+          var appendValueForKey = function(key) {
+            return function(value) {
+              data.append(key, value);
+            };
+          };
+
           for (var key in rawData) {
-            data.append(key, rawData[key]);
+            rawData[key].forEach(appendValueForKey(key));
           }
 
           o.processData = false;
@@ -75,7 +82,7 @@
       }
       if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.url.match('\\?') ? '&' : '?');
-        o.url = options.url + separator + $.param(queryParams);
+        o.url = options.url + separator + $.param(queryParams, true);
       }
 
       return o;

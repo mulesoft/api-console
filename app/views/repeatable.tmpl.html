@@ -1,0 +1,7 @@
+<div ng-if="repeatable" ng-repeat="model in repeatableModel track by $index">
+  <div ng-transclude></div>
+</div>
+
+<div ng-if="!repeatable">
+  <div ng-transclude></div>
+</div>

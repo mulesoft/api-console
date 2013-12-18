@@ -1,14 +1,20 @@
 <fieldset>
-  <div class="control-group" ng-repeat="(parameterName, parameter) in parameters.plain track by parameterName">
+  <div ng-repeat="(parameterName, parameter) in parameters.plain track by parameterName">
     <div class="parameter-field" ng-repeat="definition in parameter.definitions" ng-show="parameter.isSelected(definition)">
-      <label for="{{parameterName}}">
-        <span class="required" ng-if="definition.required">*</span>
-        {{definition.displayName}}:
-      </label>
-      <ng-switch on='definition.type'>
-        <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='parameters.values[parameterName]'/>
-        <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='parameters.values[parameterName]' placeholder='{{definition.example}}' ng-trim="false" constraints='definition'/>
-      </ng-switch>
+      <div repeatable="definition.repeat" repeatable-model="parameters.values[parameterName]">
+        <div class="control-group">
+          <label for="{{parameterName}}">
+            <span class="required" ng-if="definition.required">*</span>
+            {{definition.displayName}}:
+          </label>
+          <ng-switch on='definition.type'>
+            <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='repeatableModel[$index]'/>
+            <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim="false" constraints='definition'/>
+          </ng-switch>
+          <repeatable-remove></repeatable-remove>
+          <repeatable-add></repeatable-add>
+        </div>
+      </div>
     </div>
 
     <div class="parameter-type" ng-if="parameter.hasMultipleTypes()">

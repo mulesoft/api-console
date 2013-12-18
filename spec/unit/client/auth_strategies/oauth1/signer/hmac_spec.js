@@ -52,14 +52,14 @@ describe("RAML.Client.AuthStrategies.Oauth1.Signer.Hmac", function() {
         request = RAML.Client.Request.create('http://example.com/request', 'POST');
 
         request.queryParams({
-          'b5': '=%3D',
-          'a3': 'a',
-          'c@': '',
-          'a2': 'r b'
+          'b5': ['=%3D'],
+          'a3': ['a'],
+          'c@': [''],
+          'a2': ['r b']
         });
         request.data({
-          'c2': '',
-          'a3': '2 q'
+          'c2': [''],
+          'a3': ['2 q']
         });
         request.header('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -159,15 +159,15 @@ describe("RAML.Client.AuthStrategies.Oauth1.Signer.Hmac", function() {
     });
 
     it("sorts them in ascending byte value ordering", function() {
-      request.queryParams({ 'c': '3', 'e': '5', 'a': '1', 'd': '4', 'b': '2' });
+      request.queryParams({ 'c': ['3'], 'e': ['5'], 'a': ['1'], 'd': ['4'], 'b': ['2'] });
       var result = encodeParameters(request);
       expect(result).toMatch('a=1&b=2&c=3&d=4&e=5');
     });
 
     it("breaks sorting ties by parameter value", function() {
       request.header('Content-Type', 'application/x-www-form-urlencoded');
-      request.queryParams({ 'c': '3', 'e': '5', 'a': '1', 'd': '4', 'b': '2', 'a b': 'percent' });
-      request.data({ 'c': '03', 'e': '05', 'a': '01', 'd': '04', 'b': '02' });
+      request.queryParams({ 'c': ['3'], 'e': ['5'], 'a': ['1'], 'd': ['4'], 'b': ['2'], 'a b': ['percent'] });
+      request.data({ 'c': ['03'], 'e': ['05'], 'a': ['01'], 'd': ['04'], 'b': ['02'] });
 
       var result = encodeParameters(request);
       expect(result).toMatch('a=01&a=1&a%20b=percent&b=02&b=2&c=03&c=3&d=04&d=4&e=05&e=5');
@@ -184,7 +184,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Signer.Hmac", function() {
 
     it("includes single-part form body parameters", function() {
       request.header('Content-Type', 'application/x-www-form-urlencoded');
-      request.data({ 'f%rm': 'p@ram' });
+      request.data({ 'f%rm': ['p@ram'] });
 
       var result = encodeParameters(request);
       expect(result).toMatch('f%25rm=p%40ram');
@@ -192,7 +192,7 @@ describe("RAML.Client.AuthStrategies.Oauth1.Signer.Hmac", function() {
 
     it("does not include multipart form body parameters", function() {
       request.header('Content-Type', 'multipart/form-data');
-      request.data({ 'f%rm': 'p@ram' });
+      request.data({ 'f%rm': ['p@ram'] });
 
       var result = encodeParameters(request);
       expect(result).not.toMatch('f%25rm=p%40ram');
