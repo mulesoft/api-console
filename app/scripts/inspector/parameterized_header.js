@@ -22,6 +22,9 @@
         header.displayName = parameterizedString.render({'*': value});
 
         return header;
+      },
+      definition: function() {
+        return definition;
       }
     };
   }
