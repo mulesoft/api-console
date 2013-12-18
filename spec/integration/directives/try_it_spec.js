@@ -688,8 +688,8 @@ describe("RAML.Controllers.tryIt", function() {
         formDataSpy.append = jasmine.createSpy();
         spyOn(window, 'FormData').andReturn(formDataSpy);
 
-        var urlencodedInput = $el.find('.media-types input[value="application/x-www-form-urlencoded"]');
-        var multipartInput = $el.find('.media-types input[value="multipart/form-data"]');
+        var urlencodedInput = $el.find('[role="media-types"] input[value="application/x-www-form-urlencoded"]');
+        var multipartInput = $el.find('[role="media-types"] input[value="multipart/form-data"]');
         urlencodedInput.prop('checked', false);
         multipartInput.prop('checked', true);
         multipartInput.click();
