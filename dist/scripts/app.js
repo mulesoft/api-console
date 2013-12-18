@@ -1003,12 +1003,19 @@ RAML.Inspector = (function() {
 
     this.toOptions = function() {
       var o = RAML.Utils.clone(options);
+      o.traditional = true;
       if (rawData) {
         if (isMultipartRequest) {
           var data = new FormData();
 
+          var appendValueForKey = function(key) {
+            return function(value) {
+              data.append(key, value);
+            };
+          };
+
           for (var key in rawData) {
-            data.append(key, rawData[key]);
+            rawData[key].forEach(appendValueForKey(key));
           }
 
           o.processData = false;
@@ -1020,7 +1027,7 @@ RAML.Inspector = (function() {
       }
       if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.url.match('\\?') ? '&' : '?');
-        o.url = options.url + separator + $.param(queryParams);
+        o.url = options.url + separator + $.param(queryParams, true);
       }
 
       return o;
@@ -1602,8 +1609,12 @@ RAML.Inspector = (function() {
     var copy = {};
 
     Object.keys(object).forEach(function(key) {
-      if (object[key] && (typeof object[key] !== 'string' || object[key].trim().length > 0)) {
-        copy[key] = object[key];
+      var values = object[key].filter(function(value) {
+        return value !== undefined && value !== null && (typeof value !== 'string' || value.trim().length > 0);
+      });
+
+      if (values.length > 0) {
+        copy[key] = values;
       }
     });
 
@@ -1614,6 +1625,9 @@ RAML.Inspector = (function() {
     this.plain = copy(plain);
     this.parameterized = parameterized;
     this.values = {};
+    Object.keys(this.plain).forEach(function(key) {
+      this.values[key] = [];
+    }.bind(this));
   };
 
   NamedParameters.prototype.create = function(name, value) {
@@ -1624,10 +1638,13 @@ RAML.Inspector = (function() {
     });
 
     this.plain[definition[0].displayName] = new RAML.Controllers.TryIt.NamedParameter(definition);
+    this.values[definition[0].displayName] = [value];
   };
 
   NamedParameters.prototype.remove = function(name) {
-    return delete this.plain[name];
+    delete this.plain[name];
+    delete this.values[name];
+    return;
   };
 
   NamedParameters.prototype.data = function() {
@@ -2189,6 +2206,88 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
+  RAML.Directives.repeatable = function($parse) {
+    var controller = function($scope, $attrs) {
+      this.repeatable = function() {
+        return $parse($attrs.repeatable)($scope);
+      };
+
+      this.new = function() {
+        $scope.repeatableModel.push('');
+      };
+
+      this.remove = function(index) {
+        $scope.repeatableModel.splice(index, 1);
+      };
+    };
+
+    return {
+      restrict: 'EA',
+      templateUrl: 'views/repeatable.tmpl.html',
+      transclude: true,
+      controller: controller,
+      link: function(scope, element, attrs) {
+        scope.repeatable = !attrs.repeatable || $parse(attrs.repeatable)(scope);
+        scope.repeatableModel = [''];
+
+        if (attrs.repeatableModel) {
+          scope.$watch('repeatableModel', function(value) {
+            $parse(attrs.repeatableModel).assign(scope, value);
+          }, true);
+        }
+      }
+    };
+  };
+})();
+
+'use strict';
+
+(function() {
+  RAML.Directives.repeatableAdd = function() {
+    return {
+      require: '^repeatable',
+      restrict: 'E',
+      template: '<i class="icon icon-plus-sign-alt" ng-show="visible" ng-click="new()"></i>',
+      scope: true,
+      link: function(scope, element, attrs, controller) {
+        scope.$watch('$last', function(last) {
+          scope.visible = controller.repeatable() && last;
+        });
+
+        scope.new = function() {
+          controller.new();
+        };
+      }
+    };
+  };
+})();
+
+'use strict';
+
+(function() {
+  RAML.Directives.repeatableRemove = function() {
+    return {
+      require: '^repeatable',
+      restrict: 'E',
+      template: '<i class="icon icon-remove-sign" ng-show="visible" ng-click="remove()"></i>',
+      scope: true,
+      link: function(scope, element, attrs, controller) {
+        scope.$watch('repeatableModel.length', function(length) {
+          scope.visible = controller.repeatable() && length > 1;
+        });
+
+        scope.remove = function() {
+          var index = scope.$index;
+          controller.remove(index);
+        };
+      }
+    };
+  };
+})();
+
+'use strict';
+
+(function() {
   RAML.Directives.responses = function() {
     return {
       restrict: 'E',
@@ -2515,6 +2614,9 @@ RAML.Filters = {};
   module.directive('ramlConsole', RAML.Directives.ramlConsole);
   module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
   module.directive('requests', RAML.Directives.requests);
+  module.directive('repeatable', RAML.Directives.repeatable);
+  module.directive('repeatableAdd', RAML.Directives.repeatableAdd);
+  module.directive('repeatableRemove', RAML.Directives.repeatableRemove);
   module.directive('resource', RAML.Directives.resource);
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
@@ -2704,16 +2806,22 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/parameter_fields.tmpl.html',
     "<fieldset>\n" +
-    "  <div class=\"control-group\" ng-repeat=\"(parameterName, parameter) in parameters.plain track by parameterName\">\n" +
+    "  <div ng-repeat=\"(parameterName, parameter) in parameters.plain track by parameterName\">\n" +
     "    <div class=\"parameter-field\" ng-repeat=\"definition in parameter.definitions\" ng-show=\"parameter.isSelected(definition)\">\n" +
-    "      <label for=\"{{parameterName}}\">\n" +
-    "        <span class=\"required\" ng-if=\"definition.required\">*</span>\n" +
-    "        {{definition.displayName}}:\n" +
-    "      </label>\n" +
-    "      <ng-switch on='definition.type'>\n" +
-    "        <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='parameters.values[parameterName]'/>\n" +
-    "        <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='parameters.values[parameterName]' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
-    "      </ng-switch>\n" +
+    "      <div repeatable=\"definition.repeat\" repeatable-model=\"parameters.values[parameterName]\">\n" +
+    "        <div class=\"control-group\">\n" +
+    "          <label for=\"{{parameterName}}\">\n" +
+    "            <span class=\"required\" ng-if=\"definition.required\">*</span>\n" +
+    "            {{definition.displayName}}:\n" +
+    "          </label>\n" +
+    "          <ng-switch on='definition.type'>\n" +
+    "            <input ng-switch-when='file' name=\"{{parameterName}}\" type='file' ng-model='repeatableModel[$index]'/>\n" +
+    "            <input ng-switch-default validated-input name=\"{{parameterName}}\" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
+    "          </ng-switch>\n" +
+    "          <repeatable-remove></repeatable-remove>\n" +
+    "          <repeatable-add></repeatable-add>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"parameter-type\" ng-if=\"parameter.hasMultipleTypes()\">\n" +
@@ -2799,6 +2907,17 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "  </div>\n" +
     "</article>\n"
+  );
+
+
+  $templateCache.put('views/repeatable.tmpl.html',
+    "<div ng-if=\"repeatable\" ng-repeat=\"model in repeatableModel track by $index\">\n" +
+    "  <div ng-transclude></div>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"!repeatable\">\n" +
+    "  <div ng-transclude></div>\n" +
+    "</div>\n"
   );
 
 
