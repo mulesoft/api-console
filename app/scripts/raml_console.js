@@ -26,6 +26,8 @@
   module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
   module.directive('requests', RAML.Directives.requests);
   module.directive('repeatable', RAML.Directives.repeatable);
+  module.directive('repeatableAdd', RAML.Directives.repeatableAdd);
+  module.directive('repeatableRemove', RAML.Directives.repeatableRemove);
   module.directive('resource', RAML.Directives.resource);
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);

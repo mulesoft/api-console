@@ -10,8 +10,8 @@
           <input ng-switch-when='file' name="{{parameterName}}" type='file' ng-model='repeatableModel[$index]'/>
           <input ng-switch-default validated-input name="{{parameterName}}" type='text' ng-model='repeatableModel[$index]' placeholder='{{parameter.example}}' ng-trim="false" constraints='parameter'/>
         </ng-switch>
-        <i class='icon icon-remove-sign' ng-hide="!repeatable || ($last && $first)" ng-click="remove($index)"></i>
-        <i class='icon icon-plus-sign-alt' ng-show="repeatable && $last" ng-click="new()"></i>
+        <repeatable-remove></repeatable-remove>
+        <repeatable-add></repeatable-add>
       </div>
     </div>
   </div>

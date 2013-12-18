@@ -644,7 +644,7 @@ describe("RAML.Controllers.tryIt", function() {
 
       it('executes a request to the parameterized URI', function() {
         $el.find('input[name=someParam]').eq(0).fillIn('1');
-        // TODO Click to add second
+        $el.find('input[name=someParam]').eq(0).closest('.control-group').find('repeatable-add .icon').click();
         $el.find('input[name=someParam]').eq(1).fillIn('2');
         $el.find('button[role="try-it"]').click();
 
@@ -664,7 +664,7 @@ describe("RAML.Controllers.tryIt", function() {
       it('executes a request to the parameterized URI', function() {
         $el.find('.media-types input[value="application/x-www-form-urlencoded"]').click();
         $el.find('input[name=someFormParam]').eq(0).fillIn('1');
-        // TODO Click to add second
+        $el.find('input[name=someFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon').click();
         $el.find('input[name=someFormParam]').eq(1).fillIn('2');
         $el.find('button[role="try-it"]').click();
 
@@ -695,7 +695,7 @@ describe("RAML.Controllers.tryIt", function() {
         multipartInput.click();
 
         $el.find('input[name=someMultipartFormParam]').eq(0).fillIn('1');
-        // TODO Click to add second
+        $el.find('input[name=someMultipartFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon').click();
         $el.find('input[name=someMultipartFormParam]').eq(1).fillIn('2');
         $el.find('button[role="try-it"]').click();
 
@@ -721,7 +721,7 @@ describe("RAML.Controllers.tryIt", function() {
 
       it('executes a request to the parameterized URI', function() {
         $el.find('input[name=someHeader]').eq(0).fillIn('1');
-        // TODO Click to add second
+        $el.find('input[name=someHeader]').eq(0).closest('.control-group').find('repeatable-add .icon').click();
         $el.find('input[name=someHeader]').eq(1).fillIn('2');
         $el.find('button[role="try-it"]').click();
 
