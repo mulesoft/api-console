@@ -224,6 +224,9 @@ RAML.Inspector = (function() {
         header.displayName = parameterizedString.render({'*': value});
 
         return header;
+      },
+      definition: function() {
+        return definition;
       }
     };
   }
@@ -2174,7 +2177,16 @@ RAML.Inspector = (function() {
   RAML.Directives.parameters = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/parameters.tmpl.html'
+      templateUrl: 'views/parameters.tmpl.html',
+      link: function(scope) {
+        var plainAndParameterizedHeaders = RAML.Utils.copy(scope.method.headers.plain);
+        Object.keys(scope.method.headers.parameterized).forEach(function(parameterizedHeader) {
+          plainAndParameterizedHeaders[parameterizedHeader] = scope.method.headers.parameterized[parameterizedHeader].map(function(parameterized) {
+            return parameterized.definition();
+          });
+        });
+        scope.plainAndParameterizedHeaders = plainAndParameterizedHeaders;
+      }
     };
   };
 })();
@@ -2674,6 +2686,14 @@ RAML.Filters = {};
       return new Clone();
     },
 
+    copy: function(object) {
+      var copiedObject = {};
+      for (var key in object) {
+        copiedObject[key] = object[key];
+      }
+      return copiedObject;
+    },
+
     isEmpty: function(object) {
       if (object) {
         return Object.keys(object).length === 0;
@@ -2980,7 +3000,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/parameters.tmpl.html',
-    "<named-parameters-documentation heading='Headers' role='parameter-group' parameters='method.headers.plain'></named-parameters-documentation>\n" +
+    "<named-parameters-documentation heading='Headers' role='parameter-group' parameters='plainAndParameterizedHeaders'></named-parameters-documentation>\n" +
     "\n" +
     "<named-parameters-documentation heading='URI Parameters' role='parameter-group' parameters='resource.uriParametersForDocumentation'></named-parameters-documentation>\n" +
     "\n" +
