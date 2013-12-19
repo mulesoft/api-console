@@ -31,7 +31,7 @@
     this.parameterized = parameterized;
     this.values = {};
     Object.keys(this.plain).forEach(function(key) {
-      this.values[key] = [];
+      this.values[key] = [undefined];
     }.bind(this));
   };
 

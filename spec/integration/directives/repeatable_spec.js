@@ -5,7 +5,7 @@ describe("RAML.Directives.repeatable", function() {
 
   describe("repeatable", function() {
     var html =
-      '<div repeatable="canBeRepeated">' +
+      '<div repeatable="canBeRepeated" repeatable-model="repeatableModel">' +
         '<span>some content</span>' +
         '<repeatable-add></repeatable-add>' +
         '<repeatable-remove></repeatable-remove>' +
@@ -15,6 +15,7 @@ describe("RAML.Directives.repeatable", function() {
       beforeEach(function() {
         scope = createScope(function(scope) {
           scope.canBeRepeated = true;
+          scope.repeatableModel = [undefined];
         });
         el = compileTemplate(html, scope);
         setFixtures(el);
@@ -79,6 +80,7 @@ describe("RAML.Directives.repeatable", function() {
       beforeEach(function() {
         scope = createScope(function(scope) {
           scope.canBeRepeated = false;
+          scope.repeatableModel = [undefined];
         });
         el = compileTemplate(html, scope);
         setFixtures(el);
@@ -107,30 +109,62 @@ describe("RAML.Directives.repeatable", function() {
         '<repeatable-remove></repeatable-remove>' +
       '</div>'
 
-    beforeEach(function() {
-      scope = createScope(function(scope) {
-        scope.someModel = [];
+    describe('by default', function() {
+      beforeEach(function() {
+        scope = createScope(function(scope) {
+          scope.someModel = [undefined];
+        });
+        el = compileTemplate(html, scope);
+        setFixtures(el);
       });
-      el = compileTemplate(html, scope);
-      setFixtures(el);
 
-      click(el.find('repeatable-add i').eq(0))
-      click(el.find('repeatable-add i').eq(0))
+      describe('adding a few new values', function() {
+        beforeEach(function() {
+          click(el.find('repeatable-add i').eq(0))
 
-      el.find('input').eq(0).fillIn('firstValue');
-      el.find('input').eq(1).fillIn('secondValue');
-      el.find('input').eq(2).fillIn('thirdValue');
+          el.find('input').eq(0).fillIn('firstValue');
+          el.find('input').eq(1).fillIn('secondValue');
+        });
+
+        it('updates the model', function() {
+          expect(scope.someModel).toEqual(['firstValue', 'secondValue']);
+        });
+      });
+
+      describe('removing a few new values', function() {
+        beforeEach(function() {
+          click(el.find('repeatable-add i').eq(0))
+          click(el.find('repeatable-add i').eq(0))
+
+          el.find('input').eq(0).fillIn('firstValue');
+          el.find('input').eq(1).fillIn('secondValue');
+          el.find('input').eq(2).fillIn('thirdValue');
+
+          click(el.find('repeatable-remove i').eq(1))
+        });
+
+        it('removes the correct item', function() {
+          expect(scope.someModel).toEqual(['firstValue', 'thirdValue']);
+          expect(el.find('input').eq(0).val()).toEqual('firstValue');
+          expect(el.find('input').eq(1).val()).toEqual('thirdValue');
+        });
+      });
     });
 
-    it('updates the model', function() {
-      expect(scope.someModel).toEqual(['firstValue', 'secondValue', 'thirdValue']);
-    });
+    describe('with data in the model', function() {
+      beforeEach(function() {
+        scope = createScope(function(scope) {
+          scope.someModel = ['cats', 'dogs', 'pizza'];
+        });
+        el = compileTemplate(html, scope);
+        setFixtures(el);
+      });
 
-    it('removes the correct item', function() {
-      click(el.find('repeatable-remove i').eq(1))
-      expect(scope.someModel).toEqual(['firstValue', 'thirdValue']);
-      expect(el.find('input').eq(0).val()).toEqual('firstValue');
-      expect(el.find('input').eq(1).val()).toEqual('thirdValue');
+      it('sets up the repeatable with the existing values', function() {
+        expect(el.find('input').eq(0).val()).toEqual('cats');
+        expect(el.find('input').eq(1).val()).toEqual('dogs');
+        expect(el.find('input').eq(2).val()).toEqual('pizza');
+      });
     });
   });
 });

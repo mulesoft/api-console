@@ -1727,7 +1727,7 @@ RAML.Inspector = (function() {
     this.parameterized = parameterized;
     this.values = {};
     Object.keys(this.plain).forEach(function(key) {
-      this.values[key] = [];
+      this.values[key] = [undefined];
     }.bind(this));
   };
 
@@ -2373,9 +2373,9 @@ RAML.Inspector = (function() {
   };
 })();
 
-'use strict';
-
 (function() {
+  'use strict';
+
   RAML.Directives.repeatable = function($parse) {
     var controller = function($scope, $attrs) {
       this.repeatable = function() {
@@ -2398,13 +2398,11 @@ RAML.Inspector = (function() {
       controller: controller,
       link: function(scope, element, attrs) {
         scope.repeatable = !attrs.repeatable || $parse(attrs.repeatable)(scope);
-        scope.repeatableModel = [''];
+        scope.repeatableModel = $parse(attrs.repeatableModel)(scope);
 
-        if (attrs.repeatableModel) {
-          scope.$watch('repeatableModel', function(value) {
-            $parse(attrs.repeatableModel).assign(scope, value);
-          }, true);
-        }
+        scope.$watch('repeatableModel', function(value) {
+          $parse(attrs.repeatableModel).assign(scope, value);
+        }, true);
       }
     };
   };
