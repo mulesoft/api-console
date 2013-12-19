@@ -11,7 +11,10 @@
       replace: true,
       transclude: true,
       controller: RAML.Controllers.tabset,
-      templateUrl: 'views/tabset.tmpl.html'
+      templateUrl: 'views/tabset.tmpl.html',
+      scope: {
+        keyBase: '@'
+      }
     };
   };
 

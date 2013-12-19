@@ -40,6 +40,7 @@
 
   module.controller('TryItController', RAML.Controllers.tryIt);
 
+  module.service('DataStore', RAML.Services.DataStore);
   module.service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
 
   module.filter('nameFromParameterizable', RAML.Filters.nameFromParameterizable);

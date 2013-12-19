@@ -75,6 +75,10 @@ RAML.Inspector = (function() {
         return accum;
       }, {});
 
+    clone.toString = function() {
+      return this.pathSegments.map(function(segment) { return segment.toString(); }).join('');
+    };
+
     return clone;
   };
 
