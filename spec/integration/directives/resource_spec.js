@@ -7,18 +7,26 @@ describe("RAML.Directives.resource", function() {
     var raml = createRAML(
       'title: Test',
       'resourceTypes:',
-      '  - typedcollection: {}',
+      '  - typedcollection:',
+      '      description: hi',
       '/somewhere:',
       '  type: typedcollection',
       '  get:'
     );
 
+    parseRAML(raml);
+
     beforeEach(function() {
-      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource></resource>', raml);
+      var inspected = RAML.Inspector.create(this.api);
+      scope = createScope();
+      scope.resource = inspected.resources[0];
+      scope.method = scope.resource.methods[0];
+
+      $el = compileTemplate('<resource></resource>', scope)
    });
 
     it("displays the name of the resourceType", function() {
-      var resourceType = this.$el.find('[role="resource-type"]').text().trim();
+      var resourceType = $el.find('[role="resource-type"]').text().trim();
       expect(resourceType).toEqual('typedcollection');
     });
   });
@@ -45,8 +53,5 @@ describe("RAML.Directives.resource", function() {
       var traits = this.$el.find('[role="trait"]').text().trim();
       expect(traits).toEqual('chau');
     });
-
-
   });
-
 });

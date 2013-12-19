@@ -75,6 +75,10 @@ RAML.Inspector = (function() {
         return accum;
       }, {});
 
+    clone.toString = function() {
+      return this.pathSegments.map(function(segment) { return segment.toString(); }).join('');
+    };
+
     return clone;
   };
 
@@ -1255,6 +1259,38 @@ RAML.Inspector = (function() {
   RAML.Controllers.Documentation = controller;
 })();
 
+(function() {
+  'use strict';
+
+  var controller = function($scope, DataStore) {
+    $scope.methodView = this;
+    this.resource = $scope.resource;
+    this.method = $scope.method;
+    this.DataStore = DataStore;
+    this.expanded = this.DataStore.get(this.methodKey(), true);
+  };
+
+  controller.prototype.toggleExpansion = function(evt) {
+    evt.preventDefault();
+    this.expanded = !this.expanded;
+    this.DataStore.set(this.methodKey(), this.expanded);
+  };
+
+  controller.prototype.methodKey = function() {
+    return this.resource.toString() + ':' + this.method.method;
+  };
+
+  controller.prototype.cssClass = function() {
+    if (this.expanded) {
+      return 'expanded ' + this.method.method;
+    } else {
+      return 'collapsed ' + this.method.method;
+    }
+  };
+
+  RAML.Controllers.Method = controller;
+})();
+
 'use strict';
 
 (function() {
@@ -1346,31 +1382,77 @@ RAML.Inspector = (function() {
   RAML.Controllers.RAMLConsole = controller;
 })();
 
+(function() {
+  'use strict';
+
+  var controller = function($scope, DataStore) {
+    $scope.resourceView = this;
+    this.resource = $scope.resource;
+    this.DataStore = DataStore;
+    this.expanded = this.DataStore.get(this.resourceKey(), true);
+  };
+
+  controller.prototype.resourceKey = function() {
+    return this.resource.toString();
+  };
+
+  controller.prototype.expandInitially = function(method) {
+    if (method.method === this.methodToExpand) {
+      delete this.methodToExpand;
+      return true;
+    }
+    return false;
+  };
+
+  controller.prototype.expandMethod = function(method) {
+    this.methodToExpand = method.method;
+  };
+
+  controller.prototype.toggleExpansion = function() {
+    this.expanded = !this.expanded;
+    this.DataStore.set(this.resourceKey(), this.expanded);
+  };
+
+  RAML.Controllers.Resource = controller;
+
+})();
+
 'use strict';
 
 (function() {
-
-  var controller = function($scope) {
+  var controller = function($scope, DataStore) {
     this.tabs = $scope.tabs = [];
     $scope.tabset = this;
+    this.DataStore = DataStore;
+    this.key = $scope.keyBase + ':tabset';
   };
 
-  controller.prototype.select = function(tab) {
+  controller.prototype.select = function(tab, dontPersist) {
     if (tab.disabled) {
       return;
     }
+
     this.tabs.forEach(function(tab) {
       tab.active = false;
     });
+
     tab.active = true;
+    if (!dontPersist) {
+      this.DataStore.set(this.key, tab.heading);
+    }
   };
 
   controller.prototype.addTab = function(tab) {
-    if (this.tabs.every(function(tab) { return tab.disabled; }) || tab.active) {
-      this.select(tab);
+    var previouslyEnabled = this.DataStore.get(this.key, true) === tab.heading,
+        allOthersDisabled = this.tabs.every(function(tab) { return tab.disabled; });
+
+    if (allOthersDisabled || previouslyEnabled) {
+      this.select(tab, true);
     }
+
     this.tabs.push(tab);
   };
+
 
   RAML.Controllers.tabset = controller;
 
@@ -1990,27 +2072,9 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var controller = function($scope) {
-    $scope.methodView = this;
-    this.method = $scope.method;
-  };
-
-  controller.prototype.toggleExpansion = function(evt) {
-    evt.preventDefault();
-    this.expanded = !this.expanded;
-  };
-
-  controller.prototype.cssClass = function() {
-    if (this.expanded) {
-      return 'expanded ' + this.method.method;
-    } else {
-      return 'collapsed ' + this.method.method;
-    }
-  };
-
   RAML.Directives.method = function() {
     return {
-      controller: controller,
+      controller: RAML.Controllers.Method,
       require: ['^resource', 'method'],
       restrict: 'E',
       templateUrl: 'views/method.tmpl.html',
@@ -2215,11 +2279,12 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  RAML.Directives.ramlConsole = function(ramlParserWrapper) {
+  RAML.Directives.ramlConsole = function(ramlParserWrapper, DataStore) {
 
     var link = function ($scope, $el, $attrs, controller) {
       ramlParserWrapper.onParseSuccess(function(raml) {
         $scope.api = controller.api = RAML.Inspector.create(raml);
+        DataStore.invalidate();
       });
 
       ramlParserWrapper.onParseError(function(error) {
@@ -2282,41 +2347,12 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var controller = function($scope) {
-    $scope.resourceView = this;
-    this.resource = $scope.resource;
-  };
-
-  controller.prototype.expandInitially = function(method) {
-    if (method.method === this.methodToExpand) {
-      delete this.methodToExpand;
-      return true;
-    }
-    return false;
-  };
-
-  controller.prototype.expandMethod = function(method) {
-    this.methodToExpand = method.method;
-  };
-
-  controller.prototype.toggleExpansion = function() {
-    this.expanded = !this.expanded;
-  };
-
-  controller.prototype.type = function() {
-    return this.resource.resourceType;
-  };
-
-  controller.prototype.traits = function() {
-    return this.resource.traits || [];
-  };
-
   RAML.Directives.resource = function() {
     return {
       restrict: 'E',
       templateUrl: 'views/resource.tmpl.html',
       replace: true,
-      controller: controller
+      controller: RAML.Controllers.Resource
     };
   };
 })();
@@ -2467,7 +2503,10 @@ RAML.Inspector = (function() {
       replace: true,
       transclude: true,
       controller: RAML.Controllers.tabset,
-      templateUrl: 'views/tabset.tmpl.html'
+      templateUrl: 'views/tabset.tmpl.html',
+      scope: {
+        keyBase: '@'
+      }
     };
   };
 
@@ -2595,6 +2634,42 @@ RAML.Filters = {};
   'use strict';
 
   RAML.Services = {};
+})();
+
+(function() {
+  'use strict';
+
+  RAML.Services.DataStore = function() {
+    var store = {};
+
+    return {
+      get: function(key, validate) {
+        var entry = store[key];
+        if (!entry) {
+          return;
+        }
+
+        if (validate === true) {
+          entry.valid = validate;
+        }
+
+        if (entry.valid) {
+          return entry.value;
+        }
+      },
+      set: function(key, value) {
+        store[key] = {
+          valid: true,
+          value: value
+        };
+      },
+      invalidate: function() {
+        Object.keys(store).forEach(function(key) {
+          store[key].valid = false;
+        });
+      }
+    };
+  };
 })();
 
 (function() {
@@ -2757,6 +2832,7 @@ RAML.Filters = {};
 
   module.controller('TryItController', RAML.Controllers.tryIt);
 
+  module.service('DataStore', RAML.Services.DataStore);
   module.service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
 
   module.filter('nameFromParameterizable', RAML.Filters.nameFromParameterizable);
@@ -2839,7 +2915,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "       markdown=\"method.description\">\n" +
     "  </div>\n" +
     "\n" +
-    "  <tabset>\n" +
+    "  <tabset key-base='{{methodView.methodKey()}}'>\n" +
     "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
     "      <parameters></parameters>\n" +
     "      <requests></requests>\n" +
@@ -3099,11 +3175,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "  <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
     "    <ul class=\"modifiers\">\n" +
-    "      <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resourceView.traits()\">\n" +
-    "        {{trait|nameFromParameterizable}}\n" +
+    "      <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\">\n" +
+    "        {{trait | nameFromParameterizable}}\n" +
     "      </li>\n" +
-    "      <li class=\"resource-type\" role=\"resource-type\" ng-if='resourceView.type()'>\n" +
-    "        {{resourceView.type()|nameFromParameterizable}}\n" +
+    "      <li class=\"resource-type\" role=\"resource-type\" ng-if='resource.resourceType'>\n" +
+    "        {{resource.resourceType | nameFromParameterizable}}\n" +
     "      </li>\n" +
     "    </ul>\n" +
     "\n" +

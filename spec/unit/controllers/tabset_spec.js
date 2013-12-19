@@ -1,7 +1,9 @@
 describe("RAML.Controllers.tabset", function() {
+  var storeSpy;
 
   beforeEach(function() {
-    this.controller = new RAML.Controllers.tabset({});
+    storeSpy = jasmine.createSpyObj('store', ['get', 'set']);
+    this.controller = new RAML.Controllers.tabset({ keyBase: 'key-base' }, storeSpy);
   });
 
   describe("upon initialization", function() {
@@ -14,8 +16,8 @@ describe("RAML.Controllers.tabset", function() {
     var tab1, tab2;
 
     beforeEach(function() {
-      tab1 = jasmine.createSpy();
-      tab2 = jasmine.createSpy();
+      tab1 = { heading: 'tab1' };
+      tab2 = { heading: 'tab2' };
       spyOn(this.controller, 'select');
     });
 
@@ -24,34 +26,37 @@ describe("RAML.Controllers.tabset", function() {
       expect(this.controller.tabs).toEqual([tab1]);
     });
 
-    describe("selecting", function() {
-      describe("given no other tabs", function() {
-        it('selects the added tab', function() {
-          this.controller.addTab(tab1);
-          expect(this.controller.select).toHaveBeenCalledWith(tab1);
-        });
+    describe("with an empty tabset", function() {
+      it('selects the added tab', function() {
+        this.controller.addTab(tab1);
+        expect(this.controller.select).toHaveBeenCalledWith(tab1, true);
+      });
+    });
+
+    describe("with a non-empty tabset", function() {
+      beforeEach(function() {
+        this.controller.tabs = [ tab1 ];
       });
 
-      describe("given other tabs", function() {
+      it('does not select the added tab by default', function() {
+        this.controller.addTab(tab2);
+        expect(this.controller.select).not.toHaveBeenCalled();
+      });
+
+      it('selects the added tab if no existing tabs are enabled', function() {
+        tab1.disabled = true;
+        this.controller.addTab(tab2);
+        expect(this.controller.select).toHaveBeenCalledWith(tab2, true);
+      });
+
+      describe('when the new tab is active in the store', function() {
         beforeEach(function() {
-          this.controller.tabs = [ tab1 ];
+          storeSpy.get.andReturn('tab2');
         });
 
-        it('does not select the added tab by default', function() {
+        it('selects the added tab', function() {
           this.controller.addTab(tab2);
-          expect(this.controller.select).not.toHaveBeenCalled();
-        });
-
-        it('selects the added tab if no existing tabs are enabled', function() {
-          tab1.disabled = true;
-          this.controller.addTab(tab2);
-          expect(this.controller.select).toHaveBeenCalledWith(tab2);
-        });
-
-        it('selects the added tab if it is marked active', function() {
-          tab2.active = true;
-          this.controller.addTab(tab2);
-          expect(this.controller.select).toHaveBeenCalledWith(tab2);
+          expect(this.controller.select).toHaveBeenCalledWith(tab2, true);
         });
       });
     });
@@ -61,10 +66,14 @@ describe("RAML.Controllers.tabset", function() {
     var tab1, tab2;
 
     beforeEach(function() {
-      tab1 = jasmine.createSpy();
-      tab1.active = true;
-      tab2 = jasmine.createSpy();
-      tab2.active = false;
+      tab1 = {
+        active: true,
+        heading: 'tab1'
+      }
+      tab2 = {
+        active: false,
+        heading: 'tab2'
+      }
       this.controller.tabs = [ tab1, tab2 ];
     });
 
@@ -78,10 +87,22 @@ describe("RAML.Controllers.tabset", function() {
       expect(tab2.active).toBeTruthy();
     });
 
+    it("updates the store", function() {
+      this.controller.select(tab2);
+      expect(storeSpy.set).toHaveBeenCalledWith('key-base:tabset', 'tab2');
+    });
+
     it("ignores a disabled tab", function() {
       tab2.disabled = true;
       this.controller.select(tab2);
       expect(tab2.active).toBeFalsy();
+    });
+
+    describe('when dontPersist is passed', function() {
+      it('does not update the store', function() {
+        this.controller.select(tab2, true);
+        expect(storeSpy.set).not.toHaveBeenCalled();
+      });
     });
   });
 });

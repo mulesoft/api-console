@@ -143,4 +143,8 @@ describe("RAML.Inspector.resourceOverviewSource", function() {
     expect(resourceOverview.uriParametersForDocumentation.resourceId).toBeDefined();
     expect(resourceOverview.uriParametersForDocumentation.filter).toBeDefined();
   });
+
+  it('adds toString', function() {
+    expect(resourceOverview.toString()).toEqual('/resource/{resourceId}/{filter}');
+  });
 });
