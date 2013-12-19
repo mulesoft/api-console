@@ -55,7 +55,9 @@
   function processResponses(responses) {
     Object.keys(responses).forEach(function(status) {
       var response = responses[status];
-      normalizeNamedParameters(response.headers);
+      if (response) {
+        normalizeNamedParameters(response.headers);
+      }
     });
   }
 
