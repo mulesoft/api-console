@@ -13,7 +13,7 @@
             methodView   = controllers[1];
 
         if (resourceView.expandInitially(scope.method)) {
-          methodView.expanded = true;
+          methodView.expand();
         }
       }
     };

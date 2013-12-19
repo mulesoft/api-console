@@ -11,7 +11,21 @@
 
   controller.prototype.toggleExpansion = function(evt) {
     evt.preventDefault();
-    this.expanded = !this.expanded;
+
+    if (this.expanded) {
+      this.collapse();
+    } else {
+      this.expand();
+    }
+  };
+
+  controller.prototype.expand = function() {
+    this.expanded = true;
+    this.DataStore.set(this.methodKey(), this.expanded);
+  };
+
+  controller.prototype.collapse = function() {
+    this.expanded = false;
     this.DataStore.set(this.methodKey(), this.expanded);
   };
 

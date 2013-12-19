@@ -1274,7 +1274,21 @@ RAML.Inspector = (function() {
 
   controller.prototype.toggleExpansion = function(evt) {
     evt.preventDefault();
-    this.expanded = !this.expanded;
+
+    if (this.expanded) {
+      this.collapse();
+    } else {
+      this.expand();
+    }
+  };
+
+  controller.prototype.expand = function() {
+    this.expanded = true;
+    this.DataStore.set(this.methodKey(), this.expanded);
+  };
+
+  controller.prototype.collapse = function() {
+    this.expanded = false;
     this.DataStore.set(this.methodKey(), this.expanded);
   };
 
@@ -2086,7 +2100,7 @@ RAML.Inspector = (function() {
             methodView   = controllers[1];
 
         if (resourceView.expandInitially(scope.method)) {
-          methodView.expanded = true;
+          methodView.expand();
         }
       }
     };
