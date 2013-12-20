@@ -3963,8 +3963,7 @@ raml-console article#raml-console #raml-console-api-title,
 raml-console article#raml-console #raml-console-main-nav,
 #raml-console-loader #raml-console-main-nav {
   float: right;
-  margin-right: 10px;
-  margin-top: 13px;
+  margin-top: 15px;
 }
 raml-console article#raml-console #raml-console-content,
 #raml-console-loader #raml-console-content {
