@@ -326,7 +326,7 @@ module.exports = function (grunt) {
     'clean',
     'useminPrepare',
     'ngtemplates:dist',
-    'less:dist',
+    'less',
     'concat:generated',
     'concat:addTemplate',
     'copy:dist',
