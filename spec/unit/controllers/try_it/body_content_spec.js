@@ -32,11 +32,18 @@ describe("RAML.Controllers.TryIt.BodyContent", function() {
         newBodyContent = new RAML.Controllers.TryIt.BodyContent(newBody);
 
         bodyContent.definitions['application/json'].value = "{ raw: 'json' }";
+        bodyContent.selected = 'text/xml';
+
         newBodyContent.copyFrom(bodyContent);
       });
 
       it('updates values using the old content types', function() {
         expect(newBodyContent.definitions['application/json'].value).toEqual("{ raw: 'json' }");
+      });
+
+      it('preserves selection', function() {
+        expect(newBodyContent.selected).toEqual("text/xml");
+
       });
     });
 
@@ -53,11 +60,17 @@ describe("RAML.Controllers.TryIt.BodyContent", function() {
         newBodyContent = new RAML.Controllers.TryIt.BodyContent(newBody);
 
         bodyContent.definitions['application/json'].value = "{ raw: 'json' }";
+        bodyContent.selected = 'text/xml';
+
         newBodyContent.copyFrom(bodyContent);
       });
 
       it('removes content types that are no longer present', function() {
         expect(newBodyContent.definitions['application/json']).toBeUndefined();
+      });
+
+      it('discards selection if the old selection is no longer valid', function() {
+        expect(newBodyContent.selected).not.toEqual("text/xml");
       });
     });
   });

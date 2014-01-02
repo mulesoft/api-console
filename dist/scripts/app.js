@@ -1663,6 +1663,10 @@ RAML.Inspector = (function() {
         content.definitions[contentType].copyFrom(oldContent.definitions[contentType]);
       }
     });
+
+    if (this.contentTypes.some(function(contentType) { return contentType === oldContent.selected; })) {
+      this.selected = oldContent.selected;
+    }
   };
 
   RAML.Controllers.TryIt.BodyContent = BodyContent;
