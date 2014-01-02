@@ -44,5 +44,15 @@
     }
   };
 
+  BodyContent.prototype.copyFrom = function(oldContent) {
+    var content = this;
+
+    oldContent.contentTypes.forEach(function(contentType) {
+      if (content.definitions[contentType]) {
+        content.definitions[contentType].copyFrom(oldContent.definitions[contentType]);
+      }
+    });
+  };
+
   RAML.Controllers.TryIt.BodyContent = BodyContent;
 })();
