@@ -1,32 +1,22 @@
 describe("RAML.Controllers.TryIt", function() {
-  var scope, httpService, controller;
+  var scope, httpService, controller, dataStoreSpy;
 
-  function createMethod(method, options) {
-    method = method || "get";
-    options = options || {};
+  var raml = createRAML(
+    'title: My RAML',
+    'baseUri: http://example.com',
+    '/resources/search:',
+    '  get:'
+  )
 
-    var body = options.body ? {} : undefined;
-    if (options.body) {
-      options.body.forEach(function(mediaType) { body[mediaType] = {} });
-    }
+  parseRAML(raml);
 
-    return {
-      method: method,
-      body: body,
-      headers: {
-        plain: {},
-        parameterized: {}
-      },
-      securitySchemes: function() { return {}; }
-    }
-  }
-
-  function createScope(method) {
-    method = method || createMethod();
+  function createScope(parsed) {
+    var api = RAML.Inspector.create(parsed);
 
     return {
-      api: { baseUri: "http://example.com" },
-      method: method,
+      api: api,
+      method: api.resources[0].methods[0],
+      resource: api.resources[0],
       pathBuilder: function() { return "/resources/search" },
       ramlConsole: { keychain: {} },
       $apply: jasmine.createSpy()
@@ -34,15 +24,16 @@ describe("RAML.Controllers.TryIt", function() {
   }
 
   beforeEach(function() {
+    dataStoreSpy = jasmine.createSpyObj('dataStore', ['get', 'set']);
     httpService = spyOn($, 'ajax');
   });
 
   describe("upon initialization", function() {
     describe('by default', function() {
       beforeEach(function() {
-        scope = createScope();
+        scope = createScope(this.api);
 
-        controller = new RAML.Controllers.TryIt(scope);
+        controller = new RAML.Controllers.TryIt(scope, dataStoreSpy);
       });
 
       it("assigns itself as the apiClient", function() {
@@ -58,8 +49,8 @@ describe("RAML.Controllers.TryIt", function() {
       promise = jasmine.createSpyObj("promise", ['then']);
       httpService.andReturn(promise);
 
-      scope = createScope();
-      controller = new RAML.Controllers.TryIt(scope);
+      scope = createScope(this.api);
+      controller = new RAML.Controllers.TryIt(scope, dataStoreSpy);
     });
 
     describe("by default", function() {

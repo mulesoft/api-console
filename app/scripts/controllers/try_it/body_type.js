@@ -18,5 +18,9 @@
     return this.value;
   };
 
+  BodyType.prototype.copyFrom = function(oldBodyType) {
+    this.value = oldBodyType.value;
+  };
+
   RAML.Controllers.TryIt.BodyType = BodyType;
 })();

@@ -1503,13 +1503,19 @@ RAML.Inspector = (function() {
 
   var apply;
 
-  var TryIt = function($scope) {
-    this.context = $scope.context = {};
-    this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
-    this.context.queryParameters = new RAML.Controllers.TryIt.NamedParameters($scope.method.queryParameters);
-    if ($scope.method.body) {
-      this.context.bodyContent = new RAML.Controllers.TryIt.BodyContent($scope.method.body);
+  var TryIt = function($scope, DataStore) {
+    var contextKey = $scope.resource.toString() + ':' + $scope.method.method + ':' + 'context';
+
+    var context = new RAML.Controllers.TryIt.Context($scope.method);
+    var oldContext = DataStore.get(contextKey, true);
+
+    if (oldContext) {
+      context.merge(oldContext);
     }
+
+    this.context = $scope.context = context;
+
+    DataStore.set(contextKey, this.context);
 
     this.getPathBuilder = function() {
       return $scope.pathBuilder;
@@ -1649,6 +1655,20 @@ RAML.Inspector = (function() {
     }
   };
 
+  BodyContent.prototype.copyFrom = function(oldContent) {
+    var content = this;
+
+    oldContent.contentTypes.forEach(function(contentType) {
+      if (content.definitions[contentType]) {
+        content.definitions[contentType].copyFrom(oldContent.definitions[contentType]);
+      }
+    });
+
+    if (this.contentTypes.some(function(contentType) { return contentType === oldContent.selected; })) {
+      this.selected = oldContent.selected;
+    }
+  };
+
   RAML.Controllers.TryIt.BodyContent = BodyContent;
 })();
 
@@ -1672,7 +1692,33 @@ RAML.Inspector = (function() {
     return this.value;
   };
 
+  BodyType.prototype.copyFrom = function(oldBodyType) {
+    this.value = oldBodyType.value;
+  };
+
   RAML.Controllers.TryIt.BodyType = BodyType;
+})();
+
+(function() {
+  'use strict';
+
+  var Context = function(method) {
+    this.headers = new RAML.Controllers.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
+    this.queryParameters = new RAML.Controllers.TryIt.NamedParameters(method.queryParameters);
+    if (method.body) {
+      this.bodyContent = new RAML.Controllers.TryIt.BodyContent(method.body);
+    }
+  };
+
+  Context.prototype.merge = function(oldContext) {
+    this.headers.copyFrom(oldContext.headers);
+    this.queryParameters.copyFrom(oldContext.queryParameters);
+    if (this.bodyContent && oldContext.bodyContent) {
+      this.bodyContent.copyFrom(oldContext.bodyContent);
+    }
+  };
+
+  RAML.Controllers.TryIt.Context = Context;
 })();
 
 (function() {
@@ -1725,6 +1771,11 @@ RAML.Inspector = (function() {
   var NamedParameters = function(plain, parameterized) {
     this.plain = copy(plain);
     this.parameterized = parameterized;
+
+    Object.keys(parameterized || {}).forEach(function(key) {
+      parameterized[key].created = [];
+    });
+
     this.values = {};
     Object.keys(this.plain).forEach(function(key) {
       this.values[key] = [undefined];
@@ -1734,12 +1785,15 @@ RAML.Inspector = (function() {
   NamedParameters.prototype.create = function(name, value) {
     var parameters = this.parameterized[name];
 
-    var definition = Object.keys(parameters).map(function(key) {
-      return parameters[key].create(value);
+    var definition = parameters.map(function(parameterizedHeader) {
+      return parameterizedHeader.create(value);
     });
 
-    this.plain[definition[0].displayName] = new RAML.Controllers.TryIt.NamedParameter(definition);
-    this.values[definition[0].displayName] = [value];
+    var parameterizedName = definition[0].displayName;
+
+    parameters.created.push(parameterizedName);
+    this.plain[parameterizedName] = new RAML.Controllers.TryIt.NamedParameter(definition);
+    this.values[parameterizedName] = [undefined];
   };
 
   NamedParameters.prototype.remove = function(name) {
@@ -1750,6 +1804,26 @@ RAML.Inspector = (function() {
 
   NamedParameters.prototype.data = function() {
     return filterEmpty(this.values);
+  };
+
+  NamedParameters.prototype.copyFrom = function(oldParameters) {
+    var parameters = this;
+
+    Object.keys(oldParameters.parameterized || {}).forEach(function(key) {
+      if (parameters.parameterized[key]) {
+        oldParameters.parameterized[key].created.forEach(function(createdParam) {
+          parameters.plain[createdParam] = oldParameters.plain[createdParam];
+        });
+      }
+    });
+
+    var keys = Object.keys(oldParameters.plain || {}).filter(function(key) {
+      return parameters.plain[key];
+    });
+
+    keys.forEach(function(key) {
+      parameters.values[key] = oldParameters.values[key];
+    });
   };
 
   RAML.Controllers.TryIt.NamedParameters = NamedParameters;

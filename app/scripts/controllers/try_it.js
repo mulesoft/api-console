@@ -27,13 +27,19 @@
 
   var apply;
 
-  var TryIt = function($scope) {
-    this.context = $scope.context = {};
-    this.context.headers = new RAML.Controllers.TryIt.NamedParameters($scope.method.headers.plain, $scope.method.headers.parameterized);
-    this.context.queryParameters = new RAML.Controllers.TryIt.NamedParameters($scope.method.queryParameters);
-    if ($scope.method.body) {
-      this.context.bodyContent = new RAML.Controllers.TryIt.BodyContent($scope.method.body);
+  var TryIt = function($scope, DataStore) {
+    var contextKey = $scope.resource.toString() + ':' + $scope.method.method + ':' + 'context';
+
+    var context = new RAML.Controllers.TryIt.Context($scope.method);
+    var oldContext = DataStore.get(contextKey, true);
+
+    if (oldContext) {
+      context.merge(oldContext);
     }
+
+    this.context = $scope.context = context;
+
+    DataStore.set(contextKey, this.context);
 
     this.getPathBuilder = function() {
       return $scope.pathBuilder;

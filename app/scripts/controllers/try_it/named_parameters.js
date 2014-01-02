@@ -29,6 +29,11 @@
   var NamedParameters = function(plain, parameterized) {
     this.plain = copy(plain);
     this.parameterized = parameterized;
+
+    Object.keys(parameterized || {}).forEach(function(key) {
+      parameterized[key].created = [];
+    });
+
     this.values = {};
     Object.keys(this.plain).forEach(function(key) {
       this.values[key] = [undefined];
@@ -38,12 +43,15 @@
   NamedParameters.prototype.create = function(name, value) {
     var parameters = this.parameterized[name];
 
-    var definition = Object.keys(parameters).map(function(key) {
-      return parameters[key].create(value);
+    var definition = parameters.map(function(parameterizedHeader) {
+      return parameterizedHeader.create(value);
     });
 
-    this.plain[definition[0].displayName] = new RAML.Controllers.TryIt.NamedParameter(definition);
-    this.values[definition[0].displayName] = [value];
+    var parameterizedName = definition[0].displayName;
+
+    parameters.created.push(parameterizedName);
+    this.plain[parameterizedName] = new RAML.Controllers.TryIt.NamedParameter(definition);
+    this.values[parameterizedName] = [undefined];
   };
 
   NamedParameters.prototype.remove = function(name) {
@@ -54,6 +62,26 @@
 
   NamedParameters.prototype.data = function() {
     return filterEmpty(this.values);
+  };
+
+  NamedParameters.prototype.copyFrom = function(oldParameters) {
+    var parameters = this;
+
+    Object.keys(oldParameters.parameterized || {}).forEach(function(key) {
+      if (parameters.parameterized[key]) {
+        oldParameters.parameterized[key].created.forEach(function(createdParam) {
+          parameters.plain[createdParam] = oldParameters.plain[createdParam];
+        });
+      }
+    });
+
+    var keys = Object.keys(oldParameters.plain || {}).filter(function(key) {
+      return parameters.plain[key];
+    });
+
+    keys.forEach(function(key) {
+      parameters.values[key] = oldParameters.values[key];
+    });
   };
 
   RAML.Controllers.TryIt.NamedParameters = NamedParameters;
