@@ -312,7 +312,7 @@ module.exports = function (grunt) {
     'clean:server',
     'less:development',
     'connect:test',
-    'protractor'
+    'protractor:scenario'
   ]);
 
   grunt.registerTask('scenario:debug', [

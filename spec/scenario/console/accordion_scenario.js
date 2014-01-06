@@ -156,11 +156,8 @@ describe("accordion view of API", function() {
 
     it("groups resources by their first path segment", function() {
       var resourceGroups = ptor.$$('[role="resource-group"]');
-
-      expect(resourceGroups).toHaveLength(3);
-
       resourceGroups.then(function(groups) {
-
+        expect(groups).toHaveLength(3);
         expect(groups[2].$(".path").getText()).toEqual('/something{weird}');
       });
     });
