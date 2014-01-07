@@ -10,12 +10,14 @@
     <a class="btn" ng-switch-default role="view-root-documentation" ng-click='ramlConsole.gotoView("rootDocumentation")'>Documentation &rarr;</a>
   </nav>
 
-  <div id="raml-console-content" ng-switch='ramlConsole.view'>
-    <div ng-switch-when='rootDocumentation'>
-      <root-documentation></root-documentation>
-    </div>
-    <div ng-switch-default>
-      <api-resources></api-resources>
+  <div id="raml-console-content">
+    <div class="inner" ng-switch='ramlConsole.view'>
+      <div ng-switch-when='rootDocumentation'>
+        <root-documentation></root-documentation>
+      </div>
+      <div ng-switch-default>
+        <api-resources></api-resources>
+      </div>
     </div>
   </div>
 </article>

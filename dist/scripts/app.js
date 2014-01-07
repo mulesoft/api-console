@@ -2369,12 +2369,21 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  RAML.Directives.ramlConsole = function(ramlParserWrapper, DataStore) {
+  RAML.Directives.ramlConsole = function(ramlParserWrapper, DataStore, $timeout) {
 
     var link = function ($scope, $el, $attrs, controller) {
       ramlParserWrapper.onParseSuccess(function(raml) {
+        var inner = $($el[0]).find('.inner');
+
+        if (inner.length) {
+          var height = inner[0].scrollHeight;
+          inner.css('height', height);
+        }
         $scope.api = controller.api = RAML.Inspector.create(raml);
         DataStore.invalidate();
+        $timeout(function() {
+          inner.css('height', 'auto');
+        }, 0);
       });
 
       ramlParserWrapper.onParseError(function(error) {
@@ -3212,12 +3221,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <a class=\"btn\" ng-switch-default role=\"view-root-documentation\" ng-click='ramlConsole.gotoView(\"rootDocumentation\")'>Documentation &rarr;</a>\n" +
     "  </nav>\n" +
     "\n" +
-    "  <div id=\"raml-console-content\" ng-switch='ramlConsole.view'>\n" +
-    "    <div ng-switch-when='rootDocumentation'>\n" +
-    "      <root-documentation></root-documentation>\n" +
-    "    </div>\n" +
-    "    <div ng-switch-default>\n" +
-    "      <api-resources></api-resources>\n" +
+    "  <div id=\"raml-console-content\">\n" +
+    "    <div class=\"inner\" ng-switch='ramlConsole.view'>\n" +
+    "      <div ng-switch-when='rootDocumentation'>\n" +
+    "        <root-documentation></root-documentation>\n" +
+    "      </div>\n" +
+    "      <div ng-switch-default>\n" +
+    "        <api-resources></api-resources>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</article>\n"
