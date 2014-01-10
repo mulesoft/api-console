@@ -6,7 +6,7 @@
     this.resource = $scope.resource;
     this.method = $scope.method;
     this.DataStore = DataStore;
-    this.expanded = this.DataStore.get(this.methodKey(), true);
+    this.expanded = this.DataStore.get(this.methodKey());
   };
 
   controller.prototype.toggleExpansion = function(evt) {

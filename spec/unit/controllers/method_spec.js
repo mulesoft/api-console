@@ -35,7 +35,7 @@ describe("RAML.Controllers.Method", function() {
     });
 
     it('calls the store with the appropriate key', function() {
-      expect(storeSpy.get).toHaveBeenCalledWith(controller.methodKey(), true);
+      expect(storeSpy.get).toHaveBeenCalledWith(controller.methodKey());
     });
   });
 

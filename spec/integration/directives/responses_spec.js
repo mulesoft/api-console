@@ -1,7 +1,7 @@
 describe("RAML.Directives.responses", function() {
   beforeEach(module('ramlConsoleApp'));
 
-  var scope;
+  var scope, dataStore, el;
 
   describe('given a method with response documentation', function() {
     var raml = createRAML(
@@ -15,33 +15,50 @@ describe("RAML.Directives.responses", function() {
       '        description: Ut Oh'
     );
 
-    beforeEach(function() {
-      compileWithScopeFromFirstResourceAndMethodOfRAML("<responses></responses>", raml, function(el) {
-        setFixtures(el);
-      });
+    parseRAML(raml);
+
+    beforeEach(inject(function(DataStore) {
+      dataStore = DataStore;
+
+      scope = createScope();
+      scope.api = RAML.Inspector.create(this.api);
+      scope.resource = scope.api.resources[0];
+      scope.method = scope.resource.methods[0];
+
+      dataStore.set('/resource:get:500', true);
+      el = compileTemplate("<responses></responses>", scope);
+      setFixtures(el);
+    }));
+
+    afterEach(function() {
+      dataStore.reset();
     });
 
-    it('collapses the responses by default', function() {
-      expect(this.$el.find('[role="response"]')).not.toBeVisible();
+    it('queries the dataStore for the initial response state', function() {
+      expect(el.find('[role="response"]').eq(0)).not.toBeVisible();
+      expect(el.find('[role="response"]').eq(1)).toBeVisible();
     });
 
-    it('shows the codes and descriptions for both responses', function() {
-      expect(this.$el.find('[role="response-code"]')).toBeVisible();
-      expect(this.$el.find('[role="response-code"]').eq(0).text().trim()).toContain("200");
-      expect(this.$el.find('[role="response-code"]').eq(0).find('p').text().trim()).toContain("A-Okay");
-      expect(this.$el.find('[role="response-code"]').eq(1).text().trim()).toContain("500");
-      expect(this.$el.find('[role="response-code"]').eq(1).find('p').text().trim()).toContain("Ut Oh");
+    it('shows the codes and descriptions for the hidden responses', function() {
+      expect(el.find('[role="response-code"]').eq(0)).toBeVisible();
+      expect(el.find('[role="response-code"]').eq(0).text().trim()).toContain("200");
+      expect(el.find('[role="response-code"]').eq(0).find('p').text().trim()).toContain("A-Okay");
     });
 
     describe('when the responses codes are clicked', function() {
       beforeEach(function() {
-        click(this.$el.find("[role=response-code]").eq(0));
+        click(el.find("[role=response-code]").eq(0));
       });
 
       it('expands the responses', function() {
-        expect(this.$el.find("[role='response']")).toBeVisible();
-        expect(this.$el.find("[role='response']").eq(0).find('p').text().trim()).toContain("A-Okay");
-        expect(this.$el.find("[role='response-code']").eq(0).find(".abbreviated-description")).not.toBeVisible();
+        expect(el.find("[role='response']")).toBeVisible();
+        expect(el.find("[role='response']").eq(0).find('p').text().trim()).toContain("A-Okay");
+        expect(el.find("[role='response-code']").eq(0).find(".abbreviated-description")).not.toBeVisible();
+      });
+
+      it('sets the state in the dataStore', function() {
+        scope.$digest();
+        expect(dataStore.get('/resource:get:200')).toBeTruthy();
       });
     });
   });

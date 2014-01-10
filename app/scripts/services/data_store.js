@@ -5,17 +5,11 @@
     var store = {};
 
     return {
-      get: function(key, validate) {
+      get: function(key) {
         var entry = store[key];
         if (!entry) {
           return;
-        }
-
-        if (validate === true) {
-          entry.valid = validate;
-        }
-
-        if (entry.valid) {
+        } else {
           return entry.value;
         }
       },
@@ -25,10 +19,8 @@
           value: value
         };
       },
-      invalidate: function() {
-        Object.keys(store).forEach(function(key) {
-          store[key].valid = false;
-        });
+      reset: function() {
+        store = {};
       }
     };
   };

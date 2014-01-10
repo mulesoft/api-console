@@ -31,7 +31,7 @@
     var contextKey = $scope.resource.toString() + ':' + $scope.method.method + ':' + 'context';
 
     var context = new RAML.Controllers.TryIt.Context($scope.method);
-    var oldContext = DataStore.get(contextKey, true);
+    var oldContext = DataStore.get(contextKey);
 
     if (oldContext) {
       context.merge(oldContext);

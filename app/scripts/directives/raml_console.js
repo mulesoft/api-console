@@ -12,7 +12,6 @@
           inner.css('height', height);
         }
         $scope.api = controller.api = RAML.Inspector.create(raml);
-        DataStore.invalidate();
         $timeout(function() {
           inner.css('height', 'auto');
         }, 0);

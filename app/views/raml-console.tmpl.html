@@ -16,7 +16,9 @@
         <root-documentation></root-documentation>
       </div>
       <div ng-switch-default>
-        <api-resources></api-resources>
+        <div ng-if='api.resourceGroups.length > 0'>
+          <api-resources></api-resources>
+        </div>
       </div>
     </div>
   </div>

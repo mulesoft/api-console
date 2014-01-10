@@ -1,5 +1,5 @@
 <div id="raml-console-api-reference" role="resources">
-  <div collapsible role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups">
+  <div collapsible collapsed='collapsed' role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups" ng-init='collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]'>
     <h1 collapsible-toggle class='path'>
       {{resourceGroup[0].pathSegments[0].toString()}}
       <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>

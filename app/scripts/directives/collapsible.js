@@ -1,23 +1,35 @@
 (function() {
   'use strict';
 
-  // NOTE: This directive relies on the collapsible content
-  // and collapsible toggle to live in the same scope.
+  var Controller = function($scope) {
+    if ($scope.hasOwnProperty('collapsed')) {
+      $scope.expanded = !$scope.collapsed;
+    }
 
-  var Controller = function() {};
+    var callback;
+
+    this.toggle = function() {
+      $scope.expanded = !$scope.expanded;
+      $scope.collapsed = !$scope.expanded;
+      callback($scope.expanded);
+    };
+
+    this.stateUpdated = function(cb) {
+      callback = cb;
+      callback($scope.expanded);
+    };
+  };
 
   RAML.Directives.collapsible = function() {
     return {
       controller: Controller,
       restrict: 'EA',
-      scope: true,
-      link: {
-        pre: function(scope, element, attrs) {
-          if (attrs.hasOwnProperty('collapsed')) {
-            scope.collapsed = true;
-          }
-        }
-      }
+      scope: {
+        expanded: '=?',
+        collapsed: '=?'
+      },
+      transclude: true,
+      template: '<div ng-transclude></div>'
     };
   };
 
@@ -25,11 +37,9 @@
     return {
       require: '^collapsible',
       restrict: 'EA',
-      link: function(scope, element) {
+      link: function(scope, element, attrs, controller) {
         element.bind('click', function() {
-          scope.$apply(function() {
-            scope.collapsed = !scope.collapsed;
-          });
+          scope.$apply(controller.toggle);
         });
       }
     };
@@ -39,11 +49,11 @@
     return {
       require: '^collapsible',
       restrict: 'EA',
-      link: function(scope, element) {
-        scope.$watch('collapsed', function(collapsed) {
-          element.css('display', collapsed ? 'none' : 'block');
+      link: function(scope, element, attrs, controller) {
+        controller.stateUpdated(function(expanded) {
+          element.css('display', expanded ? 'block' : 'none');
           element.parent().removeClass('collapsed expanded');
-          element.parent().addClass(collapsed ? 'collapsed' : 'expanded');
+          element.parent().addClass(expanded ? 'expanded' : 'collapsed');
         });
       }
     };

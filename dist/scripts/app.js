@@ -1269,7 +1269,7 @@ RAML.Inspector = (function() {
     this.resource = $scope.resource;
     this.method = $scope.method;
     this.DataStore = DataStore;
-    this.expanded = this.DataStore.get(this.methodKey(), true);
+    this.expanded = this.DataStore.get(this.methodKey());
   };
 
   controller.prototype.toggleExpansion = function(evt) {
@@ -1405,7 +1405,7 @@ RAML.Inspector = (function() {
     $scope.resourceView = this;
     this.resource = $scope.resource;
     this.DataStore = DataStore;
-    this.expanded = this.DataStore.get(this.resourceKey(), true);
+    this.expanded = this.DataStore.get(this.resourceKey());
   };
 
   controller.prototype.resourceKey = function() {
@@ -1459,7 +1459,7 @@ RAML.Inspector = (function() {
   };
 
   controller.prototype.addTab = function(tab) {
-    var previouslyEnabled = this.DataStore.get(this.key, true) === tab.heading,
+    var previouslyEnabled = this.DataStore.get(this.key) === tab.heading,
         allOthersDisabled = this.tabs.every(function(tab) { return tab.disabled; });
 
     if (allOthersDisabled || previouslyEnabled) {
@@ -1507,7 +1507,7 @@ RAML.Inspector = (function() {
     var contextKey = $scope.resource.toString() + ':' + $scope.method.method + ':' + 'context';
 
     var context = new RAML.Controllers.TryIt.Context($scope.method);
-    var oldContext = DataStore.get(contextKey, true);
+    var oldContext = DataStore.get(contextKey);
 
     if (oldContext) {
       context.merge(oldContext);
@@ -1838,12 +1838,33 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  RAML.Directives.apiResources = function() {
+  RAML.Directives.apiResources = function(DataStore) {
+    var controller = function($scope) {
+      var self = $scope.groupView = this;
+      this.groups = $scope.api.resourceGroups;
+      this.collapsed = {};
+
+      this.groups.forEach(function(group) {
+        var key = self.keyFor(group);
+        self.collapsed[key] = DataStore.get(key);
+      });
+
+      $scope.$watch('groupView.collapsed', function(state) {
+        Object.keys(state).forEach(function(key) {
+          DataStore.set(key, state[key]);
+        });
+      }, true);
+    };
+
+    controller.prototype.keyFor = function(group) {
+      return group[0].pathSegments[0].toString();
+    };
 
     return {
       restrict: 'E',
       templateUrl: 'views/api_resources.tmpl.html',
-      replace: true
+      replace: true,
+      controller: controller
     };
   };
 })();
@@ -1955,23 +1976,35 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  // NOTE: This directive relies on the collapsible content
-  // and collapsible toggle to live in the same scope.
+  var Controller = function($scope) {
+    if ($scope.hasOwnProperty('collapsed')) {
+      $scope.expanded = !$scope.collapsed;
+    }
 
-  var Controller = function() {};
+    var callback;
+
+    this.toggle = function() {
+      $scope.expanded = !$scope.expanded;
+      $scope.collapsed = !$scope.expanded;
+      callback($scope.expanded);
+    };
+
+    this.stateUpdated = function(cb) {
+      callback = cb;
+      callback($scope.expanded);
+    };
+  };
 
   RAML.Directives.collapsible = function() {
     return {
       controller: Controller,
       restrict: 'EA',
-      scope: true,
-      link: {
-        pre: function(scope, element, attrs) {
-          if (attrs.hasOwnProperty('collapsed')) {
-            scope.collapsed = true;
-          }
-        }
-      }
+      scope: {
+        expanded: '=?',
+        collapsed: '=?'
+      },
+      transclude: true,
+      template: '<div ng-transclude></div>'
     };
   };
 
@@ -1979,11 +2012,9 @@ RAML.Inspector = (function() {
     return {
       require: '^collapsible',
       restrict: 'EA',
-      link: function(scope, element) {
+      link: function(scope, element, attrs, controller) {
         element.bind('click', function() {
-          scope.$apply(function() {
-            scope.collapsed = !scope.collapsed;
-          });
+          scope.$apply(controller.toggle);
         });
       }
     };
@@ -1993,11 +2024,11 @@ RAML.Inspector = (function() {
     return {
       require: '^collapsible',
       restrict: 'EA',
-      link: function(scope, element) {
-        scope.$watch('collapsed', function(collapsed) {
-          element.css('display', collapsed ? 'none' : 'block');
+      link: function(scope, element, attrs, controller) {
+        controller.stateUpdated(function(expanded) {
+          element.css('display', expanded ? 'block' : 'none');
           element.parent().removeClass('collapsed expanded');
-          element.parent().addClass(collapsed ? 'collapsed' : 'expanded');
+          element.parent().addClass(expanded ? 'expanded' : 'collapsed');
         });
       }
     };
@@ -2380,7 +2411,6 @@ RAML.Inspector = (function() {
           inner.css('height', height);
         }
         $scope.api = controller.api = RAML.Inspector.create(raml);
-        DataStore.invalidate();
         $timeout(function() {
           inner.css('height', 'auto');
         }, 0);
@@ -2539,10 +2569,28 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
-  RAML.Directives.responses = function() {
+  RAML.Directives.responses = function(DataStore) {
+    var controller = function($scope) {
+      var self = $scope.responsesView = this;
+      this.responses = $scope.method.responses || {};
+      this.expanded = {};
+      this.responseBaseKey = $scope.resource.toString() + ':' + $scope.method.method;
+
+      Object.keys(this.responses).forEach(function(code) {
+        self.expanded[code] = DataStore.get(self.responseBaseKey + ':' + code);
+      });
+
+      $scope.$watch('responsesView.expanded', function(state) {
+        Object.keys(state).forEach(function(code) {
+          DataStore.set(self.responseBaseKey + ':' + code, state[code]);
+        });
+      }, true);
+    };
+
     return {
       restrict: 'E',
-      templateUrl: 'views/responses.tmpl.html'
+      templateUrl: 'views/responses.tmpl.html',
+      controller: controller
     };
   };
 })();
@@ -2740,17 +2788,11 @@ RAML.Filters = {};
     var store = {};
 
     return {
-      get: function(key, validate) {
+      get: function(key) {
         var entry = store[key];
         if (!entry) {
           return;
-        }
-
-        if (validate === true) {
-          entry.valid = validate;
-        }
-
-        if (entry.valid) {
+        } else {
           return entry.value;
         }
       },
@@ -2760,10 +2802,8 @@ RAML.Filters = {};
           value: value
         };
       },
-      invalidate: function() {
-        Object.keys(store).forEach(function(key) {
-          store[key].valid = false;
-        });
+      reset: function() {
+        store = {};
       }
     };
   };
@@ -2941,7 +2981,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/api_resources.tmpl.html',
     "<div id=\"raml-console-api-reference\" role=\"resources\">\n" +
-    "  <div collapsible role=\"resource-group\" class=\"resource-group\" ng-repeat=\"resourceGroup in api.resourceGroups\">\n" +
+    "  <div collapsible collapsed='collapsed' role=\"resource-group\" class=\"resource-group\" ng-repeat=\"resourceGroup in api.resourceGroups\" ng-init='collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]'>\n" +
     "    <h1 collapsible-toggle class='path'>\n" +
     "      {{resourceGroup[0].pathSegments[0].toString()}}\n" +
     "      <i ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
@@ -3227,7 +3267,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <root-documentation></root-documentation>\n" +
     "      </div>\n" +
     "      <div ng-switch-default>\n" +
-    "        <api-resources></api-resources>\n" +
+    "        <div ng-if='api.resourceGroups.length > 0'>\n" +
+    "          <api-resources></api-resources>\n" +
+    "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -3308,13 +3350,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/responses.tmpl.html',
-    "<section collapsible collapsed ng-repeat='(responseCode, response) in method.responses'>\n" +
+    "<section collapsible expanded='responsesView.expanded[responseCode]' ng-repeat='(responseCode, response) in method.responses'>\n" +
     "  <h2 role=\"response-code\" collapsible-toggle>\n" +
     "    <a href=''>\n" +
-    "      <i ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
+    "      <i ng-class=\"{'icon-caret-right': !responsesView.expanded[responseCode], 'icon-caret-down': responsesView.expanded[responseCode]}\"></i>\n" +
     "      {{responseCode}}\n" +
     "    </a>\n" +
-    "    <div ng-if=\"collapsed\" class=\"abbreviated-description\" markdown='response.description'></div>\n" +
+    "    <div ng-if=\"!responsesView.expanded[responseCode]\" class=\"abbreviated-description\" markdown='response.description'></div>\n" +
     "  </h2>\n" +
     "  <div collapsible-content>\n" +
     "    <section role='response'>\n" +
@@ -3325,11 +3367,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <h4>{{mediaType}}</h4>\n" +
     "        <section ng-if=\"definition.schema\">\n" +
     "          <h5>Schema</h5>\n" +
-    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.schema\" visible=\"methodView.expanded && !collapsed\"></div>\n" +
+    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.schema\" visible=\"methodView.expanded && responsesView.expanded[responseCode]\"></div>\n" +
     "        </section>\n" +
     "        <section ng-if=\"definition.example\">\n" +
     "          <h5>Example</h5>\n" +
-    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"methodView.expanded && !collapsed\"></div>\n" +
+    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"methodView.expanded && responsesView.expanded[responseCode]\"></div>\n" +
     "        </section>\n" +
     "      </section>\n" +
     "    </section>\n" +
@@ -3340,7 +3382,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/root_documentation.tmpl.html',
     "<div role=\"root-documentation\">\n" +
-    "  <section collapsible collapsed ng-repeat=\"document in api.documentation\">\n" +
+    "  <section collapsible expanded='expanded' ng-repeat=\"document in api.documentation\">\n" +
     "    <h2 collapsible-toggle>{{document.title}}</h2>\n" +
     "    <div collapsible-content class=\"content\">\n" +
     "      <div markdown='document.content'></div>\n" +

@@ -24,7 +24,7 @@
   };
 
   controller.prototype.addTab = function(tab) {
-    var previouslyEnabled = this.DataStore.get(this.key, true) === tab.heading,
+    var previouslyEnabled = this.DataStore.get(this.key) === tab.heading,
         allOthersDisabled = this.tabs.every(function(tab) { return tab.disabled; });
 
     if (allOthersDisabled || previouslyEnabled) {
