@@ -25,10 +25,14 @@
     return parsed;
   }
 
-  var apply;
+  var apply, setResponse;
 
   var TryIt = function($scope, DataStore) {
-    var contextKey = $scope.resource.toString() + ':' + $scope.method.method + ':' + 'context';
+    $scope.apiClient = this;
+
+    var baseKey = $scope.resource.toString() + ':' + $scope.method.method + ':';
+    var contextKey = baseKey + 'context';
+    var responseKey = baseKey + 'response';
 
     var context = new RAML.Controllers.TryIt.Context($scope.method);
     var oldContext = DataStore.get(contextKey);
@@ -38,6 +42,7 @@
     }
 
     this.context = $scope.context = context;
+    this.response = DataStore.get(responseKey);
 
     DataStore.set(contextKey, this.context);
 
@@ -47,14 +52,17 @@
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-
-    $scope.apiClient = this;
     this.parsed = $scope.api;
     this.securitySchemes = $scope.method.securitySchemes();
     this.keychain = $scope.ramlConsole.keychain;
 
     apply = function() {
       $scope.$apply.apply($scope, arguments);
+    };
+    setResponse = function(response) {
+      DataStore.set(responseKey, response);
+      $scope.apiClient.response = response;
+      return response;
     };
   };
 
@@ -66,7 +74,7 @@
     this.missingUriParameters = false;
     this.disallowedAnonymousRequest = false;
 
-    var response = this.response = {};
+    var response = setResponse({});
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -84,7 +92,7 @@
       var client = RAML.Client.create(this.parsed, function(client) {
         client.baseUriParameters(pathBuilder.baseUriContext);
       });
-      var url = this.response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
+      var url = response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
       if (RAML.Settings.proxy) {
         url = RAML.Settings.proxy + url;
       }
@@ -125,7 +133,7 @@
         );
       });
     } catch (e) {
-      this.response = undefined;
+      setResponse(undefined);
       this.missingUriParameters = true;
     }
   };

@@ -94,6 +94,17 @@ describe("RAML.Controllers.tryIt", function() {
         expect($el.find('.response .body .response-value')).toHaveText('OK');
       });
     });
+
+
+    it("stores the response in the DataStore", inject(function(DataStore) {
+      $el.find('button[role="try-it"]').click();
+
+      whenTryItCompletes(function() {
+        expect(DataStore.get('/resource:get:response')).toBeDefined();
+        expect(DataStore.get('/resource:get:response').requestUrl).toEqual('http://www.example.com/v5/resource');
+      });
+    }));
+
   });
 
   describe('given a version', function() {
