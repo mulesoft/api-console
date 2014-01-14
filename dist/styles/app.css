@@ -3550,7 +3550,6 @@ raml-console article#raml-console .method,
 #raml-console-loader .method {
   margin: 10px 0px;
   border-radius: 0 5px 5px 0;
-  overflow: hidden;
   border-width: 1px;
   border-style: solid;
 }
