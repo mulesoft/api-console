@@ -1559,55 +1559,58 @@ RAML.Inspector = (function() {
       apply();
     }
 
+    var url;
     try {
       var pathBuilder = this.context.pathBuilder;
       var client = RAML.Client.create(this.parsed, function(client) {
         client.baseUriParameters(pathBuilder.baseUriContext);
       });
-      var url = response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
-      if (RAML.Settings.proxy) {
-        url = RAML.Settings.proxy + url;
-      }
-      var request = RAML.Client.Request.create(url, this.httpMethod);
-
-      if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {
-        request.queryParams(this.context.queryParameters.data());
-      }
-
-      if (!RAML.Utils.isEmpty(this.context.headers.data())) {
-        request.headers(this.context.headers.data());
-      }
-
-      if (this.context.bodyContent) {
-        request.header('Content-Type', this.context.bodyContent.selected);
-        request.data(this.context.bodyContent.data());
-      }
-
-      var authStrategy;
-
-      try {
-        if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
-          this.disallowedAnonymousRequest = true;
-        }
-
-        var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
-        var credentials = this.keychain[this.keychain.selectedScheme];
-        authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
-      } catch (e) {
-        // custom strategies aren't supported yet.
-      }
-
-      authStrategy.authenticate().then(function(token) {
-        token.sign(request);
-        $.ajax(request.toOptions()).then(
-          function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-          function(jqXhr) { handleResponse(jqXhr); }
-        );
-      });
+      url = response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
     } catch (e) {
       setResponse(undefined);
       this.missingUriParameters = true;
+      return;
     }
+
+    if (RAML.Settings.proxy) {
+      url = RAML.Settings.proxy + url;
+    }
+    var request = RAML.Client.Request.create(url, this.httpMethod);
+
+    if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {
+      request.queryParams(this.context.queryParameters.data());
+    }
+
+    if (!RAML.Utils.isEmpty(this.context.headers.data())) {
+      request.headers(this.context.headers.data());
+    }
+
+    if (this.context.bodyContent) {
+      request.header('Content-Type', this.context.bodyContent.selected);
+      request.data(this.context.bodyContent.data());
+    }
+
+    var authStrategy;
+
+    try {
+      if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
+        this.disallowedAnonymousRequest = true;
+      }
+
+      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
+      var credentials = this.keychain[this.keychain.selectedScheme];
+      authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
+    } catch (e) {
+      // custom strategies aren't supported yet.
+    }
+
+    authStrategy.authenticate().then(function(token) {
+      token.sign(request);
+      $.ajax(request.toOptions()).then(
+        function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+        function(jqXhr) { handleResponse(jqXhr); }
+      );
+    });
   };
 
   RAML.Controllers.TryIt = TryIt;
