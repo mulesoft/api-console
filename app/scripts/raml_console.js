@@ -22,7 +22,6 @@
   module.directive('parameterFields', RAML.Directives.parameterFields);
   module.directive('parameterizedParameter', RAML.Directives.parameterizedParameter);
   module.directive('parameters', RAML.Directives.parameters);
-  module.directive('pathBuilder', RAML.Directives.pathBuilder);
   module.directive('ramlConsole', RAML.Directives.ramlConsole);
   module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
   module.directive('requests', RAML.Directives.requests);

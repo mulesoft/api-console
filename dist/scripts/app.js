@@ -1522,9 +1522,11 @@ RAML.Inspector = (function() {
 
     DataStore.set(contextKey, this.context);
 
-    this.getPathBuilder = function() {
-      return $scope.pathBuilder;
-    };
+    this.pathBuilder = new RAML.Client.PathBuilder.create($scope.resource.pathSegments);
+    this.pathBuilder.baseUriContext = {};
+    this.pathBuilder.segmentContexts = $scope.resource.pathSegments.map(function() {
+      return {};
+    });
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
@@ -1564,7 +1566,7 @@ RAML.Inspector = (function() {
     }
 
     try {
-      var pathBuilder = this.getPathBuilder();
+      var pathBuilder = this.pathBuilder;
       var client = RAML.Client.create(this.parsed, function(client) {
         client.baseUriParameters(pathBuilder.baseUriContext);
       });
@@ -2387,27 +2389,6 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var Controller = function($scope) {
-    $scope.pathBuilder = new RAML.Client.PathBuilder.create($scope.resource.pathSegments);
-    $scope.pathBuilder.baseUriContext = {};
-    $scope.pathBuilder.segmentContexts = $scope.resource.pathSegments.map(function() {
-      return {};
-    });
-  };
-
-  RAML.Directives.pathBuilder = function() {
-    return {
-      restrict: 'E',
-      controller: Controller,
-      templateUrl: 'views/path_builder.tmpl.html',
-      replace: true
-    };
-  };
-})();
-
-(function() {
-  'use strict';
-
   RAML.Directives.ramlConsole = function(ramlParserWrapper, DataStore, $timeout) {
 
     var link = function ($scope, $el, $attrs, controller) {
@@ -2959,7 +2940,6 @@ RAML.Filters = {};
   module.directive('parameterFields', RAML.Directives.parameterFields);
   module.directive('parameterizedParameter', RAML.Directives.parameterizedParameter);
   module.directive('parameters', RAML.Directives.parameters);
-  module.directive('pathBuilder', RAML.Directives.pathBuilder);
   module.directive('ramlConsole', RAML.Directives.ramlConsole);
   module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
   module.directive('requests', RAML.Directives.requests);
@@ -3229,33 +3209,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
-  $templateCache.put('views/path_builder.tmpl.html',
-    "<span role=\"path\" class=\"path\">\n" +
-    "  <span clsas=\"segment\">\n" +
-    "    <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
-    "      <input type='text' validated-input ng-if='api.baseUri.parameters[token]'\n" +
-    "                             name=\"{{token}}\"\n" +
-    "                             ng-model=\"pathBuilder.baseUriContext[token]\"\n" +
-    "                             placeholder=\"{{token}}\"\n" +
-    "                             constraints=\"api.baseUri.parameters[token]\"\n" +
-    "                             invalid-class=\"error\"/>\n" +
-    "      <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
-    "    </span>\n" +
-    "  <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
-    "    <span ng-repeat='token in segment.tokens track by $index'>\n" +
-    "      <input type='text' validated-input ng-if='segment.parameters[token]'\n" +
-    "                             name=\"{{token}}\"\n" +
-    "                             ng-model=\"pathBuilder.segmentContexts[$segmentIndex][token]\"\n" +
-    "                             placeholder=\"{{token}}\"\n" +
-    "                             constraints=\"segment.parameters[token]\"\n" +
-    "                             invalid-class=\"error\"/>\n" +
-    "      <span class=\"segment\" ng-if=\"!segment.parameters[token]\">{{token}}</span>\n" +
-    "    </span>\n" +
-    "  </span>\n" +
-    "</span>\n"
-  );
-
-
   $templateCache.put('views/raml-console.tmpl.html',
     "<article role=\"api-console\" id=\"raml-console\">\n" +
     "  <div role=\"error\" ng-if=\"parseError\">\n" +
@@ -3455,7 +3408,31 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<section class=\"try-it\">\n" +
     "\n" +
     "  <form>\n" +
-    "    <path-builder></path-builder>\n" +
+    "      <span role=\"path\" class=\"path\">\n" +
+    "        <span class=\"segment\">\n" +
+    "          <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
+    "            <input type='text' validated-input ng-if='api.baseUri.parameters[token]'\n" +
+    "                                   name=\"{{token}}\"\n" +
+    "                                   ng-model=\"apiClient.pathBuilder.baseUriContext[token]\"\n" +
+    "                                   placeholder=\"{{token}}\"\n" +
+    "                                   constraints=\"api.baseUri.parameters[token]\"\n" +
+    "                                   invalid-class=\"error\"/>\n" +
+    "            <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
+    "          </span>\n" +
+    "        <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
+    "          <span ng-repeat='token in segment.tokens track by $index'>\n" +
+    "            <input type='text' validated-input ng-if='segment.parameters[token]'\n" +
+    "                                   name=\"{{token}}\"\n" +
+    "                                   ng-model=\"apiClient.pathBuilder.segmentContexts[$segmentIndex][token]\"\n" +
+    "                                   placeholder=\"{{token}}\"\n" +
+    "                                   constraints=\"segment.parameters[token]\"\n" +
+    "                                   invalid-class=\"error\"/>\n" +
+    "            <span class=\"segment\" ng-if=\"!segment.parameters[token]\">{{token}}</span>\n" +
+    "          </span>\n" +
+    "        </span>\n" +
+    "      </span>\n" +
+    "    </span>\n" +
+    "\n" +
     "\n" +
     "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\"></security-schemes>\n" +
     "    <named-parameters heading=\"Headers\" parameters=\"context.headers\"></named-parameters>\n" +

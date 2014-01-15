@@ -7,7 +7,6 @@ describe("RAML.Controllers.tryIt", function() {
       scope.resource = scope.api.resources[0];
       scope.ramlConsole = { keychain: {} };
       scope.method = scope.resource.methods[0];
-      scope.method.pathBuilder = new RAML.Client.PathBuilder.create(scope.resource.pathSegments);
     });
   }
 
@@ -20,6 +19,86 @@ describe("RAML.Controllers.tryIt", function() {
 
     runs(cb);
   };
+
+  describe('the path builder', function() {
+    describe("for a resource with no templated parameters", function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://example.com',
+        '/resource/search:',
+        '  get:'
+      );
+
+      parseRAML(raml);
+
+      beforeEach(function() {
+        scope = createScopeForTryIt(this.api);
+        $el = compileTemplate('<try-it></try-it>', scope);
+        setFixtures($el);
+      });
+
+      it("renders the path segments", function() {
+        expect($el).toHaveText(/http:\/\/example.com[\s\S]*\/resource[\s\S]*\/[\s\S]*search/)
+      });
+    });
+
+    describe("for a resource with templated parameters", function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://example.com/{thing}',
+        '/resource/{resourceId}list{format}:',
+        '  get:'
+      );
+
+      parseRAML(raml);
+
+      beforeEach(function() {
+        scope = createScopeForTryIt(this.api);
+        $el = compileTemplate('<try-it></try-it>', scope);
+        setFixtures($el);
+      });
+
+      it("renders templated path segments as input fields", function() {
+        expect($el).toHaveText(/http:\/\/example.com[\s\S]*\/resource[\s\S]*list/);
+
+        var inputs = $el.find('input');
+        expect(inputs[0]).toHaveAttr('placeholder', 'thing');
+        expect(inputs[1]).toHaveAttr('placeholder', 'resourceId');
+        expect(inputs[2]).toHaveAttr('placeholder', 'format');
+      });
+    });
+
+    describe("a resource and a sub-resource with templated parameters that have the same name", function() {
+      var raml = createRAML(
+        'title: Example API',
+        'baseUri: http://www.example.com',
+        '/{resource}:',
+        '  /{resource}:',
+        '    get:'
+      );
+
+      parseRAML(raml);
+
+      beforeEach(function() {
+        scope = createScope();
+        scope.api = RAML.Inspector.create(this.api);
+        scope.resource = scope.api.resources[1];
+        scope.method = scope.resource.methods[0];
+        scope.ramlConsole = { keychain: {} };
+        $el = compileTemplate('<try-it></try-it>', scope);
+        setFixtures($el);
+      });
+
+      it("allows each segment to be independently filled", function() {
+        var inputs = $el.find('input');
+        inputs.first().fillIn('first');
+        inputs.last().fillIn('last');
+
+        expect(inputs.first().val()).toEqual('first');
+        expect(inputs.last().val()).toEqual('last');
+      });
+    });
+  });
 
   describe("when execute fails", function() {
     var raml = createRAML(

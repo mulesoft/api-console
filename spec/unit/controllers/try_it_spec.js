@@ -17,7 +17,6 @@ describe("RAML.Controllers.TryIt", function() {
       api: api,
       method: api.resources[0].methods[0],
       resource: api.resources[0],
-      pathBuilder: function() { return "/resources/search" },
       ramlConsole: { keychain: {} },
       $apply: jasmine.createSpy()
     };
