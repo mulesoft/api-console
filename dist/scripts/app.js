@@ -1510,7 +1510,7 @@ RAML.Inspector = (function() {
     var contextKey = baseKey + 'context';
     var responseKey = baseKey + 'response';
 
-    var context = new RAML.Controllers.TryIt.Context($scope.method);
+    var context = new RAML.Controllers.TryIt.Context($scope.resource, $scope.method);
     var oldContext = DataStore.get(contextKey);
 
     if (oldContext) {
@@ -1521,12 +1521,6 @@ RAML.Inspector = (function() {
     this.response = DataStore.get(responseKey);
 
     DataStore.set(contextKey, this.context);
-
-    this.pathBuilder = new RAML.Client.PathBuilder.create($scope.resource.pathSegments);
-    this.pathBuilder.baseUriContext = {};
-    this.pathBuilder.segmentContexts = $scope.resource.pathSegments.map(function() {
-      return {};
-    });
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
@@ -1566,7 +1560,7 @@ RAML.Inspector = (function() {
     }
 
     try {
-      var pathBuilder = this.pathBuilder;
+      var pathBuilder = this.context.pathBuilder;
       var client = RAML.Client.create(this.parsed, function(client) {
         client.baseUriParameters(pathBuilder.baseUriContext);
       });
@@ -1712,12 +1706,18 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var Context = function(method) {
+  var Context = function(resource, method) {
     this.headers = new RAML.Controllers.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
     this.queryParameters = new RAML.Controllers.TryIt.NamedParameters(method.queryParameters);
     if (method.body) {
       this.bodyContent = new RAML.Controllers.TryIt.BodyContent(method.body);
     }
+
+    this.pathBuilder = new RAML.Client.PathBuilder.create(resource.pathSegments);
+    this.pathBuilder.baseUriContext = {};
+    this.pathBuilder.segmentContexts = resource.pathSegments.map(function() {
+      return {};
+    });
   };
 
   Context.prototype.merge = function(oldContext) {
@@ -3413,7 +3413,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
     "            <input type='text' validated-input ng-if='api.baseUri.parameters[token]'\n" +
     "                                   name=\"{{token}}\"\n" +
-    "                                   ng-model=\"apiClient.pathBuilder.baseUriContext[token]\"\n" +
+    "                                   ng-model=\"context.pathBuilder.baseUriContext[token]\"\n" +
     "                                   placeholder=\"{{token}}\"\n" +
     "                                   constraints=\"api.baseUri.parameters[token]\"\n" +
     "                                   invalid-class=\"error\"/>\n" +
@@ -3423,7 +3423,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <span ng-repeat='token in segment.tokens track by $index'>\n" +
     "            <input type='text' validated-input ng-if='segment.parameters[token]'\n" +
     "                                   name=\"{{token}}\"\n" +
-    "                                   ng-model=\"apiClient.pathBuilder.segmentContexts[$segmentIndex][token]\"\n" +
+    "                                   ng-model=\"context.pathBuilder.segmentContexts[$segmentIndex][token]\"\n" +
     "                                   placeholder=\"{{token}}\"\n" +
     "                                   constraints=\"segment.parameters[token]\"\n" +
     "                                   invalid-class=\"error\"/>\n" +

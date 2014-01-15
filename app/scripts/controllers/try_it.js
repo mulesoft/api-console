@@ -34,7 +34,7 @@
     var contextKey = baseKey + 'context';
     var responseKey = baseKey + 'response';
 
-    var context = new RAML.Controllers.TryIt.Context($scope.method);
+    var context = new RAML.Controllers.TryIt.Context($scope.resource, $scope.method);
     var oldContext = DataStore.get(contextKey);
 
     if (oldContext) {
@@ -45,12 +45,6 @@
     this.response = DataStore.get(responseKey);
 
     DataStore.set(contextKey, this.context);
-
-    this.pathBuilder = new RAML.Client.PathBuilder.create($scope.resource.pathSegments);
-    this.pathBuilder.baseUriContext = {};
-    this.pathBuilder.segmentContexts = $scope.resource.pathSegments.map(function() {
-      return {};
-    });
 
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
@@ -90,7 +84,7 @@
     }
 
     try {
-      var pathBuilder = this.pathBuilder;
+      var pathBuilder = this.context.pathBuilder;
       var client = RAML.Client.create(this.parsed, function(client) {
         client.baseUriParameters(pathBuilder.baseUriContext);
       });

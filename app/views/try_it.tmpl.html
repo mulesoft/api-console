@@ -6,7 +6,7 @@
           <span ng-repeat='token in api.baseUri.tokens track by $index'>
             <input type='text' validated-input ng-if='api.baseUri.parameters[token]'
                                    name="{{token}}"
-                                   ng-model="apiClient.pathBuilder.baseUriContext[token]"
+                                   ng-model="context.pathBuilder.baseUriContext[token]"
                                    placeholder="{{token}}"
                                    constraints="api.baseUri.parameters[token]"
                                    invalid-class="error"/>
@@ -16,7 +16,7 @@
           <span ng-repeat='token in segment.tokens track by $index'>
             <input type='text' validated-input ng-if='segment.parameters[token]'
                                    name="{{token}}"
-                                   ng-model="apiClient.pathBuilder.segmentContexts[$segmentIndex][token]"
+                                   ng-model="context.pathBuilder.segmentContexts[$segmentIndex][token]"
                                    placeholder="{{token}}"
                                    constraints="segment.parameters[token]"
                                    invalid-class="error"/>
