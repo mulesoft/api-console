@@ -1729,6 +1729,9 @@ RAML.Inspector = (function() {
     if (this.bodyContent && oldContext.bodyContent) {
       this.bodyContent.copyFrom(oldContext.bodyContent);
     }
+
+    this.pathBuilder.baseUriContext = oldContext.pathBuilder.baseUriContext;
+    this.pathBuilder.segmentContexts = oldContext.pathBuilder.segmentContexts;
   };
 
   RAML.Controllers.TryIt.Context = Context;
