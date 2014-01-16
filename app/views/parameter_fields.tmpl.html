@@ -7,19 +7,7 @@
             <span class="required" ng-if="definition.required">*</span>
             {{definition.displayName}}:
           </label>
-          <ng-switch on='parameterFields.inputView(definition)'>
-            <span ng-switch-when="file">
-              <input name="{{parameterName}}" type='file' ng-model='repeatableModel[$index]'/>
-            </span>
-            <span ng-switch-when="enum">
-              <enum options='definition.enum' model='repeatableModel[$index]'>
-                <input validated-input name="{{parameterName}}" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim="false" constraints='definition'/>
-              </enum>
-           </span>
-            <span ng-switch-default>
-              <input validated-input name="{{parameterName}}" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim="false" constraints='definition'/>
-            </span>
-          </ng-switch>
+          <parameter-field name='parameterName' model='repeatableModel[$index]' definition='definition' ></parameter-field>
           <repeatable-remove></repeatable-remove>
           <repeatable-add></repeatable-add>
         </div>
