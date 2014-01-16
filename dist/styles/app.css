@@ -3550,7 +3550,6 @@ raml-console article#raml-console .method,
 #raml-console-loader .method {
   margin: 10px 0px;
   border-radius: 0 5px 5px 0;
-  overflow: hidden;
   border-width: 1px;
   border-style: solid;
 }
@@ -3868,6 +3867,10 @@ raml-console article#raml-console .try-it .path input,
   margin: 0 5px 0 2px;
   font-size: 15px;
   width: 9em;
+}
+raml-console article#raml-console .try-it .path ul,
+#raml-console-loader .try-it .path ul {
+  font-size: 15px;
 }
 raml-console article#raml-console .try-it i,
 #raml-console-loader .try-it i {

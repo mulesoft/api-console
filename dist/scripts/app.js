@@ -2306,24 +2306,38 @@ RAML.Inspector = (function() {
 (function() {
 
   var Controller = function($scope) {
-    $scope.parameterFields = this;
-  };
-
-  Controller.prototype.inputView = function(parameter) {
-    if (parameter.type === 'file') {
-      return 'file';
-    } else if (!!parameter.enum) {
-      return 'enum';
+    if ($scope.definition.type === 'file') {
+      $scope.inputType = 'file';
+    } else if (!!$scope.definition.enum) {
+      $scope.inputType = 'enum';
     } else {
-      return 'default';
+      $scope.inputType = 'default';
     }
   };
+
+  RAML.Directives.parameterField = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'views/parameter_field.tmpl.html',
+      controller: Controller,
+      scope: {
+        name: '=',
+        model: '=',
+        definition: '='
+      }
+    };
+  };
+})();
+
+'use strict';
+
+(function() {
+
 
   RAML.Directives.parameterFields = function() {
     return {
       restrict: 'E',
       templateUrl: 'views/parameter_fields.tmpl.html',
-      controller: Controller,
       scope: {
         parameters: '=',
       }
@@ -2943,6 +2957,7 @@ RAML.Filters = {};
   module.directive('namedParametersDocumentation', RAML.Directives.namedParametersDocumentation);
   module.directive('oauth1', RAML.Directives.oauth1);
   module.directive('oauth2', RAML.Directives.oauth2);
+  module.directive('parameterField', RAML.Directives.parameterField);
   module.directive('parameterFields', RAML.Directives.parameterFields);
   module.directive('parameterizedParameter', RAML.Directives.parameterizedParameter);
   module.directive('parameters', RAML.Directives.parameters);
@@ -3152,6 +3167,23 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('views/parameter_field.tmpl.html',
+    "<ng-switch on='inputType'>\n" +
+    "  <span ng-switch-when=\"file\">\n" +
+    "    <input name=\"{{name}}\" type='file' ng-model='$parent.model'/>\n" +
+    "  </span>\n" +
+    "  <span ng-switch-when=\"enum\">\n" +
+    "    <enum options='definition.enum' model='$parent.model'>\n" +
+    "      <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
+    "    </enum>\n" +
+    " </span>\n" +
+    "  <span ng-switch-default>\n" +
+    "    <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
+    "  </span>\n" +
+    "</ng-switch>"
+  );
+
+
   $templateCache.put('views/parameter_fields.tmpl.html',
     "<fieldset>\n" +
     "  <div ng-repeat=\"(parameterName, parameter) in parameters.plain track by parameterName\">\n" +
@@ -3162,19 +3194,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <span class=\"required\" ng-if=\"definition.required\">*</span>\n" +
     "            {{definition.displayName}}:\n" +
     "          </label>\n" +
-    "          <ng-switch on='parameterFields.inputView(definition)'>\n" +
-    "            <span ng-switch-when=\"file\">\n" +
-    "              <input name=\"{{parameterName}}\" type='file' ng-model='repeatableModel[$index]'/>\n" +
-    "            </span>\n" +
-    "            <span ng-switch-when=\"enum\">\n" +
-    "              <enum options='definition.enum' model='repeatableModel[$index]'>\n" +
-    "                <input validated-input name=\"{{parameterName}}\" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
-    "              </enum>\n" +
-    "           </span>\n" +
-    "            <span ng-switch-default>\n" +
-    "              <input validated-input name=\"{{parameterName}}\" type='text' ng-model='repeatableModel[$index]' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
-    "            </span>\n" +
-    "          </ng-switch>\n" +
+    "          <parameter-field name='parameterName' model='repeatableModel[$index]' definition='definition' ></parameter-field>\n" +
     "          <repeatable-remove></repeatable-remove>\n" +
     "          <repeatable-add></repeatable-add>\n" +
     "        </div>\n" +
@@ -3417,22 +3437,16 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <span role=\"path\" class=\"path\">\n" +
     "        <span class=\"segment\">\n" +
     "          <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
-    "            <input type='text' validated-input ng-if='api.baseUri.parameters[token]'\n" +
-    "                                   name=\"{{token}}\"\n" +
-    "                                   ng-model=\"context.pathBuilder.baseUriContext[token]\"\n" +
-    "                                   placeholder=\"{{token}}\"\n" +
-    "                                   constraints=\"api.baseUri.parameters[token]\"\n" +
-    "                                   invalid-class=\"error\"/>\n" +
+    "            <span ng-if='api.baseUri.parameters[token]'>\n" +
+    "              <parameter-field name='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]'></parameter-field>\n" +
+    "            </span>\n" +
     "            <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
     "          </span>\n" +
     "        <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
     "          <span ng-repeat='token in segment.tokens track by $index'>\n" +
-    "            <input type='text' validated-input ng-if='segment.parameters[token]'\n" +
-    "                                   name=\"{{token}}\"\n" +
-    "                                   ng-model=\"context.pathBuilder.segmentContexts[$segmentIndex][token]\"\n" +
-    "                                   placeholder=\"{{token}}\"\n" +
-    "                                   constraints=\"segment.parameters[token]\"\n" +
-    "                                   invalid-class=\"error\"/>\n" +
+    "            <span ng-if='segment.parameters[token]'>\n" +
+    "              <parameter-field name='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]'></parameter-field>\n" +
+    "            </span>\n" +
     "            <span class=\"segment\" ng-if=\"!segment.parameters[token]\">{{token}}</span>\n" +
     "          </span>\n" +
     "        </span>\n" +
