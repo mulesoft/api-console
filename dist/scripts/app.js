@@ -3196,22 +3196,16 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<span role=\"path\" class=\"path\">\n" +
     "  <span clsas=\"segment\">\n" +
     "    <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
-    "      <input type='text' validated-input ng-if='api.baseUri.parameters[token]'\n" +
-    "                             name=\"{{token}}\"\n" +
-    "                             ng-model=\"pathBuilder.baseUriContext[token]\"\n" +
-    "                             placeholder=\"{{token}}\"\n" +
-    "                             constraints=\"api.baseUri.parameters[token]\"\n" +
-    "                             invalid-class=\"error\"/>\n" +
+    "      <span ng-if='api.baseUri.parameters[token]'>\n" +
+    "        <parameter-field name='token' definition='api.baseUri.parameters[token]' model='pathBuilder.baseUriContext[token]'></parameter-field>\n" +
+    "      </span>\n" +
     "      <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
     "    </span>\n" +
     "  <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
     "    <span ng-repeat='token in segment.tokens track by $index'>\n" +
-    "      <input type='text' validated-input ng-if='segment.parameters[token]'\n" +
-    "                             name=\"{{token}}\"\n" +
-    "                             ng-model=\"pathBuilder.segmentContexts[$segmentIndex][token]\"\n" +
-    "                             placeholder=\"{{token}}\"\n" +
-    "                             constraints=\"segment.parameters[token]\"\n" +
-    "                             invalid-class=\"error\"/>\n" +
+    "      <span ng-if='segment.parameters[token]'>\n" +
+    "        <parameter-field name='token' definition='segment.parameters[token]' model='pathBuilder.segmentContexts[$segmentIndex][token]'></parameter-field>\n" +
+    "      </span>\n" +
     "      <span class=\"segment\" ng-if=\"!segment.parameters[token]\">{{token}}</span>\n" +
     "    </span>\n" +
     "  </span>\n" +

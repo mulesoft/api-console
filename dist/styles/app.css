@@ -3868,6 +3868,10 @@ raml-console article#raml-console .try-it .path input,
   font-size: 15px;
   width: 9em;
 }
+raml-console article#raml-console .try-it .path ul,
+#raml-console-loader .try-it .path ul {
+  font-size: 15px;
+}
 raml-console article#raml-console .try-it i,
 #raml-console-loader .try-it i {
   font-size: 15px;
