@@ -61,7 +61,7 @@ describe("RAML.Controllers.tryIt", function() {
       it("renders templated path segments as input fields", function() {
         expect($el).toHaveText(/http:\/\/example.com[\s\S]*\/resource[\s\S]*list/);
 
-        var inputs = $el.find('input');
+        var inputs = $el.find('.path input');
         expect(inputs[0]).toHaveAttr('placeholder', 'thing');
         expect(inputs[1]).toHaveAttr('placeholder', 'resourceId');
         expect(inputs[2]).toHaveAttr('placeholder', 'format');

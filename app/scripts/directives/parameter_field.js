@@ -3,6 +3,8 @@
 (function() {
 
   var Controller = function($scope) {
+    $scope.placeholder = $scope.placeholder || $scope.definition.example;
+
     if ($scope.definition.type === 'file') {
       $scope.inputType = 'file';
     } else if (!!$scope.definition.enum) {
@@ -20,7 +22,9 @@
       scope: {
         name: '=',
         model: '=',
-        definition: '='
+        definition: '=',
+        placeholder: '=?',
+        invalidClass: '@?'
       }
     };
   };

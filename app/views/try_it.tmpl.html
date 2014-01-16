@@ -5,14 +5,14 @@
         <span class="segment">
           <span ng-repeat='token in api.baseUri.tokens track by $index'>
             <span ng-if='api.baseUri.parameters[token]'>
-              <parameter-field name='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]'></parameter-field>
+              <parameter-field name='token' placeholder='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]' invalid-class='error'></parameter-field>
             </span>
             <span class="segment" ng-if="!api.baseUri.parameters[token]">{{token}}</span>
           </span>
         <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init="$segmentIndex = $index">
           <span ng-repeat='token in segment.tokens track by $index'>
             <span ng-if='segment.parameters[token]'>
-              <parameter-field name='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]'></parameter-field>
+              <parameter-field name='token' placeholder='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]' invalid-class='error'></parameter-field>
             </span>
             <span class="segment" ng-if="!segment.parameters[token]">{{token}}</span>
           </span>

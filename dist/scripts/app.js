@@ -2306,6 +2306,8 @@ RAML.Inspector = (function() {
 (function() {
 
   var Controller = function($scope) {
+    $scope.placeholder = $scope.placeholder || $scope.definition.example;
+
     if ($scope.definition.type === 'file') {
       $scope.inputType = 'file';
     } else if (!!$scope.definition.enum) {
@@ -2323,7 +2325,9 @@ RAML.Inspector = (function() {
       scope: {
         name: '=',
         model: '=',
-        definition: '='
+        definition: '=',
+        placeholder: '=?',
+        invalidClass: '@?'
       }
     };
   };
@@ -2704,49 +2708,49 @@ RAML.Inspector = (function() {
 
 (function() {
   'use strict';
+  RAML.Directives.validatedInput = function($parse) {
 
-  var Controller = function($attrs, $parse) {
-    this.constraints = $parse($attrs.constraints);
-  };
+    var Controller = function($attrs) {
+      this.constraints = $parse($attrs.constraints);
+    };
 
-  Controller.prototype.validate = function(scope, value) {
-    var constraints = this.constraints(scope);
-    var validator = RAML.Client.Validator.from(constraints);
+    Controller.prototype.validate = function(scope, value) {
+      var constraints = this.constraints(scope);
+      var validator = RAML.Client.Validator.from(constraints);
 
-    return validator.validate(value);
-  };
+      return validator.validate(value);
+    };
 
-  var link = function($scope, $el, $attrs, controllers) {
-    var modelController    = controllers[0],
-        validateController = controllers[1],
-        errorClass = $attrs.invalidClass || 'warning';
+    var link = function($scope, $el, $attrs, controllers) {
+      var modelController    = controllers[0],
+          validateController = controllers[1],
+          errorClass = $parse($attrs.invalidClass)($scope) || 'warning';
 
-    function validateField() {
-      var errors = validateController.validate($scope, modelController.$modelValue);
+      function validateField() {
+        var errors = validateController.validate($scope, modelController.$modelValue);
 
-      if (errors) {
-        $el.addClass(errorClass);
-      } else {
-        $el.removeClass(errorClass);
+        if (errors) {
+          $el.addClass(errorClass);
+        } else {
+          $el.removeClass(errorClass);
+        }
       }
-    }
 
-    $el.bind('blur', function() {
-      $scope.$apply(validateField);
-    });
-
-    $el.bind('focus', function() {
-      $scope.$apply(function() {
-        $el.removeClass(errorClass);
+      $el.bind('blur', function() {
+        $scope.$apply(validateField);
       });
-    });
 
-    angular.element($el[0].form).bind('submit', function() {
-      $scope.$apply(validateField);
-    });
-  };
+      $el.bind('focus', function() {
+        $scope.$apply(function() {
+          $el.removeClass(errorClass);
+        });
+      });
 
-  RAML.Directives.validatedInput = function() {
+      angular.element($el[0].form).bind('submit', function() {
+        $scope.$apply(validateField);
+      });
+    };
+
     return {
       restrict: 'A',
       require: ['ngModel', 'validatedInput'],
@@ -3174,11 +3178,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </span>\n" +
     "  <span ng-switch-when=\"enum\">\n" +
     "    <enum options='definition.enum' model='$parent.model'>\n" +
-    "      <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
+    "      <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim=\"false\" constraints='definition' invalid-class='invalidClass'/>\n" +
     "    </enum>\n" +
     " </span>\n" +
     "  <span ng-switch-default>\n" +
-    "    <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{definition.example}}' ng-trim=\"false\" constraints='definition'/>\n" +
+    "    <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim=\"false\" constraints='definition' invalid-class='invalidClass'/>\n" +
     "  </span>\n" +
     "</ng-switch>"
   );
@@ -3438,14 +3442,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <span class=\"segment\">\n" +
     "          <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
     "            <span ng-if='api.baseUri.parameters[token]'>\n" +
-    "              <parameter-field name='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]'></parameter-field>\n" +
+    "              <parameter-field name='token' placeholder='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]' invalid-class='error'></parameter-field>\n" +
     "            </span>\n" +
     "            <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
     "          </span>\n" +
     "        <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
     "          <span ng-repeat='token in segment.tokens track by $index'>\n" +
     "            <span ng-if='segment.parameters[token]'>\n" +
-    "              <parameter-field name='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]'></parameter-field>\n" +
+    "              <parameter-field name='token' placeholder='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]' invalid-class='error'></parameter-field>\n" +
     "            </span>\n" +
     "            <span class=\"segment\" ng-if=\"!segment.parameters[token]\">{{token}}</span>\n" +
     "          </span>\n" +

@@ -4,10 +4,10 @@
   </span>
   <span ng-switch-when="enum">
     <enum options='definition.enum' model='$parent.model'>
-      <input validated-input name="{{name}}" type='text' ng-model='$parent.model' placeholder='{{definition.example}}' ng-trim="false" constraints='definition'/>
+      <input validated-input name="{{name}}" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim="false" constraints='definition' invalid-class='invalidClass'/>
     </enum>
  </span>
   <span ng-switch-default>
-    <input validated-input name="{{name}}" type='text' ng-model='$parent.model' placeholder='{{definition.example}}' ng-trim="false" constraints='definition'/>
+    <input validated-input name="{{name}}" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim="false" constraints='definition' invalid-class='invalidClass'/>
   </span>
 </ng-switch>
