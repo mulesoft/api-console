@@ -3174,17 +3174,17 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/parameter_field.tmpl.html',
     "<ng-switch on='inputType'>\n" +
     "  <span ng-switch-when=\"file\">\n" +
-    "    <input name=\"{{name}}\" type='file' ng-model='$parent.model'/>\n" +
+    "    <input name=\"{{name}}\" type='file' ng-model='model'/>\n" +
     "  </span>\n" +
     "  <span ng-switch-when=\"enum\">\n" +
-    "    <enum options='definition.enum' model='$parent.model'>\n" +
+    "    <enum options='definition.enum' model='model'>\n" +
     "      <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim=\"false\" constraints='definition' invalid-class='invalidClass'/>\n" +
     "    </enum>\n" +
     " </span>\n" +
     "  <span ng-switch-default>\n" +
     "    <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim=\"false\" constraints='definition' invalid-class='invalidClass'/>\n" +
     "  </span>\n" +
-    "</ng-switch>"
+    "</ng-switch>\n"
   );
 
 
