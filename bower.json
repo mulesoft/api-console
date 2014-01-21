@@ -28,8 +28,8 @@
   "dependencies": {
     "raml-js-parser": "raml-org/raml-js-parser#a87b91310109c306af54a3239b34b47acdee2c03",
     "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
-    "angular": "1.2.2",
-    "angular-sanitize": "1.2.2",
+    "angular": "1.2.9",
+    "angular-sanitize": "1.2.9",
     "codemirror": "3.x",
     "font-awesome": "3.x",
     "showdown": "0.3.1",
