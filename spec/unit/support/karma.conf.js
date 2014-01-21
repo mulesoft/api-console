@@ -26,6 +26,7 @@ files = [
 
 // list of files to exclude
 exclude = [
+  'app/scripts/directives/input.js',
   'app/scripts/raml.js',
   'app/scripts/raml_console.js'
 ];
