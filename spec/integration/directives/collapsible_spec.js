@@ -15,24 +15,27 @@ describe("RAML.Directives.collapsible", function() {
       setFixtures($el);
     });
 
-    it("has the collapsible-content expanded by default", function() {
-      expect($(".content")).toBeVisible();
+    it("has the collapsible-content collapsed by default", function() {
+      expect($(".content")).not.toBeVisible();
     });
 
-    it("hides the content on clicking the heading", function() {
+    it("shows the content on clicking the heading", function() {
       click($(".heading"));
-      expect($(".content")).not.toBeVisible();
+      expect($(".content")).toBeVisible();
     });
   });
 
-  describe("when given the 'collapsed' attribute", function() {
+  describe("when given the 'expanded' attribute set to false", function() {
     beforeEach(function() {
+      scope = createScope();
+      scope.expanded = false;
+
       $el = compileTemplate([
-        "<collapsible collapsed>",
+        "<collapsible expanded='expanded'>",
           "<h3 class='heading' collapsible-toggle>Collapse me!</h3>",
           "<div class='content' collapsible-content>I feel small</div>",
          "</collapsible>"
-        ].join("\n"), createScope());
+        ].join("\n"), scope);
 
       setFixtures($el);
     });
@@ -40,6 +43,65 @@ describe("RAML.Directives.collapsible", function() {
     it("has the collapsible-content collapsed", function() {
       expect($(".content")).not.toBeVisible();
     });
+  });
 
+  describe("when given the 'expanded' attribute set to true", function() {
+    beforeEach(function() {
+      scope = createScope();
+      scope.expanded = true;
+
+      $el = compileTemplate([
+        "<collapsible expanded='expanded'>",
+          "<h3 class='heading' collapsible-toggle>Collapse me!</h3>",
+          "<div class='content' collapsible-content>I feel small</div>",
+         "</collapsible>"
+        ].join("\n"), scope);
+
+      setFixtures($el);
+    });
+
+    it("has the collapsible-content expanded", function() {
+      expect($(".content")).toBeVisible();
+    });
+  });
+
+  describe("when given the 'collapsed' attribute set to false", function() {
+    beforeEach(function() {
+      scope = createScope();
+      scope.collapsed = false;
+
+      $el = compileTemplate([
+        "<collapsible collapsed='collapsed'>",
+          "<h3 class='heading' collapsible-toggle>Collapse me!</h3>",
+          "<div class='content' collapsible-content>I feel small</div>",
+         "</collapsible>"
+        ].join("\n"), scope);
+
+      setFixtures($el);
+    });
+
+    it("has the collapsible-content expanded", function() {
+      expect($(".content")).toBeVisible();
+    });
+  });
+
+  describe("when given the 'collapsed' attribute set to true", function() {
+    beforeEach(function() {
+      scope = createScope();
+      scope.collapsed = true;
+
+      $el = compileTemplate([
+        "<collapsible collapsed='collapsed'>",
+          "<h3 class='heading' collapsible-toggle>Collapse me!</h3>",
+          "<div class='content' collapsible-content>I feel small</div>",
+         "</collapsible>"
+        ].join("\n"), scope);
+
+      setFixtures($el);
+    });
+
+    it("has the collapsible-content collapsed", function() {
+      expect($(".content")).not.toBeVisible();
+    });
   });
 });

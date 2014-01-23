@@ -5,7 +5,7 @@
     $scope.resourceView = this;
     this.resource = $scope.resource;
     this.DataStore = DataStore;
-    this.expanded = this.DataStore.get(this.resourceKey(), true);
+    this.expanded = this.DataStore.get(this.resourceKey());
   };
 
   controller.prototype.resourceKey = function() {

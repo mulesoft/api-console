@@ -25,36 +25,40 @@
     return parsed;
   }
 
-  var apply;
+  var apply, setResponse;
 
   var TryIt = function($scope, DataStore) {
-    var contextKey = $scope.resource.toString() + ':' + $scope.method.method + ':' + 'context';
+    $scope.apiClient = this;
 
-    var context = new RAML.Controllers.TryIt.Context($scope.method);
-    var oldContext = DataStore.get(contextKey, true);
+    var baseKey = $scope.resource.toString() + ':' + $scope.method.method + ':';
+    var contextKey = baseKey + 'context';
+    var responseKey = baseKey + 'response';
+
+    var context = new RAML.Controllers.TryIt.Context($scope.resource, $scope.method);
+    var oldContext = DataStore.get(contextKey);
 
     if (oldContext) {
       context.merge(oldContext);
     }
 
     this.context = $scope.context = context;
+    this.response = DataStore.get(responseKey);
 
     DataStore.set(contextKey, this.context);
 
-    this.getPathBuilder = function() {
-      return $scope.pathBuilder;
-    };
-
     this.method = $scope.method;
     this.httpMethod = $scope.method.method;
-
-    $scope.apiClient = this;
     this.parsed = $scope.api;
     this.securitySchemes = $scope.method.securitySchemes();
     this.keychain = $scope.ramlConsole.keychain;
 
     apply = function() {
       $scope.$apply.apply($scope, arguments);
+    };
+    setResponse = function(response) {
+      DataStore.set(responseKey, response);
+      $scope.apiClient.response = response;
+      return response;
     };
   };
 
@@ -66,7 +70,7 @@
     this.missingUriParameters = false;
     this.disallowedAnonymousRequest = false;
 
-    var response = this.response = {};
+    var response = setResponse({});
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -79,55 +83,58 @@
       apply();
     }
 
+    var url;
     try {
-      var pathBuilder = this.getPathBuilder();
+      var pathBuilder = this.context.pathBuilder;
       var client = RAML.Client.create(this.parsed, function(client) {
         client.baseUriParameters(pathBuilder.baseUriContext);
       });
-      var url = this.response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
-      if (RAML.Settings.proxy) {
-        url = RAML.Settings.proxy + url;
-      }
-      var request = RAML.Client.Request.create(url, this.httpMethod);
-
-      if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {
-        request.queryParams(this.context.queryParameters.data());
-      }
-
-      if (!RAML.Utils.isEmpty(this.context.headers.data())) {
-        request.headers(this.context.headers.data());
-      }
-
-      if (this.context.bodyContent) {
-        request.header('Content-Type', this.context.bodyContent.selected);
-        request.data(this.context.bodyContent.data());
-      }
-
-      var authStrategy;
-
-      try {
-        if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
-          this.disallowedAnonymousRequest = true;
-        }
-
-        var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
-        var credentials = this.keychain[this.keychain.selectedScheme];
-        authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
-      } catch (e) {
-        // custom strategies aren't supported yet.
-      }
-
-      authStrategy.authenticate().then(function(token) {
-        token.sign(request);
-        $.ajax(request.toOptions()).then(
-          function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-          function(jqXhr) { handleResponse(jqXhr); }
-        );
-      });
+      url = response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
     } catch (e) {
-      this.response = undefined;
+      setResponse(undefined);
       this.missingUriParameters = true;
+      return;
     }
+
+    if (RAML.Settings.proxy) {
+      url = RAML.Settings.proxy + url;
+    }
+    var request = RAML.Client.Request.create(url, this.httpMethod);
+
+    if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {
+      request.queryParams(this.context.queryParameters.data());
+    }
+
+    if (!RAML.Utils.isEmpty(this.context.headers.data())) {
+      request.headers(this.context.headers.data());
+    }
+
+    if (this.context.bodyContent) {
+      request.header('Content-Type', this.context.bodyContent.selected);
+      request.data(this.context.bodyContent.data());
+    }
+
+    var authStrategy;
+
+    try {
+      if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
+        this.disallowedAnonymousRequest = true;
+      }
+
+      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
+      var credentials = this.keychain[this.keychain.selectedScheme];
+      authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
+    } catch (e) {
+      // custom strategies aren't supported yet.
+    }
+
+    authStrategy.authenticate().then(function(token) {
+      token.sign(request);
+      $.ajax(request.toOptions()).then(
+        function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+        function(jqXhr) { handleResponse(jqXhr); }
+      );
+    });
   };
 
   RAML.Controllers.TryIt = TryIt;

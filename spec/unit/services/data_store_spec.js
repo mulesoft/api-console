@@ -15,31 +15,4 @@ describe("RAML.Services.DataStore", function() {
       expect(service.get('key')).toBe(undefined);
     });
   });
-
-  describe("invalidating the store", function() {
-    beforeEach(function() {
-      service.set('key', 'value');
-      service.invalidate();
-    });
-
-    it("returns undefined for an invalid key", function() {
-      expect(service.get('key')).toBe(undefined);
-    });
-
-    describe("forced retrieval of an invalid key", function() {
-      var value;
-
-      beforeEach(function() {
-        value = service.get('key', true);
-      });
-
-      it("returns the value for the key", function() {
-        expect(value).toBe('value');
-      });
-
-      it("revalidates the key", function() {
-        expect(service.get('key')).toBe('value');
-      });
-    });
-  });
 });

@@ -35,7 +35,7 @@ describe("RAML.Controllers.Resource", function() {
     });
 
     it('calls the store with the appropriate key', function() {
-      expect(storeSpy.get).toHaveBeenCalledWith(controller.resourceKey(), true);
+      expect(storeSpy.get).toHaveBeenCalledWith(controller.resourceKey());
     });
   });
 

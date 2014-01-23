@@ -2844,6 +2844,7 @@ raml-console article#raml-console .autocomplete ul,
   width: 100%;
   background-color: white;
   position: absolute;
+  z-index: 1;
   top: 35px;
   left: 0;
   border-radius: 4px;
@@ -3867,6 +3868,10 @@ raml-console article#raml-console .try-it .path input,
   margin: 0 5px 0 2px;
   font-size: 15px;
   width: 9em;
+}
+raml-console article#raml-console .try-it .path ul,
+#raml-console-loader .try-it .path ul {
+  font-size: 15px;
 }
 raml-console article#raml-console .try-it i,
 #raml-console-loader .try-it i {

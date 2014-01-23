@@ -81,8 +81,9 @@ describe("RAML.Directives.validatedInput", function() {
     });
 
     describe("when configured with a custom error class", function() {
-      var template = '<input validated-input ng-model="model.resourceId" name="id" constraints="constraints" invalid-class="error"/>';
+      var template = '<input validated-input ng-model="model.resourceId" name="id" constraints="constraints" invalid-class="invalidClass"/>';
       beforeEach(function() {
+        scope.invalidClass = 'error';
         input = compileTemplate(template, scope);
         setFixtures(input);
         input.trigger('focus');

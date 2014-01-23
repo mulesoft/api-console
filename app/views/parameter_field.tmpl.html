@@ -1,0 +1,13 @@
+<ng-switch on='inputType'>
+  <span ng-switch-when="file">
+    <input name="{{name}}" type='file' ng-model='model'/>
+  </span>
+  <span ng-switch-when="enum">
+    <enum options='definition.enum' model='model'>
+      <input validated-input name="{{name}}" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim="false" constraints='definition' invalid-class='invalidClass'/>
+    </enum>
+ </span>
+  <span ng-switch-default>
+    <input validated-input name="{{name}}" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim="false" constraints='definition' invalid-class='invalidClass'/>
+  </span>
+</ng-switch>
