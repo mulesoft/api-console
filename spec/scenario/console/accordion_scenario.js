@@ -158,7 +158,7 @@ describe("accordion view of API", function() {
       var resourceGroups = ptor.$$('[role="resource-group"]');
       resourceGroups.then(function(groups) {
         expect(groups).toHaveLength(3);
-        expect(groups[2].$(".path").getText()).toEqual('/something{weird}');
+        expect(groups[2].$('[role="resource"] .path').getText()).toEqual('/something{weird}');
       });
     });
   });
