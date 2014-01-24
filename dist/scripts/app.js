@@ -3007,10 +3007,18 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/api_resources.tmpl.html',
     "<div id=\"raml-console-api-reference\" role=\"resources\">\n" +
     "  <div collapsible collapsed='collapsed' role=\"resource-group\" class=\"resource-group\" ng-repeat=\"resourceGroup in api.resourceGroups\" ng-init='collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]'>\n" +
-    "    <i collapsible-toggle ng-show=\"resourceGroup.length > 1\" ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
-    "    <resource ng-repeat=\"resource in resourceGroup.slice(0,1)\"></resource>\n" +
+    "    <i collapsible-toggle ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
+    "\n" +
+    "    <div class=\"resource\" role=\"resource-group-placeholder\" ng-show=\"collapsed\">\n" +
+    "      <div class=\"summary\">\n" +
+    "        <h3 class=\"path\">\n" +
+    "          <span role='segment' ng-repeat='segment in resourceGroup[0].pathSegments'>{{segment.toString()}} </span>\n" +
+    "        </h3>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
     "    <div collapsible-content>\n" +
-    "      <resource ng-repeat=\"resource in resourceGroup.slice(1)\"></resource>\n" +
+    "      <resource ng-repeat=\"resource in resourceGroup\"></resource>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"

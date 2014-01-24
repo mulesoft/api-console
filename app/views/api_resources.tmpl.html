@@ -1,9 +1,17 @@
 <div id="raml-console-api-reference" role="resources">
   <div collapsible collapsed='collapsed' role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups" ng-init='collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]'>
-    <i collapsible-toggle ng-show="resourceGroup.length > 1" ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
-    <resource ng-repeat="resource in resourceGroup.slice(0,1)"></resource>
+    <i collapsible-toggle ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
+
+    <div class="resource" role="resource-group-placeholder" ng-show="collapsed">
+      <div class="summary">
+        <h3 class="path">
+          <span role='segment' ng-repeat='segment in resourceGroup[0].pathSegments'>{{segment.toString()}} </span>
+        </h3>
+      </div>
+    </div>
+
     <div collapsible-content>
-      <resource ng-repeat="resource in resourceGroup.slice(1)"></resource>
+      <resource ng-repeat="resource in resourceGroup"></resource>
     </div>
   </div>
 </div>

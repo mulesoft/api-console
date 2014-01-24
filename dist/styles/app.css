@@ -3296,7 +3296,7 @@ raml-console article#raml-console .resource .methods,
   float: right;
   text-align: right;
   margin-top: -1px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 raml-console article#raml-console .resource .methods li,
 #raml-console-loader .resource .methods li {

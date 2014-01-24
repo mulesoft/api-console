@@ -24,18 +24,17 @@ describe("RAML.Directives.api_resources", function() {
 
   describe("resource groups", function() {
     it("is opened by default", function() {
+      expect($el.find('[role="resource-group-placeholder"]')).not.toBeVisible();
       expect($el.find('[role="resource"]').eq(0)).toBeVisible();
       expect($el.find('[role="resource"]').eq(1)).toBeVisible();
     });
 
     it("collapses on clicking the caret", function() {
       click($el.find('[role="resource-group"] > div > i'));
-      expect($el.find('[role="resource"]').eq(0)).toBeVisible();
-      expect($el.find('[role="resource"]').eq(1)).not.toBeVisible();
-    });
+      expect($el.find('[role="resource-group-placeholder"]')).toBeVisible();
 
-    it("does not show a caret when there is only 1 resource in a group", function() {
-      expect($el.find('[role="resource-group"] > div > i').eq(2)).not.toBeVisible();
+      expect($el.find('[role="resource"]').eq(0)).not.toBeVisible();
+      expect($el.find('[role="resource"]').eq(1)).not.toBeVisible();
     });
   });
 });
