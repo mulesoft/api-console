@@ -2155,31 +2155,43 @@ RAML.Inspector = (function() {
   };
 })();
 
-(function() {
+(function(angular) {
   'use strict';
+
+  var inputOverride = angular.module('fileInputOverride', []);
 
   // enhancement to ng-model for input[type="file"]
   // code for this directive taken from:
   // https://github.com/marcenuc/angular.js/commit/2bfff4668c341ddcfec0120c9a5018b0c2463982
-  RAML.Directives.input = function() {
-    return {
-      restrict: 'E',
-      require: '?ngModel',
-      link: function(scope, element, attr, ctrl) {
-        if (ctrl && attr.type && attr.type.toLowerCase() === 'file') {
-          element.bind('change', function() {
-            scope.$apply(function() {
-              var files = element[0].files;
-              var viewValue = attr.multiple ? files : files[0];
 
-              ctrl.$setViewValue(viewValue);
-            });
-          });
-        }
-      }
-    };
-  };
-})();
+  // since angular (as of version 1.2.3) breaks our enhancement to the input directive for files
+  // we are disabling it (for only file type inputs) with this decorator.
+
+  inputOverride.config(['$provide', function($provide) {
+    $provide.decorator('inputDirective', ['$delegate', function($delegate) {
+      angular.forEach($delegate, function(inputDirective) {
+        var originalCompile = inputDirective.compile;
+        inputDirective.compile = function(element, attrs) {
+          if (!attrs.type || attrs.type.toLowerCase() !== 'file') {
+            return originalCompile.apply(this, arguments);
+          } else {
+            return function(scope, element, attr, ctrl) {
+              element.bind('change', function() {
+                scope.$apply(function() {
+                  var files = element[0].files;
+                  var viewValue = attr.multiple ? files : files[0];
+
+                  ctrl.$setViewValue(viewValue);
+                });
+              });
+            };
+          }
+        };
+      });
+      return $delegate;
+    }]);
+  }]);
+})(window.angular);
 
 (function() {
   'use strict';
@@ -2943,7 +2955,7 @@ RAML.Filters = {};
 'use strict';
 
 (function() {
-  var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize']);
+  var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize', 'fileInputOverride']);
 
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
@@ -2954,7 +2966,7 @@ RAML.Filters = {};
   module.directive('collapsibleToggle', RAML.Directives.collapsibleToggle);
   module.directive('documentation', RAML.Directives.documentation);
   module.directive('enum', RAML.Directives.enum);
-  module.directive('input', RAML.Directives.input);
+  // module.directive('input', RAML.Directives.input);
   module.directive('markdown', RAML.Directives.markdown);
   module.directive('method', RAML.Directives.method);
   module.directive('namedParameters', RAML.Directives.namedParameters);
@@ -2995,13 +3007,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/api_resources.tmpl.html',
     "<div id=\"raml-console-api-reference\" role=\"resources\">\n" +
     "  <div collapsible collapsed='collapsed' role=\"resource-group\" class=\"resource-group\" ng-repeat=\"resourceGroup in api.resourceGroups\" ng-init='collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]'>\n" +
-    "    <h1 collapsible-toggle class='path'>\n" +
-    "      {{resourceGroup[0].pathSegments[0].toString()}}\n" +
-    "      <i ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
-    "    </h1>\n" +
-    "\n" +
+    "    <i collapsible-toggle ng-show=\"resourceGroup.length > 1\" ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
+    "    <resource ng-repeat=\"resource in resourceGroup.slice(0,1)\"></resource>\n" +
     "    <div collapsible-content>\n" +
-    "      <resource ng-repeat=\"resource in resourceGroup\"></resource>\n" +
+    "      <resource ng-repeat=\"resource in resourceGroup.slice(1)\"></resource>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"

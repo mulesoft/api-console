@@ -1,6 +1,11 @@
 (function() {
   global.toggleResource = function(index) {
-    var resource = ptor.$('[role="resource"]:nth-of-type(' + index + ')');
+    var resource;
+    if (index === 1) {
+      resource = ptor.$('[role="resource"]');
+    } else {
+      resource = ptor.$('[collapsible-content] [role="resource"]:nth-of-type(' + (index-1) + ')');
+    }
     resource.$('.accordion-toggle').click();
 
     return resource;
