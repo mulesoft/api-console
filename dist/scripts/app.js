@@ -1856,7 +1856,7 @@ RAML.Inspector = (function() {
 
   RAML.Directives.apiResources = function(DataStore) {
     var controller = function($scope) {
-      var self = $scope.groupView = this;
+      var self = $scope.apiResources = this;
       this.groups = $scope.api.resourceGroups;
       this.collapsed = {};
 
@@ -1865,7 +1865,19 @@ RAML.Inspector = (function() {
         self.collapsed[key] = DataStore.get(key);
       });
 
-      $scope.$watch('groupView.collapsed', function(state) {
+      this.toggleAll = function(collapsed) {
+        this.groups.forEach(function(group) {
+          var key = self.keyFor(group);
+          self.collapsed[key] = collapsed;
+        });
+      };
+
+      this.isCollapsed = function(group) {
+        var key = self.keyFor(group);
+        return self.collapsed[key];
+      };
+
+      $scope.$watch('apiResources.collapsed', function(state) {
         Object.keys(state).forEach(function(key) {
           DataStore.set(key, state[key]);
         });
@@ -1993,34 +2005,40 @@ RAML.Inspector = (function() {
   'use strict';
 
   var Controller = function($scope) {
-    if ($scope.hasOwnProperty('collapsed')) {
-      $scope.expanded = !$scope.collapsed;
-    }
-
-    var callback;
-
     this.toggle = function() {
-      $scope.expanded = !$scope.expanded;
-      $scope.collapsed = !$scope.expanded;
-      callback($scope.expanded);
-    };
-
-    this.stateUpdated = function(cb) {
-      callback = cb;
-      callback($scope.expanded);
+      $scope.collapsed = !$scope.collapsed;
     };
   };
 
-  RAML.Directives.collapsible = function() {
+  RAML.Directives.collapsible = function($parse) {
     return {
       controller: Controller,
       restrict: 'EA',
-      scope: {
-        expanded: '=?',
-        collapsed: '=?'
-      },
-      transclude: true,
-      template: '<div ng-transclude></div>'
+      scope: true,
+      link: function(scope, element, attrs) {
+        if (!attrs.collapsed && !attrs.expanded) {
+          scope.collapsed = true;
+          return;
+        }
+
+        var attr = attrs.collapsed || attrs.expanded;
+        var normalizeForAttribute = function(arg) {
+          return attrs.expanded ? !arg : arg;
+        };
+
+        scope.collapsed = normalizeForAttribute($parse(attr)(scope));
+
+        scope.$watch(attr, function(value) {
+          scope.collapsed = normalizeForAttribute(value);
+        });
+
+        scope.$watch('collapsed', function(collapsed) {
+          $parse(attr).assign(scope.$parent, normalizeForAttribute(collapsed));
+
+          element.removeClass('collapsed expanded');
+          element.addClass(collapsed ? 'collapsed' : 'expanded');
+        });
+      }
     };
   };
 
@@ -2040,16 +2058,13 @@ RAML.Inspector = (function() {
     return {
       require: '^collapsible',
       restrict: 'EA',
-      link: function(scope, element, attrs, controller) {
-        controller.stateUpdated(function(expanded) {
-          element.css('display', expanded ? 'block' : 'none');
-          element.parent().removeClass('collapsed expanded');
-          element.parent().addClass(expanded ? 'expanded' : 'collapsed');
+      link: function(scope, element) {
+        scope.$watch('collapsed', function(collapsed) {
+          element.css('display', collapsed ? 'none' : 'block');
         });
       }
     };
   };
-
 })();
 
 (function() {
@@ -3006,7 +3021,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/api_resources.tmpl.html',
     "<div id=\"raml-console-api-reference\" role=\"resources\">\n" +
-    "  <div collapsible collapsed='collapsed' role=\"resource-group\" class=\"resource-group\" ng-repeat=\"resourceGroup in api.resourceGroups\" ng-init='collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]'>\n" +
+    "  <div class=\"toggle-resource-groups\">\n" +
+    "    <a ng-click='apiResources.toggleAll(false)' role=\"expand-all\">Expand</a>\n" +
+    "    <span>/</span>\n" +
+    "    <a ng-click='apiResources.toggleAll(true)' role=\"collapse-all\">Collapse</a>\n" +
+    "    <span>All</span>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div collapsible collapsed='apiResources.collapsed[apiResources.keyFor(resourceGroup)]' role=\"resource-group\" class=\"resource-group\" ng-repeat=\"resourceGroup in api.resourceGroups\">\n" +
     "    <i collapsible-toggle ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
     "\n" +
     "    <div class=\"resource\" role=\"resource-group-placeholder\" ng-show=\"collapsed\">\n" +

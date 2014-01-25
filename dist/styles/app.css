@@ -3973,20 +3973,34 @@ raml-console article#raml-console #raml-console-content,
 #raml-console-loader #raml-console-content {
   clear: both;
 }
+raml-console article#raml-console .toggle-resource-groups,
+#raml-console-loader .toggle-resource-groups {
+  text-transform: lowercase;
+}
+raml-console article#raml-console .toggle-resource-groups a,
+#raml-console-loader .toggle-resource-groups a {
+  font-weight: bold;
+  cursor: pointer;
+  color: #18191d;
+}
+raml-console article#raml-console .toggle-resource-groups span,
+#raml-console-loader .toggle-resource-groups span {
+  color: #a2a4aa;
+}
 raml-console article#raml-console .resource-group,
 #raml-console-loader .resource-group {
   position: relative;
   margin-bottom: 17px;
 }
-raml-console article#raml-console .resource-group > div > i,
-#raml-console-loader .resource-group > div > i {
+raml-console article#raml-console .resource-group > i,
+#raml-console-loader .resource-group > i {
   position: absolute;
   left: -12px;
   top: 19px;
   font-size: 15px;
 }
-raml-console article#raml-console .resource-group > div > i.icon-caret-down,
-#raml-console-loader .resource-group > div > i.icon-caret-down {
+raml-console article#raml-console .resource-group > i.icon-caret-down,
+#raml-console-loader .resource-group > i.icon-caret-down {
   left: -14px;
 }
 raml-console article#raml-console [role=documentation] h2 i[class^="icon-"],
