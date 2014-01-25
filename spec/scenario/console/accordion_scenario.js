@@ -49,6 +49,8 @@ describe("accordion view of API", function() {
         methodsPromise = resources[2].$$(methodSummarySelector);
         expect(methodsPromise).toHaveLength(1);
 
+        resources[2].$('.accordion-toggle').click();
+
         var resourceTypesPromise = resources[2].$$('[role="resource-type"]');
         expect(resourceTypesPromise).toHaveLength(1);
         resourceTypesPromise.then(function(resourceType) {

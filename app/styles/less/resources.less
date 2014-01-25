@@ -14,15 +14,9 @@
     position: relative;
     cursor: pointer;
 
-    ul.modifiers {
+    .modifiers {
       margin: -15px -18px 8px 0;
       min-height: 7px;
-
-      li {
-        &:last-child {
-          border-top-right-radius: 4px;
-        }
-      }
     }
 
     .path {
@@ -68,28 +62,36 @@
   }
 }
 
-ul.modifiers {
-  font-size: 0px; // ignore whitespace around inline-block elements below
-  text-align: right;
-  margin-right: -3px;
+.modifiers {
+  font-size: 9px;
+  letter-spacing: 0.33px;
+
+  > *:first-child .caption {
+    margin-left: 0;
+  }
+
+  .caption {
+    display: inline-block;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0 5px 0 15px;
+    vertical-align: middle;
+  }
+
+  ul {
+    display: inline-block;
+  }
 
   li {
     display: inline-block;
-    font-family: @monospace;
-    font-size: 11px;
     padding: 0px 6px;
-    margin-bottom: 3px;
-    margin-right: 3px;
-    line-height: 18px;
-
-    &.resource-type {
-      background-color: @grayB;
-      color: @veryLightGray;
-    }
-
-    &.trait {
-      background-color: @grayD;
-      color: @gray;
+    line-height: 14px;
+    margin-left: -1px;
+    margin-top: -1px;
+    &.resource-type, &.trait {
+      background-color: @veryLightGray;
+      color: @gray9;
+      border: 1px solid @lightGray;
     }
   }
 }

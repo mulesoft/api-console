@@ -1,10 +1,14 @@
 <section class='documentation' role='documentation'>
-  <ul role="traits" class="modifiers">
-    <li class="trait" ng-repeat="trait in documentation.traits()">
-      {{trait|nameFromParameterizable}}
-    </li>
-  </ul>
-
+  <div class="modifiers">
+    <div ng-if="documentation.traits()">
+      <span class="caption">Traits</span>
+      <ul role="traits">
+        <li class="trait" ng-repeat="trait in documentation.traits()">
+          {{trait|nameFromParameterizable}}
+        </li>
+      </ul>
+    </div>
+  </div>
   <div role="full-description" class="description"
        ng-if="method.description"
        markdown="method.description">

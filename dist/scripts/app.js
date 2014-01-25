@@ -3093,12 +3093,16 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
-    "  <ul role=\"traits\" class=\"modifiers\">\n" +
-    "    <li class=\"trait\" ng-repeat=\"trait in documentation.traits()\">\n" +
-    "      {{trait|nameFromParameterizable}}\n" +
-    "    </li>\n" +
-    "  </ul>\n" +
-    "\n" +
+    "  <div class=\"modifiers\">\n" +
+    "    <div ng-if=\"documentation.traits()\">\n" +
+    "      <span class=\"caption\">Traits</span>\n" +
+    "      <ul role=\"traits\">\n" +
+    "        <li class=\"trait\" ng-repeat=\"trait in documentation.traits()\">\n" +
+    "          {{trait|nameFromParameterizable}}\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "  <div role=\"full-description\" class=\"description\"\n" +
     "       ng-if=\"method.description\"\n" +
     "       markdown=\"method.description\">\n" +
@@ -3345,14 +3349,24 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "     class='resource' role=\"resource\">\n" +
     "\n" +
     "  <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
-    "    <ul class=\"modifiers\">\n" +
-    "      <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\">\n" +
-    "        {{trait | nameFromParameterizable}}\n" +
-    "      </li>\n" +
-    "      <li class=\"resource-type\" role=\"resource-type\" ng-if='resource.resourceType'>\n" +
-    "        {{resource.resourceType | nameFromParameterizable}}\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
+    "    <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
+    "      <span ng-if='resource.resourceType'>\n" +
+    "        <span class=\"caption\">Type</span>\n" +
+    "        <ul>\n" +
+    "          <li class=\"resource-type\" role=\"resource-type\">\n" +
+    "            {{resource.resourceType | nameFromParameterizable}}\n" +
+    "          </li>\n" +
+    "        </ul>\n" +
+    "      </span>\n" +
+    "      <span ng-if='resource.traits.length > 0'>\n" +
+    "        <span class=\"caption\">Traits</span>\n" +
+    "        <ul>\n" +
+    "          <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\">\n" +
+    "            {{trait | nameFromParameterizable}}\n" +
+    "          </li>\n" +
+    "        </ul>\n" +
+    "      </span>\n" +
+    "    </div>\n" +
     "\n" +
     "    <h3 class=\"path\">\n" +
     "      <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
