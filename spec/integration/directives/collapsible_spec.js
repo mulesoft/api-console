@@ -104,4 +104,28 @@ describe("RAML.Directives.collapsible", function() {
       expect($(".content")).not.toBeVisible();
     });
   });
+
+  describe("when the 'collapsed' attribute changes", function() {
+    beforeEach(function() {
+      scope = createScope();
+      scope.collapsed = true;
+
+      $el = compileTemplate([
+        "<collapsible collapsed='collapsed'>",
+          "<h3 class='heading' collapsible-toggle>Collapse me!</h3>",
+          "<div class='content' collapsible-content>I feel small</div>",
+         "</collapsible>"
+        ].join("\n"), scope);
+
+      setFixtures($el);
+    });
+
+    it("updates the state of the collapsible", function() {
+      expect($(".content")).not.toBeVisible();
+      angular.element($el[0]).scope().collapsed = false;
+      scope.$digest();
+      expect($(".content")).toBeVisible();
+    });
+  });
+
 });

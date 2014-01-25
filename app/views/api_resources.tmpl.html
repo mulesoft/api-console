@@ -1,5 +1,12 @@
 <div id="raml-console-api-reference" role="resources">
-  <div collapsible collapsed='collapsed' role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups" ng-init='collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]'>
+  <div class="toggle-resource-groups">
+    <a ng-click='apiResources.toggleAll(false)' role="expand-all">Expand</a>
+    <span>/</span>
+    <a ng-click='apiResources.toggleAll(true)' role="collapse-all">Collapse</a>
+    <span>All</span>
+  </div>
+
+  <div collapsible collapsed='apiResources.collapsed[apiResources.keyFor(resourceGroup)]' role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups">
     <i collapsible-toggle ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
 
     <div class="resource" role="resource-group-placeholder" ng-show="collapsed">
