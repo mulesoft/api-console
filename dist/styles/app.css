@@ -41,7 +41,6 @@ body#raml-console-unembedded {
 raml-console article {
   background-color: #E6E7EB;
   color: #333;
-  margin: 0 20px 20px;
 }
 #raml-console-loader form {
   margin: 25px;
@@ -3962,16 +3961,17 @@ raml-console article#raml-console #raml-console-api-title,
   float: left;
   font-size: 20px;
   line-height: 1em;
-  margin: 20px 0;
+  margin: 20px;
 }
 raml-console article#raml-console #raml-console-main-nav,
 #raml-console-loader #raml-console-main-nav {
   float: right;
-  margin-top: 15px;
+  margin: 15px 20px 0 0;
 }
 raml-console article#raml-console #raml-console-content,
 #raml-console-loader #raml-console-content {
   clear: both;
+  padding: 0 20px;
 }
 raml-console article#raml-console .toggle-resource-groups,
 #raml-console-loader .toggle-resource-groups {
