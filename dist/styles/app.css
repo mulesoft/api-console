@@ -3247,14 +3247,10 @@ raml-console article#raml-console .resource .summary,
   cursor: pointer;
   *zoom: 1;
 }
-raml-console article#raml-console .resource .summary ul.modifiers,
-#raml-console-loader .resource .summary ul.modifiers {
+raml-console article#raml-console .resource .summary .modifiers,
+#raml-console-loader .resource .summary .modifiers {
   margin: -15px -18px 8px 0;
   min-height: 7px;
-}
-raml-console article#raml-console .resource .summary ul.modifiers li:last-child,
-#raml-console-loader .resource .summary ul.modifiers li:last-child {
-  border-top-right-radius: 4px;
 }
 raml-console article#raml-console .resource .summary .path,
 #raml-console-loader .resource .summary .path {
@@ -3304,31 +3300,42 @@ raml-console article#raml-console .resource .methods li,
   margin-right: 5px;
   margin-bottom: 5px;
 }
-raml-console article#raml-console ul.modifiers,
-#raml-console-loader ul.modifiers {
-  font-size: 0px;
-  text-align: right;
-  margin-right: -3px;
+raml-console article#raml-console .modifiers,
+#raml-console-loader .modifiers {
+  font-size: 9px;
+  letter-spacing: 0.33px;
 }
-raml-console article#raml-console ul.modifiers li,
-#raml-console-loader ul.modifiers li {
+raml-console article#raml-console .modifiers > *:first-child .caption,
+#raml-console-loader .modifiers > *:first-child .caption {
+  margin-left: 0;
+}
+raml-console article#raml-console .modifiers .caption,
+#raml-console-loader .modifiers .caption {
   display: inline-block;
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0 5px 0 15px;
+  vertical-align: middle;
+}
+raml-console article#raml-console .modifiers ul,
+#raml-console-loader .modifiers ul {
+  display: inline-block;
+}
+raml-console article#raml-console .modifiers li,
+#raml-console-loader .modifiers li {
+  display: inline-block;
   padding: 0px 6px;
-  margin-bottom: 3px;
-  margin-right: 3px;
-  line-height: 18px;
+  line-height: 14px;
+  margin-left: -1px;
+  margin-top: -1px;
 }
-raml-console article#raml-console ul.modifiers li.resource-type,
-#raml-console-loader ul.modifiers li.resource-type {
-  background-color: #bbbbbb;
-  color: #f3f3f6;
-}
-raml-console article#raml-console ul.modifiers li.trait,
-#raml-console-loader ul.modifiers li.trait {
-  background-color: #dee0e7;
-  color: #a2a4aa;
+raml-console article#raml-console .modifiers li.resource-type,
+#raml-console-loader .modifiers li.resource-type,
+raml-console article#raml-console .modifiers li.trait,
+#raml-console-loader .modifiers li.trait {
+  background-color: #f3f3f6;
+  color: #96989f;
+  border: 1px solid #c0c2c9;
 }
 raml-console article#raml-console .get,
 #raml-console-loader .get {
@@ -3671,7 +3678,6 @@ raml-console article#raml-console .documentation,
 }
 raml-console article#raml-console .documentation .modifiers,
 #raml-console-loader .documentation .modifiers {
-  margin-left: 0;
   margin-bottom: 20px;
 }
 raml-console article#raml-console .documentation .description,
