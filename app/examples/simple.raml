@@ -19,7 +19,7 @@ traits:
   - someParameterizedTrait:
       description: <<someParameterName>>
 resourceTypes:
-  - collection:
+  - longCollectionName:
       description: bunk
 documentation:
   - title: Getting Started
@@ -88,8 +88,8 @@ documentation:
 
 /another/resource:
   displayName: Cats
-  type: collection
-  is: [secured, catpictures]
+  type: longCollectionName
+  is: [secured, catpictures, anotherTrait, andAnotherTrait]
   connect: !!null
   head: !!null
   get:

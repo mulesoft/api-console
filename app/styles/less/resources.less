@@ -15,7 +15,8 @@
     cursor: pointer;
 
     .modifiers {
-      margin: -15px -18px 8px 0;
+      margin-top: -15px;
+      margin-bottom: 8px;
       min-height: 7px;
     }
 
@@ -66,32 +67,44 @@
   font-size: 9px;
   letter-spacing: 0.33px;
 
-  > *:first-child .caption {
-    margin-left: 0;
-  }
-
-  .caption {
+  .modifier-group {
     display: inline-block;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin: 0 5px 0 15px;
-    vertical-align: middle;
-  }
+    margin-right: 15px;
+    margin-bottom: 5px;
+    white-space: nowrap;
 
-  ul {
-    display: inline-block;
-  }
+    .caption {
+      display: inline-block;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-right: 5px;
+      vertical-align: top;
+      min-width: 32px;
+    }
 
-  li {
-    display: inline-block;
-    padding: 0px 6px;
-    line-height: 14px;
-    margin-left: -1px;
-    margin-top: -1px;
-    &.resource-type, &.trait {
-      background-color: @veryLightGray;
-      color: @gray9;
-      border: 1px solid @lightGray;
+    ul {
+      display: inline-block;
+      white-space: normal;
+
+      li {
+        display: inline-block;
+        padding: 0px 6px;
+        line-height: 14px;
+        margin-left: -1px;
+        margin-top: -1px;
+        &.resource-type, &.trait {
+          background-color: @veryLightGray;
+          color: @gray9;
+          border: 1px solid @lightGray;
+        }
+      }
+    }
+
+    &:last-child {
+      margin-right: 5px;
+      ul {
+        padding-right: 32px;
+      }
     }
   }
 }

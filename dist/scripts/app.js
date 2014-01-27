@@ -1254,10 +1254,6 @@ RAML.Inspector = (function() {
     return !RAML.Utils.isEmpty(this.method.responses);
   };
 
-  controller.prototype.traits = function() {
-    return (this.method.is || []);
-  };
-
   RAML.Controllers.Documentation = controller;
 })();
 
@@ -3094,14 +3090,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
     "  <div class=\"modifiers\">\n" +
-    "    <div ng-if=\"documentation.traits()\">\n" +
+    "    <span class=\"modifier-group\" ng-if=\"documentation.method.is\">\n" +
     "      <span class=\"caption\">Traits</span>\n" +
     "      <ul role=\"traits\">\n" +
-    "        <li class=\"trait\" ng-repeat=\"trait in documentation.traits()\">\n" +
+    "        <li class=\"trait\" ng-repeat=\"trait in documentation.method.is\">\n" +
     "          {{trait|nameFromParameterizable}}\n" +
     "        </li>\n" +
     "      </ul>\n" +
-    "    </div>\n" +
+    "    </span>\n" +
     "  </div>\n" +
     "  <div role=\"full-description\" class=\"description\"\n" +
     "       ng-if=\"method.description\"\n" +
@@ -3350,7 +3346,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "  <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
     "    <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
-    "      <span ng-if='resource.resourceType'>\n" +
+    "      <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
     "        <span class=\"caption\">Type</span>\n" +
     "        <ul>\n" +
     "          <li class=\"resource-type\" role=\"resource-type\">\n" +
@@ -3358,7 +3354,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          </li>\n" +
     "        </ul>\n" +
     "      </span>\n" +
-    "      <span ng-if='resource.traits.length > 0'>\n" +
+    "      <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
     "        <span class=\"caption\">Traits</span>\n" +
     "        <ul>\n" +
     "          <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\">\n" +
