@@ -1,13 +1,13 @@
 <section class='documentation' role='documentation'>
   <div class="modifiers">
-    <div ng-if="documentation.traits()">
+    <span class="modifier-group" ng-if="documentation.traits()">
       <span class="caption">Traits</span>
       <ul role="traits">
         <li class="trait" ng-repeat="trait in documentation.traits()">
           {{trait|nameFromParameterizable}}
         </li>
       </ul>
-    </div>
+    </span>
   </div>
   <div role="full-description" class="description"
        ng-if="method.description"

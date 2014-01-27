@@ -3249,7 +3249,8 @@ raml-console article#raml-console .resource .summary,
 }
 raml-console article#raml-console .resource .summary .modifiers,
 #raml-console-loader .resource .summary .modifiers {
-  margin: -15px -18px 8px 0;
+  margin-top: -15px;
+  margin-bottom: 8px;
   min-height: 7px;
 }
 raml-console article#raml-console .resource .summary .path,
@@ -3305,37 +3306,50 @@ raml-console article#raml-console .modifiers,
   font-size: 9px;
   letter-spacing: 0.33px;
 }
-raml-console article#raml-console .modifiers > *:first-child .caption,
-#raml-console-loader .modifiers > *:first-child .caption {
-  margin-left: 0;
+raml-console article#raml-console .modifiers .modifier-group,
+#raml-console-loader .modifiers .modifier-group {
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 5px;
+  white-space: nowrap;
 }
-raml-console article#raml-console .modifiers .caption,
-#raml-console-loader .modifiers .caption {
+raml-console article#raml-console .modifiers .modifier-group .caption,
+#raml-console-loader .modifiers .modifier-group .caption {
   display: inline-block;
   font-weight: bold;
   text-transform: uppercase;
-  margin: 0 5px 0 15px;
-  vertical-align: middle;
+  margin-right: 5px;
+  vertical-align: top;
+  min-width: 32px;
 }
-raml-console article#raml-console .modifiers ul,
-#raml-console-loader .modifiers ul {
+raml-console article#raml-console .modifiers .modifier-group ul,
+#raml-console-loader .modifiers .modifier-group ul {
   display: inline-block;
+  white-space: normal;
 }
-raml-console article#raml-console .modifiers li,
-#raml-console-loader .modifiers li {
+raml-console article#raml-console .modifiers .modifier-group ul li,
+#raml-console-loader .modifiers .modifier-group ul li {
   display: inline-block;
   padding: 0px 6px;
   line-height: 14px;
   margin-left: -1px;
   margin-top: -1px;
 }
-raml-console article#raml-console .modifiers li.resource-type,
-#raml-console-loader .modifiers li.resource-type,
-raml-console article#raml-console .modifiers li.trait,
-#raml-console-loader .modifiers li.trait {
+raml-console article#raml-console .modifiers .modifier-group ul li.resource-type,
+#raml-console-loader .modifiers .modifier-group ul li.resource-type,
+raml-console article#raml-console .modifiers .modifier-group ul li.trait,
+#raml-console-loader .modifiers .modifier-group ul li.trait {
   background-color: #f3f3f6;
   color: #96989f;
   border: 1px solid #c0c2c9;
+}
+raml-console article#raml-console .modifiers .modifier-group:last-child,
+#raml-console-loader .modifiers .modifier-group:last-child {
+  margin-right: 5px;
+}
+raml-console article#raml-console .modifiers .modifier-group:last-child ul,
+#raml-console-loader .modifiers .modifier-group:last-child ul {
+  padding-right: 32px;
 }
 raml-console article#raml-console .get,
 #raml-console-loader .get {
