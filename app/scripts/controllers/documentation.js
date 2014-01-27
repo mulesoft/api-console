@@ -35,9 +35,5 @@
     return !RAML.Utils.isEmpty(this.method.responses);
   };
 
-  controller.prototype.traits = function() {
-    return (this.method.is || []);
-  };
-
   RAML.Controllers.Documentation = controller;
 })();

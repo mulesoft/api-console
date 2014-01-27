@@ -1254,10 +1254,6 @@ RAML.Inspector = (function() {
     return !RAML.Utils.isEmpty(this.method.responses);
   };
 
-  controller.prototype.traits = function() {
-    return (this.method.is || []);
-  };
-
   RAML.Controllers.Documentation = controller;
 })();
 
@@ -3094,10 +3090,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
     "  <div class=\"modifiers\">\n" +
-    "    <span class=\"modifier-group\" ng-if=\"documentation.traits()\">\n" +
+    "    <span class=\"modifier-group\" ng-if=\"documentation.method.is\">\n" +
     "      <span class=\"caption\">Traits</span>\n" +
     "      <ul role=\"traits\">\n" +
-    "        <li class=\"trait\" ng-repeat=\"trait in documentation.traits()\">\n" +
+    "        <li class=\"trait\" ng-repeat=\"trait in documentation.method.is\">\n" +
     "          {{trait|nameFromParameterizable}}\n" +
     "        </li>\n" +
     "      </ul>\n" +

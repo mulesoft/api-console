@@ -1,9 +1,9 @@
 <section class='documentation' role='documentation'>
   <div class="modifiers">
-    <span class="modifier-group" ng-if="documentation.traits()">
+    <span class="modifier-group" ng-if="documentation.method.is">
       <span class="caption">Traits</span>
       <ul role="traits">
-        <li class="trait" ng-repeat="trait in documentation.traits()">
+        <li class="trait" ng-repeat="trait in documentation.method.is">
           {{trait|nameFromParameterizable}}
         </li>
       </ul>
