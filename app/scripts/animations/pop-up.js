@@ -8,7 +8,6 @@
         var wrapper = angular.element(element.children()[0]);
         var resource = angular.element(wrapper.children()[0]);
 
-        console.log('calc height');
         var height = resource[0].offsetHeight + 'px';
         wrapper.css('position', 'fixed');
         var top = (wrapper[0].offsetTop - 20) + 'px';
