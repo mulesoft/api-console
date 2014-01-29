@@ -1,3 +1,26 @@
+.resource-placeholder.pop-up {
+  .resource-container {
+    position: fixed;
+    z-index: 2;
+    width: ~"calc(100% - 40px)";
+    padding: 20px;
+    margin-left: -20px;
+    border: none;
+    top: 0;
+    height: 100vh;
+    transition: background-color 0.25s;
+    background-color: #E6E7EB;
+
+    .resource {
+      margin-top: 0;
+      .box-sizing(border-box);
+      height: ~"calc(100% - 40px)";
+      transition: height 0.25s, margin-top 0.25s;
+      overflow: hidden;
+    }
+  }
+}
+
 .resource {
   background-color: @veryLightGray;
   border-radius: 5px;

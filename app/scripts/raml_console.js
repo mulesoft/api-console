@@ -1,7 +1,9 @@
 'use strict';
 
 (function() {
-  var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize', 'fileInputOverride']);
+  var module = angular.module('ramlConsoleApp', ['raml', 'ngAnimate', 'ngSanitize', 'fileInputOverride']);
+
+  module.animation('.pop-up', RAML.Animations.popUp);
 
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
