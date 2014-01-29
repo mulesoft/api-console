@@ -12,6 +12,7 @@
         var resourceView = controllers[0],
             methodView   = controllers[1];
 
+        // TODO expandInitially has been removed
         if (resourceView.expandInitially(scope.method)) {
           methodView.expand();
         }

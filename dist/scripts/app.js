@@ -1,3 +1,43 @@
+(function() {
+  'use strict';
+
+  RAML.Animations = {};
+})();
+
+(function() {
+  'use strict';
+
+  RAML.Animations.popUp = function() {
+    return {
+      beforeAddClass: function(element, className, done) {
+        var placeholder = element;
+        var wrapper = angular.element(element.children()[0]);
+        var resource = angular.element(wrapper.children()[0]);
+
+        console.log('calc height');
+        var height = resource[0].offsetHeight + 'px';
+        wrapper.css('position', 'fixed');
+        var top = (wrapper[0].offsetTop - 20) + 'px';
+        wrapper.css('position', null);
+
+        placeholder.css('height', height);
+        resource.css('height', height);
+        resource.css('margin-top', top);
+
+        setTimeout(done, 0);
+      },
+      addClass: function(element, className, done) {
+        var resource = angular.element(element[0].children[0].children[0]);
+
+        resource.css('height', null);
+        resource.css('margin-top', '0px');
+
+        done();
+      }
+    };
+  };
+})();
+
 RAML.Inspector = (function() {
   'use strict';
 
@@ -1402,27 +1442,24 @@ RAML.Inspector = (function() {
     this.resource = $scope.resource;
     this.DataStore = DataStore;
     this.expanded = this.DataStore.get(this.resourceKey());
+
+    this.expandMethod = function(method) {
+      $scope.method = method;
+      this.expanded = true;
+    };
+
+    this.toggleExpansion = function() {
+      if ($scope.method) {
+        return;
+      }
+
+      this.expanded = !this.expanded;
+      this.DataStore.set(this.resourceKey(), this.expanded);
+    };
   };
 
   controller.prototype.resourceKey = function() {
     return this.resource.toString();
-  };
-
-  controller.prototype.expandInitially = function(method) {
-    if (method.method === this.methodToExpand) {
-      delete this.methodToExpand;
-      return true;
-    }
-    return false;
-  };
-
-  controller.prototype.expandMethod = function(method) {
-    this.methodToExpand = method.method;
-  };
-
-  controller.prototype.toggleExpansion = function() {
-    this.expanded = !this.expanded;
-    this.DataStore.set(this.resourceKey(), this.expanded);
   };
 
   RAML.Controllers.Resource = controller;
@@ -2243,6 +2280,7 @@ RAML.Inspector = (function() {
         var resourceView = controllers[0],
             methodView   = controllers[1];
 
+        // TODO expandInitially has been removed
         if (resourceView.expandInitially(scope.method)) {
           methodView.expand();
         }
@@ -2966,7 +3004,9 @@ RAML.Filters = {};
 'use strict';
 
 (function() {
-  var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize', 'fileInputOverride']);
+  var module = angular.module('ramlConsoleApp', ['raml', 'ngAnimate', 'ngSanitize', 'fileInputOverride']);
+
+  module.animation('.pop-up', RAML.Animations.popUp);
 
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
@@ -3341,47 +3381,51 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/resource.tmpl.html',
-    "<div ng-class=\"{expanded: resourceView.expanded, collapsed: !resourceView.expanded}\"\n" +
-    "     class='resource' role=\"resource\">\n" +
+    "<div class=\"resource-placeholder\" ng-class=\"{'pop-up': method}\">\n" +
+    "  <div class=\"resource-container\">\n" +
+    "    <div ng-class=\"{expanded: resourceView.expanded, collapsed: !resourceView.expanded}\" class='resource' role=\"resource\">\n" +
+    "      <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
+    "        <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
+    "          <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
+    "            <span class=\"caption\">Type</span>\n" +
+    "            <ul>\n" +
+    "              <li class=\"resource-type\" role=\"resource-type\">\n" +
+    "                {{resource.resourceType | nameFromParameterizable}}\n" +
+    "              </li>\n" +
+    "            </ul>\n" +
+    "          </span>\n" +
+    "          <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
+    "            <span class=\"caption\">Traits</span>\n" +
+    "            <ul>\n" +
+    "              <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\">\n" +
+    "                {{trait | nameFromParameterizable}}\n" +
+    "              </li>\n" +
+    "            </ul>\n" +
+    "          </span>\n" +
+    "        </div>\n" +
     "\n" +
-    "  <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
-    "    <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
-    "      <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
-    "        <span class=\"caption\">Type</span>\n" +
-    "        <ul>\n" +
-    "          <li class=\"resource-type\" role=\"resource-type\">\n" +
-    "            {{resource.resourceType | nameFromParameterizable}}\n" +
-    "          </li>\n" +
+    "        <h3 class=\"path\">\n" +
+    "          <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
+    "        </h3>\n" +
+    "        <ul class='methods' role=\"methods\" ng-if=\"resource.methods\">\n" +
+    "          <li class='method-name' ng-class='method.method'\n" +
+    "              ng-click='resourceView.expandMethod(method)' ng-repeat=\"method in resource.methods\">{{method.method}}</li>\n" +
     "        </ul>\n" +
-    "      </span>\n" +
-    "      <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
-    "        <span class=\"caption\">Traits</span>\n" +
-    "        <ul>\n" +
-    "          <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\">\n" +
-    "            {{trait | nameFromParameterizable}}\n" +
-    "          </li>\n" +
-    "        </ul>\n" +
-    "      </span>\n" +
-    "    </div>\n" +
+    "      </div>\n" +
     "\n" +
-    "    <h3 class=\"path\">\n" +
-    "      <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
-    "    </h3>\n" +
-    "    <ul class='methods' role=\"methods\" ng-if=\"resource.methods\" ng-hide=\"resourceView.expanded\">\n" +
-    "      <li class='method-name' ng-class='method.method'\n" +
-    "          ng-click='resourceView.expandMethod(method)' ng-repeat=\"method in resource.methods\">{{method.method}}</li>\n" +
-    "    </ul>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div ng-if='resourceView.expanded'>\n" +
-    "    <div>\n" +
     "      <div role='description'\n" +
     "           class='description'\n" +
-    "           ng-if='resource.description'\n" +
+    "           ng-show='resourceView.expanded && resource.description && !method'\n" +
     "           markdown='resource.description'>\n" +
     "      </div>\n" +
-    "      <div class='accordion' role=\"methods\">\n" +
-    "        <method ng-repeat=\"method in resource.methods\"></method>\n" +
+    "\n" +
+    "      <div ng-if='resourceView.expanded'>\n" +
+    "        <div>\n" +
+    "\n" +
+    "    <!--       <div class='accordion' role=\"methods\">\n" +
+    "            <method ng-repeat=\"method in resource.methods\"></method>\n" +
+    "          </div> -->\n" +
+    "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +

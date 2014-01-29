@@ -2502,6 +2502,15 @@ raml-console article#raml-console .clearfix:after,
 #raml-console-loader .clearfix:after {
   clear: both;
 }
+raml-console article#raml-console .disable-selection,
+#raml-console-loader .disable-selection {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}
 raml-console article#raml-console,
 #raml-console-loader {
   font-family: 'Open Sans', sans-serif;
@@ -3226,6 +3235,28 @@ raml-console article#raml-console .btn-connect,
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe4b849', endColorstr='#ffae8319', GradientType=0);
 }
+raml-console article#raml-console .resource-placeholder.pop-up .resource-container,
+#raml-console-loader .resource-placeholder.pop-up .resource-container {
+  position: fixed;
+  z-index: 2;
+  width: calc(100% - 40px);
+  padding: 20px;
+  margin-left: -20px;
+  border: none;
+  top: 0;
+  height: 100vh;
+  transition: background-color 0.25s;
+  background-color: #E6E7EB;
+}
+raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource,
+#raml-console-loader .resource-placeholder.pop-up .resource-container .resource {
+  margin-top: 0;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: calc(100% - 40px);
+  transition: height 0.25s, margin-top 0.25s;
+  overflow: hidden;
+}
 raml-console article#raml-console .resource,
 #raml-console-loader .resource {
   background-color: #f3f3f6;
@@ -3560,6 +3591,12 @@ raml-console article#raml-console .connect.method-summary:hover,
 }
 raml-console article#raml-console .method-name,
 #raml-console-loader .method-name {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
   font-size: 10px;
   text-transform: uppercase;
   color: #f3f3f6;
