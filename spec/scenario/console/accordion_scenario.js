@@ -84,60 +84,48 @@ describe("accordion view of API", function() {
         var resourceDescription = resources[0].$('[role="description"]');
         expect(resourceDescription.getText()).toEqual('This resource defeats all others');
 
-        // var resourceMethodSumaries = resources[0].$$('[role="methodSummary"]');
-        // expect(resourceMethodSumaries).toHaveLength(2);
-
         var topLevelMethods = resource.$('[role="methods"]');
         expect(topLevelMethods.isDisplayed()).toBeTruthy()
 
-        // var method = openMethod(1, resource);
-
-        // var path = method.$('[role="path"]');
-        // expect(path.getText()).toMatch(/\/[\s\S]*resource/);
-
-        // resources[1].$('.accordion-toggle').click();
-        // var resourceMethodSumaries = resources[1].$$('[role="methodSummary"]');
-        // expect(resourceMethodSumaries).toHaveLength(3);
+        var method = openMethod(1, resource);
+        expect(method.getText()).toMatch(/get/i);
       });
-
-      // var firstMethodSpan = ptor.$('[role="resource"] [role="method"]');
-      // expect(firstMethodSpan.getText()).toMatch(/get/i)
     });
   });
 
-  // describe("method expansion (direct and through method summaries)", function() {
-  //   raml = createRAML(
-  //     'title: Example API',
-  //     'baseUri: http://www.example.com',
-  //     'traits:',
-  //     '  - sorted:',
-  //     '      queryParameters:',
-  //     '        sort:',
-  //     '          enum: ["asc", "desc"]',
-  //     '/resource:',
-  //     '  get:',
-  //     '    is: ["sorted"]',
-  //     '    description: Get all resources'
-  //   );
+  describe("method expansion", function() {
+    raml = createRAML(
+      'title: Example API',
+      'baseUri: http://www.example.com',
+      'traits:',
+      '  - sorted:',
+      '      queryParameters:',
+      '        sort:',
+      '          enum: ["asc", "desc"]',
+      '/resource:',
+      '  get:',
+      '    is: ["sorted"]',
+      '    description: Get all resources'
+    );
 
-  //  loadRamlFixture(raml);
+   loadRamlFixture(raml);
 
-  //   it("displays the method description and traits", function() {
-  //     var resource = toggleResource(1);
-  //     var method = openMethod(1, resource);
-  //     var description = resource.$('[role="method"] [role="full-description"]');
-  //     var traits = resource.$('[role="method"] [role="traits"]');
+    it("displays the method description and traits", function() {
+      var resource = toggleResource(1);
+      var method = openMethod(1, resource);
+      var description = method.$('[role="full-description"]');
+      var traits = method.$('[role="traits"]');
 
-  //     expect(description.getText()).toEqual('Get all resources')
-  //     expect(traits.getText()).toEqual('sorted')
+      expect(description.getText()).toEqual('Get all resources')
+      expect(traits.getText()).toEqual('sorted')
 
-  //     resource = toggleResource(1);
-  //     resource.$('[role="resource-summary"] [role="methods"] li:first-child').click();
-  //     description = resource.$('[role="method"] [role="full-description"]');
+      resource = toggleResource(1);
+      resource.$('[role="resource-summary"] [role="methods"] li:first-child').click();
+      description = resource.$('[role="method"] [role="full-description"]');
 
-  //     expect(description.getText()).toEqual('Get all resources')
-  //   });
-  // });
+      expect(description.getText()).toEqual('Get all resources')
+    });
+  });
 
   describe("resource grouping", function() {
     raml = createRAML(

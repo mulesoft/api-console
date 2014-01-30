@@ -1,6 +1,6 @@
 (function() {
   global.toggleResource = function(index) {
-    var resource = ptor.$('[role="resource"]:nth-of-type(' + index + ')');
+    var resource = ptor.$('[role="resource-placeholder"]:nth-of-type(' + index + ') [role="resource"]');
 
     resource.$('.accordion-toggle').click();
 
@@ -8,10 +8,10 @@
   };
 
   global.openMethod = function(index, resource) {
-    var method = resource.$('[role="method"]:nth-child(' + index + ')');
-    method.$('.accordion-toggle').click();
+    var methodName = resource.$('[role="methods"] li:nth-child(' + index + ')');
+    methodName.click();
 
-    return method;
+    return resource.$('[role="method"]');
   };
 
   global.openDocumentationTab = function(index, method) {

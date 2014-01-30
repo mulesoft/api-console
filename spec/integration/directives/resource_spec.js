@@ -73,14 +73,16 @@ describe("RAML.Directives.resource", function() {
     parseRAML(raml);
 
     beforeEach(function() {
-      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource></resource>', raml,  function($el) {
-        setFixtures($el);
-        resourceType = $el.find('[role="resource-type"]');
-        trait = $el.find('[role="trait"]');
-        description = $el.find('[role="description"]');
+      scope = createScopeWithFirstResourceAndMethod(this.api);
+      scope.ramlConsole = { keychain: {} };
+      $el = compileTemplate('<resource></resource>', scope);
+      setFixtures($el);
 
-        click($el.find('[role="methods"] li'));
-      });
+      resourceType = $el.find('[role="resource-type"]');
+      trait = $el.find('[role="trait"]');
+      description = $el.find('[role="description"]');
+
+      click($el.find('[role="methods"] li'));
     });
 
     it("automatically shows types and traits", function() {
@@ -93,7 +95,7 @@ describe("RAML.Directives.resource", function() {
     });
 
     it("does not hide types and traits when clicked", function() {
-      click(this.$el.find('[role="resource-summary"]'));
+      click($el.find('[role="resource-summary"]'));
       expect(resourceType).toBeVisible();
       expect(trait).toBeVisible();
     });
@@ -115,6 +117,7 @@ describe("RAML.Directives.resource", function() {
     beforeEach(function() {
       var inspected = RAML.Inspector.create(this.api);
       scope = createScope();
+      scope.ramlConsole = { keychain: {} };
       scope.resource = inspected.resources[0];
       scope.method = scope.resource.methods[0];
 
@@ -141,12 +144,17 @@ describe("RAML.Directives.resource", function() {
       '  get:'
     );
 
+    parseRAML(raml);
+
     beforeEach(function() {
-      compileWithScopeFromFirstResourceAndMethodOfRAML('<resource></resource>', raml);
+      scope = createScopeWithFirstResourceAndMethod(this.api);
+      scope.ramlConsole = { keychain: {} };
+      $el = compileTemplate('<resource></resource>', scope);
+      setFixtures($el);
     });
 
     it("displays only the name of the trait", function() {
-      var traits = this.$el.find('[role="trait"]').text().trim();
+      var traits = $el.find('[role="trait"]').text().trim();
       expect(traits).toEqual('chau');
     });
   });
