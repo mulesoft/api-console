@@ -22,9 +22,12 @@
 
           description.data('height', description[0].getBoundingClientRect().height + 20 + 'px');
           description.css('height', description.data('height'));
+          setTimeout(function() {
+            description.css('transition', 'height 0.33s');
+          });
 
           done();
-        }, 0);
+        });
       },
       addClass: function(element, className, done) {
         var placeholder = element;
@@ -34,15 +37,19 @@
         resource.scope().$apply('resourceView.expandMethod(methodToAdd)');
         setTimeout(function() {
           resource.css('transition', 'height .33s, margin-top .33s');
-          resource.css('height', null);
-          resource.css('margin-top', null);
-          description.css('height', '0px');
-
           setTimeout(function() {
-            placeholder.css('height', resource.data('height'));
-            done();
-          }, 333);
-        }, 0);
+            resource.css('height', null);
+            resource.css('margin-top', null);
+            setTimeout(function() {
+              description.css('height', '0px');
+            });
+
+            setTimeout(function() {
+              placeholder.css('height', resource.data('height'));
+              done();
+            }, 333);
+          });
+        });
       },
       beforeRemoveClass: function(element, className, done) {
         var wrapper = angular.element(element.children()[0]);
@@ -50,11 +57,14 @@
         var description = angular.element(resource[0].querySelector('.description'));
 
         wrapper.css('background-color', 'transparent');
-        resource.css('height', resource.data('height'));
-        resource.css('margin-top', parseInt(resource.data('margin-top'), 10) - 20 + 'px');
-        description.css('height', description.data('height'));
+        resource.css('height', resource[0].getBoundingClientRect().height + 'px'); // Firefox won't animate from calc(100%-40px) to _px
+        setTimeout(function() {
+          resource.css('height', resource.data('height'));
+          resource.css('margin-top', parseInt(resource.data('margin-top'), 10) - 20 + 'px');
+          description.css('height', description.data('height'));
 
-        setTimeout(done, 333);
+          setTimeout(done, 333);
+        }, 20);
       },
       removeClass: function(element, className, done) {
         var placeholder = element;
@@ -69,7 +79,11 @@
         resource.css('transition', null);
         resource.css('height', null);
         resource.css('margin-top', null);
+        description.css('transition', 'height 0s'); // otherwise Sarfari incorrectly animates description from 0 to its natural height
         description.css('height', null);
+        setTimeout(function() {
+          description.css('transition', null);
+        });
 
         done();
       }

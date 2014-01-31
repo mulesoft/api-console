@@ -1,5 +1,4 @@
 .resource-placeholder {
-  /*border: 1px solid red;*/
   margin: 5px 0;
   .box-sizing(border-box);
 
@@ -21,11 +20,8 @@
     background-color: #E6E7EB;
 
     .resource {
-      /*margin-top: 0;*/
       .box-sizing(border-box);
       height: ~"calc(100% - 40px)";
-      /*transition: height 0.33s cubic-bezier(1, 0, 0, 1), margin-top 0.33s cubic-bezier(1, 0, 0, 1);*/
-      /*transition: height 0.33s, margin-top 0.33s;*/
 
       .method {
         opacity: 1;
@@ -38,10 +34,6 @@
   .resource-container {
     transition: background-color 0.33s;
     background-color: transparent;
-
-    .resource {
-      /*transition: height 0.33s, margin-top 0.33s;*/
-    }
   }
 }
 
@@ -61,7 +53,6 @@
     float: right;
     width: 0;
     height: 0;
-    /*margin-right: 6px;*/
     margin-top: -15px;
     opacity: 1;
     transition: opacity 0.333s;
@@ -113,7 +104,6 @@
   }
 
   .description {
-    transition: height 0.25s;
     p:first-child {
       margin-top: 5px;
     }
