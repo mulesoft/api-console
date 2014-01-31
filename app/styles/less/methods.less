@@ -38,20 +38,15 @@
   width: 60px;
 }
 
-/*.pop-up .method {
-  display: block;
-}*/
-
 .method {
-  /*display: none;*/
+  .flex(1 1 auto);
   position: relative;
-  height: 100%; // TODO
-  overflow: auto; // TODO
   margin: 0px 0px 10px;
   border-radius: 0 0 5px 5px;
   border-width: 1px;
   border-style: solid;
   background: white;
+  .flex-column;
 
   &:first-child {
     margin-top: 0;
@@ -71,9 +66,7 @@
 }
 
 .method-summary {
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
+  .flex(0 0 auto);
 
   .abbreviated-description {
     padding: 0 20px 0 10px;

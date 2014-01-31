@@ -21,6 +21,25 @@
           transition: @transition;
 }
 
+.flex-column {
+  .display-flex;
+  .flex-direction(column);
+}
+
+.flex-direction(@direction) {
+  -webkit-flex-direction: @direction;
+  flex-direction: @direction;
+}
+
+.display-flex {
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex(@values) {
+  flex: @values;
+}
+
 .clearfix {
   *zoom: 1;
   &:before,
