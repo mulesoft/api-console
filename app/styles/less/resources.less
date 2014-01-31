@@ -1,3 +1,13 @@
+.resource-placeholder {
+  /*border: 1px solid red;*/
+  margin: 5px 0;
+  .box-sizing(border-box);
+
+  .method {
+    transition: opacity 0.5s;
+  }
+}
+
 .resource-placeholder.pop-up {
   .resource-container {
     position: fixed;
@@ -8,15 +18,29 @@
     border: none;
     top: 0;
     height: 100vh;
-    transition: background-color 0.25s;
     background-color: #E6E7EB;
 
     .resource {
-      margin-top: 0;
+      /*margin-top: 0;*/
       .box-sizing(border-box);
       height: ~"calc(100% - 40px)";
-      transition: height 0.25s, margin-top 0.25s;
-      overflow: hidden;
+      /*transition: height 0.33s cubic-bezier(1, 0, 0, 1), margin-top 0.33s cubic-bezier(1, 0, 0, 1);*/
+      /*transition: height 0.33s, margin-top 0.33s;*/
+
+      .method {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.resource-placeholder {
+  .resource-container {
+    transition: background-color 0.33s;
+    background-color: transparent;
+
+    .resource {
+      /*transition: height 0.33s, margin-top 0.33s;*/
     }
   }
 }
@@ -25,12 +49,39 @@
   background-color: @veryLightGray;
   border-radius: 5px;
   border: 1px solid @lightGray;
-  margin: 5px 0;
   padding: 15px;
   padding-bottom: 0;
+  overflow: hidden;
 
   &.collapsed:hover, &.expanded {
     background-color: white;
+  }
+
+  i.collapse {
+    float: right;
+    width: 0;
+    height: 0;
+    /*margin-right: 6px;*/
+    margin-top: -15px;
+    opacity: 1;
+    transition: opacity 0.333s;
+
+    &.transparent {
+      opacity: 0;
+    }
+
+    &::before {
+      display: block;
+      background: #999;
+      border-radius: 3px;
+      box-shadow: inset 0 0 4px 0 rgba(0,0,0,0.25);
+      color: #666;
+      font-size: 11px;
+      text-shadow: 1px 0 rgba(255,255,255,0.25);
+      text-align: center;
+      width: 15px;
+      line-height: 15px;
+    }
   }
 
   .summary {
@@ -62,6 +113,7 @@
   }
 
   .description {
+    transition: height 0.25s;
     p:first-child {
       margin-top: 5px;
     }
@@ -76,6 +128,7 @@
     text-align: right;
     margin-top: -1px;
     margin-bottom: 8px;
+    margin-right: -5px;
 
     li {
       float: right;

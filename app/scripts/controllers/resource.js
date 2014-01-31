@@ -7,14 +7,29 @@
     this.DataStore = DataStore;
     this.expanded = this.DataStore.get(this.resourceKey());
 
+    this.initiateExpand = function(method) {
+      if ($scope.method) {
+        $scope.method = method;
+      } else {
+        $scope.methodToAdd = method;
+      }
+    };
+
     this.expandMethod = function(method) {
       $scope.method = method;
       DataStore.set(this.methodKey(), method.method);
-      this.expanded = true;
+      // this.expanded = true;
+    };
+
+    this.collapseMethod = function($event) {
+      // this.expanded = false;
+      DataStore.set(this.methodKey(), undefined);
+      $scope.methodToAdd = undefined;
+      $event.stopPropagation();
     };
 
     this.toggleExpansion = function() {
-      if ($scope.method) {
+      if ($scope.methodToAdd || $scope.method) {
         return;
       }
 
