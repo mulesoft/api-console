@@ -85,20 +85,20 @@ describe("RAML.Directives.resource", function() {
       click($el.find('[role="methods"] li'));
     });
 
-    it("automatically shows types and traits", function() {
-      expect(resourceType).toBeVisible();
-      expect(trait).toBeVisible();
-    });
+    // it("automatically shows types and traits", function() {
+    //   expect(resourceType).toBeVisible();
+    //   expect(trait).toBeVisible();
+    // });
 
     it("hides resource description", function() {
       expect(description).not.toBeVisible();
     });
 
-    it("does not hide types and traits when clicked", function() {
-      click($el.find('[role="resource-summary"]'));
-      expect(resourceType).toBeVisible();
-      expect(trait).toBeVisible();
-    });
+    // it("does not hide types and traits when clicked", function() {
+    //   click($el.find('[role="resource-summary"]'));
+    //   expect(resourceType).toBeVisible();
+    //   expect(trait).toBeVisible();
+    // });
   });
 
   describe("given RAML with a resourceType with parameters", function() {

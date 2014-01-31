@@ -3241,8 +3241,6 @@ raml-console article#raml-console .btn-connect,
 }
 raml-console article#raml-console .resource-placeholder,
 #raml-console-loader .resource-placeholder {
-  /*border: 1px solid red;*/
-
   margin: 5px 0;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -3265,15 +3263,9 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
 }
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource,
 #raml-console-loader .resource-placeholder.pop-up .resource-container .resource {
-  /*margin-top: 0;*/
-
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   height: calc(100% - 40px);
-  /*transition: height 0.33s cubic-bezier(1, 0, 0, 1), margin-top 0.33s cubic-bezier(1, 0, 0, 1);*/
-
-  /*transition: height 0.33s, margin-top 0.33s;*/
-
 }
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource .method,
 #raml-console-loader .resource-placeholder.pop-up .resource-container .resource .method {
@@ -3283,11 +3275,6 @@ raml-console article#raml-console .resource-placeholder .resource-container,
 #raml-console-loader .resource-placeholder .resource-container {
   transition: background-color 0.33s;
   background-color: transparent;
-}
-raml-console article#raml-console .resource-placeholder .resource-container .resource,
-#raml-console-loader .resource-placeholder .resource-container .resource {
-  /*transition: height 0.33s, margin-top 0.33s;*/
-
 }
 raml-console article#raml-console .resource,
 #raml-console-loader .resource {
@@ -3309,8 +3296,6 @@ raml-console article#raml-console .resource i.collapse,
   float: right;
   width: 0;
   height: 0;
-  /*margin-right: 6px;*/
-
   margin-top: -15px;
   opacity: 1;
   transition: opacity 0.333s;
@@ -3369,10 +3354,6 @@ raml-console article#raml-console .resource .summary:after,
 raml-console article#raml-console .resource .summary:after,
 #raml-console-loader .resource .summary:after {
   clear: both;
-}
-raml-console article#raml-console .resource .description,
-#raml-console-loader .resource .description {
-  transition: height 0.25s;
 }
 raml-console article#raml-console .resource .description p:first-child,
 #raml-console-loader .resource .description p:first-child {
