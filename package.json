@@ -26,7 +26,8 @@
     "grunt-angular-templates": "~0.4.7",
     "protractor": "0.16.0",
     "selenium-webdriver": "*",
-    "nock": "*"
+    "nock": "*",
+    "grunt-autoprefixer": "~0.6.4"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -34,5 +35,4 @@
   "scripts": {
     "test": "grunt test"
   }
-
 }
