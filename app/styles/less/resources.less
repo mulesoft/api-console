@@ -1,174 +1,176 @@
 .resource-placeholder {
   margin: 5px 0;
   .box-sizing(border-box);
-}
 
-.resource-placeholder.pop-up {
-  .resource-container {
-    position: fixed;
-    z-index: 2;
-    width: ~"calc(100% - 40px)";
-    padding: 20px;
-    margin-left: -20px;
-    border: none;
-    top: 0;
-    height: 100vh;
-    background-color: #E6E7EB;
+  &.pop-up {
+    .resource-container {
+      position: fixed;
+      z-index: 2;
+      width: ~"calc(100% - 40px)";
+      padding: 20px;
+      margin-left: -20px;
+      border: none;
+      top: 0;
+      height: 100vh;
+      background-color: #E6E7EB;
 
-    .resource {
-      .box-sizing(border-box);
-      height: ~"calc(100% - 40px)";
+      .resource {
+        .box-sizing(border-box);
+        height: ~"calc(100% - 40px)";
 
-      .method {
-        opacity: 1;
+        .summary {
+          cursor: auto;
+
+          .method-name {
+            cursor: pointer;
+          }
+        }
       }
     }
   }
-}
 
-.resource-placeholder {
   .resource-container {
     transition: background-color 0.33s;
     background-color: transparent;
-  }
-}
 
-.resource {
-  background-color: @veryLightGray;
-  border-radius: 5px;
-  border: 1px solid @lightGray;
-  padding: 15px;
-  padding-bottom: 0;
-  overflow: hidden;
-  .flex-column;
-  > * {
-    .flex(0 0 auto);
-  }
-
-  &.collapsed:hover, &.expanded {
-    background-color: white;
-  }
-
-  i.collapse {
-    float: right;
-    width: 0;
-    height: 0;
-    margin-right: -1px;
-    margin-top: -15px;
-    opacity: 1;
-    cursor: pointer;
-
-    &.transparent {
-      opacity: 0;
-    }
-
-    &::before {
-      display: block;
-      border-radius: 1px;
-      color: #666;
-      font-size: 15px;
-      text-shadow: 1px 0 rgba(255,255,255,0.25);
-      text-align: center;
-      width: 14px;
-      line-height: 14px;
-    }
-  }
-
-  .summary {
-    position: relative;
-    cursor: pointer;
-
-    .modifiers {
-      margin-top: -15px;
-      margin-bottom: 8px;
-      min-height: 7px;
-    }
-
-    .path {
-      float: left;
-      margin: 0;
-      margin-top: 1px;
-      margin-bottom: 15px;
-      line-height: 18px;
-      max-width: 100%;
-      word-wrap: break-word;
-
-      span:last-child {
-        font-weight: bold;
-        color: @black;
+    .resource {
+      background-color: @veryLightGray;
+      border-radius: 5px;
+      border: 1px solid @lightGray;
+      padding: 15px;
+      padding-bottom: 0;
+      overflow: hidden;
+      .flex-column;
+      > * {
+        .flex(0 0 auto);
       }
-    }
 
-    .clearfix();
-  }
+      &.collapsed:hover, &.expanded {
+        background-color: white;
+      }
 
-  .description {
-    p:first-child {
-      margin-top: 5px;
-    }
+      i.collapse {
+        float: right;
+        width: 0;
+        height: 0;
+        margin-right: -1px;
+        margin-top: -15px;
+        opacity: 1;
+        cursor: pointer;
 
-    p:last-child {
-      margin-bottom: 20px;
-    }
-  }
+        &.transparent {
+          opacity: 0;
+        }
 
-  .methods {
-    float: right;
-    text-align: right;
-    margin-top: -1px;
-    margin-bottom: 8px;
-    margin-right: -5px;
+        &::before {
+          display: block;
+          border-radius: 1px;
+          color: #666;
+          font-size: 15px;
+          text-shadow: 1px 0 rgba(255,255,255,0.25);
+          text-align: center;
+          width: 14px;
+          line-height: 14px;
+        }
+      }
 
-    li {
-      float: right;
-      line-height: 22px;
-      margin-right: 5px;
-      margin-bottom: 5px;
-    }
-  }
-}
+      .summary {
+        position: relative;
+        cursor: pointer;
 
-.modifiers {
-  font-size: 9px;
-  letter-spacing: 0.33px;
+        .modifiers {
+          margin-top: -15px;
+          margin-bottom: 8px;
+          min-height: 7px;
+        }
 
-  .modifier-group {
-    display: inline-block;
-    margin-right: 15px;
-    margin-bottom: 5px;
-    white-space: nowrap;
+        .path {
+          float: left;
+          margin: 0;
+          margin-top: 1px;
+          margin-bottom: 15px;
+          line-height: 18px;
+          max-width: 100%;
+          word-wrap: break-word;
 
-    .caption {
-      display: inline-block;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin-right: 5px;
-      vertical-align: top;
-      min-width: 32px;
-    }
+          span:last-child {
+            font-weight: bold;
+            color: @black;
+          }
+        }
 
-    ul {
-      display: inline-block;
-      white-space: normal;
+        .clearfix();
+      }
 
-      li {
-        display: inline-block;
-        padding: 0px 6px;
-        line-height: 14px;
-        margin-left: -1px;
+      .description {
+        p:first-child {
+          margin-top: 5px;
+        }
+
+        p:last-child {
+          margin-bottom: 20px;
+        }
+      }
+
+      .methods {
+        float: right;
+        text-align: right;
         margin-top: -1px;
-        &.resource-type, &.trait {
-          background-color: @veryLightGray;
-          color: @gray9;
-          border: 1px solid @lightGray;
+        margin-bottom: 8px;
+        margin-right: -5px;
+
+        li {
+          float: right;
+          line-height: 22px;
+          margin-right: 5px;
+          margin-bottom: 5px;
         }
       }
     }
 
-    &:last-child {
-      margin-right: 5px;
-      ul {
-        padding-right: 32px;
+    .modifiers {
+      font-size: 9px;
+      letter-spacing: 0.33px;
+
+      .modifier-group {
+        display: inline-block;
+        margin-right: 15px;
+        margin-bottom: 5px;
+        white-space: nowrap;
+
+        .caption {
+          display: inline-block;
+          font-weight: bold;
+          text-transform: uppercase;
+          margin-right: 5px;
+          vertical-align: top;
+          min-width: 32px;
+        }
+
+        ul {
+          display: inline-block;
+          white-space: normal;
+
+          li {
+            display: inline-block;
+            padding: 0px 6px;
+            line-height: 14px;
+            margin-left: -1px;
+            margin-top: -1px;
+            &.resource-type, &.trait {
+              background-color: @veryLightGray;
+              color: @gray9;
+              border: 1px solid @lightGray;
+            }
+          }
+        }
+
+        &:last-child {
+          margin-right: 5px;
+          ul {
+            padding-right: 32px;
+          }
+        }
       }
     }
   }
