@@ -11,16 +11,6 @@
   filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
 }
 
-.box-sizing(@boxmodel) {
-  -moz-box-sizing: @boxmodel;
-       box-sizing: @boxmodel;
-}
-
-.transition(@transition) {
-  -webkit-transition: @transition;
-          transition: @transition;
-}
-
 .clearfix {
   *zoom: 1;
   &:before,
@@ -31,9 +21,4 @@
   &:after {
     clear: both;
   }
-}
-
-.box-shadow(@shadow) {
-  -webkit-box-shadow: @shadow; // iOS <4.3 & Android <4.1
-          box-shadow: @shadow;
 }
