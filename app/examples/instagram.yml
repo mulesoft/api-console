@@ -11,12 +11,6 @@ securitySchemes:
         all requests to the API must be made over SSL (https:// not http://)
       type: OAuth 2.0
       describedBy:
-        headers:
-          Authorization:
-            description: |
-              Used to send a valid OAuth 2 access token. Do not use together with
-              the "access_token" queryParameters string parameter.
-            type: string
         queryParameters:
           access_token:
             description: |
