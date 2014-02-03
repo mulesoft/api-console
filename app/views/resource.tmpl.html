@@ -2,7 +2,7 @@
   <div class="resource-container">
     <div ng-class="{expanded: resourceView.expanded, collapsed: !resourceView.expanded}" class='resource' role="resource">
       <div>
-        <i class="icon-remove-circle collapse" ng-class="{transparent: !methodToAdd}" ng-click='resourceView.collapseMethod($event)'></i>
+        <i class="icon-remove collapse" ng-class="{transparent: !methodToAdd}" ng-click='resourceView.collapseMethod($event)'></i>
 
         <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>
           <div class="modifiers" ng-show='resourceView.expanded'>
