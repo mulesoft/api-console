@@ -4,19 +4,20 @@
 
   &.pop-up {
     .resource-container {
-      position: fixed;
+      .box-sizing(border-box);
+      position: absolute;
       z-index: 2;
-      width: ~"calc(100% - 40px)";
+      width: 100%;
       padding: 20px;
       margin-left: -20px;
       border: none;
       top: 0;
-      height: 100vh;
+      height: 100%;
       background-color: #E6E7EB;
 
       .resource {
         .box-sizing(border-box);
-        height: ~"calc(100% - 40px)";
+        height: 100%;
 
         .summary {
           cursor: auto;
@@ -43,6 +44,9 @@
       .flex-column;
       > * {
         .flex(0 0 auto);
+      }
+      .method {
+        .flex(1 1 auto);
       }
 
       &.collapsed:hover, &.expanded {

@@ -4,23 +4,22 @@
   RAML.Animations.popUp = function() {
     return {
       beforeAddClass: function(element, className, done) {
-        angular.element(document.body).css('height', '100vh').css('overflow', 'hidden');
-
         var placeholder = element;
         var wrapper = angular.element(element.children()[0]);
         var resource = angular.element(wrapper.children()[0]);
         var description = angular.element(resource[0].querySelector('.description'));
 
         var rect = placeholder[0].getBoundingClientRect();
+        var topOffset = placeholder[0].offsetParent.getBoundingClientRect().top;
         placeholder.scope().resourceView.expanded = true;
         setTimeout(function() {
           var rect2 = placeholder[0].getBoundingClientRect();
 
           placeholder.css('height', rect.height + 'px');
           resource.css('height', rect.height + 'px');
-          resource.css('margin-top', rect.top - 20 + 'px'); // 20 padding from wrapper
+          resource.css('margin-top', rect.top - 20 - topOffset + 'px'); // 20 padding from wrapper
           resource.data('height', rect2.height + 'px');
-          resource.data('margin-top', rect.top + 'px');
+          resource.data('margin-top', rect.top - topOffset + 'px');
 
           description.data('height', description[0].getBoundingClientRect().height + 20 + 'px');
           description.css('height', description.data('height'));
@@ -48,6 +47,7 @@
 
             setTimeout(function() {
               placeholder.css('height', resource.data('height'));
+              angular.element(document.querySelector('[role="api-console"]')).css('height', '0').css('overflow', 'hidden');
               done();
             }, 333);
           });
@@ -57,6 +57,8 @@
         var wrapper = angular.element(element.children()[0]);
         var resource = angular.element(wrapper.children()[0]);
         var description = angular.element(resource[0].querySelector('.description'));
+
+        angular.element(document.querySelector('[role="api-console"]')).css('height', 'auto').css('overflow', 'visible');
 
         wrapper.css('background-color', 'transparent');
         resource.css('height', resource[0].getBoundingClientRect().height + 'px'); // Firefox won't animate from calc(100%-40px) to _px
@@ -86,8 +88,6 @@
         setTimeout(function() {
           description.css('transition', '');
         });
-
-        angular.element(document.body).css('height', 'auto').css('overflow', 'visible');
 
         done();
       }
