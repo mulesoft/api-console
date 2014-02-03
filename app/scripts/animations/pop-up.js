@@ -4,6 +4,8 @@
   RAML.Animations.popUp = function() {
     return {
       beforeAddClass: function(element, className, done) {
+        angular.element(document.body).css('height', '100vh').css('overflow', 'hidden');
+
         var placeholder = element;
         var wrapper = angular.element(element.children()[0]);
         var resource = angular.element(wrapper.children()[0]);
@@ -38,8 +40,8 @@
         setTimeout(function() {
           resource.css('transition', 'height .33s, margin-top .33s');
           setTimeout(function() {
-            resource.css('height', null);
-            resource.css('margin-top', null);
+            resource.css('height', '');
+            resource.css('margin-top', '');
             setTimeout(function() {
               description.css('height', '0px');
             });
@@ -74,16 +76,18 @@
 
         resource.scope().$apply('method = methodToAdd');
 
-        placeholder.css('height', null);
-        wrapper.css('background-color', null);
-        resource.css('transition', null);
-        resource.css('height', null);
-        resource.css('margin-top', null);
+        placeholder.css('height', '');
+        wrapper.css('background-color', '');
+        resource.css('transition', '');
+        resource.css('height', '');
+        resource.css('margin-top', '');
         description.css('transition', 'height 0s'); // otherwise Sarfari incorrectly animates description from 0 to its natural height
-        description.css('height', null);
+        description.css('height', '');
         setTimeout(function() {
-          description.css('transition', null);
+          description.css('transition', '');
         });
+
+        angular.element(document.body).css('height', 'auto').css('overflow', 'visible');
 
         done();
       }
