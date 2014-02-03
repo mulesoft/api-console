@@ -147,10 +147,6 @@ raml-console article#raml-console,
 
   /* IE7 hack to prevent it from returning funny offsetTops on the spans */
 
-  /*.pop-up .method {
-  display: block;
-}*/
-
 }
 @font-face {
   font-family: 'FontAwesome';
@@ -2491,6 +2487,18 @@ raml-console article#raml-console .icon-spinner,
   font-size: 24px;
   line-height: inherit;
 }
+raml-console article#raml-console .flex-column,
+#raml-console-loader .flex-column {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+raml-console article#raml-console .display-flex,
+#raml-console-loader .display-flex {
+  display: -webkit-flex;
+  display: flex;
+}
 raml-console article#raml-console .clearfix,
 #raml-console-loader .clearfix {
   *zoom: 1;
@@ -3245,92 +3253,105 @@ raml-console article#raml-console .resource-placeholder,
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-raml-console article#raml-console .resource-placeholder .method,
-#raml-console-loader .resource-placeholder .method {
-  transition: opacity 0.5s;
-}
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container,
 #raml-console-loader .resource-placeholder.pop-up .resource-container {
-  position: fixed;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
   z-index: 2;
-  width: calc(100% - 40px);
+  width: 100%;
   padding: 20px;
   margin-left: -20px;
   border: none;
   top: 0;
-  height: 100vh;
+  height: 100%;
   background-color: #E6E7EB;
 }
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource,
 #raml-console-loader .resource-placeholder.pop-up .resource-container .resource {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  height: calc(100% - 40px);
+  height: 100%;
 }
-raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource .method,
-#raml-console-loader .resource-placeholder.pop-up .resource-container .resource .method {
-  opacity: 1;
+raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource .summary,
+#raml-console-loader .resource-placeholder.pop-up .resource-container .resource .summary {
+  cursor: auto;
+}
+raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource .summary .method-name,
+#raml-console-loader .resource-placeholder.pop-up .resource-container .resource .summary .method-name {
+  cursor: pointer;
 }
 raml-console article#raml-console .resource-placeholder .resource-container,
 #raml-console-loader .resource-placeholder .resource-container {
   transition: background-color 0.33s;
   background-color: transparent;
 }
-raml-console article#raml-console .resource,
-#raml-console-loader .resource {
+raml-console article#raml-console .resource-placeholder .resource-container .resource,
+#raml-console-loader .resource-placeholder .resource-container .resource {
   background-color: #f3f3f6;
   border-radius: 5px;
   border: 1px solid #c0c2c9;
   padding: 15px;
   padding-bottom: 0;
   overflow: hidden;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
 }
-raml-console article#raml-console .resource.collapsed:hover,
-#raml-console-loader .resource.collapsed:hover,
-raml-console article#raml-console .resource.expanded,
-#raml-console-loader .resource.expanded {
+raml-console article#raml-console .resource-placeholder .resource-container .resource > *,
+#raml-console-loader .resource-placeholder .resource-container .resource > * {
+  flex: 0 0 auto;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource .method,
+#raml-console-loader .resource-placeholder .resource-container .resource .method {
+  flex: 1 1 auto;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource.collapsed:hover,
+#raml-console-loader .resource-placeholder .resource-container .resource.collapsed:hover,
+raml-console article#raml-console .resource-placeholder .resource-container .resource.expanded,
+#raml-console-loader .resource-placeholder .resource-container .resource.expanded {
   background-color: white;
 }
-raml-console article#raml-console .resource i.collapse,
-#raml-console-loader .resource i.collapse {
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse {
   float: right;
   width: 0;
   height: 0;
+  margin-right: -1px;
   margin-top: -15px;
   opacity: 1;
-  transition: opacity 0.333s;
+  cursor: pointer;
 }
-raml-console article#raml-console .resource i.collapse.transparent,
-#raml-console-loader .resource i.collapse.transparent {
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse.transparent,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse.transparent {
   opacity: 0;
 }
-raml-console article#raml-console .resource i.collapse::before,
-#raml-console-loader .resource i.collapse::before {
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse::before,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse::before {
   display: block;
-  background: #999;
-  border-radius: 3px;
-  box-shadow: inset 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 1px;
   color: #666;
-  font-size: 11px;
+  font-size: 15px;
   text-shadow: 1px 0 rgba(255, 255, 255, 0.25);
   text-align: center;
-  width: 15px;
-  line-height: 15px;
+  width: 14px;
+  line-height: 14px;
 }
-raml-console article#raml-console .resource .summary,
-#raml-console-loader .resource .summary {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary {
   position: relative;
   cursor: pointer;
   *zoom: 1;
 }
-raml-console article#raml-console .resource .summary .modifiers,
-#raml-console-loader .resource .summary .modifiers {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary .modifiers,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary .modifiers {
   margin-top: -15px;
   margin-bottom: 8px;
   min-height: 7px;
 }
-raml-console article#raml-console .resource .summary .path,
-#raml-console-loader .resource .summary .path {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary .path,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary .path {
   float: left;
   margin: 0;
   margin-top: 1px;
@@ -3339,59 +3360,59 @@ raml-console article#raml-console .resource .summary .path,
   max-width: 100%;
   word-wrap: break-word;
 }
-raml-console article#raml-console .resource .summary .path span:last-child,
-#raml-console-loader .resource .summary .path span:last-child {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary .path span:last-child,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary .path span:last-child {
   font-weight: bold;
   color: #18191d;
 }
-raml-console article#raml-console .resource .summary:before,
-#raml-console-loader .resource .summary:before,
-raml-console article#raml-console .resource .summary:after,
-#raml-console-loader .resource .summary:after {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary:before,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary:before,
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary:after,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary:after {
   display: table;
   content: "";
 }
-raml-console article#raml-console .resource .summary:after,
-#raml-console-loader .resource .summary:after {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary:after,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary:after {
   clear: both;
 }
-raml-console article#raml-console .resource .description p:first-child,
-#raml-console-loader .resource .description p:first-child {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .description p:first-child,
+#raml-console-loader .resource-placeholder .resource-container .resource .description p:first-child {
   margin-top: 5px;
 }
-raml-console article#raml-console .resource .description p:last-child,
-#raml-console-loader .resource .description p:last-child {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .description p:last-child,
+#raml-console-loader .resource-placeholder .resource-container .resource .description p:last-child {
   margin-bottom: 20px;
 }
-raml-console article#raml-console .resource .methods,
-#raml-console-loader .resource .methods {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .methods,
+#raml-console-loader .resource-placeholder .resource-container .resource .methods {
   float: right;
   text-align: right;
   margin-top: -1px;
   margin-bottom: 8px;
   margin-right: -5px;
 }
-raml-console article#raml-console .resource .methods li,
-#raml-console-loader .resource .methods li {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .methods li,
+#raml-console-loader .resource-placeholder .resource-container .resource .methods li {
   float: right;
   line-height: 22px;
   margin-right: 5px;
   margin-bottom: 5px;
 }
-raml-console article#raml-console .modifiers,
-#raml-console-loader .modifiers {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers,
+#raml-console-loader .resource-placeholder .resource-container .modifiers {
   font-size: 9px;
   letter-spacing: 0.33px;
 }
-raml-console article#raml-console .modifiers .modifier-group,
-#raml-console-loader .modifiers .modifier-group {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group {
   display: inline-block;
   margin-right: 15px;
   margin-bottom: 5px;
   white-space: nowrap;
 }
-raml-console article#raml-console .modifiers .modifier-group .caption,
-#raml-console-loader .modifiers .modifier-group .caption {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group .caption,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group .caption {
   display: inline-block;
   font-weight: bold;
   text-transform: uppercase;
@@ -3399,33 +3420,33 @@ raml-console article#raml-console .modifiers .modifier-group .caption,
   vertical-align: top;
   min-width: 32px;
 }
-raml-console article#raml-console .modifiers .modifier-group ul,
-#raml-console-loader .modifiers .modifier-group ul {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul {
   display: inline-block;
   white-space: normal;
 }
-raml-console article#raml-console .modifiers .modifier-group ul li,
-#raml-console-loader .modifiers .modifier-group ul li {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul li {
   display: inline-block;
   padding: 0px 6px;
   line-height: 14px;
   margin-left: -1px;
   margin-top: -1px;
 }
-raml-console article#raml-console .modifiers .modifier-group ul li.resource-type,
-#raml-console-loader .modifiers .modifier-group ul li.resource-type,
-raml-console article#raml-console .modifiers .modifier-group ul li.trait,
-#raml-console-loader .modifiers .modifier-group ul li.trait {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li.resource-type,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul li.resource-type,
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li.trait,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul li.trait {
   background-color: #f3f3f6;
   color: #96989f;
   border: 1px solid #c0c2c9;
 }
-raml-console article#raml-console .modifiers .modifier-group:last-child,
-#raml-console-loader .modifiers .modifier-group:last-child {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group:last-child,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group:last-child {
   margin-right: 5px;
 }
-raml-console article#raml-console .modifiers .modifier-group:last-child ul,
-#raml-console-loader .modifiers .modifier-group:last-child ul {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group:last-child ul,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group:last-child ul {
   padding-right: 32px;
 }
 raml-console article#raml-console .get.method-name,
@@ -3598,16 +3619,16 @@ raml-console article#raml-console .method-name,
 }
 raml-console article#raml-console .method,
 #raml-console-loader .method {
-  /*display: none;*/
-
   position: relative;
-  height: 100%;
-  overflow: auto;
   margin: 0px 0px 10px;
   border-radius: 0 0 5px 5px;
   border-width: 1px;
   border-style: solid;
   background: white;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
 }
 raml-console article#raml-console .method:first-child,
 #raml-console-loader .method:first-child {
@@ -3627,9 +3648,7 @@ raml-console article#raml-console .method .description p:first-child,
 }
 raml-console article#raml-console .method-summary,
 #raml-console-loader .method-summary {
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
+  flex: 0 0 auto;
   *zoom: 1;
 }
 raml-console article#raml-console .method-summary .abbreviated-description,
@@ -3714,6 +3733,7 @@ raml-console article#raml-console .method-summary:after,
 }
 raml-console article#raml-console .documentation,
 #raml-console-loader .documentation {
+  overflow: auto;
   padding: 0 20px 20px;
 }
 raml-console article#raml-console .documentation .modifiers,
@@ -4035,19 +4055,21 @@ raml-console article#raml-console .toggle-resource-groups span,
 }
 raml-console article#raml-console .resource-group,
 #raml-console-loader .resource-group {
-  position: relative;
   margin-bottom: 17px;
 }
 raml-console article#raml-console .resource-group > i,
 #raml-console-loader .resource-group > i {
-  position: absolute;
-  left: -12px;
-  top: 19px;
+  display: block;
+  height: 0;
+  position: relative;
+  left: -11px;
+  top: 15px;
   font-size: 15px;
 }
 raml-console article#raml-console .resource-group > i.icon-caret-down,
 #raml-console-loader .resource-group > i.icon-caret-down {
   left: -14px;
+  top: 23px;
 }
 raml-console article#raml-console [role=documentation] h2 i[class^="icon-"],
 #raml-console-loader [role=documentation] h2 i[class^="icon-"] {

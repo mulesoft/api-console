@@ -16,15 +16,16 @@
         var description = angular.element(resource[0].querySelector('.description'));
 
         var rect = placeholder[0].getBoundingClientRect();
+        var topOffset = placeholder[0].offsetParent.getBoundingClientRect().top;
         placeholder.scope().resourceView.expanded = true;
         setTimeout(function() {
           var rect2 = placeholder[0].getBoundingClientRect();
 
           placeholder.css('height', rect.height + 'px');
           resource.css('height', rect.height + 'px');
-          resource.css('margin-top', rect.top - 20 + 'px'); // 20 padding from wrapper
+          resource.css('margin-top', rect.top - 20 - topOffset + 'px'); // 20 padding from wrapper
           resource.data('height', rect2.height + 'px');
-          resource.data('margin-top', rect.top + 'px');
+          resource.data('margin-top', rect.top - topOffset + 'px');
 
           description.data('height', description[0].getBoundingClientRect().height + 20 + 'px');
           description.css('height', description.data('height'));
@@ -44,14 +45,15 @@
         setTimeout(function() {
           resource.css('transition', 'height .33s, margin-top .33s');
           setTimeout(function() {
-            resource.css('height', null);
-            resource.css('margin-top', null);
+            resource.css('height', '');
+            resource.css('margin-top', '');
             setTimeout(function() {
               description.css('height', '0px');
             });
 
             setTimeout(function() {
               placeholder.css('height', resource.data('height'));
+              angular.element(document.querySelector('[role="api-console"]')).css('height', '0').css('overflow', 'hidden');
               done();
             }, 333);
           });
@@ -61,6 +63,8 @@
         var wrapper = angular.element(element.children()[0]);
         var resource = angular.element(wrapper.children()[0]);
         var description = angular.element(resource[0].querySelector('.description'));
+
+        angular.element(document.querySelector('[role="api-console"]')).css('height', 'auto').css('overflow', 'visible');
 
         wrapper.css('background-color', 'transparent');
         resource.css('height', resource[0].getBoundingClientRect().height + 'px'); // Firefox won't animate from calc(100%-40px) to _px
@@ -80,15 +84,15 @@
 
         resource.scope().$apply('method = methodToAdd');
 
-        placeholder.css('height', null);
-        wrapper.css('background-color', null);
-        resource.css('transition', null);
-        resource.css('height', null);
-        resource.css('margin-top', null);
+        placeholder.css('height', '');
+        wrapper.css('background-color', '');
+        resource.css('transition', '');
+        resource.css('height', '');
+        resource.css('margin-top', '');
         description.css('transition', 'height 0s'); // otherwise Sarfari incorrectly animates description from 0 to its natural height
-        description.css('height', null);
+        description.css('height', '');
         setTimeout(function() {
-          description.css('transition', null);
+          description.css('transition', '');
         });
 
         done();
@@ -3213,9 +3217,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <div class=\"filler\"></div>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div>\n" +
-    "    <documentation></documentation>\n" +
-    "  </div>\n" +
+    "  <documentation></documentation>\n" +
     "</div>\n"
   );
 
@@ -3412,35 +3414,37 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div class=\"resource-placeholder\" ng-class=\"{'pop-up': methodToAdd}\" role=\"resource-placeholder\">\n" +
     "  <div class=\"resource-container\">\n" +
     "    <div ng-class=\"{expanded: resourceView.expanded, collapsed: !resourceView.expanded}\" class='resource' role=\"resource\">\n" +
-    "      <i class=\"icon-remove-circle collapse\" ng-class=\"{transparent: !methodToAdd}\" ng-click='resourceView.collapseMethod($event)'></i>\n" +
+    "      <div>\n" +
+    "        <i class=\"icon-remove collapse\" ng-class=\"{transparent: !methodToAdd}\" ng-click='resourceView.collapseMethod($event)'></i>\n" +
     "\n" +
-    "      <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
-    "        <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
-    "          <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
-    "            <span class=\"caption\">Type</span>\n" +
-    "            <ul>\n" +
-    "              <li class=\"resource-type\" role=\"resource-type\">\n" +
-    "                {{resource.resourceType | nameFromParameterizable}}\n" +
-    "              </li>\n" +
-    "            </ul>\n" +
-    "          </span>\n" +
-    "          <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
-    "            <span class=\"caption\">Traits</span>\n" +
-    "            <ul>\n" +
-    "              <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\">\n" +
-    "                {{trait | nameFromParameterizable}}\n" +
-    "              </li>\n" +
-    "            </ul>\n" +
-    "          </span>\n" +
+    "        <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
+    "          <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
+    "            <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
+    "              <span class=\"caption\">Type</span>\n" +
+    "              <ul>\n" +
+    "                <li class=\"resource-type\" role=\"resource-type\">\n" +
+    "                  {{resource.resourceType | nameFromParameterizable}}\n" +
+    "                </li>\n" +
+    "              </ul>\n" +
+    "            </span>\n" +
+    "            <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
+    "              <span class=\"caption\">Traits</span>\n" +
+    "              <ul>\n" +
+    "                <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\">\n" +
+    "                  {{trait | nameFromParameterizable}}\n" +
+    "                </li>\n" +
+    "              </ul>\n" +
+    "            </span>\n" +
+    "          </div>\n" +
+    "\n" +
+    "          <h3 class=\"path\">\n" +
+    "            <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
+    "          </h3>\n" +
+    "          <ul class='methods' role=\"methods\" ng-if=\"resource.methods\">\n" +
+    "            <li class='method-name' ng-class='method.method'\n" +
+    "                ng-click='resourceView.initiateExpand(method)' ng-repeat=\"method in resource.methods\">{{method.method}}</li>\n" +
+    "          </ul>\n" +
     "        </div>\n" +
-    "\n" +
-    "        <h3 class=\"path\">\n" +
-    "          <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
-    "        </h3>\n" +
-    "        <ul class='methods' role=\"methods\" ng-if=\"resource.methods\">\n" +
-    "          <li class='method-name' ng-class='method.method'\n" +
-    "              ng-click='resourceView.initiateExpand(method)' ng-repeat=\"method in resource.methods\">{{method.method}}</li>\n" +
-    "        </ul>\n" +
     "      </div>\n" +
     "\n" +
     "      <div role='description'\n" +
