@@ -3301,10 +3301,12 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource > *,
 #raml-console-loader .resource-placeholder .resource-container .resource > * {
+  -webkit-flex: 0 0 auto;
   flex: 0 0 auto;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource .method,
 #raml-console-loader .resource-placeholder .resource-container .resource .method {
+  -webkit-flex: 1 1 auto;
   flex: 1 1 auto;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource.collapsed:hover,
@@ -3326,6 +3328,10 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
 raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse.transparent,
 #raml-console-loader .resource-placeholder .resource-container .resource i.collapse.transparent {
   opacity: 0;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse:hover::before,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse:hover::before {
+  color: #888;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse::before,
 #raml-console-loader .resource-placeholder .resource-container .resource i.collapse::before {
@@ -3648,6 +3654,7 @@ raml-console article#raml-console .method .description p:first-child,
 }
 raml-console article#raml-console .method-summary,
 #raml-console-loader .method-summary {
+  -webkit-flex: 0 0 auto;
   flex: 0 0 auto;
   *zoom: 1;
 }

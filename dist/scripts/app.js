@@ -7,6 +7,8 @@
 (function() {
   'use strict';
 
+  var animationDuration = 333;
+
   RAML.Animations.popUp = function() {
     return {
       beforeAddClass: function(element, className, done) {
@@ -30,7 +32,7 @@
           description.data('height', description[0].getBoundingClientRect().height + 20 + 'px');
           description.css('height', description.data('height'));
           setTimeout(function() {
-            description.css('transition', 'height 0.33s');
+            description.css('transition', 'height ' + animationDuration/1000 + 's');
           });
 
           done();
@@ -43,7 +45,7 @@
 
         resource.scope().$apply('resourceView.expandMethod(methodToAdd)');
         setTimeout(function() {
-          resource.css('transition', 'height .33s, margin-top .33s');
+          resource.css('transition', 'height ' + animationDuration/1000 + 's, margin-top ' + animationDuration/1000 + 's');
           setTimeout(function() {
             resource.css('height', '');
             resource.css('margin-top', '');
@@ -55,7 +57,7 @@
               placeholder.css('height', resource.data('height'));
               angular.element(document.querySelector('[role="api-console"]')).css('height', '0').css('overflow', 'hidden');
               done();
-            }, 333);
+            }, animationDuration);
           });
         });
       },
@@ -73,7 +75,7 @@
           resource.css('margin-top', parseInt(resource.data('margin-top'), 10) - 20 + 'px');
           description.css('height', description.data('height'));
 
-          setTimeout(done, 333);
+          setTimeout(done, animationDuration);
         }, 20);
       },
       removeClass: function(element, className, done) {
@@ -1471,11 +1473,9 @@ RAML.Inspector = (function() {
     this.expandMethod = function(method) {
       $scope.method = method;
       DataStore.set(this.methodKey(), method.method);
-      // this.expanded = true;
     };
 
     this.collapseMethod = function($event) {
-      // this.expanded = false;
       DataStore.set(this.methodKey(), undefined);
       $scope.methodToAdd = undefined;
       $event.stopPropagation();
