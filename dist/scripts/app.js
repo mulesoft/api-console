@@ -55,6 +55,7 @@
 
             setTimeout(function() {
               placeholder.css('height', resource.data('height'));
+              description.css('visibility', 'hidden');
               angular.element(document.querySelector('[role="api-console"]')).css('height', '0').css('overflow', 'hidden');
               done();
             }, animationDuration);
@@ -69,6 +70,7 @@
         angular.element(document.querySelector('[role="api-console"]')).css('height', 'auto').css('overflow', 'visible');
 
         wrapper.css('background-color', 'transparent');
+        description.css('visibility', '');
         resource.css('height', resource[0].getBoundingClientRect().height + 'px'); // Firefox won't animate from calc(100%-40px) to _px
         setTimeout(function() {
           resource.css('height', resource.data('height'));
