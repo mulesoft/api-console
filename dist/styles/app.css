@@ -3382,6 +3382,10 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
 #raml-console-loader .resource-placeholder .resource-container .resource .summary:after {
   clear: both;
 }
+raml-console article#raml-console .resource-placeholder .resource-container .resource .description,
+#raml-console-loader .resource-placeholder .resource-container .resource .description {
+  overflow: hidden;
+}
 raml-console article#raml-console .resource-placeholder .resource-container .resource .description p:first-child,
 #raml-console-loader .resource-placeholder .resource-container .resource .description p:first-child {
   margin-top: 5px;
