@@ -18,11 +18,9 @@
     this.expandMethod = function(method) {
       $scope.method = method;
       DataStore.set(this.methodKey(), method.method);
-      // this.expanded = true;
     };
 
     this.collapseMethod = function($event) {
-      // this.expanded = false;
       DataStore.set(this.methodKey(), undefined);
       $scope.methodToAdd = undefined;
       $event.stopPropagation();

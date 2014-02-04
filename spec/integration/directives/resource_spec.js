@@ -73,8 +73,12 @@ describe("RAML.Directives.resource", function() {
     parseRAML(raml);
 
     beforeEach(function() {
-      scope = createScopeWithFirstResourceAndMethod(this.api);
-      scope.ramlConsole = { keychain: {} };
+      scope = createScope(function(scope) {
+        scope.api = RAML.Inspector.create(this.api);
+        scope.resource = scope.api.resources[0];
+        scope.ramlConsole = { keychain: {} };
+      }.bind(this));
+
       $el = compileTemplate('<resource></resource>', scope);
       setFixtures($el);
 
@@ -85,20 +89,13 @@ describe("RAML.Directives.resource", function() {
       click($el.find('[role="methods"] li'));
     });
 
-    // it("automatically shows types and traits", function() {
-    //   expect(resourceType).toBeVisible();
-    //   expect(trait).toBeVisible();
-    // });
+    it("adds the pop-up class to trigger animation and styling", function() {
+      expect($el).toHaveClass("pop-up");
+    });
 
     it("hides resource description", function() {
       expect(description).not.toBeVisible();
     });
-
-    // it("does not hide types and traits when clicked", function() {
-    //   click($el.find('[role="resource-summary"]'));
-    //   expect(resourceType).toBeVisible();
-    //   expect(trait).toBeVisible();
-    // });
   });
 
   describe("given RAML with a resourceType with parameters", function() {
