@@ -1,20 +1,26 @@
 describe("RAML.Controllers.Resource", function() {
-  var controller, resource, storeSpy;
+  var controller, scope, resource, methods, storeSpy;
 
   var raml = createRAML(
     'title: my API',
     '/base:',
     '  /{sub}:',
-    '    /nested:'
+    '    /nested:',
+    '      patch:',
+    '      put:',
+    '      delete:'
   );
 
   parseRAML(raml);
 
   beforeEach(function() {
+    storeSpy = jasmine.createSpyObj('store', ['get', 'set']);
+
     var inspected = RAML.Inspector.create(this.api);
     resource = inspected.resources[2];
-    storeSpy = jasmine.createSpyObj('store', ['get', 'set']);
-    controller = new RAML.Controllers.Resource({ resource: resource }, storeSpy);
+    methods = resource.methods;
+    scope = { resource: resource };
+    controller = new RAML.Controllers.Resource(scope, storeSpy);
   });
 
   describe('by default', function() {
@@ -27,7 +33,7 @@ describe("RAML.Controllers.Resource", function() {
     beforeEach(function() {
       storeSpy.get.andReturn(true);
 
-      controller = new RAML.Controllers.Resource({ resource: resource }, storeSpy);
+      controller = new RAML.Controllers.Resource(scope, storeSpy);
     });
 
     it('is expanded', function() {
@@ -53,13 +59,55 @@ describe("RAML.Controllers.Resource", function() {
     });
   });
 
+  describe('methods', function() {
+    describe('when initially expanded', function() {
+      beforeEach(function() {
+        storeSpy.get.andReturn(methods[1].method);
+
+        controller = new RAML.Controllers.Resource(scope, storeSpy);
+      });
+
+      it('calls the store with the appropriate key', function() {
+        expect(storeSpy.get).toHaveBeenCalledWith(controller.methodKey());
+      });
+
+      it('sets method on scope', function() {
+        expect(scope.method).toEqual(methods[1]);
+      });
+    });
+
+    describe('expanding a method', function() {
+      beforeEach(function() {
+        controller.expandMethod(methods[1]);
+      });
+
+      it('sets method on scope', function() {
+        expect(scope.method).toEqual(methods[1]);
+      });
+
+      it('updates the value in the store', function() {
+        expect(storeSpy.set).toHaveBeenCalledWith(controller.methodKey(), methods[1].method);
+      });
+    });
+  });
+
   describe('resourceKey', function() {
     beforeEach(function() {
-      controller = new RAML.Controllers.Resource({ resource: resource }, storeSpy);
+      controller = new RAML.Controllers.Resource(scope, storeSpy);
     });
 
     it('generates a unique key', function() {
       expect(controller.resourceKey()).toEqual('/base/{sub}/nested');
+    });
+  });
+
+  describe('methodKey', function() {
+    beforeEach(function() {
+      controller = new RAML.Controllers.Resource(scope, storeSpy);
+    });
+
+    it('generates a unique key', function() {
+      expect(controller.methodKey()).toEqual('/base/{sub}/nested:method');
     });
   });
 });

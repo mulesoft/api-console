@@ -1,23 +1,19 @@
 .method-color(@color) {
-  background-color: tint(@color, 15%);
-  border-color:     tint(@color, 15%);
+  &.method-name {
+    background-color: tint(@color, 15%);
+    border-color:     tint(@color, 15%);
 
-  &:hover {
-    background-color: @color;
-  }
-
-  &.method {
-    .method-name:hover, .filler:hover {
-      background-color: tint(@color, 15%);
+    &:hover {
+      background-color: @color;
     }
   }
 
-  &.method-summary {
-    background-color: @veryLightGray;
+  &.method {
+    border-color: tint(@color, 15%);
+  }
 
-    &:hover {
-      background-color: tint(@color, 90%);
-    };
+  .method-summary {
+    background-color: tint(@color, 15%);
   }
 }
 
@@ -32,6 +28,7 @@
 .connect  { .method-color(@gold);       }
 
 .method-name {
+  user-select: none;
   font-size: 10px;
   text-transform: uppercase;
   color: @veryLightGray;
@@ -42,10 +39,14 @@
 }
 
 .method {
-  margin: 10px 0px;
-  border-radius: 0 5px 5px 0;
+  position: relative;
+  margin: 0px 0px 10px;
+  border-radius: 0 0 5px 5px;
   border-width: 1px;
   border-style: solid;
+  background: white;
+  display: flex;
+  flex-direction: column;
 
   &:first-child {
     margin-top: 0;
@@ -53,15 +54,6 @@
 
   &:last-child {
     margin-bottom: 15px;
-  }
-
-  &.collapsed {
-    border: none;
-  }
-
-  &.expanded {
-    border-radius: 0 0 5px 5px;
-    background: white;
   }
 
   .description {
@@ -74,9 +66,7 @@
 }
 
 .method-summary {
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
+  flex: 0 0 auto;
 
   .abbreviated-description {
     padding: 0 20px 0 10px;

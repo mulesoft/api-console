@@ -84,28 +84,16 @@ describe("accordion view of API", function() {
         var resourceDescription = resources[0].$('[role="description"]');
         expect(resourceDescription.getText()).toEqual('This resource defeats all others');
 
-        var resourceMethodSumaries = resources[0].$$('[role="methodSummary"]');
-        expect(resourceMethodSumaries).toHaveLength(2);
-
         var topLevelMethods = resource.$('[role="methods"]');
-        expect(topLevelMethods.isDisplayed()).toBeFalsy()
+        expect(topLevelMethods.isDisplayed()).toBeTruthy()
 
         var method = openMethod(1, resource);
-
-        var path = method.$('[role="path"]');
-        expect(path.getText()).toMatch(/\/[\s\S]*resource/);
-
-        resources[1].$('.accordion-toggle').click();
-        var resourceMethodSumaries = resources[1].$$('[role="methodSummary"]');
-        expect(resourceMethodSumaries).toHaveLength(3);
+        expect(method.getText()).toMatch(/get/i);
       });
-
-      var firstMethodSpan = ptor.$('[role="resource"] [role="method"]');
-      expect(firstMethodSpan.getText()).toMatch(/get/i)
     });
   });
 
-  describe("method expansion (direct and through method summaries)", function() {
+  describe("method expansion", function() {
     raml = createRAML(
       'title: Example API',
       'baseUri: http://www.example.com',
@@ -125,8 +113,8 @@ describe("accordion view of API", function() {
     it("displays the method description and traits", function() {
       var resource = toggleResource(1);
       var method = openMethod(1, resource);
-      var description = resource.$('[role="method"] [role="full-description"]');
-      var traits = resource.$('[role="method"] [role="traits"]');
+      var description = method.$('[role="full-description"]');
+      var traits = method.$('[role="traits"]');
 
       expect(description.getText()).toEqual('Get all resources')
       expect(traits.getText()).toEqual('sorted')

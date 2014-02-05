@@ -1,113 +1,186 @@
-.resource-group.collapsed .resource .summary {
-  cursor: default;
-}
-
-.resource {
-  background-color: @veryLightGray;
-  border-radius: 5px;
-  border: 1px solid @lightGray;
+.resource-placeholder {
   margin: 5px 0;
-  padding: 15px;
-  padding-bottom: 0;
+  box-sizing: border-box;
 
-  &.collapsed:hover, &.expanded {
-    background-color: white;
+  &.pop-up {
+    .resource-container {
+      box-sizing: border-box;
+      position: absolute;
+      z-index: 2;
+      width: 100%;
+      padding: 20px;
+      margin-left: -20px;
+      border: none;
+      top: 0;
+      height: 100%;
+      background-color: #E6E7EB;
+
+      .resource {
+        box-sizing: border-box;
+        height: 100%;
+
+        .summary {
+          cursor: auto;
+
+          .method-name {
+            cursor: pointer;
+          }
+        }
+      }
+    }
   }
 
-  .summary {
-    position: relative;
-    cursor: pointer;
+  .resource-container {
+    transition: background-color 0.33s;
+    background-color: transparent;
 
-    .modifiers {
-      margin-top: -15px;
-      margin-bottom: 8px;
-      min-height: 7px;
-    }
+    .resource {
+      background-color: @veryLightGray;
+      border-radius: 5px;
+      border: 1px solid @lightGray;
+      padding: 15px;
+      padding-bottom: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      > * {
+        flex: 0 0 auto;
+      }
+      .method {
+        flex: 1 1 auto;
+      }
 
-    .path {
-      float: left;
-      margin: 0;
-      margin-top: 1px;
-      margin-bottom: 15px;
-      line-height: 18px;
-      max-width: 100%;
-      word-wrap: break-word;
+      &.collapsed:hover, &.expanded {
+        background-color: white;
+      }
 
-      span:last-child {
-        font-weight: bold;
-        color: @black;
+      i.collapse {
+        float: right;
+        width: 0;
+        height: 0;
+        margin-right: -1px;
+        margin-top: -15px;
+        opacity: 1;
+        cursor: pointer;
+
+        &.transparent {
+          opacity: 0;
+        }
+
+        &:hover::before {
+          color: #888;
+        }
+
+        &::before {
+          display: block;
+          border-radius: 1px;
+          color: #666;
+          font-size: 15px;
+          text-shadow: 1px 0 rgba(255,255,255,0.25);
+          text-align: center;
+          width: 14px;
+          line-height: 14px;
+        }
+      }
+
+      .summary {
+        position: relative;
+        cursor: pointer;
+
+        .modifiers {
+          margin-top: -15px;
+          margin-bottom: 8px;
+          min-height: 7px;
+        }
+
+        .path {
+          float: left;
+          margin: 0;
+          margin-top: 1px;
+          margin-bottom: 15px;
+          line-height: 18px;
+          max-width: 100%;
+          word-wrap: break-word;
+
+          span:last-child {
+            font-weight: bold;
+            color: @black;
+          }
+        }
+
+        .clearfix();
+      }
+
+      .description {
+        overflow: hidden;
+
+        p:first-child {
+          margin-top: 5px;
+        }
+
+        p:last-child {
+          margin-bottom: 20px;
+        }
+      }
+
+      .methods {
+        float: right;
+        text-align: right;
+        margin-top: -1px;
+        margin-bottom: 8px;
+        margin-right: -5px;
+
+        li {
+          float: right;
+          line-height: 22px;
+          margin-right: 5px;
+          margin-bottom: 5px;
+        }
       }
     }
 
-    .clearfix();
-  }
+    .modifiers {
+      font-size: 9px;
+      letter-spacing: 0.33px;
 
-  .description {
-    p:first-child {
-      margin-top: 5px;
-    }
+      .modifier-group {
+        display: inline-flex;
+        background-color: #F3F3F6;
+        padding: 0px 5px;
+        margin-right: 5px;
+        margin-top: 5px;
+        border: 1px solid @grayD;
 
-    p:last-child {
-      margin-bottom: 20px;
-    }
-  }
-
-  .methods {
-    float: right;
-    text-align: right;
-    margin-top: -1px;
-    margin-bottom: 8px;
-
-    li {
-      float: right;
-      line-height: 22px;
-      margin-right: 5px;
-      margin-bottom: 5px;
-    }
-  }
-}
-
-.modifiers {
-  font-size: 9px;
-  letter-spacing: 0.33px;
-
-  .modifier-group {
-    display: inline-flex;
-    background-color: #F3F3F6;
-    padding: 0px 5px;
-    margin-right: 5px;
-    margin-top: 5px;
-    border: 1px solid @grayD;
-
-    .caption {
-      flex: 0 0 auto;
-      display: inline-block;
-      font-weight: bold;
-      text-transform: uppercase;
-      vertical-align: top;
-      min-width: 32px;
-      margin-right: 5px;
-    }
-
-    ul {
-      flex: 1 1 auto;
-
-      li {
-        display: inline-block;
-        line-height: 14px;
-        &.resource-type, &.trait {
-          color: @gray;
-        }
-
-        &:after {
+        .caption {
+          flex: 0 0 auto;
           display: inline-block;
-          content: ",\00a0";
+          font-weight: bold;
+          text-transform: uppercase;
+          vertical-align: top;
+          min-width: 32px;
+          margin-right: 5px;
         }
 
-        &:last-child:after {
-          content: "";
-        }
+        ul {
+          flex: 1 1 auto;
 
+          li {
+            display: inline-block;
+            line-height: 14px;
+            &.resource-type, &.trait {
+              color: @gray;
+            }
+
+            &:after {
+              display: inline-block;
+              content: ",\00a0";
+            }
+
+            &:last-child:after {
+              content: "";
+            }
+          }
+        }
       }
     }
   }

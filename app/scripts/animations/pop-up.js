@@ -1,0 +1,100 @@
+(function() {
+  'use strict';
+
+  var animationDuration = 333;
+
+  RAML.Animations.popUp = function() {
+    return {
+      beforeAddClass: function(element, className, done) {
+        var placeholder = element;
+        var wrapper = angular.element(element.children()[0]);
+        var resource = angular.element(wrapper.children()[0]);
+        var description = angular.element(resource[0].querySelector('.description'));
+
+        var rect = placeholder[0].getBoundingClientRect();
+        var topOffset = placeholder[0].offsetParent.getBoundingClientRect().top;
+        placeholder.scope().resourceView.expanded = true;
+        setTimeout(function() {
+          var rect2 = placeholder[0].getBoundingClientRect();
+
+          placeholder.css('height', rect.height + 'px');
+          resource.css('height', rect.height + 'px');
+          resource.css('margin-top', rect.top - 20 - topOffset + 'px'); // 20 padding from wrapper
+          resource.data('height', rect2.height + 'px');
+          resource.data('margin-top', rect.top - topOffset + 'px');
+
+          description.data('height', description[0].getBoundingClientRect().height + 20 + 'px');
+          description.css('height', description.data('height'));
+          setTimeout(function() {
+            description.css('transition', 'height ' + animationDuration/1000 + 's');
+          });
+
+          done();
+        });
+      },
+      addClass: function(element, className, done) {
+        var placeholder = element;
+        var resource = angular.element(element[0].children[0].children[0]);
+        var description = angular.element(resource[0].querySelector('.description'));
+
+        resource.scope().$apply('resourceView.expandMethod(methodToAdd)');
+        setTimeout(function() {
+          resource.css('transition', 'height ' + animationDuration/1000 + 's, margin-top ' + animationDuration/1000 + 's');
+          setTimeout(function() {
+            resource.css('height', '');
+            resource.css('margin-top', '');
+            setTimeout(function() {
+              description.css('height', '0px');
+            });
+
+            setTimeout(function() {
+              placeholder.css('height', resource.data('height'));
+              description.css('visibility', 'hidden');
+              angular.element(document.querySelector('[role="api-console"]')).css('height', '0').css('overflow', 'hidden');
+              done();
+            }, animationDuration);
+          });
+        });
+      },
+      beforeRemoveClass: function(element, className, done) {
+        var wrapper = angular.element(element.children()[0]);
+        var resource = angular.element(wrapper.children()[0]);
+        var description = angular.element(resource[0].querySelector('.description'));
+
+        angular.element(document.querySelector('[role="api-console"]')).css('height', 'auto').css('overflow', 'visible');
+
+        wrapper.css('background-color', 'transparent');
+        description.css('visibility', '');
+        resource.css('height', resource[0].getBoundingClientRect().height + 'px'); // Firefox won't animate from calc(100%-40px) to _px
+        setTimeout(function() {
+          resource.css('height', resource.data('height'));
+          resource.css('margin-top', parseInt(resource.data('margin-top'), 10) - 20 + 'px');
+          description.css('height', description.data('height'));
+
+          setTimeout(done, animationDuration);
+        }, 20);
+      },
+      removeClass: function(element, className, done) {
+        var placeholder = element;
+        var wrapper = angular.element(element.children()[0]);
+        var resource = angular.element(wrapper.children()[0]);
+        var description = angular.element(resource[0].querySelector('.description'));
+
+        resource.scope().$apply('method = methodToAdd');
+
+        placeholder.css('height', '');
+        wrapper.css('background-color', '');
+        resource.css('transition', '');
+        resource.css('height', '');
+        resource.css('margin-top', '');
+        description.css('transition', 'height 0s'); // otherwise Sarfari incorrectly animates description from 0 to its natural height
+        description.css('height', '');
+        setTimeout(function() {
+          description.css('transition', '');
+        });
+
+        done();
+      }
+    };
+  };
+})();

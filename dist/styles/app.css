@@ -3157,39 +3157,127 @@ raml-console article#raml-console .btn-connect,
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe4b849', endColorstr='#ffae8319', GradientType=0);
 }
-raml-console article#raml-console .resource-group.collapsed .resource .summary,
-#raml-console-loader .resource-group.collapsed .resource .summary {
-  cursor: default;
+raml-console article#raml-console .resource-placeholder,
+#raml-console-loader .resource-placeholder {
+  margin: 5px 0;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
-raml-console article#raml-console .resource,
-#raml-console-loader .resource {
+raml-console article#raml-console .resource-placeholder.pop-up .resource-container,
+#raml-console-loader .resource-placeholder.pop-up .resource-container {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  padding: 20px;
+  margin-left: -20px;
+  border: none;
+  top: 0;
+  height: 100%;
+  background-color: #E6E7EB;
+}
+raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource,
+#raml-console-loader .resource-placeholder.pop-up .resource-container .resource {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+}
+raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource .summary,
+#raml-console-loader .resource-placeholder.pop-up .resource-container .resource .summary {
+  cursor: auto;
+}
+raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource .summary .method-name,
+#raml-console-loader .resource-placeholder.pop-up .resource-container .resource .summary .method-name {
+  cursor: pointer;
+}
+raml-console article#raml-console .resource-placeholder .resource-container,
+#raml-console-loader .resource-placeholder .resource-container {
+  -webkit-transition: background-color 0.33s;
+  transition: background-color 0.33s;
+  background-color: transparent;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource,
+#raml-console-loader .resource-placeholder .resource-container .resource {
   background-color: #f3f3f6;
   border-radius: 5px;
   border: 1px solid #c0c2c9;
-  margin: 5px 0;
   padding: 15px;
   padding-bottom: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
-raml-console article#raml-console .resource.collapsed:hover,
-#raml-console-loader .resource.collapsed:hover,
-raml-console article#raml-console .resource.expanded,
-#raml-console-loader .resource.expanded {
+raml-console article#raml-console .resource-placeholder .resource-container .resource > *,
+#raml-console-loader .resource-placeholder .resource-container .resource > * {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource .method,
+#raml-console-loader .resource-placeholder .resource-container .resource .method {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource.collapsed:hover,
+#raml-console-loader .resource-placeholder .resource-container .resource.collapsed:hover,
+raml-console article#raml-console .resource-placeholder .resource-container .resource.expanded,
+#raml-console-loader .resource-placeholder .resource-container .resource.expanded {
   background-color: white;
 }
-raml-console article#raml-console .resource .summary,
-#raml-console-loader .resource .summary {
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse {
+  float: right;
+  width: 0;
+  height: 0;
+  margin-right: -1px;
+  margin-top: -15px;
+  opacity: 1;
+  cursor: pointer;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse.transparent,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse.transparent {
+  opacity: 0;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse:hover::before,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse:hover::before {
+  color: #888;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse::before,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse::before {
+  display: block;
+  border-radius: 1px;
+  color: #666;
+  font-size: 15px;
+  text-shadow: 1px 0 rgba(255, 255, 255, 0.25);
+  text-align: center;
+  width: 14px;
+  line-height: 14px;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary {
   position: relative;
   cursor: pointer;
   *zoom: 1;
 }
-raml-console article#raml-console .resource .summary .modifiers,
-#raml-console-loader .resource .summary .modifiers {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary .modifiers,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary .modifiers {
   margin-top: -15px;
   margin-bottom: 8px;
   min-height: 7px;
 }
-raml-console article#raml-console .resource .summary .path,
-#raml-console-loader .resource .summary .path {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary .path,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary .path {
   float: left;
   margin: 0;
   margin-top: 1px;
@@ -3198,51 +3286,56 @@ raml-console article#raml-console .resource .summary .path,
   max-width: 100%;
   word-wrap: break-word;
 }
-raml-console article#raml-console .resource .summary .path span:last-child,
-#raml-console-loader .resource .summary .path span:last-child {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary .path span:last-child,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary .path span:last-child {
   font-weight: bold;
   color: #18191d;
 }
-raml-console article#raml-console .resource .summary:before,
-#raml-console-loader .resource .summary:before,
-raml-console article#raml-console .resource .summary:after,
-#raml-console-loader .resource .summary:after {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary:before,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary:before,
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary:after,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary:after {
   display: table;
   content: "";
 }
-raml-console article#raml-console .resource .summary:after,
-#raml-console-loader .resource .summary:after {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .summary:after,
+#raml-console-loader .resource-placeholder .resource-container .resource .summary:after {
   clear: both;
 }
-raml-console article#raml-console .resource .description p:first-child,
-#raml-console-loader .resource .description p:first-child {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .description,
+#raml-console-loader .resource-placeholder .resource-container .resource .description {
+  overflow: hidden;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource .description p:first-child,
+#raml-console-loader .resource-placeholder .resource-container .resource .description p:first-child {
   margin-top: 5px;
 }
-raml-console article#raml-console .resource .description p:last-child,
-#raml-console-loader .resource .description p:last-child {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .description p:last-child,
+#raml-console-loader .resource-placeholder .resource-container .resource .description p:last-child {
   margin-bottom: 20px;
 }
-raml-console article#raml-console .resource .methods,
-#raml-console-loader .resource .methods {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .methods,
+#raml-console-loader .resource-placeholder .resource-container .resource .methods {
   float: right;
   text-align: right;
   margin-top: -1px;
   margin-bottom: 8px;
+  margin-right: -5px;
 }
-raml-console article#raml-console .resource .methods li,
-#raml-console-loader .resource .methods li {
+raml-console article#raml-console .resource-placeholder .resource-container .resource .methods li,
+#raml-console-loader .resource-placeholder .resource-container .resource .methods li {
   float: right;
   line-height: 22px;
   margin-right: 5px;
   margin-bottom: 5px;
 }
-raml-console article#raml-console .modifiers,
-#raml-console-loader .modifiers {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers,
+#raml-console-loader .resource-placeholder .resource-container .modifiers {
   font-size: 9px;
   letter-spacing: 0.33px;
 }
-raml-console article#raml-console .modifiers .modifier-group,
-#raml-console-loader .modifiers .modifier-group {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group {
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -3252,8 +3345,8 @@ raml-console article#raml-console .modifiers .modifier-group,
   margin-top: 5px;
   border: 1px solid #dee0e7;
 }
-raml-console article#raml-console .modifiers .modifier-group .caption,
-#raml-console-loader .modifiers .modifier-group .caption {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group .caption,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group .caption {
   -webkit-box-flex: 0;
   -webkit-flex: 0 0 auto;
   -ms-flex: 0 0 auto;
@@ -3265,242 +3358,192 @@ raml-console article#raml-console .modifiers .modifier-group .caption,
   min-width: 32px;
   margin-right: 5px;
 }
-raml-console article#raml-console .modifiers .modifier-group ul,
-#raml-console-loader .modifiers .modifier-group ul {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul {
   -webkit-box-flex: 1;
   -webkit-flex: 1 1 auto;
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
 }
-raml-console article#raml-console .modifiers .modifier-group ul li,
-#raml-console-loader .modifiers .modifier-group ul li {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul li {
   display: inline-block;
   line-height: 14px;
 }
-raml-console article#raml-console .modifiers .modifier-group ul li.resource-type,
-#raml-console-loader .modifiers .modifier-group ul li.resource-type,
-raml-console article#raml-console .modifiers .modifier-group ul li.trait,
-#raml-console-loader .modifiers .modifier-group ul li.trait {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li.resource-type,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul li.resource-type,
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li.trait,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul li.trait {
   color: #a2a4aa;
 }
-raml-console article#raml-console .modifiers .modifier-group ul li:after,
-#raml-console-loader .modifiers .modifier-group ul li:after {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li:after,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul li:after {
   display: inline-block;
   content: ",\00a0";
 }
-raml-console article#raml-console .modifiers .modifier-group ul li:last-child:after,
-#raml-console-loader .modifiers .modifier-group ul li:last-child:after {
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li:last-child:after,
+#raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul li:last-child:after {
   content: "";
 }
-raml-console article#raml-console .get,
-#raml-console-loader .get {
+raml-console article#raml-console .get.method-name,
+#raml-console-loader .get.method-name {
   background-color: #7ab5e6;
   border-color: #7ab5e6;
 }
-raml-console article#raml-console .get:hover,
-#raml-console-loader .get:hover {
+raml-console article#raml-console .get.method-name:hover,
+#raml-console-loader .get.method-name:hover {
   background-color: #63a8e2;
 }
-raml-console article#raml-console .get.method .method-name:hover,
-#raml-console-loader .get.method .method-name:hover,
-raml-console article#raml-console .get.method .filler:hover,
-#raml-console-loader .get.method .filler:hover {
+raml-console article#raml-console .get.method,
+#raml-console-loader .get.method {
+  border-color: #7ab5e6;
+}
+raml-console article#raml-console .get .method-summary,
+#raml-console-loader .get .method-summary {
   background-color: #7ab5e6;
 }
-raml-console article#raml-console .get.method-summary,
-#raml-console-loader .get.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .get.method-summary:hover,
-#raml-console-loader .get.method-summary:hover {
-  background-color: #eff6fc;
-}
-raml-console article#raml-console .post,
-#raml-console-loader .post {
+raml-console article#raml-console .post.method-name,
+#raml-console-loader .post.method-name {
   background-color: #82c791;
   border-color: #82c791;
 }
-raml-console article#raml-console .post:hover,
-#raml-console-loader .post:hover {
+raml-console article#raml-console .post.method-name:hover,
+#raml-console-loader .post.method-name:hover {
   background-color: #6cbd7d;
 }
-raml-console article#raml-console .post.method .method-name:hover,
-#raml-console-loader .post.method .method-name:hover,
-raml-console article#raml-console .post.method .filler:hover,
-#raml-console-loader .post.method .filler:hover {
+raml-console article#raml-console .post.method,
+#raml-console-loader .post.method {
+  border-color: #82c791;
+}
+raml-console article#raml-console .post .method-summary,
+#raml-console-loader .post .method-summary {
   background-color: #82c791;
 }
-raml-console article#raml-console .post.method-summary,
-#raml-console-loader .post.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .post.method-summary:hover,
-#raml-console-loader .post.method-summary:hover {
-  background-color: #f0f8f2;
-}
-raml-console article#raml-console .put,
-#raml-console-loader .put {
+raml-console article#raml-console .put.method-name,
+#raml-console-loader .put.method-name {
   background-color: #43c4cd;
   border-color: #43c4cd;
 }
-raml-console article#raml-console .put:hover,
-#raml-console-loader .put:hover {
+raml-console article#raml-console .put.method-name:hover,
+#raml-console-loader .put.method-name:hover {
   background-color: #22bac4;
 }
-raml-console article#raml-console .put.method .method-name:hover,
-#raml-console-loader .put.method .method-name:hover,
-raml-console article#raml-console .put.method .filler:hover,
-#raml-console-loader .put.method .filler:hover {
+raml-console article#raml-console .put.method,
+#raml-console-loader .put.method {
+  border-color: #43c4cd;
+}
+raml-console article#raml-console .put .method-summary,
+#raml-console-loader .put .method-summary {
   background-color: #43c4cd;
 }
-raml-console article#raml-console .put.method-summary,
-#raml-console-loader .put.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .put.method-summary:hover,
-#raml-console-loader .put.method-summary:hover {
-  background-color: #e9f8f9;
-}
-raml-console article#raml-console .patch,
-#raml-console-loader .patch {
+raml-console article#raml-console .patch.method-name,
+#raml-console-loader .patch.method-name {
   background-color: #d5a36f;
   border-color: #d5a36f;
 }
-raml-console article#raml-console .patch:hover,
-#raml-console-loader .patch:hover {
+raml-console article#raml-console .patch.method-name:hover,
+#raml-console-loader .patch.method-name:hover {
   background-color: #cd9356;
 }
-raml-console article#raml-console .patch.method .method-name:hover,
-#raml-console-loader .patch.method .method-name:hover,
-raml-console article#raml-console .patch.method .filler:hover,
-#raml-console-loader .patch.method .filler:hover {
+raml-console article#raml-console .patch.method,
+#raml-console-loader .patch.method {
+  border-color: #d5a36f;
+}
+raml-console article#raml-console .patch .method-summary,
+#raml-console-loader .patch .method-summary {
   background-color: #d5a36f;
 }
-raml-console article#raml-console .patch.method-summary,
-#raml-console-loader .patch.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .patch.method-summary:hover,
-#raml-console-loader .patch.method-summary:hover {
-  background-color: #faf4ee;
-}
-raml-console article#raml-console .delete,
-#raml-console-loader .delete {
+raml-console article#raml-console .delete.method-name,
+#raml-console-loader .delete.method-name {
   background-color: #d97b78;
   border-color: #d97b78;
 }
-raml-console article#raml-console .delete:hover,
-#raml-console-loader .delete:hover {
+raml-console article#raml-console .delete.method-name:hover,
+#raml-console-loader .delete.method-name:hover {
   background-color: #d26460;
 }
-raml-console article#raml-console .delete.method .method-name:hover,
-#raml-console-loader .delete.method .method-name:hover,
-raml-console article#raml-console .delete.method .filler:hover,
-#raml-console-loader .delete.method .filler:hover {
+raml-console article#raml-console .delete.method,
+#raml-console-loader .delete.method {
+  border-color: #d97b78;
+}
+raml-console article#raml-console .delete .method-summary,
+#raml-console-loader .delete .method-summary {
   background-color: #d97b78;
 }
-raml-console article#raml-console .delete.method-summary,
-#raml-console-loader .delete.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .delete.method-summary:hover,
-#raml-console-loader .delete.method-summary:hover {
-  background-color: #fbf0ef;
-}
-raml-console article#raml-console .head,
-#raml-console-loader .head {
+raml-console article#raml-console .head.method-name,
+#raml-console-loader .head.method-name {
   background-color: #ad6fa4;
   border-color: #ad6fa4;
 }
-raml-console article#raml-console .head:hover,
-#raml-console-loader .head:hover {
+raml-console article#raml-console .head.method-name:hover,
+#raml-console-loader .head.method-name:hover {
   background-color: #9f5594;
 }
-raml-console article#raml-console .head.method .method-name:hover,
-#raml-console-loader .head.method .method-name:hover,
-raml-console article#raml-console .head.method .filler:hover,
-#raml-console-loader .head.method .filler:hover {
+raml-console article#raml-console .head.method,
+#raml-console-loader .head.method {
+  border-color: #ad6fa4;
+}
+raml-console article#raml-console .head .method-summary,
+#raml-console-loader .head .method-summary {
   background-color: #ad6fa4;
 }
-raml-console article#raml-console .head.method-summary,
-#raml-console-loader .head.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .head.method-summary:hover,
-#raml-console-loader .head.method-summary:hover {
-  background-color: #f5eef4;
-}
-raml-console article#raml-console .options,
-#raml-console-loader .options {
+raml-console article#raml-console .options.method-name,
+#raml-console-loader .options.method-name {
   background-color: #afc741;
   border-color: #afc741;
 }
-raml-console article#raml-console .options:hover,
-#raml-console-loader .options:hover {
+raml-console article#raml-console .options.method-name:hover,
+#raml-console-loader .options.method-name:hover {
   background-color: #a1bd1f;
 }
-raml-console article#raml-console .options.method .method-name:hover,
-#raml-console-loader .options.method .method-name:hover,
-raml-console article#raml-console .options.method .filler:hover,
-#raml-console-loader .options.method .filler:hover {
+raml-console article#raml-console .options.method,
+#raml-console-loader .options.method {
+  border-color: #afc741;
+}
+raml-console article#raml-console .options .method-summary,
+#raml-console-loader .options .method-summary {
   background-color: #afc741;
 }
-raml-console article#raml-console .options.method-summary,
-#raml-console-loader .options.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .options.method-summary:hover,
-#raml-console-loader .options.method-summary:hover {
-  background-color: #f6f8e9;
-}
-raml-console article#raml-console .trace,
-#raml-console-loader .trace {
+raml-console article#raml-console .trace.method-name,
+#raml-console-loader .trace.method-name {
   background-color: #7acbf1;
   border-color: #7acbf1;
 }
-raml-console article#raml-console .trace:hover,
-#raml-console-loader .trace:hover {
+raml-console article#raml-console .trace.method-name:hover,
+#raml-console-loader .trace.method-name:hover {
   background-color: #63c2ee;
 }
-raml-console article#raml-console .trace.method .method-name:hover,
-#raml-console-loader .trace.method .method-name:hover,
-raml-console article#raml-console .trace.method .filler:hover,
-#raml-console-loader .trace.method .filler:hover {
+raml-console article#raml-console .trace.method,
+#raml-console-loader .trace.method {
+  border-color: #7acbf1;
+}
+raml-console article#raml-console .trace .method-summary,
+#raml-console-loader .trace .method-summary {
   background-color: #7acbf1;
 }
-raml-console article#raml-console .trace.method-summary,
-#raml-console-loader .trace.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .trace.method-summary:hover,
-#raml-console-loader .trace.method-summary:hover {
-  background-color: #eff9fd;
-}
-raml-console article#raml-console .connect,
-#raml-console-loader .connect {
+raml-console article#raml-console .connect.method-name,
+#raml-console-loader .connect.method-name {
   background-color: #e0b341;
   border-color: #e0b341;
 }
-raml-console article#raml-console .connect:hover,
-#raml-console-loader .connect:hover {
+raml-console article#raml-console .connect.method-name:hover,
+#raml-console-loader .connect.method-name:hover {
   background-color: #daa520;
 }
-raml-console article#raml-console .connect.method .method-name:hover,
-#raml-console-loader .connect.method .method-name:hover,
-raml-console article#raml-console .connect.method .filler:hover,
-#raml-console-loader .connect.method .filler:hover {
+raml-console article#raml-console .connect.method,
+#raml-console-loader .connect.method {
+  border-color: #e0b341;
+}
+raml-console article#raml-console .connect .method-summary,
+#raml-console-loader .connect .method-summary {
   background-color: #e0b341;
-}
-raml-console article#raml-console .connect.method-summary,
-#raml-console-loader .connect.method-summary {
-  background-color: #f3f3f6;
-}
-raml-console article#raml-console .connect.method-summary:hover,
-#raml-console-loader .connect.method-summary:hover {
-  background-color: #fbf6e9;
 }
 raml-console article#raml-console .method-name,
 #raml-console-loader .method-name {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   font-size: 10px;
   text-transform: uppercase;
   color: #f3f3f6;
@@ -3510,10 +3553,21 @@ raml-console article#raml-console .method-name,
 }
 raml-console article#raml-console .method,
 #raml-console-loader .method {
-  margin: 10px 0px;
-  border-radius: 0 5px 5px 0;
+  position: relative;
+  margin: 0px 0px 10px;
+  border-radius: 0 0 5px 5px;
   border-width: 1px;
   border-style: solid;
+  background: white;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
 raml-console article#raml-console .method:first-child,
 #raml-console-loader .method:first-child {
@@ -3522,15 +3576,6 @@ raml-console article#raml-console .method:first-child,
 raml-console article#raml-console .method:last-child,
 #raml-console-loader .method:last-child {
   margin-bottom: 15px;
-}
-raml-console article#raml-console .method.collapsed,
-#raml-console-loader .method.collapsed {
-  border: none;
-}
-raml-console article#raml-console .method.expanded,
-#raml-console-loader .method.expanded {
-  border-radius: 0 0 5px 5px;
-  background: white;
 }
 raml-console article#raml-console .method .description,
 #raml-console-loader .method .description {
@@ -3542,9 +3587,10 @@ raml-console article#raml-console .method .description p:first-child,
 }
 raml-console article#raml-console .method-summary,
 #raml-console-loader .method-summary {
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
   *zoom: 1;
 }
 raml-console article#raml-console .method-summary .abbreviated-description,
@@ -3629,6 +3675,7 @@ raml-console article#raml-console .method-summary:after,
 }
 raml-console article#raml-console .documentation,
 #raml-console-loader .documentation {
+  overflow: auto;
   padding: 0 20px 20px;
 }
 raml-console article#raml-console .documentation .modifiers,
@@ -3950,19 +3997,21 @@ raml-console article#raml-console .toggle-resource-groups span,
 }
 raml-console article#raml-console .resource-group,
 #raml-console-loader .resource-group {
-  position: relative;
   margin-bottom: 17px;
 }
 raml-console article#raml-console .resource-group > i,
 #raml-console-loader .resource-group > i {
-  position: absolute;
-  left: -12px;
-  top: 19px;
+  display: block;
+  height: 0;
+  position: relative;
+  left: -11px;
+  top: 15px;
   font-size: 15px;
 }
 raml-console article#raml-console .resource-group > i.icon-caret-down,
 #raml-console-loader .resource-group > i.icon-caret-down {
   left: -14px;
+  top: 23px;
 }
 raml-console article#raml-console [role=documentation] h2 i[class^="icon-"],
 #raml-console-loader [role=documentation] h2 i[class^="icon-"] {

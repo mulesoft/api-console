@@ -15,11 +15,11 @@
         <h4>{{mediaType}}</h4>
         <section ng-if="definition.schema">
           <h5>Schema</h5>
-          <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && responsesView.expanded[responseCode]"></div>
+          <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="responsesView.expanded[responseCode]"></div>
         </section>
         <section ng-if="definition.example">
           <h5>Example</h5>
-          <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && responsesView.expanded[responseCode]"></div>
+          <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="responsesView.expanded[responseCode]"></div>
         </section>
       </section>
     </section>

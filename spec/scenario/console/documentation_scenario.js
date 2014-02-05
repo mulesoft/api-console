@@ -97,7 +97,9 @@ describe('API Documentation', function() {
         ].map(escapeRegExp).join('\\s+'), "i");
         expect(queryParam.getText()).toMatch(expectedText);
       });
+    });
 
+    it("displays information about schemas and examples", function() {
       resource = toggleResource(1);
       method = openMethod(1, resource);
 
@@ -150,6 +152,10 @@ describe('API Documentation', function() {
 
       expect(header.getText()).toMatch('SomeHeader');
       expect(header.getText()).toMatch(/Example: 5/i);
+
+      ptor.executeScript(function() {
+        document.querySelectorAll('[role="response"]')[1].scrollIntoView()
+      });
       expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(documentation.getText()).toMatch(/<api-response>[\d\s]*<status>[\d\s]*Error[\d\s]*<\/status>[\d\s]*<\/api-response>/);
 

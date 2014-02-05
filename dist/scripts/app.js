@@ -1,3 +1,110 @@
+(function() {
+  'use strict';
+
+  RAML.Animations = {};
+})();
+
+(function() {
+  'use strict';
+
+  var animationDuration = 333;
+
+  RAML.Animations.popUp = function() {
+    return {
+      beforeAddClass: function(element, className, done) {
+        var placeholder = element;
+        var wrapper = angular.element(element.children()[0]);
+        var resource = angular.element(wrapper.children()[0]);
+        var description = angular.element(resource[0].querySelector('.description'));
+
+        var rect = placeholder[0].getBoundingClientRect();
+        var topOffset = placeholder[0].offsetParent.getBoundingClientRect().top;
+        placeholder.scope().resourceView.expanded = true;
+        setTimeout(function() {
+          var rect2 = placeholder[0].getBoundingClientRect();
+
+          placeholder.css('height', rect.height + 'px');
+          resource.css('height', rect.height + 'px');
+          resource.css('margin-top', rect.top - 20 - topOffset + 'px'); // 20 padding from wrapper
+          resource.data('height', rect2.height + 'px');
+          resource.data('margin-top', rect.top - topOffset + 'px');
+
+          description.data('height', description[0].getBoundingClientRect().height + 20 + 'px');
+          description.css('height', description.data('height'));
+          setTimeout(function() {
+            description.css('transition', 'height ' + animationDuration/1000 + 's');
+          });
+
+          done();
+        });
+      },
+      addClass: function(element, className, done) {
+        var placeholder = element;
+        var resource = angular.element(element[0].children[0].children[0]);
+        var description = angular.element(resource[0].querySelector('.description'));
+
+        resource.scope().$apply('resourceView.expandMethod(methodToAdd)');
+        setTimeout(function() {
+          resource.css('transition', 'height ' + animationDuration/1000 + 's, margin-top ' + animationDuration/1000 + 's');
+          setTimeout(function() {
+            resource.css('height', '');
+            resource.css('margin-top', '');
+            setTimeout(function() {
+              description.css('height', '0px');
+            });
+
+            setTimeout(function() {
+              placeholder.css('height', resource.data('height'));
+              description.css('visibility', 'hidden');
+              angular.element(document.querySelector('[role="api-console"]')).css('height', '0').css('overflow', 'hidden');
+              done();
+            }, animationDuration);
+          });
+        });
+      },
+      beforeRemoveClass: function(element, className, done) {
+        var wrapper = angular.element(element.children()[0]);
+        var resource = angular.element(wrapper.children()[0]);
+        var description = angular.element(resource[0].querySelector('.description'));
+
+        angular.element(document.querySelector('[role="api-console"]')).css('height', 'auto').css('overflow', 'visible');
+
+        wrapper.css('background-color', 'transparent');
+        description.css('visibility', '');
+        resource.css('height', resource[0].getBoundingClientRect().height + 'px'); // Firefox won't animate from calc(100%-40px) to _px
+        setTimeout(function() {
+          resource.css('height', resource.data('height'));
+          resource.css('margin-top', parseInt(resource.data('margin-top'), 10) - 20 + 'px');
+          description.css('height', description.data('height'));
+
+          setTimeout(done, animationDuration);
+        }, 20);
+      },
+      removeClass: function(element, className, done) {
+        var placeholder = element;
+        var wrapper = angular.element(element.children()[0]);
+        var resource = angular.element(wrapper.children()[0]);
+        var description = angular.element(resource[0].querySelector('.description'));
+
+        resource.scope().$apply('method = methodToAdd');
+
+        placeholder.css('height', '');
+        wrapper.css('background-color', '');
+        resource.css('transition', '');
+        resource.css('height', '');
+        resource.css('margin-top', '');
+        description.css('transition', 'height 0s'); // otherwise Sarfari incorrectly animates description from 0 to its natural height
+        description.css('height', '');
+        setTimeout(function() {
+          description.css('transition', '');
+        });
+
+        done();
+      }
+    };
+  };
+})();
+
 RAML.Inspector = (function() {
   'use strict';
 
@@ -1257,52 +1364,6 @@ RAML.Inspector = (function() {
   RAML.Controllers.Documentation = controller;
 })();
 
-(function() {
-  'use strict';
-
-  var controller = function($scope, DataStore) {
-    $scope.methodView = this;
-    this.resource = $scope.resource;
-    this.method = $scope.method;
-    this.DataStore = DataStore;
-    this.expanded = this.DataStore.get(this.methodKey());
-  };
-
-  controller.prototype.toggleExpansion = function(evt) {
-    evt.preventDefault();
-
-    if (this.expanded) {
-      this.collapse();
-    } else {
-      this.expand();
-    }
-  };
-
-  controller.prototype.expand = function() {
-    this.expanded = true;
-    this.DataStore.set(this.methodKey(), this.expanded);
-  };
-
-  controller.prototype.collapse = function() {
-    this.expanded = false;
-    this.DataStore.set(this.methodKey(), this.expanded);
-  };
-
-  controller.prototype.methodKey = function() {
-    return this.resource.toString() + ':' + this.method.method;
-  };
-
-  controller.prototype.cssClass = function() {
-    if (this.expanded) {
-      return 'expanded ' + this.method.method;
-    } else {
-      return 'collapsed ' + this.method.method;
-    }
-  };
-
-  RAML.Controllers.Method = controller;
-})();
-
 'use strict';
 
 (function() {
@@ -1402,27 +1463,52 @@ RAML.Inspector = (function() {
     this.resource = $scope.resource;
     this.DataStore = DataStore;
     this.expanded = this.DataStore.get(this.resourceKey());
+
+    this.initiateExpand = function(method) {
+      if ($scope.method) {
+        $scope.method = method;
+      } else {
+        $scope.methodToAdd = method;
+      }
+    };
+
+    this.expandMethod = function(method) {
+      $scope.method = method;
+      DataStore.set(this.methodKey(), method.method);
+    };
+
+    this.collapseMethod = function($event) {
+      DataStore.set(this.methodKey(), undefined);
+      $scope.methodToAdd = undefined;
+      $event.stopPropagation();
+    };
+
+    this.toggleExpansion = function() {
+      if ($scope.methodToAdd || $scope.method) {
+        return;
+      }
+
+      this.expanded = !this.expanded;
+      this.DataStore.set(this.resourceKey(), this.expanded);
+    };
+
+    var methodName = this.DataStore.get(this.methodKey());
+    if (methodName) {
+      var method = this.resource.methods.filter(function(method) {
+        return method.method === methodName;
+      })[0];
+      if (method) {
+        this.expandMethod(method);
+      }
+    }
   };
 
   controller.prototype.resourceKey = function() {
     return this.resource.toString();
   };
 
-  controller.prototype.expandInitially = function(method) {
-    if (method.method === this.methodToExpand) {
-      delete this.methodToExpand;
-      return true;
-    }
-    return false;
-  };
-
-  controller.prototype.expandMethod = function(method) {
-    this.methodToExpand = method.method;
-  };
-
-  controller.prototype.toggleExpansion = function() {
-    this.expanded = !this.expanded;
-    this.DataStore.set(this.resourceKey(), this.expanded);
+  controller.prototype.methodKey = function() {
+    return this.resourceKey() + ':method';
   };
 
   RAML.Controllers.Resource = controller;
@@ -2238,15 +2324,7 @@ RAML.Inspector = (function() {
       require: ['^resource', 'method'],
       restrict: 'E',
       templateUrl: 'views/method.tmpl.html',
-      replace: true,
-      link: function(scope, element, attrs, controllers) {
-        var resourceView = controllers[0],
-            methodView   = controllers[1];
-
-        if (resourceView.expandInitially(scope.method)) {
-          methodView.expand();
-        }
-      }
+      replace: true
     };
   };
 })();
@@ -2966,7 +3044,9 @@ RAML.Filters = {};
 'use strict';
 
 (function() {
-  var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize', 'fileInputOverride']);
+  var module = angular.module('ramlConsoleApp', ['raml', 'ngAnimate', 'ngSanitize', 'fileInputOverride']);
+
+  module.animation('.pop-up', RAML.Animations.popUp);
 
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
@@ -3102,7 +3182,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "       markdown=\"method.description\">\n" +
     "  </div>\n" +
     "\n" +
-    "  <tabset key-base='{{methodView.methodKey()}}'>\n" +
+    "  <tabset key-base='{{resourceView.methodKey()}}'>\n" +
     "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
     "      <parameters></parameters>\n" +
     "      <requests></requests>\n" +
@@ -3131,21 +3211,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/method.tmpl.html',
-    "<div class='method' role=\"method\" ng-class=\"methodView.cssClass()\">\n" +
-    "  <div class='accordion-toggle method-summary' role=\"methodSummary\" ng-class='method.method' ng-click='methodView.toggleExpansion($event)'>\n" +
-    "    <span role=\"verb\" class='method-name' ng-class='method.method'>{{method.method}}</span>\n" +
-    "    <div class='filler' ng-show='methodView.expanded' ng-class='method.method'></div>\n" +
-    "\n" +
-    "    <div role=\"description\" ng-if=\"!methodView.expanded\">\n" +
-    "       <div class='abbreviated-description' markdown='method.description'></div>\n" +
-    "       <i class='icon-caret-right'></i>\n" +
-    "    </div>\n" +
-    "\n" +
+    "<div class=\"method {{method.method}}\" role=\"method\">\n" +
+    "  <div class=\"method-summary\" role=\"methodSummary\">\n" +
+    "    <span role=\"verb\" class=\"method-name\">{{method.method}}</span>\n" +
+    "    <div class=\"filler\"></div>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div ng-show='methodView.expanded'>\n" +
-    "    <documentation></documentation>\n" +
-    "  </div>\n" +
+    "  <documentation></documentation>\n" +
     "</div>\n"
   );
 
@@ -3326,11 +3398,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <div ng-switch-default>\n" +
     "      <section ng-if=\"definition.schema\">\n" +
     "        <h5>Schema</h5>\n" +
-    "        <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
+    "        <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"documentation.requestsActive\"></div>\n" +
     "      </section>\n" +
     "      <section ng-if=\"definition.example\">\n" +
     "        <h5>Example</h5>\n" +
-    "        <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{mediaType}}\" visible=\"methodView.expanded && documentation.requestsActive\"></div>\n" +
+    "        <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{mediaType}}\" visible=\"documentation.requestsActive\"></div>\n" +
     "      </section>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -3339,44 +3411,45 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/resource.tmpl.html',
-    "<div ng-class=\"{expanded: resourceView.expanded, collapsed: !resourceView.expanded}\"\n" +
-    "     class='resource' role=\"resource\">\n" +
+    "<div class=\"resource-placeholder\" ng-class=\"{'pop-up': methodToAdd}\" role=\"resource-placeholder\">\n" +
+    "  <div class=\"resource-container\">\n" +
+    "    <div ng-class=\"{expanded: resourceView.expanded, collapsed: !resourceView.expanded}\" class='resource' role=\"resource\">\n" +
+    "      <div>\n" +
+    "        <i class=\"icon-remove collapse\" ng-class=\"{transparent: !methodToAdd}\" ng-click='resourceView.collapseMethod($event)'></i>\n" +
     "\n" +
-    "  <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
-    "    <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
-    "      <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
-    "        <span class=\"caption\">Type:</span>\n" +
-    "        <ul>\n" +
-    "          <li class=\"resource-type\" role=\"resource-type\" ng-bind=\"resource.resourceType|nameFromParameterizable\"></li>\n" +
-    "        </ul>\n" +
-    "      </span>\n" +
-    "      <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
-    "        <span class=\"caption\">Traits:</span>\n" +
-    "        <ul>\n" +
-    "          <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
-    "        </ul>\n" +
-    "      </span>\n" +
-    "    </div>\n" +
+    "        <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
+    "          <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
+    "            <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
+    "              <span class=\"caption\">Type:</span>\n" +
+    "              <ul>\n" +
+    "                <li class=\"resource-type\" role=\"resource-type\" ng-bind=\"resource.resourceType|nameFromParameterizable\"></li>\n" +
+    "              </ul>\n" +
+    "            </span>\n" +
+    "            <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
+    "              <span class=\"caption\">Traits:</span>\n" +
+    "              <ul>\n" +
+    "                <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
+    "              </ul>\n" +
+    "            </span>\n" +
+    "          </div>\n" +
     "\n" +
-    "    <h3 class=\"path\">\n" +
-    "      <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
-    "    </h3>\n" +
-    "    <ul class='methods' role=\"methods\" ng-if=\"resource.methods\" ng-hide=\"resourceView.expanded\">\n" +
-    "      <li class='method-name' ng-class='method.method'\n" +
-    "          ng-click='resourceView.expandMethod(method)' ng-repeat=\"method in resource.methods\">{{method.method}}</li>\n" +
-    "    </ul>\n" +
-    "  </div>\n" +
+    "          <h3 class=\"path\">\n" +
+    "            <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
+    "          </h3>\n" +
+    "          <ul class='methods' role=\"methods\" ng-if=\"resource.methods\">\n" +
+    "            <li class='method-name' ng-class='method.method'\n" +
+    "                ng-click='resourceView.initiateExpand(method)' ng-repeat=\"method in resource.methods\">{{method.method}}</li>\n" +
+    "          </ul>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
     "\n" +
-    "  <div ng-if='resourceView.expanded'>\n" +
-    "    <div>\n" +
     "      <div role='description'\n" +
     "           class='description'\n" +
-    "           ng-if='resource.description'\n" +
+    "           ng-show='resourceView.expanded && resource.description'\n" +
     "           markdown='resource.description'>\n" +
     "      </div>\n" +
-    "      <div class='accordion' role=\"methods\">\n" +
-    "        <method ng-repeat=\"method in resource.methods\"></method>\n" +
-    "      </div>\n" +
+    "\n" +
+    "      <method ng-if=\"method\"></method>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -3401,11 +3474,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <h4>{{mediaType}}</h4>\n" +
     "        <section ng-if=\"definition.schema\">\n" +
     "          <h5>Schema</h5>\n" +
-    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.schema\" visible=\"methodView.expanded && responsesView.expanded[responseCode]\"></div>\n" +
+    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.schema\" visible=\"responsesView.expanded[responseCode]\"></div>\n" +
     "        </section>\n" +
     "        <section ng-if=\"definition.example\">\n" +
     "          <h5>Example</h5>\n" +
-    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"methodView.expanded && responsesView.expanded[responseCode]\"></div>\n" +
+    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"responsesView.expanded[responseCode]\"></div>\n" +
     "        </section>\n" +
     "      </section>\n" +
     "    </section>\n" +

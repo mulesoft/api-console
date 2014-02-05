@@ -44,6 +44,7 @@
     <!-- build:js({.tmp,app}) scripts/vendor.min.js -->
     <script src="vendor/bower_components/vkbeautify/vkbeautify.js"></script>
     <script src="vendor/bower_components/angular/angular.js"></script>
+    <script src="vendor/bower_components/angular-animate/angular-animate.js"></script>
     <script src="vendor/bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="vendor/jquery.js"></script>
     <script src="vendor/bower_components/raml-js-parser/dist/raml-parser.js"></script>
@@ -57,6 +58,8 @@
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/app.min.js -->
+    <script src="scripts/animations.js"></script>
+    <script src="scripts/animations/pop-up.js"></script>
     <script src="scripts/inspector.js"></script>
     <script src="scripts/inspector/method.js"></script>
     <script src="scripts/inspector/parameterized_header.js"></script>
@@ -84,7 +87,6 @@
     <script src="scripts/client/validator.js"></script>
     <script src="scripts/controllers.js"></script>
     <script src="scripts/controllers/documentation.js"></script>
-    <script src="scripts/controllers/method.js"></script>
     <script src="scripts/controllers/named_parameters_documentation.js"></script>
     <script src="scripts/controllers/raml_console.js"></script>
     <script src="scripts/controllers/resource.js"></script>

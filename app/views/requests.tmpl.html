@@ -7,11 +7,11 @@
     <div ng-switch-default>
       <section ng-if="definition.schema">
         <h5>Schema</h5>
-        <div class="code" code-mirror="definition.schema" mode="{{mediaType}}" visible="methodView.expanded && documentation.requestsActive"></div>
+        <div class="code" code-mirror="definition.schema" mode="{{mediaType}}" visible="documentation.requestsActive"></div>
       </section>
       <section ng-if="definition.example">
         <h5>Example</h5>
-        <div class="code" code-mirror="definition.example" mode="{{mediaType}}" visible="methodView.expanded && documentation.requestsActive"></div>
+        <div class="code" code-mirror="definition.example" mode="{{mediaType}}" visible="documentation.requestsActive"></div>
       </section>
     </div>
   </div>

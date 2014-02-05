@@ -16,8 +16,8 @@ describe("trying an API method", function() {
   );
 
   var openTryIt = function(resource) {
-    resource.$('[role="methodSummary"]').click();
-    resource.$('[role="method"] .nav-tabs li:last-child a').click();
+    var method = openMethod(1, resource);
+    method.$('.nav-tabs li:last-child a').click();
   };
 
   var tryIt = function(resource) {
@@ -45,6 +45,9 @@ describe("trying an API method", function() {
       expect(requestUrl.getText()).toMatch(new RegExp(BASE_URI + "/resource"));
 
       var responseStatus = resource.$('.try-it .response .status');
+      ptor.executeScript(function() {
+        document.querySelector('.try-it .response').scrollIntoView();
+      });
       expect(responseStatus.getText()).toMatch(/200/);
 
       var responseHeaders = resource.$('.try-it .response .headers');
