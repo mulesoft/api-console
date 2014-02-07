@@ -13,11 +13,13 @@
 
         var rect = placeholder[0].getBoundingClientRect();
         var topOffset = placeholder[0].offsetParent.getBoundingClientRect().top;
+        var scrollOffset = placeholder[0].offsetParent.scrollTop;
         placeholder.scope().resourceView.expanded = true;
         setTimeout(function() {
           var rect2 = placeholder[0].getBoundingClientRect();
 
           placeholder.css('height', rect.height + 'px');
+          wrapper.css('top', scrollOffset + 'px');
           resource.css('height', rect.height + 'px');
           resource.css('margin-top', rect.top - 20 - topOffset + 'px'); // 20 padding from wrapper
           resource.data('height', rect2.height + 'px');
@@ -34,6 +36,7 @@
       },
       addClass: function(element, className, done) {
         var placeholder = element;
+        var wrapper = angular.element(element.children()[0]);
         var resource = angular.element(element[0].children[0].children[0]);
         var description = angular.element(resource[0].querySelector('.description'));
 
@@ -50,7 +53,12 @@
             setTimeout(function() {
               placeholder.css('height', resource.data('height'));
               description.css('visibility', 'hidden');
-              angular.element(document.querySelector('[role="api-console"]')).css('height', '0').css('overflow', 'hidden');
+              wrapper.css('top', 0);
+              angular.element(document.querySelector('[role="api-console"]'))
+                .data('scrollTop', placeholder[0].offsetParent.scrollTop)
+                .css('height', '0px')
+                .css('overflow', 'hidden');
+
               done();
             }, animationDuration);
           });
@@ -61,7 +69,13 @@
         var resource = angular.element(wrapper.children()[0]);
         var description = angular.element(resource[0].querySelector('.description'));
 
-        angular.element(document.querySelector('[role="api-console"]')).css('height', 'auto').css('overflow', 'visible');
+        angular.element(document.querySelector('[role="api-console"]'))
+          .css('height', 'auto')
+          .css('overflow', 'visible');
+        var scrollTop = angular.element(document.querySelector('[role="api-console"]')).data('scrollTop');
+        document.querySelector('[role="api-console"]').offsetParent.scrollTop = scrollTop;
+        wrapper.css('top', scrollTop + 'px');
+
 
         wrapper.css('background-color', 'transparent');
         description.css('visibility', '');
