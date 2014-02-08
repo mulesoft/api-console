@@ -32,7 +32,6 @@
     function rememberExpandedResourceBounds(offsetParent, placeholder, resource) {
       var topOffset = offsetParent[0].getBoundingClientRect().top;
       var expandedPlaceholderBounds = placeholder[0].getBoundingClientRect();
-      console.log(expandedPlaceholderBounds.height);
       resource.data('height', expandedPlaceholderBounds.height + 'px');
       resource.data('margin-top', expandedPlaceholderBounds.top - topOffset + 'px');
     }
@@ -45,7 +44,8 @@
       });
     }
 
-    function triggerOpenAnimation(resource, description) {
+    function triggerOpenAnimation(offsetParent, wrapper, resource, description) {
+      wrapper.css('height', offsetParent[0].getBoundingClientRect().height + 'px');
       resource.css('height', '');
       resource.css('margin-top', '');
       description.css('height', '0px');
@@ -97,7 +97,7 @@
         elements.resource.scope().$apply('resourceView.expandMethod(methodToAdd)');
 
         setTimeout(function() {
-          triggerOpenAnimation(elements.resource, elements.description)
+          triggerOpenAnimation(elements.offsetParent, elements.wrapper, elements.resource, elements.description)
 
           afterAnimation(function() {
             elements.placeholder.css('height', elements.resource.data('height'));
@@ -126,7 +126,7 @@
         elements.resource.scope().$apply('method = methodToAdd');
 
         elements.placeholder.css('height', '');
-        elements.wrapper.css('background-color', '');
+        elements.wrapper.css({ 'background-color': '', 'height': '' });
         elements.resource.css({ 'height': '', 'margin-top': '' });
         elements.description.css({ 'transition': 'height 0s', 'height': '' }); // otherwise Safari incorrectly animates description from 0 to its natural height and freaks out
 

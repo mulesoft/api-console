@@ -3174,7 +3174,6 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
   margin-left: -20px;
   border: none;
   top: 0;
-  height: 100%;
   background-color: #E6E7EB;
 }
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource,
@@ -3981,7 +3980,7 @@ raml-console article#raml-console #raml-console-main-nav,
 raml-console article#raml-console #raml-console-content,
 #raml-console-loader #raml-console-content {
   clear: both;
-  padding: 0 20px;
+  padding: 0 20px 15px;
 }
 raml-console article#raml-console .toggle-resource-groups,
 #raml-console-loader .toggle-resource-groups {
@@ -4000,6 +3999,10 @@ raml-console article#raml-console .toggle-resource-groups span,
 raml-console article#raml-console .resource-group,
 #raml-console-loader .resource-group {
   margin-bottom: 17px;
+}
+raml-console article#raml-console .resource-group:last-of-type,
+#raml-console-loader .resource-group:last-of-type {
+  margin-bottom: 0;
 }
 raml-console article#raml-console .resource-group > i,
 #raml-console-loader .resource-group > i {
