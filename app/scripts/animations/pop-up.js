@@ -12,7 +12,7 @@
         wrapper: placeholder.children().eq(0),
         resource: placeholder.children().eq(0).children().eq(0),
         description: angular.element(placeholder[0].querySelector('.description'))
-      }
+      };
     }
 
     function beginExpansion(placeholder) {
@@ -97,7 +97,7 @@
         elements.resource.scope().$apply('resourceView.expandMethod(methodToAdd)');
 
         setTimeout(function() {
-          triggerOpenAnimation(elements.offsetParent, elements.wrapper, elements.resource, elements.description)
+          triggerOpenAnimation(elements.offsetParent, elements.wrapper, elements.resource, elements.description);
 
           afterAnimation(function() {
             elements.placeholder.css('height', elements.resource.data('height'));
