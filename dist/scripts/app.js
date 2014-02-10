@@ -1979,16 +1979,10 @@ RAML.Inspector = (function() {
   RAML.Directives.apiResources = function(DataStore) {
     var controller = function($scope) {
       var self = $scope.apiResources = this;
-      this.groups = $scope.api.resourceGroups;
       this.collapsed = {};
 
-      this.groups.forEach(function(group) {
-        var key = self.keyFor(group);
-        self.collapsed[key] = DataStore.get(key);
-      });
-
       this.toggleAll = function(collapsed) {
-        this.groups.forEach(function(group) {
+        $scope.api.resourceGroups.forEach(function(group) {
           var key = self.keyFor(group);
           self.collapsed[key] = collapsed;
         });
@@ -1998,12 +1992,6 @@ RAML.Inspector = (function() {
         var key = self.keyFor(group);
         return self.collapsed[key];
       };
-
-      $scope.$watch('apiResources.collapsed', function(state) {
-        Object.keys(state).forEach(function(key) {
-          DataStore.set(key, state[key]);
-        });
-      }, true);
     };
 
     controller.prototype.keyFor = function(group) {
