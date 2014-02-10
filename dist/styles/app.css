@@ -3175,6 +3175,7 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
   border: none;
   top: 0;
   background-color: #E6E7EB;
+  min-height: 50vh;
 }
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource,
 #raml-console-loader .resource-placeholder.pop-up .resource-container .resource {
