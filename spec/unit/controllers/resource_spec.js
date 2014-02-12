@@ -19,7 +19,7 @@ describe("RAML.Controllers.Resource", function() {
     var inspected = RAML.Inspector.create(this.api);
     resource = inspected.resources[2];
     methods = resource.methods;
-    scope = { resource: resource };
+    scope = { resource: resource, ramlConsole: {} };
     controller = new RAML.Controllers.Resource(scope, storeSpy);
   });
 
@@ -89,6 +89,10 @@ describe("RAML.Controllers.Resource", function() {
 
       it('sets child height based on the dataStore', function() {
         expect(childrenSpy.css).toHaveBeenCalledWith('height', '100px');
+      });
+
+      it('disables the scroll', function() {
+        expect(scope.ramlConsole.scrollDisabled).toBe(true);
       });
     });
 

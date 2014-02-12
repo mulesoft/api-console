@@ -3,8 +3,12 @@
 
   var controller = function($scope, DataStore, $element) {
     $scope.resourceView = this;
-    this.resource = $scope.resource;
     this.DataStore = DataStore;
+
+    this.resourceKey = function() {
+      return $scope.resource.toString();
+    };
+
     this.expanded = this.DataStore.get(this.resourceKey());
 
     this.initiateExpand = function(method) {
@@ -18,6 +22,7 @@
     this.expandMethod = function(method) {
       $scope.method = method;
       $scope.methodToAdd = method;
+      $scope.ramlConsole.scrollDisabled = true;
       DataStore.set(this.methodKey(), method.method);
     };
 
@@ -38,19 +43,18 @@
 
     var methodName = this.DataStore.get(this.methodKey());
     if (methodName) {
-      var method = this.resource.methods.filter(function(method) {
+      var method = $scope.resource.methods.filter(function(method) {
         return method.method === methodName;
       })[0];
       if (method) {
         this.expanded = false;
         this.expandMethod(method);
+        $scope.ramlConsole.scrollDisabled = true;
         $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
+      } else {
+        $scope.ramlConsole.scrollDisabled = false;
       }
     }
-  };
-
-  controller.prototype.resourceKey = function() {
-    return this.resource.toString();
   };
 
   controller.prototype.methodKey = function() {

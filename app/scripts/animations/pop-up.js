@@ -55,10 +55,9 @@
       description.css('height', '0px');
     }
 
-    function blockScroll(offsetParent, wrapper, console) {
+    function blockScroll(offsetParent, wrapper) {
       wrapper.css('top', 0);
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
-      console.css('height', '0px').css('overflow', 'hidden');
     }
 
     function afterAnimation(cb) {
