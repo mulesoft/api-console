@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var controller = function($scope, DataStore) {
+  var controller = function($scope, DataStore, $element) {
     $scope.resourceView = this;
     this.resource = $scope.resource;
     this.DataStore = DataStore;
@@ -17,6 +17,7 @@
 
     this.expandMethod = function(method) {
       $scope.method = method;
+      $scope.methodToAdd = method;
       DataStore.set(this.methodKey(), method.method);
     };
 
@@ -41,7 +42,9 @@
         return method.method === methodName;
       })[0];
       if (method) {
+        this.expanded = false;
         this.expandMethod(method);
+        $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
       }
     }
   };

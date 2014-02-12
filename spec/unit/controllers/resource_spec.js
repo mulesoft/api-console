@@ -61,10 +61,22 @@ describe("RAML.Controllers.Resource", function() {
 
   describe('methods', function() {
     describe('when initially expanded', function() {
-      beforeEach(function() {
-        storeSpy.get.andReturn(methods[1].method);
+      var elementSpy, childrenSpy;
 
-        controller = new RAML.Controllers.Resource(scope, storeSpy);
+      beforeEach(function() {
+        storeSpy.get.andCallFake(function(key) {
+          if (key === '/base/{sub}/nested:method') {
+            return (methods[1].method);
+          }
+          if (key === 'pop-up:wrapper-height') {
+            return '100px';
+          }
+        });
+        elementSpy = jasmine.createSpyObj('element', ['children']);
+        childrenSpy = jasmine.createSpyObj('children', ['css']);
+        elementSpy.children.andReturn(childrenSpy);
+
+        controller = new RAML.Controllers.Resource(scope, storeSpy, elementSpy);
       });
 
       it('calls the store with the appropriate key', function() {
@@ -73,6 +85,10 @@ describe("RAML.Controllers.Resource", function() {
 
       it('sets method on scope', function() {
         expect(scope.method).toEqual(methods[1]);
+      });
+
+      it('sets child height based on the dataStore', function() {
+        expect(childrenSpy.css).toHaveBeenCalledWith('height', '100px');
       });
     });
 

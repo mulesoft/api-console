@@ -34,13 +34,13 @@ describe("RAML.Animations.popUp", function() {
       description = $el.find('[role="description"]');
     });
 
-    beforeEach(inject(function($animate) {
+    beforeEach(inject(function($animate, DataStore) {
       scope.resourceView.initiateExpand(scope.resource.methods[0]);
 
       var done = false;
       runs(function() {
-        RAML.Animations.popUp().beforeAddClass(angular.element($el), 'pop-up', function() {
-          RAML.Animations.popUp().addClass(angular.element($el), 'pop-up', function() {
+        RAML.Animations.popUp(DataStore).beforeAddClass(angular.element($el), 'pop-up', function() {
+          RAML.Animations.popUp(DataStore).addClass(angular.element($el), 'pop-up', function() {
             done = true
           })
         })

@@ -3,7 +3,7 @@
 
   var animationDuration = 333;
 
-  RAML.Animations.popUp = function() {
+  RAML.Animations.popUp = function(DataStore) {
     function getElements(placeholder) {
       return {
         console: angular.element(document.querySelector('[role="api-console"]')), // FIXME What about multiple consoles on a page; can we just set offsetParent overflow:hidden?
@@ -29,23 +29,27 @@
       resource.css('margin-top', bounds.top - 20 - topOffset + 'px'); // 20 padding from wrapper
     }
 
-    function rememberExpandedResourceBounds(offsetParent, placeholder, resource) {
+    function rememberExpandedResourceBounds(offsetParent, placeholder) {
       var topOffset = offsetParent[0].getBoundingClientRect().top;
       var expandedPlaceholderBounds = placeholder[0].getBoundingClientRect();
-      resource.data('height', expandedPlaceholderBounds.height + 'px');
-      resource.data('margin-top', expandedPlaceholderBounds.top - topOffset + 'px');
+      DataStore.set('pop-up:resource-height', expandedPlaceholderBounds.height + 'px');
+      DataStore.set('pop-up:resource-margin-top', expandedPlaceholderBounds.top - topOffset + 'px');
     }
 
     function prepareDescriptionForAnimation(description) {
-      description.data('height', description[0].getBoundingClientRect().height + 20 + 'px');
-      description.css('height', description.data('height'));
+      var height = description[0].getBoundingClientRect().height + 20 + 'px';
+      DataStore.set('pop-up:description-height', height);
+      description.css('height', height);
       setTimeout(function() {
         description.css('transition', 'height ' + animationDuration/1000 + 's');
       });
     }
 
     function triggerOpenAnimation(offsetParent, wrapper, resource, description) {
-      wrapper.css('height', offsetParent[0].getBoundingClientRect().height + 'px');
+      var wrapperHeight = offsetParent[0].getBoundingClientRect().height + 'px';
+      wrapper.css('height', wrapperHeight);
+      DataStore.set('pop-up:wrapper-height', wrapperHeight);
+
       resource.css('height', '');
       resource.css('margin-top', '');
       description.css('height', '0px');
@@ -53,10 +57,8 @@
 
     function blockScroll(offsetParent, wrapper, console) {
       wrapper.css('top', 0);
-      console
-        .data('scrollTop', offsetParent[0].scrollTop)
-        .css('height', '0px')
-        .css('overflow', 'hidden');
+      DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
+      console.css('height', '0px').css('overflow', 'hidden');
     }
 
     function afterAnimation(cb) {
@@ -64,7 +66,7 @@
     }
 
     function restoreScroll(offsetParent, wrapper, console) {
-      var scrollTop = console.data('scrollTop');
+      var scrollTop = DataStore.get('pop-up:console-scrollTop');
 
       console.css('height', '').css('overflow', '');
       offsetParent[0].scrollTop = scrollTop;
@@ -72,9 +74,9 @@
     }
 
     function triggerCloseAnimation(resource, description) {
-      resource.css('height', resource.data('height'));
-      resource.css('margin-top', parseInt(resource.data('margin-top'), 10) - 20 + 'px');
-      description.css('height', description.data('height'));
+      resource.css('height', DataStore.get('pop-up:resource-height'));
+      resource.css('margin-top', parseInt(DataStore.get('pop-up:resource-margin-top'), 10) - 20 + 'px');
+      description.css('height', DataStore.get('pop-up:description-height'));
     }
 
     return {
@@ -83,7 +85,7 @@
 
         var originalPlaceholderBounds = beginExpansion(elements.placeholder);
         setTimeout(function() {
-          rememberExpandedResourceBounds(elements.offsetParent, elements.placeholder, elements.resource);
+          rememberExpandedResourceBounds(elements.offsetParent, elements.placeholder);
           prepareResourceForAbsolutePositioning(elements.offsetParent, elements.wrapper, elements.resource, originalPlaceholderBounds);
           elements.placeholder.css('height', originalPlaceholderBounds.height + 'px');
           prepareDescriptionForAnimation(elements.description);
@@ -100,7 +102,7 @@
           triggerOpenAnimation(elements.offsetParent, elements.wrapper, elements.resource, elements.description);
 
           afterAnimation(function() {
-            elements.placeholder.css('height', elements.resource.data('height'));
+            elements.placeholder.css('height', DataStore.get('pop-up:resource-height'));
             blockScroll(elements.offsetParent, elements.wrapper, elements.console);
 
             done();

@@ -3231,8 +3231,8 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
 }
-raml-console article#raml-console .resource-placeholder .resource-container .resource.collapsed:hover,
-#raml-console-loader .resource-placeholder .resource-container .resource.collapsed:hover,
+raml-console article#raml-console .resource-placeholder .resource-container .resource:hover,
+#raml-console-loader .resource-placeholder .resource-container .resource:hover,
 raml-console article#raml-console .resource-placeholder .resource-container .resource.expanded,
 #raml-console-loader .resource-placeholder .resource-container .resource.expanded {
   background-color: white;
