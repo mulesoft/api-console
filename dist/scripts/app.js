@@ -1976,7 +1976,7 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  RAML.Directives.apiResources = function(DataStore) {
+  RAML.Directives.apiResources = function() {
     var controller = function($scope) {
       var self = $scope.apiResources = this;
       this.collapsed = {};
@@ -3197,21 +3197,23 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
-    "  <div class=\"modifiers\">\n" +
-    "    <span class=\"modifier-group\" ng-if=\"documentation.method.is\">\n" +
-    "      <span class=\"caption\">Traits:</span>\n" +
-    "      <ul role=\"traits\">\n" +
-    "        <li class=\"trait\" ng-repeat=\"trait in documentation.method.is\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
-    "      </ul>\n" +
-    "    </span>\n" +
-    "  </div>\n" +
-    "  <div role=\"full-description\" class=\"description\"\n" +
-    "       ng-if=\"method.description\"\n" +
-    "       markdown=\"method.description\">\n" +
-    "  </div>\n" +
-    "\n" +
     "  <tabset key-base='{{resourceView.methodKey()}}'>\n" +
+    "    <div class=\"modifiers\">\n" +
+    "      <span class=\"modifier-group\" ng-if=\"documentation.method.is\">\n" +
+    "        <span class=\"caption\">Traits:</span>\n" +
+    "        <ul role=\"traits\">\n" +
+    "          <li class=\"trait\" ng-repeat=\"trait in documentation.method.is\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
+    "        </ul>\n" +
+    "      </span>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <tab heading=\"{{method.method}}\" disabled='true'>\n" +
+    "    </tab>\n" +
     "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
+    "      <div role=\"full-description\" class=\"description\"\n" +
+    "           ng-if=\"method.description\"\n" +
+    "           markdown=\"method.description\">\n" +
+    "      </div>\n" +
     "      <parameters></parameters>\n" +
     "      <requests></requests>\n" +
     "    </tab>\n" +
@@ -3240,11 +3242,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/method.tmpl.html',
     "<div class=\"method {{method.method}}\" role=\"method\">\n" +
-    "  <div class=\"method-summary\" role=\"methodSummary\">\n" +
-    "    <span role=\"verb\" class=\"method-name\">{{method.method}}</span>\n" +
-    "    <div class=\"filler\"></div>\n" +
-    "  </div>\n" +
-    "\n" +
     "  <documentation></documentation>\n" +
     "</div>\n"
   );

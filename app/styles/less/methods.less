@@ -8,12 +8,75 @@
     }
   }
 
-  &.method {
-    border-color: tint(@color, 15%);
+  .method-nav(@color)
+}
+
+.method-nav(@color) {
+  .tabbable, .nav, .nav-tabs {
+    .clearfix();
   }
 
-  .method-summary {
+  .nav {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    color: white;
+    background-color: @color;
+  }
+
+  .nav-tabs {
+    text-align: right;
+  }
+
+  .nav-tabs > li {
+    display: inline-block;
+    cursor: pointer;
+    line-height: 24px;
+  }
+
+  .nav-tabs > li > a {
+    display: block;
+    color: white;
+    padding: 0 15px;
+    line-height: 24px;
+  }
+
+  .nav-tabs > li:nth-child(1) {
+    display:block;
+    float:left;
+    user-select: none;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .nav-tabs > li:nth-child(1) > a {
+    color: white;
+  }
+
+  .nav-tabs > li > a:hover,
+  .nav-tabs > .active > a,
+  .nav-tabs > .active > a:hover,
+  .nav-tabs > .active > a:focus {
+    cursor: default;
     background-color: tint(@color, 15%);
+  }
+
+  .nav > .disabled > a,
+  .nav > .disabled > a:hover,
+  .nav > .disabled > a:focus {
+    color: tint(@color, 40%);
+    text-decoration: none;
+    cursor: default;
+    background-color: transparent;
+  }
+
+  .tab-pane {
+    margin-top: 30px;
+  }
+
+  .tab-content {
+    padding: 0 15px;
   }
 }
 
@@ -31,7 +94,7 @@
   user-select: none;
   font-size: 10px;
   text-transform: uppercase;
-  color: @veryLightGray;
+  color: #FFF;
   text-align: center;
   display: inline-block;
 
@@ -40,10 +103,7 @@
 
 .method {
   position: relative;
-  margin: 0px 0px 10px;
-  border-radius: 0 0 5px 5px;
-  border-width: 1px;
-  border-style: solid;
+  margin: 0 -15px 10px -15px;
   background: white;
   display: flex;
   flex-direction: column;
@@ -62,6 +122,10 @@
     p:first-child {
       margin-top: 0px;
     }
+  }
+
+  .modifiers {
+    margin-top: 24px;
   }
 }
 
@@ -95,3 +159,4 @@
 
   .clearfix();
 }
+

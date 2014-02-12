@@ -1,19 +1,21 @@
 <section class='documentation' role='documentation'>
-  <div class="modifiers">
-    <span class="modifier-group" ng-if="documentation.method.is">
-      <span class="caption">Traits:</span>
-      <ul role="traits">
-        <li class="trait" ng-repeat="trait in documentation.method.is" ng-bind="trait|nameFromParameterizable"></li>
-      </ul>
-    </span>
-  </div>
-  <div role="full-description" class="description"
-       ng-if="method.description"
-       markdown="method.description">
-  </div>
-
   <tabset key-base='{{resourceView.methodKey()}}'>
+    <div class="modifiers">
+      <span class="modifier-group" ng-if="documentation.method.is">
+        <span class="caption">Traits:</span>
+        <ul role="traits">
+          <li class="trait" ng-repeat="trait in documentation.method.is" ng-bind="trait|nameFromParameterizable"></li>
+        </ul>
+      </span>
+    </div>
+
+    <tab heading="{{method.method}}" disabled='true'>
+    </tab>
     <tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
+      <div role="full-description" class="description"
+           ng-if="method.description"
+           markdown="method.description">
+      </div>
       <parameters></parameters>
       <requests></requests>
     </tab>
