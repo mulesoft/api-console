@@ -1378,27 +1378,24 @@ RAML.Inspector = (function() {
   var controller = function($scope) {
     $scope.documentation = this;
 
-    this.resource = $scope.resource;
-    this.method = $scope.method;
-  };
+    function hasUriParameters() {
+      return $scope.resource.pathSegments.some(function(segment) {
+        return segment.templated;
+      });
+    }
 
-  controller.prototype.hasUriParameters = function() {
-    return this.resource.pathSegments.some(function(segment) {
-      return segment.templated;
-    });
-  };
+    function hasParameters() {
+      return !!(hasUriParameters() || $scope.method.queryParameters ||
+        !RAML.Utils.isEmpty($scope.method.headers.plain) || hasFormParameters($scope.method));
+    }
 
-  controller.prototype.hasParameters = function() {
-    return !!(this.hasUriParameters() || this.method.queryParameters ||
-      !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
-  };
+    this.hasRequestDocumentation = function() {
+      return hasParameters() || !RAML.Utils.isEmpty($scope.method.body);
+    };
 
-  controller.prototype.hasRequestDocumentation = function() {
-    return this.hasParameters() || !RAML.Utils.isEmpty(this.method.body);
-  };
-
-  controller.prototype.hasResponseDocumentation = function() {
-    return !RAML.Utils.isEmpty(this.method.responses);
+    this.hasResponseDocumentation = function() {
+      return !RAML.Utils.isEmpty($scope.method.responses);
+    };
   };
 
   RAML.Controllers.Documentation = controller;
@@ -1976,7 +1973,7 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  RAML.Directives.apiResources = function(DataStore) {
+  RAML.Directives.apiResources = function() {
     var controller = function($scope) {
       var self = $scope.apiResources = this;
       this.collapsed = {};
@@ -3198,10 +3195,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
     "  <div class=\"modifiers\">\n" +
-    "    <span class=\"modifier-group\" ng-if=\"documentation.method.is\">\n" +
+    "    <span class=\"modifier-group\" ng-if=\"method.is\">\n" +
     "      <span class=\"caption\">Traits:</span>\n" +
     "      <ul role=\"traits\">\n" +
-    "        <li class=\"trait\" ng-repeat=\"trait in documentation.method.is\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
+    "        <li class=\"trait\" ng-repeat=\"trait in method.is\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
     "      </ul>\n" +
     "    </span>\n" +
     "  </div>\n" +
