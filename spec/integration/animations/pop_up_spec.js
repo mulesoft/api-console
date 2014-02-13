@@ -26,7 +26,7 @@ describe("RAML.Animations.popUp", function() {
         scope.ramlConsole = { keychain: {} };
       }.bind(this));
 
-      $el = compileTemplate('<resource></resource>', scope);
+      $el = compileTemplate('<div role="api-console"><resource></resource></div>', scope);
       setFixtures($el);
 
       resourceType = $el.find('[role="resource-type"]');

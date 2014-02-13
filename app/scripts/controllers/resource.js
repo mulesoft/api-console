@@ -14,6 +14,7 @@
     this.initiateExpand = function(method) {
       if ($scope.method) {
         $scope.method = method;
+        DataStore.set(this.methodKey(), method.method);
       } else {
         $scope.methodToAdd = method;
       }
@@ -22,14 +23,12 @@
     this.expandMethod = function(method) {
       $scope.method = method;
       $scope.methodToAdd = method;
-      $scope.ramlConsole.scrollDisabled = true;
       DataStore.set(this.methodKey(), method.method);
     };
 
     this.collapseMethod = function($event) {
       DataStore.set(this.methodKey(), undefined);
       $scope.methodToAdd = undefined;
-      $scope.ramlConsole.scrollDisabled = false;
       $event.stopPropagation();
     };
 
