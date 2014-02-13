@@ -2557,6 +2557,8 @@ RAML.Inspector = (function() {
           var height = inner[0].scrollHeight;
           inner.css('height', height);
         }
+        controller.scrollDisabled = false;
+
         $scope.api = controller.api = RAML.Inspector.create(raml);
         $timeout(function() {
           inner.css('height', 'auto');
