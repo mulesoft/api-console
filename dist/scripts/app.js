@@ -1518,6 +1518,7 @@ RAML.Inspector = (function() {
     this.initiateExpand = function(method) {
       if ($scope.method) {
         $scope.method = method;
+        DataStore.set(this.methodKey(), method.method);
       } else {
         $scope.methodToAdd = method;
       }
