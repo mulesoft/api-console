@@ -2567,7 +2567,7 @@ raml-console article#raml-console .well,
 #raml-console-loader .well,
 raml-console article#raml-console [markdown] code,
 #raml-console-loader [markdown] code {
-  background-color: #F8F7E6;
+  background-color: #E2F1FC;
   display: inline-block;
   padding: 0 3px;
 }
@@ -3350,6 +3350,7 @@ raml-console article#raml-console .get .nav,
   width: 100%;
   color: white;
   background-color: #0a93c8;
+  z-index: 5;
 }
 raml-console article#raml-console .get .nav-tabs,
 #raml-console-loader .get .nav-tabs {
@@ -3461,6 +3462,7 @@ raml-console article#raml-console .post .nav,
   width: 100%;
   color: white;
   background-color: #1ea18d;
+  z-index: 5;
 }
 raml-console article#raml-console .post .nav-tabs,
 #raml-console-loader .post .nav-tabs {
@@ -3572,6 +3574,7 @@ raml-console article#raml-console .put .nav,
   width: 100%;
   color: white;
   background-color: #5f74df;
+  z-index: 5;
 }
 raml-console article#raml-console .put .nav-tabs,
 #raml-console-loader .put .nav-tabs {
@@ -3683,6 +3686,7 @@ raml-console article#raml-console .patch .nav,
   width: 100%;
   color: white;
   background-color: #fca215;
+  z-index: 5;
 }
 raml-console article#raml-console .patch .nav-tabs,
 #raml-console-loader .patch .nav-tabs {
@@ -3794,6 +3798,7 @@ raml-console article#raml-console .delete .nav,
   width: 100%;
   color: white;
   background-color: #ff6666;
+  z-index: 5;
 }
 raml-console article#raml-console .delete .nav-tabs,
 #raml-console-loader .delete .nav-tabs {
@@ -3905,6 +3910,7 @@ raml-console article#raml-console .head .nav,
   width: 100%;
   color: white;
   background-color: #9446af;
+  z-index: 5;
 }
 raml-console article#raml-console .head .nav-tabs,
 #raml-console-loader .head .nav-tabs {
@@ -4016,6 +4022,7 @@ raml-console article#raml-console .options .nav,
   width: 100%;
   color: white;
   background-color: #9ec000;
+  z-index: 5;
 }
 raml-console article#raml-console .options .nav-tabs,
 #raml-console-loader .options .nav-tabs {
@@ -4127,6 +4134,7 @@ raml-console article#raml-console .trace .nav,
   width: 100%;
   color: white;
   background-color: #26c57f;
+  z-index: 5;
 }
 raml-console article#raml-console .trace .nav-tabs,
 #raml-console-loader .trace .nav-tabs {
@@ -4238,6 +4246,7 @@ raml-console article#raml-console .connect .nav,
   width: 100%;
   color: white;
   background-color: #00c3fb;
+  z-index: 5;
 }
 raml-console article#raml-console .connect .nav-tabs,
 #raml-console-loader .connect .nav-tabs {
@@ -4451,6 +4460,26 @@ raml-console article#raml-console .documentation .description,
 #raml-console-loader .documentation .description {
   margin-bottom: 20px;
 }
+raml-console article#raml-console .documentation h2,
+#raml-console-loader .documentation h2 {
+  color: #22779E;
+}
+raml-console article#raml-console .documentation .body-documentation .toggle .labelled-radio-group,
+#raml-console-loader .documentation .body-documentation .toggle .labelled-radio-group {
+  margin-top: -40px;
+  display: block;
+  float: right;
+}
+raml-console article#raml-console .documentation .body-documentation .schema-toggle,
+#raml-console-loader .documentation .body-documentation .schema-toggle {
+  margin-top: 22px;
+  display: inline-block;
+  cursor: pointer;
+}
+raml-console article#raml-console .documentation .body-documentation .named-parameters,
+#raml-console-loader .documentation .body-documentation .named-parameters {
+  margin-top: -3px;
+}
 raml-console article#raml-console .documentation .named-parameters,
 #raml-console-loader .documentation .named-parameters {
   border-bottom: 1px solid #f3f3f6;
@@ -4609,6 +4638,28 @@ raml-console article#raml-console [role=root-documentation] section > h2:before,
   padding-right: 10px;
   color: #bbb;
   width: 15px;
+}
+raml-console article#raml-console .toggle .radio-group,
+#raml-console-loader .toggle .radio-group {
+  background-color: #c0c2c9;
+  border-radius: 2px;
+  padding: 2px;
+  line-height: 18px !important;
+}
+raml-console article#raml-console .toggle .radio-group label.radio,
+#raml-console-loader .toggle .radio-group label.radio {
+  border-radius: 2px;
+  padding: 0 5px;
+  margin-top: -3px;
+  line-height: 18px;
+}
+raml-console article#raml-console .toggle .radio-group label.radio.active,
+#raml-console-loader .toggle .radio-group label.radio.active {
+  background-color: #f3f3f6;
+}
+raml-console article#raml-console .toggle .radio-group label.radio input,
+#raml-console-loader .toggle .radio-group label.radio input {
+  display: none;
 }
 raml-console article#raml-console .try-it,
 #raml-console-loader .try-it {

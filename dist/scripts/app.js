@@ -1604,6 +1604,47 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
+  var controller = function($scope, DataStore) {
+    this.DataStore = DataStore;
+    this.key = $scope.keyBase + ':toggle';
+    this.toggleItems = $scope.toggleItems = [];
+
+    $scope.toggle = this;
+  };
+
+  controller.prototype.select = function(toggleItem, dontPersist) {
+    if (toggleItem.disabled) {
+      return;
+    }
+
+    this.toggleItems.forEach(function(toggleItem) {
+      toggleItem.active = false;
+    });
+
+    toggleItem.active = true;
+    if (!dontPersist) {
+      this.DataStore.set(this.key, toggleItem.heading);
+    }
+  };
+
+  controller.prototype.addToggleItem = function(toggleItem) {
+    var previouslyEnabled = this.DataStore.get(this.key) === toggleItem.heading,
+        allOthersDisabled = this.toggleItems.every(function(toggleItem) { return toggleItem.disabled; });
+
+    if (allOthersDisabled || previouslyEnabled) {
+      this.select(toggleItem, true);
+    }
+
+    this.toggleItems.push(toggleItem);
+  };
+
+
+  RAML.Controllers.toggle = controller;
+})();
+
+'use strict';
+
+(function() {
   function parseHeaders(headers) {
     var parsed = {}, key, val, i;
 
@@ -2832,6 +2873,51 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
+  ////////////
+  // toggle
+  ////////////
+
+  RAML.Directives.toggle = function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      transclude: true,
+      controller: RAML.Controllers.toggle,
+      templateUrl: 'views/toggle.tmpl.html',
+      scope: {
+        keyBase: '@'
+      }
+    };
+  };
+
+  ////////////////
+  // toggle items
+  ///////////////
+
+  var link = function($scope, $element, $attrs, toggleCtrl) {
+    toggleCtrl.addToggleItem($scope);
+  };
+
+  RAML.Directives.toggleItem = function() {
+    return {
+      restrict: 'E',
+      require: '^toggle',
+      replace: true,
+      transclude: true,
+      link: link,
+      templateUrl: 'views/toggle-item.tmpl.html',
+      scope: {
+        heading: '@',
+        active: '=?',
+        disabled: '=?'
+      }
+    };
+  };
+})();
+
+(function() {
+  'use strict';
+
   RAML.Directives.tryIt = function() {
     return {
       restrict: 'E',
@@ -3115,6 +3201,8 @@ RAML.Filters = {};
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
   module.directive('tab', RAML.Directives.tab);
   module.directive('tabset', RAML.Directives.tabset);
+  module.directive('toggle', RAML.Directives.toggle);
+  module.directive('toggleItem', RAML.Directives.toggleItem);
   module.directive('tryIt', RAML.Directives.tryIt);
   module.directive('validatedInput', RAML.Directives.validatedInput);
 
@@ -3273,8 +3361,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </h4>\n" +
     "\n" +
     "      <div class=\"info\">\n" +
-    "        <div ng-if=\"definition.example\"><span class=\"label\">Example:</span> <code class=\"well\" role=\"example\">{{definition.example}}</code></div>\n" +
     "        <div role=\"description\" markdown=\"definition.description\"></div>\n" +
+    "        <div ng-if=\"definition.example\"><span class=\"label\">Example:</span> <code class=\"well\" role=\"example\">{{definition.example}}</code></div>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </section>\n" +
@@ -3421,24 +3509,31 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/requests.tmpl.html',
-    "<h2 ng-if=\"method.body\">Body</h2>\n" +
-    "<section ng-repeat=\"(mediaType, definition) in method.body track by mediaType\">\n" +
-    "  <h4>{{mediaType}}</h4>\n" +
-    "  <div ng-switch=\"mediaType\">\n" +
-    "    <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
-    "    <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
-    "    <div ng-switch-default>\n" +
-    "      <section ng-if=\"definition.schema\">\n" +
-    "        <h5>Schema</h5>\n" +
-    "        <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"documentation.requestsActive\"></div>\n" +
-    "      </section>\n" +
-    "      <section ng-if=\"definition.example\">\n" +
-    "        <h5>Example</h5>\n" +
-    "        <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{mediaType}}\" visible=\"documentation.requestsActive\"></div>\n" +
-    "      </section>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</section>\n"
+    "<div class='body-documentation'>\n" +
+    "  <h2 ng-if=\"method.body\">Body</h2>\n" +
+    "\n" +
+    "  <toggle key-base='{{resourceView.methodKey() + \":selectedBody\"'>\n" +
+    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}'>\n" +
+    "      <div ng-switch=\"contentType\">\n" +
+    "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
+    "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
+    "        <div ng-switch-default>\n" +
+    "          <section ng-if=\"definition.example\">\n" +
+    "            <h5>Example</h5>\n" +
+    "            <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{contentType}}\" visible=\"documentation.requestsActive\"></div>\n" +
+    "          </section>\n" +
+    "          <section ng-if=\"definition.schema\">\n" +
+    "            <a class=\"schema-toggle\" ng-click=\"schemaExpanded = true\" ng-show=\"!schemaExpanded\">Show Schema</a>\n" +
+    "            <div ng-show=\"schemaExpanded\">\n" +
+    "              <h5>Schema</h5>\n" +
+    "              <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{contentType}}\" visible=\"documentation.requestsActive\"></div>\n" +
+    "            </div>\n" +
+    "          </section>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </toggle-item>\n" +
+    "  </toggle>\n" +
+    "</div>\n"
   );
 
 
@@ -3578,6 +3673,26 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </ul>\n" +
     "\n" +
     "  <div class=\"tab-content\" ng-transclude></div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('views/toggle-item.tmpl.html',
+    "<div class=\"toggle-item\" ng-class=\"{active: active, disabled: disabled}\" ng-show=\"active\" ng-transclude></div>\n"
+  );
+
+
+  $templateCache.put('views/toggle.tmpl.html',
+    "<div class=\"toggle\">\n" +
+    "  <fieldset class=\"labelled-radio-group\">\n" +
+    "    <div class=\"radio-group\">\n" +
+    "      <label class=\"radio\" ng-repeat=\"item in toggleItems\" ng-class=\"{active: item.active, disabled: item.disabled}\">\n" +
+    "        <span ng-click=\"toggle.select(item)\">{{item.heading}}</span>\n" +
+    "      </label>\n" +
+    "    </div>\n" +
+    "  </fieldset>\n" +
+    "\n" +
+    "  <div class=\"item-content\" ng-transclude></div>\n" +
     "</div>\n"
   );
 
