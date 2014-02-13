@@ -29,6 +29,7 @@
     this.collapseMethod = function($event) {
       DataStore.set(this.methodKey(), undefined);
       $scope.methodToAdd = undefined;
+      $scope.ramlConsole.scrollDisabled = false;
       $event.stopPropagation();
     };
 
