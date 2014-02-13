@@ -61,7 +61,7 @@
       description.css('height', '0px');
     }
 
-    function blockScroll(offsetParent, wrapper, console) {
+    function blockScroll(offsetParent, wrapper) {
       wrapper.css('top', 0);
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
     }
@@ -1524,6 +1524,7 @@ RAML.Inspector = (function() {
     this.collapseMethod = function($event) {
       DataStore.set(this.methodKey(), undefined);
       $scope.methodToAdd = undefined;
+      $scope.ramlConsole.scrollDisabled = false;
       $event.stopPropagation();
     };
 
