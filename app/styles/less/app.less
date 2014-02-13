@@ -25,6 +25,11 @@ body#raml-console-unembedded {
 }
 
 raml-console article#raml-console, #raml-console-loader {
+
+  &.scroll-disabled {
+    height: 0px;
+    overflow: hidden;
+  }
   @import "../../vendor/bower_components/font-awesome/less/font-awesome.less";
   @import (less) "../../vendor/bower_components/codemirror/lib/codemirror.css";
   @import "overrides.less";

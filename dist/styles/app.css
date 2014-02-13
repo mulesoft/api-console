@@ -148,6 +148,11 @@ raml-console article#raml-console,
   /* IE7 hack to prevent it from returning funny offsetTops on the spans */
 
 }
+raml-console article#raml-console.scroll-disabled,
+#raml-console-loader.scroll-disabled {
+  height: 0px;
+  overflow: hidden;
+}
 @font-face {
   font-family: 'FontAwesome';
   src: url('../font/fontawesome-webfont.eot?v=3.2.1');
@@ -3146,8 +3151,8 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
 }
-raml-console article#raml-console .resource-placeholder .resource-container .resource.collapsed:hover,
-#raml-console-loader .resource-placeholder .resource-container .resource.collapsed:hover,
+raml-console article#raml-console .resource-placeholder .resource-container .resource:hover,
+#raml-console-loader .resource-placeholder .resource-container .resource:hover,
 raml-console article#raml-console .resource-placeholder .resource-container .resource.expanded,
 #raml-console-loader .resource-placeholder .resource-container .resource.expanded {
   background-color: white;

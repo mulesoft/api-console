@@ -9,7 +9,7 @@
 
   var animationDuration = 333;
 
-  RAML.Animations.popUp = function() {
+  RAML.Animations.popUp = function(DataStore) {
     function getElements(placeholder) {
       return {
         console: angular.element(document.querySelector('[role="api-console"]')), // FIXME What about multiple consoles on a page; can we just set offsetParent overflow:hidden?
@@ -35,34 +35,35 @@
       resource.css('margin-top', bounds.top - 20 - topOffset + 'px'); // 20 padding from wrapper
     }
 
-    function rememberExpandedResourceBounds(offsetParent, placeholder, resource) {
+    function rememberExpandedResourceBounds(offsetParent, placeholder) {
       var topOffset = offsetParent[0].getBoundingClientRect().top;
       var expandedPlaceholderBounds = placeholder[0].getBoundingClientRect();
-      resource.data('height', expandedPlaceholderBounds.height + 'px');
-      resource.data('margin-top', expandedPlaceholderBounds.top - topOffset + 'px');
+      DataStore.set('pop-up:resource-height', expandedPlaceholderBounds.height + 'px');
+      DataStore.set('pop-up:resource-margin-top', expandedPlaceholderBounds.top - topOffset + 'px');
     }
 
     function prepareDescriptionForAnimation(description) {
-      description.data('height', description[0].getBoundingClientRect().height + 20 + 'px');
-      description.css('height', description.data('height'));
+      var height = description[0].getBoundingClientRect().height + 20 + 'px';
+      DataStore.set('pop-up:description-height', height);
+      description.css('height', height);
       setTimeout(function() {
         description.css('transition', 'height ' + animationDuration/1000 + 's');
       });
     }
 
     function triggerOpenAnimation(offsetParent, wrapper, resource, description) {
-      wrapper.css('height', offsetParent[0].getBoundingClientRect().height + 'px');
+      var wrapperHeight = offsetParent[0].getBoundingClientRect().height + 'px';
+      wrapper.css('height', wrapperHeight);
+      DataStore.set('pop-up:wrapper-height', wrapperHeight);
+
       resource.css('height', '');
       resource.css('margin-top', '');
       description.css('height', '0px');
     }
 
-    function blockScroll(offsetParent, wrapper, console) {
+    function blockScroll(offsetParent, wrapper) {
       wrapper.css('top', 0);
-      console
-        .data('scrollTop', offsetParent[0].scrollTop)
-        .css('height', '0px')
-        .css('overflow', 'hidden');
+      DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
     }
 
     function afterAnimation(cb) {
@@ -70,7 +71,7 @@
     }
 
     function restoreScroll(offsetParent, wrapper, console) {
-      var scrollTop = console.data('scrollTop');
+      var scrollTop = DataStore.get('pop-up:console-scrollTop');
 
       console.css('height', '').css('overflow', '');
       offsetParent[0].scrollTop = scrollTop;
@@ -78,9 +79,9 @@
     }
 
     function triggerCloseAnimation(resource, description) {
-      resource.css('height', resource.data('height'));
-      resource.css('margin-top', parseInt(resource.data('margin-top'), 10) - 20 + 'px');
-      description.css('height', description.data('height'));
+      resource.css('height', DataStore.get('pop-up:resource-height'));
+      resource.css('margin-top', parseInt(DataStore.get('pop-up:resource-margin-top'), 10) - 20 + 'px');
+      description.css('height', DataStore.get('pop-up:description-height'));
     }
 
     return {
@@ -89,7 +90,7 @@
 
         var originalPlaceholderBounds = beginExpansion(elements.placeholder);
         setTimeout(function() {
-          rememberExpandedResourceBounds(elements.offsetParent, elements.placeholder, elements.resource);
+          rememberExpandedResourceBounds(elements.offsetParent, elements.placeholder);
           prepareResourceForAbsolutePositioning(elements.offsetParent, elements.wrapper, elements.resource, originalPlaceholderBounds);
           elements.placeholder.css('height', originalPlaceholderBounds.height + 'px');
           prepareDescriptionForAnimation(elements.description);
@@ -106,7 +107,7 @@
           triggerOpenAnimation(elements.offsetParent, elements.wrapper, elements.resource, elements.description);
 
           afterAnimation(function() {
-            elements.placeholder.css('height', elements.resource.data('height'));
+            elements.placeholder.css('height', DataStore.get('pop-up:resource-height'));
             blockScroll(elements.offsetParent, elements.wrapper, elements.console);
 
             done();
@@ -1378,27 +1379,24 @@ RAML.Inspector = (function() {
   var controller = function($scope) {
     $scope.documentation = this;
 
-    this.resource = $scope.resource;
-    this.method = $scope.method;
-  };
+    function hasUriParameters() {
+      return $scope.resource.pathSegments.some(function(segment) {
+        return segment.templated;
+      });
+    }
 
-  controller.prototype.hasUriParameters = function() {
-    return this.resource.pathSegments.some(function(segment) {
-      return segment.templated;
-    });
-  };
+    function hasParameters() {
+      return !!(hasUriParameters() || $scope.method.queryParameters ||
+        !RAML.Utils.isEmpty($scope.method.headers.plain) || hasFormParameters($scope.method));
+    }
 
-  controller.prototype.hasParameters = function() {
-    return !!(this.hasUriParameters() || this.method.queryParameters ||
-      !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
-  };
+    this.hasRequestDocumentation = function() {
+      return hasParameters() || !RAML.Utils.isEmpty($scope.method.body);
+    };
 
-  controller.prototype.hasRequestDocumentation = function() {
-    return this.hasParameters() || !RAML.Utils.isEmpty(this.method.body);
-  };
-
-  controller.prototype.hasResponseDocumentation = function() {
-    return !RAML.Utils.isEmpty(this.method.responses);
+    this.hasResponseDocumentation = function() {
+      return !RAML.Utils.isEmpty($scope.method.responses);
+    };
   };
 
   RAML.Controllers.Documentation = controller;
@@ -1498,10 +1496,14 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var controller = function($scope, DataStore) {
+  var controller = function($scope, DataStore, $element) {
     $scope.resourceView = this;
-    this.resource = $scope.resource;
     this.DataStore = DataStore;
+
+    this.resourceKey = function() {
+      return $scope.resource.toString();
+    };
+
     this.expanded = this.DataStore.get(this.resourceKey());
 
     this.initiateExpand = function(method) {
@@ -1514,12 +1516,15 @@ RAML.Inspector = (function() {
 
     this.expandMethod = function(method) {
       $scope.method = method;
+      $scope.methodToAdd = method;
+      $scope.ramlConsole.scrollDisabled = true;
       DataStore.set(this.methodKey(), method.method);
     };
 
     this.collapseMethod = function($event) {
       DataStore.set(this.methodKey(), undefined);
       $scope.methodToAdd = undefined;
+      $scope.ramlConsole.scrollDisabled = false;
       $event.stopPropagation();
     };
 
@@ -1534,17 +1539,18 @@ RAML.Inspector = (function() {
 
     var methodName = this.DataStore.get(this.methodKey());
     if (methodName) {
-      var method = this.resource.methods.filter(function(method) {
+      var method = $scope.resource.methods.filter(function(method) {
         return method.method === methodName;
       })[0];
       if (method) {
+        this.expanded = false;
         this.expandMethod(method);
+        $scope.ramlConsole.scrollDisabled = true;
+        $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
+      } else {
+        $scope.ramlConsole.scrollDisabled = false;
       }
     }
-  };
-
-  controller.prototype.resourceKey = function() {
-    return this.resource.toString();
   };
 
   controller.prototype.methodKey = function() {
@@ -3199,10 +3205,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<section class='documentation' role='documentation'>\n" +
     "  <tabset key-base='{{resourceView.methodKey()}}'>\n" +
     "    <div class=\"modifiers\">\n" +
-    "      <span class=\"modifier-group\" ng-if=\"documentation.method.is\">\n" +
-    "        <span class=\"caption\">Traits</span>\n" +
+    "      <span class=\"modifier-group\" ng-if=\"method.is\">\n" +
+    "        <span class=\"caption\">Traits:</span>\n" +
     "        <ul role=\"traits\">\n" +
-    "          <li class=\"trait\" ng-repeat=\"trait in documentation.method.is\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
+    "          <li class=\"trait\" ng-repeat=\"trait in method.is\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
     "        </ul>\n" +
     "      </span>\n" +
     "    </div>\n" +
@@ -3374,7 +3380,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/raml-console.tmpl.html',
-    "<article role=\"api-console\" id=\"raml-console\">\n" +
+    "<article role=\"api-console\" id=\"raml-console\" ng-class=\"{ 'scroll-disabled': ramlConsole.scrollDisabled }\">\n" +
     "  <div role=\"error\" ng-if=\"parseError\">\n" +
     "    {{parseError}}\n" +
     "  </div>\n" +
@@ -3438,7 +3444,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/resource.tmpl.html',
     "<div class=\"resource-placeholder\" ng-class=\"{'pop-up': methodToAdd}\" role=\"resource-placeholder\">\n" +
     "  <div class=\"resource-container\">\n" +
-    "    <div ng-class=\"{expanded: resourceView.expanded, collapsed: !resourceView.expanded}\" class='resource' role=\"resource\">\n" +
+    "    <div ng-class=\"{expanded: resourceView.expanded || method}\" class='resource' role=\"resource\">\n" +
     "      <div>\n" +
     "        <i class=\"icon-remove collapse\" ng-class=\"{transparent: !methodToAdd}\" ng-click='resourceView.collapseMethod($event)'></i>\n" +
     "\n" +

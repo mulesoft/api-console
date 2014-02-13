@@ -12,27 +12,24 @@
   var controller = function($scope) {
     $scope.documentation = this;
 
-    this.resource = $scope.resource;
-    this.method = $scope.method;
-  };
+    function hasUriParameters() {
+      return $scope.resource.pathSegments.some(function(segment) {
+        return segment.templated;
+      });
+    }
 
-  controller.prototype.hasUriParameters = function() {
-    return this.resource.pathSegments.some(function(segment) {
-      return segment.templated;
-    });
-  };
+    function hasParameters() {
+      return !!(hasUriParameters() || $scope.method.queryParameters ||
+        !RAML.Utils.isEmpty($scope.method.headers.plain) || hasFormParameters($scope.method));
+    }
 
-  controller.prototype.hasParameters = function() {
-    return !!(this.hasUriParameters() || this.method.queryParameters ||
-      !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
-  };
+    this.hasRequestDocumentation = function() {
+      return hasParameters() || !RAML.Utils.isEmpty($scope.method.body);
+    };
 
-  controller.prototype.hasRequestDocumentation = function() {
-    return this.hasParameters() || !RAML.Utils.isEmpty(this.method.body);
-  };
-
-  controller.prototype.hasResponseDocumentation = function() {
-    return !RAML.Utils.isEmpty(this.method.responses);
+    this.hasResponseDocumentation = function() {
+      return !RAML.Utils.isEmpty($scope.method.responses);
+    };
   };
 
   RAML.Controllers.Documentation = controller;
