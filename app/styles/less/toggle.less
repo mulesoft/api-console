@@ -1,0 +1,23 @@
+.toggle {
+  .radio-group {
+    background-color: @lightGray;
+    border-radius: 2px;
+    padding: 2px;
+    line-height: 18px !important;
+
+    label.radio {
+      border-radius: 2px;
+      padding: 0 5px;
+      margin-top: -3px;
+      line-height: 18px;
+
+      &.active {
+        background-color: @veryLightGray;
+      }
+
+      input {
+        display: none;
+      }
+    }
+  }
+}
