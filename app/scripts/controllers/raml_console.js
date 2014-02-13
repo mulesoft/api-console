@@ -15,6 +15,15 @@
     this.keychain = {};
   };
 
+  controller.prototype.style = function() {
+    if (this.scrollDisabled) {
+      return {
+        height: '0px',
+        overflow: 'hidden'
+      };
+    }
+  };
+
   controller.prototype.gotoView = function(view) {
     this.view = view;
   };

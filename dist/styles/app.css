@@ -148,11 +148,6 @@ raml-console article#raml-console,
   /* IE7 hack to prevent it from returning funny offsetTops on the spans */
 
 }
-raml-console article#raml-console.scroll-disabled,
-#raml-console-loader.scroll-disabled {
-  height: 0px;
-  overflow: hidden;
-}
 @font-face {
   font-family: 'FontAwesome';
   src: url('../font/fontawesome-webfont.eot?v=3.2.1');

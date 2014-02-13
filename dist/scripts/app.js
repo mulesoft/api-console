@@ -1478,6 +1478,15 @@ RAML.Inspector = (function() {
     this.keychain = {};
   };
 
+  controller.prototype.style = function() {
+    if (this.scrollDisabled) {
+      return {
+        height: '0px',
+        overflow: 'hidden'
+      };
+    }
+  };
+
   controller.prototype.gotoView = function(view) {
     this.view = view;
   };
@@ -3383,7 +3392,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/raml-console.tmpl.html',
-    "<article role=\"api-console\" id=\"raml-console\" ng-class=\"{ 'scroll-disabled': ramlConsole.scrollDisabled }\">\n" +
+    "<article role=\"api-console\" id=\"raml-console\" ng-style=\"console.style()\">\n" +
     "  <div role=\"error\" ng-if=\"parseError\">\n" +
     "    {{parseError}}\n" +
     "  </div>\n" +
