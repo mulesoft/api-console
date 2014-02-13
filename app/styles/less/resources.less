@@ -146,11 +146,8 @@
 
       .modifier-group {
         display: inline-flex;
-        background-color: #F3F3F6;
         padding: 0px 5px;
         margin-right: 5px;
-        margin-top: 5px;
-        border: 1px solid @grayD;
 
         .caption {
           flex: 0 0 auto;
@@ -166,15 +163,14 @@
           flex: 1 1 auto;
 
           li {
+            background-color: #F3F3F6;
+            border: 0 solid @grayD;
+            border-width: 0 1px 1px 1px;
             display: inline-block;
             line-height: 14px;
+            padding: 0 5px;
             &.resource-type, &.trait {
               color: @gray;
-            }
-
-            &:after {
-              display: inline-block;
-              content: ",\00a0";
             }
 
             &:last-child:after {

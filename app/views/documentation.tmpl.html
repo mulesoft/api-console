@@ -2,7 +2,7 @@
   <tabset key-base='{{resourceView.methodKey()}}'>
     <div class="modifiers">
       <span class="modifier-group" ng-if="documentation.method.is">
-        <span class="caption">Traits:</span>
+        <span class="caption">Traits</span>
         <ul role="traits">
           <li class="trait" ng-repeat="trait in documentation.method.is" ng-bind="trait|nameFromParameterizable"></li>
         </ul>
