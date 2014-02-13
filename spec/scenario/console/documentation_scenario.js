@@ -68,9 +68,9 @@ describe('API Documentation', function() {
           "x-custom-header",
           "required,",
           "string matching /^[0-9a-f]{32}$/",
+          "API Key",
           "Example:",
-          "0a724bfa133666c5041019ef5bf5a659",
-          "API Key"
+          "0a724bfa133666c5041019ef5bf5a659"
         ].map(escapeRegExp).join('\\s+'), "i");
         expect(header.getText()).toMatch(expectedText);
 
@@ -91,9 +91,9 @@ describe('API Documentation', function() {
           "page",
           "required,",
           "integer between 1-100",
+          "Which page?",
           "Example:",
-          "1",
-          "Which page?"
+          "1"
         ].map(escapeRegExp).join('\\s+'), "i");
         expect(queryParam.getText()).toMatch(expectedText);
       });
@@ -104,8 +104,11 @@ describe('API Documentation', function() {
       method = openMethod(1, resource);
 
       expect(method.getText()).toMatch(new RegExp('text/xml'));
-      expect(method.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(method.getText()).toMatch(new RegExp("<id>1511685</id>"));
+      expect(method.getText()).toMatch('Show Schema');
+      var schemaToggle = method.$('.schema-toggle')
+      schemaToggle.click();
+      expect(method.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
     });
   });
 

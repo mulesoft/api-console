@@ -1,20 +1,25 @@
-<h2 ng-if="method.body">Body</h2>
+<div class='body-documentation'>
+  <h2 ng-if="method.body">Body</h2>
 
-<toggle key-base='{{resourceView.methodKey() + ":selectedBody"'>
-  <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}'>
-    <div ng-switch="contentType">
-      <named-parameters-documentation ng-switch-when="application/x-www-form-urlencoded" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
-      <named-parameters-documentation ng-switch-when="multipart/form-data" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
-      <div ng-switch-default>
-        <section ng-if="definition.schema">
-          <h5>Schema</h5>
-          <div class="code" code-mirror="definition.schema" mode="{{contentType}}" visible="documentation.requestsActive"></div>
-        </section>
-        <section ng-if="definition.example">
-          <h5>Example</h5>
-          <div class="code" code-mirror="definition.example" mode="{{contentType}}" visible="documentation.requestsActive"></div>
-        </section>
+  <toggle key-base='{{resourceView.methodKey() + ":selectedBody"'>
+    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}'>
+      <div ng-switch="contentType">
+        <named-parameters-documentation ng-switch-when="application/x-www-form-urlencoded" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
+        <named-parameters-documentation ng-switch-when="multipart/form-data" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
+        <div ng-switch-default>
+          <section ng-if="definition.example">
+            <h5>Example</h5>
+            <div class="code" code-mirror="definition.example" mode="{{contentType}}" visible="documentation.requestsActive"></div>
+          </section>
+          <section ng-if="definition.schema">
+            <a class="schema-toggle" ng-click="schemaExpanded = true" ng-show="!schemaExpanded">Show Schema</a>
+            <div ng-show="schemaExpanded">
+              <h5>Schema</h5>
+              <div class="code" code-mirror="definition.schema" mode="{{contentType}}" visible="documentation.requestsActive"></div>
+            </div>
+          </section>
+        </div>
       </div>
-    </div>
-  </toggle-item>
-</toggle>
+    </toggle-item>
+  </toggle>
+</div>
