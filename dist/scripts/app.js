@@ -61,9 +61,10 @@
       description.css('height', '0px');
     }
 
-    function blockScroll(offsetParent, wrapper) {
+    function blockScroll(offsetParent, wrapper, console) {
       wrapper.css('top', 0);
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
+      console.scope().$apply('ramlConsole.scrollDisabled = true');
     }
 
     function afterAnimation(cb) {
@@ -72,8 +73,7 @@
 
     function restoreScroll(offsetParent, wrapper, console) {
       var scrollTop = DataStore.get('pop-up:console-scrollTop');
-
-      console.css('height', '').css('overflow', '');
+      console.scope().ramlConsole.scrollDisabled = false;
       offsetParent[0].scrollTop = scrollTop;
       wrapper.css('top', scrollTop + 'px');
     }
@@ -1478,15 +1478,6 @@ RAML.Inspector = (function() {
     this.keychain = {};
   };
 
-  controller.prototype.style = function() {
-    if (this.scrollDisabled) {
-      return {
-        height: '0px',
-        overflow: 'hidden'
-      };
-    }
-  };
-
   controller.prototype.gotoView = function(view) {
     this.view = view;
   };
@@ -1527,14 +1518,12 @@ RAML.Inspector = (function() {
     this.expandMethod = function(method) {
       $scope.method = method;
       $scope.methodToAdd = method;
-      $scope.ramlConsole.scrollDisabled = true;
       DataStore.set(this.methodKey(), method.method);
     };
 
     this.collapseMethod = function($event) {
       DataStore.set(this.methodKey(), undefined);
       $scope.methodToAdd = undefined;
-      $scope.ramlConsole.scrollDisabled = false;
       $event.stopPropagation();
     };
 
@@ -3393,7 +3382,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/raml-console.tmpl.html',
-    "<article role=\"api-console\" id=\"raml-console\" ng-style=\"console.style()\">\n" +
+    "<article role=\"api-console\" id=\"raml-console\" ng-class=\"{ 'scroll-disabled': ramlConsole.scrollDisabled }\">\n" +
     "  <div role=\"error\" ng-if=\"parseError\">\n" +
     "    {{parseError}}\n" +
     "  </div>\n" +

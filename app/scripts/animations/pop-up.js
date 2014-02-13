@@ -55,9 +55,10 @@
       description.css('height', '0px');
     }
 
-    function blockScroll(offsetParent, wrapper) {
+    function blockScroll(offsetParent, wrapper, console) {
       wrapper.css('top', 0);
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
+      console.scope().$apply('ramlConsole.scrollDisabled = true');
     }
 
     function afterAnimation(cb) {
@@ -66,8 +67,7 @@
 
     function restoreScroll(offsetParent, wrapper, console) {
       var scrollTop = DataStore.get('pop-up:console-scrollTop');
-
-      console.css('height', '').css('overflow', '');
+      console.scope().ramlConsole.scrollDisabled = false;
       offsetParent[0].scrollTop = scrollTop;
       wrapper.css('top', scrollTop + 'px');
     }
