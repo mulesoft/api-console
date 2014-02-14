@@ -3547,13 +3547,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
     "          <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
     "            <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
-    "              <span class=\"caption\">Type</span>\n" +
+    "              <span class=\"caption\">Type:</span>\n" +
     "              <ul>\n" +
     "                <li class=\"resource-type\" role=\"resource-type\" ng-bind=\"resource.resourceType|nameFromParameterizable\"></li>\n" +
     "              </ul>\n" +
     "            </span>\n" +
     "            <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
-    "              <span class=\"caption\">Traits</span>\n" +
+    "              <span class=\"caption\">Traits:</span>\n" +
     "              <ul>\n" +
     "                <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
     "              </ul>\n" +
