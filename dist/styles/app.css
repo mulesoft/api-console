@@ -3386,7 +3386,9 @@ raml-console article#raml-console .get .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .get .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .get .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .get .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .get .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .get .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .get .nav-tabs > li > a:hover,
@@ -3498,7 +3500,9 @@ raml-console article#raml-console .post .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .post .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .post .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .post .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .post .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .post .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .post .nav-tabs > li > a:hover,
@@ -3610,7 +3614,9 @@ raml-console article#raml-console .put .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .put .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .put .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .put .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .put .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .put .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .put .nav-tabs > li > a:hover,
@@ -3722,7 +3728,9 @@ raml-console article#raml-console .patch .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .patch .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .patch .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .patch .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .patch .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .patch .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .patch .nav-tabs > li > a:hover,
@@ -3834,7 +3842,9 @@ raml-console article#raml-console .delete .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .delete .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .delete .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .delete .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .delete .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .delete .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .delete .nav-tabs > li > a:hover,
@@ -3946,7 +3956,9 @@ raml-console article#raml-console .head .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .head .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .head .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .head .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .head .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .head .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .head .nav-tabs > li > a:hover,
@@ -4058,7 +4070,9 @@ raml-console article#raml-console .options .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .options .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .options .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .options .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .options .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .options .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .options .nav-tabs > li > a:hover,
@@ -4170,7 +4184,9 @@ raml-console article#raml-console .trace .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .trace .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .trace .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .trace .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .trace .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .trace .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .trace .nav-tabs > li > a:hover,
@@ -4282,7 +4298,9 @@ raml-console article#raml-console .connect .nav-tabs > li:nth-child(1),
   text-transform: uppercase;
 }
 raml-console article#raml-console .connect .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .connect .nav-tabs > li:nth-child(1) > a {
+#raml-console-loader .connect .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .connect .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .connect .nav-tabs > li:nth-child(1) > a:hover {
   color: white;
 }
 raml-console article#raml-console .connect .nav-tabs > li > a:hover,
