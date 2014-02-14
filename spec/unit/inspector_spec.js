@@ -35,6 +35,8 @@ describe("RAML.Inspector.create", function() {
     '    get: !!null',
     '/resource/search:',
     '  get: !!null',
+    '/resourced:',
+    '  get:',
     '/another/resource:',
     '  get:',
     '    securedBy: [null, basic, oauth_2: { scopes: [ comments ] } ]'
@@ -56,13 +58,15 @@ describe("RAML.Inspector.create", function() {
 
     it("provides an array of resources grouped by initial path segments", function() {
       var resourceGroups = inspector.resourceGroups;
-      expect(resourceGroups).toHaveLength(2);
+      expect(resourceGroups).toHaveLength(3);
       expect(resourceGroups[0]).toHaveLength(3);
       expect(resourceGroups[1]).toHaveLength(1);
+      expect(resourceGroups[2]).toHaveLength(1);
 
       var resourceGroupPaths = resourceGroups.map(getGroupPaths);
       expect(resourceGroupPaths[0]).toEqual(['/resource', '/resource/{resourceId}', '/resource/search']);
-      expect(resourceGroupPaths[1]).toEqual(['/another/resource']);
+      expect(resourceGroupPaths[1]).toEqual(['/resourced']);
+      expect(resourceGroupPaths[2]).toEqual(['/another/resource']);
     });
 
     it("creates a resource overview for each resource", function() {
