@@ -1622,6 +1622,10 @@ RAML.Inspector = (function() {
     });
 
     toggleItem.active = true;
+    if (toggleItem.onActive) {
+      toggleItem.onActive(toggleItem.heading);
+    }
+
     if (!dontPersist) {
       this.DataStore.set(this.key, toggleItem.heading);
     }
@@ -2658,7 +2662,17 @@ RAML.Inspector = (function() {
   RAML.Directives.requests = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/requests.tmpl.html'
+      templateUrl: 'views/requests.tmpl.html',
+      link: function($scope) {
+        var displayed = {};
+        $scope.displayed = function(contentType) {
+          return displayed[contentType];
+        };
+
+        $scope.prepareView = function(name) {
+          displayed[name] = true;
+        };
+      }
     };
   };
 })();
@@ -2909,7 +2923,8 @@ RAML.Inspector = (function() {
       scope: {
         heading: '@',
         active: '=?',
-        disabled: '=?'
+        disabled: '=?',
+        onActive: '=?'
       }
     };
   };
@@ -3513,20 +3528,20 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <h2 ng-if=\"method.body\">Body</h2>\n" +
     "\n" +
     "  <toggle key-base='{{resourceView.methodKey() + \":selectedBody\"'>\n" +
-    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}'>\n" +
+    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-active='prepareView'>\n" +
     "      <div ng-switch=\"contentType\">\n" +
     "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <div ng-switch-default>\n" +
     "          <section ng-if=\"definition.example\">\n" +
     "            <h5>Example</h5>\n" +
-    "            <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{contentType}}\" visible=\"documentation.requestsActive\"></div>\n" +
+    "            <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{contentType}}\" visible=\"displayed(contentType)\"></div>\n" +
     "          </section>\n" +
     "          <section ng-if=\"definition.schema\">\n" +
     "            <a class=\"schema-toggle\" ng-click=\"schemaExpanded = true\" ng-show=\"!schemaExpanded\">Show Schema</a>\n" +
     "            <div ng-show=\"schemaExpanded\">\n" +
     "              <h5>Schema</h5>\n" +
-    "              <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{contentType}}\" visible=\"documentation.requestsActive\"></div>\n" +
+    "              <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{contentType}}\" visible=\"schemaExpanded\"></div>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "        </div>\n" +
