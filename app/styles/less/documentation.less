@@ -10,11 +10,16 @@
   }
 
   h2 {
-    color: #22779E;
+    font-size: 18px;
+    color: @muleBlue;
+    padding: 20px 0;
+    margin: 0;
   }
 
   .body-documentation {
     .toggle {
+      margin-top: -18px;
+
       .labelled-radio-group {
         margin-top: -40px;
         display: block;
@@ -22,9 +27,17 @@
       }
     }
 
+    h5 {
+      color: @darkGray;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
     .schema-toggle {
-      margin-top: 22px;
       display: inline-block;
+      margin-top: 22px;
+      font-size: 10px;
+      font-weight: 600;
       cursor: pointer;
     }
 
@@ -34,15 +47,7 @@
   }
 
   .named-parameters {
-    border-bottom: 1px solid @veryLightGray;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    > h2 {
-      margin-top: 25px;
-    }
+    border-bottom: 1px solid @lightGray;
 
     .parameter {
       margin-bottom: 25px;
@@ -55,6 +60,12 @@
         p:last-child {
           margin: 0 0 1px 0;
         }
+      }
+
+      h4 {
+        font-size: 12px;
+        font-weight: 600;
+        color: @black;
       }
 
       .constraints {
