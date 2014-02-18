@@ -37,7 +37,8 @@
       scope: {
         heading: '@',
         active: '=?',
-        disabled: '=?'
+        disabled: '=?',
+        onActive: '=?'
       }
     };
   };

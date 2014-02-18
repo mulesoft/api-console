@@ -19,6 +19,10 @@
     });
 
     toggleItem.active = true;
+    if (toggleItem.onActive) {
+      toggleItem.onActive(toggleItem.heading);
+    }
+
     if (!dontPersist) {
       this.DataStore.set(this.key, toggleItem.heading);
     }

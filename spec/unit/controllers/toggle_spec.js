@@ -104,5 +104,16 @@ describe("RAML.Controllers.toggle", function() {
         expect(storeSpy.set).not.toHaveBeenCalled();
       });
     });
+
+    describe('when toggle item has registered an activation callback', function() {
+      beforeEach(function() {
+        toggleItem2.onActive = jasmine.createSpy();
+        this.controller.select(toggleItem2, true);
+      });
+
+      it('executes it', function() {
+        expect(toggleItem2.onActive).toHaveBeenCalled();
+      });
+    });
   });
 });
