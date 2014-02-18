@@ -4666,6 +4666,7 @@ raml-console article#raml-console .toggle .radio-group label.radio,
   line-height: 18px;
   font-size: 10px;
   color: #555555;
+  margin-right: 0 !important;
 }
 raml-console article#raml-console .toggle .radio-group label.radio.active,
 #raml-console-loader .toggle .radio-group label.radio.active {
