@@ -1391,7 +1391,7 @@ RAML.Inspector = (function() {
     }
 
     this.hasRequestDocumentation = function() {
-      return hasParameters() || !RAML.Utils.isEmpty($scope.method.body);
+      return !!$scope.method.description || hasParameters() || !RAML.Utils.isEmpty($scope.method.body);
     };
 
     this.hasResponseDocumentation = function() {
