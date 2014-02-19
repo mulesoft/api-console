@@ -3079,7 +3079,7 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
   position: absolute;
   z-index: 2;
   width: 100%;
-  padding: 20px;
+  padding: 10px;
   margin-left: -20px;
   border: none;
   top: 0;
@@ -3367,7 +3367,7 @@ raml-console article#raml-console .get .nav-tabs > li > a,
 raml-console article#raml-console .get .nav-tabs > li:nth-child(1),
 #raml-console-loader .get .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -3480,7 +3480,7 @@ raml-console article#raml-console .post .nav-tabs > li > a,
 raml-console article#raml-console .post .nav-tabs > li:nth-child(1),
 #raml-console-loader .post .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -3593,7 +3593,7 @@ raml-console article#raml-console .put .nav-tabs > li > a,
 raml-console article#raml-console .put .nav-tabs > li:nth-child(1),
 #raml-console-loader .put .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -3706,7 +3706,7 @@ raml-console article#raml-console .patch .nav-tabs > li > a,
 raml-console article#raml-console .patch .nav-tabs > li:nth-child(1),
 #raml-console-loader .patch .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -3819,7 +3819,7 @@ raml-console article#raml-console .delete .nav-tabs > li > a,
 raml-console article#raml-console .delete .nav-tabs > li:nth-child(1),
 #raml-console-loader .delete .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -3932,7 +3932,7 @@ raml-console article#raml-console .head .nav-tabs > li > a,
 raml-console article#raml-console .head .nav-tabs > li:nth-child(1),
 #raml-console-loader .head .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -4045,7 +4045,7 @@ raml-console article#raml-console .options .nav-tabs > li > a,
 raml-console article#raml-console .options .nav-tabs > li:nth-child(1),
 #raml-console-loader .options .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -4158,7 +4158,7 @@ raml-console article#raml-console .trace .nav-tabs > li > a,
 raml-console article#raml-console .trace .nav-tabs > li:nth-child(1),
 #raml-console-loader .trace .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -4271,7 +4271,7 @@ raml-console article#raml-console .connect .nav-tabs > li > a,
 raml-console article#raml-console .connect .nav-tabs > li:nth-child(1),
 #raml-console-loader .connect .nav-tabs > li:nth-child(1) {
   display: block;
-  float: left;
+  position: absolute;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
