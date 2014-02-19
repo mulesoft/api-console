@@ -3320,6 +3320,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <tab heading=\"{{method.method}}\" disabled='true'>\n" +
     "    </tab>\n" +
     "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
+    "      <h2 ng-if=\"method.description\">Description</h2>\n" +
     "      <div role=\"full-description\" class=\"description\"\n" +
     "           ng-if=\"method.description\"\n" +
     "           markdown=\"method.description\">\n" +

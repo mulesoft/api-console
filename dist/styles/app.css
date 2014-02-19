@@ -4853,12 +4853,6 @@ raml-console article#raml-console [role=documentation] h2 i[class^="icon-"],
   line-height: 40px;
   vertical-align: baseline;
 }
-raml-console article#raml-console [role=documentation] [role=documentation-requests] > div,
-#raml-console-loader [role=documentation] [role=documentation-requests] > div,
-raml-console article#raml-console [role=documentation] [role=documentation-responses] > div,
-#raml-console-loader [role=documentation] [role=documentation-responses] > div {
-  margin-top: 30px;
-}
 raml-console article#raml-console [role=documentation] [role=documentation-requests] > div:first-child,
 #raml-console-loader [role=documentation] [role=documentation-requests] > div:first-child,
 raml-console article#raml-console [role=documentation] [role=documentation-responses] > div:first-child,
