@@ -33,6 +33,26 @@ describe("RAML.Controllers.Documentation", function() {
     });
   });
 
+  describe('given a method with a description', function() {
+    var raml = createRAML(
+      'title: Example API',
+      '/resource:',
+      '  get:',
+      '    description: hi'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      scope = createScopeForDocumentationController(this.api);
+      controller = new RAML.Controllers.Documentation(scope);
+    });
+
+    it('has request documentation', function() {
+      expect(controller.hasRequestDocumentation()).toBe(true);
+    });
+  });
+
   describe('given a method with query parameters', function() {
     var raml = createRAML(
       'title: Example API',
