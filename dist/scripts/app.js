@@ -2099,6 +2099,42 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
+  RAML.Directives.bodyDocumentation = function(DataStore) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'views/body_documentation.tmpl.html',
+      link: function($scope) {
+        var displayed = {};
+        $scope.displayed = function(contentType) {
+          return displayed[contentType];
+        };
+
+        $scope.prepareView = function(name) {
+          displayed[name] = true;
+        };
+
+        $scope.bodyKey = function() {
+          return $scope.resourceView.methodKey() + ':body';
+        };
+
+        $scope.expandSchema = function(contentType) {
+          var key = $scope.bodyKey() + ':schemaExpanded:' + contentType;
+          return DataStore.set(key, true);
+        };
+
+        $scope.schemaExpanded = function(contentType) {
+          var key = $scope.bodyKey() + ':schemaExpanded:' + contentType;
+          return DataStore.get(key);
+        };
+      }
+    };
+  };
+})();
+
+(function() {
+  'use strict';
+
   var formatters = {
     'application/json' : function(code) {
       return vkbeautify.json(code);
@@ -2665,7 +2701,7 @@ RAML.Inspector = (function() {
 
         $scope.bodyKey = function() {
           return $scope.resourceView.methodKey() + ':body';
-        }
+        };
       }
     };
   };
@@ -3181,6 +3217,7 @@ RAML.Filters = {};
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
   module.directive('bodyContent', RAML.Directives.bodyContent);
+  module.directive('bodyDocumentation', RAML.Directives.bodyDocumentation);
   module.directive('codeMirror', RAML.Directives.codeMirror);
   module.directive('collapsible', RAML.Directives.collapsible);
   module.directive('collapsibleContent', RAML.Directives.collapsibleContent);
@@ -3298,6 +3335,35 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('views/body_documentation.tmpl.html',
+    "<section class='body-documentation'>\n" +
+    "  <h2>Body</h2>\n" +
+    "\n" +
+    "  <toggle key-base='{{ bodyKey() }}'>\n" +
+    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-active='prepareView'>\n" +
+    "      <div ng-switch=\"contentType\">\n" +
+    "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
+    "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
+    "        <div ng-switch-default>\n" +
+    "          <section ng-if=\"definition.example\">\n" +
+    "            <h5>Example</h5>\n" +
+    "            <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{contentType}}\" visible=\"displayed(contentType)\"></div>\n" +
+    "          </section>\n" +
+    "          <section ng-if=\"definition.schema\">\n" +
+    "            <a class=\"schema-toggle\" ng-click=\"expandSchema(contentType)\" ng-show=\"!schemaExpanded(contentType)\">Show Schema</a>\n" +
+    "            <div ng-show=\"schemaExpanded(contentType)\">\n" +
+    "              <h5>Schema</h5>\n" +
+    "              <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{contentType}}\" visible=\"schemaExpanded(contentType)\"></div>\n" +
+    "            </div>\n" +
+    "          </section>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </toggle-item>\n" +
+    "  </toggle>\n" +
+    "</section>\n"
+  );
+
+
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
     "  <tabset key-base='{{resourceView.methodKey()}}'>\n" +
@@ -3333,7 +3399,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "\n" +
     "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(method.body)'>\n" +
-    "        <requests></requests>\n" +
+    "        <body-documentation></body-documentation>\n" +
     "      </div>\n" +
     "    </tab>\n" +
     "    <tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
@@ -3533,17 +3599,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <div ng-switch-default>\n" +
-    "          <section ng-if=\"definition.example\">\n" +
-    "            <h5>Example</h5>\n" +
-    "            <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{contentType}}\" visible=\"displayed(contentType)\"></div>\n" +
-    "          </section>\n" +
-    "          <section ng-if=\"definition.schema\">\n" +
-    "            <a class=\"schema-toggle\" ng-click=\"schemaExpanded = true\" ng-show=\"!schemaExpanded\">Show Schema</a>\n" +
-    "            <div ng-show=\"schemaExpanded\">\n" +
-    "              <h5>Schema</h5>\n" +
-    "              <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{contentType}}\" visible=\"schemaExpanded\"></div>\n" +
-    "            </div>\n" +
-    "          </section>\n" +
+    "          <schema-and-example schema=\"definition.schema\" example=\"definition.example\" content-type=\"contentType\"></schema-and-example>\n" +
     "        </div>\n" +
     "      </div>\n" +
     "    </toggle-item>\n" +

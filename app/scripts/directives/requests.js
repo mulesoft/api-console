@@ -18,7 +18,7 @@
 
         $scope.bodyKey = function() {
           return $scope.resourceView.methodKey() + ':body';
-        }
+        };
       }
     };
   };

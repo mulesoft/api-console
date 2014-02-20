@@ -7,7 +7,17 @@
         <named-parameters-documentation ng-switch-when="application/x-www-form-urlencoded" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
         <named-parameters-documentation ng-switch-when="multipart/form-data" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
         <div ng-switch-default>
-          <schema-and-example schema="definition.schema" example="definition.example" content-type="contentType"></schema-and-example>
+          <section ng-if="definition.example">
+            <h5>Example</h5>
+            <div class="code" code-mirror="definition.example" mode="{{contentType}}" visible="displayed(contentType)"></div>
+          </section>
+          <section ng-if="definition.schema">
+            <a class="schema-toggle" ng-click="expandSchema(contentType)" ng-show="!schemaExpanded(contentType)">Show Schema</a>
+            <div ng-show="schemaExpanded(contentType)">
+              <h5>Schema</h5>
+              <div class="code" code-mirror="definition.schema" mode="{{contentType}}" visible="schemaExpanded(contentType)"></div>
+            </div>
+          </section>
         </div>
       </div>
     </toggle-item>

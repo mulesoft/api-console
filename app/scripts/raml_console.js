@@ -8,6 +8,7 @@
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
   module.directive('bodyContent', RAML.Directives.bodyContent);
+  module.directive('bodyDocumentation', RAML.Directives.bodyDocumentation);
   module.directive('codeMirror', RAML.Directives.codeMirror);
   module.directive('collapsible', RAML.Directives.collapsible);
   module.directive('collapsibleContent', RAML.Directives.collapsibleContent);
