@@ -25,16 +25,29 @@
   }
 
   .body-documentation {
-    .toggle {
-      .labelled-radio-group {
-        display: block;
-      }
+    h2 {
+      float: left;
     }
 
     h5 {
       color: @darkGray;
       font-size: 10px;
       font-weight: 600;
+    }
+
+    .toggle {
+      .labelled-radio-group {
+        text-align: right;
+        display: block;
+
+        .radio-group {
+          margin-top: 20px;
+        }
+      }
+
+      .item-content {
+        margin-top: 15px;
+      }
     }
 
     .schema-toggle {

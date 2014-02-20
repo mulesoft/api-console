@@ -42,13 +42,6 @@ raml-console article {
   background-color: #E6E7EB;
   color: #333;
 }
-#raml-console-unembedded .documentation .body-documentation .toggle {
-  margin-top: -18px;
-}
-#raml-console-unembedded .documentation .body-documentation .toggle .labelled-radio-group {
-  margin-top: -40px;
-  float: right;
-}
 #raml-console-loader form {
   margin: 25px;
 }
@@ -4515,15 +4508,28 @@ raml-console article#raml-console .documentation h2,
   padding: 20px 0;
   margin: 0;
 }
-raml-console article#raml-console .documentation .body-documentation .toggle .labelled-radio-group,
-#raml-console-loader .documentation .body-documentation .toggle .labelled-radio-group {
-  display: block;
+raml-console article#raml-console .documentation .body-documentation h2,
+#raml-console-loader .documentation .body-documentation h2 {
+  float: left;
 }
 raml-console article#raml-console .documentation .body-documentation h5,
 #raml-console-loader .documentation .body-documentation h5 {
   color: #555555;
   font-size: 10px;
   font-weight: 600;
+}
+raml-console article#raml-console .documentation .body-documentation .toggle .labelled-radio-group,
+#raml-console-loader .documentation .body-documentation .toggle .labelled-radio-group {
+  text-align: right;
+  display: block;
+}
+raml-console article#raml-console .documentation .body-documentation .toggle .labelled-radio-group .radio-group,
+#raml-console-loader .documentation .body-documentation .toggle .labelled-radio-group .radio-group {
+  margin-top: 20px;
+}
+raml-console article#raml-console .documentation .body-documentation .toggle .item-content,
+#raml-console-loader .documentation .body-documentation .toggle .item-content {
+  margin-top: 15px;
 }
 raml-console article#raml-console .documentation .body-documentation .schema-toggle,
 #raml-console-loader .documentation .body-documentation .schema-toggle {
