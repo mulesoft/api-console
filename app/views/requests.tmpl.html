@@ -1,5 +1,5 @@
-<div class='body-documentation'>
-  <h2 ng-if="method.body">Body</h2>
+<section ng-if="method.body" class='body-documentation'>
+  <h2>Body</h2>
 
   <toggle key-base='{{resourceView.methodKey() + ":selectedBody"'>
     <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-active='prepareView'>
@@ -22,4 +22,4 @@
       </div>
     </toggle-item>
   </toggle>
-</div>
+</section>

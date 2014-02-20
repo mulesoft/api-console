@@ -3375,6 +3375,10 @@ raml-console article#raml-console .get .nav-tabs > li:nth-child(1),
   font-weight: 600;
   text-transform: uppercase;
 }
+raml-console article#raml-console .get .nav-tabs > li:nth-child(2),
+#raml-console-loader .get .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
+}
 raml-console article#raml-console .get .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .get .nav-tabs > li:nth-child(1) > a,
 raml-console article#raml-console .get .nav-tabs > li:nth-child(1) > a:hover,
@@ -3487,6 +3491,10 @@ raml-console article#raml-console .post .nav-tabs > li:nth-child(1),
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
+}
+raml-console article#raml-console .post .nav-tabs > li:nth-child(2),
+#raml-console-loader .post .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
 }
 raml-console article#raml-console .post .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .post .nav-tabs > li:nth-child(1) > a,
@@ -3601,6 +3609,10 @@ raml-console article#raml-console .put .nav-tabs > li:nth-child(1),
   font-weight: 600;
   text-transform: uppercase;
 }
+raml-console article#raml-console .put .nav-tabs > li:nth-child(2),
+#raml-console-loader .put .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
+}
 raml-console article#raml-console .put .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .put .nav-tabs > li:nth-child(1) > a,
 raml-console article#raml-console .put .nav-tabs > li:nth-child(1) > a:hover,
@@ -3713,6 +3725,10 @@ raml-console article#raml-console .patch .nav-tabs > li:nth-child(1),
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
+}
+raml-console article#raml-console .patch .nav-tabs > li:nth-child(2),
+#raml-console-loader .patch .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
 }
 raml-console article#raml-console .patch .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .patch .nav-tabs > li:nth-child(1) > a,
@@ -3827,6 +3843,10 @@ raml-console article#raml-console .delete .nav-tabs > li:nth-child(1),
   font-weight: 600;
   text-transform: uppercase;
 }
+raml-console article#raml-console .delete .nav-tabs > li:nth-child(2),
+#raml-console-loader .delete .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
+}
 raml-console article#raml-console .delete .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .delete .nav-tabs > li:nth-child(1) > a,
 raml-console article#raml-console .delete .nav-tabs > li:nth-child(1) > a:hover,
@@ -3939,6 +3959,10 @@ raml-console article#raml-console .head .nav-tabs > li:nth-child(1),
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
+}
+raml-console article#raml-console .head .nav-tabs > li:nth-child(2),
+#raml-console-loader .head .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
 }
 raml-console article#raml-console .head .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .head .nav-tabs > li:nth-child(1) > a,
@@ -4053,6 +4077,10 @@ raml-console article#raml-console .options .nav-tabs > li:nth-child(1),
   font-weight: 600;
   text-transform: uppercase;
 }
+raml-console article#raml-console .options .nav-tabs > li:nth-child(2),
+#raml-console-loader .options .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
+}
 raml-console article#raml-console .options .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .options .nav-tabs > li:nth-child(1) > a,
 raml-console article#raml-console .options .nav-tabs > li:nth-child(1) > a:hover,
@@ -4166,6 +4194,10 @@ raml-console article#raml-console .trace .nav-tabs > li:nth-child(1),
   font-weight: 600;
   text-transform: uppercase;
 }
+raml-console article#raml-console .trace .nav-tabs > li:nth-child(2),
+#raml-console-loader .trace .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
+}
 raml-console article#raml-console .trace .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .trace .nav-tabs > li:nth-child(1) > a,
 raml-console article#raml-console .trace .nav-tabs > li:nth-child(1) > a:hover,
@@ -4278,6 +4310,10 @@ raml-console article#raml-console .connect .nav-tabs > li:nth-child(1),
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
+}
+raml-console article#raml-console .connect .nav-tabs > li:nth-child(2),
+#raml-console-loader .connect .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
 }
 raml-console article#raml-console .connect .nav-tabs > li:nth-child(1) > a,
 #raml-console-loader .connect .nav-tabs > li:nth-child(1) > a,
@@ -4456,6 +4492,14 @@ raml-console article#raml-console .documentation,
 #raml-console-loader .documentation {
   overflow: auto;
 }
+raml-console article#raml-console .documentation .documentation-section section,
+#raml-console-loader .documentation .documentation-section section {
+  border-bottom: solid 1px #cccccc;
+}
+raml-console article#raml-console .documentation .documentation-section:last-of-type section,
+#raml-console-loader .documentation .documentation-section:last-of-type section {
+  border-bottom: none;
+}
 raml-console article#raml-console .documentation .modifiers,
 #raml-console-loader .documentation .modifiers {
   margin-bottom: 20px;
@@ -4492,10 +4536,6 @@ raml-console article#raml-console .documentation .body-documentation .schema-tog
 raml-console article#raml-console .documentation .body-documentation .named-parameters,
 #raml-console-loader .documentation .body-documentation .named-parameters {
   margin-top: -3px;
-}
-raml-console article#raml-console .documentation .named-parameters,
-#raml-console-loader .documentation .named-parameters {
-  border-bottom: 1px solid #cccccc;
 }
 raml-console article#raml-console .documentation .named-parameters .parameter,
 #raml-console-loader .documentation .named-parameters .parameter {
@@ -4810,7 +4850,7 @@ raml-console article#raml-console #raml-console-main-nav,
 raml-console article#raml-console #raml-console-content,
 #raml-console-loader #raml-console-content {
   clear: both;
-  padding: 0 20px 15px;
+  padding: 0 15px 15px;
 }
 raml-console article#raml-console .toggle-resource-groups,
 #raml-console-loader .toggle-resource-groups {

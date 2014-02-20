@@ -3319,12 +3319,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <tab heading=\"{{method.method}}\" disabled='true'>\n" +
     "    </tab>\n" +
-    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
-    "      <h2 ng-if=\"method.description\">Description</h2>\n" +
-    "      <div role=\"full-description\" class=\"description\"\n" +
-    "           ng-if=\"method.description\"\n" +
-    "           markdown=\"method.description\">\n" +
-    "      </div>\n" +
+    "    <tab class=\"request\" role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
+    "      <section class=\"documentation-setion\" ng-if=\"method.description\">\n" +
+    "        <h2>Description</h2>\n" +
+    "        <div role=\"full-description\" class=\"description\" markdown=\"method.description\"></div>\n" +
+    "      </section>\n" +
     "      <parameters></parameters>\n" +
     "      <requests></requests>\n" +
     "    </tab>\n" +
@@ -3525,8 +3524,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/requests.tmpl.html',
-    "<div class='body-documentation'>\n" +
-    "  <h2 ng-if=\"method.body\">Body</h2>\n" +
+    "<section ng-if=\"method.body\" class='body-documentation'>\n" +
+    "  <h2>Body</h2>\n" +
     "\n" +
     "  <toggle key-base='{{resourceView.methodKey() + \":selectedBody\"'>\n" +
     "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-active='prepareView'>\n" +
@@ -3549,7 +3548,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "    </toggle-item>\n" +
     "  </toggle>\n" +
-    "</div>\n"
+    "</section>\n"
   );
 
 

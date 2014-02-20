@@ -11,12 +11,11 @@
 
     <tab heading="{{method.method}}" disabled='true'>
     </tab>
-    <tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
-      <h2 ng-if="method.description">Description</h2>
-      <div role="full-description" class="description"
-           ng-if="method.description"
-           markdown="method.description">
-      </div>
+    <tab class="request" role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
+      <section class="documentation-setion" ng-if="method.description">
+        <h2>Description</h2>
+        <div role="full-description" class="description" markdown="method.description"></div>
+      </section>
       <parameters></parameters>
       <requests></requests>
     </tab>

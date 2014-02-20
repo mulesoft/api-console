@@ -1,6 +1,15 @@
 .documentation {
   overflow: auto;
 
+  .documentation-section {
+    section {
+      border-bottom: solid 1px @lightGray;
+    }
+    &:last-of-type section {
+      border-bottom: none;
+    }
+  }
+
   .modifiers {
     margin-bottom: 20px;
   }
@@ -43,8 +52,6 @@
   }
 
   .named-parameters {
-    border-bottom: 1px solid @lightGray;
-
     .parameter {
       margin-bottom: 25px;
 
