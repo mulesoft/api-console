@@ -2578,26 +2578,6 @@ RAML.Inspector = (function() {
   };
 })();
 
-'use strict';
-
-(function() {
-  RAML.Directives.parameters = function() {
-    return {
-      restrict: 'E',
-      templateUrl: 'views/parameters.tmpl.html',
-      link: function(scope) {
-        var plainAndParameterizedHeaders = RAML.Utils.copy(scope.method.headers.plain);
-        Object.keys(scope.method.headers.parameterized).forEach(function(parameterizedHeader) {
-          plainAndParameterizedHeaders[parameterizedHeader] = scope.method.headers.parameterized[parameterizedHeader].map(function(parameterized) {
-            return parameterized.definition();
-          });
-        });
-        scope.plainAndParameterizedHeaders = plainAndParameterizedHeaders;
-      }
-    };
-  };
-})();
-
 (function() {
   'use strict';
 
@@ -3213,7 +3193,6 @@ RAML.Filters = {};
   module.directive('parameterField', RAML.Directives.parameterField);
   module.directive('parameterFields', RAML.Directives.parameterFields);
   module.directive('parameterizedParameter', RAML.Directives.parameterizedParameter);
-  module.directive('parameters', RAML.Directives.parameters);
   module.directive('ramlConsole', RAML.Directives.ramlConsole);
   module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
   module.directive('requests', RAML.Directives.requests);
@@ -3497,15 +3476,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <a href='#' role='create-parameter' ng-click=\"parameterFactory.create($event)\"><i class='icon icon-plus-sign-alt'></i></a>\n" +
     "  </span>\n" +
     "</div>\n"
-  );
-
-
-  $templateCache.put('views/parameters.tmpl.html',
-    "<named-parameters-documentation heading='Headers' role='parameter-group' parameters='plainAndParameterizedHeaders'></named-parameters-documentation>\n" +
-    "\n" +
-    "<named-parameters-documentation heading='URI Parameters' role='parameter-group' parameters='resource.uriParametersForDocumentation'></named-parameters-documentation>\n" +
-    "\n" +
-    "<named-parameters-documentation heading='Query Parameters' role='parameter-group' parameters='method.queryParameters'></named-parameters-documentation>\n"
   );
 
 

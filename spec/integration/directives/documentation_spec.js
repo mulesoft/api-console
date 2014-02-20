@@ -11,7 +11,12 @@ describe("RAML.Directives.documentation", function() {
     '/someResource:',
     '  is: ["someTraitOnAResource"]',
     '  get:',
-    '    is: ["someTraitOnAMethod", {someParameterizedTrait: { someParameterName: someParameterValue }}]'
+    '    is: ["someTraitOnAMethod", {someParameterizedTrait: { someParameterName: someParameterValue }}]',
+    '    headers:',
+    '      someHeader:',
+    '        description: Plain parameter',
+    '      x-custom-{*}:',
+    '        description: Parameterized parameter'
   );
 
   parseRAML(raml);
@@ -33,5 +38,17 @@ describe("RAML.Directives.documentation", function() {
 
   it("displays just the trait name of parameterized traits", function() {
     expect(traits.text()).not.toMatch('someParameterName');
+  });
+
+  describe('headers', function() {
+    it('documents plain parameters', function() {
+      expect($el).toHaveText(/someHeader/);
+      expect($el).toHaveText(/Plain parameter/);
+    });
+
+    it('documents parameterized parameters', function() {
+      expect($el).toHaveText(/x-custom-\{\*\}/);
+      expect($el).toHaveText(/Parameterized parameter/);
+    });
   });
 });
