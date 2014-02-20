@@ -2662,6 +2662,10 @@ RAML.Inspector = (function() {
         $scope.prepareView = function(name) {
           displayed[name] = true;
         };
+
+        $scope.bodyKey = function() {
+          return $scope.resourceView.methodKey() + ':body';
+        }
       }
     };
   };
@@ -3523,7 +3527,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<section class='body-documentation'>\n" +
     "  <h2>Body</h2>\n" +
     "\n" +
-    "  <toggle key-base='{{resourceView.methodKey() + \":selectedBody\"'>\n" +
+    "  <toggle key-base='{{ bodyKey() }}'>\n" +
     "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-active='prepareView'>\n" +
     "      <div ng-switch=\"contentType\">\n" +
     "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +

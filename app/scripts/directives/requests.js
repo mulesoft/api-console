@@ -15,6 +15,10 @@
         $scope.prepareView = function(name) {
           displayed[name] = true;
         };
+
+        $scope.bodyKey = function() {
+          return $scope.resourceView.methodKey() + ':body';
+        }
       }
     };
   };
