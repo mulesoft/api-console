@@ -1397,6 +1397,18 @@ RAML.Inspector = (function() {
     this.hasResponseDocumentation = function() {
       return !RAML.Utils.isEmpty($scope.method.responses);
     };
+
+    var plainAndParameterizedHeaders = RAML.Utils.copy($scope.method.headers.plain);
+    Object.keys($scope.method.headers.parameterized).forEach(function(parameterizedHeader) {
+      plainAndParameterizedHeaders[parameterizedHeader] = $scope.method.headers.parameterized[parameterizedHeader].map(function(parameterized) {
+        return parameterized.definition();
+      });
+    });
+    $scope.plainAndParameterizedHeaders = plainAndParameterizedHeaders;
+  };
+
+  controller.prototype.isEmpty = function(params) {
+    return RAML.Utils.isEmpty(params);
   };
 
   RAML.Controllers.Documentation = controller;
@@ -1407,10 +1419,6 @@ RAML.Inspector = (function() {
 (function() {
   var controller = function($scope) {
     $scope.namedParametersDocumentation = this;
-  };
-
-  controller.prototype.isEmpty = function(params) {
-    return RAML.Utils.isEmpty(params);
   };
 
   controller.prototype.constraints = function(parameter) {
@@ -2440,6 +2448,7 @@ RAML.Inspector = (function() {
   RAML.Directives.namedParametersDocumentation = function() {
     return {
       restrict: 'E',
+      replace: true,
       controller: RAML.Controllers.NamedParametersDocumentation,
       templateUrl: 'views/named_parameters_documentation.tmpl.html',
       scope: {
@@ -2662,6 +2671,7 @@ RAML.Inspector = (function() {
   RAML.Directives.requests = function() {
     return {
       restrict: 'E',
+      replace: true,
       templateUrl: 'views/requests.tmpl.html',
       link: function($scope) {
         var displayed = {};
@@ -3320,12 +3330,28 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <tab heading=\"{{method.method}}\" disabled='true'>\n" +
     "    </tab>\n" +
     "    <tab class=\"request\" role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
-    "      <section class=\"documentation-setion\" ng-if=\"method.description\">\n" +
-    "        <h2>Description</h2>\n" +
-    "        <div role=\"full-description\" class=\"description\" markdown=\"method.description\"></div>\n" +
-    "      </section>\n" +
-    "      <parameters></parameters>\n" +
-    "      <requests></requests>\n" +
+    "      <div class=\"documentation-section\" ng-if=\"method.description\">\n" +
+    "        <section>\n" +
+    "          <h2>Description</h2>\n" +
+    "          <div role=\"full-description\" class=\"description\" markdown=\"method.description\"></div>\n" +
+    "        </section>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(plainAndParameterizedHeaders)'>\n" +
+    "        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='plainAndParameterizedHeaders'></named-parameters-documentation>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(resource.uriParametersForDocumentation)'>\n" +
+    "        <named-parameters-documentation heading='URI Parameters' role='parameter-group' parameters='resource.uriParametersForDocumentation'></named-parameters-documentation>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(method.queryParameters)'>\n" +
+    "        <named-parameters-documentation heading='Query Parameters' role='parameter-group' parameters='method.queryParameters'></named-parameters-documentation>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(method.body)'>\n" +
+    "        <requests></requests>\n" +
+    "      </div>\n" +
     "    </tab>\n" +
     "    <tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
     "      <responses></responses>\n" +
@@ -3366,7 +3392,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/named_parameters_documentation.tmpl.html',
-    "<section class='named-parameters' ng-if='!namedParametersDocumentation.isEmpty(parameters)'>\n" +
+    "<section class='named-parameters'>\n" +
     "  <h2>{{heading}}</h2>\n" +
     "  <section role='parameter' class='parameter' ng-repeat='parameter in parameters'>\n" +
     "    <div ng-repeat=\"definition in parameter\">\n" +
@@ -3524,7 +3550,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/requests.tmpl.html',
-    "<section ng-if=\"method.body\" class='body-documentation'>\n" +
+    "<section class='body-documentation'>\n" +
     "  <h2>Body</h2>\n" +
     "\n" +
     "  <toggle key-base='{{resourceView.methodKey() + \":selectedBody\"'>\n" +

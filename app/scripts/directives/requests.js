@@ -4,6 +4,7 @@
   RAML.Directives.requests = function() {
     return {
       restrict: 'E',
+      replace: true,
       templateUrl: 'views/requests.tmpl.html',
       link: function($scope) {
         var displayed = {};

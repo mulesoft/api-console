@@ -30,6 +30,18 @@
     this.hasResponseDocumentation = function() {
       return !RAML.Utils.isEmpty($scope.method.responses);
     };
+
+    var plainAndParameterizedHeaders = RAML.Utils.copy($scope.method.headers.plain);
+    Object.keys($scope.method.headers.parameterized).forEach(function(parameterizedHeader) {
+      plainAndParameterizedHeaders[parameterizedHeader] = $scope.method.headers.parameterized[parameterizedHeader].map(function(parameterized) {
+        return parameterized.definition();
+      });
+    });
+    $scope.plainAndParameterizedHeaders = plainAndParameterizedHeaders;
+  };
+
+  controller.prototype.isEmpty = function(params) {
+    return RAML.Utils.isEmpty(params);
   };
 
   RAML.Controllers.Documentation = controller;

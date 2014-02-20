@@ -4492,12 +4492,12 @@ raml-console article#raml-console .documentation,
 #raml-console-loader .documentation {
   overflow: auto;
 }
-raml-console article#raml-console .documentation .documentation-section section,
-#raml-console-loader .documentation .documentation-section section {
+raml-console article#raml-console .documentation .documentation-section,
+#raml-console-loader .documentation .documentation-section {
   border-bottom: solid 1px #cccccc;
 }
-raml-console article#raml-console .documentation .documentation-section:last-of-type section,
-#raml-console-loader .documentation .documentation-section:last-of-type section {
+raml-console article#raml-console .documentation .documentation-section:last-of-type,
+#raml-console-loader .documentation .documentation-section:last-of-type {
   border-bottom: none;
 }
 raml-console article#raml-console .documentation .modifiers,

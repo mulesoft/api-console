@@ -5,10 +5,6 @@
     $scope.namedParametersDocumentation = this;
   };
 
-  controller.prototype.isEmpty = function(params) {
-    return RAML.Utils.isEmpty(params);
-  };
-
   controller.prototype.constraints = function(parameter) {
     var result = '';
 
