@@ -2678,21 +2678,6 @@ raml-console article#raml-console fieldset,
   margin: 0;
   border: none;
 }
-raml-console article#raml-console fieldset.bordered,
-#raml-console-loader fieldset.bordered {
-  margin-bottom: 20px;
-}
-raml-console article#raml-console fieldset.bordered legend,
-#raml-console-loader fieldset.bordered legend {
-  background-color: #f2f2f2;
-  font-size: 13px;
-  width: 100%;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  padding: 2px 0 2px 10px;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
 raml-console article#raml-console .label,
 #raml-console-loader .label {
   color: #555555;
@@ -4482,27 +4467,20 @@ raml-console article#raml-console .documentation,
 #raml-console-loader .documentation {
   overflow: auto;
 }
-raml-console article#raml-console .documentation .modifiers,
-#raml-console-loader .documentation .modifiers {
-  margin: 20px 0 25px 0;
-}
-raml-console article#raml-console .documentation .documentation-section,
-#raml-console-loader .documentation .documentation-section {
-  padding-bottom: 30px;
-  margin-bottom: 20px;
-  border-bottom: solid 1px #cccccc;
-}
-raml-console article#raml-console .documentation .documentation-section:first-of-type,
-#raml-console-loader .documentation .documentation-section:first-of-type {
+raml-console article#raml-console .documentation .request .documentation-section,
+#raml-console-loader .documentation .request .documentation-section,
+raml-console article#raml-console .documentation .try-it .documentation-section,
+#raml-console-loader .documentation .try-it .documentation-section {
   padding-top: 20px;
+  margin-top: 0;
+  border-top: none;
 }
-raml-console article#raml-console .documentation .documentation-section:last-of-type,
-#raml-console-loader .documentation .documentation-section:last-of-type {
-  border-bottom: none;
-}
-raml-console article#raml-console .documentation .description,
-#raml-console-loader .documentation .description {
-  margin-bottom: 20px;
+raml-console article#raml-console .documentation .request .documentation-section ~ .documentation-section,
+#raml-console-loader .documentation .request .documentation-section ~ .documentation-section,
+raml-console article#raml-console .documentation .try-it .documentation-section ~ .documentation-section,
+#raml-console-loader .documentation .try-it .documentation-section ~ .documentation-section {
+  margin-top: 30px;
+  border-top: solid 1px #cccccc;
 }
 raml-console article#raml-console .documentation h2,
 #raml-console-loader .documentation h2 {
@@ -4922,8 +4900,6 @@ raml-console article#raml-console [role=documentation] h2 i[class^="icon-"],
   line-height: 40px;
   vertical-align: baseline;
 }
-raml-console article#raml-console [role=documentation] [role=documentation-requests] > div:first-child,
-#raml-console-loader [role=documentation] [role=documentation-requests] > div:first-child,
 raml-console article#raml-console [role=documentation] [role=documentation-responses] > div:first-child,
 #raml-console-loader [role=documentation] [role=documentation-responses] > div:first-child {
   margin-top: 0;

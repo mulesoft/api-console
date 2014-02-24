@@ -3426,7 +3426,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/named_parameters.tmpl.html',
     "<section class=\"documentation-section\" ng-show=\"displayParameters()\">\n" +
-    "  <fieldset class='documentation-section labelled-inline bordered'>\n" +
+    "  <fieldset class='labelled-inline bordered'>\n" +
     "    <h2>{{heading}}</h2>\n" +
     "    <parameter-fields parameters=\"parameters\"></parameter-fields>\n" +
     "  </fieldset>\n" +

@@ -1,26 +1,17 @@
 .documentation {
   overflow: auto;
 
-  .modifiers {
-    margin: 20px 0 25px 0;
-  }
-
-  .documentation-section {
-    padding-bottom: 30px;
-    margin-bottom: 20px;
-    border-bottom: solid 1px @lightGray;
-
-    &:first-of-type {
+  .request, .try-it {
+    .documentation-section {
       padding-top: 20px;
-    }
+      margin-top: 0;
+      border-top: none;
 
-    &:last-of-type {
-      border-bottom: none;
+      ~ .documentation-section {
+        margin-top: 30px;
+        border-top: solid 1px @lightGray;
+      }
     }
-  }
-
-  .description {
-    margin-bottom: 20px;
   }
 
   h2 {
