@@ -516,7 +516,7 @@ describe("RAML.Controllers.tryIt", function() {
     });
 
     it('executes the request', function() {
-      $el.find('input[value="anonymous"]')[0].click();
+      click($el.find('.radio span')[0]);
       $el.find('button[role="try-it"]').click();
 
       whenTryItCompletes(function() {
@@ -525,7 +525,7 @@ describe("RAML.Controllers.tryIt", function() {
     });
 
     it('warns that authentication is required', function() {
-      $el.find('input[value="anonymous"]')[0].click();
+      click($el.find('.radio span')[0]);
       $el.find('button[role="try-it"]').click();
 
       whenTryItCompletes(function() {
@@ -561,7 +561,7 @@ describe("RAML.Controllers.tryIt", function() {
     });
 
     it('executes a request with the supplied value for the custom header', function() {
-      $el.find('input[value="basic"]')[0].click();
+      click($el.find('.radio span')[1]);
       $el.find('input[name="username"]').fillIn("user");
       $el.find('input[name="password"]').fillIn("password");
       $el.find('button[role="try-it"]').click();
@@ -622,7 +622,7 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       it('asks for client id and secret', function() {
-        $el.find('input[value="oauth2"]')[0].click();
+        click($el.find('.radio span')[1]);
         $el.find('input[name="clientId"]').fillIn("user");
         $el.find('input[name="clientSecret"]').fillIn("password");
         $el.find('button[role="try-it"]').click();

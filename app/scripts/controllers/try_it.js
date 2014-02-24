@@ -30,9 +30,13 @@
   var TryIt = function($scope, DataStore) {
     $scope.apiClient = this;
 
-    var baseKey = $scope.resource.toString() + ':' + $scope.method.method + ':';
-    var contextKey = baseKey + 'context';
-    var responseKey = baseKey + 'response';
+    var baseKey = $scope.resource.toString() + ':' + $scope.method.method;
+    $scope.baseKey = function() {
+      return baseKey;
+    };
+
+    var contextKey = baseKey + ':context';
+    var responseKey = baseKey + ':response';
 
     var context = new RAML.Controllers.TryIt.Context($scope.resource, $scope.method);
     var oldContext = DataStore.get(contextKey);
@@ -55,6 +59,7 @@
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
+
     setResponse = function(response) {
       DataStore.set(responseKey, response);
       $scope.apiClient.response = response;
@@ -117,7 +122,7 @@
     var authStrategy;
 
     try {
-      if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
+      if (this.keychain.selectedScheme === 'Anonymous' && !this.method.allowsAnonymousAccess()) {
         this.disallowedAnonymousRequest = true;
       }
 
