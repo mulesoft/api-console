@@ -18,7 +18,7 @@ describe("RAML.Controllers.toggle", function() {
     beforeEach(function() {
       toggleItem1 = { heading: 'toggle item1' };
       toggleItem2 = { heading: 'toggle item2' };
-      spyOn(this.controller, 'select');
+      spyOn(this.controller, 'select').andCallThrough();
     });
 
     it("adds the toggle item to the array of toggle items", function() {
@@ -35,18 +35,12 @@ describe("RAML.Controllers.toggle", function() {
 
     describe("with a non-empty toggle", function() {
       beforeEach(function() {
-        this.controller.toggleItems = [ toggleItem1 ];
+        this.controller.addToggleItem(toggleItem1);
       });
 
       it('does not select the added toggle item by default', function() {
         this.controller.addToggleItem(toggleItem2);
-        expect(this.controller.select).not.toHaveBeenCalled();
-      });
-
-      it('selects the added toggle item if no existing toggle items are enabled', function() {
-        toggleItem1.disabled = true;
-        this.controller.addToggleItem(toggleItem2);
-        expect(this.controller.select).toHaveBeenCalledWith(toggleItem2, true);
+        expect(this.controller.select).not.toHaveBeenCalledWith(toggleItem2, true);
       });
 
       describe('when the new toggle item is active in the store', function() {
@@ -92,12 +86,6 @@ describe("RAML.Controllers.toggle", function() {
       expect(storeSpy.set).toHaveBeenCalledWith('key-base:toggle', 'toggleItem2');
     });
 
-    it("ignores a disabled toggle item", function() {
-      toggleItem2.disabled = true;
-      this.controller.select(toggleItem2);
-      expect(toggleItem2.active).toBeFalsy();
-    });
-
     describe('when dontPersist is passed', function() {
       it('does not update the store', function() {
         this.controller.select(toggleItem2, true);
@@ -105,14 +93,14 @@ describe("RAML.Controllers.toggle", function() {
       });
     });
 
-    describe('when toggle item has registered an activation callback', function() {
+    describe('when the toggle has a selection callback registered', function() {
       beforeEach(function() {
-        toggleItem2.onActive = jasmine.createSpy();
+        this.controller.onSelect = jasmine.createSpy();
         this.controller.select(toggleItem2, true);
       });
 
       it('executes it', function() {
-        expect(toggleItem2.onActive).toHaveBeenCalled();
+        expect(this.controller.onSelect).toHaveBeenCalled();
       });
     });
   });

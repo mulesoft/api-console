@@ -1,10 +1,6 @@
 (function() {
   'use strict';
 
-  ////////////
-  // toggle
-  ////////////
-
   RAML.Directives.toggle = function() {
     return {
       restrict: 'E',
@@ -13,14 +9,15 @@
       controller: RAML.Controllers.toggle,
       templateUrl: 'views/toggle.tmpl.html',
       scope: {
-        keyBase: '@'
+        keyBase: '@',
+        onSelect: '=?'
       }
     };
   };
+})();
 
-  ////////////////
-  // toggle items
-  ///////////////
+(function() {
+  'use strict';
 
   var link = function($scope, $element, $attrs, toggleCtrl) {
     toggleCtrl.addToggleItem($scope);
@@ -36,9 +33,7 @@
       templateUrl: 'views/toggle-item.tmpl.html',
       scope: {
         heading: '@',
-        active: '=?',
-        disabled: '=?',
-        onActive: '=?'
+        active: '=?'
       }
     };
   };

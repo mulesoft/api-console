@@ -2,7 +2,7 @@
   <h2>Body</h2>
 
   <toggle key-base='{{ bodyKey() }}'>
-    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-active='prepareView'>
+    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-select='prepareView'>
       <div ng-switch="contentType">
         <named-parameters-documentation ng-switch-when="application/x-www-form-urlencoded" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
         <named-parameters-documentation ng-switch-when="multipart/form-data" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
