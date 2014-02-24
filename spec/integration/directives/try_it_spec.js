@@ -321,13 +321,13 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       it('selects a mime type', function() {
-        expect($el.find('[role="media-types"] input:checked').length).toEqual(1);
+        expect($el.find('.request-body .toggle .radio.active').length).toEqual(1);
       });
 
       it('executes a request with the Content-Type header set to the chosen media type', function() {
         var suppliedBody = '<document type="xml" />';
 
-        $el.find('[role="media-types"] input[value="text/xml"]')[0].click();
+        click($el.find('.request-body .toggle .radio')[0]);
         $el.find('textarea').fillIn(suppliedBody);
         $el.find('button[role="try-it"]').click();
 
@@ -352,12 +352,12 @@ describe("RAML.Controllers.tryIt", function() {
         setFixtures($el);
         var suppliedBody = '<document type="xml" />';
 
-        click($('[role="media-types"] input[value="text/xml"]'))
+        click($('.request-body .toggle .radio')[0])
         $el.find('textarea').fillIn(suppliedBody);
       });
 
       it('executes a request with form data when the user changes modes', function() {
-        click($('[role="media-types"] input[value="application/x-www-form-urlencoded"]'))
+        click($('.request-body .toggle .radio span')[2]);
 
         $el.find('input[name="foo"]').fillIn("whatever");
         $el.find('button[role="try-it"]').click();
@@ -756,10 +756,10 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       it('executes a request to the parameterized URI', function() {
-        click($el.find('[role="media-types"] input[value="application/x-www-form-urlencoded"]'))
-        $el.find('input[name=someFormParam]').eq(0).fillIn('1');
-        click($el.find('input[name=someFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon'))
-        $el.find('input[name=someFormParam]').eq(1).fillIn('2');
+        click($el.find('.request-body .toggle .radio')[0]);
+        $el.find('input[name="someFormParam"]').eq(0).fillIn('1');
+        click($el.find('input[name="someFormParam"]').eq(0).closest('.control-group').find('repeatable-add .icon'))
+        $el.find('input[name="someFormParam"]').eq(1).fillIn('2');
         click($el.find('button[role="try-it"]'))
 
         whenTryItCompletes(function() {
@@ -782,11 +782,7 @@ describe("RAML.Controllers.tryIt", function() {
         formDataSpy.append = jasmine.createSpy();
         spyOn(window, 'FormData').andReturn(formDataSpy);
 
-        var urlencodedInput = $el.find('[role="media-types"] input[value="application/x-www-form-urlencoded"]');
-        var multipartInput = $el.find('[role="media-types"] input[value="multipart/form-data"]');
-        urlencodedInput.prop('checked', false);
-        multipartInput.prop('checked', true);
-        click(multipartInput)
+        click($el.find('.request-body .toggle .radio span')[1]);
 
         $el.find('input[name=someMultipartFormParam]').eq(0).fillIn('1');
         click($el.find('input[name=someMultipartFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon'))

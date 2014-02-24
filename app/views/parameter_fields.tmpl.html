@@ -5,7 +5,7 @@
         <div class="control-group">
           <label for="{{parameterName}}">
             <span class="required" ng-if="definition.required">*</span>
-            {{definition.displayName}}:
+            {{definition.displayName}}
           </label>
           <parameter-field name='parameterName' model='repeatableModel[$index]' definition='definition' ></parameter-field>
           <repeatable-remove></repeatable-remove>
