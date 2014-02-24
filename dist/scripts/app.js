@@ -1616,23 +1616,21 @@ RAML.Inspector = (function() {
     this.DataStore = DataStore;
     this.key = $scope.keyBase + ':toggle';
     this.toggleItems = $scope.toggleItems = [];
+    this.onSelect = $scope.onSelect || function() {};
+    this.toggleModel = $scope.toggleModel || {};
 
     $scope.toggle = this;
   };
 
   controller.prototype.select = function(toggleItem, dontPersist) {
-    if (toggleItem.disabled) {
-      return;
-    }
-
+    this.toggleModel.selected = undefined;
     this.toggleItems.forEach(function(toggleItem) {
       toggleItem.active = false;
     });
 
     toggleItem.active = true;
-    if (toggleItem.onActive) {
-      toggleItem.onActive(toggleItem.heading);
-    }
+    this.toggleModel.selected = toggleItem.heading;
+    this.onSelect(toggleItem.heading);
 
     if (!dontPersist) {
       this.DataStore.set(this.key, toggleItem.heading);
@@ -1641,15 +1639,14 @@ RAML.Inspector = (function() {
 
   controller.prototype.addToggleItem = function(toggleItem) {
     var previouslyEnabled = this.DataStore.get(this.key) === toggleItem.heading,
-        allOthersDisabled = this.toggleItems.every(function(toggleItem) { return toggleItem.disabled; });
+        noneActive = this.toggleItems.every(function(toggleItem) { return !toggleItem.active; });
 
-    if (allOthersDisabled || previouslyEnabled) {
+    if (noneActive || previouslyEnabled) {
       this.select(toggleItem, true);
     }
 
     this.toggleItems.push(toggleItem);
   };
-
 
   RAML.Controllers.toggle = controller;
 })();
@@ -1686,9 +1683,13 @@ RAML.Inspector = (function() {
   var TryIt = function($scope, DataStore) {
     $scope.apiClient = this;
 
-    var baseKey = $scope.resource.toString() + ':' + $scope.method.method + ':';
-    var contextKey = baseKey + 'context';
-    var responseKey = baseKey + 'response';
+    var baseKey = $scope.resource.toString() + ':' + $scope.method.method;
+    $scope.baseKey = function() {
+      return baseKey;
+    };
+
+    var contextKey = baseKey + ':context';
+    var responseKey = baseKey + ':response';
 
     var context = new RAML.Controllers.TryIt.Context($scope.resource, $scope.method);
     var oldContext = DataStore.get(contextKey);
@@ -1711,6 +1712,7 @@ RAML.Inspector = (function() {
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
+
     setResponse = function(response) {
       DataStore.set(responseKey, response);
       $scope.apiClient.response = response;
@@ -1773,12 +1775,12 @@ RAML.Inspector = (function() {
     var authStrategy;
 
     try {
-      if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
+      if (this.keychain.selected === 'Anonymous' && !this.method.allowsAnonymousAccess()) {
         this.disallowedAnonymousRequest = true;
       }
 
-      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
-      var credentials = this.keychain[this.keychain.selectedScheme];
+      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selected];
+      var credentials = this.keychain[this.keychain.selected];
       authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
     } catch (e) {
       // custom strategies aren't supported yet.
@@ -2863,7 +2865,8 @@ RAML.Inspector = (function() {
       controller: controller,
       scope: {
         schemes: '=',
-        keychain: '='
+        keychain: '=',
+        baseKey: '='
       }
     };
   };
@@ -2917,10 +2920,6 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  ////////////
-  // toggle
-  ////////////
-
   RAML.Directives.toggle = function() {
     return {
       restrict: 'E',
@@ -2929,14 +2928,16 @@ RAML.Inspector = (function() {
       controller: RAML.Controllers.toggle,
       templateUrl: 'views/toggle.tmpl.html',
       scope: {
-        keyBase: '@'
+        keyBase: '@',
+        onSelect: '=?',
+        toggleModel: '=?'
       }
     };
   };
+})();
 
-  ////////////////
-  // toggle items
-  ///////////////
+(function() {
+  'use strict';
 
   var link = function($scope, $element, $attrs, toggleCtrl) {
     toggleCtrl.addToggleItem($scope);
@@ -2952,9 +2953,7 @@ RAML.Inspector = (function() {
       templateUrl: 'views/toggle-item.tmpl.html',
       scope: {
         heading: '@',
-        active: '=?',
-        disabled: '=?',
-        onActive: '=?'
+        active: '=?'
       }
     };
   };
@@ -3294,12 +3293,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/basic_auth.tmpl.html',
     "<fieldset class=\"labelled-inline\" role=\"basic\">\n" +
     "  <div class=\"control-group\">\n" +
-    "    <label for=\"username\">Username:</label>\n" +
+    "    <label for=\"username\">Username</label>\n" +
     "    <input type=\"text\" name=\"username\" ng-model='credentials.username'/>\n" +
     "  </div>\n" +
     "\n" +
     "  <div class=\"control-group\">\n" +
-    "    <label for=\"password\">Password:</label>\n" +
+    "    <label for=\"password\">Password</label>\n" +
     "    <input type=\"password\" name=\"password\" ng-model='credentials.password'/>\n" +
     "  </div>\n" +
     "</fieldset>\n"
@@ -3307,31 +3306,24 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/body_content.tmpl.html',
-    "<div class=\"request-body\" ng-show=\"body\">\n" +
+    "<section class=\"documentation-section request-body\" ng-show=\"body\">\n" +
     "  <fieldset class=\"bordered\">\n" +
-    "    <legend>Body</legend>\n" +
+    "    <h2>Body</h2>\n" +
     "\n" +
-    "    <fieldset class=\"labelled-radio-group\" role=\"media-types\">\n" +
-    "      <label>Content Type</label>\n" +
-    "      <div class=\"radio-group\">\n" +
-    "        <label class=\"radio\" ng-repeat=\"contentType in body.contentTypes\">\n" +
-    "          <input type=\"radio\" name=\"media-type\" value=\"{{contentType}}\" ng-model=\"body.selected\">\n" +
-    "          {{contentType}}\n" +
-    "        </label>\n" +
-    "      </div>\n" +
-    "    </fieldset>\n" +
+    "    <toggle key-base=\"baseKey + ':body'\" toggle-model=\"body\">\n" +
+    "      <toggle-item ng-repeat=\"contentType in body.contentTypes\" heading=\"{{contentType}}\">\n" +
+    "        <div class=\"labelled-inline\" ng-if='body.isForm(contentType)' ng-show=\"body.isSelected(contentType)\">\n" +
+    "          <parameter-fields parameters='body.definitions[contentType]'></parameter-fields>\n" +
+    "        </div>\n" +
     "\n" +
-    "    <div ng-repeat=\"contentType in body.contentTypes\">\n" +
-    "      <div class=\"labelled-inline\" ng-if='body.isForm(contentType)' ng-show=\"body.isSelected(contentType)\">\n" +
-    "        <parameter-fields parameters='body.definitions[contentType]'></parameter-fields>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"!body.isForm(contentType)\" ng-show=\"body.isSelected(contentType)\">\n" +
-    "        <textarea name=\"{{contentType}}\" ng-model=\"body.definitions[contentType].value\"></textarea>\n" +
-    "        <a href=\"#\" class=\"body-prefill\" ng-show=\"body.hasExample(contentType)\" ng-click=\"body.fillWithExample($event)\">Prefill with example</a>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
+    "        <div ng-if=\"!body.isForm(contentType)\" ng-show=\"body.isSelected(contentType)\">\n" +
+    "          <textarea name=\"{{contentType}}\" ng-model=\"body.definitions[contentType].value\"></textarea>\n" +
+    "          <a href=\"#\" class=\"body-prefill\" ng-show=\"body.hasExample(contentType)\" ng-click=\"body.fillWithExample($event)\">Prefill with example</a>\n" +
+    "        </div>\n" +
+    "      </toggle-item>\n" +
+    "    </toggle>\n" +
     "  </fieldset>\n" +
-    "</div>\n"
+    "</section>\n"
   );
 
 
@@ -3339,8 +3331,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<section class='body-documentation'>\n" +
     "  <h2>Body</h2>\n" +
     "\n" +
-    "  <toggle key-base='{{ bodyKey() }}'>\n" +
-    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-active='prepareView'>\n" +
+    "  <toggle key-base='{{ bodyKey() }}' on-select='prepareView'>\n" +
+    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}'>\n" +
     "      <div ng-switch=\"contentType\">\n" +
     "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
@@ -3367,18 +3359,18 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
     "  <tabset key-base='{{resourceView.methodKey()}}'>\n" +
-    "    <div class=\"modifiers\">\n" +
-    "      <span class=\"modifier-group\" ng-if=\"method.is\">\n" +
-    "        <span class=\"caption\">Traits:</span>\n" +
-    "        <ul role=\"traits\">\n" +
-    "          <li class=\"trait\" ng-repeat=\"trait in method.is\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
-    "        </ul>\n" +
-    "      </span>\n" +
-    "    </div>\n" +
-    "\n" +
     "    <tab heading=\"{{method.method}}\" disabled='true'>\n" +
     "    </tab>\n" +
     "    <tab class=\"request\" role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
+    "      <div class=\"modifiers\">\n" +
+    "        <span class=\"modifier-group\" ng-if=\"method.is\">\n" +
+    "          <span class=\"caption\">Traits:</span>\n" +
+    "          <ul role=\"traits\">\n" +
+    "            <li class=\"trait\" ng-repeat=\"trait in method.is\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
+    "          </ul>\n" +
+    "        </span>\n" +
+    "      </div>\n" +
+    "\n" +
     "      <div class=\"documentation-section\" ng-if=\"method.description\">\n" +
     "        <section>\n" +
     "          <h2>Description</h2>\n" +
@@ -3433,10 +3425,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/named_parameters.tmpl.html',
-    "<fieldset class='labelled-inline bordered' ng-show=\"displayParameters()\">\n" +
-    "  <legend>{{heading}}</legend>\n" +
-    "  <parameter-fields parameters=\"parameters\"></parameter-fields>\n" +
-    "</fieldset>\n"
+    "<section class=\"documentation-section\" ng-show=\"displayParameters()\">\n" +
+    "  <fieldset class='documentation-section labelled-inline bordered'>\n" +
+    "    <h2>{{heading}}</h2>\n" +
+    "    <parameter-fields parameters=\"parameters\"></parameter-fields>\n" +
+    "  </fieldset>\n" +
+    "</section>\n"
   );
 
 
@@ -3463,12 +3457,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/oauth1.tmpl.html',
     "<fieldset class=\"labelled-inline\" role=\"oauth1\">\n" +
     "  <div class=\"control-group\">\n" +
-    "    <label for=\"consumerKey\">Consumer Key:</label>\n" +
+    "    <label for=\"consumerKey\">Consumer Key</label>\n" +
     "    <input type=\"text\" name=\"consumerKey\" ng-model='credentials.consumerKey'/>\n" +
     "  </div>\n" +
     "\n" +
     "  <div class=\"control-group\">\n" +
-    "    <label for=\"consumerSecret\">Consumer Secret:</label>\n" +
+    "    <label for=\"consumerSecret\">Consumer Secret</label>\n" +
     "    <input type=\"password\" name=\"consumerSecret\" ng-model='credentials.consumerSecret'/>\n" +
     "  </div>\n" +
     "</fieldset>\n"
@@ -3478,12 +3472,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/oauth2.tmpl.html',
     "<fieldset class=\"labelled-inline\" role=\"oauth2\">\n" +
     "  <div class=\"control-group\">\n" +
-    "    <label for=\"clientId\">Client ID:</label>\n" +
+    "    <label for=\"clientId\">Client ID</label>\n" +
     "    <input type=\"text\" name=\"clientId\" ng-model='credentials.clientId'/>\n" +
     "  </div>\n" +
     "\n" +
     "  <div class=\"control-group\">\n" +
-    "    <label for=\"clientSecret\">Client Secret:</label>\n" +
+    "    <label for=\"clientSecret\">Client Secret</label>\n" +
     "    <input type=\"password\" name=\"clientSecret\" ng-model='credentials.clientSecret'/>\n" +
     "  </div>\n" +
     "</fieldset>\n"
@@ -3515,7 +3509,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <div class=\"control-group\">\n" +
     "          <label for=\"{{parameterName}}\">\n" +
     "            <span class=\"required\" ng-if=\"definition.required\">*</span>\n" +
-    "            {{definition.displayName}}:\n" +
+    "            {{definition.displayName}}\n" +
     "          </label>\n" +
     "          <parameter-field name='parameterName' model='repeatableModel[$index]' definition='definition' ></parameter-field>\n" +
     "          <repeatable-remove></repeatable-remove>\n" +
@@ -3593,8 +3587,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<section class='body-documentation'>\n" +
     "  <h2>Body</h2>\n" +
     "\n" +
-    "  <toggle key-base='{{ bodyKey() }}'>\n" +
-    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}' on-active='prepareView'>\n" +
+    "  <toggle key-base='{{ bodyKey() }}' on-select=\"prepareView\">\n" +
+    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}'>\n" +
     "      <div ng-switch=\"contentType\">\n" +
     "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
@@ -3698,33 +3692,22 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/security_schemes.tmpl.html',
-    "<div class=\"authentication\">\n" +
-    "  <fieldset class=\"labelled-radio-group bordered\">\n" +
-    "    <legend>Authentication</legend>\n" +
-    "    <label for=\"scheme\">Type:</label>\n" +
+    "<section class=\"documentation-section authentication\">\n" +
+    "  <fieldset class=\"bordered\">\n" +
+    "    <h2>Authentication</h2>\n" +
     "\n" +
-    "    <div class=\"radio-group\">\n" +
-    "      <label class=\"radio\">\n" +
-    "        <input type=\"radio\" name=\"scheme\" value=\"anonymous\" ng-model=\"keychain.selectedScheme\"> Anonymous </input>\n" +
-    "      </label>\n" +
-    "      <span ng-repeat=\"(name, scheme) in schemes\">\n" +
-    "        <label class=\"radio\"  ng-if=\"securitySchemes.supports(scheme)\">\n" +
-    "          <input type=\"radio\" name=\"scheme\" value=\"{{name}}\" ng-model=\"keychain.selectedScheme\"> {{ name }} </input>\n" +
-    "        </label>\n" +
-    "      </span>\n" +
-    "    </div>\n" +
+    "    <toggle key-base=\"baseKey + ':securitySchemes'\" toggle-model=\"keychain\">\n" +
+    "      <toggle-item heading=\"Anonymous\"></toggle-item>\n" +
+    "      <toggle-item ng-repeat=\"(name, scheme) in schemes\" heading=\"{{name}}\">\n" +
+    "        <div ng-switch=\"scheme.type\">\n" +
+    "          <basic-auth ng-switch-when=\"Basic Authentication\" credentials='keychain[name]'></basic-auth>\n" +
+    "          <oauth1 ng-switch-when=\"OAuth 1.0\" credentials='keychain[name]'></oauth1>\n" +
+    "          <oauth2 ng-switch-when=\"OAuth 2.0\" credentials='keychain[name]'></oauth2>\n" +
+    "        </div>\n" +
+    "      </toggle-item>\n" +
+    "    </toggle>\n" +
     "  </fieldset>\n" +
-    "\n" +
-    "  <div ng-repeat=\"(name, scheme) in schemes\">\n" +
-    "    <div ng-show=\"keychain.selectedScheme == name\">\n" +
-    "      <div ng-switch=\"scheme.type\">\n" +
-    "        <basic-auth ng-switch-when=\"Basic Authentication\" credentials='keychain[name]'></basic-auth>\n" +
-    "        <oauth1 ng-switch-when=\"OAuth 1.0\" credentials='keychain[name]'></oauth1>\n" +
-    "        <oauth2 ng-switch-when=\"OAuth 2.0\" credentials='keychain[name]'></oauth2>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>\n"
+    "</section>\n"
   );
 
 
@@ -3770,16 +3753,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/try_it.tmpl.html',
     "<section class=\"try-it\">\n" +
-    "\n" +
     "  <form>\n" +
-    "      <span role=\"path\" class=\"path\">\n" +
-    "        <span class=\"segment\">\n" +
-    "          <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
-    "            <span ng-if='api.baseUri.parameters[token]'>\n" +
-    "              <parameter-field name='token' placeholder='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]' invalid-class='error'></parameter-field>\n" +
-    "            </span>\n" +
-    "            <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
+    "    <span role=\"path\" class=\"nav path\">\n" +
+    "      <span class=\"segment\">\n" +
+    "        <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
+    "          <span ng-if='api.baseUri.parameters[token]'>\n" +
+    "            <parameter-field name='token' placeholder='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]' invalid-class='error'></parameter-field>\n" +
     "          </span>\n" +
+    "          <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
+    "        </span>\n" +
     "        <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
     "          <span ng-repeat='token in segment.tokens track by $index'>\n" +
     "            <span ng-if='segment.parameters[token]'>\n" +
@@ -3791,8 +3773,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </span>\n" +
     "    </span>\n" +
     "\n" +
-    "\n" +
-    "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\"></security-schemes>\n" +
+    "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\" base-key=\"apiClient.baseKey()\"></security-schemes>\n" +
     "    <named-parameters heading=\"Headers\" parameters=\"context.headers\"></named-parameters>\n" +
     "    <named-parameters heading=\"Query Parameters\" parameters=\"context.queryParameters\"></named-parameters>\n" +
     "    <body-content body=\"context.bodyContent\"></body-content>\n" +

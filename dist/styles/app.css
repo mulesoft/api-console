@@ -2680,7 +2680,7 @@ raml-console article#raml-console fieldset,
 }
 raml-console article#raml-console fieldset.bordered,
 #raml-console-loader fieldset.bordered {
-  margin-top: 30px;
+  margin-bottom: 20px;
 }
 raml-console article#raml-console fieldset.bordered legend,
 #raml-console-loader fieldset.bordered legend {
@@ -2723,7 +2723,6 @@ raml-console article#raml-console .autocomplete ul,
   left: 0;
   border-radius: 3px;
   border: 1px solid #cccccc;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.33);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
@@ -2741,18 +2740,13 @@ raml-console article#raml-console .autocomplete ul li:first-child,
 #raml-console-loader .autocomplete ul li:first-child {
   border-top: none;
 }
-raml-console article#raml-console input,
-#raml-console-loader input,
 raml-console article#raml-console textarea,
 #raml-console-loader textarea {
+  color: #222222;
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   font-size: 13px;
-  color: #222222;
-  vertical-align: baseline;
-}
-raml-console article#raml-console textarea,
-#raml-console-loader textarea {
   line-height: 16px;
+  vertical-align: baseline;
   padding: 8px;
 }
 raml-console article#raml-console input[type="text"],
@@ -2761,9 +2755,17 @@ raml-console article#raml-console input[type="password"],
 #raml-console-loader input[type="password"],
 raml-console article#raml-console textarea,
 #raml-console-loader textarea {
+  outline: none;
   border-radius: 3px;
-  border: 1px solid #cccccc;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  border: 2px solid #cccccc;
+}
+raml-console article#raml-console input[type="text"]:focus,
+#raml-console-loader input[type="text"]:focus,
+raml-console article#raml-console input[type="password"]:focus,
+#raml-console-loader input[type="password"]:focus,
+raml-console article#raml-console textarea:focus,
+#raml-console-loader textarea:focus {
+  border: 2px solid #666666;
 }
 raml-console article#raml-console input[type="text"],
 #raml-console-loader input[type="text"],
@@ -2788,9 +2790,8 @@ raml-console article#raml-console select optgroup,
 }
 raml-console article#raml-console input.warning,
 #raml-console-loader input.warning {
-  border-color: #daa520;
+  border-color: #fbb03b;
   outline: 0;
-  box-shadow: inset 0 1px 1px #daa520, 0 0 3px #daa520;
 }
 raml-console article#raml-console .required,
 #raml-console-loader .required {
@@ -2798,7 +2799,7 @@ raml-console article#raml-console .required,
 }
 raml-console article#raml-console input.error,
 #raml-console-loader input.error {
-  border-color: #b94a48;
+  border-color: #ff6666;
 }
 raml-console article#raml-console .control-group,
 #raml-console-loader .control-group {
@@ -2808,11 +2809,7 @@ raml-console article#raml-console .labelled-inline label,
 #raml-console-loader .labelled-inline label,
 raml-console article#raml-console .labelled-radio-group > label,
 #raml-console-loader .labelled-radio-group > label {
-  display: inline-block;
-  min-width: 150px;
-  text-align: right;
-  font-weight: bold;
-  margin-right: 2px;
+  display: block;
 }
 raml-console article#raml-console .labelled-radio-group .radio-group,
 #raml-console-loader .labelled-radio-group .radio-group {
@@ -2842,9 +2839,6 @@ raml-console article#raml-console .form-control,
   background-image: none;
   border: 1px solid #cccccc;
   border-radius: 3px;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
 raml-console article#raml-console .form-control[disabled],
 #raml-console-loader .form-control[disabled],
@@ -2869,15 +2863,9 @@ raml-console article#raml-console .btn,
   cursor: pointer;
   border: 1px solid #aaaaaa;
   color: #f2f2f2;
+  background-color: #aaaaaa;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #afafaf;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#c3c3c3), to(#919191));
-  background-image: -webkit-linear-gradient(top, #c3c3c3, #919191);
-  background-image: linear-gradient(to bottom, #c3c3c3, #919191);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc3c3c3', endColorstr='#ff919191', GradientType=0);
 }
 raml-console article#raml-console .btn-get,
 #raml-console-loader .btn-get {
@@ -2889,15 +2877,9 @@ raml-console article#raml-console .btn-get,
   cursor: pointer;
   border: 1px solid #0a93c8;
   color: #f2f2f2;
+  background-color: #0a93c8;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #0e99ce;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#12b4f3), to(#086f97));
-  background-image: -webkit-linear-gradient(top, #12b4f3, #086f97);
-  background-image: linear-gradient(to bottom, #12b4f3, #086f97);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff12b4f3', endColorstr='#ff086f97', GradientType=0);
 }
 raml-console article#raml-console .btn-post,
 #raml-console-loader .btn-post {
@@ -2909,15 +2891,9 @@ raml-console article#raml-console .btn-post,
   cursor: pointer;
   border: 1px solid #1ea18d;
   color: #f2f2f2;
+  background-color: #1ea18d;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #20aa95;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#26ccb3), to(#167667));
-  background-image: -webkit-linear-gradient(top, #26ccb3, #167667);
-  background-image: linear-gradient(to bottom, #26ccb3, #167667);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff26ccb3', endColorstr='#ff167667', GradientType=0);
 }
 raml-console article#raml-console .btn-put,
 #raml-console-loader .btn-put {
@@ -2929,15 +2905,9 @@ raml-console article#raml-console .btn-put,
   cursor: pointer;
   border: 1px solid #5f74df;
   color: #f2f2f2;
+  background-color: #5f74df;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #687be1;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#8a99e8), to(#354fd7));
-  background-image: -webkit-linear-gradient(top, #8a99e8, #354fd7);
-  background-image: linear-gradient(to bottom, #8a99e8, #354fd7);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8a99e8', endColorstr='#ff354fd7', GradientType=0);
 }
 raml-console article#raml-console .btn-patch,
 #raml-console-loader .btn-patch {
@@ -2949,15 +2919,9 @@ raml-console article#raml-console .btn-patch,
   cursor: pointer;
   border: 1px solid #fca215;
   color: #f2f2f2;
+  background-color: #fca215;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #efa32c;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdb647), to(#db8703));
-  background-image: -webkit-linear-gradient(top, #fdb647, #db8703);
-  background-image: linear-gradient(to bottom, #fdb647, #db8703);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffdb647', endColorstr='#ffdb8703', GradientType=0);
 }
 raml-console article#raml-console .btn-delete,
 #raml-console-loader .btn-delete {
@@ -2969,15 +2933,9 @@ raml-console article#raml-console .btn-delete,
   cursor: pointer;
   border: 1px solid #d14956;
   color: #f2f2f2;
+  background-color: #d14956;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #cd5762;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#db727c), to(#b82f3c));
-  background-image: -webkit-linear-gradient(top, #db727c, #b82f3c);
-  background-image: linear-gradient(to bottom, #db727c, #b82f3c);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdb727c', endColorstr='#ffb82f3c', GradientType=0);
 }
 raml-console article#raml-console .btn-head,
 #raml-console-loader .btn-head {
@@ -2989,15 +2947,9 @@ raml-console article#raml-console .btn-head,
   cursor: pointer;
   border: 1px solid #9446af;
   color: #f2f2f2;
+  background-color: #9446af;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #9553ac;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#aa66c2), to(#75378b));
-  background-image: -webkit-linear-gradient(top, #aa66c2, #75378b);
-  background-image: linear-gradient(to bottom, #aa66c2, #75378b);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaa66c2', endColorstr='#ff75378b', GradientType=0);
 }
 raml-console article#raml-console .btn-options,
 #raml-console-loader .btn-options {
@@ -3009,15 +2961,9 @@ raml-console article#raml-console .btn-options,
   cursor: pointer;
   border: 1px solid #9ec000;
   color: #f2f2f2;
+  background-color: #9ec000;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #a6ca00;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#c8f300), to(#748d00));
-  background-image: -webkit-linear-gradient(top, #c8f300, #748d00);
-  background-image: linear-gradient(to bottom, #c8f300, #748d00);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc8f300', endColorstr='#ff748d00', GradientType=0);
 }
 raml-console article#raml-console .btn-trace,
 #raml-console-loader .btn-trace {
@@ -3029,15 +2975,9 @@ raml-console article#raml-console .btn-trace,
   cursor: pointer;
   border: 1px solid #26c57f;
   color: #f2f2f2;
+  background-color: #26c57f;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #34c183;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#43db98), to(#1e9a63));
-  background-image: -webkit-linear-gradient(top, #43db98, #1e9a63);
-  background-image: linear-gradient(to bottom, #43db98, #1e9a63);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff43db98', endColorstr='#ff1e9a63', GradientType=0);
 }
 raml-console article#raml-console .btn-connect,
 #raml-console-loader .btn-connect {
@@ -3049,15 +2989,9 @@ raml-console article#raml-console .btn-connect,
   cursor: pointer;
   border: 1px solid #00c3fb;
   color: #f2f2f2;
+  background-color: #00c3fb;
   border-radius: 3px;
   text-transform: uppercase;
-  text-shadow: 0 1px 1px rgba(85, 85, 85, 0.5);
-  background-color: #1cbbe9;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#2fd1ff), to(#009bc8));
-  background-image: -webkit-linear-gradient(top, #2fd1ff, #009bc8);
-  background-image: linear-gradient(to bottom, #2fd1ff, #009bc8);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff2fd1ff', endColorstr='#ff009bc8', GradientType=0);
 }
 raml-console article#raml-console .resource-placeholder,
 #raml-console-loader .resource-placeholder {
@@ -3400,9 +3334,16 @@ raml-console article#raml-console .get .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .get .tab-pane,
-#raml-console-loader .get .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .get .try-it,
+#raml-console-loader .get .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .get .try-it .nav,
+#raml-console-loader .get .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #16a7df;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .get .tab-content,
 #raml-console-loader .get .tab-content {
@@ -3517,9 +3458,16 @@ raml-console article#raml-console .post .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .post .tab-pane,
-#raml-console-loader .post .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .post .try-it,
+#raml-console-loader .post .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .post .try-it .nav,
+#raml-console-loader .post .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #4aceba;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .post .tab-content,
 #raml-console-loader .post .tab-content {
@@ -3634,9 +3582,16 @@ raml-console article#raml-console .put .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .put .tab-pane,
-#raml-console-loader .put .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .put .try-it,
+#raml-console-loader .put .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .put .try-it .nav,
+#raml-console-loader .put .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #6880fb;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .put .tab-content,
 #raml-console-loader .put .tab-content {
@@ -3751,9 +3706,16 @@ raml-console article#raml-console .patch .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .patch .tab-pane,
-#raml-console-loader .patch .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .patch .try-it,
+#raml-console-loader .patch .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .patch .try-it .nav,
+#raml-console-loader .patch .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #fbb03b;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .patch .tab-content,
 #raml-console-loader .patch .tab-content {
@@ -3868,9 +3830,16 @@ raml-console article#raml-console .delete .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .delete .tab-pane,
-#raml-console-loader .delete .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .delete .try-it,
+#raml-console-loader .delete .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .delete .try-it .nav,
+#raml-console-loader .delete .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #ea5b69;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .delete .tab-content,
 #raml-console-loader .delete .tab-content {
@@ -3985,9 +3954,16 @@ raml-console article#raml-console .head .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .head .tab-pane,
-#raml-console-loader .head .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .head .try-it,
+#raml-console-loader .head .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .head .try-it .nav,
+#raml-console-loader .head .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #ac45d0;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .head .tab-content,
 #raml-console-loader .head .tab-content {
@@ -4102,9 +4078,16 @@ raml-console article#raml-console .options .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .options .tab-pane,
-#raml-console-loader .options .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .options .try-it,
+#raml-console-loader .options .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .options .try-it .nav,
+#raml-console-loader .options .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #b2d900;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .options .tab-content,
 #raml-console-loader .options .tab-content {
@@ -4219,9 +4202,16 @@ raml-console article#raml-console .trace .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .trace .tab-pane,
-#raml-console-loader .trace .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .trace .try-it,
+#raml-console-loader .trace .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .trace .try-it .nav,
+#raml-console-loader .trace .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #3fce8f;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .trace .tab-content,
 #raml-console-loader .trace .tab-content {
@@ -4336,9 +4326,16 @@ raml-console article#raml-console .connect .nav > .disabled > a:focus,
   cursor: default;
   background-color: transparent;
 }
-raml-console article#raml-console .connect .tab-pane,
-#raml-console-loader .connect .tab-pane {
-  margin-top: 30px;
+raml-console article#raml-console .connect .try-it,
+#raml-console-loader .connect .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .connect .try-it .nav,
+#raml-console-loader .connect .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #33d1fe;
+  padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .connect .tab-content,
 #raml-console-loader .connect .tab-content {
@@ -4485,17 +4482,23 @@ raml-console article#raml-console .documentation,
 #raml-console-loader .documentation {
   overflow: auto;
 }
+raml-console article#raml-console .documentation .modifiers,
+#raml-console-loader .documentation .modifiers {
+  margin: 20px 0 25px 0;
+}
 raml-console article#raml-console .documentation .documentation-section,
 #raml-console-loader .documentation .documentation-section {
+  padding-bottom: 30px;
+  margin-bottom: 20px;
   border-bottom: solid 1px #cccccc;
+}
+raml-console article#raml-console .documentation .documentation-section:first-of-type,
+#raml-console-loader .documentation .documentation-section:first-of-type {
+  padding-top: 20px;
 }
 raml-console article#raml-console .documentation .documentation-section:last-of-type,
 #raml-console-loader .documentation .documentation-section:last-of-type {
   border-bottom: none;
-}
-raml-console article#raml-console .documentation .modifiers,
-#raml-console-loader .documentation .modifiers {
-  margin-bottom: 20px;
 }
 raml-console article#raml-console .documentation .description,
 #raml-console-loader .documentation .description {
@@ -4505,32 +4508,48 @@ raml-console article#raml-console .documentation h2,
 #raml-console-loader .documentation h2 {
   font-size: 18px;
   color: #086c96;
-  padding: 20px 0;
+  padding: 0 0 20px 0;
   margin: 0;
 }
+raml-console article#raml-console .documentation .request-body h2,
+#raml-console-loader .documentation .request-body h2,
+raml-console article#raml-console .documentation .authentication h2,
+#raml-console-loader .documentation .authentication h2,
 raml-console article#raml-console .documentation .body-documentation h2,
 #raml-console-loader .documentation .body-documentation h2 {
   float: left;
 }
+raml-console article#raml-console .documentation .request-body h5,
+#raml-console-loader .documentation .request-body h5,
+raml-console article#raml-console .documentation .authentication h5,
+#raml-console-loader .documentation .authentication h5,
 raml-console article#raml-console .documentation .body-documentation h5,
 #raml-console-loader .documentation .body-documentation h5 {
   color: #555555;
   font-size: 10px;
   font-weight: 600;
 }
+raml-console article#raml-console .documentation .request-body .toggle .labelled-radio-group,
+#raml-console-loader .documentation .request-body .toggle .labelled-radio-group,
+raml-console article#raml-console .documentation .authentication .toggle .labelled-radio-group,
+#raml-console-loader .documentation .authentication .toggle .labelled-radio-group,
 raml-console article#raml-console .documentation .body-documentation .toggle .labelled-radio-group,
 #raml-console-loader .documentation .body-documentation .toggle .labelled-radio-group {
   text-align: right;
   display: block;
 }
-raml-console article#raml-console .documentation .body-documentation .toggle .labelled-radio-group .radio-group,
-#raml-console-loader .documentation .body-documentation .toggle .labelled-radio-group .radio-group {
-  margin-top: 20px;
-}
+raml-console article#raml-console .documentation .request-body .toggle .item-content,
+#raml-console-loader .documentation .request-body .toggle .item-content,
+raml-console article#raml-console .documentation .authentication .toggle .item-content,
+#raml-console-loader .documentation .authentication .toggle .item-content,
 raml-console article#raml-console .documentation .body-documentation .toggle .item-content,
 #raml-console-loader .documentation .body-documentation .toggle .item-content {
   margin-top: 15px;
 }
+raml-console article#raml-console .documentation .request-body .schema-toggle,
+#raml-console-loader .documentation .request-body .schema-toggle,
+raml-console article#raml-console .documentation .authentication .schema-toggle,
+#raml-console-loader .documentation .authentication .schema-toggle,
 raml-console article#raml-console .documentation .body-documentation .schema-toggle,
 #raml-console-loader .documentation .body-documentation .schema-toggle {
   display: inline-block;
@@ -4539,6 +4558,10 @@ raml-console article#raml-console .documentation .body-documentation .schema-tog
   font-weight: 600;
   cursor: pointer;
 }
+raml-console article#raml-console .documentation .request-body .named-parameters,
+#raml-console-loader .documentation .request-body .named-parameters,
+raml-console article#raml-console .documentation .authentication .named-parameters,
+#raml-console-loader .documentation .authentication .named-parameters,
 raml-console article#raml-console .documentation .body-documentation .named-parameters,
 #raml-console-loader .documentation .body-documentation .named-parameters {
   margin-top: -3px;
@@ -4771,8 +4794,8 @@ raml-console article#raml-console .try-it form .parameter-factory,
 #raml-console-loader .try-it form .parameter-factory {
   margin-top: 50px;
 }
-raml-console article#raml-console .try-it form textarea[name=body],
-#raml-console-loader .try-it form textarea[name=body] {
+raml-console article#raml-console .try-it form textarea,
+#raml-console-loader .try-it form textarea {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 100%;
