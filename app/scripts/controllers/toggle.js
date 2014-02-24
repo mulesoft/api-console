@@ -6,16 +6,19 @@
     this.key = $scope.keyBase + ':toggle';
     this.toggleItems = $scope.toggleItems = [];
     this.onSelect = $scope.onSelect || function() {};
+    this.toggleModel = $scope.toggleModel || {};
 
     $scope.toggle = this;
   };
 
   controller.prototype.select = function(toggleItem, dontPersist) {
+    this.toggleModel.selected = undefined;
     this.toggleItems.forEach(function(toggleItem) {
       toggleItem.active = false;
     });
 
     toggleItem.active = true;
+    this.toggleModel.selected = toggleItem.heading;
     this.onSelect(toggleItem.heading);
 
     if (!dontPersist) {

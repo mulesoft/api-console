@@ -122,12 +122,12 @@
     var authStrategy;
 
     try {
-      if (this.keychain.selectedScheme === 'Anonymous' && !this.method.allowsAnonymousAccess()) {
+      if (this.keychain.selected === 'Anonymous' && !this.method.allowsAnonymousAccess()) {
         this.disallowedAnonymousRequest = true;
       }
 
-      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
-      var credentials = this.keychain[this.keychain.selectedScheme];
+      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selected];
+      var credentials = this.keychain[this.keychain.selected];
       authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
     } catch (e) {
       // custom strategies aren't supported yet.

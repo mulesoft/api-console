@@ -3,7 +3,8 @@ describe("RAML.Controllers.toggle", function() {
 
   beforeEach(function() {
     storeSpy = jasmine.createSpyObj('store', ['get', 'set']);
-    this.controller = new RAML.Controllers.toggle({ keyBase: 'key-base' }, storeSpy);
+    this.toggleModel = {};
+    this.controller = new RAML.Controllers.toggle({ keyBase: 'key-base', toggleModel: this.toggleModel }, storeSpy);
   });
 
   describe("upon initialization", function() {
@@ -71,19 +72,26 @@ describe("RAML.Controllers.toggle", function() {
       this.controller.toggleItems = [ toggleItem1, toggleItem2 ];
     });
 
-    it("marks all other toggle items as inactive", function() {
-      this.controller.select(toggleItem2);
-      expect(toggleItem1.active).toBeFalsy();
-    });
+    describe("by default", function() {
+      beforeEach(function() {
+        this.controller.select(toggleItem2);
+      });
 
-    it("marks the selected toggle item as active", function() {
-      this.controller.select(toggleItem2);
-      expect(toggleItem2.active).toBeTruthy();
-    });
+      it("marks all other toggle items as inactive", function() {
+        expect(toggleItem1.active).toBeFalsy();
+      });
 
-    it("updates the store", function() {
-      this.controller.select(toggleItem2);
-      expect(storeSpy.set).toHaveBeenCalledWith('key-base:toggle', 'toggleItem2');
+      it("marks the selected toggle item as active", function() {
+        expect(toggleItem2.active).toBeTruthy();
+      });
+
+      it("updates the store", function() {
+        expect(storeSpy.set).toHaveBeenCalledWith('key-base:toggle', 'toggleItem2');
+      });
+
+      it("it updates the toggle model", function() {
+        expect(this.toggleModel.selected).toEqual(toggleItem2.heading);
+      });
     });
 
     describe('when dontPersist is passed', function() {

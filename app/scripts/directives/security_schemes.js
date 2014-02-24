@@ -5,9 +5,6 @@
 
     var controller = function($scope) {
       $scope.securitySchemes = this;
-      $scope.updateKeychain = function(scheme) {
-        $scope.keychain.selectedScheme = scheme;
-      };
     };
 
     controller.prototype.supports = function(scheme) {

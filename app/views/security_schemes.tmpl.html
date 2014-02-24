@@ -1,7 +1,7 @@
 <section class="authentication">
   <h2>Authentication</h2>
 
-  <toggle key-base="baseKey + ':securitySchemes'" on-select="updateKeychain">
+  <toggle key-base="baseKey + ':securitySchemes'" toggle-model="keychain">
     <toggle-item heading="Anonymous"></toggle-item>
     <toggle-item ng-repeat="(name, scheme) in schemes" heading="{{name}}">
       <div ng-switch="scheme.type">
