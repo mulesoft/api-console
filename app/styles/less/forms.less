@@ -61,7 +61,6 @@ input, .autocomplete {
     left: 0;
     border-radius: 3px;
     border: 1px solid @lightGray;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.33);
     box-sizing: border-box;
 
     li {
@@ -79,22 +78,23 @@ input, .autocomplete {
   }
 }
 
-input, textarea {
+textarea {
+  color: @black;
   font-family: @monospace;
   font-size: 13px;
-  color: @black;
-  vertical-align: baseline;
-}
-
-textarea {
   line-height: 16px;
+  vertical-align: baseline;
   padding: 8px;
 }
 
 input[type="text"], input[type="password"], textarea {
+  outline: none;
   border-radius: 3px;
-  border: 1px solid @lightGray;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  border: 2px solid @lightGray;
+
+  &:focus {
+    border: 2px solid @gray6;
+  }
 }
 
 input[type="text"], input[type="password"] {
@@ -116,9 +116,8 @@ select optgroup {
 }
 
 input.warning {
-  border-color: @gold;
+  border-color: #fbb03b;
   outline: 0;
-  box-shadow: inset 0 1px 1px @gold, 0 0 3px @gold;
 }
 
 .required {
@@ -126,7 +125,7 @@ input.warning {
 }
 
 input.error {
-  border-color: #b94a48;
+  border-color: #ff6666;
 }
 
 .control-group {
@@ -166,8 +165,6 @@ input.error {
   background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
   border: 1px solid @input-border;
   border-radius: @input-border-radius;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 
   // Disabled and read-only inputs
   // Note: HTML5 says that controls under a fieldset > legend:first-child won't

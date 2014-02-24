@@ -1,16 +1,22 @@
 .documentation {
   overflow: auto;
 
+  .modifiers {
+    margin: 20px 0 25px 0;
+  }
+
   .documentation-section {
+    padding-bottom: 30px;
+    margin-bottom: 20px;
     border-bottom: solid 1px @lightGray;
+
+    &:first-of-type {
+      padding-top: 20px;
+    }
 
     &:last-of-type {
       border-bottom: none;
     }
-  }
-
-  .modifiers {
-    margin-bottom: 20px;
   }
 
   .description {
@@ -20,7 +26,7 @@
   h2 {
     font-size: 18px;
     color: @muleBlue;
-    padding: 20px 0;
+    padding: 0 0 20px 0;
     margin: 0;
   }
 
@@ -39,10 +45,6 @@
       .labelled-radio-group {
         text-align: right;
         display: block;
-
-        .radio-group {
-          margin-top: 20px;
-        }
       }
 
       .item-content {
