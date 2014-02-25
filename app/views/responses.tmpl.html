@@ -18,7 +18,7 @@
 
       <div ng-if="response.body" class='body-documentation'>
         <h2 ng-show="response.body">Body</h2>
-        <toggle key-base='{{resourceView.methodKey() + ":selectedBody"' on-select="prepareView">
+        <toggle key-base='{{resourceView.methodKey() + ":selectedBody"}}' on-select="prepareView">
           <toggle-item ng-repeat='(mediaType, definition) in response.body track by mediaType' heading='{{mediaType}}'>
             <section ng-if="definition.example">
               <h5>Example</h5>
