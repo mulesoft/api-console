@@ -2806,27 +2806,35 @@ RAML.Inspector = (function() {
 
 (function() {
   RAML.Directives.responses = function(DataStore) {
-    var controller = function($scope) {
-      var self = $scope.responsesView = this;
-      this.responses = $scope.method.responses || {};
-      this.expanded = {};
-      this.responseBaseKey = $scope.resource.toString() + ':' + $scope.method.method;
+    function linkResponses($scope) {
+      var responseBaseKey = $scope.resource.toString() + ':' + $scope.method.method;
+      var selectedCode = DataStore.get(responseBaseKey);
+      var displayed = {};
 
-      Object.keys(this.responses).forEach(function(code) {
-        self.expanded[code] = DataStore.get(self.responseBaseKey + ':' + code);
-      });
+      selectedCode = selectedCode || Object.keys($scope.method.responses || {}).sort()[0];
 
-      $scope.$watch('responsesView.expanded', function(state) {
-        Object.keys(state).forEach(function(code) {
-          DataStore.set(self.responseBaseKey + ':' + code, state[code]);
-        });
-      }, true);
-    };
+      $scope.select = function select(responseCode) {
+        selectedCode = responseCode;
+        DataStore.set(responseBaseKey, responseCode);
+      };
+
+      $scope.selected = function selected(responseCode) {
+        return selectedCode === responseCode;
+      };
+
+      $scope.displayed = function(contentType) {
+        return displayed[contentType];
+      };
+
+      $scope.prepareView = function(contentType) {
+        displayed[contentType] = true;
+      };
+    }
 
     return {
       restrict: 'E',
       templateUrl: 'views/responses.tmpl.html',
-      controller: controller
+      link: linkResponses
     };
   };
 })();
@@ -3649,30 +3657,42 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/responses.tmpl.html',
-    "<section collapsible expanded='responsesView.expanded[responseCode]' ng-repeat='(responseCode, response) in method.responses'>\n" +
-    "  <h2 role=\"response-code\" collapsible-toggle>\n" +
-    "    <a href=''>\n" +
-    "      <i ng-class=\"{'icon-caret-right': !responsesView.expanded[responseCode], 'icon-caret-down': responsesView.expanded[responseCode]}\"></i>\n" +
-    "      {{responseCode}}\n" +
-    "    </a>\n" +
-    "    <div ng-if=\"!responsesView.expanded[responseCode]\" class=\"abbreviated-description\" markdown='response.description'></div>\n" +
-    "  </h2>\n" +
-    "  <div collapsible-content>\n" +
+    "<section class=\"responses\">\n" +
+    "  <ul class=\"nav nav-tabs\">\n" +
+    "    <li>\n" +
+    "      <a>Responses</a>\n" +
+    "    </li>\n" +
+    "    <li ng-repeat='(responseCode, response) in method.responses' ng-class=\"{active: selected(responseCode) }\" ng-click=\"select(responseCode)\">\n" +
+    "      <a href=\"#{{responseCode}}\">{{ responseCode }}</a>\n" +
+    "    </li>\n" +
+    "  </ul>\n" +
+    "\n" +
+    "  <div class=\"documentation-section response\" expanded='responsesView.expanded[responseCode]' ng-repeat='(responseCode, response) in method.responses'>\n" +
+    "    <a class=\"response-code\" name=\"{{responseCode}}\" role=\"response-code\"> {{responseCode}} </a>\n" +
     "    <section role='response'>\n" +
     "      <div markdown='response.description'></div>\n" +
-    "      <named-parameters-documentation heading='Headers' role='parameter-group' parameters='response.headers'></named-parameters-documentation>\n" +
-    "      <h3 ng-show=\"response.body\">Body</h3>\n" +
-    "      <section ng-repeat=\"(mediaType, definition) in response.body track by mediaType\">\n" +
-    "        <h4>{{mediaType}}</h4>\n" +
-    "        <section ng-if=\"definition.schema\">\n" +
-    "          <h5>Schema</h5>\n" +
-    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.schema\" visible=\"responsesView.expanded[responseCode]\"></div>\n" +
-    "        </section>\n" +
-    "        <section ng-if=\"definition.example\">\n" +
-    "          <h5>Example</h5>\n" +
-    "          <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"responsesView.expanded[responseCode]\"></div>\n" +
-    "        </section>\n" +
-    "      </section>\n" +
+    "      <div ng-if='!documentation.isEmpty(response.headers)'>\n" +
+    "        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='response.headers'></named-parameters-documentation>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div ng-if=\"response.body\" class='body-documentation'>\n" +
+    "        <h2 ng-show=\"response.body\">Body</h2>\n" +
+    "        <toggle key-base='{{resourceView.methodKey() + \":selectedBody\"' on-select=\"prepareView\">\n" +
+    "          <toggle-item ng-repeat='(mediaType, definition) in response.body track by mediaType' heading='{{mediaType}}'>\n" +
+    "            <section ng-if=\"definition.example\">\n" +
+    "              <h5>Example</h5>\n" +
+    "              <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"displayed(mediaType) && documentation.responsesActive\"></div>\n" +
+    "            </section>\n" +
+    "            <section ng-if=\"definition.schema\">\n" +
+    "              <a class=\"schema-toggle\" ng-click=\"schemaExpanded = true\" ng-show=\"!schemaExpanded\">Show Schema</a>\n" +
+    "              <div ng-show=\"schemaExpanded\">\n" +
+    "                <h5>Schema</h5>\n" +
+    "                <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"schemaExpanded\"></div>\n" +
+    "              </div>\n" +
+    "            </section>\n" +
+    "          </toggle-item>\n" +
+    "        </toggle>\n" +
+    "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
     "</section>\n"
