@@ -6,15 +6,8 @@
       restrict: 'E',
       replace: true,
       templateUrl: 'views/body_documentation.tmpl.html',
-      link: function($scope) {
+      controller: function($scope) {
         var displayed = {};
-        $scope.displayed = function(contentType) {
-          return displayed[contentType];
-        };
-
-        $scope.prepareView = function(name) {
-          displayed[name] = true;
-        };
 
         $scope.bodyKey = function() {
           return $scope.resourceView.methodKey() + ':body';
@@ -28,6 +21,14 @@
         $scope.schemaExpanded = function(contentType) {
           var key = $scope.bodyKey() + ':schemaExpanded:' + contentType;
           return DataStore.get(key);
+        };
+
+        $scope.displayed = function(contentType) {
+          return displayed[contentType];
+        };
+
+        $scope.prepareView = function(name) {
+          displayed[name] = true;
         };
       }
     };
