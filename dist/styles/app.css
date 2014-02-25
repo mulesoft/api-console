@@ -2575,11 +2575,11 @@ raml-console article#raml-console [markdown] code,
 }
 raml-console article#raml-console .icon-remove-sign,
 #raml-console-loader .icon-remove-sign {
-  color: #d26460;
+  color: #ff6666;
 }
 raml-console article#raml-console .icon-plus-sign-alt,
 #raml-console-loader .icon-plus-sign-alt {
-  color: #07c;
+  color: #086c96;
 }
 raml-console article#raml-console [markdown],
 #raml-console-loader [markdown] {
@@ -2780,7 +2780,7 @@ raml-console article#raml-console input.warning,
 }
 raml-console article#raml-console .required,
 #raml-console-loader .required {
-  color: #daa520;
+  color: #fbb03b;
 }
 raml-console article#raml-console input.error,
 #raml-console-loader input.error {
@@ -2788,7 +2788,7 @@ raml-console article#raml-console input.error,
 }
 raml-console article#raml-console .control-group,
 #raml-console-loader .control-group {
-  margin-bottom: 6px;
+  margin-bottom: 18px;
 }
 raml-console article#raml-console .labelled-inline label,
 #raml-console-loader .labelled-inline label,
@@ -2849,6 +2849,7 @@ raml-console article#raml-console .btn,
   border: 1px solid #aaaaaa;
   color: #f2f2f2;
   background-color: #aaaaaa;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2860,9 +2861,10 @@ raml-console article#raml-console .btn-get,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #0a93c8;
+  border: 1px solid #0b88b9;
   color: #f2f2f2;
-  background-color: #0a93c8;
+  background-color: #0b88b9;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2877,6 +2879,7 @@ raml-console article#raml-console .btn-post,
   border: 1px solid #1ea18d;
   color: #f2f2f2;
   background-color: #1ea18d;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2888,9 +2891,10 @@ raml-console article#raml-console .btn-put,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #5f74df;
+  border: 1px solid #4472d9;
   color: #f2f2f2;
-  background-color: #5f74df;
+  background-color: #4472d9;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2902,9 +2906,10 @@ raml-console article#raml-console .btn-patch,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #fca215;
+  border: 1px solid #02b0e2;
   color: #f2f2f2;
-  background-color: #fca215;
+  background-color: #02b0e2;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2919,6 +2924,7 @@ raml-console article#raml-console .btn-delete,
   border: 1px solid #d14956;
   color: #f2f2f2;
   background-color: #d14956;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2930,9 +2936,10 @@ raml-console article#raml-console .btn-head,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #9446af;
+  border: 1px solid #8a45a2;
   color: #f2f2f2;
-  background-color: #9446af;
+  background-color: #8a45a2;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2944,9 +2951,10 @@ raml-console article#raml-console .btn-options,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #9ec000;
+  border: 1px solid #1ebd77;
   color: #f2f2f2;
-  background-color: #9ec000;
+  background-color: #1ebd77;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2958,9 +2966,10 @@ raml-console article#raml-console .btn-trace,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #26c57f;
+  border: 1px solid #98b805;
   color: #f2f2f2;
-  background-color: #26c57f;
+  background-color: #98b805;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2972,9 +2981,10 @@ raml-console article#raml-console .btn-connect,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #00c3fb;
+  border: 1px solid #e48f0a;
   color: #f2f2f2;
-  background-color: #00c3fb;
+  background-color: #e48f0a;
+  outline: none;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -3131,14 +3141,6 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
 #raml-console-loader .resource-placeholder .resource-container .resource .description {
   overflow: hidden;
 }
-raml-console article#raml-console .resource-placeholder .resource-container .resource .description p:first-child,
-#raml-console-loader .resource-placeholder .resource-container .resource .description p:first-child {
-  margin-top: 5px;
-}
-raml-console article#raml-console .resource-placeholder .resource-container .resource .description p:last-child,
-#raml-console-loader .resource-placeholder .resource-container .resource .description p:last-child {
-  margin-bottom: 20px;
-}
 raml-console article#raml-console .resource-placeholder .resource-container .resource .methods,
 #raml-console-loader .resource-placeholder .resource-container .resource .methods {
   float: right;
@@ -3157,7 +3159,7 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
 raml-console article#raml-console .resource-placeholder .resource-container .modifiers,
 #raml-console-loader .resource-placeholder .resource-container .modifiers {
   font-size: 9px;
-  letter-spacing: 0.33px;
+  letter-spacing: 0.5px;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group,
 #raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group {
@@ -3212,12 +3214,12 @@ raml-console article#raml-console .resource-placeholder .resource-container .mod
 }
 raml-console article#raml-console .get.method-name,
 #raml-console-loader .get.method-name {
-  background-color: #0a93c8;
-  border-color: #0a93c8;
+  background-color: #0b88b9;
+  border-color: #0b88b9;
 }
 raml-console article#raml-console .get.method-name:hover,
 #raml-console-loader .get.method-name:hover {
-  background-color: #16a7df;
+  background-color: #109bd1;
 }
 raml-console article#raml-console .get .tabbable,
 #raml-console-loader .get .tabbable,
@@ -3256,7 +3258,7 @@ raml-console article#raml-console .get .nav,
   top: 0;
   width: 100%;
   color: white;
-  background-color: #0a93c8;
+  background-color: #0b88b9;
   z-index: 5;
 }
 raml-console article#raml-console .get .nav-tabs,
@@ -3306,7 +3308,7 @@ raml-console article#raml-console .get .nav-tabs > .active > a:hover,
 raml-console article#raml-console .get .nav-tabs > .active > a:focus,
 #raml-console-loader .get .nav-tabs > .active > a:focus {
   cursor: default;
-  background-color: #16a7df;
+  background-color: #109bd1;
 }
 raml-console article#raml-console .get .nav > .disabled > a,
 #raml-console-loader .get .nav > .disabled > a,
@@ -3314,7 +3316,7 @@ raml-console article#raml-console .get .nav > .disabled > a:hover,
 #raml-console-loader .get .nav > .disabled > a:hover,
 raml-console article#raml-console .get .nav > .disabled > a:focus,
 #raml-console-loader .get .nav > .disabled > a:focus {
-  color: #85c9e4;
+  color: #85c4dc;
   text-decoration: none;
   cursor: default;
   background-color: transparent;
@@ -3327,11 +3329,11 @@ raml-console article#raml-console .get .responses .nav,
 #raml-console-loader .get .responses .nav {
   top: 24px;
   left: 0;
-  background-color: #16a7df;
+  background-color: #109bd1;
 }
 raml-console article#raml-console .get .responses .nav .active a,
 #raml-console-loader .get .responses .nav .active a {
-  background-color: #73caec;
+  background-color: #18b0eb;
 }
 raml-console article#raml-console .get .try-it,
 #raml-console-loader .get .try-it {
@@ -3341,7 +3343,7 @@ raml-console article#raml-console .get .try-it .nav,
 #raml-console-loader .get .try-it .nav {
   top: 24px;
   left: 0;
-  background-color: #16a7df;
+  background-color: #109bd1;
   padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .get .tab-content,
@@ -3355,7 +3357,7 @@ raml-console article#raml-console .post.method-name,
 }
 raml-console article#raml-console .post.method-name:hover,
 #raml-console-loader .post.method-name:hover {
-  background-color: #4aceba;
+  background-color: #22b9a2;
 }
 raml-console article#raml-console .post .tabbable,
 #raml-console-loader .post .tabbable,
@@ -3444,7 +3446,7 @@ raml-console article#raml-console .post .nav-tabs > .active > a:hover,
 raml-console article#raml-console .post .nav-tabs > .active > a:focus,
 #raml-console-loader .post .nav-tabs > .active > a:focus {
   cursor: default;
-  background-color: #4aceba;
+  background-color: #22b9a2;
 }
 raml-console article#raml-console .post .nav > .disabled > a,
 #raml-console-loader .post .nav > .disabled > a,
@@ -3465,11 +3467,11 @@ raml-console article#raml-console .post .responses .nav,
 #raml-console-loader .post .responses .nav {
   top: 24px;
   left: 0;
-  background-color: #4aceba;
+  background-color: #22b9a2;
 }
 raml-console article#raml-console .post .responses .nav .active a,
 #raml-console-loader .post .responses .nav .active a {
-  background-color: #92e2d6;
+  background-color: #3acbb5;
 }
 raml-console article#raml-console .post .try-it,
 #raml-console-loader .post .try-it {
@@ -3479,287 +3481,11 @@ raml-console article#raml-console .post .try-it .nav,
 #raml-console-loader .post .try-it .nav {
   top: 24px;
   left: 0;
-  background-color: #4aceba;
+  background-color: #22b9a2;
   padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .post .tab-content,
 #raml-console-loader .post .tab-content {
-  padding: 0 15px;
-}
-raml-console article#raml-console .put.method-name,
-#raml-console-loader .put.method-name {
-  background-color: #5f74df;
-  border-color: #5f74df;
-}
-raml-console article#raml-console .put.method-name:hover,
-#raml-console-loader .put.method-name:hover {
-  background-color: #6880fb;
-}
-raml-console article#raml-console .put .tabbable,
-#raml-console-loader .put .tabbable,
-raml-console article#raml-console .put .nav,
-#raml-console-loader .put .nav,
-raml-console article#raml-console .put .nav-tabs,
-#raml-console-loader .put .nav-tabs {
-  *zoom: 1;
-}
-raml-console article#raml-console .put .tabbable:before,
-#raml-console-loader .put .tabbable:before,
-raml-console article#raml-console .put .nav:before,
-#raml-console-loader .put .nav:before,
-raml-console article#raml-console .put .nav-tabs:before,
-#raml-console-loader .put .nav-tabs:before,
-raml-console article#raml-console .put .tabbable:after,
-#raml-console-loader .put .tabbable:after,
-raml-console article#raml-console .put .nav:after,
-#raml-console-loader .put .nav:after,
-raml-console article#raml-console .put .nav-tabs:after,
-#raml-console-loader .put .nav-tabs:after {
-  display: table;
-  content: "";
-}
-raml-console article#raml-console .put .tabbable:after,
-#raml-console-loader .put .tabbable:after,
-raml-console article#raml-console .put .nav:after,
-#raml-console-loader .put .nav:after,
-raml-console article#raml-console .put .nav-tabs:after,
-#raml-console-loader .put .nav-tabs:after {
-  clear: both;
-}
-raml-console article#raml-console .put .nav,
-#raml-console-loader .put .nav {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  color: white;
-  background-color: #5f74df;
-  z-index: 5;
-}
-raml-console article#raml-console .put .nav-tabs,
-#raml-console-loader .put .nav-tabs {
-  text-align: right;
-}
-raml-console article#raml-console .put .nav-tabs > li,
-#raml-console-loader .put .nav-tabs > li {
-  display: inline-block;
-  cursor: pointer;
-  line-height: 24px;
-}
-raml-console article#raml-console .put .nav-tabs > li > a,
-#raml-console-loader .put .nav-tabs > li > a {
-  display: block;
-  color: white;
-  padding: 0 15px;
-  line-height: 24px;
-}
-raml-console article#raml-console .put .nav-tabs > li:nth-child(1),
-#raml-console-loader .put .nav-tabs > li:nth-child(1) {
-  display: block;
-  position: absolute;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-raml-console article#raml-console .put .nav-tabs > li:nth-child(2),
-#raml-console-loader .put .nav-tabs > li:nth-child(2) {
-  margin-left: 60px;
-}
-raml-console article#raml-console .put .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .put .nav-tabs > li:nth-child(1) > a,
-raml-console article#raml-console .put .nav-tabs > li:nth-child(1) > a:hover,
-#raml-console-loader .put .nav-tabs > li:nth-child(1) > a:hover {
-  color: white;
-}
-raml-console article#raml-console .put .nav-tabs > li > a:hover,
-#raml-console-loader .put .nav-tabs > li > a:hover,
-raml-console article#raml-console .put .nav-tabs > .active > a,
-#raml-console-loader .put .nav-tabs > .active > a,
-raml-console article#raml-console .put .nav-tabs > .active > a:hover,
-#raml-console-loader .put .nav-tabs > .active > a:hover,
-raml-console article#raml-console .put .nav-tabs > .active > a:focus,
-#raml-console-loader .put .nav-tabs > .active > a:focus {
-  cursor: default;
-  background-color: #6880fb;
-}
-raml-console article#raml-console .put .nav > .disabled > a,
-#raml-console-loader .put .nav > .disabled > a,
-raml-console article#raml-console .put .nav > .disabled > a:hover,
-#raml-console-loader .put .nav > .disabled > a:hover,
-raml-console article#raml-console .put .nav > .disabled > a:focus,
-#raml-console-loader .put .nav > .disabled > a:focus {
-  color: #afbaef;
-  text-decoration: none;
-  cursor: default;
-  background-color: transparent;
-}
-raml-console article#raml-console .put .responses,
-#raml-console-loader .put .responses {
-  margin-top: 50px;
-}
-raml-console article#raml-console .put .responses .nav,
-#raml-console-loader .put .responses .nav {
-  top: 24px;
-  left: 0;
-  background-color: #6880fb;
-}
-raml-console article#raml-console .put .responses .nav .active a,
-#raml-console-loader .put .responses .nav .active a {
-  background-color: #a4b3fd;
-}
-raml-console article#raml-console .put .try-it,
-#raml-console-loader .put .try-it {
-  margin-top: 76px;
-}
-raml-console article#raml-console .put .try-it .nav,
-#raml-console-loader .put .try-it .nav {
-  top: 24px;
-  left: 0;
-  background-color: #6880fb;
-  padding: 10px 0 10px 15px;
-}
-raml-console article#raml-console .put .tab-content,
-#raml-console-loader .put .tab-content {
-  padding: 0 15px;
-}
-raml-console article#raml-console .patch.method-name,
-#raml-console-loader .patch.method-name {
-  background-color: #fca215;
-  border-color: #fca215;
-}
-raml-console article#raml-console .patch.method-name:hover,
-#raml-console-loader .patch.method-name:hover {
-  background-color: #fbb03b;
-}
-raml-console article#raml-console .patch .tabbable,
-#raml-console-loader .patch .tabbable,
-raml-console article#raml-console .patch .nav,
-#raml-console-loader .patch .nav,
-raml-console article#raml-console .patch .nav-tabs,
-#raml-console-loader .patch .nav-tabs {
-  *zoom: 1;
-}
-raml-console article#raml-console .patch .tabbable:before,
-#raml-console-loader .patch .tabbable:before,
-raml-console article#raml-console .patch .nav:before,
-#raml-console-loader .patch .nav:before,
-raml-console article#raml-console .patch .nav-tabs:before,
-#raml-console-loader .patch .nav-tabs:before,
-raml-console article#raml-console .patch .tabbable:after,
-#raml-console-loader .patch .tabbable:after,
-raml-console article#raml-console .patch .nav:after,
-#raml-console-loader .patch .nav:after,
-raml-console article#raml-console .patch .nav-tabs:after,
-#raml-console-loader .patch .nav-tabs:after {
-  display: table;
-  content: "";
-}
-raml-console article#raml-console .patch .tabbable:after,
-#raml-console-loader .patch .tabbable:after,
-raml-console article#raml-console .patch .nav:after,
-#raml-console-loader .patch .nav:after,
-raml-console article#raml-console .patch .nav-tabs:after,
-#raml-console-loader .patch .nav-tabs:after {
-  clear: both;
-}
-raml-console article#raml-console .patch .nav,
-#raml-console-loader .patch .nav {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  color: white;
-  background-color: #fca215;
-  z-index: 5;
-}
-raml-console article#raml-console .patch .nav-tabs,
-#raml-console-loader .patch .nav-tabs {
-  text-align: right;
-}
-raml-console article#raml-console .patch .nav-tabs > li,
-#raml-console-loader .patch .nav-tabs > li {
-  display: inline-block;
-  cursor: pointer;
-  line-height: 24px;
-}
-raml-console article#raml-console .patch .nav-tabs > li > a,
-#raml-console-loader .patch .nav-tabs > li > a {
-  display: block;
-  color: white;
-  padding: 0 15px;
-  line-height: 24px;
-}
-raml-console article#raml-console .patch .nav-tabs > li:nth-child(1),
-#raml-console-loader .patch .nav-tabs > li:nth-child(1) {
-  display: block;
-  position: absolute;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-raml-console article#raml-console .patch .nav-tabs > li:nth-child(2),
-#raml-console-loader .patch .nav-tabs > li:nth-child(2) {
-  margin-left: 60px;
-}
-raml-console article#raml-console .patch .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .patch .nav-tabs > li:nth-child(1) > a,
-raml-console article#raml-console .patch .nav-tabs > li:nth-child(1) > a:hover,
-#raml-console-loader .patch .nav-tabs > li:nth-child(1) > a:hover {
-  color: white;
-}
-raml-console article#raml-console .patch .nav-tabs > li > a:hover,
-#raml-console-loader .patch .nav-tabs > li > a:hover,
-raml-console article#raml-console .patch .nav-tabs > .active > a,
-#raml-console-loader .patch .nav-tabs > .active > a,
-raml-console article#raml-console .patch .nav-tabs > .active > a:hover,
-#raml-console-loader .patch .nav-tabs > .active > a:hover,
-raml-console article#raml-console .patch .nav-tabs > .active > a:focus,
-#raml-console-loader .patch .nav-tabs > .active > a:focus {
-  cursor: default;
-  background-color: #fbb03b;
-}
-raml-console article#raml-console .patch .nav > .disabled > a,
-#raml-console-loader .patch .nav > .disabled > a,
-raml-console article#raml-console .patch .nav > .disabled > a:hover,
-#raml-console-loader .patch .nav > .disabled > a:hover,
-raml-console article#raml-console .patch .nav > .disabled > a:focus,
-#raml-console-loader .patch .nav > .disabled > a:focus {
-  color: #fed18a;
-  text-decoration: none;
-  cursor: default;
-  background-color: transparent;
-}
-raml-console article#raml-console .patch .responses,
-#raml-console-loader .patch .responses {
-  margin-top: 50px;
-}
-raml-console article#raml-console .patch .responses .nav,
-#raml-console-loader .patch .responses .nav {
-  top: 24px;
-  left: 0;
-  background-color: #fbb03b;
-}
-raml-console article#raml-console .patch .responses .nav .active a,
-#raml-console-loader .patch .responses .nav .active a {
-  background-color: #fdd089;
-}
-raml-console article#raml-console .patch .try-it,
-#raml-console-loader .patch .try-it {
-  margin-top: 76px;
-}
-raml-console article#raml-console .patch .try-it .nav,
-#raml-console-loader .patch .try-it .nav {
-  top: 24px;
-  left: 0;
-  background-color: #fbb03b;
-  padding: 10px 0 10px 15px;
-}
-raml-console article#raml-console .patch .tab-content,
-#raml-console-loader .patch .tab-content {
   padding: 0 15px;
 }
 raml-console article#raml-console .delete.method-name,
@@ -3769,7 +3495,7 @@ raml-console article#raml-console .delete.method-name,
 }
 raml-console article#raml-console .delete.method-name:hover,
 #raml-console-loader .delete.method-name:hover {
-  background-color: #ea5b69;
+  background-color: #e9505f;
 }
 raml-console article#raml-console .delete .tabbable,
 #raml-console-loader .delete .tabbable,
@@ -3858,7 +3584,7 @@ raml-console article#raml-console .delete .nav-tabs > .active > a:hover,
 raml-console article#raml-console .delete .nav-tabs > .active > a:focus,
 #raml-console-loader .delete .nav-tabs > .active > a:focus {
   cursor: default;
-  background-color: #ea5b69;
+  background-color: #e9505f;
 }
 raml-console article#raml-console .delete .nav > .disabled > a,
 #raml-console-loader .delete .nav > .disabled > a,
@@ -3879,11 +3605,11 @@ raml-console article#raml-console .delete .responses .nav,
 #raml-console-loader .delete .responses .nav {
   top: 24px;
   left: 0;
-  background-color: #ea5b69;
+  background-color: #e9505f;
 }
 raml-console article#raml-console .delete .responses .nav .active a,
 #raml-console-loader .delete .responses .nav .active a {
-  background-color: #f29da5;
+  background-color: #f96b7c;
 }
 raml-console article#raml-console .delete .try-it,
 #raml-console-loader .delete .try-it {
@@ -3893,21 +3619,297 @@ raml-console article#raml-console .delete .try-it .nav,
 #raml-console-loader .delete .try-it .nav {
   top: 24px;
   left: 0;
-  background-color: #ea5b69;
+  background-color: #e9505f;
   padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .delete .tab-content,
 #raml-console-loader .delete .tab-content {
   padding: 0 15px;
 }
+raml-console article#raml-console .put.method-name,
+#raml-console-loader .put.method-name {
+  background-color: #4472d9;
+  border-color: #4472d9;
+}
+raml-console article#raml-console .put.method-name:hover,
+#raml-console-loader .put.method-name:hover {
+  background-color: #5483ec;
+}
+raml-console article#raml-console .put .tabbable,
+#raml-console-loader .put .tabbable,
+raml-console article#raml-console .put .nav,
+#raml-console-loader .put .nav,
+raml-console article#raml-console .put .nav-tabs,
+#raml-console-loader .put .nav-tabs {
+  *zoom: 1;
+}
+raml-console article#raml-console .put .tabbable:before,
+#raml-console-loader .put .tabbable:before,
+raml-console article#raml-console .put .nav:before,
+#raml-console-loader .put .nav:before,
+raml-console article#raml-console .put .nav-tabs:before,
+#raml-console-loader .put .nav-tabs:before,
+raml-console article#raml-console .put .tabbable:after,
+#raml-console-loader .put .tabbable:after,
+raml-console article#raml-console .put .nav:after,
+#raml-console-loader .put .nav:after,
+raml-console article#raml-console .put .nav-tabs:after,
+#raml-console-loader .put .nav-tabs:after {
+  display: table;
+  content: "";
+}
+raml-console article#raml-console .put .tabbable:after,
+#raml-console-loader .put .tabbable:after,
+raml-console article#raml-console .put .nav:after,
+#raml-console-loader .put .nav:after,
+raml-console article#raml-console .put .nav-tabs:after,
+#raml-console-loader .put .nav-tabs:after {
+  clear: both;
+}
+raml-console article#raml-console .put .nav,
+#raml-console-loader .put .nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  color: white;
+  background-color: #4472d9;
+  z-index: 5;
+}
+raml-console article#raml-console .put .nav-tabs,
+#raml-console-loader .put .nav-tabs {
+  text-align: right;
+}
+raml-console article#raml-console .put .nav-tabs > li,
+#raml-console-loader .put .nav-tabs > li {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 24px;
+}
+raml-console article#raml-console .put .nav-tabs > li > a,
+#raml-console-loader .put .nav-tabs > li > a {
+  display: block;
+  color: white;
+  padding: 0 15px;
+  line-height: 24px;
+}
+raml-console article#raml-console .put .nav-tabs > li:nth-child(1),
+#raml-console-loader .put .nav-tabs > li:nth-child(1) {
+  display: block;
+  position: absolute;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+raml-console article#raml-console .put .nav-tabs > li:nth-child(2),
+#raml-console-loader .put .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
+}
+raml-console article#raml-console .put .nav-tabs > li:nth-child(1) > a,
+#raml-console-loader .put .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .put .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .put .nav-tabs > li:nth-child(1) > a:hover {
+  color: white;
+}
+raml-console article#raml-console .put .nav-tabs > li > a:hover,
+#raml-console-loader .put .nav-tabs > li > a:hover,
+raml-console article#raml-console .put .nav-tabs > .active > a,
+#raml-console-loader .put .nav-tabs > .active > a,
+raml-console article#raml-console .put .nav-tabs > .active > a:hover,
+#raml-console-loader .put .nav-tabs > .active > a:hover,
+raml-console article#raml-console .put .nav-tabs > .active > a:focus,
+#raml-console-loader .put .nav-tabs > .active > a:focus {
+  cursor: default;
+  background-color: #5483ec;
+}
+raml-console article#raml-console .put .nav > .disabled > a,
+#raml-console-loader .put .nav > .disabled > a,
+raml-console article#raml-console .put .nav > .disabled > a:hover,
+#raml-console-loader .put .nav > .disabled > a:hover,
+raml-console article#raml-console .put .nav > .disabled > a:focus,
+#raml-console-loader .put .nav > .disabled > a:focus {
+  color: #a2b9ec;
+  text-decoration: none;
+  cursor: default;
+  background-color: transparent;
+}
+raml-console article#raml-console .put .responses,
+#raml-console-loader .put .responses {
+  margin-top: 50px;
+}
+raml-console article#raml-console .put .responses .nav,
+#raml-console-loader .put .responses .nav {
+  top: 24px;
+  left: 0;
+  background-color: #5483ec;
+}
+raml-console article#raml-console .put .responses .nav .active a,
+#raml-console-loader .put .responses .nav .active a {
+  background-color: #6b98fc;
+}
+raml-console article#raml-console .put .try-it,
+#raml-console-loader .put .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .put .try-it .nav,
+#raml-console-loader .put .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #5483ec;
+  padding: 10px 0 10px 15px;
+}
+raml-console article#raml-console .put .tab-content,
+#raml-console-loader .put .tab-content {
+  padding: 0 15px;
+}
+raml-console article#raml-console .patch.method-name,
+#raml-console-loader .patch.method-name {
+  background-color: #02b0e2;
+  border-color: #02b0e2;
+}
+raml-console article#raml-console .patch.method-name:hover,
+#raml-console-loader .patch.method-name:hover {
+  background-color: #17c4f6;
+}
+raml-console article#raml-console .patch .tabbable,
+#raml-console-loader .patch .tabbable,
+raml-console article#raml-console .patch .nav,
+#raml-console-loader .patch .nav,
+raml-console article#raml-console .patch .nav-tabs,
+#raml-console-loader .patch .nav-tabs {
+  *zoom: 1;
+}
+raml-console article#raml-console .patch .tabbable:before,
+#raml-console-loader .patch .tabbable:before,
+raml-console article#raml-console .patch .nav:before,
+#raml-console-loader .patch .nav:before,
+raml-console article#raml-console .patch .nav-tabs:before,
+#raml-console-loader .patch .nav-tabs:before,
+raml-console article#raml-console .patch .tabbable:after,
+#raml-console-loader .patch .tabbable:after,
+raml-console article#raml-console .patch .nav:after,
+#raml-console-loader .patch .nav:after,
+raml-console article#raml-console .patch .nav-tabs:after,
+#raml-console-loader .patch .nav-tabs:after {
+  display: table;
+  content: "";
+}
+raml-console article#raml-console .patch .tabbable:after,
+#raml-console-loader .patch .tabbable:after,
+raml-console article#raml-console .patch .nav:after,
+#raml-console-loader .patch .nav:after,
+raml-console article#raml-console .patch .nav-tabs:after,
+#raml-console-loader .patch .nav-tabs:after {
+  clear: both;
+}
+raml-console article#raml-console .patch .nav,
+#raml-console-loader .patch .nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  color: white;
+  background-color: #02b0e2;
+  z-index: 5;
+}
+raml-console article#raml-console .patch .nav-tabs,
+#raml-console-loader .patch .nav-tabs {
+  text-align: right;
+}
+raml-console article#raml-console .patch .nav-tabs > li,
+#raml-console-loader .patch .nav-tabs > li {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 24px;
+}
+raml-console article#raml-console .patch .nav-tabs > li > a,
+#raml-console-loader .patch .nav-tabs > li > a {
+  display: block;
+  color: white;
+  padding: 0 15px;
+  line-height: 24px;
+}
+raml-console article#raml-console .patch .nav-tabs > li:nth-child(1),
+#raml-console-loader .patch .nav-tabs > li:nth-child(1) {
+  display: block;
+  position: absolute;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+raml-console article#raml-console .patch .nav-tabs > li:nth-child(2),
+#raml-console-loader .patch .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
+}
+raml-console article#raml-console .patch .nav-tabs > li:nth-child(1) > a,
+#raml-console-loader .patch .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .patch .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .patch .nav-tabs > li:nth-child(1) > a:hover {
+  color: white;
+}
+raml-console article#raml-console .patch .nav-tabs > li > a:hover,
+#raml-console-loader .patch .nav-tabs > li > a:hover,
+raml-console article#raml-console .patch .nav-tabs > .active > a,
+#raml-console-loader .patch .nav-tabs > .active > a,
+raml-console article#raml-console .patch .nav-tabs > .active > a:hover,
+#raml-console-loader .patch .nav-tabs > .active > a:hover,
+raml-console article#raml-console .patch .nav-tabs > .active > a:focus,
+#raml-console-loader .patch .nav-tabs > .active > a:focus {
+  cursor: default;
+  background-color: #17c4f6;
+}
+raml-console article#raml-console .patch .nav > .disabled > a,
+#raml-console-loader .patch .nav > .disabled > a,
+raml-console article#raml-console .patch .nav > .disabled > a:hover,
+#raml-console-loader .patch .nav > .disabled > a:hover,
+raml-console article#raml-console .patch .nav > .disabled > a:focus,
+#raml-console-loader .patch .nav > .disabled > a:focus {
+  color: #81d8f1;
+  text-decoration: none;
+  cursor: default;
+  background-color: transparent;
+}
+raml-console article#raml-console .patch .responses,
+#raml-console-loader .patch .responses {
+  margin-top: 50px;
+}
+raml-console article#raml-console .patch .responses .nav,
+#raml-console-loader .patch .responses .nav {
+  top: 24px;
+  left: 0;
+  background-color: #17c4f6;
+}
+raml-console article#raml-console .patch .responses .nav .active a,
+#raml-console-loader .patch .responses .nav .active a {
+  background-color: #44d4fd;
+}
+raml-console article#raml-console .patch .try-it,
+#raml-console-loader .patch .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .patch .try-it .nav,
+#raml-console-loader .patch .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #17c4f6;
+  padding: 10px 0 10px 15px;
+}
+raml-console article#raml-console .patch .tab-content,
+#raml-console-loader .patch .tab-content {
+  padding: 0 15px;
+}
 raml-console article#raml-console .head.method-name,
 #raml-console-loader .head.method-name {
-  background-color: #9446af;
-  border-color: #9446af;
+  background-color: #8a45a2;
+  border-color: #8a45a2;
 }
 raml-console article#raml-console .head.method-name:hover,
 #raml-console-loader .head.method-name:hover {
-  background-color: #ac45d0;
+  background-color: #a652c3;
 }
 raml-console article#raml-console .head .tabbable,
 #raml-console-loader .head .tabbable,
@@ -3946,7 +3948,7 @@ raml-console article#raml-console .head .nav,
   top: 0;
   width: 100%;
   color: white;
-  background-color: #9446af;
+  background-color: #8a45a2;
   z-index: 5;
 }
 raml-console article#raml-console .head .nav-tabs,
@@ -3996,7 +3998,7 @@ raml-console article#raml-console .head .nav-tabs > .active > a:hover,
 raml-console article#raml-console .head .nav-tabs > .active > a:focus,
 #raml-console-loader .head .nav-tabs > .active > a:focus {
   cursor: default;
-  background-color: #ac45d0;
+  background-color: #a652c3;
 }
 raml-console article#raml-console .head .nav > .disabled > a,
 #raml-console-loader .head .nav > .disabled > a,
@@ -4004,7 +4006,7 @@ raml-console article#raml-console .head .nav > .disabled > a:hover,
 #raml-console-loader .head .nav > .disabled > a:hover,
 raml-console article#raml-console .head .nav > .disabled > a:focus,
 #raml-console-loader .head .nav > .disabled > a:focus {
-  color: #caa3d7;
+  color: #c5a2d1;
   text-decoration: none;
   cursor: default;
   background-color: transparent;
@@ -4017,11 +4019,11 @@ raml-console article#raml-console .head .responses .nav,
 #raml-console-loader .head .responses .nav {
   top: 24px;
   left: 0;
-  background-color: #ac45d0;
+  background-color: #a652c3;
 }
 raml-console article#raml-console .head .responses .nav .active a,
 #raml-console-loader .head .responses .nav .active a {
-  background-color: #cd8fe3;
+  background-color: #ba68d7;
 }
 raml-console article#raml-console .head .try-it,
 #raml-console-loader .head .try-it {
@@ -4031,159 +4033,21 @@ raml-console article#raml-console .head .try-it .nav,
 #raml-console-loader .head .try-it .nav {
   top: 24px;
   left: 0;
-  background-color: #ac45d0;
+  background-color: #a652c3;
   padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .head .tab-content,
 #raml-console-loader .head .tab-content {
   padding: 0 15px;
 }
-raml-console article#raml-console .options.method-name,
-#raml-console-loader .options.method-name {
-  background-color: #9ec000;
-  border-color: #9ec000;
-}
-raml-console article#raml-console .options.method-name:hover,
-#raml-console-loader .options.method-name:hover {
-  background-color: #b2d900;
-}
-raml-console article#raml-console .options .tabbable,
-#raml-console-loader .options .tabbable,
-raml-console article#raml-console .options .nav,
-#raml-console-loader .options .nav,
-raml-console article#raml-console .options .nav-tabs,
-#raml-console-loader .options .nav-tabs {
-  *zoom: 1;
-}
-raml-console article#raml-console .options .tabbable:before,
-#raml-console-loader .options .tabbable:before,
-raml-console article#raml-console .options .nav:before,
-#raml-console-loader .options .nav:before,
-raml-console article#raml-console .options .nav-tabs:before,
-#raml-console-loader .options .nav-tabs:before,
-raml-console article#raml-console .options .tabbable:after,
-#raml-console-loader .options .tabbable:after,
-raml-console article#raml-console .options .nav:after,
-#raml-console-loader .options .nav:after,
-raml-console article#raml-console .options .nav-tabs:after,
-#raml-console-loader .options .nav-tabs:after {
-  display: table;
-  content: "";
-}
-raml-console article#raml-console .options .tabbable:after,
-#raml-console-loader .options .tabbable:after,
-raml-console article#raml-console .options .nav:after,
-#raml-console-loader .options .nav:after,
-raml-console article#raml-console .options .nav-tabs:after,
-#raml-console-loader .options .nav-tabs:after {
-  clear: both;
-}
-raml-console article#raml-console .options .nav,
-#raml-console-loader .options .nav {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  color: white;
-  background-color: #9ec000;
-  z-index: 5;
-}
-raml-console article#raml-console .options .nav-tabs,
-#raml-console-loader .options .nav-tabs {
-  text-align: right;
-}
-raml-console article#raml-console .options .nav-tabs > li,
-#raml-console-loader .options .nav-tabs > li {
-  display: inline-block;
-  cursor: pointer;
-  line-height: 24px;
-}
-raml-console article#raml-console .options .nav-tabs > li > a,
-#raml-console-loader .options .nav-tabs > li > a {
-  display: block;
-  color: white;
-  padding: 0 15px;
-  line-height: 24px;
-}
-raml-console article#raml-console .options .nav-tabs > li:nth-child(1),
-#raml-console-loader .options .nav-tabs > li:nth-child(1) {
-  display: block;
-  position: absolute;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-raml-console article#raml-console .options .nav-tabs > li:nth-child(2),
-#raml-console-loader .options .nav-tabs > li:nth-child(2) {
-  margin-left: 60px;
-}
-raml-console article#raml-console .options .nav-tabs > li:nth-child(1) > a,
-#raml-console-loader .options .nav-tabs > li:nth-child(1) > a,
-raml-console article#raml-console .options .nav-tabs > li:nth-child(1) > a:hover,
-#raml-console-loader .options .nav-tabs > li:nth-child(1) > a:hover {
-  color: white;
-}
-raml-console article#raml-console .options .nav-tabs > li > a:hover,
-#raml-console-loader .options .nav-tabs > li > a:hover,
-raml-console article#raml-console .options .nav-tabs > .active > a,
-#raml-console-loader .options .nav-tabs > .active > a,
-raml-console article#raml-console .options .nav-tabs > .active > a:hover,
-#raml-console-loader .options .nav-tabs > .active > a:hover,
-raml-console article#raml-console .options .nav-tabs > .active > a:focus,
-#raml-console-loader .options .nav-tabs > .active > a:focus {
-  cursor: default;
-  background-color: #b2d900;
-}
-raml-console article#raml-console .options .nav > .disabled > a,
-#raml-console-loader .options .nav > .disabled > a,
-raml-console article#raml-console .options .nav > .disabled > a:hover,
-#raml-console-loader .options .nav > .disabled > a:hover,
-raml-console article#raml-console .options .nav > .disabled > a:focus,
-#raml-console-loader .options .nav > .disabled > a:focus {
-  color: #cfe080;
-  text-decoration: none;
-  cursor: default;
-  background-color: transparent;
-}
-raml-console article#raml-console .options .responses,
-#raml-console-loader .options .responses {
-  margin-top: 50px;
-}
-raml-console article#raml-console .options .responses .nav,
-#raml-console-loader .options .responses .nav {
-  top: 24px;
-  left: 0;
-  background-color: #b2d900;
-}
-raml-console article#raml-console .options .responses .nav .active a,
-#raml-console-loader .options .responses .nav .active a {
-  background-color: #d1e866;
-}
-raml-console article#raml-console .options .try-it,
-#raml-console-loader .options .try-it {
-  margin-top: 76px;
-}
-raml-console article#raml-console .options .try-it .nav,
-#raml-console-loader .options .try-it .nav {
-  top: 24px;
-  left: 0;
-  background-color: #b2d900;
-  padding: 10px 0 10px 15px;
-}
-raml-console article#raml-console .options .tab-content,
-#raml-console-loader .options .tab-content {
-  padding: 0 15px;
-}
 raml-console article#raml-console .trace.method-name,
 #raml-console-loader .trace.method-name {
-  background-color: #26c57f;
-  border-color: #26c57f;
+  background-color: #98b805;
+  border-color: #98b805;
 }
 raml-console article#raml-console .trace.method-name:hover,
 #raml-console-loader .trace.method-name:hover {
-  background-color: #3fce8f;
+  background-color: #a7c908;
 }
 raml-console article#raml-console .trace .tabbable,
 #raml-console-loader .trace .tabbable,
@@ -4222,7 +4086,7 @@ raml-console article#raml-console .trace .nav,
   top: 0;
   width: 100%;
   color: white;
-  background-color: #26c57f;
+  background-color: #98b805;
   z-index: 5;
 }
 raml-console article#raml-console .trace .nav-tabs,
@@ -4272,7 +4136,7 @@ raml-console article#raml-console .trace .nav-tabs > .active > a:hover,
 raml-console article#raml-console .trace .nav-tabs > .active > a:focus,
 #raml-console-loader .trace .nav-tabs > .active > a:focus {
   cursor: default;
-  background-color: #3fce8f;
+  background-color: #a7c908;
 }
 raml-console article#raml-console .trace .nav > .disabled > a,
 #raml-console-loader .trace .nav > .disabled > a,
@@ -4280,7 +4144,7 @@ raml-console article#raml-console .trace .nav > .disabled > a:hover,
 #raml-console-loader .trace .nav > .disabled > a:hover,
 raml-console article#raml-console .trace .nav > .disabled > a:focus,
 #raml-console-loader .trace .nav > .disabled > a:focus {
-  color: #93e2bf;
+  color: #ccdc82;
   text-decoration: none;
   cursor: default;
   background-color: transparent;
@@ -4293,11 +4157,11 @@ raml-console article#raml-console .trace .responses .nav,
 #raml-console-loader .trace .responses .nav {
   top: 24px;
   left: 0;
-  background-color: #3fce8f;
+  background-color: #a7c908;
 }
 raml-console article#raml-console .trace .responses .nav .active a,
 #raml-console-loader .trace .responses .nav .active a {
-  background-color: #8ce2bc;
+  background-color: #b9db1b;
 }
 raml-console article#raml-console .trace .try-it,
 #raml-console-loader .trace .try-it {
@@ -4307,7 +4171,7 @@ raml-console article#raml-console .trace .try-it .nav,
 #raml-console-loader .trace .try-it .nav {
   top: 24px;
   left: 0;
-  background-color: #3fce8f;
+  background-color: #a7c908;
   padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .trace .tab-content,
@@ -4316,12 +4180,12 @@ raml-console article#raml-console .trace .tab-content,
 }
 raml-console article#raml-console .connect.method-name,
 #raml-console-loader .connect.method-name {
-  background-color: #00c3fb;
-  border-color: #00c3fb;
+  background-color: #e48f0a;
+  border-color: #e48f0a;
 }
 raml-console article#raml-console .connect.method-name:hover,
 #raml-console-loader .connect.method-name:hover {
-  background-color: #33d1fe;
+  background-color: #f39e1a;
 }
 raml-console article#raml-console .connect .tabbable,
 #raml-console-loader .connect .tabbable,
@@ -4360,7 +4224,7 @@ raml-console article#raml-console .connect .nav,
   top: 0;
   width: 100%;
   color: white;
-  background-color: #00c3fb;
+  background-color: #e48f0a;
   z-index: 5;
 }
 raml-console article#raml-console .connect .nav-tabs,
@@ -4410,7 +4274,7 @@ raml-console article#raml-console .connect .nav-tabs > .active > a:hover,
 raml-console article#raml-console .connect .nav-tabs > .active > a:focus,
 #raml-console-loader .connect .nav-tabs > .active > a:focus {
   cursor: default;
-  background-color: #33d1fe;
+  background-color: #f39e1a;
 }
 raml-console article#raml-console .connect .nav > .disabled > a,
 #raml-console-loader .connect .nav > .disabled > a,
@@ -4418,7 +4282,7 @@ raml-console article#raml-console .connect .nav > .disabled > a:hover,
 #raml-console-loader .connect .nav > .disabled > a:hover,
 raml-console article#raml-console .connect .nav > .disabled > a:focus,
 #raml-console-loader .connect .nav > .disabled > a:focus {
-  color: #80e1fd;
+  color: #f2c785;
   text-decoration: none;
   cursor: default;
   background-color: transparent;
@@ -4431,11 +4295,11 @@ raml-console article#raml-console .connect .responses .nav,
 #raml-console-loader .connect .responses .nav {
   top: 24px;
   left: 0;
-  background-color: #33d1fe;
+  background-color: #f39e1a;
 }
 raml-console article#raml-console .connect .responses .nav .active a,
 #raml-console-loader .connect .responses .nav .active a {
-  background-color: #85e3fe;
+  background-color: #fbb03b;
 }
 raml-console article#raml-console .connect .try-it,
 #raml-console-loader .connect .try-it {
@@ -4445,11 +4309,149 @@ raml-console article#raml-console .connect .try-it .nav,
 #raml-console-loader .connect .try-it .nav {
   top: 24px;
   left: 0;
-  background-color: #33d1fe;
+  background-color: #f39e1a;
   padding: 10px 0 10px 15px;
 }
 raml-console article#raml-console .connect .tab-content,
 #raml-console-loader .connect .tab-content {
+  padding: 0 15px;
+}
+raml-console article#raml-console .options.method-name,
+#raml-console-loader .options.method-name {
+  background-color: #1ebd77;
+  border-color: #1ebd77;
+}
+raml-console article#raml-console .options.method-name:hover,
+#raml-console-loader .options.method-name:hover {
+  background-color: #31d08a;
+}
+raml-console article#raml-console .options .tabbable,
+#raml-console-loader .options .tabbable,
+raml-console article#raml-console .options .nav,
+#raml-console-loader .options .nav,
+raml-console article#raml-console .options .nav-tabs,
+#raml-console-loader .options .nav-tabs {
+  *zoom: 1;
+}
+raml-console article#raml-console .options .tabbable:before,
+#raml-console-loader .options .tabbable:before,
+raml-console article#raml-console .options .nav:before,
+#raml-console-loader .options .nav:before,
+raml-console article#raml-console .options .nav-tabs:before,
+#raml-console-loader .options .nav-tabs:before,
+raml-console article#raml-console .options .tabbable:after,
+#raml-console-loader .options .tabbable:after,
+raml-console article#raml-console .options .nav:after,
+#raml-console-loader .options .nav:after,
+raml-console article#raml-console .options .nav-tabs:after,
+#raml-console-loader .options .nav-tabs:after {
+  display: table;
+  content: "";
+}
+raml-console article#raml-console .options .tabbable:after,
+#raml-console-loader .options .tabbable:after,
+raml-console article#raml-console .options .nav:after,
+#raml-console-loader .options .nav:after,
+raml-console article#raml-console .options .nav-tabs:after,
+#raml-console-loader .options .nav-tabs:after {
+  clear: both;
+}
+raml-console article#raml-console .options .nav,
+#raml-console-loader .options .nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  color: white;
+  background-color: #1ebd77;
+  z-index: 5;
+}
+raml-console article#raml-console .options .nav-tabs,
+#raml-console-loader .options .nav-tabs {
+  text-align: right;
+}
+raml-console article#raml-console .options .nav-tabs > li,
+#raml-console-loader .options .nav-tabs > li {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 24px;
+}
+raml-console article#raml-console .options .nav-tabs > li > a,
+#raml-console-loader .options .nav-tabs > li > a {
+  display: block;
+  color: white;
+  padding: 0 15px;
+  line-height: 24px;
+}
+raml-console article#raml-console .options .nav-tabs > li:nth-child(1),
+#raml-console-loader .options .nav-tabs > li:nth-child(1) {
+  display: block;
+  position: absolute;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+raml-console article#raml-console .options .nav-tabs > li:nth-child(2),
+#raml-console-loader .options .nav-tabs > li:nth-child(2) {
+  margin-left: 60px;
+}
+raml-console article#raml-console .options .nav-tabs > li:nth-child(1) > a,
+#raml-console-loader .options .nav-tabs > li:nth-child(1) > a,
+raml-console article#raml-console .options .nav-tabs > li:nth-child(1) > a:hover,
+#raml-console-loader .options .nav-tabs > li:nth-child(1) > a:hover {
+  color: white;
+}
+raml-console article#raml-console .options .nav-tabs > li > a:hover,
+#raml-console-loader .options .nav-tabs > li > a:hover,
+raml-console article#raml-console .options .nav-tabs > .active > a,
+#raml-console-loader .options .nav-tabs > .active > a,
+raml-console article#raml-console .options .nav-tabs > .active > a:hover,
+#raml-console-loader .options .nav-tabs > .active > a:hover,
+raml-console article#raml-console .options .nav-tabs > .active > a:focus,
+#raml-console-loader .options .nav-tabs > .active > a:focus {
+  cursor: default;
+  background-color: #31d08a;
+}
+raml-console article#raml-console .options .nav > .disabled > a,
+#raml-console-loader .options .nav > .disabled > a,
+raml-console article#raml-console .options .nav > .disabled > a:hover,
+#raml-console-loader .options .nav > .disabled > a:hover,
+raml-console article#raml-console .options .nav > .disabled > a:focus,
+#raml-console-loader .options .nav > .disabled > a:focus {
+  color: #8fdebb;
+  text-decoration: none;
+  cursor: default;
+  background-color: transparent;
+}
+raml-console article#raml-console .options .responses,
+#raml-console-loader .options .responses {
+  margin-top: 50px;
+}
+raml-console article#raml-console .options .responses .nav,
+#raml-console-loader .options .responses .nav {
+  top: 24px;
+  left: 0;
+  background-color: #31d08a;
+}
+raml-console article#raml-console .options .responses .nav .active a,
+#raml-console-loader .options .responses .nav .active a {
+  background-color: #53dda0;
+}
+raml-console article#raml-console .options .try-it,
+#raml-console-loader .options .try-it {
+  margin-top: 76px;
+}
+raml-console article#raml-console .options .try-it .nav,
+#raml-console-loader .options .try-it .nav {
+  top: 24px;
+  left: 0;
+  background-color: #31d08a;
+  padding: 10px 0 10px 15px;
+}
+raml-console article#raml-console .options .tab-content,
+#raml-console-loader .options .tab-content {
   padding: 0 15px;
 }
 raml-console article#raml-console .method-name,
@@ -4628,6 +4630,7 @@ raml-console article#raml-console .documentation .body-documentation h5,
   color: #555555;
   font-size: 10px;
   font-weight: 600;
+  text-transform: uppercase;
 }
 raml-console article#raml-console .documentation .request-body .toggle .labelled-radio-group,
 #raml-console-loader .documentation .request-body .toggle .labelled-radio-group,
@@ -4657,6 +4660,22 @@ raml-console article#raml-console .documentation .body-documentation .schema-tog
   font-size: 10px;
   font-weight: 600;
   cursor: pointer;
+  color: #086c96;
+  text-transform: uppercase;
+}
+raml-console article#raml-console .documentation .request-body .schema-toggle:visited,
+#raml-console-loader .documentation .request-body .schema-toggle:visited,
+raml-console article#raml-console .documentation .authentication .schema-toggle:visited,
+#raml-console-loader .documentation .authentication .schema-toggle:visited,
+raml-console article#raml-console .documentation .body-documentation .schema-toggle:visited,
+#raml-console-loader .documentation .body-documentation .schema-toggle:visited,
+raml-console article#raml-console .documentation .request-body .schema-toggle:focus,
+#raml-console-loader .documentation .request-body .schema-toggle:focus,
+raml-console article#raml-console .documentation .authentication .schema-toggle:focus,
+#raml-console-loader .documentation .authentication .schema-toggle:focus,
+raml-console article#raml-console .documentation .body-documentation .schema-toggle:focus,
+#raml-console-loader .documentation .body-documentation .schema-toggle:focus {
+  color: #086c96;
 }
 raml-console article#raml-console .documentation .request-body .named-parameters,
 #raml-console-loader .documentation .request-body .named-parameters,
@@ -4680,6 +4699,7 @@ raml-console article#raml-console .documentation .named-parameters .parameter [m
 }
 raml-console article#raml-console .documentation .named-parameters .parameter h4,
 #raml-console-loader .documentation .named-parameters .parameter h4 {
+  margin: 0;
   font-size: 12px;
   font-weight: 600;
   color: #222222;
@@ -4854,11 +4874,11 @@ raml-console article#raml-console .try-it form .form-actions .warning,
 }
 raml-console article#raml-console .try-it form .form-actions .error,
 #raml-console-loader .try-it form .form-actions .error {
-  color: #d26460;
+  color: #ff6666;
 }
 raml-console article#raml-console .try-it form .form-actions .warning,
 #raml-console-loader .try-it form .form-actions .warning {
-  color: #cd9356;
+  color: #fbb03b;
 }
 raml-console article#raml-console .try-it form .parameter-field,
 #raml-console-loader .try-it form .parameter-field {

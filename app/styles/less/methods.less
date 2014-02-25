@@ -1,17 +1,17 @@
-.method-color(@color, @lightColor) {
+.method-color(@color, @mediumColor, @lightColor) {
   &.method-name {
     background-color: @color;
     border-color:     @color;
 
     &:hover {
-      background-color: @lightColor;
+      background-color: @mediumColor;
     }
   }
 
-  .method-nav(@color, @lightColor)
+  .method-nav(@color, @mediumColor, @lightColor)
 }
 
-.method-nav(@color, @lightColor) {
+.method-nav(@color, @mediumColor, @lightColor) {
   .tabbable, .nav, .nav-tabs {
     .clearfix();
   }
@@ -64,7 +64,7 @@
   .nav-tabs > .active > a:hover,
   .nav-tabs > .active > a:focus {
     cursor: default;
-    background-color: @lightColor;
+    background-color: @mediumColor;
   }
 
   .nav > .disabled > a,
@@ -76,17 +76,16 @@
     background-color: transparent;
   }
 
-
   .responses {
     margin-top: 50px;
 
     .nav {
       top: 24px;
       left: 0;
-      background-color: @lightColor;
+      background-color: @mediumColor;
 
       .active a {
-        background-color: tint(@lightColor, 40%);
+        background-color: @lightColor;
       }
     }
    }
@@ -97,7 +96,7 @@
     .nav {
       top: 24px;
       left: 0;
-      background-color: @lightColor;
+      background-color: @mediumColor;
       padding: 10px 0 10px 15px;
     }
   }
@@ -107,15 +106,15 @@
   }
 }
 
-.get      { .method-color(@getColor, @getLightColor);               }
-.post     { .method-color(@postColor, @postLightColor);             }
-.put      { .method-color(@putColor, @putLightColor);               }
-.patch    { .method-color(@patchColor, @patchLightColor);           }
-.delete   { .method-color(@deleteColor, @deleteLightColor);         }
-.head     { .method-color(@headColor, @headLightColor);             }
-.options  { .method-color(@optionsColor, @optionsLightColor);       }
-.trace    { .method-color(@traceColor, @traceLightColor);           }
-.connect  { .method-color(@connectColor, @connectLightColor);       }
+.get      { .method-color(@getColor, @getMediumColor, @getLightColor);               }
+.post     { .method-color(@postColor, @postMediumColor,  @postLightColor);             }
+.delete   { .method-color(@deleteColor, @deleteMediumColor, @deleteLightColor);         }
+.put      { .method-color(@putColor, @putMediumColor,  @putLightColor);               }
+.patch    { .method-color(@patchColor, @patchMediumColor,  @patchLightColor);           }
+.head     { .method-color(@headColor, @headMediumColor, @headLightColor);             }
+.trace    { .method-color(@traceColor, @traceMediumColor, @traceLightColor);           }
+.connect  { .method-color(@connectColor, @connectMediumColor, @connectLightColor);       }
+.options  { .method-color(@optionsColor, @optionsMediumColor, @optionsLightColor);       }
 
 .method-name {
   user-select: none;

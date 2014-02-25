@@ -28,6 +28,7 @@
       color: @darkGray;
       font-size: 10px;
       font-weight: 600;
+      text-transform: uppercase;
     }
 
     .toggle {
@@ -47,6 +48,12 @@
       font-size: 10px;
       font-weight: 600;
       cursor: pointer;
+      color: @muleBlue;
+      text-transform: uppercase;
+
+      &:visited, &:focus {
+        color: @muleBlue;
+      }
     }
 
     .named-parameters {
@@ -69,6 +76,7 @@
       }
 
       h4 {
+        margin: 0;
         font-size: 12px;
         font-weight: 600;
         color: @black;
