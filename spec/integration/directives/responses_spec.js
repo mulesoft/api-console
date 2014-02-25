@@ -25,7 +25,7 @@ describe("RAML.Directives.responses", function() {
       scope.resource = scope.api.resources[0];
       scope.method = scope.resource.methods[0];
 
-      dataStore.set('/resource:get:500', true);
+      dataStore.set('/resource:get', '500');
       el = compileTemplate("<responses></responses>", scope);
       setFixtures(el);
     }));
@@ -35,30 +35,17 @@ describe("RAML.Directives.responses", function() {
     });
 
     it('queries the dataStore for the initial response state', function() {
-      expect(el.find('[role="response"]').eq(0)).not.toBeVisible();
-      expect(el.find('[role="response"]').eq(1)).toBeVisible();
-    });
-
-    it('shows the codes and descriptions for the hidden responses', function() {
-      expect(el.find('[role="response-code"]').eq(0)).toBeVisible();
-      expect(el.find('[role="response-code"]').eq(0).text().trim()).toContain("200");
-      expect(el.find('[role="response-code"]').eq(0).find('p').text().trim()).toContain("A-Okay");
+      expect(el.find('.nav li').eq(2)).toHaveClass('active');
     });
 
     describe('when the responses codes are clicked', function() {
       beforeEach(function() {
-        click(el.find("[role=response-code]").eq(0));
-      });
-
-      it('expands the responses', function() {
-        expect(el.find("[role='response']")).toBeVisible();
-        expect(el.find("[role='response']").eq(0).find('p').text().trim()).toContain("A-Okay");
-        expect(el.find("[role='response-code']").eq(0).find(".abbreviated-description")).not.toBeVisible();
+        click(el.find(".nav li").eq(1));
       });
 
       it('sets the state in the dataStore', function() {
         scope.$digest();
-        expect(dataStore.get('/resource:get:200')).toBeTruthy();
+        expect(dataStore.get('/resource:get')).toEqual('200');
       });
     });
   });

@@ -149,18 +149,21 @@ describe('API Documentation', function() {
       var documentation = openDocumentationTab(2, method);
 
       documentation.findElement(protractor.By.linkText('200')).click();
-      documentation.findElement(protractor.By.linkText('404')).click();
 
       var header = documentation.$('[role="parameter"]');
 
       expect(header.getText()).toMatch('SomeHeader');
       expect(header.getText()).toMatch(/Example: 5/i);
 
+      documentation.findElement(protractor.By.linkText('404')).click();
       ptor.executeScript(function() {
-        document.querySelectorAll('[role="response"]')[1].scrollIntoView()
+        document.querySelectorAll('.responses .toggle-item.active')[0].scrollIntoView()
       });
-      expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
       expect(documentation.getText()).toMatch(/<api-response>[\d\s]*<status>[\d\s]*Error[\d\s]*<\/status>[\d\s]*<\/api-response>/);
+
+      var schemaToggle = method.$('.schema-toggle')
+      schemaToggle.click();
+      expect(documentation.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));
 
       expect(documentation.getInnerHtml()).toMatch(/<em>Success<\/em> description/);
       expect(documentation.getInnerHtml()).toMatch(/<em>Error<\/em> description/);

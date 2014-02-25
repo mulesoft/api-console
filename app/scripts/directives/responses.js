@@ -2,27 +2,35 @@
 
 (function() {
   RAML.Directives.responses = function(DataStore) {
-    var controller = function($scope) {
-      var self = $scope.responsesView = this;
-      this.responses = $scope.method.responses || {};
-      this.expanded = {};
-      this.responseBaseKey = $scope.resource.toString() + ':' + $scope.method.method;
+    function linkResponses($scope) {
+      var responseBaseKey = $scope.resource.toString() + ':' + $scope.method.method;
+      var selectedCode = DataStore.get(responseBaseKey);
+      var displayed = {};
 
-      Object.keys(this.responses).forEach(function(code) {
-        self.expanded[code] = DataStore.get(self.responseBaseKey + ':' + code);
-      });
+      selectedCode = selectedCode || Object.keys($scope.method.responses || {}).sort()[0];
 
-      $scope.$watch('responsesView.expanded', function(state) {
-        Object.keys(state).forEach(function(code) {
-          DataStore.set(self.responseBaseKey + ':' + code, state[code]);
-        });
-      }, true);
-    };
+      $scope.select = function select(responseCode) {
+        selectedCode = responseCode;
+        DataStore.set(responseBaseKey, responseCode);
+      };
+
+      $scope.selected = function selected(responseCode) {
+        return selectedCode === responseCode;
+      };
+
+      $scope.displayed = function(contentType) {
+        return displayed[contentType];
+      };
+
+      $scope.prepareView = function(contentType) {
+        displayed[contentType] = true;
+      };
+    }
 
     return {
       restrict: 'E',
       templateUrl: 'views/responses.tmpl.html',
-      controller: controller
+      link: linkResponses
     };
   };
 })();
