@@ -2,11 +2,11 @@
 
 (function() {
   var Controller = function($scope) {
-    var parameters = $scope.parameters || {};
-    parameters.plain = parameters.plain || {};
-    parameters.parameterized = parameters.parameterized || {};
-
     $scope.displayParameters = function() {
+      var parameters = $scope.parameters || {};
+      parameters.plain = parameters.plain || {};
+      parameters.parameterized = parameters.parameterized || {};
+
       return Object.keys(parameters.plain).length > 0 || Object.keys(parameters.parameterized).length > 0;
     };
   };
