@@ -103,6 +103,13 @@
       processBody(method.body || {});
       processResponses(method.responses || {});
 
+      method.plainAndParameterizedHeaders = RAML.Utils.copy(method.headers.plain);
+      Object.keys(method.headers.parameterized).forEach(function(parameterizedHeader) {
+        method.plainAndParameterizedHeaders[parameterizedHeader] = method.headers.parameterized[parameterizedHeader].map(function(parameterized) {
+          return parameterized.definition();
+        });
+      });
+
       return method;
     }
   };

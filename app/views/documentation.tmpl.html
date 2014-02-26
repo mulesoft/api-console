@@ -19,8 +19,8 @@
         </section>
       </div>
 
-      <div class="documentation-section" ng-if='!documentation.isEmpty(plainAndParameterizedHeaders)'>
-        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='plainAndParameterizedHeaders'></named-parameters-documentation>
+      <div class="documentation-section" ng-if='!documentation.isEmpty(method.plainAndParameterizedHeaders)'>
+        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='method.plainAndParameterizedHeaders'></named-parameters-documentation>
       </div>
 
       <div class="documentation-section" ng-if='!documentation.isEmpty(resource.uriParametersForDocumentation)'>
