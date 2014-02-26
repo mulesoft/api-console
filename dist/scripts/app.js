@@ -349,6 +349,13 @@ RAML.Inspector = (function() {
       processBody(method.body || {});
       processResponses(method.responses || {});
 
+      method.plainAndParameterizedHeaders = RAML.Utils.copy(method.headers.plain);
+      Object.keys(method.headers.parameterized).forEach(function(parameterizedHeader) {
+        method.plainAndParameterizedHeaders[parameterizedHeader] = method.headers.parameterized[parameterizedHeader].map(function(parameterized) {
+          return parameterized.definition();
+        });
+      });
+
       return method;
     }
   };
@@ -1416,14 +1423,6 @@ RAML.Inspector = (function() {
     this.hasResponseDocumentation = function() {
       return !RAML.Utils.isEmpty($scope.method.responses);
     };
-
-    var plainAndParameterizedHeaders = RAML.Utils.copy($scope.method.headers.plain);
-    Object.keys($scope.method.headers.parameterized).forEach(function(parameterizedHeader) {
-      plainAndParameterizedHeaders[parameterizedHeader] = $scope.method.headers.parameterized[parameterizedHeader].map(function(parameterized) {
-        return parameterized.definition();
-      });
-    });
-    $scope.plainAndParameterizedHeaders = plainAndParameterizedHeaders;
   };
 
   controller.prototype.isEmpty = function(params) {
@@ -2442,8 +2441,6 @@ RAML.Inspector = (function() {
 
   RAML.Directives.method = function() {
     return {
-      controller: RAML.Controllers.Method,
-      require: ['^resource', 'method'],
       restrict: 'E',
       templateUrl: 'views/method.tmpl.html',
       replace: true
@@ -2455,11 +2452,11 @@ RAML.Inspector = (function() {
 
 (function() {
   var Controller = function($scope) {
-    var parameters = $scope.parameters || {};
-    parameters.plain = parameters.plain || {};
-    parameters.parameterized = parameters.parameterized || {};
-
     $scope.displayParameters = function() {
+      var parameters = $scope.parameters || {};
+      parameters.plain = parameters.plain || {};
+      parameters.parameterized = parameters.parameterized || {};
+
       return Object.keys(parameters.plain).length > 0 || Object.keys(parameters.parameterized).length > 0;
     };
   };
@@ -2934,12 +2931,18 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  RAML.Directives.tryIt = function() {
+  RAML.Directives.tryIt = function(DataStore) {
     return {
       restrict: 'E',
       templateUrl: 'views/try_it.tmpl.html',
       replace: true,
-      controller: RAML.Controllers.TryIt
+      link: function($scope) {
+        // fix that ensures the try it display is updated
+        // when switching between methods in the resource popover.
+        $scope.$watch('method', function() {
+          new RAML.Controllers.TryIt($scope, DataStore);
+        });
+      }
     };
   };
 })();
@@ -3349,8 +3352,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </section>\n" +
     "      </div>\n" +
     "\n" +
-    "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(plainAndParameterizedHeaders)'>\n" +
-    "        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='plainAndParameterizedHeaders'></named-parameters-documentation>\n" +
+    "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(method.plainAndParameterizedHeaders)'>\n" +
+    "        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='method.plainAndParameterizedHeaders'></named-parameters-documentation>\n" +
     "      </div>\n" +
     "\n" +
     "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(resource.uriParametersForDocumentation)'>\n" +
@@ -3725,7 +3728,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\" base-key=\"apiClient.baseKey()\"></security-schemes>\n" +
     "    <named-parameters heading=\"Headers\" parameters=\"context.headers\"></named-parameters>\n" +
     "    <named-parameters heading=\"Query Parameters\" parameters=\"context.queryParameters\"></named-parameters>\n" +
-    "    <body-content body=\"context.bodyContent\"></body-content>\n" +
+    "    <!-- the ng-if below reinstantiates the try it directive which results in the try it \n" +
+    "         section getting updated when a method is selected in the resource popover.\n" +
+    "    -->\n" +
+    "    <body-content ng-if=\"context.bodyContent\" body=\"context.bodyContent\"></body-content>\n" +
     "\n" +
     "\n" +
     "    <div class=\"form-actions\">\n" +
