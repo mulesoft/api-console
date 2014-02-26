@@ -3,28 +3,21 @@
 (function() {
   RAML.Directives.responses = function(DataStore) {
     function linkResponses($scope) {
-      var responseBaseKey = $scope.resource.toString() + ':' + $scope.method.method;
-      var selectedCode = DataStore.get(responseBaseKey);
-      var displayed = {};
-
-      selectedCode = selectedCode || Object.keys($scope.method.responses || {}).sort()[0];
+      $scope.keyBase = $scope.resource.toString() + ':' + $scope.method.method;
 
       $scope.select = function select(responseCode) {
         selectedCode = responseCode;
-        DataStore.set(responseBaseKey, responseCode);
+        DataStore.set($scope.keyBase, responseCode);
       };
 
       $scope.selected = function selected(responseCode) {
         return selectedCode === responseCode;
       };
 
-      $scope.displayed = function(contentType) {
-        return displayed[contentType];
-      };
+      var selectedCode = DataStore.get($scope.keyBase);
 
-      $scope.prepareView = function(contentType) {
-        displayed[contentType] = true;
-      };
+      selectedCode = selectedCode || Object.keys($scope.method.responses || {}).sort()[0];
+
     }
 
     return {

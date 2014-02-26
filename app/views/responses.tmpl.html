@@ -16,23 +16,8 @@
         <named-parameters-documentation heading='Headers' role='parameter-group' parameters='response.headers'></named-parameters-documentation>
       </div>
 
-      <div ng-if="response.body" class='body-documentation'>
-        <h2 ng-show="response.body">Body</h2>
-        <toggle key-base='{{resourceView.methodKey() + ":selectedBody"}}' on-select="prepareView">
-          <toggle-item ng-repeat='(mediaType, definition) in response.body track by mediaType' heading='{{mediaType}}'>
-            <section ng-if="definition.example">
-              <h5>Example</h5>
-              <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="displayed(mediaType) && documentation.responsesActive"></div>
-            </section>
-            <section ng-if="definition.schema">
-              <a class="schema-toggle" ng-click="schemaExpanded = true" ng-show="!schemaExpanded">Show Schema</a>
-              <div ng-show="schemaExpanded">
-                <h5>Schema</h5>
-                <div class="code" code-mirror="definition.schema" mode="{{mediaType}}" visible="schemaExpanded"></div>
-              </div>
-            </section>
-          </toggle-item>
-        </toggle>
+      <div ng-if="response.body && documentation.responsesActive" class='body-documentation'>
+        <body-documentation body="response.body" key-base='keyBase + "responses"'></body-documentation>
       </div>
     </section>
   </div>

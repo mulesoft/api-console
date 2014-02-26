@@ -105,7 +105,7 @@ describe('API Documentation', function() {
 
       expect(method.getText()).toMatch(new RegExp('text/xml'));
       expect(method.getText()).toMatch(new RegExp("<id>1511685</id>"));
-      expect(method.getText()).toMatch('Show Schema');
+      expect(method.getText()).toMatch('SHOW SCHEMA');
       var schemaToggle = method.$('.schema-toggle')
       schemaToggle.click();
       expect(method.getText()).toMatch(new RegExp('<xs:element type="xs:int" name="id"/>'));

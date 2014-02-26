@@ -1368,6 +1368,34 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
+  RAML.Controllers.BodyDocumentation = function bodyDocumentationController($scope, DataStore) {
+    var displayed = {};
+
+    $scope.bodyKey =  $scope.keyBase + ':body';
+
+    $scope.expandSchema = function(contentType) {
+      var key = $scope.bodyKey + ':schemaExpanded:' + contentType;
+      return DataStore.set(key, true);
+    };
+
+    $scope.schemaExpanded = function(contentType) {
+      var key = $scope.bodyKey + ':schemaExpanded:' + contentType;
+      return DataStore.get(key);
+    };
+
+    $scope.displayed = function(contentType) {
+      return displayed[contentType];
+    };
+
+    $scope.prepareView = function(contentType) {
+      displayed[contentType] = true;
+    };
+  };
+})();
+
+(function() {
+  'use strict';
+
   var FORM_MIME_TYPES = ['application/x-www-form-urlencoded', 'multipart/form-data'];
 
   function hasFormParameters(method) {
@@ -2101,35 +2129,16 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  RAML.Directives.bodyDocumentation = function(DataStore) {
+  RAML.Directives.bodyDocumentation = function() {
     return {
       restrict: 'E',
       replace: true,
       templateUrl: 'views/body_documentation.tmpl.html',
-      link: function($scope) {
-        var displayed = {};
-        $scope.displayed = function(contentType) {
-          return displayed[contentType];
-        };
-
-        $scope.prepareView = function(name) {
-          displayed[name] = true;
-        };
-
-        $scope.bodyKey = function() {
-          return $scope.resourceView.methodKey() + ':body';
-        };
-
-        $scope.expandSchema = function(contentType) {
-          var key = $scope.bodyKey() + ':schemaExpanded:' + contentType;
-          return DataStore.set(key, true);
-        };
-
-        $scope.schemaExpanded = function(contentType) {
-          var key = $scope.bodyKey() + ':schemaExpanded:' + contentType;
-          return DataStore.get(key);
-        };
-      }
+      scope: {
+        body: '=',
+        keyBase: '='
+      },
+      controller: RAML.Controllers.BodyDocumentation
     };
   };
 })();
@@ -2683,32 +2692,6 @@ RAML.Inspector = (function() {
   };
 })();
 
-'use strict';
-
-(function() {
-  RAML.Directives.requests = function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'views/requests.tmpl.html',
-      link: function($scope) {
-        var displayed = {};
-        $scope.displayed = function(contentType) {
-          return displayed[contentType];
-        };
-
-        $scope.prepareView = function(name) {
-          displayed[name] = true;
-        };
-
-        $scope.bodyKey = function() {
-          return $scope.resourceView.methodKey() + ':body';
-        };
-      }
-    };
-  };
-})();
-
 (function() {
   'use strict';
 
@@ -2807,28 +2790,21 @@ RAML.Inspector = (function() {
 (function() {
   RAML.Directives.responses = function(DataStore) {
     function linkResponses($scope) {
-      var responseBaseKey = $scope.resource.toString() + ':' + $scope.method.method;
-      var selectedCode = DataStore.get(responseBaseKey);
-      var displayed = {};
-
-      selectedCode = selectedCode || Object.keys($scope.method.responses || {}).sort()[0];
+      $scope.keyBase = $scope.resource.toString() + ':' + $scope.method.method;
 
       $scope.select = function select(responseCode) {
         selectedCode = responseCode;
-        DataStore.set(responseBaseKey, responseCode);
+        DataStore.set($scope.keyBase, responseCode);
       };
 
       $scope.selected = function selected(responseCode) {
         return selectedCode === responseCode;
       };
 
-      $scope.displayed = function(contentType) {
-        return displayed[contentType];
-      };
+      var selectedCode = DataStore.get($scope.keyBase);
 
-      $scope.prepareView = function(contentType) {
-        displayed[contentType] = true;
-      };
+      selectedCode = selectedCode || Object.keys($scope.method.responses || {}).sort()[0];
+
     }
 
     return {
@@ -3243,7 +3219,6 @@ RAML.Filters = {};
   module.directive('parameterizedParameter', RAML.Directives.parameterizedParameter);
   module.directive('ramlConsole', RAML.Directives.ramlConsole);
   module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
-  module.directive('requests', RAML.Directives.requests);
   module.directive('repeatable', RAML.Directives.repeatable);
   module.directive('repeatableAdd', RAML.Directives.repeatableAdd);
   module.directive('repeatableRemove', RAML.Directives.repeatableRemove);
@@ -3339,19 +3314,19 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<section class='body-documentation'>\n" +
     "  <h2>Body</h2>\n" +
     "\n" +
-    "  <toggle key-base='{{ bodyKey() }}' on-select='prepareView'>\n" +
-    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}'>\n" +
+    "  <toggle key-base='{{ bodyKey }}' on-select=\"prepareView\">\n" +
+    "    <toggle-item ng-repeat='(contentType, definition) in body track by contentType' heading='{{contentType}}'>\n" +
     "      <div ng-switch=\"contentType\">\n" +
     "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <div ng-switch-default>\n" +
-    "          <section ng-if=\"definition.example\">\n" +
+    "          <section ng-if=\"definition.example\" role=\"example\">\n" +
     "            <h5>Example</h5>\n" +
     "            <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{contentType}}\" visible=\"displayed(contentType)\"></div>\n" +
     "          </section>\n" +
-    "          <section ng-if=\"definition.schema\">\n" +
+    "          <section ng-if=\"definition.schema\" role=\"schema\">\n" +
     "            <a class=\"schema-toggle\" ng-click=\"expandSchema(contentType)\" ng-show=\"!schemaExpanded(contentType)\">Show Schema</a>\n" +
-    "            <div ng-show=\"schemaExpanded(contentType)\">\n" +
+    "            <div ng-if=\"schemaExpanded(contentType)\">\n" +
     "              <h5>Schema</h5>\n" +
     "              <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{contentType}}\" visible=\"schemaExpanded(contentType)\"></div>\n" +
     "            </div>\n" +
@@ -3399,7 +3374,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "\n" +
     "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(method.body)'>\n" +
-    "        <body-documentation></body-documentation>\n" +
+    "        <body-documentation body=\"method.body\" key-base=\"resourceView.methodKey() + ':request'\"></body-documentation>\n" +
     "      </div>\n" +
     "    </tab>\n" +
     "    <tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
@@ -3591,25 +3566,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
-  $templateCache.put('views/requests.tmpl.html',
-    "<section class='body-documentation'>\n" +
-    "  <h2>Body</h2>\n" +
-    "\n" +
-    "  <toggle key-base='{{ bodyKey() }}' on-select=\"prepareView\">\n" +
-    "    <toggle-item ng-repeat='(contentType, definition) in method.body track by contentType' heading='{{contentType}}'>\n" +
-    "      <div ng-switch=\"contentType\">\n" +
-    "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
-    "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
-    "        <div ng-switch-default>\n" +
-    "          <schema-and-example schema=\"definition.schema\" example=\"definition.example\" content-type=\"contentType\"></schema-and-example>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    </toggle-item>\n" +
-    "  </toggle>\n" +
-    "</section>\n"
-  );
-
-
   $templateCache.put('views/resource.tmpl.html',
     "<div class=\"resource-placeholder\" ng-class=\"{'pop-up': methodToAdd}\" role=\"resource-placeholder\">\n" +
     "  <div class=\"resource-container\">\n" +
@@ -3675,23 +3631,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='response.headers'></named-parameters-documentation>\n" +
     "      </div>\n" +
     "\n" +
-    "      <div ng-if=\"response.body\" class='body-documentation'>\n" +
-    "        <h2 ng-show=\"response.body\">Body</h2>\n" +
-    "        <toggle key-base='{{resourceView.methodKey() + \":selectedBody\"' on-select=\"prepareView\">\n" +
-    "          <toggle-item ng-repeat='(mediaType, definition) in response.body track by mediaType' heading='{{mediaType}}'>\n" +
-    "            <section ng-if=\"definition.example\">\n" +
-    "              <h5>Example</h5>\n" +
-    "              <div class=\"code\" mode='{{mediaType}}' code-mirror=\"definition.example\" visible=\"displayed(mediaType) && documentation.responsesActive\"></div>\n" +
-    "            </section>\n" +
-    "            <section ng-if=\"definition.schema\">\n" +
-    "              <a class=\"schema-toggle\" ng-click=\"schemaExpanded = true\" ng-show=\"!schemaExpanded\">Show Schema</a>\n" +
-    "              <div ng-show=\"schemaExpanded\">\n" +
-    "                <h5>Schema</h5>\n" +
-    "                <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{mediaType}}\" visible=\"schemaExpanded\"></div>\n" +
-    "              </div>\n" +
-    "            </section>\n" +
-    "          </toggle-item>\n" +
-    "        </toggle>\n" +
+    "      <div ng-if=\"response.body && documentation.responsesActive\" class='body-documentation'>\n" +
+    "        <body-documentation body=\"response.body\" key-base='keyBase + \"responses\"'></body-documentation>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
