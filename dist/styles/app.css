@@ -2697,6 +2697,7 @@ raml-console article#raml-console .autocomplete,
 raml-console article#raml-console .autocomplete,
 #raml-console-loader .autocomplete {
   position: relative;
+  color: #555555;
 }
 raml-console article#raml-console .autocomplete ul,
 #raml-console-loader .autocomplete ul {
