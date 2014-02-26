@@ -4823,17 +4823,20 @@ raml-console article#raml-console .try-it .path,
 }
 raml-console article#raml-console .try-it .path .segment,
 #raml-console-loader .try-it .path .segment {
-  font-size: 15px;
+  font-size: 12px;
+  line-height: 16px;
 }
 raml-console article#raml-console .try-it .path input,
 #raml-console-loader .try-it .path input {
   margin: 0 5px 0 2px;
-  font-size: 15px;
-  width: 9em;
+  font-size: 12px;
+  line-height: 16px;
+  width: 7em;
 }
 raml-console article#raml-console .try-it .path ul,
 #raml-console-loader .try-it .path ul {
-  font-size: 15px;
+  font-size: 12px;
+  line-height: 16px;
 }
 raml-console article#raml-console .try-it i,
 #raml-console-loader .try-it i {
