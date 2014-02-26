@@ -22,7 +22,10 @@
     <security-schemes ng-if="apiClient.securitySchemes" schemes="apiClient.securitySchemes" keychain="ramlConsole.keychain" base-key="apiClient.baseKey()"></security-schemes>
     <named-parameters heading="Headers" parameters="context.headers"></named-parameters>
     <named-parameters heading="Query Parameters" parameters="context.queryParameters"></named-parameters>
-    <body-content body="context.bodyContent"></body-content>
+    <!-- the ng-if below reinstantiates the try it directive which results in the try it 
+         section getting updated when a method is selected in the resource popover.
+    -->
+    <body-content ng-if="context.bodyContent" body="context.bodyContent"></body-content>
 
 
     <div class="form-actions">
