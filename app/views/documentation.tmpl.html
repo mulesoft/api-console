@@ -31,7 +31,7 @@
         <named-parameters-documentation heading='Query Parameters' role='parameter-group' parameters='method.queryParameters'></named-parameters-documentation>
       </div>
 
-      <div class="documentation-section" ng-if='!documentation.isEmpty(method.body)'>
+      <div class="documentation-section" ng-if='method.body && documentation.requestsActive'>
         <body-documentation body="method.body" key-base="resourceView.methodKey() + ':request'"></body-documentation>
       </div>
     </tab>

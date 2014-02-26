@@ -3373,7 +3373,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <named-parameters-documentation heading='Query Parameters' role='parameter-group' parameters='method.queryParameters'></named-parameters-documentation>\n" +
     "      </div>\n" +
     "\n" +
-    "      <div class=\"documentation-section\" ng-if='!documentation.isEmpty(method.body)'>\n" +
+    "      <div class=\"documentation-section\" ng-if='method.body && documentation.requestsActive'>\n" +
     "        <body-documentation body=\"method.body\" key-base=\"resourceView.methodKey() + ':request'\"></body-documentation>\n" +
     "      </div>\n" +
     "    </tab>\n" +
