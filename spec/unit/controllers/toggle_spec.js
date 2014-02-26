@@ -100,16 +100,5 @@ describe("RAML.Controllers.toggle", function() {
         expect(storeSpy.set).not.toHaveBeenCalled();
       });
     });
-
-    describe('when the toggle has a selection callback registered', function() {
-      beforeEach(function() {
-        this.controller.onSelect = jasmine.createSpy();
-        this.controller.select(toggleItem2, true);
-      });
-
-      it('executes it', function() {
-        expect(this.controller.onSelect).toHaveBeenCalled();
-      });
-    });
   });
 });

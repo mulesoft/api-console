@@ -5,7 +5,6 @@
     this.DataStore = DataStore;
     this.key = $scope.keyBase + ':toggle';
     this.toggleItems = $scope.toggleItems = [];
-    this.onSelect = $scope.onSelect || function() {};
     this.toggleModel = $scope.toggleModel || {};
 
     $scope.toggle = this;
@@ -19,7 +18,6 @@
 
     toggleItem.active = true;
     this.toggleModel.selected = toggleItem.heading;
-    this.onSelect(toggleItem.heading);
 
     if (!dontPersist) {
       this.DataStore.set(this.key, toggleItem.heading);

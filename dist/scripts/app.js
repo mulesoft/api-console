@@ -1369,9 +1369,8 @@ RAML.Inspector = (function() {
   'use strict';
 
   RAML.Controllers.BodyDocumentation = function bodyDocumentationController($scope, DataStore) {
-    var displayed = {};
-
     $scope.bodyKey =  $scope.keyBase + ':body';
+    $scope.displayed = {};
 
     $scope.expandSchema = function(contentType) {
       var key = $scope.bodyKey + ':schemaExpanded:' + contentType;
@@ -1381,14 +1380,6 @@ RAML.Inspector = (function() {
     $scope.schemaExpanded = function(contentType) {
       var key = $scope.bodyKey + ':schemaExpanded:' + contentType;
       return DataStore.get(key);
-    };
-
-    $scope.displayed = function(contentType) {
-      return displayed[contentType];
-    };
-
-    $scope.prepareView = function(contentType) {
-      displayed[contentType] = true;
     };
   };
 })();
@@ -1644,7 +1635,6 @@ RAML.Inspector = (function() {
     this.DataStore = DataStore;
     this.key = $scope.keyBase + ':toggle';
     this.toggleItems = $scope.toggleItems = [];
-    this.onSelect = $scope.onSelect || function() {};
     this.toggleModel = $scope.toggleModel || {};
 
     $scope.toggle = this;
@@ -1658,7 +1648,6 @@ RAML.Inspector = (function() {
 
     toggleItem.active = true;
     this.toggleModel.selected = toggleItem.heading;
-    this.onSelect(toggleItem.heading);
 
     if (!dontPersist) {
       this.DataStore.set(this.key, toggleItem.heading);
@@ -2913,7 +2902,6 @@ RAML.Inspector = (function() {
       templateUrl: 'views/toggle.tmpl.html',
       scope: {
         keyBase: '@',
-        onSelect: '=?',
         toggleModel: '=?'
       }
     };
@@ -3314,21 +3302,21 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<section class='body-documentation'>\n" +
     "  <h2>Body</h2>\n" +
     "\n" +
-    "  <toggle key-base='{{ bodyKey }}' on-select=\"prepareView\">\n" +
-    "    <toggle-item ng-repeat='(contentType, definition) in body track by contentType' heading='{{contentType}}'>\n" +
+    "  <toggle key-base='{{ bodyKey }}'>\n" +
+    "    <toggle-item ng-repeat='(contentType, definition) in body track by contentType' active=\"displayed[contentType]\" heading='{{contentType}}'>\n" +
     "      <div ng-switch=\"contentType\">\n" +
     "        <named-parameters-documentation ng-switch-when=\"application/x-www-form-urlencoded\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <named-parameters-documentation ng-switch-when=\"multipart/form-data\" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>\n" +
     "        <div ng-switch-default>\n" +
     "          <section ng-if=\"definition.example\" role=\"example\">\n" +
     "            <h5>Example</h5>\n" +
-    "            <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{contentType}}\" visible=\"displayed(contentType)\"></div>\n" +
+    "            <div class=\"code\" code-mirror=\"definition.example\" mode=\"{{contentType}}\" visible=\"displayed[contentType]\"></div>\n" +
     "          </section>\n" +
     "          <section ng-if=\"definition.schema\" role=\"schema\">\n" +
     "            <a class=\"schema-toggle\" ng-click=\"expandSchema(contentType)\" ng-show=\"!schemaExpanded(contentType)\">Show Schema</a>\n" +
     "            <div ng-if=\"schemaExpanded(contentType)\">\n" +
     "              <h5>Schema</h5>\n" +
-    "              <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{contentType}}\" visible=\"schemaExpanded(contentType)\"></div>\n" +
+    "              <div class=\"code\" code-mirror=\"definition.schema\" mode=\"{{contentType}}\" visible=\"displayed[contentType] && schemaExpanded(contentType)\"></div>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "        </div>\n" +

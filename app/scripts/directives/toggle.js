@@ -10,7 +10,6 @@
       templateUrl: 'views/toggle.tmpl.html',
       scope: {
         keyBase: '@',
-        onSelect: '=?',
         toggleModel: '=?'
       }
     };
