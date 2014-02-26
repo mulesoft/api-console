@@ -2473,7 +2473,7 @@ raml-console article#raml-console a,
 #raml-console-loader a,
 raml-console article#raml-console a:visited,
 #raml-console-loader a:visited {
-  color: #07c;
+  color: #086c96;
   text-decoration: none;
   outline: 0;
 }
@@ -2850,6 +2850,7 @@ raml-console article#raml-console .btn,
   color: #f2f2f2;
   background-color: #aaaaaa;
   outline: none;
+  box-shadow: 0 2px 0 0 #555555;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2861,10 +2862,11 @@ raml-console article#raml-console .btn-get,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #0b88b9;
+  border: 1px solid #109bd1;
   color: #f2f2f2;
-  background-color: #0b88b9;
+  background-color: #109bd1;
   outline: none;
+  box-shadow: 0 2px 0 0 #0b88b9;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2876,10 +2878,11 @@ raml-console article#raml-console .btn-post,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #1ea18d;
+  border: 1px solid #22b9a2;
   color: #f2f2f2;
-  background-color: #1ea18d;
+  background-color: #22b9a2;
   outline: none;
+  box-shadow: 0 2px 0 0 #1ea18d;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2891,10 +2894,11 @@ raml-console article#raml-console .btn-put,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #4472d9;
+  border: 1px solid #5483ec;
   color: #f2f2f2;
-  background-color: #4472d9;
+  background-color: #5483ec;
   outline: none;
+  box-shadow: 0 2px 0 0 #4472d9;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2906,10 +2910,11 @@ raml-console article#raml-console .btn-patch,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #02b0e2;
+  border: 1px solid #17c4f6;
   color: #f2f2f2;
-  background-color: #02b0e2;
+  background-color: #17c4f6;
   outline: none;
+  box-shadow: 0 2px 0 0 #02b0e2;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2921,10 +2926,11 @@ raml-console article#raml-console .btn-delete,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #d14956;
+  border: 1px solid #e9505f;
   color: #f2f2f2;
-  background-color: #d14956;
+  background-color: #e9505f;
   outline: none;
+  box-shadow: 0 2px 0 0 #d14956;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2936,10 +2942,11 @@ raml-console article#raml-console .btn-head,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #8a45a2;
+  border: 1px solid #a652c3;
   color: #f2f2f2;
-  background-color: #8a45a2;
+  background-color: #a652c3;
   outline: none;
+  box-shadow: 0 2px 0 0 #8a45a2;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2951,10 +2958,11 @@ raml-console article#raml-console .btn-options,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #1ebd77;
+  border: 1px solid #31d08a;
   color: #f2f2f2;
-  background-color: #1ebd77;
+  background-color: #31d08a;
   outline: none;
+  box-shadow: 0 2px 0 0 #1ebd77;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2966,10 +2974,11 @@ raml-console article#raml-console .btn-trace,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #98b805;
+  border: 1px solid #a7c908;
   color: #f2f2f2;
-  background-color: #98b805;
+  background-color: #a7c908;
   outline: none;
+  box-shadow: 0 2px 0 0 #98b805;
   border-radius: 3px;
   text-transform: uppercase;
 }
@@ -2981,10 +2990,11 @@ raml-console article#raml-console .btn-connect,
   font-size: 13px;
   line-height: 20px;
   cursor: pointer;
-  border: 1px solid #e48f0a;
+  border: 1px solid #f39e1a;
   color: #f2f2f2;
-  background-color: #e48f0a;
+  background-color: #f39e1a;
   outline: none;
+  box-shadow: 0 2px 0 0 #e48f0a;
   border-radius: 3px;
   text-transform: uppercase;
 }

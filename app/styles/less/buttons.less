@@ -1,4 +1,4 @@
-.button(@color: @gray) {
+.button(@color, @borderColor) {
   display: inline-block;
   padding: 4px 12px;
   min-width: 100px;
@@ -9,18 +9,19 @@
   color: @veryLightGray;
   background-color: @color;
   outline: none;
+  box-shadow: 0 2px 0 0 @borderColor;
 
   border-radius: 3px;
   text-transform: uppercase;
 }
 
-.btn          { .button(@gray);               }
-.btn-get      { .button(@getColor);           }
-.btn-post     { .button(@postColor);          }
-.btn-put      { .button(@putColor);           }
-.btn-patch    { .button(@patchColor);         }
-.btn-delete   { .button(@deleteColor);        }
-.btn-head     { .button(@headColor);          }
-.btn-options  { .button(@optionsColor);       }
-.btn-trace    { .button(@traceColor);         }
-.btn-connect  { .button(@connectColor);       }
+.btn          { .button(@gray, @darkGray);               }
+.btn-get      { .button(@getMediumColor, @getColor);           }
+.btn-post     { .button(@postMediumColor, @postColor);          }
+.btn-put      { .button(@putMediumColor, @putColor);           }
+.btn-patch    { .button(@patchMediumColor, @patchColor);         }
+.btn-delete   { .button(@deleteMediumColor, @deleteColor);        }
+.btn-head     { .button(@headMediumColor, @headColor);          }
+.btn-options  { .button(@optionsMediumColor, @optionsColor);       }
+.btn-trace    { .button(@traceMediumColor, @traceColor);         }
+.btn-connect  { .button(@connectMediumColor, @connectColor);       }
