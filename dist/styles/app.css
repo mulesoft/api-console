@@ -3013,9 +3013,10 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
   z-index: 2;
   width: 100%;
   padding: 10px;
-  margin-left: -20px;
   border: none;
   top: 0;
+  left: 0;
+  right: 0;
   background-color: #E6E7EB;
   min-height: 50vh;
 }
@@ -3044,10 +3045,9 @@ raml-console article#raml-console .resource-placeholder .resource-container,
 raml-console article#raml-console .resource-placeholder .resource-container .resource,
 #raml-console-loader .resource-placeholder .resource-container .resource {
   background-color: #f2f2f2;
-  border-radius: 5px;
+  border-radius: 3px;
   border: 1px solid #cccccc;
-  padding: 15px;
-  padding-bottom: 0;
+  padding: 0 5px 0 10px;
   overflow: hidden;
   display: -webkit-box;
   display: -webkit-flex;
@@ -3081,32 +3081,19 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse,
 #raml-console-loader .resource-placeholder .resource-container .resource i.collapse {
+  display: block;
   float: right;
-  width: 0;
-  height: 0;
-  margin-right: -1px;
-  margin-top: -15px;
-  opacity: 1;
+  position: relative;
+  z-index: 1;
+  font-size: 15px;
+  line-height: 14px;
+  text-shadow: 1px 0 rgba(255, 255, 255, 0.25);
+  color: #666;
   cursor: pointer;
 }
-raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse.transparent,
-#raml-console-loader .resource-placeholder .resource-container .resource i.collapse.transparent {
-  opacity: 0;
-}
-raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse:hover::before,
-#raml-console-loader .resource-placeholder .resource-container .resource i.collapse:hover::before {
+raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse:hover,
+#raml-console-loader .resource-placeholder .resource-container .resource i.collapse:hover {
   color: #888;
-}
-raml-console article#raml-console .resource-placeholder .resource-container .resource i.collapse::before,
-#raml-console-loader .resource-placeholder .resource-container .resource i.collapse::before {
-  display: block;
-  border-radius: 1px;
-  color: #666;
-  font-size: 15px;
-  text-shadow: 1px 0 rgba(255, 255, 255, 0.25);
-  text-align: center;
-  width: 14px;
-  line-height: 14px;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource .summary,
 #raml-console-loader .resource-placeholder .resource-container .resource .summary {
@@ -3114,19 +3101,11 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
   cursor: pointer;
   *zoom: 1;
 }
-raml-console article#raml-console .resource-placeholder .resource-container .resource .summary .modifiers,
-#raml-console-loader .resource-placeholder .resource-container .resource .summary .modifiers {
-  margin-top: -15px;
-  margin-bottom: 8px;
-  min-height: 7px;
-}
 raml-console article#raml-console .resource-placeholder .resource-container .resource .summary .path,
 #raml-console-loader .resource-placeholder .resource-container .resource .summary .path {
   float: left;
   margin: 0;
-  margin-top: 1px;
-  margin-bottom: 15px;
-  line-height: 18px;
+  line-height: 30px;
   max-width: 100%;
   word-wrap: break-word;
   font-size: 14px;
@@ -3148,6 +3127,15 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
 #raml-console-loader .resource-placeholder .resource-container .resource .summary:after {
   clear: both;
 }
+raml-console article#raml-console .resource-placeholder .resource-container .resource.expanded,
+#raml-console-loader .resource-placeholder .resource-container .resource.expanded {
+  /* maybe put this on desription / header nav */
+
+}
+raml-console article#raml-console .resource-placeholder .resource-container .resource.expanded .method,
+#raml-console-loader .resource-placeholder .resource-container .resource.expanded .method {
+  margin-top: 5px;
+}
 raml-console article#raml-console .resource-placeholder .resource-container .resource .description,
 #raml-console-loader .resource-placeholder .resource-container .resource .description {
   overflow: hidden;
@@ -3156,8 +3144,7 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
 #raml-console-loader .resource-placeholder .resource-container .resource .methods {
   float: right;
   text-align: right;
-  margin-top: -1px;
-  margin-bottom: 8px;
+  margin: 0;
   margin-right: -5px;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource .methods li,
@@ -3165,12 +3152,16 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
   float: right;
   line-height: 19px;
   margin-right: 5px;
-  margin-bottom: 5px;
+  margin-top: 5px;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .modifiers,
 #raml-console-loader .resource-placeholder .resource-container .modifiers {
   font-size: 9px;
   letter-spacing: 0.5px;
+}
+raml-console article#raml-console .resource-placeholder .resource-container .modifiers.expanded,
+#raml-console-loader .resource-placeholder .resource-container .modifiers.expanded {
+  min-height: 23px;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group,
 #raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group {
@@ -4482,7 +4473,7 @@ raml-console article#raml-console .method-name,
 raml-console article#raml-console .method,
 #raml-console-loader .method {
   position: relative;
-  margin: 0 -15px 10px -15px;
+  margin: 0 -8px 10px -10px;
   background: white;
   display: -webkit-box;
   display: -webkit-flex;
@@ -4974,7 +4965,7 @@ raml-console article#raml-console .resource-group > i,
 raml-console article#raml-console .resource-group > i.icon-caret-down,
 #raml-console-loader .resource-group > i.icon-caret-down {
   left: -14px;
-  top: 23px;
+  top: 15px;
 }
 raml-console article#raml-console [role=documentation] h2 i[class^="icon-"],
 #raml-console-loader [role=documentation] h2 i[class^="icon-"] {

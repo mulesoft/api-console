@@ -3251,11 +3251,19 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div collapsible collapsed='apiResources.collapsed[apiResources.keyFor(resourceGroup)]' role=\"resource-group\" class=\"resource-group\" ng-repeat=\"resourceGroup in api.resourceGroups\">\n" +
     "    <i collapsible-toggle ng-class=\"{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}\"></i>\n" +
     "\n" +
-    "    <div class=\"resource\" role=\"resource-group-placeholder\" ng-show=\"collapsed\">\n" +
-    "      <div class=\"summary\">\n" +
-    "        <h3 class=\"path\">\n" +
-    "          <span role='segment' ng-repeat='segment in resourceGroup[0].pathSegments'>{{segment.toString()}} </span>\n" +
-    "        </h3>\n" +
+    "    <div collapsible-toggle class=\"resource\" role=\"resource-group-placeholder\" ng-show=\"collapsed\" ng-init=\"resource = resourceGroup[0]\">\n" +
+    "      <div class=\"resource-placeholder\" role=\"resource-placeholder\">\n" +
+    "        <div class=\"resource-container\">\n" +
+    "          <div class='resource' role=\"resource\">\n" +
+    "            <div>\n" +
+    "              <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
+    "                <h3 class=\"path\">\n" +
+    "                  <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
+    "                </h3>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "\n" +
@@ -3565,10 +3573,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div class=\"resource-container\">\n" +
     "    <div ng-class=\"{expanded: resourceView.expanded || selectedMethod}\" class='resource' role=\"resource\">\n" +
     "      <div>\n" +
-    "        <i class=\"icon-remove collapse\" ng-class=\"{transparent: !methodToAdd}\" ng-click='resourceView.collapseMethod($event)'></i>\n" +
+    "        <i class=\"icon-remove collapse\" ng-if=\"methodToAdd\" ng-click='resourceView.collapseMethod($event)'></i>\n" +
     "\n" +
     "        <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
-    "          <div class=\"modifiers\" ng-show='resourceView.expanded'>\n" +
+    "          <div class=\"modifiers\" ng-class=\"{expanded: selectedMethod}\" ng-show='resourceView.expanded'>\n" +
     "            <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
     "              <span class=\"caption\">Type:</span>\n" +
     "              <ul>\n" +
