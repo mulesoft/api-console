@@ -24,6 +24,10 @@ describe("RAML.Directives.documentation", function() {
   beforeEach(function() {
     scope = createScopeWithFirstResourceAndMethod(this.api);
     scope.ramlConsole = { keychain: {} };
+    scope.resourceView = {
+      resourceKey: function() { return 'fake'; }
+    };
+
     $el = compileTemplate('<documentation></documentation>', scope);
     traits = $el.find('[role="traits"]');
   });

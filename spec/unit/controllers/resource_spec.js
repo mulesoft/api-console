@@ -84,7 +84,7 @@ describe("RAML.Controllers.Resource", function() {
       });
 
       it('sets method on scope', function() {
-        expect(scope.method).toEqual(methods[1]);
+        expect(scope.selectedMethod).toEqual(methods[1]);
       });
 
       it('sets child height based on the dataStore', function() {
@@ -102,7 +102,7 @@ describe("RAML.Controllers.Resource", function() {
       });
 
       it('sets method on scope', function() {
-        expect(scope.method).toEqual(methods[1]);
+        expect(scope.selectedMethod).toEqual(methods[1]);
       });
 
       it('updates the value in the store', function() {

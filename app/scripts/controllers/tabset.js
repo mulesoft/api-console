@@ -28,7 +28,7 @@
         allOthersDisabled = this.tabs.every(function(tab) { return tab.disabled; });
 
     if (allOthersDisabled || previouslyEnabled) {
-      this.select(tab, true);
+      this.select(tab, this.DataStore.get(this.key));
     }
 
     this.tabs.push(tab);

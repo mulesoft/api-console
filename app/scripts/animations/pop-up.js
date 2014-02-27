@@ -124,7 +124,7 @@
 
       removeClass: function(element, className, done) {
         var elements = getElements(element);
-        elements.resource.scope().$apply('method = methodToAdd');
+        elements.resource.scope().$apply('selectedMethod = methodToAdd');
 
         elements.placeholder.css('height', '');
         elements.wrapper.css({ 'background-color': '', 'height': '' });

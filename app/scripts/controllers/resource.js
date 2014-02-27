@@ -12,8 +12,8 @@
     this.expanded = this.DataStore.get(this.resourceKey());
 
     this.initiateExpand = function(method) {
-      if ($scope.method) {
-        $scope.method = method;
+      if ($scope.selectedMethod) {
+        $scope.selectedMethod = method;
         DataStore.set(this.methodKey(), method.method);
       } else {
         $scope.methodToAdd = method;
@@ -21,7 +21,7 @@
     };
 
     this.expandMethod = function(method) {
-      $scope.method = method;
+      $scope.selectedMethod = method;
       $scope.methodToAdd = method;
       DataStore.set(this.methodKey(), method.method);
     };
@@ -33,7 +33,7 @@
     };
 
     this.toggleExpansion = function() {
-      if ($scope.methodToAdd || $scope.method) {
+      if ($scope.methodToAdd || $scope.selectedMethod) {
         return;
       }
 

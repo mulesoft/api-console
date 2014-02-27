@@ -1,5 +1,5 @@
 <section class='documentation' role='documentation'>
-  <tabset key-base='{{resourceView.methodKey()}}'>
+  <tabset key-base='{{ generateKey() }}'>
     <tab heading="{{method.method}}" disabled='true'>
     </tab>
     <tab class="request" role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
@@ -32,7 +32,7 @@
       </div>
 
       <div class="documentation-section" ng-if='method.body && documentation.requestsActive'>
-        <body-documentation body="method.body" key-base="resourceView.methodKey() + ':request'"></body-documentation>
+        <body-documentation body="method.body" key-base="generateKey() + ':request'"></body-documentation>
       </div>
     </tab>
     <tab role='documentation-responses' class="responses" heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>

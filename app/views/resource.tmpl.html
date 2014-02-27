@@ -1,6 +1,6 @@
 <div class="resource-placeholder" ng-class="{'pop-up': methodToAdd}" role="resource-placeholder">
   <div class="resource-container">
-    <div ng-class="{expanded: resourceView.expanded || method}" class='resource' role="resource">
+    <div ng-class="{expanded: resourceView.expanded || selectedMethod}" class='resource' role="resource">
       <div>
         <i class="icon-remove collapse" ng-class="{transparent: !methodToAdd}" ng-click='resourceView.collapseMethod($event)'></i>
 
@@ -36,7 +36,7 @@
            markdown='resource.description'>
       </div>
 
-      <method ng-if="method"></method>
+      <method ng-repeat="method in resource.methods" ng-if="method === selectedMethod"></method>
     </div>
   </div>
 </div>

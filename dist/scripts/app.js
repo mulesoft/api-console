@@ -130,7 +130,7 @@
 
       removeClass: function(element, className, done) {
         var elements = getElements(element);
-        elements.resource.scope().$apply('method = methodToAdd');
+        elements.resource.scope().$apply('selectedMethod = methodToAdd');
 
         elements.placeholder.css('height', '');
         elements.wrapper.css({ 'background-color': '', 'height': '' });
@@ -1404,6 +1404,9 @@ RAML.Inspector = (function() {
 
   var controller = function($scope) {
     $scope.documentation = this;
+    $scope.generateKey = function() {
+      return $scope.resourceView.resourceKey() + ':' + $scope.method.method;
+    };
 
     function hasUriParameters() {
       return $scope.resource.pathSegments.some(function(segment) {
@@ -1533,8 +1536,8 @@ RAML.Inspector = (function() {
     this.expanded = this.DataStore.get(this.resourceKey());
 
     this.initiateExpand = function(method) {
-      if ($scope.method) {
-        $scope.method = method;
+      if ($scope.selectedMethod) {
+        $scope.selectedMethod = method;
         DataStore.set(this.methodKey(), method.method);
       } else {
         $scope.methodToAdd = method;
@@ -1542,7 +1545,7 @@ RAML.Inspector = (function() {
     };
 
     this.expandMethod = function(method) {
-      $scope.method = method;
+      $scope.selectedMethod = method;
       $scope.methodToAdd = method;
       DataStore.set(this.methodKey(), method.method);
     };
@@ -1554,7 +1557,7 @@ RAML.Inspector = (function() {
     };
 
     this.toggleExpansion = function() {
-      if ($scope.methodToAdd || $scope.method) {
+      if ($scope.methodToAdd || $scope.selectedMethod) {
         return;
       }
 
@@ -1616,7 +1619,7 @@ RAML.Inspector = (function() {
         allOthersDisabled = this.tabs.every(function(tab) { return tab.disabled; });
 
     if (allOthersDisabled || previouslyEnabled) {
-      this.select(tab, true);
+      this.select(tab, this.DataStore.get(this.key));
     }
 
     this.tabs.push(tab);
@@ -3332,7 +3335,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
-    "  <tabset key-base='{{resourceView.methodKey()}}'>\n" +
+    "  <tabset key-base='{{ generateKey() }}'>\n" +
     "    <tab heading=\"{{method.method}}\" disabled='true'>\n" +
     "    </tab>\n" +
     "    <tab class=\"request\" role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
@@ -3365,7 +3368,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "\n" +
     "      <div class=\"documentation-section\" ng-if='method.body && documentation.requestsActive'>\n" +
-    "        <body-documentation body=\"method.body\" key-base=\"resourceView.methodKey() + ':request'\"></body-documentation>\n" +
+    "        <body-documentation body=\"method.body\" key-base=\"generateKey() + ':request'\"></body-documentation>\n" +
     "      </div>\n" +
     "    </tab>\n" +
     "    <tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
@@ -3560,7 +3563,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/resource.tmpl.html',
     "<div class=\"resource-placeholder\" ng-class=\"{'pop-up': methodToAdd}\" role=\"resource-placeholder\">\n" +
     "  <div class=\"resource-container\">\n" +
-    "    <div ng-class=\"{expanded: resourceView.expanded || method}\" class='resource' role=\"resource\">\n" +
+    "    <div ng-class=\"{expanded: resourceView.expanded || selectedMethod}\" class='resource' role=\"resource\">\n" +
     "      <div>\n" +
     "        <i class=\"icon-remove collapse\" ng-class=\"{transparent: !methodToAdd}\" ng-click='resourceView.collapseMethod($event)'></i>\n" +
     "\n" +
@@ -3596,7 +3599,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "           markdown='resource.description'>\n" +
     "      </div>\n" +
     "\n" +
-    "      <method ng-if=\"method\"></method>\n" +
+    "      <method ng-repeat=\"method in resource.methods\" ng-if=\"method === selectedMethod\"></method>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
