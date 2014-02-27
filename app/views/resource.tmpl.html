@@ -2,10 +2,10 @@
   <div class="resource-container">
     <div ng-class="{expanded: resourceView.expanded || selectedMethod}" class='resource' role="resource">
       <div>
-        <i class="icon-remove collapse" ng-class="{transparent: !methodToAdd}" ng-click='resourceView.collapseMethod($event)'></i>
+        <i class="icon-remove collapse" ng-if="methodToAdd" ng-click='resourceView.collapseMethod($event)'></i>
 
         <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>
-          <div class="modifiers" ng-show='resourceView.expanded'>
+          <div class="modifiers" ng-class="{expanded: selectedMethod}" ng-show='resourceView.expanded'>
             <span class="modifier-group" ng-if='resource.resourceType'>
               <span class="caption">Type:</span>
               <ul>
