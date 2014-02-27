@@ -12,11 +12,11 @@
     <div collapsible-toggle class="resource" role="resource-group-placeholder" ng-show="collapsed" ng-init="resource = resourceGroup[0]">
       <div class="resource-placeholder" role="resource-placeholder">
         <div class="resource-container">
-          <div class='resource' role="resource">
+          <div class='resource'>
             <div>
-              <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>
+              <div class='summary accordion-toggle'>
                 <h3 class="path">
-                  <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
+                  <span ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
                 </h3>
               </div>
             </div>

@@ -3254,11 +3254,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <div collapsible-toggle class=\"resource\" role=\"resource-group-placeholder\" ng-show=\"collapsed\" ng-init=\"resource = resourceGroup[0]\">\n" +
     "      <div class=\"resource-placeholder\" role=\"resource-placeholder\">\n" +
     "        <div class=\"resource-container\">\n" +
-    "          <div class='resource' role=\"resource\">\n" +
+    "          <div class='resource'>\n" +
     "            <div>\n" +
-    "              <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
+    "              <div class='summary accordion-toggle'>\n" +
     "                <h3 class=\"path\">\n" +
-    "                  <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
+    "                  <span ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
     "                </h3>\n" +
     "              </div>\n" +
     "            </div>\n" +
