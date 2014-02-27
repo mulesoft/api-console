@@ -9,11 +9,19 @@
   <div collapsible collapsed='apiResources.collapsed[apiResources.keyFor(resourceGroup)]' role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups">
     <i collapsible-toggle ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
 
-    <div class="resource" role="resource-group-placeholder" ng-show="collapsed">
-      <div class="summary">
-        <h3 class="path">
-          <span role='segment' ng-repeat='segment in resourceGroup[0].pathSegments'>{{segment.toString()}} </span>
-        </h3>
+    <div collapsible-toggle class="resource" role="resource-group-placeholder" ng-show="collapsed" ng-init="resource = resourceGroup[0]">
+      <div class="resource-placeholder" role="resource-placeholder">
+        <div class="resource-container">
+          <div class='resource' role="resource">
+            <div>
+              <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>
+                <h3 class="path">
+                  <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
