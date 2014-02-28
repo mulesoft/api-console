@@ -63,8 +63,6 @@
 
     function blockScroll(offsetParent, wrapper, console) {
       wrapper.css('top', 0);
-      wrapper.css('bottom', 0);
-      wrapper.css('height', '');
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
       console.addClass('scroll-disabled');
     }
@@ -78,7 +76,6 @@
       console.removeClass('scroll-disabled');
       offsetParent[0].scrollTop = scrollTop;
       wrapper.css('top', scrollTop + 'px');
-      wrapper.css('bottom', '');
     }
 
     function triggerCloseAnimation(resource, description) {
@@ -1577,8 +1574,7 @@ RAML.Inspector = (function() {
         this.expanded = false;
         this.expandMethod(method);
         $scope.$emit('console:blockScroll');
-        $element.children().css('top', 0);
-        $element.children().css('bottom', 0);
+        $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
       } else {
         $scope.$emit('console:restoreScroll');
       }

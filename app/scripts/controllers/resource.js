@@ -50,8 +50,7 @@
         this.expanded = false;
         this.expandMethod(method);
         $scope.$emit('console:blockScroll');
-        $element.children().css('top', 0);
-        $element.children().css('bottom', 0);
+        $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
       } else {
         $scope.$emit('console:restoreScroll');
       }
