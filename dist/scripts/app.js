@@ -63,8 +63,10 @@
 
     function blockScroll(offsetParent, wrapper, console) {
       wrapper.css('top', 0);
+      wrapper.css('bottom', 0);
+      wrapper.css('height', '');
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
-      console.scope().$apply('ramlConsole.scrollDisabled = true');
+      console.addClass('scroll-disabled');
     }
 
     function afterAnimation(cb) {
@@ -73,9 +75,10 @@
 
     function restoreScroll(offsetParent, wrapper, console) {
       var scrollTop = DataStore.get('pop-up:console-scrollTop');
-      console.scope().ramlConsole.scrollDisabled = false;
+      console.removeClass('scroll-disabled');
       offsetParent[0].scrollTop = scrollTop;
       wrapper.css('top', scrollTop + 'px');
+      wrapper.css('bottom', '');
     }
 
     function triggerCloseAnimation(resource, description) {
@@ -1573,10 +1576,11 @@ RAML.Inspector = (function() {
       if (method) {
         this.expanded = false;
         this.expandMethod(method);
-        $scope.ramlConsole.scrollDisabled = true;
-        $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
+        $scope.$emit('console:blockScroll');
+        $element.children().css('top', 0);
+        $element.children().css('bottom', 0);
       } else {
-        $scope.ramlConsole.scrollDisabled = false;
+        $scope.$emit('console:restoreScroll');
       }
     }
   };
@@ -2627,7 +2631,6 @@ RAML.Inspector = (function() {
           var height = inner[0].scrollHeight;
           inner.css('height', height);
         }
-        controller.scrollDisabled = false;
 
         $scope.api = controller.api = RAML.Inspector.create(raml);
         $timeout(function() {
@@ -2637,6 +2640,14 @@ RAML.Inspector = (function() {
 
       ramlParserWrapper.onParseError(function(error) {
         $scope.parseError = error;
+      });
+
+      $scope.$on('console:blockScroll', function() {
+        $el.addClass('scroll-disabled');
+      });
+
+      $scope.$on('console:restoreScroll', function() {
+        $el.removeClass('scroll-disabled');
       });
     };
 
@@ -3529,7 +3540,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/raml-console.tmpl.html',
-    "<article role=\"api-console\" id=\"raml-console\" ng-class=\"{ 'scroll-disabled': ramlConsole.scrollDisabled }\">\n" +
+    "<article role=\"api-console\" id=\"raml-console\">\n" +
     "  <div role=\"error\" ng-if=\"parseError\">\n" +
     "    {{parseError}}\n" +
     "  </div>\n" +
@@ -3576,7 +3587,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <i class=\"icon-remove collapse\" ng-if=\"methodToAdd\" ng-click='resourceView.collapseMethod($event)'></i>\n" +
     "\n" +
     "        <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>\n" +
-    "          <div class=\"modifiers\" ng-class=\"{expanded: selectedMethod}\" ng-show='resourceView.expanded'>\n" +
+    "          <div class=\"modifiers\" ng-class=\"{expanded: selectedMethod}\" ng-show='resourceView.expanded || selectedMethod'>\n" +
     "            <span class=\"modifier-group\" ng-if='resource.resourceType'>\n" +
     "              <span class=\"caption\">Type:</span>\n" +
     "              <ul>\n" +

@@ -88,7 +88,8 @@ describe("RAML.Controllers.Resource", function() {
       });
 
       it('sets child height based on the dataStore', function() {
-        expect(childrenSpy.css).toHaveBeenCalledWith('height', '100px');
+        expect(childrenSpy.css.argsForCall).toContain(['top', 0]);
+        expect(childrenSpy.css.argsForCall).toContain(['bottom', 0]);
       });
 
       it('disables the scroll', function() {
