@@ -5,7 +5,7 @@
         <i class="icon-remove collapse" ng-if="methodToAdd" ng-click='resourceView.collapseMethod($event)'></i>
 
         <div class='summary accordion-toggle' role='resource-summary' ng-click='resourceView.toggleExpansion()'>
-          <div class="modifiers" ng-class="{expanded: selectedMethod}" ng-show='resourceView.expanded'>
+          <div class="modifiers" ng-class="{expanded: selectedMethod}" ng-show='resourceView.expanded || selectedMethod'>
             <span class="modifier-group" ng-if='resource.resourceType'>
               <span class="caption">Type:</span>
               <ul>
