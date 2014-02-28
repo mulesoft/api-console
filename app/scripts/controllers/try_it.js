@@ -25,7 +25,7 @@
     return parsed;
   }
 
-  var apply, setResponse;
+  var apply;
 
   var TryIt = function($scope, DataStore) {
     $scope.apiClient = this;
@@ -55,7 +55,7 @@
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
-    setResponse = function(response) {
+    this.setResponse = function(response) {
       DataStore.set(responseKey, response);
       $scope.apiClient.response = response;
       return response;
@@ -70,7 +70,7 @@
     this.missingUriParameters = false;
     this.disallowedAnonymousRequest = false;
 
-    var response = setResponse({});
+    var response = this.setResponse({});
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -91,7 +91,7 @@
       });
       url = response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
     } catch (e) {
-      setResponse(undefined);
+      this.setResponse(undefined);
       this.missingUriParameters = true;
       return;
     }
