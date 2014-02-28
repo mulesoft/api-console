@@ -1503,7 +1503,7 @@ RAML.Inspector = (function() {
     return parsed;
   }
 
-  var apply, setResponse;
+  var apply;
 
   var TryIt = function($scope, DataStore) {
     $scope.apiClient = this;
@@ -1533,7 +1533,7 @@ RAML.Inspector = (function() {
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
-    setResponse = function(response) {
+    this.setResponse = function(response) {
       DataStore.set(responseKey, response);
       $scope.apiClient.response = response;
       return response;
@@ -1548,7 +1548,7 @@ RAML.Inspector = (function() {
     this.missingUriParameters = false;
     this.disallowedAnonymousRequest = false;
 
-    var response = setResponse({});
+    var response = this.setResponse({});
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -1569,7 +1569,7 @@ RAML.Inspector = (function() {
       });
       url = response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
     } catch (e) {
-      setResponse(undefined);
+      this.setResponse(undefined);
       this.missingUriParameters = true;
       return;
     }
