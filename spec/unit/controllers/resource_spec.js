@@ -19,7 +19,7 @@ describe("RAML.Controllers.Resource", function() {
     var inspected = RAML.Inspector.create(this.api);
     resource = inspected.resources[2];
     methods = resource.methods;
-    scope = { resource: resource, ramlConsole: {} };
+    scope = { resource: resource, $emit: function() {} };
     controller = new RAML.Controllers.Resource(scope, storeSpy);
   });
 
@@ -75,7 +75,7 @@ describe("RAML.Controllers.Resource", function() {
         elementSpy = jasmine.createSpyObj('element', ['children']);
         childrenSpy = jasmine.createSpyObj('children', ['css']);
         elementSpy.children.andReturn(childrenSpy);
-
+        spyOn(scope, '$emit');
         controller = new RAML.Controllers.Resource(scope, storeSpy, elementSpy);
       });
 
@@ -92,7 +92,7 @@ describe("RAML.Controllers.Resource", function() {
       });
 
       it('disables the scroll', function() {
-        expect(scope.ramlConsole.scrollDisabled).toBe(true);
+        expect(scope.$emit).toHaveBeenCalledWith('console:blockScroll');
       });
     });
 

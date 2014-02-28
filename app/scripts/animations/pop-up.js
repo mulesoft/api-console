@@ -58,7 +58,7 @@
     function blockScroll(offsetParent, wrapper, console) {
       wrapper.css('top', 0);
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
-      console.scope().$apply('ramlConsole.scrollDisabled = true');
+      console.addClass('scroll-disabled');
     }
 
     function afterAnimation(cb) {
@@ -67,7 +67,7 @@
 
     function restoreScroll(offsetParent, wrapper, console) {
       var scrollTop = DataStore.get('pop-up:console-scrollTop');
-      console.scope().ramlConsole.scrollDisabled = false;
+      console.removeClass('scroll-disabled');
       offsetParent[0].scrollTop = scrollTop;
       wrapper.css('top', scrollTop + 'px');
     }

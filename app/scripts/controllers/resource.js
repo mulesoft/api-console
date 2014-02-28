@@ -49,10 +49,10 @@
       if (method) {
         this.expanded = false;
         this.expandMethod(method);
-        $scope.ramlConsole.scrollDisabled = true;
+        $scope.$emit('console:blockScroll');
         $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
       } else {
-        $scope.ramlConsole.scrollDisabled = false;
+        $scope.$emit('console:restoreScroll');
       }
     }
   };
