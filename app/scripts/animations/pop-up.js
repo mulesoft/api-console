@@ -101,6 +101,7 @@
           triggerOpenAnimation(elements.offsetParent, elements.wrapper, elements.resource, elements.description);
 
           afterAnimation(function() {
+            elements.wrapper.css('height', '');
             elements.placeholder.css('height', DataStore.get('pop-up:resource-height'));
             blockScroll(elements.offsetParent, elements.wrapper, elements.console);
 
@@ -114,6 +115,7 @@
 
         restoreScroll(elements.offsetParent, elements.wrapper, elements.console);
         elements.wrapper.css('background-color', 'transparent');
+        elements.wrapper.css('height', DataStore.get('pop-up:wrapper-height'));
         elements.resource.css('height', elements.resource[0].getBoundingClientRect().height + 'px'); // Safari loses the resource's height otherwise
 
         setTimeout(function() {

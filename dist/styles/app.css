@@ -3017,6 +3017,7 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
   top: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   background-color: #E6E7EB;
   min-height: 50vh;
 }
