@@ -24,7 +24,8 @@
         model: '=',
         definition: '=',
         placeholder: '=?',
-        invalidClass: '@?'
+        invalidClass: '@?',
+        containedBy: '@'
       }
     };
   };

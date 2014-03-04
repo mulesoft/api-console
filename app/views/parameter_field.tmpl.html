@@ -3,7 +3,7 @@
     <input name="{{name}}" type='file' ng-model='model'/>
   </span>
   <span ng-switch-when="enum">
-    <enum options='definition.enum' model='model'>
+    <enum options='definition.enum' model='model' contained-by="containedBy">
       <input validated-input name="{{name}}" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim="false" constraints='definition' invalid-class='invalidClass'/>
     </enum>
  </span>

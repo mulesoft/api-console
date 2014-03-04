@@ -2296,6 +2296,23 @@ RAML.Inspector = (function() {
         KEY_UP    = 38,
         KEY_ENTER = 13;
 
+    function correctHeight(el, container) {
+      var enumRect = el.getBoundingClientRect(),
+          containerRect = container.getBoundingClientRect(),
+          top = enumRect.top,
+          bottom = enumRect.bottom;
+
+      if (top <= containerRect.top) {
+        top = containerRect.top;
+      }
+
+      if (bottom >= containerRect.bottom) {
+        bottom = containerRect.bottom;
+      }
+
+      return bottom - top;
+    }
+
     var link = function($scope, $el) {
       var filterEnumElements = function() {
         $scope.filteredEnum = $filter('filter')($scope.options, $scope.model);
@@ -2363,6 +2380,23 @@ RAML.Inspector = (function() {
         }
         $scope.$apply();
       });
+
+      $scope.$watch('focused', function() {
+        setTimeout(function() {
+          var ul = $el.find('ul'), container = $el[0].offsetParent;
+          console.log(container);
+
+          if ($scope.containedBy) {
+            container = document.querySelector($scope.containedBy);
+          }
+
+          if(!container) {
+            return;
+          }
+
+          ul.css('height', correctHeight(ul[0], container) + 'px');
+        });
+      });
     };
 
     return {
@@ -2372,7 +2406,8 @@ RAML.Inspector = (function() {
       templateUrl: 'views/enum.tmpl.html',
       scope: {
         options: '=',
-        model: '='
+        model: '=',
+        containedBy: '='
       }
     };
   };
@@ -2553,7 +2588,8 @@ RAML.Inspector = (function() {
         model: '=',
         definition: '=',
         placeholder: '=?',
-        invalidClass: '@?'
+        invalidClass: '@?',
+        containedBy: '@'
       }
     };
   };
@@ -3484,7 +3520,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <input name=\"{{name}}\" type='file' ng-model='model'/>\n" +
     "  </span>\n" +
     "  <span ng-switch-when=\"enum\">\n" +
-    "    <enum options='definition.enum' model='model'>\n" +
+    "    <enum options='definition.enum' model='model' contained-by=\"containedBy\">\n" +
     "      <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim=\"false\" constraints='definition' invalid-class='invalidClass'/>\n" +
     "    </enum>\n" +
     " </span>\n" +
@@ -3730,14 +3766,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <span class=\"segment\">\n" +
     "        <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
     "          <span ng-if='api.baseUri.parameters[token]'>\n" +
-    "            <parameter-field name='token' placeholder='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]' invalid-class='error'></parameter-field>\n" +
+    "            <parameter-field name='token' placeholder='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]' invalid-class='error'\n" +
+    "            contained-by='[role=\"documentation\"]'></parameter-field>\n" +
     "          </span>\n" +
     "          <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
     "        </span>\n" +
     "        <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
     "          <span ng-repeat='token in segment.tokens track by $index'>\n" +
     "            <span ng-if='segment.parameters[token]'>\n" +
-    "              <parameter-field name='token' placeholder='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]' invalid-class='error'></parameter-field>\n" +
+    "              <parameter-field name='token' placeholder='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]' invalid-class='error' contained-by='[role=\"documentation\"]'></parameter-field>\n" +
     "            </span>\n" +
     "            <span class=\"segment\" ng-if=\"!segment.parameters[token]\">{{token}}</span>\n" +
     "          </span>\n" +
@@ -3748,7 +3785,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\" base-key=\"apiClient.baseKey()\"></security-schemes>\n" +
     "    <named-parameters heading=\"Headers\" parameters=\"context.headers\"></named-parameters>\n" +
     "    <named-parameters heading=\"Query Parameters\" parameters=\"context.queryParameters\"></named-parameters>\n" +
-    "    <!-- the ng-if below reinstantiates the try it directive which results in the try it \n" +
+    "    <!-- the ng-if below reinstantiates the try it directive which results in the try it\n" +
     "         section getting updated when a method is selected in the resource popover.\n" +
     "    -->\n" +
     "    <body-content ng-if=\"context.bodyContent\" body=\"context.bodyContent\"></body-content>\n" +

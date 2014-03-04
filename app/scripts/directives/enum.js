@@ -6,6 +6,23 @@
         KEY_UP    = 38,
         KEY_ENTER = 13;
 
+    function correctHeight(el, container) {
+      var enumRect = el.getBoundingClientRect(),
+          containerRect = container.getBoundingClientRect(),
+          top = enumRect.top,
+          bottom = enumRect.bottom;
+
+      if (top <= containerRect.top) {
+        top = containerRect.top;
+      }
+
+      if (bottom >= containerRect.bottom) {
+        bottom = containerRect.bottom;
+      }
+
+      return bottom - top;
+    }
+
     var link = function($scope, $el) {
       var filterEnumElements = function() {
         $scope.filteredEnum = $filter('filter')($scope.options, $scope.model);
@@ -73,6 +90,23 @@
         }
         $scope.$apply();
       });
+
+      $scope.$watch('focused', function() {
+        setTimeout(function() {
+          var ul = $el.find('ul'), container = $el[0].offsetParent;
+          console.log(container);
+
+          if ($scope.containedBy) {
+            container = document.querySelector($scope.containedBy);
+          }
+
+          if(!container) {
+            return;
+          }
+
+          ul.css('height', correctHeight(ul[0], container) + 'px');
+        });
+      });
     };
 
     return {
@@ -82,7 +116,8 @@
       templateUrl: 'views/enum.tmpl.html',
       scope: {
         options: '=',
-        model: '='
+        model: '=',
+        containedBy: '='
       }
     };
   };
