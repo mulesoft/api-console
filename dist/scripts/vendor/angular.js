@@ -16016,6 +16016,8 @@ function validate(ctrl, validatorName, validity, value){
 }
 
 function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
+  scope.OMG = ctrl;
+
   // In composition mode, users are still inputing intermediate text buffer,
   // hold the listener until composition is done.
   // More about composition events: https://developer.mozilla.org/en-US/docs/Web/API/CompositionEvent

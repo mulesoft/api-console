@@ -2711,6 +2711,7 @@ raml-console article#raml-console .autocomplete ul,
   border: 1px solid #cccccc;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  overflow: scroll;
 }
 raml-console article#raml-console .autocomplete ul li,
 #raml-console-loader .autocomplete ul li {
@@ -4596,6 +4597,19 @@ raml-console article#raml-console .method-summary:after,
 raml-console article#raml-console .documentation,
 #raml-console-loader .documentation {
   overflow: auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
 raml-console article#raml-console .documentation .documentation-section,
 #raml-console-loader .documentation .documentation-section {

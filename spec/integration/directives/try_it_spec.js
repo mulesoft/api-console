@@ -696,6 +696,42 @@ describe("RAML.Controllers.tryIt", function() {
     });
   });
 
+  describe("given enumerated parameters", function() {
+    mockHttp(function(mock) {
+      mock
+        .when("get", 'http://www.example.com/resource/a')
+        .respondWith(200, "cool");
+    });
+
+    var raml = createRAML(
+      'title: API With Parameters Where Repeat=True',
+      'baseUri: http://www.example.com',
+      '/resource/{someParam}:',
+      '  uriParameters:',
+      '    someParam:',
+      '      enum: [a, b, c]',
+      '  get:'
+    );
+
+    parseRAML(raml);
+
+    beforeEach(function() {
+      scope = createScopeForTryIt(this.api);
+      $el = compileTemplate('<try-it></try-it>', scope);
+      setFixtures($el);
+    });
+
+    it('executes a request using the selected enumerated value', function() {
+      $el.find('input[name=someParam]').eq(0).fillIn('a');
+      click($el.find('ul li'));
+      click($el.find('button[role="try-it"]'));
+
+      whenTryItCompletes(function() {
+        expect($el.find('.response .status .response-value')).toHaveText('200');
+      });
+    });
+  });
+
   describe("given repeatable parameters", function() {
     var raml = createRAML(
       'title: API With Parameters Where Repeat=True',
