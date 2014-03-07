@@ -64,7 +64,7 @@
         </li>
       </ul>
     </div>
-    <div class="body">
+    <div class="body" ng-if="apiClient.response.body">
       <h5>Body</h5>
       <div class="response-value">
         <div class="code" mode='{{apiClient.response.contentType}}' code-mirror="apiClient.response.body" visible="apiClient.response.body"></div>

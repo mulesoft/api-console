@@ -1533,6 +1533,7 @@ RAML.Inspector = (function() {
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
+
     this.setResponse = function(response) {
       DataStore.set(responseKey, response);
       $scope.apiClient.response = response;
@@ -3515,7 +3516,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </li>\n" +
     "      </ul>\n" +
     "    </div>\n" +
-    "    <div class=\"body\">\n" +
+    "    <div class=\"body\" ng-if=\"apiClient.response.body\">\n" +
     "      <h5>Body</h5>\n" +
     "      <div class=\"response-value\">\n" +
     "        <div class=\"code\" mode='{{apiClient.response.contentType}}' code-mirror=\"apiClient.response.body\" visible=\"apiClient.response.body\"></div>\n" +

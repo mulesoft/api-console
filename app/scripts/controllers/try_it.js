@@ -55,6 +55,7 @@
     apply = function() {
       $scope.$apply.apply($scope, arguments);
     };
+
     this.setResponse = function(response) {
       DataStore.set(responseKey, response);
       $scope.apiClient.response = response;
