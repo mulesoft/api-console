@@ -184,11 +184,13 @@ RAML.Inspector = (function() {
     var currentPrefix, resourceGroups = [];
 
     (resources || []).forEach(function(resource) {
-      if (resource.pathSegments[0].toString().indexOf(currentPrefix) !== 0) {
+      var prefix = resource.pathSegments[0].toString();
+      if (prefix === currentPrefix || prefix.indexOf(currentPrefix + '/') === 0) {
+        resourceGroups[resourceGroups.length-1].push(resource);
+      } else {
         currentPrefix = resource.pathSegments[0].toString();
-        resourceGroups.push([]);
+        resourceGroups.push([resource]);
       }
-      resourceGroups[resourceGroups.length-1].push(resource);
     });
 
     return resourceGroups;
@@ -1699,7 +1701,7 @@ RAML.Inspector = (function() {
     return parsed;
   }
 
-  var apply, setResponse;
+  var apply;
 
   var TryIt = function($scope, DataStore) {
     $scope.apiClient = this;
@@ -1734,7 +1736,7 @@ RAML.Inspector = (function() {
       $scope.$apply.apply($scope, arguments);
     };
 
-    setResponse = function(response) {
+    this.setResponse = function(response) {
       DataStore.set(responseKey, response);
       $scope.apiClient.response = response;
       return response;
@@ -1749,7 +1751,7 @@ RAML.Inspector = (function() {
     this.missingUriParameters = false;
     this.disallowedAnonymousRequest = false;
 
-    var response = setResponse({});
+    var response = this.setResponse({});
 
     function handleResponse(jqXhr) {
       response.body = jqXhr.responseText,
@@ -1770,7 +1772,7 @@ RAML.Inspector = (function() {
       });
       url = response.requestUrl = client.baseUri + pathBuilder(pathBuilder.segmentContexts);
     } catch (e) {
-      setResponse(undefined);
+      this.setResponse(undefined);
       this.missingUriParameters = true;
       return;
     }
@@ -3833,7 +3835,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </li>\n" +
     "      </ul>\n" +
     "    </div>\n" +
-    "    <div class=\"body\">\n" +
+    "    <div class=\"body\" ng-if=\"apiClient.response.body\">\n" +
     "      <h5>Body</h5>\n" +
     "      <div class=\"response-value\">\n" +
     "        <div class=\"code\" mode='{{apiClient.response.contentType}}' code-mirror=\"apiClient.response.body\" visible=\"apiClient.response.body\"></div>\n" +

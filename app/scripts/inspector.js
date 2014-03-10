@@ -34,11 +34,13 @@ RAML.Inspector = (function() {
     var currentPrefix, resourceGroups = [];
 
     (resources || []).forEach(function(resource) {
-      if (resource.pathSegments[0].toString().indexOf(currentPrefix) !== 0) {
+      var prefix = resource.pathSegments[0].toString();
+      if (prefix === currentPrefix || prefix.indexOf(currentPrefix + '/') === 0) {
+        resourceGroups[resourceGroups.length-1].push(resource);
+      } else {
         currentPrefix = resource.pathSegments[0].toString();
-        resourceGroups.push([]);
+        resourceGroups.push([resource]);
       }
-      resourceGroups[resourceGroups.length-1].push(resource);
     });
 
     return resourceGroups;
