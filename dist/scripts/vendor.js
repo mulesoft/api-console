@@ -29445,7 +29445,7 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 
 }).call(this);
 
-},{"./errors":5,"./events":6,"./nodes":9,"./raml":12,"./util":24}],2:[function(require,module,exports){
+},{"./errors":3,"./events":4,"./nodes":7,"./raml":10,"./util":20}],2:[function(require,module,exports){
 var Buffer=require("__browserify_Buffer").Buffer;(function() {
   var MarkedYAMLError, nodes, util, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -29631,8 +29631,12 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
     }
 
     BOOL_VALUES = {
+      on: true,
+      off: false,
       "true": true,
-      "false": false
+      "false": false,
+      yes: true,
+      no: false
     };
 
     TIMESTAMP_REGEX = /^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)(?:(?:[Tt]|[\x20\t]+)([0-9][0-9]?):([0-9][0-9]):([0-9][0-9])(?:\.([0-9]*))?(?:[\x20\t]*(Z|([-+])([0-9][0-9]?)(?::([0-9][0-9]))?))?)?$/;
@@ -30010,1390 +30014,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9,"./util":24,"__browserify_Buffer":65}],3:[function(require,module,exports){
-(function() {
-  var emitter, representer, resolver, serializer, util,
-    __slice = [].slice;
-
-  util = require('./util');
-
-  emitter = require('./emitter');
-
-  serializer = require('./serializer');
-
-  representer = require('./representer');
-
-  resolver = require('./resolver');
-
-  this.make_dumper = function(Emitter, Serializer, Representer, Resolver) {
-    var Dumper, components;
-    if (Emitter == null) {
-      Emitter = emitter.Emitter;
-    }
-    if (Serializer == null) {
-      Serializer = serializer.Serializer;
-    }
-    if (Representer == null) {
-      Representer = representer.Representer;
-    }
-    if (Resolver == null) {
-      Resolver = resolver.Resolver;
-    }
-    components = [Emitter, Serializer, Representer, Resolver];
-    return Dumper = (function() {
-      var component;
-
-      util.extend.apply(util, [Dumper.prototype].concat(__slice.call((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = components.length; _i < _len; _i++) {
-          component = components[_i];
-          _results.push(component.prototype);
-        }
-        return _results;
-      })())));
-
-      function Dumper(stream, options) {
-        var _i, _len, _ref;
-        if (options == null) {
-          options = {};
-        }
-        components[0].call(this, stream, options);
-        _ref = components.slice(1);
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          component = _ref[_i];
-          component.call(this, options);
-        }
-      }
-
-      return Dumper;
-
-    })();
-  };
-
-  this.Dumper = this.make_dumper();
-
-}).call(this);
-
-},{"./emitter":4,"./representer":14,"./resolver":15,"./serializer":20,"./util":24}],4:[function(require,module,exports){
-(function() {
-  var ScalarAnalysis, YAMLError, events, util, _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  events = require('./events');
-
-  util = require('./util');
-
-  YAMLError = require('./errors').YAMLError;
-
-  this.EmitterError = (function(_super) {
-    __extends(EmitterError, _super);
-
-    function EmitterError() {
-      _ref = EmitterError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return EmitterError;
-
-  })(YAMLError);
-
-  /*
-  Emitter expects events obeying the following grammar:
-  
-  stream   ::= STREAM-START document* STREAM-END
-  document ::= DOCUMENT-START node DOCUMENT-END
-  node     ::= SCALA | sequence | mapping
-  sequence ::= SEQUENCE-START node* SEQUENCE-END
-  mapping  ::= MAPPING-START (node node)* MAPPING-END
-  */
-
-
-  this.Emitter = (function() {
-    var C_WHITESPACE, DEFAULT_TAG_PREFIXES, ESCAPE_REPLACEMENTS;
-
-    C_WHITESPACE = '\0 \t\r\n\x85\u2028\u2029';
-
-    DEFAULT_TAG_PREFIXES = {
-      '!': '!',
-      'tag:yaml.org,2002:': '!!'
-    };
-
-    ESCAPE_REPLACEMENTS = {
-      '\0': '0',
-      '\x07': 'a',
-      '\x08': 'b',
-      '\x09': 't',
-      '\x0A': 'n',
-      '\x0B': 'v',
-      '\x0C': 'f',
-      '\x0D': 'r',
-      '\x1B': 'e',
-      '"': '"',
-      '\\': '\\',
-      '\x85': 'N',
-      '\xA0': '_',
-      '\u2028': 'L',
-      '\u2029': 'P'
-    };
-
-    function Emitter(stream, options) {
-      var _ref1;
-      this.stream = stream;
-      this.encoding = null;
-      this.states = [];
-      this.state = this.expect_stream_start;
-      this.events = [];
-      this.event = null;
-      this.indents = [];
-      this.indent = null;
-      this.flow_level = 0;
-      this.root_context = false;
-      this.sequence_context = false;
-      this.mapping_context = false;
-      this.simple_key_context = false;
-      this.line = 0;
-      this.column = 0;
-      this.whitespace = true;
-      this.indentation = true;
-      this.open_ended = false;
-      this.canonical = options.canonical, this.allow_unicode = options.allow_unicode;
-      this.best_indent = 1 < options.indent && options.indent < 10 ? options.indent : 2;
-      this.best_width = options.width > this.indent * 2 ? options.width : 80;
-      this.best_line_break = (_ref1 = options.line_break) === '\r' || _ref1 === '\n' || _ref1 === '\r\n' ? options.line_break : '\n';
-      this.tag_prefixes = null;
-      this.prepared_anchor = null;
-      this.prepared_tag = null;
-      this.analysis = null;
-      this.style = null;
-    }
-
-    /*
-    Reset the state attributes (to clear self-references)
-    */
-
-
-    Emitter.prototype.dispose = function() {
-      this.states = [];
-      return this.state = null;
-    };
-
-    Emitter.prototype.emit = function(event) {
-      var _results;
-      this.events.push(event);
-      _results = [];
-      while (!this.need_more_events()) {
-        this.event = this.events.shift();
-        this.state();
-        _results.push(this.event = null);
-      }
-      return _results;
-    };
-
-    /*
-    In some cases, we wait for a few next events before emitting.
-    */
-
-
-    Emitter.prototype.need_more_events = function() {
-      var event;
-      if (this.events.length === 0) {
-        return true;
-      }
-      event = events[0];
-      if (event instanceof events.DocumentStartEvent) {
-        return this.need_events(1);
-      } else if (event instanceof events.SequenceStartEvent) {
-        return this.need_events(2);
-      } else if (event instanceof events.MappingStartEvent) {
-        return this.need_events(3);
-      } else {
-        return false;
-      }
-    };
-
-    Emitter.prototype.need_events = function(count) {
-      var event, level, _i, _len, _ref1;
-      level = 0;
-      _ref1 = this.events.slice(1);
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        event = _ref1[_i];
-        if (event instanceof events.DocumentStartEvent || event instanceof events.CollectionStartEvent) {
-          level++;
-        } else if (event instanceof events.DocumentEndEvent || event instanceof events.CollectionEndEvent) {
-          level--;
-        } else if (event instanceof StreamEndEvent) {
-          level = -1;
-        }
-        if (level < 0) {
-          return false;
-        }
-      }
-      return this.events.length < count + 1;
-    };
-
-    Emitter.prototype.increase_indent = function(options) {
-      if (options == null) {
-        options = {};
-      }
-      this.indents.push(this.indent);
-      if (this.indent == null) {
-        return this.indent = options.flow ? this.best_indent : 0;
-      } else if (!options.indentless) {
-        return this.indent += this.best_indent;
-      }
-    };
-
-    Emitter.prototype.expect_stream_start = function() {
-      if (this.event instanceof events.StreamStartEvent) {
-        if (this.event.encoding && !('encoding' in this.stream)) {
-          this.encoding = this.event.encoding;
-        }
-        this.write_stream_start();
-        return this.state = this.expect_first_document_start;
-      } else {
-        return this.error('expected StreamStartEvent, but got', this.event);
-      }
-    };
-
-    Emitter.prototype.expect_nothing = function() {
-      return this.error('expected nothing, but got', this.event);
-    };
-
-    Emitter.prototype.expect_first_document_start = function() {
-      return this.expect_document_start(true);
-    };
-
-    Emitter.prototype.expect_document_start = function(first) {
-      var explicit, handle, k, prefix, _i, _len, _ref1;
-      if (first == null) {
-        first = false;
-      }
-      if (this.event instanceof events.DocumentStartEvent) {
-        if ((this.event.version || this.event.tags) && this.open_ended) {
-          this.write_indicator('...', true);
-          this.write_indent();
-        }
-        if (this.event.version) {
-          this.write_version_directive(this.prepare_version(this.event.version));
-        }
-        this.tag_prefixes = util.clone(DEFAULT_TAG_PREFIXES);
-        if (this.event.tags) {
-          _ref1 = ((function() {
-            var _ref1, _results;
-            _ref1 = this.event.tags;
-            _results = [];
-            for (k in _ref1) {
-              if (!__hasProp.call(_ref1, k)) continue;
-              _results.push(k);
-            }
-            return _results;
-          }).call(this)).sort();
-          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-            handle = _ref1[_i];
-            prefix = this.event.tags[handle];
-            this.tag_prefixes[prefix] = handle;
-            this.write_tag_directive(this.prepare_tag_handle(handle), this.prepare_tag_prefix(prefix));
-          }
-        }
-        explicit = !first || this.event.explicit || this.canonical || this.event.version || this.event.tags || this.check_empty_document();
-        if (explicit) {
-          this.write_indent();
-          this.write_indicator('---', true);
-          if (this.canonical) {
-            this.write_indent();
-          }
-        }
-        return this.state = this.expect_document_root;
-      } else if (this.event instanceof events.StreamEndEvent) {
-        if (this.open_ended) {
-          this.write_indicator('...', true);
-          this.write_indent();
-        }
-        this.write_stream_end();
-        return this.state = this.expect_nothing;
-      } else {
-        return this.error('expected DocumentStartEvent, but got', this.event);
-      }
-    };
-
-    Emitter.prototype.expect_document_end = function() {
-      if (this.event instanceof events.DocumentEndEvent) {
-        this.write_indent();
-        if (this.event.explicit) {
-          this.write_indicator('...', true);
-          this.write_indent();
-        }
-        this.flush_stream();
-        return this.state = this.expect_document_start;
-      } else {
-        return this.error('expected DocumentEndEvent, but got', this.event);
-      }
-    };
-
-    Emitter.prototype.expect_document_root = function() {
-      this.states.push(this.expect_document_end);
-      return this.expect_node({
-        root: true
-      });
-    };
-
-    Emitter.prototype.expect_node = function(expect) {
-      if (expect == null) {
-        expect = {};
-      }
-      this.root_context = !!expect.root;
-      this.sequence_context = !!expect.sequence;
-      this.mapping_context = !!expect.mapping;
-      this.simple_key_context = !!expect.simple_key;
-      if (this.event instanceof events.AliasEvent) {
-        return this.expect_alias();
-      } else if (this.event instanceof events.ScalarEvent || this.event instanceof events.CollectionStartEvent) {
-        this.process_anchor('&');
-        this.process_tag();
-        if (this.event instanceof events.ScalarEvent) {
-          return this.expect_scalar();
-        } else if (this.event instanceof events.SequenceStartEvent) {
-          if (this.flow_level || this.canonical || this.event.flow_style || this.check_empty_sequence()) {
-            return this.expect_flow_sequence();
-          } else {
-            return this.expect_block_sequence();
-          }
-        } else if (this.event instanceof events.MappingStartEvent) {
-          if (this.flow_level || this.canonical || this.event.flow_style || this.check_empty_mapping()) {
-            return this.expect_flow_mapping();
-          } else {
-            return this.expect_block_mapping();
-          }
-        }
-      } else {
-        return this.error('expected NodeEvent, but got', this.event);
-      }
-    };
-
-    Emitter.prototype.expect_alias = function() {
-      if (!this.event.anchor) {
-        this.error('anchor is not specified for alias');
-      }
-      this.process_anchor('*');
-      return this.state = this.states.pop();
-    };
-
-    Emitter.prototype.expect_scalar = function() {
-      this.increase_indent({
-        flow: true
-      });
-      this.process_scalar();
-      this.indent = this.indents.pop();
-      return this.state = this.states.pop();
-    };
-
-    Emitter.prototype.expect_flow_sequence = function() {
-      this.write_indicator('[', true, {
-        whitespace: true
-      });
-      this.flow_level++;
-      this.increase_indent({
-        flow: true
-      });
-      return this.state = this.expect_first_flow_sequence_item;
-    };
-
-    Emitter.prototype.expect_first_flow_sequence_item = function() {
-      if (this.event instanceof events.SequenceEndEvent) {
-        this.indent = this.indents.pop();
-        this.flow_level--;
-        this.write_indicator(']', false);
-        return this.state = this.states.pop();
-      } else {
-        if (this.canonical || this.column > this.best_width) {
-          this.write_indent();
-        }
-        this.states.push(this.expect_flow_sequence_item);
-        return this.expect_node({
-          sequence: true
-        });
-      }
-    };
-
-    Emitter.prototype.expect_flow_sequence_item = function() {
-      if (this.event instanceof events.SequenceEndEvent) {
-        this.indent = this.indents.pop();
-        this.flow_level--;
-        if (this.canonical) {
-          this.write_indicator(',', false);
-          this.write_indent();
-        }
-        this.write_indicator(']', false);
-        return this.state = this.states.pop();
-      } else {
-        this.write_indicator(',', false);
-        if (this.canonical || this.column > this.best_width) {
-          this.write_indent();
-        }
-        this.states.push(this.expect_flow_sequence_item);
-        return this.expect_node({
-          sequence: true
-        });
-      }
-    };
-
-    Emitter.prototype.expect_flow_mapping = function() {
-      this.write_indicator('{', true, {
-        whitespace: true
-      });
-      this.flow_level++;
-      this.increase_indent({
-        flow: true
-      });
-      return this.state = this.expect_first_flow_mapping_key;
-    };
-
-    Emitter.prototype.expect_first_flow_mapping_key = function() {
-      if (this.event instanceof events.MappingEndEvent) {
-        this.indent = this.indents.pop();
-        this.flow_level--;
-        this.write_indicator('}', false);
-        return this.state = this.states.pop();
-      } else {
-        if (this.canonical || this.column > this.best_width) {
-          this.write_indent();
-        }
-        if (!this.canonical && this.check_simple_key()) {
-          this.states.push(this.expect_flow_mapping_simple_value);
-          return this.expect_node({
-            mapping: true,
-            simple_key: true
-          });
-        } else {
-          this.write_indicator('?', true);
-          this.states.push(this.expect_flow_mapping_value);
-          return this.expect_node({
-            mapping: true
-          });
-        }
-      }
-    };
-
-    Emitter.prototype.expect_flow_mapping_key = function() {
-      if (this.event instanceof events.MappingEndEvent) {
-        this.indent = this.indents.pop();
-        this.flow_level--;
-        if (this.canonical) {
-          this.write_indicator(',', false);
-          this.write_indent();
-        }
-        this.write_indicator('}', false);
-        return this.state = this.states.pop();
-      } else {
-        this.write_indicator(',', false);
-        if (this.canonical || this.column > this.best_width) {
-          this.write_indent();
-        }
-        if (!this.canonical && this.check_simple_key()) {
-          this.states.push(this.expect_flow_mapping_simple_value);
-          return this.expect_node({
-            mapping: true,
-            simple_key: true
-          });
-        } else {
-          this.write_indicator('?', true);
-          this.states.push(this.expect_flow_mapping_value);
-          return this.expect_node({
-            mapping: true
-          });
-        }
-      }
-    };
-
-    Emitter.prototype.expect_flow_mapping_simple_value = function() {
-      this.write_indicator(':', false);
-      this.states.push(this.expect_flow_mapping_key);
-      return this.expect_node({
-        mapping: true
-      });
-    };
-
-    Emitter.prototype.expect_flow_mapping_value = function() {
-      if (this.canonical || this.column > this.best_width) {
-        this.write_indent();
-      }
-      this.write_indicator(':', true);
-      this.states.push(this.expect_flow_mapping_key);
-      return this.expect_node({
-        mapping: true
-      });
-    };
-
-    Emitter.prototype.expect_block_sequence = function() {
-      var indentless;
-      indentless = this.mapping_context && !this.indentation;
-      this.increase_indent({
-        indentless: indentless
-      });
-      return this.state = this.expect_first_block_sequence_item;
-    };
-
-    Emitter.prototype.expect_first_block_sequence_item = function() {
-      return this.expect_block_sequence_item(true);
-    };
-
-    Emitter.prototype.expect_block_sequence_item = function(first) {
-      if (first == null) {
-        first = false;
-      }
-      if (!first && this.event instanceof events.SequenceEndEvent) {
-        this.indent = this.indents.pop();
-        return this.state = this.states.pop();
-      } else {
-        this.write_indent();
-        this.write_indicator('-', true, {
-          indentation: true
-        });
-        this.states.push(this.expect_block_sequence_item);
-        return this.expect_node({
-          sequence: true
-        });
-      }
-    };
-
-    Emitter.prototype.expect_block_mapping = function() {
-      this.increase_indent();
-      return this.state = this.expect_first_block_mapping_key;
-    };
-
-    Emitter.prototype.expect_first_block_mapping_key = function() {
-      return this.expect_block_mapping_key(true);
-    };
-
-    Emitter.prototype.expect_block_mapping_key = function(first) {
-      if (first == null) {
-        first = false;
-      }
-      if (!first && this.event instanceof events.MappingEndEvent) {
-        this.indent = this.indents.pop();
-        return this.state = this.states.pop();
-      } else {
-        this.write_indent();
-        if (this.check_simple_key()) {
-          this.states.push(this.expect_block_mapping_simple_value);
-          return this.expect_node({
-            mapping: true,
-            simple_key: true
-          });
-        } else {
-          this.write_indicator('?', true, {
-            indentation: true
-          });
-          this.states.push(this.expect_block_mapping_value);
-          return this.expect_node({
-            mapping: true
-          });
-        }
-      }
-    };
-
-    Emitter.prototype.expect_block_mapping_simple_value = function() {
-      this.write_indicator(':', false);
-      this.states.push(this.expect_block_mapping_key);
-      return this.expect_node({
-        mapping: true
-      });
-    };
-
-    Emitter.prototype.expect_block_mapping_value = function() {
-      this.write_indent();
-      this.write_indicator(':', true, {
-        indentation: true
-      });
-      this.states.push(this.expect_block_mapping_key);
-      return this.expect_node({
-        mapping: true
-      });
-    };
-
-    Emitter.prototype.check_empty_document = function() {
-      var event;
-      if (!(this.event instanceof events.DocumentStartEvent) || this.events.length === 0) {
-        return false;
-      }
-      event = this.events[0];
-      return event instanceof events.ScalarEvent && (event.anchor == null) && (event.tag == null) && event.implicit && event.value === '';
-    };
-
-    Emitter.prototype.check_empty_sequence = function() {
-      return this.event instanceof events.SequenceStartEvent && this.events[0] instanceof events.SequenceEndEvent;
-    };
-
-    Emitter.prototype.check_empty_mapping = function() {
-      return this.event instanceof events.MappingStartEvent && this.events[0] instanceof events.MappingEndEvent;
-    };
-
-    Emitter.prototype.check_simple_key = function() {
-      var length;
-      length = 0;
-      if (this.event instanceof events.NodeEvent && (this.event.anchor != null)) {
-        if (this.prepared_anchor == null) {
-          this.prepared_anchor = this.prepare_anchor(this.event.anchor);
-        }
-        length += this.prepared_anchor.length;
-      }
-      if ((this.event.tag != null) && (this.event instanceof events.ScalarEvent || this.event instanceof events.CollectionStartEvent)) {
-        if (this.prepared_tag == null) {
-          this.prepared_tag = this.prepare_tag(this.event.tag);
-        }
-        length += this.prepared_tag.length;
-      }
-      if (this.event instanceof events.ScalarEvent) {
-        if (this.analysis == null) {
-          this.analysis = this.analyze_scalar(this.event.value);
-        }
-        length += this.analysis.scalar.length;
-      }
-      return length < 128 && (this.event instanceof events.AliasEvent || (this.event instanceof events.ScalarEvent && !this.analysis.empty && !this.analysis.multiline) || this.check_empty_sequence() || this.check_empty_mapping());
-    };
-
-    Emitter.prototype.process_anchor = function(indicator) {
-      if (this.event.anchor == null) {
-        this.prepared_anchor = null;
-        return;
-      }
-      if (this.prepared_anchor == null) {
-        this.prepared_anchor = this.prepare_anchor(this.event.anchor);
-      }
-      if (this.prepared_anchor) {
-        this.write_indicator("" + indicator + this.prepared_anchor, true);
-      }
-      return this.prepared_anchor = null;
-    };
-
-    Emitter.prototype.process_tag = function() {
-      var tag;
-      tag = this.event.tag;
-      if (this.event instanceof events.ScalarEvent) {
-        if (this.style == null) {
-          this.style = this.choose_scalar_style();
-        }
-        if ((!this.canonical || (tag == null)) && ((this.style === '' && this.event.implicit[0]) || (this.style !== '' && this.event.implicit[1]))) {
-          this.prepared_tag = null;
-          return;
-        }
-        if (this.event.implicit[0] && (tag == null)) {
-          tag = '!';
-          this.prepared_tag = null;
-        }
-      } else if ((!this.canonical || (this.tag == null)) && this.event.implicit) {
-        this.prepared_tag = null;
-        return;
-      }
-      if (tag == null) {
-        this.error('tag is not specified');
-      }
-      if (this.prepared_tag == null) {
-        this.prepared_tag = this.prepare_tag(tag);
-      }
-      this.write_indicator(this.prepared_tag, true);
-      return this.prepared_tag = null;
-    };
-
-    Emitter.prototype.process_scalar = function() {
-      var split;
-      if (this.analysis == null) {
-        this.analysis = this.analyze_scalar(this.event.value);
-      }
-      if (this.style == null) {
-        this.style = this.choose_scalar_style();
-      }
-      split = !this.simple_key_context;
-      switch (this.style) {
-        case '"':
-          this.write_double_quoted(this.analysis.scalar, split);
-          break;
-        case "'":
-          this.write_single_quoted(this.analysis.scalar, split);
-          break;
-        case '>':
-          this.write_folded(this.analysis.scalar);
-          break;
-        case '|':
-          this.write_literal(this.analysis.scalar);
-          break;
-        default:
-          this.write_plain(this.analysis.scalar, split);
-      }
-      this.analysis = null;
-      return this.style = null;
-    };
-
-    Emitter.prototype.choose_scalar_style = function() {
-      var _ref1;
-      if (this.analysis == null) {
-        this.analysis = this.analyze_scalar(this.event.value);
-      }
-      if (this.event.style === '"' || this.canonical) {
-        return '"';
-      }
-      if (!this.event.style && this.event.implicit[0] && !(this.simple_key_context && (this.analysis.empty || this.analysis.multiline)) && ((this.flow_level && this.analysis.allow_flow_plain) || (!this.flow_level && this.analysis.allow_block_plain))) {
-        return '';
-      }
-      if (this.event.style && (_ref1 = this.event.style, __indexOf.call('|>', _ref1) >= 0) && !this.flow_level && !this.simple_key_context && this.analysis.allow_block) {
-        return this.event.style;
-      }
-      if (!(this.event.style || this.event.style === "'") && this.analysis.allow_single_quoted && !(this.simple_key_context && this.analysis.multiline)) {
-        return "'";
-      }
-      return '"';
-    };
-
-    Emitter.prototype.prepare_version = function(_arg) {
-      var major, minor, version;
-      major = _arg[0], minor = _arg[1];
-      version = "" + major + "." + minor;
-      if (major === 1) {
-        return version;
-      } else {
-        return this.error('unsupported YAML version', version);
-      }
-    };
-
-    Emitter.prototype.prepare_tag_handle = function(handle) {
-      var char, _i, _len, _ref1;
-      if (!handle) {
-        this.error('tag handle must not be empty');
-      }
-      if (handle[0] !== '!' || handle.slice(-1) !== '!') {
-        this.error("tag handle must start and end with '!':", handle);
-      }
-      _ref1 = handle.slice(1, -1);
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        char = _ref1[_i];
-        if (!(('0' <= char && char <= '9') || 'A' <= char('Z' || ('a' <= char && char <= 'z') || __indexOf.call('-_', char) >= 0))) {
-          this.error("invalid character '" + char + "' in the tag handle:", handle);
-        }
-      }
-      return handle;
-    };
-
-    Emitter.prototype.prepare_tag_prefix = function(prefix) {
-      var char, chunks, end, start;
-      if (!prefix) {
-        this.error('tag prefix must not be empty');
-      }
-      chunks = [];
-      start = 0;
-      end = +(prefix[0] === '!');
-      while (end < prefix.length) {
-        char = prefix[end];
-        if (('0' <= char && char <= '9') || ('A' <= char && char <= 'Z') || ('a' <= char && char <= 'z') || __indexOf.call('-;/?!:@&=+$,_.~*\'()[]', char) >= 0) {
-          end++;
-        } else {
-          if (start < end) {
-            chunks.push(prefix.slice(start, end));
-          }
-          start = end = end + 1;
-          chunks.push(char);
-        }
-      }
-      if (start < end) {
-        chunks.push(prefix.slice(start, end));
-      }
-      return chunks.join('');
-    };
-
-    Emitter.prototype.prepare_tag = function(tag) {
-      var char, chunks, end, handle, k, prefix, start, suffix, suffix_text, _i, _len, _ref1;
-      if (!tag) {
-        this.error('tag must not be empty');
-      }
-      if (tag === '!') {
-        return tag;
-      }
-      handle = null;
-      suffix = tag;
-      _ref1 = ((function() {
-        var _ref1, _results;
-        _ref1 = this.tag_prefixes;
-        _results = [];
-        for (k in _ref1) {
-          if (!__hasProp.call(_ref1, k)) continue;
-          _results.push(k);
-        }
-        return _results;
-      }).call(this)).sort();
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        prefix = _ref1[_i];
-        if (tag.indexOf(prefix) === 0 && (prefix === '!' || prefix.length < tag.length)) {
-          handle = this.tag_prefixes[prefix];
-          suffix = tag.slice(prefix.length);
-        }
-      }
-      chunks = [];
-      start = end = 0;
-      while (end < suffix.length) {
-        char = suffix[end];
-        if (('0' <= char && char <= '9') || ('A' <= char && char <= 'Z') || ('a' <= char && char <= 'z') || __indexOf.call('-;/?!:@&=+$,_.~*\'()[]', char) >= 0 || (char === '!' && handle !== '!')) {
-          end++;
-        } else {
-          if (start < end) {
-            chunks.push(suffix.slice(start, end));
-          }
-          start = end = end + 1;
-          chunks.push(char);
-        }
-      }
-      if (start < end) {
-        chunks.push(suffix.slice(start, end));
-      }
-      suffix_text = chunks.join('');
-      if (handle) {
-        return "" + handle + suffix_text;
-      } else {
-        return "!<" + suffix_text + ">";
-      }
-    };
-
-    Emitter.prototype.prepare_anchor = function(anchor) {
-      var char, _i, _len;
-      if (!anchor) {
-        this.error('anchor must not be empty');
-      }
-      for (_i = 0, _len = anchor.length; _i < _len; _i++) {
-        char = anchor[_i];
-        if (!(('0' <= char && char <= '9') || ('A' <= char && char <= 'Z') || ('a' <= char && char <= 'z') || __indexOf.call('-_', char) >= 0)) {
-          this.error("invalid character '" + char + "' in the anchor:", anchor);
-        }
-      }
-      return anchor;
-    };
-
-    Emitter.prototype.analyze_scalar = function(scalar) {
-      var allow_block, allow_block_plain, allow_double_quoted, allow_flow_plain, allow_single_quoted, block_indicators, break_space, char, flow_indicators, followed_by_whitespace, index, leading_break, leading_space, line_breaks, preceded_by_whitespace, previous_break, previous_space, space_break, special_characters, trailing_break, trailing_space, unicode_characters, _i, _len, _ref1, _ref2;
-      if (!scalar) {
-        new ScalarAnalysis(scalar, true, false, false, true, true, true, false);
-      }
-      block_indicators = false;
-      flow_indicators = false;
-      line_breaks = false;
-      special_characters = false;
-      unicode_characters = false;
-      leading_space = false;
-      leading_break = false;
-      trailing_space = false;
-      trailing_break = false;
-      break_space = false;
-      space_break = false;
-      if (scalar.indexOf('---') === 0 || scalar.indexOf('...') === 0) {
-        block_indicators = true;
-        flow_indicators = true;
-      }
-      preceded_by_whitespace = true;
-      followed_by_whitespace = scalar.length === 1 || (_ref1 = scalar[1], __indexOf.call('\0 \t\r\n\x85\u2028\u2029', _ref1) >= 0);
-      previous_space = false;
-      previous_break = false;
-      index = 0;
-      for (index = _i = 0, _len = scalar.length; _i < _len; index = ++_i) {
-        char = scalar[index];
-        if (index === 0) {
-          if (__indexOf.call('#,[]{}&*!|>\'"%@`', char) >= 0 || (char === '-' && followed_by_whitespace)) {
-            flow_indicators = true;
-            block_indicators = true;
-          } else if (__indexOf.call('?:', char) >= 0) {
-            flow_indicators = true;
-            if (followed_by_whitespace) {
-              block_indicators = true;
-            }
-          }
-        } else {
-          if (__indexOf.call(',?[]{}', char) >= 0) {
-            flow_indicators = true;
-          } else if (char === ':') {
-            flow_indicators = true;
-            if (followed_by_whitespace) {
-              block_indicators = true;
-            }
-          } else if (char === '#' && preceded_by_whitespace) {
-            flow_indicators = true;
-            block_indicators = true;
-          }
-        }
-        if (__indexOf.call('\n\x85\u2028\u2029', char) >= 0) {
-          line_breaks = true;
-        }
-        if (!(char === '\n' || ('\x20' <= char && char <= '\x7e'))) {
-          if (char !== '\uFEFF' && (char === '\x85' || ('\xA0' <= char && char <= '\uD7FF') || ('\uE000' <= char && char <= '\uFFFD'))) {
-            unicode_characters = true;
-            if (!this.allow_unicode) {
-              special_characters = true;
-            }
-          } else {
-            special_characters = true;
-          }
-        }
-        if (char === ' ') {
-          if (index === 0) {
-            leading_space = true;
-          }
-          if (index === scalar.length - 1) {
-            trailing_space = true;
-          }
-          if (previous_break) {
-            break_space = true;
-          }
-          previous_break = false;
-          previous_space = true;
-        } else if (__indexOf.call('\n\x85\u2028\u2029', char) >= 0) {
-          if (index === 0) {
-            leading_break = true;
-          }
-          if (index === scalar.length - 1) {
-            trailing_break = true;
-          }
-          if (previous_space) {
-            space_break = true;
-          }
-          previous_break = true;
-          previous_space = false;
-        } else {
-          previous_break = false;
-          previous_space = false;
-        }
-        preceded_by_whitespace = __indexOf.call(C_WHITESPACE, char) >= 0;
-        followed_by_whitespace = index + 2 >= scalar.length || (_ref2 = scalar[index + 2], __indexOf.call(C_WHITESPACE, _ref2) >= 0);
-      }
-      allow_flow_plain = true;
-      allow_block_plain = true;
-      allow_single_quoted = true;
-      allow_double_quoted = true;
-      allow_block = true;
-      if (leading_space || leading_break || trailing_space || trailing_break) {
-        allow_flow_plain = allow_block_plain = false;
-      }
-      if (trailing_space) {
-        allow_block = false;
-      }
-      if (break_space) {
-        allow_flow_plain = allow_block_plain = allow_single_quoted = false;
-      }
-      if (space_break || special_characters) {
-        allow_flow_plain = allow_block_plain = allow_single_quoted = allow_block = false;
-      }
-      if (line_breaks) {
-        allow_flow_plain = allow_block_plain = false;
-      }
-      if (flow_indicators) {
-        allow_flow_plain = false;
-      }
-      if (block_indicators) {
-        allow_block_plain = false;
-      }
-      return new ScalarAnalysis(scalar, false, line_breaks, allow_flow_plain, allow_block_plain, allow_single_quoted, allow_double_quoted, allow_block);
-    };
-
-    /*
-    Write BOM if needed.
-    */
-
-
-    Emitter.prototype.write_stream_start = function() {
-      if (this.encoding && this.encoding.indexOf('utf-16') === 0) {
-        this.stream.write('\uFEFF', this.encoding);
-      }
-      return this.stream.write('#%RAML 0.8\n');
-    };
-
-    Emitter.prototype.write_stream_end = function() {
-      return this.flush_stream();
-    };
-
-    Emitter.prototype.write_indicator = function(indicator, need_whitespace, options) {
-      var data;
-      if (options == null) {
-        options = {};
-      }
-      data = this.whitespace || !need_whitespace ? indicator : ' ' + indicator;
-      this.whitespace = !!options.whitespace;
-      this.indentation && (this.indentation = !!options.indentation);
-      this.column += data.length;
-      this.open_ended = false;
-      return this.stream.write(data, this.encoding);
-    };
-
-    Emitter.prototype.write_indent = function() {
-      var data, indent, _ref1;
-      indent = (_ref1 = this.indent) != null ? _ref1 : 0;
-      if (!this.indentation || this.column > indent || (this.column === indent && !this.whitespace)) {
-        this.write_line_break();
-      }
-      if (this.column < indent) {
-        this.whitespace = true;
-        data = new Array(indent - this.column + 1).join(' ');
-        this.column = indent;
-        return this.stream.write(data, this.encoding);
-      }
-    };
-
-    Emitter.prototype.write_line_break = function(data) {
-      this.whitespace = true;
-      this.indentation = true;
-      this.line += 1;
-      this.column = 0;
-      return this.stream.write(data != null ? data : this.best_line_break, this.encoding);
-    };
-
-    Emitter.prototype.write_version_directive = function(version_text) {
-      this.stream.write("%%YAML " + version_text, this.encoding);
-      return this.write_line_break();
-    };
-
-    Emitter.prototype.write_tag_directive = function(handle_text, prefix_text) {
-      this.stream.write("%%TAG " + handle_text + " " + prefix_text, this.encoding);
-      return this.write_line_break();
-    };
-
-    Emitter.prototype.write_single_quoted = function(text, split) {
-      var br, breaks, char, data, end, spaces, start, _i, _len, _ref1;
-      if (split == null) {
-        split = true;
-      }
-      this.write_indicator("'", true);
-      spaces = false;
-      breaks = false;
-      start = end = 0;
-      while (end <= text.length) {
-        char = text[end];
-        if (spaces) {
-          if ((char == null) || char !== ' ') {
-            if (start + 1 === end && this.column > this.best_width && split && start !== 0 && end !== text.length) {
-              this.write_indent();
-            } else {
-              data = text.slice(start, end);
-              this.column += data.length;
-              this.stream.write(data, this.encoding);
-            }
-            start = end;
-          }
-        } else if (breaks) {
-          if ((char == null) || __indexOf.call('\n\x85\u2028\u2029', char) < 0) {
-            if (text[start] === '\n') {
-              this.write_line_break();
-            }
-            _ref1 = text.slice(start, end);
-            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-              br = _ref1[_i];
-              if (br === '\n') {
-                this.write_line_break();
-              } else {
-                this.write_line_break(br);
-              }
-            }
-            this.write_indent();
-            start = end;
-          }
-        } else if (((char == null) || __indexOf.call(' \n\x85\u2028\u2029', char) >= 0 || char === "'") && start < end) {
-          data = text.slice(start, end);
-          this.column += data.length;
-          this.stream.write(data, this.encoding);
-          start = end;
-        }
-        if (char === "'") {
-          this.column += 2;
-          this.stream.write("''", this.encoding);
-          start = end + 1;
-        }
-        if (char != null) {
-          spaces = char === ' ';
-          breaks = __indexOf.call('\n\x85\u2028\u2029', char) >= 0;
-        }
-        end++;
-      }
-      return this.write_indicator("'", false);
-    };
-
-    Emitter.prototype.write_double_quoted = function(text, split) {
-      var char, data, end, start;
-      if (split == null) {
-        split = true;
-      }
-      this.write_indicator('"', true);
-      start = end = 0;
-      while (end <= text.length) {
-        char = text[end];
-        if ((char == null) || __indexOf.call('"\\\x85\u2028\u2029\uFEFF', char) >= 0 || !(('\x20' <= char && char <= '\x7E') || (this.allow_unicode && (('\xA0' <= char && char <= '\uD7FF') || ('\uE000' <= char && char <= '\uFFFD'))))) {
-          if (start < end) {
-            data = text.slice(start, end);
-            this.column += data.length;
-            this.stream.write(data, this.encoding);
-            start = end;
-          }
-          if (char != null) {
-            data = char in ESCAPE_REPLACEMENTS ? '\\' + ESCAPE_REPLACEMENTS[char] : char <= '\xFF' ? "\\x" + (util.pad_left(util.to_hex(char), '0', 2)) : char <= '\uFFFF' ? "\\u" + (util.pad_left(util.to_hex(char), '0', 4)) : "\\U" + (util.pad_left(util.to_hex(char), '0', 16));
-            this.column += data.length;
-            this.stream.write(data, this.encoding);
-            start = end + 1;
-          }
-        }
-        if (split && (0 < end && end < text.length - 1) && (char === ' ' || start >= end) && this.column + (end - start) > this.best_width) {
-          data = "" + text.slice(start, end) + "\\";
-          if (start < end) {
-            start = end;
-          }
-          this.column += data.length;
-          this.stream.write(data, this.encoding);
-          this.write_indent();
-          this.whitespace = false;
-          this.indentation = false;
-          if (text[start] === ' ') {
-            data = '\\';
-            this.column += data.length;
-            this.stream.write(data, this.encoding);
-          }
-        }
-        end++;
-      }
-      return this.write_indicator('"', false);
-    };
-
-    Emitter.prototype.write_folded = function(text) {
-      var br, breaks, char, data, end, hints, leading_space, spaces, start, _i, _len, _ref1, _results;
-      hints = this.determine_block_hints(text);
-      this.write_indicator(">" + hints, true);
-      if (hints.slice(-1) === '+') {
-        this.open_ended = true;
-      }
-      this.write_line_break();
-      leading_space = true;
-      breaks = true;
-      spaces = false;
-      start = end = 0;
-      _results = [];
-      while (end <= text.length) {
-        char = text[end];
-        if (breaks) {
-          if ((char == null) || __indexOf.call('\n\x85\u2028\u2029', char) < 0) {
-            if (!leading_space && (char != null) && char !== ' ' && text[start] === '\n') {
-              this.write_line_break();
-            }
-            leading_space = char === ' ';
-            _ref1 = text.slice(start, end);
-            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-              br = _ref1[_i];
-              if (br === '\n') {
-                this.write_line_break();
-              } else {
-                this.write_line_break(br);
-              }
-            }
-            if (char != null) {
-              this.write_indent();
-            }
-            start = end;
-          }
-        } else if (spaces) {
-          if (char !== ' ') {
-            if (start + 1 === end && this.column > this.best_width) {
-              this.write_indent();
-            } else {
-              data = text.slice(start, end);
-              this.column += data.length;
-              this.stream.write(data, this.encoding);
-            }
-            start = end;
-          }
-        } else if ((char == null) || __indexOf.call(' \n\x85\u2028\u2029', char) >= 0) {
-          data = text.slice(start, end);
-          this.column += data.length;
-          this.stream.write(data, this.encoding);
-          if (char == null) {
-            this.write_line_break();
-          }
-          start = end;
-        }
-        if (char != null) {
-          breaks = __indexOf.call('\n\x85\u2028\u2029', char) >= 0;
-          spaces = char === ' ';
-        }
-        _results.push(end++);
-      }
-      return _results;
-    };
-
-    Emitter.prototype.write_literal = function(text) {
-      var br, breaks, char, data, end, hints, start, _i, _len, _ref1, _results;
-      hints = this.determine_block_hints(text);
-      this.write_indicator("|" + hints, true);
-      if (hints.slice(-1) === '+') {
-        this.open_ended = true;
-      }
-      this.write_line_break();
-      breaks = true;
-      start = end = 0;
-      _results = [];
-      while (end <= text.length) {
-        char = text[end];
-        if (breaks) {
-          if ((char == null) || __indexOf.call('\n\x85\u2028\u2029', char) < 0) {
-            _ref1 = text.slice(start, end);
-            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-              br = _ref1[_i];
-              if (br === '\n') {
-                this.write_line_break();
-              } else {
-                this.write_line_break(br);
-              }
-            }
-            if (char != null) {
-              this.write_indent();
-            }
-            start = end;
-          }
-        } else {
-          if ((char == null) || __indexOf.call('\n\x85\u2028\u2029', char) >= 0) {
-            data = text.slice(start, end);
-            this.stream.write(data, this.encoding);
-            if (char == null) {
-              this.write_line_break();
-            }
-            start = end;
-          }
-        }
-        if (char != null) {
-          breaks = __indexOf.call('\n\x85\u2028\u2029', char) >= 0;
-        }
-        _results.push(end++);
-      }
-      return _results;
-    };
-
-    Emitter.prototype.write_plain = function(text, split) {
-      var br, breaks, char, data, end, spaces, start, _i, _len, _ref1, _results;
-      if (split == null) {
-        split = true;
-      }
-      if (this.root_context) {
-        this.open_ended = true;
-      }
-      if (!text) {
-        return;
-      }
-      if (!this.whitespace) {
-        data = ' ';
-        this.column += data.length;
-        this.stream.write(data, this.encoding);
-      }
-      this.whitespace = false;
-      this.indentation = false;
-      spaces = false;
-      breaks = false;
-      start = end = 0;
-      _results = [];
-      while (end <= text.length) {
-        char = text[end];
-        if (spaces) {
-          if (char !== ' ') {
-            if (start + 1 === end && this.column > this.best_width && split) {
-              this.write_indent();
-              this.whitespace = false;
-              this.indentation = false;
-            } else {
-              data = text.slice(start, end);
-              this.column += data.length;
-              this.stream.write(data, this.encoding);
-            }
-            start = end;
-          }
-        } else if (breaks) {
-          if (__indexOf.call('\n\x85\u2028\u2029', char) < 0) {
-            if (text[start] === '\n') {
-              this.write_line_break();
-            }
-            _ref1 = text.slice(start, end);
-            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-              br = _ref1[_i];
-              if (br === '\n') {
-                this.write_line_break();
-              } else {
-                this.write_line_break(br);
-              }
-            }
-            this.write_indent();
-            this.whitespace = false;
-            this.indentation = false;
-            start = end;
-          }
-        } else {
-          if ((char == null) || __indexOf.call(' \n\x85\u2028\u2029', char) >= 0) {
-            data = text.slice(start, end);
-            this.column += data.length;
-            this.stream.write(data, this.encoding);
-            start = end;
-          }
-        }
-        if (char != null) {
-          spaces = char === ' ';
-          breaks = __indexOf.call('\n\x85\u2028\u2029', char) >= 0;
-        }
-        _results.push(end++);
-      }
-      return _results;
-    };
-
-    Emitter.prototype.determine_block_hints = function(text) {
-      var hints, _ref1, _ref2, _ref3;
-      hints = '';
-      if (_ref1 = text[0], __indexOf.call(' \n\x85\u2028\u2029', _ref1) >= 0) {
-        hints += this.best_indent;
-      }
-      if (_ref2 = text.slice(-1), __indexOf.call('\n\x85\u2028\u2029', _ref2) < 0) {
-        hints += '-';
-      } else if (text.length === 1 || (_ref3 = text.slice(-2, -1), __indexOf.call('\n\x85\u2028\u2029', _ref3) >= 0)) {
-        hints += '+';
-      }
-      return hints;
-    };
-
-    Emitter.prototype.flush_stream = function() {
-      var _base;
-      return typeof (_base = this.stream).flush === "function" ? _base.flush() : void 0;
-    };
-
-    /*
-    Helper for common error pattern.
-    */
-
-
-    Emitter.prototype.error = function(message, context) {
-      var _ref1, _ref2;
-      if (context) {
-        context = (_ref1 = context != null ? (_ref2 = context.constructor) != null ? _ref2.name : void 0 : void 0) != null ? _ref1 : util.inspect(context);
-      }
-      throw new exports.EmitterError("" + message + (context ? " " + context : ''));
-    };
-
-    return Emitter;
-
-  })();
-
-  ScalarAnalysis = (function() {
-    function ScalarAnalysis(scalar, empty, multiline, allow_flow_plain, allow_block_plain, allow_single_quoted, allow_double_quoted, allow_block) {
-      this.scalar = scalar;
-      this.empty = empty;
-      this.multiline = multiline;
-      this.allow_flow_plain = allow_flow_plain;
-      this.allow_block_plain = allow_block_plain;
-      this.allow_single_quoted = allow_single_quoted;
-      this.allow_double_quoted = allow_double_quoted;
-      this.allow_block = allow_block;
-    }
-
-    return ScalarAnalysis;
-
-  })();
-
-}).call(this);
-
-},{"./errors":5,"./events":6,"./util":24}],5:[function(require,module,exports){
+},{"./errors":3,"./nodes":7,"./util":20,"__browserify_Buffer":60}],3:[function(require,module,exports){
 (function() {
   var _ref,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
@@ -31532,7 +30153,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{}],6:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function() {
   var _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6,
     __hasProp = {}.hasOwnProperty,
@@ -31722,7 +30343,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{}],7:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -31832,7 +30453,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9}],8:[function(require,module,exports){
+},{"./errors":3,"./nodes":7}],6:[function(require,module,exports){
 (function() {
   var composer, construct, joiner, parser, protocols, reader, resolver, scanner, schemas, securitySchemes, traits, transformations, types, util, validator;
 
@@ -31947,7 +30568,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./composer":1,"./construct":2,"./joiner":7,"./parser":10,"./protocols":11,"./reader":13,"./resolver":15,"./resourceTypes":16,"./scanner":17,"./schemas":18,"./securitySchemes":19,"./traits":22,"./transformations":23,"./util":24,"./validator":25}],9:[function(require,module,exports){
+},{"./composer":1,"./construct":2,"./joiner":5,"./parser":8,"./protocols":9,"./reader":11,"./resolver":12,"./resourceTypes":13,"./scanner":14,"./schemas":15,"./securitySchemes":16,"./traits":18,"./transformations":19,"./util":20,"./validator":21}],7:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, unique_id, _ref, _ref1, _ref2,
     __hasProp = {}.hasOwnProperty,
@@ -32237,7 +30858,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5}],10:[function(require,module,exports){
+},{"./errors":3}],8:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, events, tokens, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -32848,7 +31469,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./events":6,"./tokens":21}],11:[function(require,module,exports){
+},{"./errors":3,"./events":4,"./tokens":17}],9:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, url, util,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -32929,7 +31550,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9,"./util":24,"url":42}],12:[function(require,module,exports){
+},{"./errors":3,"./nodes":7,"./util":20,"url":37}],10:[function(require,module,exports){
 (function() {
   var defaultSettings, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -33037,7 +31658,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
         return deferred.promise;
       } catch (_error) {
         error = _error;
-        throw new exports.FileError("while fetching " + file, null, "cannot fetch " + file + " (" + error + "), check that the server is up and that CORS is enabled", this.start_mark);
+        throw new exports.FileError("while fetching " + file, null, "cannot fetch " + file + " (" + error + ")", this.start_mark);
       }
     };
 
@@ -33335,7 +31956,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./loader":8,"./nodes":9,"./util":24,"fs":36,"q":69,"url":42,"xmlhttprequest":71}],13:[function(require,module,exports){
+},{"./errors":3,"./loader":6,"./nodes":7,"./util":20,"fs":31,"q":64,"url":37,"xmlhttprequest":66}],11:[function(require,module,exports){
 (function() {
   var Mark, MarkedYAMLError, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -33438,280 +32059,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5}],14:[function(require,module,exports){
-(function() {
-  var YAMLError, nodes, _ref, _ref1,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  nodes = require('./nodes');
-
-  YAMLError = require('./errors').YAMLError;
-
-  this.RepresenterError = (function(_super) {
-    __extends(RepresenterError, _super);
-
-    function RepresenterError() {
-      _ref = RepresenterError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return RepresenterError;
-
-  })(YAMLError);
-
-  this.BaseRepresenter = (function() {
-    BaseRepresenter.prototype.yaml_representers_types = [];
-
-    BaseRepresenter.prototype.yaml_representers_handlers = [];
-
-    BaseRepresenter.prototype.yaml_multi_representers_types = [];
-
-    BaseRepresenter.prototype.yaml_multi_representers_handlers = [];
-
-    BaseRepresenter.add_representer = function(data_type, handler) {
-      if (!this.prototype.hasOwnProperty('yaml_representers_types')) {
-        this.prototype.yaml_representers_types = [].concat(this.prototype.yaml_representers_types);
-      }
-      if (!this.prototype.hasOwnProperty('yaml_representers_handlers')) {
-        this.prototype.yaml_representers_handlers = [].concat(this.prototype.yaml_representers_handlers);
-      }
-      this.prototype.yaml_representers_types.push(data_type);
-      return this.prototype.yaml_representers_handlers.push(handler);
-    };
-
-    BaseRepresenter.add_multi_representer = function(data_type, handler) {
-      if (!this.prototype.hasOwnProperty('yaml_multi_representers_types')) {
-        this.prototype.yaml_multi_representers_types = [].concat(this.prototype.yaml_multi_representers_types);
-      }
-      if (!this.prototype.hasOwnProperty('yaml_multi_representers_handlers')) {
-        this.prototype.yaml_multi_representers_handlers = [].concat(this.prototype.yaml_multi_representers_handlers);
-      }
-      this.prototype.yaml_multi_representers_types.push(data_type);
-      return this.prototype.yaml_multi_representers_handlers.push(handler);
-    };
-
-    function BaseRepresenter(_arg) {
-      var _ref1;
-      _ref1 = _arg != null ? _arg : {}, this.default_style = _ref1.default_style, this.default_flow_style = _ref1.default_flow_style;
-      this.represented_objects = {};
-      this.object_keeper = [];
-      this.alias_key = null;
-    }
-
-    BaseRepresenter.prototype.represent = function(data) {
-      var node;
-      node = this.represent_data(data);
-      this.serialize(node);
-      this.represented_objects = {};
-      this.object_keeper = [];
-      return this.alias_key = null;
-    };
-
-    BaseRepresenter.prototype.represent_data = function(data) {
-      var data_type, i, representer, type, _i, _len, _ref1;
-      if (this.ignore_aliases(data)) {
-        this.alias_key = null;
-      } else if ((i = this.object_keeper.indexOf(data)) !== -1) {
-        this.alias_key = i;
-        if (this.alias_key in this.represented_objects) {
-          return this.represented_objects[this.alias_key];
-        }
-      } else {
-        this.alias_key = this.object_keeper.length;
-        this.object_keeper.push(data);
-      }
-      representer = null;
-      data_type = data === null ? 'null' : typeof data;
-      if (data_type === 'object') {
-        data_type = data.constructor;
-      }
-      if ((i = this.yaml_representers_types.lastIndexOf(data_type)) !== -1) {
-        representer = this.yaml_representers_handlers[i];
-      }
-      if (representer == null) {
-        _ref1 = this.yaml_multi_representers_types;
-        for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-          type = _ref1[i];
-          if (!(data instanceof type)) {
-            continue;
-          }
-          representer = this.yaml_multi_representers_handlers[i];
-          break;
-        }
-      }
-      if (representer == null) {
-        if ((i = this.yaml_multi_representers_types.lastIndexOf(void 0)) !== -1) {
-          representer = this.yaml_multi_representers_handlers[i];
-        } else if ((i = this.yaml_representers_types.lastIndexOf(void 0)) !== -1) {
-          representer = this.yaml_representers_handlers[i];
-        }
-      }
-      if (representer != null) {
-        return representer.call(this, data);
-      } else {
-        return new nodes.ScalarNode(null, "" + data);
-      }
-    };
-
-    BaseRepresenter.prototype.represent_scalar = function(tag, value, style) {
-      var node;
-      if (style == null) {
-        style = this.default_style;
-      }
-      node = new nodes.ScalarNode(tag, value, style);
-      if (this.alias_key != null) {
-        this.represented_objects[this.alias_key] = node;
-      }
-      return node;
-    };
-
-    BaseRepresenter.prototype.represent_fixed_scalar = function(tag, value, style) {
-      var node;
-      if (style == null) {
-        style = this.default_style;
-      }
-      node = new nodes.FixedScalarNode(tag, value, style);
-      if (this.alias_key != null) {
-        this.represented_objects[this.alias_key] = node;
-      }
-      return node;
-    };
-
-    BaseRepresenter.prototype.represent_sequence = function(tag, sequence, flow_style) {
-      var best_style, item, node, node_item, value, _i, _len, _ref1;
-      value = [];
-      node = new nodes.SequenceNode(tag, value, null, null, flow_style);
-      if (this.alias_key != null) {
-        this.represented_objects[this.alias_key] = node;
-      }
-      best_style = true;
-      for (_i = 0, _len = sequence.length; _i < _len; _i++) {
-        item = sequence[_i];
-        node_item = this.represent_data(item);
-        if (!(node_item instanceof nodes.ScalarNode || node_item.style)) {
-          best_style = false;
-        }
-        value.push(node_item);
-      }
-      if (flow_style == null) {
-        node.flow_style = (_ref1 = this.default_flow_style) != null ? _ref1 : best_style;
-      }
-      return node;
-    };
-
-    BaseRepresenter.prototype.represent_mapping = function(tag, mapping, flow_style) {
-      var best_style, item_key, item_value, node, node_key, node_value, value, _ref1;
-      value = [];
-      node = new nodes.MappingNode(tag, value, flow_style);
-      if (this.alias_key) {
-        this.represented_objects[this.alias_key] = node;
-      }
-      best_style = true;
-      for (item_key in mapping) {
-        if (!__hasProp.call(mapping, item_key)) continue;
-        item_value = mapping[item_key];
-        node_key = this.represent_data(item_key);
-        node_value = this.represent_data(item_value);
-        if (!(node_key instanceof nodes.ScalarNode || node_key.style)) {
-          best_style = false;
-        }
-        if (!(node_value instanceof nodes.ScalarNode || node_value.style)) {
-          best_style = false;
-        }
-        value.push([node_key, node_value]);
-      }
-      if (!flow_style) {
-        node.flow_style = (_ref1 = this.default_flow_style) != null ? _ref1 : best_style;
-      }
-      return node;
-    };
-
-    BaseRepresenter.prototype.ignore_aliases = function(data) {
-      return false;
-    };
-
-    return BaseRepresenter;
-
-  })();
-
-  this.Representer = (function(_super) {
-    __extends(Representer, _super);
-
-    function Representer() {
-      _ref1 = Representer.__super__.constructor.apply(this, arguments);
-      return _ref1;
-    }
-
-    Representer.prototype.represent_boolean = function(data) {
-      return this.represent_scalar('tag:yaml.org,2002:bool', (data ? 'true' : 'false'));
-    };
-
-    Representer.prototype.represent_null = function(data) {
-      return this.represent_scalar('tag:yaml.org,2002:null', 'null');
-    };
-
-    Representer.prototype.represent_number = function(data) {
-      var tag, value;
-      tag = "tag:yaml.org,2002:" + (data % 1 === 0 ? 'int' : 'float');
-      value = data !== data ? '.nan' : data === Infinity ? '.inf' : data === -Infinity ? '-.inf' : data.toString();
-      return this.represent_scalar(tag, value);
-    };
-
-    Representer.prototype.represent_string = function(data) {
-      return this.represent_scalar('tag:yaml.org,2002:str', data);
-    };
-
-    Representer.prototype.represent_array = function(data) {
-      return this.represent_sequence('tag:yaml.org,2002:seq', data);
-    };
-
-    Representer.prototype.represent_date = function(data) {
-      return this.represent_scalar('tag:yaml.org,2002:timestamp', data.toISOString());
-    };
-
-    Representer.prototype.represent_object = function(data) {
-      return this.represent_mapping('tag:yaml.org,2002:map', data);
-    };
-
-    Representer.prototype.represent_undefined = function(data) {
-      throw new exports.RepresenterError("cannot represent an onbject: " + data);
-    };
-
-    Representer.prototype.ignore_aliases = function(data) {
-      var _ref2;
-      if (data == null) {
-        return true;
-      }
-      if ((_ref2 = typeof data) === 'boolean' || _ref2 === 'number' || _ref2 === 'string') {
-        return true;
-      }
-      return false;
-    };
-
-    return Representer;
-
-  })(this.BaseRepresenter);
-
-  this.Representer.add_representer('boolean', this.Representer.prototype.represent_boolean);
-
-  this.Representer.add_representer('null', this.Representer.prototype.represent_null);
-
-  this.Representer.add_representer('number', this.Representer.prototype.represent_number);
-
-  this.Representer.add_representer('string', this.Representer.prototype.represent_string);
-
-  this.Representer.add_representer(Array, this.Representer.prototype.represent_array);
-
-  this.Representer.add_representer(Date, this.Representer.prototype.represent_date);
-
-  this.Representer.add_representer(Object, this.Representer.prototype.represent_object);
-
-  this.Representer.add_representer(null, this.Representer.prototype.represent_undefined);
-
-}).call(this);
-
-},{"./errors":5,"./nodes":9}],15:[function(require,module,exports){
+},{"./errors":3}],12:[function(require,module,exports){
 (function() {
   var YAMLError, nodes, util, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -33902,7 +32250,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
   })(this.BaseResolver);
 
-  this.Resolver.add_implicit_resolver('tag:yaml.org,2002:bool', /^(?:true|True|TRUE|false|False|FALSE)$/, 'tTfF');
+  this.Resolver.add_implicit_resolver('tag:yaml.org,2002:bool', /^(?:yes|Yes|YES|true|True|TRUE|on|On|ON|no|No|NO|false|False|FALSE|off|Off|OFF)$/, 'yYnNtTfFoO');
 
   this.Resolver.add_implicit_resolver('tag:yaml.org,2002:float', /^(?:[-+]?(?:[0-9][0-9_]*)\.[0-9_]*(?:[eE][-+][0-9]+)?|\.[0-9_]+(?:[eE][-+][0-9]+)?|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\.[0-9_]*|[-+]?\.(?:inf|Inf|INF)|\.(?:nan|NaN|NAN))$/, '-+0123456789.');
 
@@ -33920,7 +32268,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9,"./util":24}],16:[function(require,module,exports){
+},{"./errors":3,"./nodes":7,"./util":20}],13:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -34109,7 +32457,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9,"./util":24}],17:[function(require,module,exports){
+},{"./errors":3,"./nodes":7,"./util":20}],14:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, SimpleKey, tokens, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -35614,7 +33962,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./tokens":21,"./util":24}],18:[function(require,module,exports){
+},{"./errors":3,"./tokens":17,"./util":20}],15:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -35715,7 +34063,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9}],19:[function(require,module,exports){
+},{"./errors":3,"./nodes":7}],16:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, nodes, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -35795,152 +34143,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9}],20:[function(require,module,exports){
-(function() {
-  var YAMLError, events, nodes, util, _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  events = require('./events');
-
-  nodes = require('./nodes');
-
-  util = require('./util');
-
-  YAMLError = require('./errors').YAMLError;
-
-  this.SerializerError = (function(_super) {
-    __extends(SerializerError, _super);
-
-    function SerializerError() {
-      _ref = SerializerError.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return SerializerError;
-
-  })(YAMLError);
-
-  this.Serializer = (function() {
-    function Serializer(_arg) {
-      var _ref1;
-      _ref1 = _arg != null ? _arg : {}, this.encoding = _ref1.encoding, this.explicit_start = _ref1.explicit_start, this.explicit_end = _ref1.explicit_end, this.version = _ref1.version, this.tags = _ref1.tags;
-      this.serialized_nodes = {};
-      this.anchors = {};
-      this.last_anchor_id = 0;
-      this.closed = null;
-    }
-
-    Serializer.prototype.open = function() {
-      if (this.closed === null) {
-        this.emit(new events.StreamStartEvent(this.encoding));
-        return this.closed = false;
-      } else if (this.closed) {
-        throw new SerializerError('serializer is closed');
-      } else {
-        throw new SerializerError('serializer is already open');
-      }
-    };
-
-    Serializer.prototype.close = function() {
-      if (this.closed === null) {
-        throw new SerializerError('serializer is not opened');
-      } else if (!this.closed) {
-        this.emit(new events.StreamEndEvent);
-        return this.closed = true;
-      }
-    };
-
-    Serializer.prototype.serialize = function(node) {
-      if (this.closed === null) {
-        throw new SerializerError('serializer is not opened');
-      } else if (this.closed) {
-        throw new SerializerError('serializer is closed');
-      }
-      this.emit(new events.DocumentStartEvent(void 0, void 0, this.explicit_start, this.version, this.tags));
-      this.anchor_node(node);
-      this.serialize_node(node);
-      this.emit(new events.DocumentEndEvent(void 0, void 0, this.explicit_end));
-      this.serialized_nodes = {};
-      this.anchors = {};
-      return this.last_anchor_id = 0;
-    };
-
-    Serializer.prototype.anchor_node = function(node) {
-      var item, key, value, _base, _i, _j, _len, _len1, _name, _ref1, _ref2, _ref3, _results, _results1;
-      if (node.unique_id in this.anchors) {
-        return (_base = this.anchors)[_name = node.unique_id] != null ? (_base = this.anchors)[_name = node.unique_id] : _base[_name] = this.generate_anchor(node);
-      } else {
-        this.anchors[node.unique_id] = null;
-        if (node instanceof nodes.SequenceNode) {
-          _ref1 = node.value;
-          _results = [];
-          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-            item = _ref1[_i];
-            _results.push(this.anchor_node(item));
-          }
-          return _results;
-        } else if (node instanceof nodes.MappingNode) {
-          _ref2 = node.value;
-          _results1 = [];
-          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-            _ref3 = _ref2[_j], key = _ref3[0], value = _ref3[1];
-            this.anchor_node(key);
-            _results1.push(this.anchor_node(value));
-          }
-          return _results1;
-        }
-      }
-    };
-
-    Serializer.prototype.generate_anchor = function(node) {
-      return "id" + (util.pad_left(++this.last_anchor_id, '0', 4));
-    };
-
-    Serializer.prototype.serialize_node = function(node, parent, index) {
-      var alias, default_tag, detected_tag, implicit, item, key, value, _i, _j, _len, _len1, _ref1, _ref2, _ref3;
-      alias = this.anchors[node.unique_id];
-      if (node.unique_id in this.serialized_nodes) {
-        return this.emit(new events.AliasEvent(alias));
-      } else {
-        this.serialized_nodes[node.unique_id] = true;
-        this.descend_resolver(parent, index);
-        if (node instanceof nodes.ScalarNode) {
-          detected_tag = this.resolve(nodes.ScalarNode, node.value, [true, false]);
-          default_tag = this.resolve(nodes.ScalarNode, node.value, [false, true]);
-          implicit = [node.tag === detected_tag, node.tag === default_tag];
-          this.emit(new events.ScalarEvent(alias, node.tag, implicit, node.value, void 0, void 0, node.style));
-        } else if (node instanceof nodes.SequenceNode) {
-          implicit = node.tag === this.resolve(nodes.SequenceNode, node.value, true);
-          this.emit(new events.SequenceStartEvent(alias, node.tag, implicit, void 0, void 0, node.flow_style));
-          _ref1 = node.value;
-          for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
-            item = _ref1[index];
-            this.serialize_node(item, node, index);
-          }
-          this.emit(new events.SequenceEndEvent);
-        } else if (node instanceof nodes.MappingNode) {
-          implicit = node.tag === this.resolve(nodes.MappingNode, node.value, true);
-          this.emit(new events.MappingStartEvent(alias, node.tag, implicit, void 0, void 0, node.flow_style));
-          _ref2 = node.value;
-          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-            _ref3 = _ref2[_j], key = _ref3[0], value = _ref3[1];
-            this.serialize_node(key, node, null);
-            this.serialize_node(value, node, key);
-          }
-          this.emit(new events.MappingEndEvent);
-        }
-        return this.ascend_resolver();
-      }
-    };
-
-    return Serializer;
-
-  })();
-
-}).call(this);
-
-},{"./errors":5,"./events":6,"./nodes":9,"./util":24}],21:[function(require,module,exports){
+},{"./errors":3,"./nodes":7}],17:[function(require,module,exports){
 (function() {
   var _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9,
     __hasProp = {}.hasOwnProperty,
@@ -36247,7 +34450,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{}],22:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, inflection, nodes, util, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -36505,7 +34708,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9,"./util":24,"inflection":67}],23:[function(require,module,exports){
+},{"./errors":3,"./nodes":7,"./util":20,"inflection":62}],19:[function(require,module,exports){
 (function() {
   var nodes, uritemplate, util,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -36645,25 +34848,18 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 
     Transformations.prototype.apply_default_media_type_to_resource = function(resource) {
-      var childResource, method, _i, _j, _len, _len1, _ref, _ref1, _results;
+      var methods,
+        _this = this;
       if (!this.mediaType) {
         return;
       }
       if (!util.isMapping(resource)) {
         return;
       }
-      _ref = this.child_resources(resource);
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        childResource = _ref[_i];
-        this.apply_default_media_type_to_resource(childResource[1]);
-      }
-      _ref1 = this.child_methods(resource);
-      _results = [];
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        method = _ref1[_j];
-        _results.push(this.apply_default_media_type_to_method(method[1]));
-      }
-      return _results;
+      methods = this.child_methods(resource);
+      return methods.forEach(function(method) {
+        return _this.apply_default_media_type_to_method(method[1]);
+      });
     };
 
     Transformations.prototype.apply_default_media_type_to_method = function(method) {
@@ -36680,9 +34876,6 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
       }
       if (this.has_property(method, "responses")) {
         responses = this.get_property(method, "responses");
-        if (!(responses && responses.value)) {
-          return;
-        }
         return responses.value.forEach(function(response) {
           if (_this.has_property(response[1], "body")) {
             return _this.apply_default_media_type_to_body(_this.get_property(response[1], "body"));
@@ -37022,7 +35215,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./nodes":9,"./util":24,"uritemplate":70}],24:[function(require,module,exports){
+},{"./nodes":7,"./util":20,"uritemplate":65}],20:[function(require,module,exports){
 (function() {
   var __slice = [].slice,
     __hasProp = {}.hasOwnProperty;
@@ -37102,7 +35295,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{}],25:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 (function() {
   var MarkedYAMLError, jsonlint, nodes, traits, uritemplate, url, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -37369,7 +35562,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
       }
     };
 
-    Validator.prototype.validate_base_uri_parameters = function() {
+    Validator.prototype.validate_base_uri_parameters = function(node) {
       if (!this.baseUriParameters) {
         return;
       }
@@ -37426,8 +35619,9 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
     };
 
     Validator.prototype.validate_types = function(typeProperty) {
-      var type, type_entry, types, _i, _len, _results;
+      var type, type_entry, types, typesNamesTrack, _i, _len, _results;
       types = typeProperty.value;
+      typesNamesTrack = {};
       if (!util.isSequence(typeProperty)) {
         throw new exports.ValidationError('while validating resource types', null, 'invalid resourceTypes definition, it must be an array', typeProperty.start_mark);
       }
@@ -37458,8 +35652,9 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
     };
 
     Validator.prototype.validate_traits = function(traitProperty) {
-      var trait, trait_entry, _i, _len, _results;
+      var trait, traitNamesTrack, trait_entry, _i, _len, _results;
       traits = traitProperty.value;
+      traitNamesTrack = {};
       if (!Array.isArray(traits)) {
         throw new exports.ValidationError('while validating traits', null, 'invalid traits definition, it must be an array', traitProperty.start_mark);
       }
@@ -37538,7 +35733,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
     };
 
     Validator.prototype.validate_named_parameter = function(node, allowParameterKeys) {
-      var booleanValues, canonicalPropertyName, childNode, enumValues, parameterProperties, parameterType, propertyName, propertyValue, unusableProperty, valid, validTypes, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2, _ref3, _results;
+      var booleanValues, canonicalPropertyName, childNode, enumValues, parameterProperties, parameterType, propertyName, propertyValue, unusableProperty, validTypes, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2, _ref3, _results;
       parameterProperties = {};
       parameterType = "string";
       _ref1 = node.value;
@@ -37548,14 +35743,11 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
         propertyValue = childNode[1].value;
         this.trackRepeatedProperties(parameterProperties, this.canonicalizePropertyName(childNode[0].value, true), childNode[0], 'while validating parameter properties', "parameter property already used");
         booleanValues = ["true", "false"];
-        if (allowParameterKeys) {
-          if (this.isParameterKey(childNode) || this.isParameterValue(childNode)) {
-            continue;
-          }
+        if (allowParameterKeys && this.isParameterKey(childNode)) {
+          continue;
         }
         canonicalPropertyName = this.canonicalizePropertyName(propertyName, allowParameterKeys);
-        valid = true;
-        switch (propertyName) {
+        switch (canonicalPropertyName) {
           case "displayName":
             if (!util.isScalar(childNode[1])) {
               throw new exports.ValidationError('while validating parameter properties', null, 'the value of displayName must be a scalar', childNode[1].start_mark);
@@ -37569,6 +35761,18 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
           case "default":
             if (!util.isScalar(childNode[1])) {
               throw new exports.ValidationError('while validating parameter properties', null, 'the value of default must be a scalar', childNode[1].start_mark);
+            }
+            break;
+          case "enum":
+            if (!util.isNullableSequence(childNode[1])) {
+              throw new exports.ValidationError('while validating parameter properties', null, 'the value of enum must be an array', childNode[1].start_mark);
+            }
+            if (!childNode[1].value.length) {
+              throw new exports.ValidationError('while validating parameter properties', null, 'enum is empty', childNode[1].start_mark);
+            }
+            enumValues = this.get_list_values(childNode[1].value);
+            if (this.hasDuplicates(enumValues)) {
+              throw new exports.ValidationError('while validating parameter properties', null, 'enum contains duplicated values', childNode[1].start_mark);
             }
             break;
           case "description":
@@ -37619,25 +35823,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
             }
             break;
           default:
-            valid = false;
-        }
-        switch (canonicalPropertyName) {
-          case "enum":
-            if (!util.isNullableSequence(childNode[1])) {
-              throw new exports.ValidationError('while validating parameter properties', null, 'the value of enum must be an array', childNode[1].start_mark);
-            }
-            if (!childNode[1].value.length) {
-              throw new exports.ValidationError('while validating parameter properties', null, 'enum is empty', childNode[1].start_mark);
-            }
-            enumValues = this.get_list_values(childNode[1].value);
-            if (this.hasDuplicates(enumValues)) {
-              throw new exports.ValidationError('while validating parameter properties', null, 'enum contains duplicated values', childNode[1].start_mark);
-            }
-            break;
-          default:
-            if (!valid) {
-              throw new exports.ValidationError('while validating parameter properties', null, "unknown property " + propertyName, childNode[0].start_mark);
-            }
+            throw new exports.ValidationError('while validating parameter properties', null, "unknown property " + propertyName, childNode[0].start_mark);
         }
       }
       if (parameterType !== "string") {
@@ -37770,7 +35956,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
     };
 
     Validator.prototype.validate_doc_section = function(docSection) {
-      var docProperties, property, _i, _len, _ref1;
+      var docProperties, hasContent, hasTitle, property, _i, _len, _ref1;
       if (!util.isMapping(docSection)) {
         throw new exports.ValidationError('while validating documentation section', null, 'each documentation section must be a map', docSection.start_mark);
       }
@@ -37784,11 +35970,13 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
             if (!(util.isScalar(property[1]) && !util.isNull(property[1]))) {
               throw new exports.ValidationError('while validating documentation section', null, 'title must be a string', property[0].start_mark);
             }
+            hasTitle = true;
             break;
           case "content":
             if (!(util.isScalar(property[1]) && !util.isNull(property[1]))) {
               throw new exports.ValidationError('while validating documentation section', null, 'content must be a string', property[0].start_mark);
             }
+            hasContent = true;
             break;
           default:
             throw new exports.ValidationError('while validating root properties', null, 'unknown property ' + property[0].value, property[0].start_mark);
@@ -37958,7 +36146,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
       return _results;
     };
 
-    Validator.prototype.validate_type_property = function(property) {
+    Validator.prototype.validate_type_property = function(property, allowParameterKeys) {
       var parameter, typeName, _i, _len, _ref1, _results;
       if (!(util.isMapping(property[1]) || util.isString(property[1]))) {
         throw new exports.ValidationError('while validating resource types', null, "property 'type' must be a string or a map", property[0].start_mark);
@@ -38026,18 +36214,6 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
           case 'responses':
             this.validate_responses(property, allowParameterKeys);
             break;
-          case 'baseUriParameters':
-            if (!this.baseUri) {
-              throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters defined when there is no baseUri', property[0].start_mark);
-            }
-            if (!util.isNullableMapping(property[1])) {
-              throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters must be a map', property[0].start_mark);
-            }
-            this.validate_uri_parameters(this.baseUri, property[1], allowParameterKeys);
-            break;
-          case 'protocols':
-            this.validate_protocols_property(property);
-            break;
           default:
             valid = false;
         }
@@ -38045,12 +36221,24 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
           case 'securedBy':
             _results.push(this.validate_secured_by(property));
             break;
+          case 'baseUriParameters':
+            if (!this.baseUri) {
+              throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters defined when there is no baseUri', property[0].start_mark);
+            }
+            if (!util.isNullableMapping(property[1])) {
+              throw new exports.ValidationError('while validating uri parameters', null, 'base uri parameters must be a map', property[0].start_mark);
+            }
+            _results.push(this.validate_uri_parameters(this.baseUri, property[1], allowParameterKeys));
+            break;
           case 'usage':
             if (!(allowParameterKeys && context === 'trait')) {
               throw new exports.ValidationError('while validating resources', null, "property: 'usage' is invalid in a " + context, property[0].start_mark);
             } else {
               _results.push(void 0);
             }
+            break;
+          case 'protocols':
+            _results.push(this.validate_protocols_property(property));
             break;
           default:
             if (!valid) {
@@ -38152,7 +36340,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
     };
 
     Validator.prototype.validate_response = function(response, allowParameterKeys) {
-      var canonicalKey, property, responseCode, responseProperties, valid, _i, _j, _len, _len1, _ref1, _ref2, _results;
+      var canonicalKey, property, responseCode, responseProperties, _i, _j, _len, _len1, _ref1, _ref2, _results;
       if (util.isSequence(response[0])) {
         if (!response[0].value.length) {
           throw new exports.ValidationError('while validating responses', null, 'there must be at least one response code', response[0].start_mark);
@@ -38178,20 +36366,17 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
           property = _ref2[_j];
           canonicalKey = this.canonicalizePropertyName(property[0].value, allowParameterKeys);
           this.trackRepeatedProperties(responseProperties, canonicalKey, property[0], 'while validating responses', "property already used");
-          valid = true;
           if (!this.isParameterKey(property)) {
-            switch (property[0].value) {
-              case "description":
-                if (!util.isScalar(property[1])) {
-                  throw new exports.ValidationError('while validating responses', null, 'property description must be a string', response[0].start_mark);
-                }
-                break;
-              default:
-                valid = false;
-            }
             switch (canonicalKey) {
               case "body":
                 _results.push(this.validate_body(property, allowParameterKeys, null, true));
+                break;
+              case "description":
+                if (!util.isScalar(property[1])) {
+                  throw new exports.ValidationError('while validating responses', null, 'property description must be a string', response[0].start_mark);
+                } else {
+                  _results.push(void 0);
+                }
                 break;
               case "headers":
                 if (!util.isNullableMapping(property[1])) {
@@ -38200,11 +36385,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
                 _results.push(this.validate_headers(property));
                 break;
               default:
-                if (!valid) {
-                  throw new exports.ValidationError('while validating response', null, "property: '" + property[0].value + "' is invalid in a response", property[0].start_mark);
-                } else {
-                  _results.push(void 0);
-                }
+                throw new exports.ValidationError('while validating response', null, "property: '" + property[0].value + "' is invalid in a response", property[0].start_mark);
             }
           } else {
             _results.push(void 0);
@@ -38226,22 +36407,10 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
       return false;
     };
 
-    Validator.prototype.isParameterValue = function(property) {
-      return this.isParameterKey(property, false);
-    };
-
-    Validator.prototype.isParameterKey = function(property, checkKey) {
-      var offset;
-      if (checkKey == null) {
-        checkKey = true;
-      }
-      offset = checkKey ? 0 : 1;
-      if (!(checkKey || util.isScalar(property[1]))) {
-        return false;
-      }
-      if (this.isParameterKeyValue(property[offset].value)) {
+    Validator.prototype.isParameterKey = function(property) {
+      if (this.isParameterKeyValue(property[0].value)) {
         return true;
-      } else if (property[offset].value.match(/<<\s*([^\|\s>]+)\s*\|.*\s*>>/g)) {
+      } else if (property[0].value.match(/<<\s*([^\|\s>]+)\s*\|.*\s*>>/g)) {
         throw new exports.ValidationError('while validating parameter', null, "unknown function applied to property name", property[0].start_mark);
       }
       return false;
@@ -38255,7 +36424,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
     };
 
     Validator.prototype.validate_body = function(property, allowParameterKeys, bodyMode, isResponseBody) {
-      var bodyProperties, bodyProperty, canonicalProperty, implicitMode, key, start_mark, valid, _i, _len, _ref1;
+      var bodyProperties, bodyProperty, canonicalProperty, implicitMode, key, start_mark, _i, _len, _ref1;
       if (bodyMode == null) {
         bodyMode = null;
       }
@@ -38284,7 +36453,6 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
         } else {
           key = bodyProperty[0].value;
           canonicalProperty = this.canonicalizePropertyName(key, allowParameterKeys);
-          valid = true;
           switch (canonicalProperty) {
             case "formParameters":
               if (bodyMode && __indexOf.call(implicitMode, bodyMode) < 0) {
@@ -38295,10 +36463,6 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
               }
               this.validate_form_params(bodyProperty, allowParameterKeys);
               break;
-            default:
-              valid = false;
-          }
-          switch (key) {
             case "example":
               if (bodyMode && __indexOf.call(implicitMode, bodyMode) < 0) {
                 throw new exports.ValidationError('while validating body', null, "not compatible with explicit Media Type", bodyProperty[0].start_mark);
@@ -38323,9 +36487,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
               this.validateSchema(bodyProperty[1]);
               break;
             default:
-              if (!valid) {
-                throw new exports.ValidationError('while validating body', null, "property: '" + bodyProperty[0].value + "' is invalid in a body", bodyProperty[0].start_mark);
-              }
+              throw new exports.ValidationError('while validating body', null, "property: '" + bodyProperty[0].value + "' is invalid in a body", bodyProperty[0].start_mark);
           }
         }
       }
@@ -38376,14 +36538,16 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
     };
 
     Validator.prototype.validate_common_properties = function(property, allowParameterKeys, context) {
-      var use, _i, _len, _ref1;
+      var canonicalProperty, key, use, _i, _len, _ref1;
       if (this.isParameterKey(property)) {
         if (!allowParameterKeys) {
           throw new exports.ValidationError('while validating resources', null, "property '" + property[0].value + "' is invalid in a resource", property[0].start_mark);
         }
         return true;
       } else {
-        switch (property[0].value) {
+        key = property[0].value;
+        canonicalProperty = this.canonicalizePropertyName(key, allowParameterKeys);
+        switch (canonicalProperty) {
           case "displayName":
             if (context === 'method') {
               return false;
@@ -38397,6 +36561,8 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
               throw new exports.ValidationError('while validating resources', null, "property 'description' must be a string", property[0].start_mark);
             }
             return true;
+        }
+        switch (key) {
           case "is":
             if (!util.isSequence(property[1])) {
               throw new exports.ValidationError('while validating resources', null, "property 'is' must be an array", property[0].start_mark);
@@ -38627,84 +36793,7 @@ var Buffer=require("__browserify_Buffer").Buffer;(function() {
 
 }).call(this);
 
-},{"./errors":5,"./nodes":9,"./traits":22,"./util":24,"json-lint":68,"uritemplate":70,"url":42}],26:[function(require,module,exports){
-(function() {
-  var composer, constructor, dumper, errors, events, loader, nodes, parser, reader, resolver, scanner, tokens, util;
-
-  composer = require('./composer');
-
-  constructor = require('./construct');
-
-  dumper = require('./dumper');
-
-  errors = require('./errors');
-
-  events = require('./events');
-
-  loader = require('./loader');
-
-  nodes = require('./nodes');
-
-  parser = require('./parser');
-
-  reader = require('./reader');
-
-  resolver = require('./resolver');
-
-  scanner = require('./scanner');
-
-  tokens = require('./tokens');
-
-  util = require('./util');
-
-  /*
-  Serialize a Javascript object into a YAML stream.
-  If stream is falsey, return the produced string instead.
-  */
-
-
-  this.dump = function(data, stream, Dumper, options) {
-    if (Dumper == null) {
-      Dumper = dumper.Dumper;
-    }
-    if (options == null) {
-      options = {};
-    }
-    return exports.dump_all([data], stream, Dumper, options);
-  };
-
-  /*
-  Serialize a sequence of Javascript objects into a YAML stream.
-  If stream is falsey, return the produced string instead.
-  */
-
-
-  this.dump_all = function(documents, stream, Dumper, options) {
-    var dest, document, _dumper, _i, _len;
-    if (Dumper == null) {
-      Dumper = dumper.Dumper;
-    }
-    if (options == null) {
-      options = {};
-    }
-    dest = stream || new util.StringStream;
-    _dumper = new Dumper(dest, options);
-    try {
-      _dumper.open();
-      for (_i = 0, _len = documents.length; _i < _len; _i++) {
-        document = documents[_i];
-        _dumper.represent(document);
-      }
-      _dumper.close();
-    } finally {
-      _dumper.dispose();
-    }
-    return stream || dest.string;
-  };
-
-}).call(this);
-
-},{"./composer":1,"./construct":2,"./dumper":3,"./errors":5,"./events":6,"./loader":8,"./nodes":9,"./parser":10,"./reader":13,"./resolver":15,"./scanner":17,"./tokens":21,"./util":24}],27:[function(require,module,exports){
+},{"./errors":3,"./nodes":7,"./traits":18,"./util":20,"json-lint":63,"uritemplate":65,"url":37}],22:[function(require,module,exports){
 
 
 //
@@ -38922,7 +37011,7 @@ if (typeof Object.getOwnPropertyDescriptor === 'function') {
   exports.getOwnPropertyDescriptor = valueObject;
 }
 
-},{}],28:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -38995,7 +37084,7 @@ function onend() {
   timers.setImmediate(shims.bind(this.end, this));
 }
 
-},{"_shims":27,"_stream_readable":30,"_stream_writable":32,"timers":41,"util":43}],29:[function(require,module,exports){
+},{"_shims":22,"_stream_readable":25,"_stream_writable":27,"timers":36,"util":38}],24:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -39038,7 +37127,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"_stream_transform":31,"util":43}],30:[function(require,module,exports){
+},{"_stream_transform":26,"util":38}],25:[function(require,module,exports){
 var process=require("__browserify_process");// Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -39959,7 +38048,7 @@ function endReadable(stream) {
   }
 }
 
-},{"__browserify_process":66,"_shims":27,"buffer":45,"events":35,"stream":39,"string_decoder":40,"timers":41,"util":43}],31:[function(require,module,exports){
+},{"__browserify_process":61,"_shims":22,"buffer":40,"events":30,"stream":34,"string_decoder":35,"timers":36,"util":38}],26:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -40165,7 +38254,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"_stream_duplex":28,"util":43}],32:[function(require,module,exports){
+},{"_stream_duplex":23,"util":38}],27:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -40535,7 +38624,7 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"buffer":45,"stream":39,"timers":41,"util":43}],33:[function(require,module,exports){
+},{"buffer":40,"stream":34,"timers":36,"util":38}],28:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -40852,13 +38941,13 @@ assert.doesNotThrow = function(block, /*optional*/message) {
 };
 
 assert.ifError = function(err) { if (err) {throw err;}};
-},{"_shims":27,"util":43}],34:[function(require,module,exports){
+},{"_shims":22,"util":38}],29:[function(require,module,exports){
 
 // not implemented
 // The reason for having an empty file and not throwing is to allow
 // untraditional implementation of this module.
 
-},{}],35:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -41139,9 +39228,9 @@ EventEmitter.listenerCount = function(emitter, type) {
     ret = emitter._events[type].length;
   return ret;
 };
-},{"util":43}],36:[function(require,module,exports){
-module.exports=require(34)
-},{}],37:[function(require,module,exports){
+},{"util":38}],31:[function(require,module,exports){
+module.exports=require(29)
+},{}],32:[function(require,module,exports){
 var http = require('http');
 
 var https = module.exports;
@@ -41155,7 +39244,7 @@ https.request = function (params, cb) {
     params.scheme = 'https';
     return http.request.call(this, params, cb);
 }
-},{"http":47}],38:[function(require,module,exports){
+},{"http":42}],33:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -41366,7 +39455,7 @@ QueryString.parse = QueryString.decode = function(qs, sep, eq, options) {
 
   return obj;
 };
-},{"_shims":27,"buffer":45,"util":43}],39:[function(require,module,exports){
+},{"_shims":22,"buffer":40,"util":38}],34:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -41495,7 +39584,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"_stream_duplex":28,"_stream_passthrough":29,"_stream_readable":30,"_stream_transform":31,"_stream_writable":32,"events":35,"util":43}],40:[function(require,module,exports){
+},{"_stream_duplex":23,"_stream_passthrough":24,"_stream_readable":25,"_stream_transform":26,"_stream_writable":27,"events":30,"util":38}],35:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -41688,7 +39777,7 @@ function base64DetectIncompleteChar(buffer) {
   return incomplete;
 }
 
-},{"buffer":45}],41:[function(require,module,exports){
+},{"buffer":40}],36:[function(require,module,exports){
 try {
     // Old IE browsers that do not curry arguments
     if (!setTimeout.call) {
@@ -41807,7 +39896,7 @@ if (!exports.setImmediate) {
   };
 }
 
-},{}],42:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -42502,7 +40591,7 @@ Url.prototype.parseHost = function() {
   }
   if (host) this.hostname = host;
 };
-},{"_shims":27,"querystring":38,"util":43}],43:[function(require,module,exports){
+},{"_shims":22,"querystring":33,"util":38}],38:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -43047,7 +41136,7 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-},{"_shims":27}],44:[function(require,module,exports){
+},{"_shims":22}],39:[function(require,module,exports){
 exports.readIEEE754 = function(buffer, offset, isBE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -43133,7 +41222,7 @@ exports.writeIEEE754 = function(buffer, value, offset, isBE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],45:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var assert;
 exports.Buffer = Buffer;
 exports.SlowBuffer = Buffer;
@@ -44259,7 +42348,7 @@ Buffer.prototype.writeDoubleBE = function(value, offset, noAssert) {
   writeDouble(this, value, offset, true, noAssert);
 };
 
-},{"./buffer_ieee754":44,"assert":33,"base64-js":46}],46:[function(require,module,exports){
+},{"./buffer_ieee754":39,"assert":28,"base64-js":41}],41:[function(require,module,exports){
 (function (exports) {
 	'use strict';
 
@@ -44345,7 +42434,7 @@ Buffer.prototype.writeDoubleBE = function(value, offset, noAssert) {
 	module.exports.fromByteArray = uint8ToBase64;
 }());
 
-},{}],47:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 var http = module.exports;
 var EventEmitter = require('events').EventEmitter;
 var Request = require('./lib/request');
@@ -44410,7 +42499,7 @@ var xhrHttp = (function () {
     }
 })();
 
-},{"./lib/request":48,"events":35}],48:[function(require,module,exports){
+},{"./lib/request":43,"events":30}],43:[function(require,module,exports){
 var Stream = require('stream');
 var Response = require('./response');
 var concatStream = require('concat-stream');
@@ -44544,7 +42633,7 @@ var indexOf = function (xs, x) {
     return -1;
 };
 
-},{"./response":49,"Base64":50,"concat-stream":51,"stream":39,"util":43}],49:[function(require,module,exports){
+},{"./response":44,"Base64":45,"concat-stream":46,"stream":34,"util":38}],44:[function(require,module,exports){
 var Stream = require('stream');
 var util = require('util');
 
@@ -44666,7 +42755,7 @@ var isArray = Array.isArray || function (xs) {
     return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{"stream":39,"util":43}],50:[function(require,module,exports){
+},{"stream":34,"util":38}],45:[function(require,module,exports){
 ;(function () {
 
   var
@@ -44723,7 +42812,7 @@ var isArray = Array.isArray || function (xs) {
 
 }());
 
-},{}],51:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var stream = require('stream')
 var bops = require('bops')
 var util = require('util')
@@ -44774,7 +42863,7 @@ module.exports = function(cb) {
 
 module.exports.ConcatStream = ConcatStream
 
-},{"bops":52,"stream":39,"util":43}],52:[function(require,module,exports){
+},{"bops":47,"stream":34,"util":38}],47:[function(require,module,exports){
 var proto = {}
 module.exports = proto
 
@@ -44795,9 +42884,9 @@ function mix(from, into) {
   }
 }
 
-},{"./copy.js":55,"./create.js":56,"./from.js":57,"./is.js":58,"./join.js":59,"./read.js":61,"./subarray.js":62,"./to.js":63,"./write.js":64}],53:[function(require,module,exports){
-module.exports=require(46)
-},{}],54:[function(require,module,exports){
+},{"./copy.js":50,"./create.js":51,"./from.js":52,"./is.js":53,"./join.js":54,"./read.js":56,"./subarray.js":57,"./to.js":58,"./write.js":59}],48:[function(require,module,exports){
+module.exports=require(41)
+},{}],49:[function(require,module,exports){
 module.exports = to_utf8
 
 var out = []
@@ -44872,7 +42961,7 @@ function reduced(list) {
   return out
 }
 
-},{}],55:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 module.exports = copy
 
 var slice = [].slice
@@ -44926,12 +43015,12 @@ function slow_copy(from, to, j, i, jend) {
   }
 }
 
-},{}],56:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 module.exports = function(size) {
   return new Uint8Array(size)
 }
 
-},{}],57:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 module.exports = from
 
 var base64 = require('base64-js')
@@ -44991,13 +43080,13 @@ function from_base64(str) {
   return new Uint8Array(base64.toByteArray(str)) 
 }
 
-},{"base64-js":53}],58:[function(require,module,exports){
+},{"base64-js":48}],53:[function(require,module,exports){
 
 module.exports = function(buffer) {
   return buffer instanceof Uint8Array;
 }
 
-},{}],59:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 module.exports = join
 
 function join(targets, hint) {
@@ -45035,7 +43124,7 @@ function get_length(targets) {
   return size
 }
 
-},{}],60:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var proto
   , map
 
@@ -45057,7 +43146,7 @@ function get(target) {
   return out
 }
 
-},{}],61:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 module.exports = {
     readUInt8:      read_uint8
   , readInt8:       read_int8
@@ -45146,14 +43235,14 @@ function read_double_be(target, at) {
   return dv.getFloat64(at + target.byteOffset, false)
 }
 
-},{"./mapped.js":60}],62:[function(require,module,exports){
+},{"./mapped.js":55}],57:[function(require,module,exports){
 module.exports = subarray
 
 function subarray(buf, from, to) {
   return buf.subarray(from || 0, to || buf.length)
 }
 
-},{}],63:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 module.exports = to
 
 var base64 = require('base64-js')
@@ -45191,7 +43280,7 @@ function to_base64(buf) {
 }
 
 
-},{"base64-js":53,"to-utf8":54}],64:[function(require,module,exports){
+},{"base64-js":48,"to-utf8":49}],59:[function(require,module,exports){
 module.exports = {
     writeUInt8:      write_uint8
   , writeInt8:       write_int8
@@ -45279,7 +43368,7 @@ function write_double_be(target, value, at) {
   return dv.setFloat64(at + target.byteOffset, value, false)
 }
 
-},{"./mapped.js":60}],65:[function(require,module,exports){
+},{"./mapped.js":55}],60:[function(require,module,exports){
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 exports.readIEEE754 = function(buffer, offset, isBE, mLen, nBytes) {
   var e, m,
@@ -47659,7 +45748,7 @@ function hasOwnProperty(obj, prop) {
 },{"_shims":5}]},{},[])
 ;;module.exports=require("buffer-browserify")
 
-},{}],66:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -47713,7 +45802,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],67:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 /*!
  * inflection
  * Copyright(c) 2011 Ben Lin <ben@dreamerslab.com>
@@ -48313,7 +46402,7 @@ process.chdir = function (dir) {
   module.exports = inflector;
 })( this );
 
-},{}],68:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 (function( glob, undefined ) {
 
 var rnumber = /[0-9]/,
@@ -48820,7 +46909,7 @@ else {
 
 })( this );
 
-},{}],69:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 var process=require("__browserify_process");// vim:ts=4:sts=4:sw=4:
 /*!
  *
@@ -50759,7 +48848,7 @@ return Q;
 
 });
 
-},{"__browserify_process":66}],70:[function(require,module,exports){
+},{"__browserify_process":61}],65:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/*global unescape, module, define, window, global*/
 
 /*
@@ -51646,7 +49735,7 @@ var UriTemplate = (function () {
     }
 ));
 
-},{}],71:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 var process=require("__browserify_process"),Buffer=require("__browserify_Buffer").Buffer;/**
  * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
  *
@@ -52247,11 +50336,11 @@ exports.XMLHttpRequest = function() {
   };
 };
 
-},{"__browserify_Buffer":65,"__browserify_process":66,"child_process":34,"fs":36,"http":47,"https":37,"url":42}],72:[function(require,module,exports){
+},{"__browserify_Buffer":60,"__browserify_process":61,"child_process":29,"fs":31,"http":42,"https":32,"url":37}],67:[function(require,module,exports){
 window.RAML = {}
 
 window.RAML.Parser = require('../lib/raml')
-},{"../lib/raml":12}]},{},[72,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,69])
+},{"../lib/raml":10}]},{},[67,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,64])
 ;
 /*
 CryptoJS v3.1.2
@@ -53957,6 +52046,7 @@ window.CodeMirror = (function() {
   var old_ie = /MSIE \d/.test(navigator.userAgent);
   var ie_lt8 = old_ie && (document.documentMode == null || document.documentMode < 8);
   var ie_lt9 = old_ie && (document.documentMode == null || document.documentMode < 9);
+  var ie_lt10 = old_ie && (document.documentMode == null || document.documentMode < 10);
   var ie_gt10 = /Trident\/([7-9]|\d{2,})\./.test(navigator.userAgent);
   var ie = old_ie || ie_gt10;
   var webkit = /WebKit\//.test(navigator.userAgent);
@@ -53980,7 +52070,7 @@ window.CodeMirror = (function() {
   if (opera_version && opera_version >= 15) { opera = false; webkit = true; }
   // Some browsers use the wrong event properties to signal cmd/ctrl on OS X
   var flipCtrlCmd = mac && (qtwebkit || opera && (opera_version == null || opera_version < 12.11));
-  var captureMiddleClick = gecko || (old_ie && !ie_lt9);
+  var captureMiddleClick = gecko || (ie && !ie_lt9);
 
   // Optimize some code when these features are not used
   var sawReadOnlySpans = false, sawCollapsedSpans = false;
@@ -54043,7 +52133,7 @@ window.CodeMirror = (function() {
   function makeDisplay(place, docStart) {
     var d = {};
 
-    var input = d.input = elt("textarea", null, null, "position: absolute; padding: 0; width: 1px; height: 1em; outline: none; font-size: 4px;");
+    var input = d.input = elt("textarea", null, null, "position: absolute; padding: 0; width: 1px; height: 1em; outline: none");
     if (webkit) input.style.width = "1000px";
     else input.setAttribute("wrap", "off");
     // if border: 0; -- iOS fails to open keyboard (issue #1287)
@@ -54115,7 +52205,7 @@ window.CodeMirror = (function() {
     // Self-resetting timeout for the poller
     d.poll = new Delayed();
 
-    d.cachedCharWidth = d.cachedTextHeight = null;
+    d.cachedCharWidth = d.cachedTextHeight = d.cachedPaddingH = null;
     d.measureLineCache = [];
     d.measureLineCachePos = 0;
 
@@ -54281,8 +52371,9 @@ window.CodeMirror = (function() {
     if (needsV) {
       d.scrollbarV.style.display = "block";
       d.scrollbarV.style.bottom = needsH ? scrollbarWidth(d.measure) + "px" : "0";
+      // A bug in IE8 can cause this value to be negative, so guard it.
       d.scrollbarV.firstChild.style.height =
-        (scrollHeight - d.scroller.clientHeight + d.scrollbarV.clientHeight) + "px";
+        Math.max(0, scrollHeight - d.scroller.clientHeight + d.scrollbarV.clientHeight) + "px";
     } else {
       d.scrollbarV.style.display = "";
       d.scrollbarV.firstChild.style.height = "0";
@@ -54762,12 +52853,12 @@ window.CodeMirror = (function() {
   function updateSelectionRange(cm) {
     var display = cm.display, doc = cm.doc, sel = cm.doc.sel;
     var fragment = document.createDocumentFragment();
-    var clientWidth = display.lineSpace.offsetWidth, pl = paddingLeft(cm.display);
+    var padding = paddingH(cm.display), leftSide = padding.left, rightSide = display.lineSpace.offsetWidth - padding.right;
 
     function add(left, top, width, bottom) {
       if (top < 0) top = 0;
       fragment.appendChild(elt("div", null, "CodeMirror-selected", "position: absolute; left: " + left +
-                               "px; top: " + top + "px; width: " + (width == null ? clientWidth - left : width) +
+                               "px; top: " + top + "px; width: " + (width == null ? rightSide - left : width) +
                                "px; height: " + (bottom - top) + "px"));
     }
 
@@ -54790,18 +52881,18 @@ window.CodeMirror = (function() {
           left = leftPos.left;
           right = rightPos.right;
         }
-        if (fromArg == null && from == 0) left = pl;
+        if (fromArg == null && from == 0) left = leftSide;
         if (rightPos.top - leftPos.top > 3) { // Different lines, draw top part
           add(left, leftPos.top, null, leftPos.bottom);
-          left = pl;
+          left = leftSide;
           if (leftPos.bottom < rightPos.top) add(left, leftPos.bottom, null, rightPos.top);
         }
-        if (toArg == null && to == lineLen) right = clientWidth;
+        if (toArg == null && to == lineLen) right = rightSide;
         if (!start || leftPos.top < start.top || leftPos.top == start.top && leftPos.left < start.left)
           start = leftPos;
         if (!end || rightPos.bottom > end.bottom || rightPos.bottom == end.bottom && rightPos.right > end.right)
           end = rightPos;
-        if (left < pl + 1) left = pl;
+        if (left < leftSide + 1) left = leftSide;
         add(left, rightPos.top, right - left, rightPos.bottom);
       });
       return {start: start, end: end};
@@ -54817,13 +52908,13 @@ window.CodeMirror = (function() {
       if (singleVLine) {
         if (leftEnd.top < rightStart.top - 2) {
           add(leftEnd.right, leftEnd.top, null, leftEnd.bottom);
-          add(pl, rightStart.top, rightStart.left, rightStart.bottom);
+          add(leftSide, rightStart.top, rightStart.left, rightStart.bottom);
         } else {
           add(leftEnd.right, leftEnd.top, rightStart.left - leftEnd.right, leftEnd.bottom);
         }
       }
       if (leftEnd.bottom < rightStart.top)
-        add(pl, leftEnd.bottom, null, rightStart.top);
+        add(leftSide, leftEnd.bottom, null, rightStart.top);
     }
 
     removeChildrenAndAdd(display.selectionDiv, fragment);
@@ -54926,9 +53017,12 @@ window.CodeMirror = (function() {
 
   function paddingTop(display) {return display.lineSpace.offsetTop;}
   function paddingVert(display) {return display.mover.offsetHeight - display.lineSpace.offsetHeight;}
-  function paddingLeft(display) {
-    var e = removeChildrenAndAdd(display.measure, elt("pre", null, null, "text-align: left")).appendChild(elt("span", "x"));
-    return e.offsetLeft;
+  function paddingH(display) {
+    if (display.cachedPaddingH) return display.cachedPaddingH;
+    var e = removeChildrenAndAdd(display.measure, elt("pre", "x"));
+    var style = window.getComputedStyle ? window.getComputedStyle(e) : e.currentStyle;
+    return display.cachedPaddingH = {left: parseInt(style.paddingLeft),
+                                     right: parseInt(style.paddingRight)};
   }
 
   function measureChar(cm, line, ch, data, bias) {
@@ -55102,7 +53196,7 @@ window.CodeMirror = (function() {
 
   function clearCaches(cm) {
     cm.display.measureLineCache.length = cm.display.measureLineCachePos = 0;
-    cm.display.cachedCharWidth = cm.display.cachedTextHeight = null;
+    cm.display.cachedCharWidth = cm.display.cachedTextHeight = cm.display.cachedPaddingH = null;
     if (!cm.options.lineWrapping) cm.display.maxLineChanged = true;
     cm.display.lineNumChars = null;
   }
@@ -55318,7 +53412,7 @@ window.CodeMirror = (function() {
     if (op.updateMaxLine) computeMaxLength(cm);
     if (display.maxLineChanged && !cm.options.lineWrapping && display.maxLine) {
       var width = measureLineWidth(cm, display.maxLine);
-      display.sizer.style.minWidth = Math.max(0, width + 3 + scrollerCutOff) + "px";
+      display.sizer.style.minWidth = Math.max(0, width + 3) + "px";
       display.maxLineChanged = false;
       var maxScrollLeft = Math.max(0, display.sizer.offsetLeft + display.sizer.offsetWidth - display.scroller.clientWidth);
       if (maxScrollLeft < doc.scrollLeft && !op.updateScrollPos)
@@ -55500,6 +53594,10 @@ window.CodeMirror = (function() {
       cm.display.input.focus();
   }
 
+  function ensureFocus(cm) {
+    if (!cm.state.focused) { focusInput(cm); onFocus(cm); }
+  }
+
   function isReadOnly(cm) {
     return cm.options.readOnly || cm.doc.cantEdit;
   }
@@ -55556,7 +53654,7 @@ window.CodeMirror = (function() {
       if (resizeTimer == null) resizeTimer = setTimeout(function() {
         resizeTimer = null;
         // Might be a text scaling operation, clear size caches.
-        d.cachedCharWidth = d.cachedTextHeight = knownScrollbarWidth = null;
+        d.cachedCharWidth = d.cachedTextHeight = d.cachedPaddingH = knownScrollbarWidth = null;
         clearCaches(cm);
         runInOp(cm, bind(regChange, cm));
       }, 100);
@@ -55572,10 +53670,7 @@ window.CodeMirror = (function() {
     }
     setTimeout(unregister, 5000);
 
-    on(d.input, "keyup", operation(cm, function(e) {
-      if (signalDOMEvent(cm, e) || cm.options.onKeyEvent && cm.options.onKeyEvent(cm, addStop(e))) return;
-      if (e.keyCode == 16) cm.doc.sel.shift = false;
-    }));
+    on(d.input, "keyup", operation(cm, onKeyUp));
     on(d.input, "input", function() {
       if (ie && !ie_lt9 && cm.display.inputHasSelection) cm.display.inputHasSelection = null;
       fastPoll(cm);
@@ -55669,6 +53764,7 @@ window.CodeMirror = (function() {
     }
     if (clickInGutter(cm, e)) return;
     var start = posFromMouse(cm, e);
+    window.focus();
 
     switch (e_button(e)) {
     case 3:
@@ -55686,7 +53782,7 @@ window.CodeMirror = (function() {
     // selection.
     if (!start) {if (e_target(e) == display.scroller) e_preventDefault(e); return;}
 
-    if (!cm.state.focused) onFocus(cm);
+    setTimeout(bind(ensureFocus, cm), 0);
 
     var now = +new Date, type = "single";
     if (lastDoubleClick && lastDoubleClick.time > now - 400 && posEq(lastDoubleClick.pos, start)) {
@@ -55766,7 +53862,7 @@ window.CodeMirror = (function() {
       var cur = posFromMouse(cm, e, true);
       if (!cur) return;
       if (!posEq(cur, last)) {
-        if (!cm.state.focused) onFocus(cm);
+        ensureFocus(cm);
         last = cur;
         doSelect(cur);
         var visible = visibleLines(display, doc);
@@ -55791,7 +53887,7 @@ window.CodeMirror = (function() {
     }
 
     var move = operation(cm, function(e) {
-      if (!old_ie && !e_button(e)) done(e);
+      if ((ie && !ie_lt10) ?  !e.buttons : !e_button(e)) done(e);
       else extend(e);
     });
     var up = operation(cm, done);
@@ -55936,7 +54032,7 @@ window.CodeMirror = (function() {
   // know one. These don't have to be accurate -- the result of them
   // being wrong would just be a slight flicker on the first wheel
   // scroll (if it is large enough).
-  if (old_ie) wheelPixelsPerUnit = -.53;
+  if (ie) wheelPixelsPerUnit = -.53;
   else if (gecko) wheelPixelsPerUnit = 15;
   else if (chrome) wheelPixelsPerUnit = -.7;
   else if (safari) wheelPixelsPerUnit = -1/3;
@@ -56085,10 +54181,16 @@ window.CodeMirror = (function() {
     return handled;
   }
 
+  function onKeyUp(e) {
+    var cm = this;
+    if (signalDOMEvent(cm, e) || cm.options.onKeyEvent && cm.options.onKeyEvent(cm, addStop(e))) return;
+    if (e.keyCode == 16) cm.doc.sel.shift = false;
+  }
+
   var lastStoppedKey = null;
   function onKeyDown(e) {
     var cm = this;
-    if (!cm.state.focused) onFocus(cm);
+    ensureFocus(cm);
     if (signalDOMEvent(cm, e) || cm.options.onKeyEvent && cm.options.onKeyEvent(cm, addStop(e))) return;
     if (old_ie && e.keyCode == 27) e.returnValue = false;
     var code = e.keyCode;
@@ -56181,7 +54283,7 @@ window.CodeMirror = (function() {
 
       // Try to detect the user choosing select-all
       if (display.input.selectionStart != null) {
-        if (!old_ie || ie_lt9) prepareSelectAllHack();
+        if (!ie || ie_lt9) prepareSelectAllHack();
         clearTimeout(detectingSelectAll);
         var i = 0, poll = function(){
           if (display.prevInput == "\u200b" && display.input.selectionStart == 0)
@@ -56193,7 +54295,7 @@ window.CodeMirror = (function() {
       }
     }
 
-    if (old_ie && !ie_lt9) prepareSelectAllHack();
+    if (ie && !ie_lt9) prepareSelectAllHack();
     if (captureMiddleClick) {
       e_stop(e);
       var mouseup = function() {
@@ -56690,15 +54792,16 @@ window.CodeMirror = (function() {
   // API UTILITIES
 
   function indentLine(cm, n, how, aggressive) {
-    var doc = cm.doc;
+    var doc = cm.doc, state;
     if (how == null) how = "add";
     if (how == "smart") {
       if (!cm.doc.mode.indent) how = "prev";
-      else var state = getStateBefore(cm, n);
+      else state = getStateBefore(cm, n);
     }
 
     var tabSize = cm.options.tabSize;
     var line = getLine(doc, n), curSpace = countColumn(line.text, null, tabSize);
+    if (line.stateAfter) line.stateAfter = null;
     var curSpaceString = line.text.match(/^\s*/)[0], indentation;
     if (!aggressive && !/\S/.test(line.text)) {
       indentation = 0;
@@ -56773,13 +54876,15 @@ window.CodeMirror = (function() {
         if (dir < 0 && !moveOnce(!first)) break;
         var cur = lineObj.text.charAt(ch) || "\n";
         var type = isWordChar(cur) ? "w"
-          : !group ? null
-          : /\s/.test(cur) ? null
+          : group && cur == "\n" ? "n"
+          : !group || /\s/.test(cur) ? null
           : "p";
+        if (group && !first && !type) type = "s";
         if (sawType && sawType != type) {
           if (dir < 0) {dir = 1; moveOnce();}
           break;
         }
+
         if (type) sawType = type;
         if (dir > 0 && !moveOnce(!first)) break;
       }
@@ -57100,6 +55205,8 @@ window.CodeMirror = (function() {
     },
 
     triggerOnKeyDown: operation(null, onKeyDown),
+    triggerOnKeyPress: operation(null, onKeyPress),
+    triggerOnKeyUp: operation(null, onKeyUp),
 
     execCommand: function(cmd) {
       if (commands.hasOwnProperty(cmd))
@@ -57166,8 +55273,10 @@ window.CodeMirror = (function() {
         this.display.cursor.className += " CodeMirror-overwrite";
       else
         this.display.cursor.className = this.display.cursor.className.replace(" CodeMirror-overwrite", "");
+
+      signal(this, "overwriteToggle", this, this.state.overwrite);
     },
-    hasFocus: function() { return this.state.focused; },
+    hasFocus: function() { return document.activeElement == this.display.input; },
 
     scrollTo: operation(null, function(x, y) {
       updateScrollPos(this, x, y);
@@ -57208,16 +55317,19 @@ window.CodeMirror = (function() {
       if (this.options.lineWrapping)
         this.display.measureLineCache.length = this.display.measureLineCachePos = 0;
       this.curOp.forceUpdate = true;
+      signal(this, "refresh", this);
     }),
 
     operation: function(f){return runInOp(this, f);},
 
     refresh: operation(null, function() {
-      var badHeight = this.display.cachedTextHeight == null;
+      var oldHeight = this.display.cachedTextHeight;
       clearCaches(this);
       updateScrollPos(this, this.doc.scrollLeft, this.doc.scrollTop);
       regChange(this);
-      if (badHeight) estimateLineHeights(this);
+      if (oldHeight == null || Math.abs(oldHeight - textHeight(this.display)) > .5)
+        estimateLineHeights(this);
+      signal(this, "refresh", this);
     }),
 
     swapDoc: operation(null, function(doc) {
@@ -57368,6 +55480,7 @@ window.CodeMirror = (function() {
       spec = mimeModes[spec];
     } else if (spec && typeof spec.name == "string" && mimeModes.hasOwnProperty(spec.name)) {
       var found = mimeModes[spec.name];
+      if (typeof found == "string") found = {name: found};
       spec = createObj(found, spec);
       spec.name = found.name;
     } else if (typeof spec == "string" && /^[\w\-]+\/[\w\-]+\+xml$/.test(spec)) {
@@ -57480,7 +55593,7 @@ window.CodeMirror = (function() {
     },
     deleteLine: function(cm) {
       var l = cm.getCursor().line;
-      cm.replaceRange("", Pos(l, 0), Pos(l), "+delete");
+      cm.replaceRange("", Pos(l, 0), Pos(l + 1, 0), "+delete");
     },
     delLineLeft: function(cm) {
       var cur = cm.getCursor();
@@ -57571,7 +55684,7 @@ window.CodeMirror = (function() {
   // default. Unknown commands are simply ignored.
   keyMap.pcDefault = {
     "Ctrl-A": "selectAll", "Ctrl-D": "deleteLine", "Ctrl-Z": "undo", "Shift-Ctrl-Z": "redo", "Ctrl-Y": "redo",
-    "Ctrl-Home": "goDocStart", "Alt-Up": "goDocStart", "Ctrl-End": "goDocEnd", "Ctrl-Down": "goDocEnd",
+    "Ctrl-Home": "goDocStart", "Ctrl-Up": "goDocStart", "Ctrl-End": "goDocEnd", "Ctrl-Down": "goDocEnd",
     "Ctrl-Left": "goGroupLeft", "Ctrl-Right": "goGroupRight", "Alt-Left": "goLineStart", "Alt-Right": "goLineEnd",
     "Ctrl-Backspace": "delGroupBefore", "Ctrl-Delete": "delGroupAfter", "Ctrl-S": "save", "Ctrl-F": "find",
     "Ctrl-G": "findNext", "Shift-Ctrl-G": "findPrev", "Shift-Ctrl-F": "replace", "Shift-Ctrl-R": "replaceAll",
@@ -58288,6 +56401,7 @@ window.CodeMirror = (function() {
         var aboveVisible = heightAtLine(cm, line) < cm.doc.scrollTop;
         updateLineHeight(line, line.height + widgetHeight(widget));
         if (aboveVisible) addToScrollPos(cm, 0, widget.height);
+        cm.curOp.forceUpdate = true;
       }
       return true;
     });
@@ -58419,7 +56533,7 @@ window.CodeMirror = (function() {
   function interpretTokenStyle(style, builder) {
     if (!style) return null;
     for (;;) {
-      var lineClass = style.match(/(?:^|\s)line-(background-)?(\S+)/);
+      var lineClass = style.match(/(?:^|\s+)line-(background-)?(\S+)/);
       if (!lineClass) break;
       style = style.slice(0, lineClass.index) + style.slice(lineClass.index + lineClass[0].length);
       var prop = lineClass[1] ? "bgClass" : "textClass";
@@ -58428,9 +56542,10 @@ window.CodeMirror = (function() {
       else if (!(new RegExp("(?:^|\s)" + lineClass[2] + "(?:$|\s)")).test(builder[prop]))
         builder[prop] += " " + lineClass[2];
     }
+    if (/^\s*$/.test(style)) return null;
     var cache = builder.cm.options.addModeClass ? styleToClassCacheWithMode : styleToClassCache;
     return cache[style] ||
-      (cache[style] = "cm-" + style.replace(/ +/g, " cm-"));
+      (cache[style] = style.replace(/\S+/g, "cm-$&"));
   }
 
   function buildLineContent(cm, realLine, measure, copyWidgets) {
@@ -58447,7 +56562,7 @@ window.CodeMirror = (function() {
       builder.measure = line == realLine && measure;
       builder.pos = 0;
       builder.addToken = builder.measure ? buildTokenMeasure : buildToken;
-      if ((old_ie || webkit) && cm.getOption("lineWrapping"))
+      if ((ie || webkit) && cm.getOption("lineWrapping"))
         builder.addToken = buildTokenSplitSpaces(builder.addToken);
       var next = insertLineContent(line, builder, getLineStyles(cm, line));
       if (measure && line == realLine && !builder.measuredSomething) {
@@ -58990,6 +57105,22 @@ window.CodeMirror = (function() {
       }
       return markers;
     },
+    findMarks: function(from, to) {
+      from = clipPos(this, from); to = clipPos(this, to);
+      var found = [], lineNo = from.line;
+      this.iter(from.line, to.line + 1, function(line) {
+        var spans = line.markedSpans;
+        if (spans) for (var i = 0; i < spans.length; i++) {
+          var span = spans[i];
+          if (!(lineNo == from.line && from.ch > span.to ||
+                span.from == null && lineNo != from.line||
+                lineNo == to.line && span.from > to.ch))
+            found.push(span.marker.parent || span.marker);
+        }
+        ++lineNo;
+      });
+      return found;
+    },
     getAllMarks: function() {
       var markers = [];
       this.iter(function(line) {
@@ -59263,6 +57394,8 @@ window.CodeMirror = (function() {
     hist.lastTime = time;
     hist.lastOp = opId;
     hist.lastOrigin = change.origin;
+
+    if (!last) signal(doc, "historyAdded");
   }
 
   function removeClearedSpans(spans) {
@@ -59544,7 +57677,7 @@ window.CodeMirror = (function() {
     return function(){return f.apply(null, args);};
   }
 
-  var nonASCIISingleCaseWordChar = /[\u3040-\u309f\u30a0-\u30ff\u3400-\u4db5\u4e00-\u9fcc\uac00-\ud7af]/;
+  var nonASCIISingleCaseWordChar = /[\u00df\u3040-\u309f\u30a0-\u30ff\u3400-\u4db5\u4e00-\u9fcc\uac00-\ud7af]/;
   function isWordChar(ch) {
     return /\w/.test(ch) || ch > "\x80" &&
       (ch.toUpperCase() != ch.toLowerCase() || nonASCIISingleCaseWordChar.test(ch));
@@ -59985,7 +58118,7 @@ window.CodeMirror = (function() {
 
   // THE END
 
-  CodeMirror.version = "3.21.0";
+  CodeMirror.version = "3.22.0";
 
   return CodeMirror;
 })();
@@ -59993,7 +58126,8 @@ window.CodeMirror = (function() {
 CodeMirror.defineMode("xml", function(config, parserConfig) {
   var indentUnit = config.indentUnit;
   var multilineTagIndentFactor = parserConfig.multilineTagIndentFactor || 1;
-  var multilineTagIndentPastTag = parserConfig.multilineTagIndentPastTag || true;
+  var multilineTagIndentPastTag = parserConfig.multilineTagIndentPastTag;
+  if (multilineTagIndentPastTag == null) multilineTagIndentPastTag = true;
 
   var Kludges = parserConfig.htmlMode ? {
     autoSelfClosers: {'area': true, 'base': true, 'br': true, 'col': true, 'command': true,
@@ -60328,7 +58462,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
 CodeMirror.defineMode("javascript", function(config, parserConfig) {
   var indentUnit = config.indentUnit;
   var statementIndent = parserConfig.statementIndent;
-  var jsonMode = parserConfig.json;
+  var jsonldMode = parserConfig.jsonld;
+  var jsonMode = parserConfig.json || jsonldMode;
   var isTS = parserConfig.typescript;
 
   // Tokenizer
@@ -60378,6 +58513,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
   }();
 
   var isOperatorChar = /[+\-*&%=<>!?|~^]/;
+  var isJsonldKeyword = /^@(context|id|value|language|type|container|list|set|reverse|index|base|vocab|graph)"/;
 
   function readRegexp(stream) {
     var escaped = false, next, inSet = false;
@@ -60453,6 +58589,10 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
   function tokenString(quote) {
     return function(stream, state) {
       var escaped = false, next;
+      if (jsonldMode && stream.peek() == "@" && stream.match(isJsonldKeyword)){
+        state.tokenize = tokenBase;
+        return ret("jsonld-keyword", "meta");
+      }
       while ((next = stream.next()) != null) {
         if (next == quote && !escaped) break;
         escaped = !escaped && next == "\\";
@@ -60520,7 +58660,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
 
   // Parser
 
-  var atomicTypes = {"atom": true, "number": true, "variable": true, "string": true, "regexp": true, "this": true};
+  var atomicTypes = {"atom": true, "number": true, "variable": true, "string": true, "regexp": true, "this": true, "jsonld-keyword": true};
 
   function JSLexical(indented, column, type, align, prev, info) {
     this.indented = indented;
@@ -60733,7 +58873,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
       cx.marked = "property";
       if (value == "get" || value == "set") return cont(getterSetter);
     } else if (type == "number" || type == "string") {
-      cx.marked = type + " property";
+      cx.marked = jsonldMode ? "property" : (type + " property");
     } else if (type == "[") {
       return cont(expression, expect("]"), afterprop);
     }
@@ -60941,6 +59081,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     fold: "brace",
 
     helperType: jsonMode ? "json" : "javascript",
+    jsonldMode: jsonldMode,
     jsonMode: jsonMode
   };
 });
@@ -60951,5 +59092,6 @@ CodeMirror.defineMIME("application/javascript", "javascript");
 CodeMirror.defineMIME("application/ecmascript", "javascript");
 CodeMirror.defineMIME("application/json", {name: "javascript", json: true});
 CodeMirror.defineMIME("application/x-json", {name: "javascript", json: true});
+CodeMirror.defineMIME("application/ld+json", {name: "javascript", jsonld: true});
 CodeMirror.defineMIME("text/typescript", { name: "javascript", typescript: true });
 CodeMirror.defineMIME("application/typescript", { name: "javascript", typescript: true });

@@ -3192,7 +3192,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <input name=\"{{name}}\" type='file' ng-model='model'/>\n" +
     "  </span>\n" +
     "  <span ng-switch-when=\"enum\">\n" +
-    "    <enum options='definition.enum' model='model'>\n" +
+    "    <enum options='definition.enum' model='$parent.model'>\n" +
     "      <input validated-input name=\"{{name}}\" type='text' ng-model='$parent.model' placeholder='{{placeholder}}' ng-trim=\"false\" constraints='definition' invalid-class='invalidClass'/>\n" +
     "    </enum>\n" +
     " </span>\n" +
