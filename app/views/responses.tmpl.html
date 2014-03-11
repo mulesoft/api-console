@@ -1,15 +1,7 @@
 <section class="responses">
-  <ul class="nav nav-tabs">
-    <li>
-      <a>Responses</a>
-    </li>
-    <li ng-repeat='(responseCode, response) in method.responses' ng-class="{active: selected(responseCode) }" ng-click="select(responseCode)">
-      <a href="#{{responseCode}}">{{ responseCode }}</a>
-    </li>
-  </ul>
-
+  <subtabs tabs="method.responseCodes" key-base="{{ resource.toString() + ':' + method.method }}"></subtabs>
   <div class="documentation-section response" expanded='responsesView.expanded[responseCode]' ng-repeat='(responseCode, response) in method.responses'>
-    <a class="response-code" name="{{responseCode}}" role="response-code"> {{responseCode}} </a>
+    <a id="{{responseCode}}" class="response-code" role="response-code"> {{responseCode}} </a>
     <section role='response'>
       <div markdown='response.description'></div>
       <div ng-if='!documentation.isEmpty(response.headers)'>

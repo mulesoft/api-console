@@ -1,29 +1,32 @@
 'use strict';
 
 (function() {
-  var controller = function($scope, DataStore) {
-    this.tabs = $scope.tabs = [];
-    $scope.tabset = this;
+  function Controller($scope, DataStore) {
+    this.tabs = [];
     this.DataStore = DataStore;
     this.key = $scope.keyBase + ':tabset';
-  };
 
-  controller.prototype.select = function(tab, dontPersist) {
+    $scope.tabset = this;
+  }
+
+  Controller.prototype.select = function(tab, dontPersist) {
     if (tab.disabled) {
       return;
     }
 
-    this.tabs.forEach(function(tab) {
-      tab.active = false;
-    });
-
-    tab.active = true;
     if (!dontPersist) {
       this.DataStore.set(this.key, tab.heading);
     }
+
+    this.tabs.forEach(function(item) {
+      item.active = false;
+    });
+
+    tab.active = true;
+    this.active = tab;
   };
 
-  controller.prototype.addTab = function(tab) {
+  Controller.prototype.addTab = function(tab) {
     var previouslyEnabled = this.DataStore.get(this.key) === tab.heading,
         allOthersDisabled = this.tabs.every(function(tab) { return tab.disabled; });
 
@@ -35,6 +38,5 @@
   };
 
 
-  RAML.Controllers.tabset = controller;
-
+  RAML.Controllers.tabset = Controller;
 })();

@@ -1,9 +1,25 @@
-<div class="tabbable">
-  <ul class="nav nav-tabs">
-    <li ng-repeat="tab in tabs" ng-class="{active: tab.active, disabled: tab.disabled}">
-      <a ng-click="tabset.select(tab)">{{tab.heading}}</a>
-    </li>
-  </ul>
+<div class="method-nav-container">
+  <div class="method-nav">
+    <ul class="method-nav-group">
+      <li>
+        <a>{{heading}}</a>
+      </li>
 
-  <div class="tab-content" ng-transclude></div>
-</div>
+      <li class="method-nav-item" ng-repeat="item in tabset.tabs" ng-class="{active: item.active, disabled: item.disabled}">
+        <a ng-click="tabset.select(item)">{{item.heading}}</a>
+      </li>
+    </ul>
+
+    <ul ng-repeat="item in tabset.tabs" class="method-nav-group method-sub-nav" ng-if="tabset.active.heading == item.heading && item.subtabs">
+      <li>
+        <a>{{item.heading}}</a>
+      </li>
+      <li class="method-nav-item" ng-repeat="subItem in item.subtabs" ng-click="item.select(subItem)" ng-class="{active: item.selected(subItem)}">
+        <a>{{subItem}}</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="method-content-container" ng-transclude>
+  </div>
+<div>

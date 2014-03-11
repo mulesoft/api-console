@@ -12,83 +12,80 @@
 }
 
 .method-nav(@color, @mediumColor, @lightColor) {
-  .tabbable, .nav, .nav-tabs {
-    .clearfix();
+  .method-nav-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
-  .nav {
-    position: absolute;
-    top: 0;
-    width: 100%;
+  .method-nav {
     color: white;
     background-color: @color;
-    z-index: 5;
-  }
 
-  .nav-tabs {
-    text-align: right;
-  }
+    .method-nav-group {
+      text-align: right;
+      padding: 0 0 0 10px;
 
-  .nav-tabs > li {
-    display: inline-block;
-    cursor: pointer;
-    line-height: 24px;
-  }
+      >li:nth-child(1) {
+        float:left;
+        user-select: none;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
 
-  .nav-tabs > li > a {
-    display: block;
-    color: white;
-    padding: 0 15px;
-    line-height: 24px;
-  }
+      li:nth-child(1) > a,
+      li:nth-child(1) > a:hover {
+        color: white;
+        line-height: 24px;
+      }
 
-  .nav-tabs > li:nth-child(1) {
-    display: block;
-    position: absolute;
-    user-select: none;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
+      &.method-sub-nav {
+        background-color: @mediumColor;
 
-  .nav-tabs > li:nth-child(2) {
-    margin-left: 60px;
-  }
+        .method-nav-item {
+          >a:hover, &.active > a, &.active > a:hover, &.active > a:focus {
+            background-color: @lightColor;
+          }
+        }
 
-  .nav-tabs > li:nth-child(1) > a,
-  .nav-tabs > li:nth-child(1) > a:hover {
-    color: white;
-  }
+      }
 
-  .nav-tabs > li > a:hover,
-  .nav-tabs > .active > a,
-  .nav-tabs > .active > a:hover,
-  .nav-tabs > .active > a:focus {
-    cursor: default;
-    background-color: @mediumColor;
-  }
+      .method-nav-item {
+        display: inline-block;
+        cursor: pointer;
+        line-height: 24px;
+      }
 
-  .nav > .disabled > a,
-  .nav > .disabled > a:hover,
-  .nav > .disabled > a:focus {
-    color: tint(@color, 50%);
-    text-decoration: none;
-    cursor: default;
-    background-color: transparent;
-  }
+      .method-nav-item {
+        >a {
+          display: block;
+          color: white;
+          padding: 0 15px;
+          line-height: 24px;
+        }
 
-  .responses {
-    margin-top: 50px;
+        >a:hover, &.active > a, &.active > a:hover, &.active > a:focus {
+          cursor: default;
+          background-color: @mediumColor;
+        }
 
-    .nav {
-      top: 24px;
-      left: 0;
-      background-color: @mediumColor;
-
-      .active a {
-        background-color: @lightColor;
+        &.disabled > a, &.disabled > a:hover, &.disabled > a:focus {
+          color: tint(@color, 50%);
+          text-decoration: none;
+          cursor: default;
+          background-color: transparent;
+        }
       }
     }
-   }
+  }
+
+  .method-content-container {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 0 10px;
+  }
 
   .try-it {
     margin-top: 76px;
@@ -99,10 +96,6 @@
       background-color: @mediumColor;
       padding: 10px 0 10px 15px;
     }
-  }
-
-  .tab-content {
-    padding: 0 15px;
   }
 }
 

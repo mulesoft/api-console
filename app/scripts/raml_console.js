@@ -36,6 +36,7 @@
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
   module.directive('tab', RAML.Directives.tab);
   module.directive('tabset', RAML.Directives.tabset);
+  module.directive('subtabs', RAML.Directives.subtabs);
   module.directive('toggle', RAML.Directives.toggle);
   module.directive('toggleItem', RAML.Directives.toggleItem);
   module.directive('tryIt', RAML.Directives.tryIt);

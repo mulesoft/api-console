@@ -17,7 +17,7 @@ describe("trying an API method", function() {
 
   var openTryIt = function(resource) {
     var method = openMethod(1, resource);
-    method.$('.nav-tabs li:last-child a').click();
+    method.$('.method-nav-group li:last-child a').click();
   };
 
   var tryIt = function(resource) {
@@ -74,13 +74,7 @@ describe("trying an API method", function() {
       openTryIt(resource);
       tryIt(resource);
 
-      waitUntilTextEquals(
-        resource.$('.try-it [role="error"]'),
-        "Required URI Parameters must be entered"
-      );
-
-      var uriParemeterInput = resource.$('[role=path] input');
-      expect(uriParemeterInput.getAttribute('class')).toContain('error');
+      expect(resource.$('.try-it [role="error"]').getText()).toMatch(/Required URI Parameters must be entered/);
     });
   });
 

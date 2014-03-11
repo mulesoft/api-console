@@ -15,8 +15,8 @@
   };
 
   global.openDocumentationTab = function(index, method) {
-    method.$('.nav-tabs li:nth-child(' + index + ') a').click();
+    method.$('.method-nav-group li:nth-child(' + index + ') a').click();
 
-    return method.$('.tab-pane.active');
+    return method.$('.method-content.active');
   };
 })();

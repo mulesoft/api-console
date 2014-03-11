@@ -26,7 +26,7 @@ describe("RAML.Directives.responses", function() {
       scope.method = scope.resource.methods[0];
 
       dataStore.set('/resource:get', '500');
-      el = compileTemplate("<responses></responses>", scope);
+      el = compileTemplate('<tabset><tab active="true" disabled="false"><responses></responses></tab></tabset>', scope);
       setFixtures(el);
     }));
 
@@ -35,12 +35,12 @@ describe("RAML.Directives.responses", function() {
     });
 
     it('queries the dataStore for the initial response state', function() {
-      expect(el.find('.nav li').eq(2)).toHaveClass('active');
+      expect(el.find('.method-sub-nav li').eq(2)).toHaveClass('active');
     });
 
     describe('when the responses codes are clicked', function() {
       beforeEach(function() {
-        click(el.find(".nav li").eq(1));
+        click(el.find(".method-sub-nav li").eq(1));
       });
 
       it('sets the state in the dataStore', function() {
