@@ -94,6 +94,7 @@
     create: function(raml, securitySchemes) {
       var method = RAML.Utils.clone(raml);
 
+      method.responseCodes = Object.keys(method.responses || {});
       method.securitySchemes = securitySchemesExtractor(securitySchemes);
       method.allowsAnonymousAccess = allowsAnonymousAccess;
       normalizeNamedParameters(method.headers);
