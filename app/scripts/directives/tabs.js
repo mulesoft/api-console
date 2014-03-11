@@ -23,6 +23,10 @@
         $scope.subtabs = subtabs;
         $scope.keyBase = keyBase;
       };
+
+      this.registerUriBar = function(uriBar) {
+        $scope.uriBar = uriBar;
+      };
     }
 
     RAML.Directives.tab = function($location, $anchorScroll, DataStore) {
@@ -70,6 +74,29 @@
         scope: {
           tabs: '=',
           keyBase: '@'
+        }
+      };
+    };
+  })();
+
+  (function() {
+    RAML.Directives.uriBar = function() {
+      return {
+        restrict: 'E',
+        require: '^tab',
+        link: function($scope, $element, $attrs, tabCtrl) {
+          $attrs.$observe('pathBuilder', function(pathBuilder) {
+            if (!pathBuilder) {
+              return;
+            }
+
+            tabCtrl.registerUriBar($scope);
+          });
+        },
+        scope: {
+          pathBuilder: '=',
+          baseUri: '=',
+          pathSegments: '='
         }
       };
     };

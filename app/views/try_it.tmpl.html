@@ -1,24 +1,6 @@
 <section class="try-it">
   <form>
-    <span role="path" class="nav path">
-      <span class="segment">
-        <span ng-repeat='token in api.baseUri.tokens track by $index'>
-          <span ng-if='api.baseUri.parameters[token]'>
-            <parameter-field name='token' placeholder='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]' invalid-class='error'
-            contained-by='[role="documentation"]'></parameter-field>
-          </span>
-          <span class="segment" ng-if="!api.baseUri.parameters[token]">{{token}}</span>
-        </span>
-        <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init="$segmentIndex = $index">
-          <span ng-repeat='token in segment.tokens track by $index'>
-            <span ng-if='segment.parameters[token]'>
-              <parameter-field name='token' placeholder='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]' invalid-class='error' contained-by='[role="documentation"]'></parameter-field>
-            </span>
-            <span class="segment" ng-if="!segment.parameters[token]">{{token}}</span>
-          </span>
-        </span>
-      </span>
-    </span>
+    <uri-bar base-uri="api.baseUri" path-segments="resource.pathSegments" path-builder="context.pathBuilder"></uri-bar>
 
     <security-schemes ng-if="apiClient.securitySchemes" schemes="apiClient.securitySchemes" keychain="ramlConsole.keychain" base-key="apiClient.baseKey()"></security-schemes>
     <named-parameters heading="Headers" parameters="context.headers"></named-parameters>
