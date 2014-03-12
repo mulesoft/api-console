@@ -344,6 +344,7 @@ RAML.Inspector = (function() {
     create: function(raml, securitySchemes) {
       var method = RAML.Utils.clone(raml);
 
+      method.responseCodes = Object.keys(method.responses || {});
       method.securitySchemes = securitySchemesExtractor(securitySchemes);
       method.allowsAnonymousAccess = allowsAnonymousAccess;
       normalizeNamedParameters(method.headers);
@@ -1596,29 +1597,32 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
-  var controller = function($scope, DataStore) {
-    this.tabs = $scope.tabs = [];
-    $scope.tabset = this;
+  function Controller($scope, DataStore) {
+    this.tabs = [];
     this.DataStore = DataStore;
     this.key = $scope.keyBase + ':tabset';
-  };
 
-  controller.prototype.select = function(tab, dontPersist) {
+    $scope.tabset = this;
+  }
+
+  Controller.prototype.select = function(tab, dontPersist) {
     if (tab.disabled) {
       return;
     }
 
-    this.tabs.forEach(function(tab) {
-      tab.active = false;
-    });
-
-    tab.active = true;
     if (!dontPersist) {
       this.DataStore.set(this.key, tab.heading);
     }
+
+    this.tabs.forEach(function(item) {
+      item.active = false;
+    });
+
+    tab.active = true;
+    this.active = tab;
   };
 
-  controller.prototype.addTab = function(tab) {
+  Controller.prototype.addTab = function(tab) {
     var previouslyEnabled = this.DataStore.get(this.key) === tab.heading,
         allOthersDisabled = this.tabs.every(function(tab) { return tab.disabled; });
 
@@ -1630,8 +1634,7 @@ RAML.Inspector = (function() {
   };
 
 
-  RAML.Controllers.tabset = controller;
-
+  RAML.Controllers.tabset = Controller;
 })();
 
 'use strict';
@@ -2827,29 +2830,10 @@ RAML.Inspector = (function() {
 'use strict';
 
 (function() {
-  RAML.Directives.responses = function(DataStore) {
-    function linkResponses($scope) {
-      $scope.keyBase = $scope.resource.toString() + ':' + $scope.method.method;
-
-      $scope.select = function select(responseCode) {
-        selectedCode = responseCode;
-        DataStore.set($scope.keyBase, responseCode);
-      };
-
-      $scope.selected = function selected(responseCode) {
-        return selectedCode === responseCode;
-      };
-
-      var selectedCode = DataStore.get($scope.keyBase);
-
-      selectedCode = selectedCode || Object.keys($scope.method.responses || {}).sort()[0];
-
-    }
-
+  RAML.Directives.responses = function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/responses.tmpl.html',
-      link: linkResponses
+      templateUrl: 'views/responses.tmpl.html'
     };
   };
 })();
@@ -2898,46 +2882,106 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  ////////////
-  // tabset
-  ////////////
-
-  RAML.Directives.tabset = function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      transclude: true,
-      controller: RAML.Controllers.tabset,
-      templateUrl: 'views/tabset.tmpl.html',
-      scope: {
-        keyBase: '@'
-      }
+  (function() {
+    RAML.Directives.tabset = function() {
+      return {
+        restrict: 'E',
+        templateUrl: 'views/tabset.tmpl.html',
+        replace: true,
+        transclude: true,
+        controller: RAML.Controllers.tabset,
+        scope: {
+          heading: '@',
+          keyBase: '@'
+        }
+      };
     };
-  };
+  })();
 
-  ////////////////
-  // tabs
-  ///////////////
+  (function() {
+    function Controller($scope) {
+      this.registerSubtabs = function(subtabs, keyBase) {
+        $scope.subtabs = subtabs;
+        $scope.keyBase = keyBase;
+      };
 
-  var link = function($scope, $element, $attrs, tabsetCtrl) {
-    tabsetCtrl.addTab($scope);
-  };
+      this.registerUriBar = function(uriBar) {
+        $scope.uriBar = uriBar;
+      };
+    }
 
-  RAML.Directives.tab = function() {
-    return {
-      restrict: 'E',
-      require: '^tabset',
-      replace: true,
-      transclude: true,
-      link: link,
-      templateUrl: 'views/tab.tmpl.html',
-      scope: {
-        heading: '@',
-        active: '=?',
-        disabled: '=?'
-      }
+    RAML.Directives.tab = function($location, $anchorScroll, DataStore) {
+      return {
+        restrict: 'E',
+        templateUrl: 'views/tab.tmpl.html',
+        replace: true,
+        transclude: true,
+        require: '^tabset',
+        controller: Controller,
+        link: function($scope, $element, $attrs, tabsetCtrl) {
+          var selected = DataStore.get($scope.keyBase);
+
+          $scope.select = function(subItem) {
+            selected = subItem;
+            $location.hash(selected);
+            $anchorScroll();
+            $location.hash('');
+            DataStore.set($scope.keyBase, selected);
+          };
+
+          $scope.selected = function(subItem) {
+            return (selected || $scope.subtabs[0]) === subItem;
+          };
+
+          tabsetCtrl.addTab($scope);
+        },
+        scope: {
+          active: '=',
+          disabled: '=',
+          heading: '@',
+        }
+      };
     };
-  };
+  })();
+
+  (function() {
+    RAML.Directives.subtabs = function() {
+      return {
+        restrict: 'E',
+        require: '^tab',
+        link: function($scope, $element, $attrs, tabCtrl) {
+          tabCtrl.registerSubtabs($scope.tabs, $scope.keyBase);
+        },
+        scope: {
+          tabs: '=',
+          keyBase: '@'
+        }
+      };
+    };
+  })();
+
+  (function() {
+    RAML.Directives.uriBar = function() {
+      return {
+        restrict: 'E',
+        require: '^tab',
+        link: function($scope, $element, $attrs, tabCtrl) {
+          $attrs.$observe('pathBuilder', function(pathBuilder) {
+            if (!pathBuilder) {
+              return;
+            }
+
+            tabCtrl.registerUriBar($scope);
+          });
+        },
+        scope: {
+          pathBuilder: '=',
+          baseUri: '=',
+          pathSegments: '='
+        }
+      };
+    };
+  })();
 })();
 
 (function() {
@@ -3272,6 +3316,8 @@ RAML.Filters = {};
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
   module.directive('tab', RAML.Directives.tab);
   module.directive('tabset', RAML.Directives.tabset);
+  module.directive('subtabs', RAML.Directives.subtabs);
+  module.directive('uriBar', RAML.Directives.uriBar);
   module.directive('toggle', RAML.Directives.toggle);
   module.directive('toggleItem', RAML.Directives.toggleItem);
   module.directive('tryIt', RAML.Directives.tryIt);
@@ -3393,10 +3439,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
-    "  <tabset key-base='{{ generateKey() }}'>\n" +
-    "    <tab heading=\"{{method.method}}\" disabled='true'>\n" +
-    "    </tab>\n" +
-    "    <tab class=\"request\" role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
+    "  <tabset key-base='{{ generateKey() }}' heading='{{ method.method }}'>\n" +
+    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
     "      <div class=\"modifiers\">\n" +
     "        <span class=\"modifier-group\" ng-if=\"method.is\">\n" +
     "          <span class=\"caption\">Traits:</span>\n" +
@@ -3428,10 +3472,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <div class=\"documentation-section\" ng-if='method.body && documentation.requestsActive'>\n" +
     "        <body-documentation body=\"method.body\" key-base=\"generateKey() + ':request'\"></body-documentation>\n" +
     "      </div>\n" +
+    "\n" +
     "    </tab>\n" +
-    "    <tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
+    "\n" +
+    "    <tab role=\"documentation-responses\" heading=\"Responses\"  active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
     "      <responses></responses>\n" +
     "    </tab>\n" +
+    "\n" +
     "    <tab role=\"try-it\" heading=\"Try It\" active=\"documentation.tryItActive\" disabled=\"!ramlConsole.tryItEnabled()\">\n" +
     "      <try-it></try-it>\n" +
     "    </tab>\n" +
@@ -3668,17 +3715,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/responses.tmpl.html',
     "<section class=\"responses\">\n" +
-    "  <ul class=\"nav nav-tabs\">\n" +
-    "    <li>\n" +
-    "      <a>Responses</a>\n" +
-    "    </li>\n" +
-    "    <li ng-repeat='(responseCode, response) in method.responses' ng-class=\"{active: selected(responseCode) }\" ng-click=\"select(responseCode)\">\n" +
-    "      <a href=\"#{{responseCode}}\">{{ responseCode }}</a>\n" +
-    "    </li>\n" +
-    "  </ul>\n" +
-    "\n" +
+    "  <subtabs tabs=\"method.responseCodes\" key-base=\"{{ resource.toString() + ':' + method.method }}\"></subtabs>\n" +
     "  <div class=\"documentation-section response\" expanded='responsesView.expanded[responseCode]' ng-repeat='(responseCode, response) in method.responses'>\n" +
-    "    <a class=\"response-code\" name=\"{{responseCode}}\" role=\"response-code\"> {{responseCode}} </a>\n" +
+    "    <a id=\"{{responseCode}}\" class=\"response-code\" role=\"response-code\"> {{responseCode}} </a>\n" +
     "    <section role='response'>\n" +
     "      <div markdown='response.description'></div>\n" +
     "      <div ng-if='!documentation.isEmpty(response.headers)'>\n" +
@@ -3727,22 +3766,59 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/tab.tmpl.html',
-    "<div class=\"tab-pane\" ng-class=\"{active: active, disabled: disabled}\" ng-show=\"active\" ng-transclude>\n" +
-    "\n" +
+    "<div class=\"method-content\" ng-class=\"{active: active, disabled: disabled}\" ng-show=\"active\" ng-transclude>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('views/tabset.tmpl.html',
-    "<div class=\"tabbable\">\n" +
-    "  <ul class=\"nav nav-tabs\">\n" +
-    "    <li ng-repeat=\"tab in tabs\" ng-class=\"{active: tab.active, disabled: tab.disabled}\">\n" +
-    "      <a ng-click=\"tabset.select(tab)\">{{tab.heading}}</a>\n" +
-    "    </li>\n" +
-    "  </ul>\n" +
+    "<div class=\"method-nav-container\">\n" +
+    "  <div class=\"method-nav\">\n" +
+    "    <ul class=\"method-nav-group\">\n" +
+    "      <li>\n" +
+    "        <a>{{heading}}</a>\n" +
+    "      </li>\n" +
     "\n" +
-    "  <div class=\"tab-content\" ng-transclude></div>\n" +
-    "</div>\n"
+    "      <li class=\"method-nav-item\" ng-repeat=\"item in tabset.tabs\" ng-class=\"{active: item.active, disabled: item.disabled}\">\n" +
+    "        <a ng-click=\"tabset.select(item)\">{{item.heading}}</a>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "\n" +
+    "    <ul ng-repeat=\"item in tabset.tabs\" class=\"method-nav-group method-sub-nav\" ng-if=\"tabset.active.heading == item.heading && item.subtabs\">\n" +
+    "      <li>\n" +
+    "        <a>{{item.heading}}</a>\n" +
+    "      </li>\n" +
+    "      <li class=\"method-nav-item\" ng-repeat=\"subItem in item.subtabs\" ng-click=\"item.select(subItem)\" ng-class=\"{active: item.selected(subItem)}\">\n" +
+    "        <a>{{subItem}}</a>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "\n" +
+    "    <div class=\"method-nav-group method-sub-nav uri-bar\" ng-repeat=\"item in tabset.tabs\" ng-if=\"tabset.active.heading == item.heading && item.uriBar\">\n" +
+    "      <span role=\"path\" class=\"path\">\n" +
+    "        <span class=\"segment\">\n" +
+    "          <span ng-repeat='token in item.uriBar.baseUri.tokens track by $index'>\n" +
+    "            <span ng-if='item.uriBar.baseUri.parameters[token]'>\n" +
+    "              <parameter-field name='token' placeholder='token' model='item.uriBar.pathBuilder.baseUriContext[token]' definition='item.uriBar.baseUri.parameters[token]' invalid-class='error'\n" +
+    "              contained-by='[role=\"documentation\"]'></parameter-field>\n" +
+    "            </span>\n" +
+    "            <span class=\"segment\" ng-if=\"!item.uriBar.baseUri.parameters[token]\">{{token}}</span>\n" +
+    "          </span>\n" +
+    "          <span role='segment' ng-repeat='segment in item.uriBar.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
+    "            <span ng-repeat='token in segment.tokens track by $index'>\n" +
+    "              <span ng-if='segment.parameters[token]'>\n" +
+    "                <parameter-field name='token' placeholder='token' model='item.uriBar.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]' invalid-class='error' contained-by='[role=\"documentation\"]'></parameter-field>\n" +
+    "              </span>\n" +
+    "              <span class=\"segment\" ng-if=\"!segment.parameters[token]\">{{token}}</span>\n" +
+    "            </span>\n" +
+    "          </span>\n" +
+    "        </span>\n" +
+    "      </span>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"method-content-container\" ng-transclude>\n" +
+    "  </div>\n" +
+    "<div>\n"
   );
 
 
@@ -3769,25 +3845,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('views/try_it.tmpl.html',
     "<section class=\"try-it\">\n" +
     "  <form>\n" +
-    "    <span role=\"path\" class=\"nav path\">\n" +
-    "      <span class=\"segment\">\n" +
-    "        <span ng-repeat='token in api.baseUri.tokens track by $index'>\n" +
-    "          <span ng-if='api.baseUri.parameters[token]'>\n" +
-    "            <parameter-field name='token' placeholder='token' model='context.pathBuilder.baseUriContext[token]' definition='api.baseUri.parameters[token]' invalid-class='error'\n" +
-    "            contained-by='[role=\"documentation\"]'></parameter-field>\n" +
-    "          </span>\n" +
-    "          <span class=\"segment\" ng-if=\"!api.baseUri.parameters[token]\">{{token}}</span>\n" +
-    "        </span>\n" +
-    "        <span role='segment' ng-repeat='segment in resource.pathSegments' ng-init=\"$segmentIndex = $index\">\n" +
-    "          <span ng-repeat='token in segment.tokens track by $index'>\n" +
-    "            <span ng-if='segment.parameters[token]'>\n" +
-    "              <parameter-field name='token' placeholder='token' model='context.pathBuilder.segmentContexts[$segmentIndex][token]' definition='segment.parameters[token]' invalid-class='error' contained-by='[role=\"documentation\"]'></parameter-field>\n" +
-    "            </span>\n" +
-    "            <span class=\"segment\" ng-if=\"!segment.parameters[token]\">{{token}}</span>\n" +
-    "          </span>\n" +
-    "        </span>\n" +
-    "      </span>\n" +
-    "    </span>\n" +
+    "    <uri-bar base-uri=\"api.baseUri\" path-segments=\"resource.pathSegments\" path-builder=\"context.pathBuilder\"></uri-bar>\n" +
     "\n" +
     "    <security-schemes ng-if=\"apiClient.securitySchemes\" schemes=\"apiClient.securitySchemes\" keychain=\"ramlConsole.keychain\" base-key=\"apiClient.baseKey()\"></security-schemes>\n" +
     "    <named-parameters heading=\"Headers\" parameters=\"context.headers\"></named-parameters>\n" +
