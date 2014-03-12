@@ -90,10 +90,6 @@ describe("RAML.Controllers.Resource", function() {
       it('sets child height based on the dataStore', function() {
         expect(childrenSpy.css).toHaveBeenCalledWith('height', '100px');
       });
-
-      it('disables the scroll', function() {
-        expect(scope.$emit).toHaveBeenCalledWith('console:blockScroll');
-      });
     });
 
     describe('expanding a method', function() {

@@ -61,19 +61,17 @@
       description.css('height', '0px');
     }
 
-    function blockScroll(offsetParent, wrapper, console) {
+    function blockScroll(offsetParent, wrapper) {
       wrapper.css('top', 0);
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
-      console.addClass('scroll-disabled');
     }
 
     function afterAnimation(cb) {
       setTimeout(cb, animationDuration);
     }
 
-    function restoreScroll(offsetParent, wrapper, console) {
+    function restoreScroll(offsetParent, wrapper) {
       var scrollTop = DataStore.get('pop-up:console-scrollTop');
-      console.removeClass('scroll-disabled');
       offsetParent[0].scrollTop = scrollTop;
       wrapper.css('top', scrollTop + 'px');
     }
@@ -109,8 +107,7 @@
           afterAnimation(function() {
             elements.wrapper.css('height', '');
             elements.placeholder.css('height', DataStore.get('pop-up:resource-height'));
-            blockScroll(elements.offsetParent, elements.wrapper, elements.console);
-
+            blockScroll(elements.offsetParent, elements.wrapper);
             done();
           });
         });
@@ -119,7 +116,7 @@
       beforeRemoveClass: function(element, className, done) {
         var elements = getElements(element);
 
-        restoreScroll(elements.offsetParent, elements.wrapper, elements.console);
+        restoreScroll(elements.offsetParent, elements.wrapper);
         elements.wrapper.css('background-color', 'transparent');
         elements.wrapper.css('height', DataStore.get('pop-up:wrapper-height'));
         elements.resource.css('height', elements.resource[0].getBoundingClientRect().height + 'px'); // Safari loses the resource's height otherwise
@@ -1545,6 +1542,7 @@ RAML.Inspector = (function() {
         $scope.selectedMethod = method;
         DataStore.set(this.methodKey(), method.method);
       } else {
+        DataStore.set($scope.api.title + ':popup', $scope.resource.toString());
         $scope.methodToAdd = method;
       }
     };
@@ -1557,6 +1555,7 @@ RAML.Inspector = (function() {
 
     this.collapseMethod = function($event) {
       DataStore.set(this.methodKey(), undefined);
+      DataStore.set($scope.api.title + ':popup', undefined);
       $scope.methodToAdd = undefined;
       $event.stopPropagation();
     };
@@ -1578,10 +1577,7 @@ RAML.Inspector = (function() {
       if (method) {
         this.expanded = false;
         this.expandMethod(method);
-        $scope.$emit('console:blockScroll');
         $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
-      } else {
-        $scope.$emit('console:restoreScroll');
       }
     }
   };
@@ -2666,6 +2662,17 @@ RAML.Inspector = (function() {
   RAML.Directives.ramlConsole = function(ramlParserWrapper, DataStore, $timeout) {
 
     var link = function ($scope, $el, $attrs, controller) {
+      $scope.popOverOpen = function() {
+        if (!$scope.api) {
+          return false;
+        }
+
+        var currentlyDisplayed = DataStore.get($scope.api.title + ':popup');
+        return $scope.api.resources.some(function(resource) {
+          return resource.toString() === currentlyDisplayed;
+        });
+      };
+
       ramlParserWrapper.onParseSuccess(function(raml) {
         var inner = $($el[0]).find('.inner');
 
@@ -2682,14 +2689,6 @@ RAML.Inspector = (function() {
 
       ramlParserWrapper.onParseError(function(error) {
         $scope.parseError = error;
-      });
-
-      $scope.$on('console:blockScroll', function() {
-        $el.addClass('scroll-disabled');
-      });
-
-      $scope.$on('console:restoreScroll', function() {
-        $el.removeClass('scroll-disabled');
       });
     };
 
@@ -3628,7 +3627,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/raml-console.tmpl.html',
-    "<article role=\"api-console\" id=\"raml-console\">\n" +
+    "<article role=\"api-console\" id=\"raml-console\" ng-class=\"{'scroll-disabled': popOverOpen()}\">\n" +
     "  <div role=\"error\" ng-if=\"parseError\">\n" +
     "    {{parseError}}\n" +
     "  </div>\n" +

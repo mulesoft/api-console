@@ -55,19 +55,17 @@
       description.css('height', '0px');
     }
 
-    function blockScroll(offsetParent, wrapper, console) {
+    function blockScroll(offsetParent, wrapper) {
       wrapper.css('top', 0);
       DataStore.set('pop-up:console-scrollTop', offsetParent[0].scrollTop);
-      console.addClass('scroll-disabled');
     }
 
     function afterAnimation(cb) {
       setTimeout(cb, animationDuration);
     }
 
-    function restoreScroll(offsetParent, wrapper, console) {
+    function restoreScroll(offsetParent, wrapper) {
       var scrollTop = DataStore.get('pop-up:console-scrollTop');
-      console.removeClass('scroll-disabled');
       offsetParent[0].scrollTop = scrollTop;
       wrapper.css('top', scrollTop + 'px');
     }
@@ -103,8 +101,7 @@
           afterAnimation(function() {
             elements.wrapper.css('height', '');
             elements.placeholder.css('height', DataStore.get('pop-up:resource-height'));
-            blockScroll(elements.offsetParent, elements.wrapper, elements.console);
-
+            blockScroll(elements.offsetParent, elements.wrapper);
             done();
           });
         });
@@ -113,7 +110,7 @@
       beforeRemoveClass: function(element, className, done) {
         var elements = getElements(element);
 
-        restoreScroll(elements.offsetParent, elements.wrapper, elements.console);
+        restoreScroll(elements.offsetParent, elements.wrapper);
         elements.wrapper.css('background-color', 'transparent');
         elements.wrapper.css('height', DataStore.get('pop-up:wrapper-height'));
         elements.resource.css('height', elements.resource[0].getBoundingClientRect().height + 'px'); // Safari loses the resource's height otherwise

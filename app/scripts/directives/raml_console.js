@@ -4,6 +4,17 @@
   RAML.Directives.ramlConsole = function(ramlParserWrapper, DataStore, $timeout) {
 
     var link = function ($scope, $el, $attrs, controller) {
+      $scope.popOverOpen = function() {
+        if (!$scope.api) {
+          return false;
+        }
+
+        var currentlyDisplayed = DataStore.get($scope.api.title + ':popup');
+        return $scope.api.resources.some(function(resource) {
+          return resource.toString() === currentlyDisplayed;
+        });
+      };
+
       ramlParserWrapper.onParseSuccess(function(raml) {
         var inner = $($el[0]).find('.inner');
 
@@ -20,14 +31,6 @@
 
       ramlParserWrapper.onParseError(function(error) {
         $scope.parseError = error;
-      });
-
-      $scope.$on('console:blockScroll', function() {
-        $el.addClass('scroll-disabled');
-      });
-
-      $scope.$on('console:restoreScroll', function() {
-        $el.removeClass('scroll-disabled');
       });
     };
 

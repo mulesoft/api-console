@@ -16,6 +16,7 @@
         $scope.selectedMethod = method;
         DataStore.set(this.methodKey(), method.method);
       } else {
+        DataStore.set($scope.api.title + ':popup', $scope.resource.toString());
         $scope.methodToAdd = method;
       }
     };
@@ -28,6 +29,7 @@
 
     this.collapseMethod = function($event) {
       DataStore.set(this.methodKey(), undefined);
+      DataStore.set($scope.api.title + ':popup', undefined);
       $scope.methodToAdd = undefined;
       $event.stopPropagation();
     };
@@ -49,10 +51,7 @@
       if (method) {
         this.expanded = false;
         this.expandMethod(method);
-        $scope.$emit('console:blockScroll');
         $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
-      } else {
-        $scope.$emit('console:restoreScroll');
       }
     }
   };
