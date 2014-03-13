@@ -25,12 +25,12 @@ body#raml-console-unembedded {
 }
 
 raml-console article#raml-console, #raml-console-loader {
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
 
   .resource-placeholder.popover {
-    display: flex;
-    flex: 1;
+    // display: flex;
+    // flex: 1;
 
     position: absolute;
     top: 0; bottom: 0; left: 0; right: 0;
@@ -46,14 +46,13 @@ raml-console article#raml-console, #raml-console-loader {
     .resource-container {
       position: relative;
       width: 100%;
+      background-color: white;
       &.grow-container {
         position: absolute;
-        transition: top 1s, bottom 1s;
-        top: 0; bottom: 0;
-      }
-
-      .resource {
-        height: 100%;
+        //transition: top 1s, bottom 1s;
+        top: 0; bottom: 0; left: 0; right: 0;
+        margin: auto;
+        width: ~"calc(100% - 30px)";
       }
     }
   }
@@ -61,7 +60,6 @@ raml-console article#raml-console, #raml-console-loader {
   .mask-resource-list {
     transition: opacity 1s;
   }
-
 
   .resource-placeholder.test-thing {
     opacity: 1;
@@ -71,6 +69,7 @@ raml-console article#raml-console, #raml-console-loader {
     height: 0px;
     overflow: hidden;
   }
+
   @import "../../vendor/bower_components/font-awesome/less/font-awesome.less";
   @import (less) "../../vendor/bower_components/codemirror/lib/codemirror.css";
   @import "overrides.less";

@@ -148,6 +148,46 @@ raml-console article#raml-console,
   /* IE7 hack to prevent it from returning funny offsetTops on the spans */
 
 }
+raml-console article#raml-console .resource-placeholder.popover,
+#raml-console-loader .resource-placeholder.popover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  width: 100%;
+  margin: 0;
+  padding: 0 15px;
+  background-color: red;
+  opacity: .5;
+}
+raml-console article#raml-console .resource-placeholder.popover .resource-container,
+#raml-console-loader .resource-placeholder.popover .resource-container {
+  position: relative;
+  width: 100%;
+  background-color: white;
+}
+raml-console article#raml-console .resource-placeholder.popover .resource-container.grow-container,
+#raml-console-loader .resource-placeholder.popover .resource-container.grow-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: -webkit-calc(100% - 30px);
+  width: calc(100% - 30px);
+}
+raml-console article#raml-console .mask-resource-list,
+#raml-console-loader .mask-resource-list {
+  -webkit-transition: opacity 1s;
+  transition: opacity 1s;
+}
+raml-console article#raml-console .resource-placeholder.test-thing,
+#raml-console-loader .resource-placeholder.test-thing {
+  opacity: 1;
+}
 raml-console article#raml-console.scroll-disabled,
 #raml-console-loader.scroll-disabled {
   height: 0px;
@@ -3023,8 +3063,6 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
 }
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource,
 #raml-console-loader .resource-placeholder.pop-up .resource-container .resource {
-  -webkit-transition: height 0.333s, margin-top 0.333s;
-  transition: height 0.333s, margin-top 0.333s;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   height: 100%;
@@ -3039,8 +3077,6 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
 }
 raml-console article#raml-console .resource-placeholder .resource-container,
 #raml-console-loader .resource-placeholder .resource-container {
-  -webkit-transition: background-color 0.333s;
-  transition: background-color 0.333s;
   background-color: transparent;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource,
