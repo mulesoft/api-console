@@ -31,6 +31,7 @@
   module.directive('repeatableAdd', RAML.Directives.repeatableAdd);
   module.directive('repeatableRemove', RAML.Directives.repeatableRemove);
   module.directive('resource', RAML.Directives.resource);
+  module.directive('resourceDocumentation', RAML.Directives.resourceDocumentation);
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
   module.directive('securitySchemes', RAML.Directives.securitySchemes);

@@ -1,11 +1,9 @@
-<div class="resource-placeholder" ng-class="{'pop-up': methodToAdd}" role="resource-placeholder">
+<div class="resource-placeholder popover mask-resource-list" ng-show="resource">
   <div class="resource-container">
-    <div ng-class="{expanded: resourceView.expanded || selectedMethod}" class='resource' role="resource" ng-click='resourceView.toggleExpansion()'>
+    <div class="resource expanded">
       <div>
-        <i class="icon-remove collapse" ng-if="methodToAdd" ng-click='resourceView.collapseMethod($event)'></i>
-
-        <div class='summary accordion-toggle' role='resource-summary'>
-          <div class="modifiers" ng-class="{expanded: selectedMethod}" ng-show='resourceView.expanded || selectedMethod'>
+        <div class="summary accordion-toggle" role="resource-summary">
+          <div class="modifiers expanded">
             <span class="modifier-group" ng-if='resource.resourceType'>
               <span class="caption">Type:</span>
               <ul>
@@ -24,7 +22,7 @@
             <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
           </h3>
           <ul class='methods' role="methods" ng-if="resource.methods">
-            <li class='method-name' ng-class='method.method' ng-click="resourceView.prepareForAnimation()" ng-repeat="method in resource.methods">{{method.method}}</li>
+            <li class='method-name' ng-class='method.method' ng-repeat="method in resource.methods">{{method.method}}</li>
           </ul>
         </div>
       </div>

@@ -25,6 +25,42 @@ body#raml-console-unembedded {
 }
 
 raml-console article#raml-console, #raml-console-loader {
+  .resource-placeholder.popover {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    z-index: 1;
+
+    width: 100%;
+    margin: 0;
+    padding: 0 15px;
+
+    background-color: red;
+    opacity: .5;
+
+    .resource-container {
+      position: relative;
+      width: 100%;
+      &.grow-container {
+        position: absolute;
+        transition: top 1s, bottom 1s;
+        top: 0; bottom: 0;
+      }
+
+      .resource {
+        height: 100%;
+      }
+    }
+  }
+
+  .mask-resource-list {
+    transition: opacity 1s;
+  }
+
+
+  .resource-placeholder.test-thing {
+    opacity: 1;
+  }
+
   &.scroll-disabled {
     height: 0px;
     overflow: hidden;
