@@ -30,10 +30,24 @@ describe("RAML.Controllers.Resource", function() {
   });
 
   describe('with initially expanded state', function() {
-    beforeEach(function() {
-      storeSpy.get.andReturn(true);
+    var elementSpy, childrenSpy;
 
-      controller = new RAML.Controllers.Resource(scope, storeSpy);
+    beforeEach(function() {
+      storeSpy.get.andCallFake(function(key) {
+        if (key === scope.resource.toString()) {
+          return true;
+        }
+
+        if (key === '/base/{sub}/nested:method') {
+          return false;
+        }
+      });
+
+      elementSpy = jasmine.createSpyObj('element', ['children']);
+      childrenSpy = jasmine.createSpyObj('children', ['css']);
+      elementSpy.children.andReturn(childrenSpy);
+      spyOn(scope, '$emit');
+      controller = new RAML.Controllers.Resource(scope, storeSpy, elementSpy);
     });
 
     it('is expanded', function() {

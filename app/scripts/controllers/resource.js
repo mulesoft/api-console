@@ -2,14 +2,9 @@
   'use strict';
 
   var controller = function($scope, DataStore, $element) {
-    $scope.resourceView = this;
-    this.DataStore = DataStore;
-
     this.resourceKey = function() {
       return $scope.resource.toString();
     };
-
-    this.expanded = this.DataStore.get(this.resourceKey());
 
     this.initiateExpand = function(method) {
       if ($scope.selectedMethod) {
@@ -31,7 +26,9 @@
       DataStore.set(this.methodKey(), undefined);
       DataStore.set($scope.api.title + ':popup', undefined);
       $scope.methodToAdd = undefined;
-      $event.stopPropagation();
+      if ($event) {
+        $event.stopPropagation();
+      }
     };
 
     this.toggleExpansion = function() {
@@ -43,15 +40,23 @@
       this.DataStore.set(this.resourceKey(), this.expanded);
     };
 
+    $scope.resourceView = this;
+    this.DataStore = DataStore;
+
+    this.expanded = this.DataStore.get(this.resourceKey());
     var methodName = this.DataStore.get(this.methodKey());
+
     if (methodName) {
       var method = $scope.resource.methods.filter(function(method) {
         return method.method === methodName;
-      })[0];
+      })[0] || $scope.resource.methods[0];
+
       if (method) {
         this.expanded = false;
         this.expandMethod(method);
         $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
+      } else {
+        this.collapseMethod();
       }
     }
   };
