@@ -4,6 +4,7 @@
   RAML.Directives.resourceDocumentation = function($window) {
     function Controller($rootScope, $scope, $element) {
       var consoleContainer = $('raml-console').parent();
+      var resourceList = $('#raml-console');
 
       function closeOnEscape(e) {
         if (e.which === 27) {
@@ -16,18 +17,20 @@
       }
 
       $rootScope.$on('console:expand', function(event, resource, $resourceEl) {
-        //$scope.resource = resource;
+        $scope.resource = resource;
         $window.addEventListener('keydown', closeOnEscape);
         consoleContainer.css('overflow', 'hidden');
+        console.log(resourceList.css('height'));
+        angular.element($element[0].querySelector('.resource-placeholder')).css('height', resourceList.css('height'));
 
         setTimeout(function() {
-          //console.log(consoleContainer[0].scrollTop);
+          console.log(consoleContainer[0].scrollTop);
           //var placeholder = $element[0].querySelector('.resource-placeholder');
-          //var container = $element[0].querySelector('.resource-container');
-          //var rect = $resourceEl[0].getBoundingClientRect();
+          var container = $element[0].querySelector('.resource-container');
+          var rect = $resourceEl[0].getBoundingClientRect();
 
-          //container.style.top = rect.top + 'px';
-          //container.style.bottom = rect.bottom + 'px';
+          container.style.top = consoleContainer[0].scrollTop + rect.top + 'px';
+          container.style.bottom = consoleContainer[0].scrollTop + rect.bottom + 'px';
           //angular.element(placeholder).addClass('test-thing');
 
           setTimeout(function() {
