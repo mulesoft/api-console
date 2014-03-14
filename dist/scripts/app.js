@@ -1421,8 +1421,12 @@ RAML.Inspector = (function() {
         !RAML.Utils.isEmpty($scope.method.headers.plain) || hasFormParameters($scope.method));
     }
 
+    function hasTraits(method) {
+      return method.is && method.is.length > 0;
+    }
+
     this.hasRequestDocumentation = function() {
-      return !!$scope.method.description || hasParameters() || !RAML.Utils.isEmpty($scope.method.body);
+      return hasTraits($scope.method) || !!$scope.method.description || hasParameters() || !RAML.Utils.isEmpty($scope.method.body);
     };
 
     this.hasResponseDocumentation = function() {
