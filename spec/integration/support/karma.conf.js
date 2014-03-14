@@ -21,8 +21,6 @@ files = [
     'app/vendor/bower_components/codemirror/mode/xml/xml.js',
     'app/vendor/bower_components/codemirror/mode/javascript/javascript.js',
     'app/vendor/bower_components/vkbeautify/vkbeautify.js',
-    'app/scripts/animations.js',
-    'app/scripts/animations/**/*.js',
     'app/scripts/client.js',
     'app/scripts/client/**/*.js',
     'app/scripts/controllers.js',

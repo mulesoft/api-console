@@ -3,8 +3,6 @@
 (function() {
   var module = angular.module('ramlConsoleApp', ['raml', 'ngAnimate', 'ngSanitize', 'fileInputOverride']);
 
-  module.animation('.pop-up', RAML.Animations.popUp);
-
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
   module.directive('bodyContent', RAML.Directives.bodyContent);
