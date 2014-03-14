@@ -121,7 +121,7 @@ describe("accordion view of API", function() {
 
       resource = toggleResource(1);
       resource.$('[role="resource-summary"] [role="methods"] li:first-child').click();
-      description = resource.$('[role="method"] [role="full-description"]');
+      description = method.$('[role="full-description"]');
 
       expect(description.getText()).toEqual('Get all resources')
     });

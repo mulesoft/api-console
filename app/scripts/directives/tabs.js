@@ -29,7 +29,7 @@
       };
     }
 
-    RAML.Directives.tab = function($location, $anchorScroll, DataStore) {
+    RAML.Directives.tab = function(DataStore) {
       return {
         restrict: 'E',
         templateUrl: 'views/tab.tmpl.html',
@@ -42,9 +42,11 @@
 
           $scope.select = function(subItem) {
             selected = subItem;
-            $location.hash(selected);
-            $anchorScroll();
-            $location.hash('');
+
+            var responseCode = $('#'+ selected)[0],
+                container = $element.parent()[0];
+
+            container.scrollTop = responseCode.offsetTop - container.getBoundingClientRect().top + responseCode.offsetParent.getBoundingClientRect().top;
             DataStore.set($scope.keyBase, selected);
           };
 

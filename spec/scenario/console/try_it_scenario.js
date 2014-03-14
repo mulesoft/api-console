@@ -18,6 +18,8 @@ describe("trying an API method", function() {
   var openTryIt = function(resource) {
     var method = openMethod(1, resource);
     method.$('.method-nav-group li:last-child a').click();
+
+    return ptor.$('.popover');
   };
 
   var tryIt = function(resource) {
@@ -38,7 +40,7 @@ describe("trying an API method", function() {
 
     it("executes the request and displays the results", function() {
       var resource = toggleResource(1);
-      openTryIt(resource);
+      resource = openTryIt(resource);
       tryIt(resource);
 
       var requestUrl = resource.$('.try-it .response .request-url');
@@ -71,7 +73,7 @@ describe("trying an API method", function() {
 
     it("does not execute the request", function() {
       var resource = toggleResource(1);
-      openTryIt(resource);
+      resource = openTryIt(resource);
       tryIt(resource);
 
       expect(resource.$('.try-it [role="error"]').getText()).toMatch(/Required URI Parameters must be entered/);
@@ -94,7 +96,7 @@ describe("trying an API method", function() {
 
     it("does execute the request", function() {
       var resource = toggleResource(1);
-      openTryIt(resource);
+      resource = openTryIt(resource);
       tryIt(resource);
 
       var queryParameterInput = resource.$('input[name="page"]');

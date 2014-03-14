@@ -11,14 +11,15 @@
 
     this.expanded = this.DataStore.get(this.resourceKey());
 
-    this.prepareForAnimation = function($event) {
+    this.prepareForAnimation = function($event, method) {
       $event.stopPropagation();
 
       if (!this.expanded) {
         this.toggleExpansion();
       }
-      $scope.$emit('console:expand', $scope.resource, $element);
-    }
+
+      $scope.$emit('console:expand', $scope.resource, method, $element);
+    };
 
     this.expandMethod = function(method) {
       $scope.selectedMethod = method;

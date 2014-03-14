@@ -11,7 +11,7 @@
     var methodName = resource.$('[role="methods"] li:nth-child(' + index + ')');
     methodName.click();
 
-    return resource.$('[role="method"]');
+    return ptor.$('[role="method"]');
   };
 
   global.openDocumentationTab = function(index, method) {

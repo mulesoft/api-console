@@ -24,7 +24,7 @@
             <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
           </h3>
           <ul class='methods' role="methods" ng-if="resource.methods">
-            <li class='method-name' ng-class='method.method' ng-click="resourceView.prepareForAnimation($event)" ng-repeat="method in resource.methods">{{method.method}}</li>
+            <li class='method-name' ng-class='method.method' ng-click="resourceView.prepareForAnimation($event, method)" ng-repeat="method in resource.methods">{{method.method}}</li>
           </ul>
         </div>
       </div>
