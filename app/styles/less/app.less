@@ -6,7 +6,7 @@ body#raml-console-unembedded {
 }
 
 #raml-console-unembedded, raml-console article {
-  background-color: #E6E7EB;
+  background-color: @grayE;
   color: #333;
 }
 
@@ -25,13 +25,7 @@ body#raml-console-unembedded {
 }
 
 raml-console article#raml-console, #raml-console-loader {
-  // display: flex;
-  // flex-direction: column;
-
   .resource-placeholder.popover {
-    // display: flex;
-    // flex: 1;
-
     position: absolute;
     top: 0; bottom: 0; left: 0; right: 0;
     z-index: 1;
@@ -40,19 +34,15 @@ raml-console article#raml-console, #raml-console-loader {
     margin: 0;
     padding: 0 15px;
 
-    background-color: red;
-    opacity: .5;
+    background-color: @grayE;
+    opacity: 0;
 
     .resource-container {
       position: relative;
       width: 100%;
       background-color: white;
-      &.grow-container {
-        position: absolute;
-        //transition: top 1s, bottom 1s;
-        top: 0; bottom: 0; left: 0; right: 0;
-        margin: auto;
-        width: ~"calc(100% - 30px)";
+      &.grow-expansion-animation {
+        transition: height 1s, top 1s;
       }
     }
   }
@@ -61,7 +51,7 @@ raml-console article#raml-console, #raml-console-loader {
     transition: opacity 1s;
   }
 
-  .resource-placeholder.test-thing {
+  .resource-placeholder.masked {
     opacity: 1;
   }
 
