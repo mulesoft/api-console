@@ -2,16 +2,53 @@
   float: left;
   font-size: 20px;
   line-height: 1em;
-  margin: 20px 0;
+  margin: 20px;
 }
 
 #raml-console-main-nav {
   float: right;
-  margin-top: 15px;
+  margin: 15px 20px 0 0;
 }
 
 #raml-console-content {
   clear: both;
+  padding: 0 15px 15px;
+}
+
+.toggle-resource-groups {
+  text-transform: lowercase;
+
+  a {
+    font-weight: bold;
+    cursor: pointer;
+    color: @black;
+  }
+
+  span {
+    color: @gray;
+  }
+}
+
+.resource-group {
+  margin-bottom: 17px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  > i {
+    display: block;
+    height: 0;
+    position: relative;
+    left: -11px;
+    top: 15px;
+    font-size: 15px;
+
+    &.icon-caret-down {
+      left: -14px;
+      top: 15px;
+    }
+  }
 }
 
 [role=documentation] {
@@ -20,10 +57,8 @@
     vertical-align: baseline;
   }
 
-  [role=documentation-requests], [role=documentation-responses] {
+  [role=documentation-responses] {
     > div {
-      margin-top: 30px;
-
       &:first-child {
         margin-top: 0;
       }

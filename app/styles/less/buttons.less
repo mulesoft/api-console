@@ -1,4 +1,4 @@
-.button(@color: @gray) {
+.button(@color, @borderColor) {
   display: inline-block;
   padding: 4px 12px;
   min-width: 100px;
@@ -7,24 +7,21 @@
   cursor: pointer;
   border: 1px solid @color;
   color: @veryLightGray;
+  background-color: @color;
+  outline: none;
+  box-shadow: 0 2px 0 0 @borderColor;
 
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+  border-radius: 3px;
   text-transform: uppercase;
-
-  text-shadow: 0 1px 1px fade(@darkGray, 50%);
-
-  .vertical-gradient(lighten(@color, 10%), darken(@color, 10%));
 }
 
-.btn          { .button(@gray);       }
-.btn-get      { .button(@cornflower); }
-.btn-post     { .button(@green);      }
-.btn-put      { .button(@aqua);       }
-.btn-patch    { .button(@mustard);    }
-.btn-delete   { .button(@red);        }
-.btn-head     { .button(@purple);     }
-.btn-options  { .button(@limeGreen);  }
-.btn-trace    { .button(@skyBlue);    }
-.btn-connect  { .button(@gold);       }
+.btn          { .button(@gray, @darkGray);               }
+.btn-get      { .button(@getMediumColor, @getColor);           }
+.btn-post     { .button(@postMediumColor, @postColor);          }
+.btn-put      { .button(@putMediumColor, @putColor);           }
+.btn-patch    { .button(@patchMediumColor, @patchColor);         }
+.btn-delete   { .button(@deleteMediumColor, @deleteColor);        }
+.btn-head     { .button(@headMediumColor, @headColor);          }
+.btn-options  { .button(@optionsMediumColor, @optionsColor);       }
+.btn-trace    { .button(@traceMediumColor, @traceColor);         }
+.btn-connect  { .button(@connectMediumColor, @connectColor);       }

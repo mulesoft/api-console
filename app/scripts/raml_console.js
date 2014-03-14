@@ -1,11 +1,14 @@
 'use strict';
 
 (function() {
-  var module = angular.module('ramlConsoleApp', ['raml', 'ngSanitize', 'fileInputOverride']);
+  var module = angular.module('ramlConsoleApp', ['raml', 'ngAnimate', 'ngSanitize', 'fileInputOverride']);
+
+  module.animation('.pop-up', RAML.Animations.popUp);
 
   module.directive('apiResources', RAML.Directives.apiResources);
   module.directive('basicAuth', RAML.Directives.basicAuth);
   module.directive('bodyContent', RAML.Directives.bodyContent);
+  module.directive('bodyDocumentation', RAML.Directives.bodyDocumentation);
   module.directive('codeMirror', RAML.Directives.codeMirror);
   module.directive('collapsible', RAML.Directives.collapsible);
   module.directive('collapsibleContent', RAML.Directives.collapsibleContent);
@@ -22,19 +25,22 @@
   module.directive('parameterField', RAML.Directives.parameterField);
   module.directive('parameterFields', RAML.Directives.parameterFields);
   module.directive('parameterizedParameter', RAML.Directives.parameterizedParameter);
-  module.directive('parameters', RAML.Directives.parameters);
   module.directive('ramlConsole', RAML.Directives.ramlConsole);
   module.directive('ramlConsoleInitializer', RAML.Directives.ramlConsoleInitializer);
-  module.directive('requests', RAML.Directives.requests);
   module.directive('repeatable', RAML.Directives.repeatable);
   module.directive('repeatableAdd', RAML.Directives.repeatableAdd);
   module.directive('repeatableRemove', RAML.Directives.repeatableRemove);
   module.directive('resource', RAML.Directives.resource);
+  module.directive('resourceDocumentation', RAML.Directives.resourceDocumentation);
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
   module.directive('tab', RAML.Directives.tab);
   module.directive('tabset', RAML.Directives.tabset);
+  module.directive('subtabs', RAML.Directives.subtabs);
+  module.directive('uriBar', RAML.Directives.uriBar);
+  module.directive('toggle', RAML.Directives.toggle);
+  module.directive('toggleItem', RAML.Directives.toggleItem);
   module.directive('tryIt', RAML.Directives.tryIt);
   module.directive('validatedInput', RAML.Directives.validatedInput);
 

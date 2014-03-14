@@ -94,6 +94,7 @@
     create: function(raml, securitySchemes) {
       var method = RAML.Utils.clone(raml);
 
+      method.responseCodes = Object.keys(method.responses || {});
       method.securitySchemes = securitySchemesExtractor(securitySchemes);
       method.allowsAnonymousAccess = allowsAnonymousAccess;
       normalizeNamedParameters(method.headers);
@@ -102,6 +103,13 @@
       method.headers = filterHeaders(method.headers);
       processBody(method.body || {});
       processResponses(method.responses || {});
+
+      method.plainAndParameterizedHeaders = RAML.Utils.copy(method.headers.plain);
+      Object.keys(method.headers.parameterized).forEach(function(parameterizedHeader) {
+        method.plainAndParameterizedHeaders[parameterizedHeader] = method.headers.parameterized[parameterizedHeader].map(function(parameterized) {
+          return parameterized.definition();
+        });
+      });
 
       return method;
     }

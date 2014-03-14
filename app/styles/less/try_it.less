@@ -7,15 +7,18 @@
     margin-bottom: 30px;
 
     .segment {
-      font-size: 15px;
+      font-size: 12px;
+      line-height: 16px;
     }
     input {
       margin: 0 5px 0 2px;
-      font-size: 15px;
-      width: 9em;
+      font-size: 12px;
+      line-height: 16px;
+      width: 7em;
     }
     ul {
-      font-size: 15px;
+      font-size: 12px;
+      line-height: 16px;
     }
   }
 }
@@ -34,8 +37,8 @@
       margin-top: 50px;
     }
 
-    textarea[name=body] {
-      .box-sizing(border-box);
+    textarea {
+      box-sizing: border-box;
       width: 100%;
       font-family: monospace;
       height: 7em;
@@ -64,11 +67,11 @@
       }
 
       .error {
-        color: @red;
+        color: @error;
       }
 
       .warning {
-        color: @mustard;
+        color: @warning;
       }
     }
 

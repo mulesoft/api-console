@@ -2,34 +2,40 @@
   'use strict';
 
   var Controller = function($scope) {
-    if ($scope.hasOwnProperty('collapsed')) {
-      $scope.expanded = !$scope.collapsed;
-    }
-
-    var callback;
-
     this.toggle = function() {
-      $scope.expanded = !$scope.expanded;
-      $scope.collapsed = !$scope.expanded;
-      callback($scope.expanded);
-    };
-
-    this.stateUpdated = function(cb) {
-      callback = cb;
-      callback($scope.expanded);
+      $scope.collapsed = !$scope.collapsed;
     };
   };
 
-  RAML.Directives.collapsible = function() {
+  RAML.Directives.collapsible = function($parse) {
     return {
       controller: Controller,
       restrict: 'EA',
-      scope: {
-        expanded: '=?',
-        collapsed: '=?'
-      },
-      transclude: true,
-      template: '<div ng-transclude></div>'
+      scope: true,
+      link: function(scope, element, attrs) {
+        if (!attrs.collapsed && !attrs.expanded) {
+          scope.collapsed = true;
+          return;
+        }
+
+        var attr = attrs.collapsed || attrs.expanded;
+        var normalizeForAttribute = function(arg) {
+          return attrs.expanded ? !arg : arg;
+        };
+
+        scope.collapsed = normalizeForAttribute($parse(attr)(scope));
+
+        scope.$watch(attr, function(value) {
+          scope.collapsed = normalizeForAttribute(value);
+        });
+
+        scope.$watch('collapsed', function(collapsed) {
+          $parse(attr).assign(scope.$parent, normalizeForAttribute(collapsed));
+
+          element.removeClass('collapsed expanded');
+          element.addClass(collapsed ? 'collapsed' : 'expanded');
+        });
+      }
     };
   };
 
@@ -49,14 +55,11 @@
     return {
       require: '^collapsible',
       restrict: 'EA',
-      link: function(scope, element, attrs, controller) {
-        controller.stateUpdated(function(expanded) {
-          element.css('display', expanded ? 'block' : 'none');
-          element.parent().removeClass('collapsed expanded');
-          element.parent().addClass(expanded ? 'expanded' : 'collapsed');
+      link: function(scope, element) {
+        scope.$watch('collapsed', function(collapsed) {
+          element.css('display', collapsed ? 'none' : 'block');
         });
       }
     };
   };
-
 })();

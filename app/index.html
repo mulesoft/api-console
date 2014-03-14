@@ -39,11 +39,14 @@
       </div>
     </raml-console-initializer>
 
-    <raml-console with-root-documentation></raml-console>
+      <div style="position:relative; height: 100vh; overflow: auto;">
+        <raml-console with-root-documentation></raml-console>
+    </div>
 
     <!-- build:js({.tmp,app}) scripts/vendor.min.js -->
     <script src="vendor/bower_components/vkbeautify/vkbeautify.js"></script>
     <script src="vendor/bower_components/angular/angular.js"></script>
+    <script src="vendor/bower_components/angular-animate/angular-animate.js"></script>
     <script src="vendor/bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="vendor/jquery.js"></script>
     <script src="vendor/bower_components/raml-js-parser/dist/raml-parser.js"></script>
@@ -57,6 +60,8 @@
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/app.min.js -->
+    <script src="scripts/animations.js"></script>
+    <script src="scripts/animations/pop-up.js"></script>
     <script src="scripts/inspector.js"></script>
     <script src="scripts/inspector/method.js"></script>
     <script src="scripts/inspector/parameterized_header.js"></script>
@@ -83,12 +88,13 @@
     <script src="scripts/client/request.js"></script>
     <script src="scripts/client/validator.js"></script>
     <script src="scripts/controllers.js"></script>
+    <script src="scripts/controllers/body_documentation.js"></script>
     <script src="scripts/controllers/documentation.js"></script>
-    <script src="scripts/controllers/method.js"></script>
     <script src="scripts/controllers/named_parameters_documentation.js"></script>
     <script src="scripts/controllers/raml_console.js"></script>
     <script src="scripts/controllers/resource.js"></script>
     <script src="scripts/controllers/tabset.js"></script>
+    <script src="scripts/controllers/toggle.js"></script>
     <script src="scripts/controllers/try_it.js"></script>
     <script src="scripts/controllers/try_it/body_content.js"></script>
     <script src="scripts/controllers/try_it/body_type.js"></script>
@@ -99,6 +105,7 @@
     <script src="scripts/directives/api_resources.js"></script>
     <script src="scripts/directives/basic_auth.js"></script>
     <script src="scripts/directives/body_content.js"></script>
+    <script src="scripts/directives/body_documentation.js"></script>
     <script src="scripts/directives/code_mirror.js"></script>
     <script src="scripts/directives/collapsible.js"></script>
     <script src="scripts/directives/documentation.js"></script>
@@ -113,11 +120,10 @@
     <script src="scripts/directives/parameter_field.js"></script>
     <script src="scripts/directives/parameter_fields.js"></script>
     <script src="scripts/directives/parameterized_parameter.js"></script>
-    <script src="scripts/directives/parameters.js"></script>
     <script src="scripts/directives/raml_console.js"></script>
     <script src="scripts/directives/raml_console_initializer.js"></script>
-    <script src="scripts/directives/requests.js"></script>
     <script src="scripts/directives/resource.js"></script>
+    <script src="scripts/directives/resource_documentation.js"></script>
     <script src="scripts/directives/repeatable.js"></script>
     <script src="scripts/directives/repeatable_add.js"></script>
     <script src="scripts/directives/repeatable_remove.js"></script>
@@ -125,6 +131,7 @@
     <script src="scripts/directives/root_documentation.js"></script>
     <script src="scripts/directives/security_schemes.js"></script>
     <script src="scripts/directives/tabs.js"></script>
+    <script src="scripts/directives/toggle.js"></script>
     <script src="scripts/directives/try_it.js"></script>
     <script src="scripts/directives/validated_input.js"></script>
     <script src="scripts/filters.js"></script>

@@ -1,27 +1,16 @@
-<section collapsible expanded='responsesView.expanded[responseCode]' ng-repeat='(responseCode, response) in method.responses'>
-  <h2 role="response-code" collapsible-toggle>
-    <a href=''>
-      <i ng-class="{'icon-caret-right': !responsesView.expanded[responseCode], 'icon-caret-down': responsesView.expanded[responseCode]}"></i>
-      {{responseCode}}
-    </a>
-    <div ng-if="!responsesView.expanded[responseCode]" class="abbreviated-description" markdown='response.description'></div>
-  </h2>
-  <div collapsible-content>
+<section class="responses">
+  <subtabs tabs="method.responseCodes" key-base="{{ resource.toString() + ':' + method.method }}"></subtabs>
+  <div class="documentation-section response" expanded='responsesView.expanded[responseCode]' ng-repeat='(responseCode, response) in method.responses'>
+    <a id="{{responseCode}}" class="response-code" role="response-code"> {{responseCode}} </a>
     <section role='response'>
       <div markdown='response.description'></div>
-      <named-parameters-documentation heading='Headers' role='parameter-group' parameters='response.headers'></named-parameters-documentation>
-      <h3 ng-show="response.body">Body</h3>
-      <section ng-repeat="(mediaType, definition) in response.body track by mediaType">
-        <h4>{{mediaType}}</h4>
-        <section ng-if="definition.schema">
-          <h5>Schema</h5>
-          <div class="code" mode='{{mediaType}}' code-mirror="definition.schema" visible="methodView.expanded && responsesView.expanded[responseCode]"></div>
-        </section>
-        <section ng-if="definition.example">
-          <h5>Example</h5>
-          <div class="code" mode='{{mediaType}}' code-mirror="definition.example" visible="methodView.expanded && responsesView.expanded[responseCode]"></div>
-        </section>
-      </section>
+      <div ng-if='!documentation.isEmpty(response.headers)'>
+        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='response.headers'></named-parameters-documentation>
+      </div>
+
+      <div ng-if="response.body && documentation.responsesActive" class='body-documentation'>
+        <body-documentation body="response.body" key-base='keyBase + "responses"'></body-documentation>
+      </div>
     </section>
   </div>
 </section>

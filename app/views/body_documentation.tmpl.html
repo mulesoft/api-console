@@ -1,0 +1,25 @@
+<section class='body-documentation'>
+  <h2>Body</h2>
+
+  <toggle key-base='{{ bodyKey }}'>
+    <toggle-item ng-repeat='(contentType, definition) in body track by contentType' active="displayed[contentType]" heading='{{contentType}}'>
+      <div ng-switch="contentType">
+        <named-parameters-documentation ng-switch-when="application/x-www-form-urlencoded" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
+        <named-parameters-documentation ng-switch-when="multipart/form-data" role='parameter-group' parameters='definition.formParameters'></named-parameters-documentation>
+        <div ng-switch-default>
+          <section ng-if="definition.example" role="example">
+            <h5>Example</h5>
+            <div class="code" code-mirror="definition.example" mode="{{contentType}}" visible="displayed[contentType]"></div>
+          </section>
+          <section ng-if="definition.schema" role="schema">
+            <a class="schema-toggle" ng-click="expandSchema(contentType)" ng-show="!schemaExpanded(contentType)">Show Schema</a>
+            <div ng-if="schemaExpanded(contentType)">
+              <h5>Schema</h5>
+              <div class="code" code-mirror="definition.schema" mode="{{contentType}}" visible="displayed[contentType] && schemaExpanded(contentType)"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </toggle-item>
+  </toggle>
+</section>

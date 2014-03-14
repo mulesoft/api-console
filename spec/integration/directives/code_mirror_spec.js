@@ -14,7 +14,7 @@ describe("RAML.Directives.codeMirror", function() {
 
     describe('updating the code mirror content', function() {
       beforeEach(function() {
-        expect($el.text()).toMatch(/^\s*$/);
+        expect($el.text().trim()).toEqual('');
         scope.code = "DaVinci code";
         scope.visible = true;
         scope.$digest();

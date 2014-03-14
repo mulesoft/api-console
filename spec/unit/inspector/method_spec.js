@@ -72,6 +72,13 @@ describe("RAML.Inspector.Method", function() {
       it("wraps response header types in an array", function() {
         expect(method.responses['200'].headers['foo'] instanceof Array).toBe(true);
       });
+
+      it("combines plain and parameterized headers", function() {
+        var keys = Object.keys(method.plainAndParameterizedHeaders);
+        expect(keys.length).toEqual(2);
+        expect(keys).toContain('example');
+        expect(keys).toContain('x-parameterized-{*}');
+      });
     });
   });
 

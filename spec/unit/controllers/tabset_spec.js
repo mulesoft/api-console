@@ -29,7 +29,7 @@ describe("RAML.Controllers.tabset", function() {
     describe("with an empty tabset", function() {
       it('selects the added tab', function() {
         this.controller.addTab(tab1);
-        expect(this.controller.select).toHaveBeenCalledWith(tab1, true);
+        expect(this.controller.select).toHaveBeenCalledWith(tab1, undefined);
       });
     });
 
@@ -46,7 +46,7 @@ describe("RAML.Controllers.tabset", function() {
       it('selects the added tab if no existing tabs are enabled', function() {
         tab1.disabled = true;
         this.controller.addTab(tab2);
-        expect(this.controller.select).toHaveBeenCalledWith(tab2, true);
+        expect(this.controller.select).toHaveBeenCalledWith(tab2, undefined);
       });
 
       describe('when the new tab is active in the store', function() {
@@ -56,7 +56,7 @@ describe("RAML.Controllers.tabset", function() {
 
         it('selects the added tab', function() {
           this.controller.addTab(tab2);
-          expect(this.controller.select).toHaveBeenCalledWith(tab2, true);
+          expect(this.controller.select).toHaveBeenCalledWith(tab2, tab2.heading);
         });
       });
     });

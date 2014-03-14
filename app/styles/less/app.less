@@ -6,9 +6,8 @@ body#raml-console-unembedded {
 }
 
 #raml-console-unembedded, raml-console article {
-  background-color: #E6E7EB;
+  background-color: @grayE;
   color: #333;
-  margin: 0 20px 20px;
 }
 
 #raml-console-loader form {
@@ -26,6 +25,41 @@ body#raml-console-unembedded {
 }
 
 raml-console article#raml-console, #raml-console-loader {
+  .resource-placeholder.popover {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    z-index: 1;
+
+    width: 100%;
+    margin: 0;
+    padding: 0 15px;
+
+    background-color: @grayE;
+    opacity: 0;
+
+    .resource-container {
+      position: relative;
+      width: 100%;
+      background-color: white;
+      &.grow-expansion-animation {
+        transition: height 0.33s, top 0.33s;
+      }
+    }
+  }
+
+  .mask-resource-list {
+    transition: opacity 0.33s;
+  }
+
+  .resource-placeholder.masked {
+    opacity: 1;
+  }
+
+  &.scroll-disabled {
+    height: 0px;
+    overflow: hidden;
+  }
+
   @import "../../vendor/bower_components/font-awesome/less/font-awesome.less";
   @import (less) "../../vendor/bower_components/codemirror/lib/codemirror.css";
   @import "overrides.less";
@@ -33,13 +67,13 @@ raml-console article#raml-console, #raml-console-loader {
   @import "mixins.less";
   @import "commons.less";
   @import "markdown.less";
-  @import "tabs.less";
   @import "forms.less";
   @import "buttons.less";
   @import "resources.less";
   @import "methods.less";
   @import "documentation.less";
   @import "root_documentation.less";
+  @import "toggle.less";
   @import "try_it.less";
 
   // figure out the rest

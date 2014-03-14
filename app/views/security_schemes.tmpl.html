@@ -1,27 +1,16 @@
-<div class="authentication">
-  <fieldset class="labelled-radio-group bordered">
-    <legend>Authentication</legend>
-    <label for="scheme">Type:</label>
+<section class="documentation-section authentication">
+  <fieldset class="bordered">
+    <h2>Authentication</h2>
 
-    <div class="radio-group">
-      <label class="radio">
-        <input type="radio" name="scheme" value="anonymous" ng-model="keychain.selectedScheme"> Anonymous </input>
-      </label>
-      <span ng-repeat="(name, scheme) in schemes">
-        <label class="radio"  ng-if="securitySchemes.supports(scheme)">
-          <input type="radio" name="scheme" value="{{name}}" ng-model="keychain.selectedScheme"> {{ name }} </input>
-        </label>
-      </span>
-    </div>
+    <toggle key-base="baseKey + ':securitySchemes'" toggle-model="keychain">
+      <toggle-item heading="Anonymous"></toggle-item>
+      <toggle-item ng-repeat="(name, scheme) in schemes" heading="{{name}}">
+        <div ng-switch="scheme.type">
+          <basic-auth ng-switch-when="Basic Authentication" credentials='keychain[name]'></basic-auth>
+          <oauth1 ng-switch-when="OAuth 1.0" credentials='keychain[name]'></oauth1>
+          <oauth2 ng-switch-when="OAuth 2.0" credentials='keychain[name]'></oauth2>
+        </div>
+      </toggle-item>
+    </toggle>
   </fieldset>
-
-  <div ng-repeat="(name, scheme) in schemes">
-    <div ng-show="keychain.selectedScheme == name">
-      <div ng-switch="scheme.type">
-        <basic-auth ng-switch-when="Basic Authentication" credentials='keychain[name]'></basic-auth>
-        <oauth1 ng-switch-when="OAuth 1.0" credentials='keychain[name]'></oauth1>
-        <oauth2 ng-switch-when="OAuth 2.0" credentials='keychain[name]'></oauth2>
-      </div>
-    </div>
-  </div>
-</div>
+</section>

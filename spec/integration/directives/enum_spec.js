@@ -22,7 +22,7 @@ describe("RAML.Directives.enum", function() {
         model: ''
       };
 
-      var template = '<enum options="constraints.enum" model="param.model"><input name="myEnum" type="text" ng-model="param.model"/></enum>';
+      var template = '<parameter-field definition="constraints" model="param.model"></parameter-field>';
       $el = compileTemplate(template, scope);
       setFixtures($el)
     });
@@ -63,7 +63,7 @@ describe("RAML.Directives.enum", function() {
     describe('when filtered by a string', function() {
       beforeEach(function() {
         $el.find("input").trigger('focus');
-        $el.find("input").fillIn('a');
+        $el.find("input").eq(0).fillIn('a');
       });
 
       it('shows only options matching the filter', function() {

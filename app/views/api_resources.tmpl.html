@@ -1,9 +1,29 @@
 <div id="raml-console-api-reference" role="resources">
-  <div collapsible collapsed='collapsed' role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups" ng-init='collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]'>
-    <h1 collapsible-toggle class='path'>
-      {{resourceGroup[0].pathSegments[0].toString()}}
-      <i ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
-    </h1>
+  <div class="toggle-resource-groups">
+    <a ng-click='apiResources.toggleAll(false)' role="expand-all">Expand</a>
+    <span>/</span>
+    <a ng-click='apiResources.toggleAll(true)' role="collapse-all">Collapse</a>
+    <span>All</span>
+  </div>
+
+  <div collapsible collapsed='apiResources.collapsed[apiResources.keyFor(resourceGroup)]' role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups">
+    <i collapsible-toggle ng-class="{'icon-caret-right': collapsed, 'icon-caret-down': !collapsed}"></i>
+
+    <div collapsible-toggle class="resource" role="resource-group-placeholder" ng-show="collapsed" ng-init="resource = resourceGroup[0]">
+      <div class="resource-placeholder" role="resource-placeholder">
+        <div class="resource-container">
+          <div class='resource'>
+            <div>
+              <div class='summary accordion-toggle'>
+                <h3 class="path">
+                  <span ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div collapsible-content>
       <resource ng-repeat="resource in resourceGroup"></resource>

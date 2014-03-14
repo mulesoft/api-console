@@ -65,7 +65,7 @@ module.exports = function (grunt) {
     watch: {
       less: {
         files: ['app/styles/less/**/*.less'],
-        tasks: ['less:development']
+        tasks: ['less:development', 'autoprefixer']
       },
       livereload: {
         options: {
@@ -82,7 +82,7 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9000,
-        hostname: 'localhost' // Change this to '0.0.0.0' to access the server from outside.
+        hostname: '0.0.0.0' // Change this to '0.0.0.0' to access the server from outside.
       },
       livereload: {
         options: {
@@ -247,6 +247,18 @@ module.exports = function (grunt) {
         mangle: false
       }
     },
+    autoprefixer: {
+      options: {
+        browsers: ['last 2 versions']
+      },
+      app: {
+        src: 'app/styles/app.css'
+      },
+      dist: {
+        src: 'dist/styles/app.min.css'
+      },
+
+    },
     less: {
       development: {
         options: {
@@ -280,6 +292,7 @@ module.exports = function (grunt) {
   grunt.registerTask('server', [
     'clean:server',
     'less:development',
+    'autoprefixer',
     'connect:livereload',
     'open',
     'watch'
@@ -311,6 +324,7 @@ module.exports = function (grunt) {
     'lint',
     'clean:server',
     'less:development',
+    'autoprefixer',
     'connect:test',
     'protractor:scenario'
   ]);
@@ -318,6 +332,7 @@ module.exports = function (grunt) {
   grunt.registerTask('scenario:debug', [
     'clean:server',
     'less:development',
+    'autoprefixer',
     'connect:test',
     'protractor:debug'
   ]);
@@ -327,6 +342,7 @@ module.exports = function (grunt) {
     'useminPrepare',
     'ngtemplates:dist',
     'less',
+    'autoprefixer',
     'concat:generated',
     'concat:addTemplate',
     'copy:dist',

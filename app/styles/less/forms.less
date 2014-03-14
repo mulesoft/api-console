@@ -19,20 +19,6 @@ fieldset {
   padding: 0;
   margin: 0;
   border: none;
-
-  &.bordered {
-    margin-top: 30px;
-
-    legend {
-      background-color: @veryLightGray;
-      font-size: 13px;
-      width: 100%;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      padding: 2px 0 2px 10px;
-      .box-sizing(border-box);
-    }
-  }
 }
 
 .label {
@@ -51,6 +37,7 @@ input, .autocomplete {
 
 .autocomplete {
   position: relative;
+  color: @darkGray;
 
   ul {
     width: 100%;
@@ -59,10 +46,10 @@ input, .autocomplete {
     z-index: 1;
     top: 35px;
     left: 0;
-    border-radius: 4px;
+    border-radius: 3px;
     border: 1px solid @lightGray;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.33);
     box-sizing: border-box;
+    overflow: scroll;
 
     li {
       border-top: 1px solid @lightGray;
@@ -79,22 +66,23 @@ input, .autocomplete {
   }
 }
 
-input, textarea {
+textarea {
+  color: @black;
   font-family: @monospace;
   font-size: 13px;
-  color: @black;
-  vertical-align: baseline;
-}
-
-textarea {
   line-height: 16px;
+  vertical-align: baseline;
   padding: 8px;
 }
 
 input[type="text"], input[type="password"], textarea {
-  border-radius: 4px;
-  border: 1px solid @lightGray;
-  .box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075));
+  outline: none;
+  border-radius: 3px;
+  border: 2px solid @lightGray;
+
+  &:focus {
+    border: 2px solid @gray6;
+  }
 }
 
 input[type="text"], input[type="password"] {
@@ -116,29 +104,24 @@ select optgroup {
 }
 
 input.warning {
-  border-color: @gold;
+  border-color: @warning;
   outline: 0;
-  .box-shadow(~'inset 0 1px 1px @gold, 0 0 3px @gold');
 }
 
 .required {
-  color: @gold;
+  color: @warning;
 }
 
 input.error {
-  border-color: #b94a48;
+  border-color: @error;
 }
 
 .control-group {
-  margin-bottom: 6px;
+  margin-bottom: 18px;
 }
 
 .labelled-inline label, .labelled-radio-group > label {
-  display: inline-block;
-  min-width: 150px;
-  text-align: right;
-  font-weight: bold;
-  margin-right: 2px;
+  display: block;
 }
 
 .labelled-radio-group {
@@ -170,8 +153,6 @@ input.error {
   background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
   border: 1px solid @input-border;
   border-radius: @input-border-radius;
-  .box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
-  .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
 
   // Disabled and read-only inputs
   // Note: HTML5 says that controls under a fieldset > legend:first-child won't

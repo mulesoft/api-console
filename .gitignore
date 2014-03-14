@@ -4,3 +4,4 @@ node_modules
 app/styles/app.css
 selenium
 app/vendor/bower_components
+dist/templates.js

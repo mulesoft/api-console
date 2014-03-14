@@ -1,0 +1,11 @@
+<div class="toggle">
+  <fieldset class="labelled-radio-group">
+    <div class="radio-group">
+      <label class="radio" ng-repeat="item in toggleItems" ng-class="{active: item.active, disabled: item.disabled}">
+        <span ng-click="toggle.select(item)">{{item.heading}}</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="item-content" ng-transclude></div>
+</div>

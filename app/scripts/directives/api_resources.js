@@ -1,22 +1,22 @@
 (function() {
   'use strict';
 
-  RAML.Directives.apiResources = function(DataStore) {
+  RAML.Directives.apiResources = function() {
     var controller = function($scope) {
-      var self = $scope.groupView = this;
-      this.groups = $scope.api.resourceGroups;
+      var self = $scope.apiResources = this;
       this.collapsed = {};
 
-      this.groups.forEach(function(group) {
-        var key = self.keyFor(group);
-        self.collapsed[key] = DataStore.get(key);
-      });
-
-      $scope.$watch('groupView.collapsed', function(state) {
-        Object.keys(state).forEach(function(key) {
-          DataStore.set(key, state[key]);
+      this.toggleAll = function(collapsed) {
+        $scope.api.resourceGroups.forEach(function(group) {
+          var key = self.keyFor(group);
+          self.collapsed[key] = collapsed;
         });
-      }, true);
+      };
+
+      this.isCollapsed = function(group) {
+        var key = self.keyFor(group);
+        return self.collapsed[key];
+      };
     };
 
     controller.prototype.keyFor = function(group) {

@@ -1,44 +1,104 @@
 (function() {
   'use strict';
 
-  ////////////
-  // tabset
-  ////////////
-
-  RAML.Directives.tabset = function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      transclude: true,
-      controller: RAML.Controllers.tabset,
-      templateUrl: 'views/tabset.tmpl.html',
-      scope: {
-        keyBase: '@'
-      }
+  (function() {
+    RAML.Directives.tabset = function() {
+      return {
+        restrict: 'E',
+        templateUrl: 'views/tabset.tmpl.html',
+        replace: true,
+        transclude: true,
+        controller: RAML.Controllers.tabset,
+        scope: {
+          heading: '@',
+          keyBase: '@'
+        }
+      };
     };
-  };
+  })();
 
-  ////////////////
-  // tabs
-  ///////////////
+  (function() {
+    function Controller($scope) {
+      this.registerSubtabs = function(subtabs, keyBase) {
+        $scope.subtabs = subtabs;
+        $scope.keyBase = keyBase;
+      };
 
-  var link = function($scope, $element, $attrs, tabsetCtrl) {
-    tabsetCtrl.addTab($scope);
-  };
+      this.registerUriBar = function(uriBar) {
+        $scope.uriBar = uriBar;
+      };
+    }
 
-  RAML.Directives.tab = function() {
-    return {
-      restrict: 'E',
-      require: '^tabset',
-      replace: true,
-      transclude: true,
-      link: link,
-      templateUrl: 'views/tab.tmpl.html',
-      scope: {
-        heading: '@',
-        active: '=?',
-        disabled: '=?'
-      }
+    RAML.Directives.tab = function($location, $anchorScroll, DataStore) {
+      return {
+        restrict: 'E',
+        templateUrl: 'views/tab.tmpl.html',
+        replace: true,
+        transclude: true,
+        require: '^tabset',
+        controller: Controller,
+        link: function($scope, $element, $attrs, tabsetCtrl) {
+          var selected = DataStore.get($scope.keyBase);
+
+          $scope.select = function(subItem) {
+            selected = subItem;
+            $location.hash(selected);
+            $anchorScroll();
+            $location.hash('');
+            DataStore.set($scope.keyBase, selected);
+          };
+
+          $scope.selected = function(subItem) {
+            return (selected || $scope.subtabs[0]) === subItem;
+          };
+
+          tabsetCtrl.addTab($scope);
+        },
+        scope: {
+          active: '=',
+          disabled: '=',
+          heading: '@',
+        }
+      };
     };
-  };
+  })();
+
+  (function() {
+    RAML.Directives.subtabs = function() {
+      return {
+        restrict: 'E',
+        require: '^tab',
+        link: function($scope, $element, $attrs, tabCtrl) {
+          tabCtrl.registerSubtabs($scope.tabs, $scope.keyBase);
+        },
+        scope: {
+          tabs: '=',
+          keyBase: '@'
+        }
+      };
+    };
+  })();
+
+  (function() {
+    RAML.Directives.uriBar = function() {
+      return {
+        restrict: 'E',
+        require: '^tab',
+        link: function($scope, $element, $attrs, tabCtrl) {
+          $attrs.$observe('pathBuilder', function(pathBuilder) {
+            if (!pathBuilder) {
+              return;
+            }
+
+            tabCtrl.registerUriBar($scope);
+          });
+        },
+        scope: {
+          pathBuilder: '=',
+          baseUri: '=',
+          pathSegments: '='
+        }
+      };
+    };
+  })();
 })();

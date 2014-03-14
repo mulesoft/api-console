@@ -1,25 +1,69 @@
 .documentation {
-  padding: 0 20px 20px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 
-  .modifiers {
-    margin-left: 0;
-    margin-bottom: 20px;
+  .documentation-section {
+    padding-top: 20px;
+    margin-top: 0;
+    border-top: none;
+
+    ~ .documentation-section {
+      margin-top: 30px;
+      border-top: solid 1px @lightGray;
+    }
   }
-  .description {
-    margin-bottom: 20px;
+
+  h2 {
+    font-size: 18px;
+    color: @muleBlue;
+    padding: 0 0 20px 0;
+    margin: 0;
+  }
+
+  .request-body, .authentication, .body-documentation {
+    h2 {
+      float: left;
+    }
+
+    h5 {
+      color: @darkGray;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .toggle {
+      .labelled-radio-group {
+        text-align: right;
+        display: block;
+      }
+
+      .item-content {
+        margin-top: 15px;
+      }
+    }
+
+    .schema-toggle {
+      display: inline-block;
+      margin-top: 22px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      color: @muleBlue;
+      text-transform: uppercase;
+
+      &:visited, &:focus {
+        color: @muleBlue;
+      }
+    }
+
+    .named-parameters {
+      margin-top: -3px;
+    }
   }
 
   .named-parameters {
-    border-bottom: 1px solid @veryLightGray;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    > h2 {
-      margin-top: 25px;
-    }
-
     .parameter {
       margin-bottom: 25px;
 
@@ -31,6 +75,13 @@
         p:last-child {
           margin: 0 0 1px 0;
         }
+      }
+
+      h4 {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+        color: @black;
       }
 
       .constraints {
@@ -54,32 +105,12 @@
   }
 
   .responses {
-    h2 {
-      a {
-        display: block;
-        float: left;
-        color: @gray;
-        font-size: 19px;
-      }
-
-      .abbreviated-description {
-        padding: 0 10px 0 20px;
-        .inline-markdown(40px);
-      }
-
-      i {
-        width: 11px;
-        display: inline-block;
-      }
-      .clearfix;
-    }
-
-    .named-parameters {
-      h2 {
-        font-size: 15px;
-        line-height: 15px;
+    .response {
+      .response-code {
+        font-size: 20px;
+        font-weight: 600;
+        color: @darkGray;
       }
     }
   }
-
 }

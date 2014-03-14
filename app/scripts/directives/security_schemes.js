@@ -20,7 +20,8 @@
       controller: controller,
       scope: {
         schemes: '=',
-        keychain: '='
+        keychain: '=',
+        baseKey: '='
       }
     };
   };

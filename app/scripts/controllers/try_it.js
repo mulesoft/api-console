@@ -30,9 +30,13 @@
   var TryIt = function($scope, DataStore) {
     $scope.apiClient = this;
 
-    var baseKey = $scope.resource.toString() + ':' + $scope.method.method + ':';
-    var contextKey = baseKey + 'context';
-    var responseKey = baseKey + 'response';
+    var baseKey = $scope.resource.toString() + ':' + $scope.method.method;
+    $scope.baseKey = function() {
+      return baseKey;
+    };
+
+    var contextKey = baseKey + ':context';
+    var responseKey = baseKey + ':response';
 
     var context = new RAML.Controllers.TryIt.Context($scope.resource, $scope.method);
     var oldContext = DataStore.get(contextKey);
@@ -118,12 +122,12 @@
     var authStrategy;
 
     try {
-      if (this.keychain.selectedScheme === 'anonymous' && !this.method.allowsAnonymousAccess()) {
+      if (this.keychain.selected === 'Anonymous' && !this.method.allowsAnonymousAccess()) {
         this.disallowedAnonymousRequest = true;
       }
 
-      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selectedScheme];
-      var credentials = this.keychain[this.keychain.selectedScheme];
+      var scheme = this.securitySchemes && this.securitySchemes[this.keychain.selected];
+      var credentials = this.keychain[this.keychain.selected];
       authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
     } catch (e) {
       // custom strategies aren't supported yet.

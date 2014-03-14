@@ -19,8 +19,17 @@ traits:
   - someParameterizedTrait:
       description: <<someParameterName>>
 resourceTypes:
-  - collection:
-      description: bunk
+  - longCollectionName:
+      description: |
+        This is a description. It can be long.
+
+        # Headers
+
+        It can have headers, and _italic_, and **bold** text.
+
+        # Length
+
+        Because it is arbitrary markdown, it can be arbitrarily long.
 documentation:
   - title: Getting Started
     content: |
@@ -32,15 +41,33 @@ documentation:
   displayName: First One
   is: [secured]
   options:
+    responses:
+      200:
   connect:
+    responses:
+      200:
   trace:
+    responses:
+      200:
   patch:
+    responses:
+      200:
   delete:
+    responses:
+      200:
+      201:
+      203:
   put:
+    responses:
+      200:
+      201:
+      203:
   get:
     description: get the first one
     headers:
       x-custom:
+    responses:
+      200:
   /{resourceId}:
     description: This is a resource description *with* some _markdown_ embedded in it
     uriParameters:
@@ -62,6 +89,8 @@ documentation:
         filter:
           description: What to filter
           type: string
+      responses:
+        200:
     post:
       body:
         application/json:
@@ -85,13 +114,21 @@ documentation:
               description: A description of the resource to create
               type: string
               example: User-generated content pertinent to the associated blog post
+      responses:
+        200:
+        201:
+        203:
 
 /another/resource:
   displayName: Cats
-  type: collection
-  is: [secured, catpictures]
+  type: longCollectionName
+  is: [secured, catpictures, anotherTrait, andAnotherTrait]
   connect: !!null
-  head: !!null
+  head:
+    responses:
+      200:
+      201:
+      203:
   get:
     queryParameters:
       chunk:

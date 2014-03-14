@@ -1,23 +1,44 @@
 <section class='documentation' role='documentation'>
-  <ul role="traits" class="modifiers">
-    <li class="trait" ng-repeat="trait in documentation.traits()">
-      {{trait|nameFromParameterizable}}
-    </li>
-  </ul>
-
-  <div role="full-description" class="description"
-       ng-if="method.description"
-       markdown="method.description">
-  </div>
-
-  <tabset key-base='{{methodView.methodKey()}}'>
+  <tabset key-base='{{ generateKey() }}' heading='{{ method.method }}'>
     <tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
-      <parameters></parameters>
-      <requests></requests>
+      <div class="modifiers">
+        <span class="modifier-group" ng-if="method.is">
+          <span class="caption">Traits:</span>
+          <ul role="traits">
+            <li class="trait" ng-repeat="trait in method.is" ng-bind="trait|nameFromParameterizable"></li>
+          </ul>
+        </span>
+      </div>
+
+      <div class="documentation-section" ng-if="method.description">
+        <section>
+          <h2>Description</h2>
+          <div role="full-description" class="description" markdown="method.description"></div>
+        </section>
+      </div>
+
+      <div class="documentation-section" ng-if='!documentation.isEmpty(method.plainAndParameterizedHeaders)'>
+        <named-parameters-documentation heading='Headers' role='parameter-group' parameters='method.plainAndParameterizedHeaders'></named-parameters-documentation>
+      </div>
+
+      <div class="documentation-section" ng-if='!documentation.isEmpty(resource.uriParametersForDocumentation)'>
+        <named-parameters-documentation heading='URI Parameters' role='parameter-group' parameters='resource.uriParametersForDocumentation'></named-parameters-documentation>
+      </div>
+
+      <div class="documentation-section" ng-if='!documentation.isEmpty(method.queryParameters)'>
+        <named-parameters-documentation heading='Query Parameters' role='parameter-group' parameters='method.queryParameters'></named-parameters-documentation>
+      </div>
+
+      <div class="documentation-section" ng-if='method.body && documentation.requestsActive'>
+        <body-documentation body="method.body" key-base="generateKey() + ':request'"></body-documentation>
+      </div>
+
     </tab>
-    <tab role='documentation-responses' class="responses" heading="Responses" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>
+
+    <tab role="documentation-responses" heading="Responses"  active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>
       <responses></responses>
     </tab>
+
     <tab role="try-it" heading="Try It" active="documentation.tryItActive" disabled="!ramlConsole.tryItEnabled()">
       <try-it></try-it>
     </tab>

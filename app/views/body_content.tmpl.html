@@ -1,25 +1,18 @@
-<div class="request-body" ng-show="body">
+<section class="documentation-section request-body" ng-show="body">
   <fieldset class="bordered">
-    <legend>Body</legend>
+    <h2>Body</h2>
 
-    <fieldset class="labelled-radio-group" role="media-types">
-      <label>Content Type</label>
-      <div class="radio-group">
-        <label class="radio" ng-repeat="contentType in body.contentTypes">
-          <input type="radio" name="media-type" value="{{contentType}}" ng-model="body.selected">
-          {{contentType}}
-        </label>
-      </div>
-    </fieldset>
+    <toggle key-base="baseKey + ':body'" toggle-model="body">
+      <toggle-item ng-repeat="contentType in body.contentTypes" heading="{{contentType}}">
+        <div class="labelled-inline" ng-if='body.isForm(contentType)' ng-show="body.isSelected(contentType)">
+          <parameter-fields parameters='body.definitions[contentType]'></parameter-fields>
+        </div>
 
-    <div ng-repeat="contentType in body.contentTypes">
-      <div class="labelled-inline" ng-if='body.isForm(contentType)' ng-show="body.isSelected(contentType)">
-        <parameter-fields parameters='body.definitions[contentType]'></parameter-fields>
-      </div>
-      <div ng-if="!body.isForm(contentType)" ng-show="body.isSelected(contentType)">
-        <textarea name="{{contentType}}" ng-model="body.definitions[contentType].value"></textarea>
-        <a href="#" class="body-prefill" ng-show="body.hasExample(contentType)" ng-click="body.fillWithExample($event)">Prefill with example</a>
-      </div>
-    </div>
+        <div ng-if="!body.isForm(contentType)" ng-show="body.isSelected(contentType)">
+          <textarea name="{{contentType}}" ng-model="body.definitions[contentType].value"></textarea>
+          <a href="#" class="body-prefill" ng-show="body.hasExample(contentType)" ng-click="body.fillWithExample($event)">Prefill with example</a>
+        </div>
+      </toggle-item>
+    </toggle>
   </fieldset>
-</div>
+</section>

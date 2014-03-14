@@ -11,32 +11,32 @@
 
   var controller = function($scope) {
     $scope.documentation = this;
+    $scope.generateKey = function() {
+      return $scope.resourceView.resourceKey() + ':' + $scope.method.method;
+    };
 
-    this.resource = $scope.resource;
-    this.method = $scope.method;
+    function hasUriParameters() {
+      return $scope.resource.pathSegments.some(function(segment) {
+        return segment.templated;
+      });
+    }
+
+    function hasParameters() {
+      return !!(hasUriParameters() || $scope.method.queryParameters ||
+        !RAML.Utils.isEmpty($scope.method.headers.plain) || hasFormParameters($scope.method));
+    }
+
+    this.hasRequestDocumentation = function() {
+      return !!$scope.method.description || hasParameters() || !RAML.Utils.isEmpty($scope.method.body);
+    };
+
+    this.hasResponseDocumentation = function() {
+      return !RAML.Utils.isEmpty($scope.method.responses);
+    };
   };
 
-  controller.prototype.hasUriParameters = function() {
-    return this.resource.pathSegments.some(function(segment) {
-      return segment.templated;
-    });
-  };
-
-  controller.prototype.hasParameters = function() {
-    return !!(this.hasUriParameters() || this.method.queryParameters ||
-      !RAML.Utils.isEmpty(this.method.headers.plain) || hasFormParameters(this.method));
-  };
-
-  controller.prototype.hasRequestDocumentation = function() {
-    return this.hasParameters() || !RAML.Utils.isEmpty(this.method.body);
-  };
-
-  controller.prototype.hasResponseDocumentation = function() {
-    return !RAML.Utils.isEmpty(this.method.responses);
-  };
-
-  controller.prototype.traits = function() {
-    return (this.method.is || []);
+  controller.prototype.isEmpty = function(params) {
+    return RAML.Utils.isEmpty(params);
   };
 
   RAML.Controllers.Documentation = controller;
