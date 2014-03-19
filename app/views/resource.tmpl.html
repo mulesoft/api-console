@@ -1,4 +1,4 @@
-<div class="resource-placeholder" ng-class="{'pop-up': methodToAdd}" role="resource-placeholder">
+<div class="resource-placeholder" role="resource-placeholder">
   <div class="resource-container">
     <div ng-class="{expanded: resourceView.expanded || selectedMethod}" class='resource' role="resource" ng-click='resourceView.toggleExpansion()'>
       <div>
@@ -32,8 +32,6 @@
            ng-show='resourceView.expanded && resource.description'
            markdown='resource.description'>
       </div>
-
-      <method ng-repeat="method in resource.methods" ng-if="method === selectedMethod"></method>
     </div>
   </div>
 </div>

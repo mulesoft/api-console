@@ -15,7 +15,7 @@
             <span class="modifier-group" ng-if='resource.traits.length > 0'>
               <span class="caption">Traits:</span>
               <ul>
-                <li class="trait" ng-show='resourceView.expanded' role="trait" ng-repeat="trait in resource.traits" ng-bind="trait|nameFromParameterizable"></li>
+                <li class="trait" role="trait" ng-repeat="trait in resource.traits" ng-bind="trait|nameFromParameterizable"></li>
               </ul>
             </span>
           </div>
@@ -27,12 +27,6 @@
             <li class='method-name' ng-class='method.method' ng-repeat="method in resource.methods" ng-click="selectMethod(method)">{{method.method}}</li>
           </ul>
         </div>
-      </div>
-
-      <div role='description'
-           class='description'
-           ng-show='resourceView.expanded && resource.description'
-           markdown='resource.description'>
       </div>
 
       <method ng-repeat="method in resource.methods" ng-if="method === selectedMethod"></method>
