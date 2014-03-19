@@ -16375,8 +16375,6 @@ function validate(ctrl, validatorName, validity, value){
 }
 
 function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-  scope.OMG = ctrl;
-
   // In composition mode, users are still inputing intermediate text buffer,
   // hold the listener until composition is done.
   // More about composition events: https://developer.mozilla.org/en-US/docs/Web/API/CompositionEvent
@@ -20919,7 +20917,6 @@ var styleDirective = valueFn({
 })(window, document);
 
 !angular.$$csp() && angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\\:form{display:block;}</style>');
-
 /**
  * @license AngularJS v1.2.9
  * (c) 2010-2014 Google, Inc. http://angularjs.org

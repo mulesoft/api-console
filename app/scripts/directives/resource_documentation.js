@@ -1,11 +1,13 @@
 (function() {
   'use strict';
 
-  RAML.Directives.resourceDocumentation = function($window) {
+  RAML.Directives.resourceDocumentation = function() {
     function Controller($rootScope, $scope, $element) {
       $scope.resourceView = this;
       var consoleContainer = angular.element(document.body).find('raml-console').parent();
       var resourceList = angular.element(document.getElementById('#raml-console'));
+      var placeholder = $element[0].querySelector('.resource-placeholder');
+      var container = $element[0].querySelector('.resource-container');
 
       this.resourceKey = function() {
         return $scope.resource.toString();
@@ -15,20 +17,14 @@
         return this.resourceKey() + ':method';
       };
 
-      $rootScope.$on('console:expand', function(event, resource, method, $resourceEl) {
-        function closeOnEscape(e) {
-          if (e.which === 27) {
-            e.preventDefault();
-            closePopover();
-          }
-        }
+      $scope.selectMethod = function(method) {
+        $scope.selectedMethod = method;
+      };
 
-        var placeholder = $element[0].querySelector('.resource-placeholder');
-        var container = $element[0].querySelector('.resource-container');
+      $rootScope.$on('console:expand', function(event, resource, method, $resourceEl) {
         var rect;
 
         $scope.resource = resource;
-        $window.addEventListener('keydown', closeOnEscape);
 
         consoleContainer.css('overflow', 'hidden');
         angular.element(placeholder).css('height', resourceList.css('height'));
@@ -49,7 +45,8 @@
           });
         });
 
-        function closePopover() {
+        $scope.resourceView.closePopover = function(e) {
+          e.preventDefault();
           container.style.top = consoleContainer[0].scrollTop + rect.top - consoleContainer[0].offsetTop + 'px';
           container.style.bottom = consoleContainer[0].scrollTop + rect.bottom + 'px';
           container.style.height = rect.bottom - rect.top + 'px';
@@ -60,12 +57,11 @@
               angular.element(container).removeClass('grow-expansion-animation');
               consoleContainer.css('overflow', 'auto');
 
-              $window.removeEventListener('keydown', closeOnEscape);
               $scope.$apply('resource = undefined');
               $scope.$apply('selectedMethod = undefined');
             }, 200);
           });
-        }
+        };
       });
     }
 

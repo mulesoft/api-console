@@ -164,14 +164,36 @@ raml-console article#raml-console .resource-placeholder.popover,
 }
 raml-console article#raml-console .resource-placeholder.popover .resource-container,
 #raml-console-loader .resource-placeholder.popover .resource-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   position: relative;
   width: 100%;
+  border-radius: 3px;
   background-color: white;
 }
 raml-console article#raml-console .resource-placeholder.popover .resource-container.grow-expansion-animation,
 #raml-console-loader .resource-placeholder.popover .resource-container.grow-expansion-animation {
   -webkit-transition: height 0.33s, top 0.33s;
   transition: height 0.33s, top 0.33s;
+}
+raml-console article#raml-console .resource-placeholder.popover .resource-container .resource,
+#raml-console-loader .resource-placeholder.popover .resource-container .resource {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  border: none;
 }
 raml-console article#raml-console .mask-resource-list,
 #raml-console-loader .mask-resource-list {
