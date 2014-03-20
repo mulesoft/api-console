@@ -12,7 +12,6 @@ files = [
     'app/vendor/bower_components/crypto-js/components/enc-base64.js',
     'app/vendor/bower_components/angular/angular.js',
     'app/vendor/jquery.js',
-    'app/vendor/bower_components/angular-animate/angular-animate.js',
     'app/vendor/bower_components/angular-mocks/angular-mocks.js',
     'app/vendor/bower_components/angular-sanitize/angular-sanitize.js',
     'app/vendor/bower_components/showdown/src/showdown.js',
