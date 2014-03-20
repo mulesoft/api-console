@@ -1,5 +1,5 @@
 <section class='documentation' role='documentation'>
-  <tabset key-base='{{ generateKey() }}' heading='{{ method.method }}'>
+  <tabset key-base='{{ generateKey(resource.toString(), method) }}' heading='{{ method.method }}'>
     <tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
       <div class="modifiers">
         <span class="modifier-group" ng-if="method.is">
@@ -30,7 +30,7 @@
       </div>
 
       <div class="documentation-section" ng-if='method.body && documentation.requestsActive'>
-        <body-documentation body="method.body" key-base="generateKey() + ':request'"></body-documentation>
+        <body-documentation body="method.body" key-base="generateKey(resource.toString(), method) + ':request'"></body-documentation>
       </div>
 
     </tab>

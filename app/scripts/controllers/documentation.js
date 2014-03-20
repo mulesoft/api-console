@@ -11,8 +11,8 @@
 
   var controller = function($scope) {
     $scope.documentation = this;
-    $scope.generateKey = function() {
-      return $scope.resourceView.resourceKey() + ':' + $scope.method.method;
+    $scope.generateKey = function(base, method) {
+      return base + ':' + method.method;
     };
 
     function hasUriParameters() {

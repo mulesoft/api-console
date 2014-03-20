@@ -3,19 +3,10 @@
 
   RAML.Directives.resourceDocumentation = function() {
     function Controller($rootScope, $scope, $element) {
-      $scope.resourceView = this;
       var consoleContainer = angular.element(document.body).find('raml-console').parent();
       var resourceList = angular.element(document.getElementById('#raml-console'));
       var placeholder = $element[0].querySelector('.resource-placeholder');
       var container = $element[0].querySelector('.resource-container');
-
-      this.resourceKey = function() {
-        return $scope.resource.toString();
-      };
-
-      this.methodKey = function() {
-        return this.resourceKey() + ':method';
-      };
 
       $scope.selectMethod = function(method) {
         $scope.selectedMethod = method;
@@ -45,7 +36,7 @@
           });
         });
 
-        $scope.resourceView.closePopover = function(e) {
+        $scope.closePopover = function(e) {
           e.preventDefault();
           container.style.top = consoleContainer[0].scrollTop + rect.top - consoleContainer[0].offsetTop + 'px';
           container.style.bottom = consoleContainer[0].scrollTop + rect.bottom + 'px';
@@ -69,7 +60,10 @@
       restrict: 'E',
       templateUrl: 'views/resource_documentation.tmpl.html',
       controller: Controller,
-      scope: { api: '=', ramlConsole: '=' }
+      scope: {
+        api: '=',
+        ramlConsole: '='
+      }
     };
   };
 })();
