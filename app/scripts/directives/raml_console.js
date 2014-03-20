@@ -21,14 +21,6 @@
       ramlParserWrapper.onParseError(function(error) {
         $scope.parseError = error;
       });
-
-      $scope.$on('console:blockScroll', function() {
-        $el.addClass('scroll-disabled');
-      });
-
-      $scope.$on('console:restoreScroll', function() {
-        $el.removeClass('scroll-disabled');
-      });
     };
 
     return {

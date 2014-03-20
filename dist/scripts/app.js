@@ -1259,8 +1259,8 @@ RAML.Inspector = (function() {
 
   var controller = function($scope) {
     $scope.documentation = this;
-    $scope.generateKey = function() {
-      return $scope.resourceView.resourceKey() + ':' + $scope.method.method;
+    $scope.generateKey = function(base, method) {
+      return base + ':' + method.method;
     };
 
     function hasUriParameters() {
@@ -1380,68 +1380,31 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var controller = function($scope, DataStore, $element) {
+  function generateKey(resource) {
+    return resource.toString();
+  }
+
+  RAML.Controllers.Resource = function Resource($scope, DataStore, $element) {
     $scope.resourceView = this;
-    this.DataStore = DataStore;
+    $scope.$emit('console:resource:rendered', $scope.resource, $element);
+    $scope.$on('$destroy', function() {
+      $scope.$emit('console:resource:destroyed', $scope.resource);
+    });
 
-    this.resourceKey = function() {
-      return $scope.resource.toString();
-    };
+    this.expanded = DataStore.get(generateKey($scope.resource));
 
-    this.expanded = this.DataStore.get(this.resourceKey());
-
-    this.prepareForAnimation = function($event, method) {
+    this.openDocumentation = function($event, method) {
       $event.stopPropagation();
 
-      if (!this.expanded) {
-        this.toggleExpansion();
-      }
-
+      this.expanded || this.toggleExpansion();
       $scope.$emit('console:expand', $scope.resource, method, $element);
     };
 
-    this.expandMethod = function(method) {
-      $scope.selectedMethod = method;
-      $scope.methodToAdd = method;
-      DataStore.set(this.methodKey(), method.method);
-    };
-
-    this.collapseMethod = function($event) {
-      DataStore.set(this.methodKey(), undefined);
-      $scope.methodToAdd = undefined;
-      $event.stopPropagation();
-    };
-
     this.toggleExpansion = function() {
-      if ($scope.methodToAdd || $scope.selectedMethod) {
-        return;
-      }
       this.expanded = !this.expanded;
-      this.DataStore.set(this.resourceKey(), this.expanded);
+      DataStore.set(generateKey($scope.resource), this.expanded);
     };
-
-    var methodName = this.DataStore.get(this.methodKey());
-    if (methodName) {
-      var method = $scope.resource.methods.filter(function(method) {
-        return method.method === methodName;
-      })[0];
-      if (method) {
-        this.expanded = false;
-        this.expandMethod(method);
-        $scope.$emit('console:blockScroll');
-        $element.children().css('height', DataStore.get('pop-up:wrapper-height'));
-      } else {
-        $scope.$emit('console:restoreScroll');
-      }
-    }
   };
-
-  controller.prototype.methodKey = function() {
-    return this.resourceKey() + ':method';
-  };
-
-  RAML.Controllers.Resource = controller;
-
 })();
 
 'use strict';
@@ -2535,14 +2498,6 @@ RAML.Inspector = (function() {
       ramlParserWrapper.onParseError(function(error) {
         $scope.parseError = error;
       });
-
-      $scope.$on('console:blockScroll', function() {
-        $el.addClass('scroll-disabled');
-      });
-
-      $scope.$on('console:restoreScroll', function() {
-        $el.removeClass('scroll-disabled');
-      });
     };
 
     return {
@@ -2602,67 +2557,113 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  RAML.Directives.resourceDocumentation = function() {
-    function Controller($rootScope, $scope, $element) {
-      $scope.resourceView = this;
-      var consoleContainer = angular.element(document.body).find('raml-console').parent();
-      var resourceList = angular.element(document.getElementById('#raml-console'));
-      var placeholder = $element[0].querySelector('.resource-placeholder');
-      var container = $element[0].querySelector('.resource-container');
+  function calculateContainerHeight(container, consoleContainer, rect) {
+    container.style.top = consoleContainer.scrollTop + rect.top - consoleContainer.offsetTop + 'px';
+    container.style.bottom = consoleContainer.scrollTop + rect.bottom + 'px';
+    container.style.height = rect.bottom - rect.top + 'px';
+  }
 
-      this.resourceKey = function() {
-        return $scope.resource.toString();
-      };
+  function createPopover(element) {
+    var consoleContainer = angular.element(document.body).find('raml-console').parent(),
+        resourceList = angular.element(document.getElementById('#raml-console')),
+        placeholder = angular.element(element[0].querySelector('.resource-placeholder')),
+        container = angular.element(element[0].querySelector('.resource-container')),
+        rect;
 
-      this.methodKey = function() {
-        return this.resourceKey() + ':method';
-      };
-
-      $scope.selectMethod = function(method) {
-        $scope.selectedMethod = method;
-      };
-
-      $rootScope.$on('console:expand', function(event, resource, method, $resourceEl) {
-        var rect;
-
+    return {
+      open: function($scope, $resourceEl, resource, method) {
         $scope.resource = resource;
 
         consoleContainer.css('overflow', 'hidden');
-        angular.element(placeholder).css('height', resourceList.css('height'));
-        angular.element(container).addClass('grow-expansion-animation');
+        placeholder.css('height', resourceList.css('height'));
+        container.addClass('grow-expansion-animation');
 
         setTimeout(function() {
           rect = $resourceEl[0].getBoundingClientRect();
-          container.style.top = consoleContainer[0].scrollTop + rect.top - consoleContainer[0].offsetTop + 'px';
-          container.style.bottom = consoleContainer[0].scrollTop + rect.bottom + 'px';
-          container.style.height = rect.bottom - rect.top + 'px';
+          calculateContainerHeight(container[0], consoleContainer[0], rect);
 
           setTimeout(function() {
-            angular.element(placeholder).addClass('masked');
-            angular.element(container).css('height', consoleContainer[0].clientHeight - 10 + 'px');
-            container.style.top = consoleContainer[0].scrollTop + 5 + 'px';
+            placeholder.addClass('masked');
+            container.css('height', consoleContainer[0].clientHeight - 10 + 'px');
+            container[0].style.top = consoleContainer[0].scrollTop + 5 + 'px';
             $scope.selectedMethod = method;
             $scope.$digest();
           });
         });
+      },
 
-        $scope.resourceView.closePopover = function(e) {
-          e.preventDefault();
-          container.style.top = consoleContainer[0].scrollTop + rect.top - consoleContainer[0].offsetTop + 'px';
-          container.style.bottom = consoleContainer[0].scrollTop + rect.bottom + 'px';
-          container.style.height = rect.bottom - rect.top + 'px';
+      close: function($scope) {
+        calculateContainerHeight(container[0], consoleContainer[0], rect);
+        setTimeout(function() {
+          placeholder.removeClass('masked');
+
           setTimeout(function() {
-            angular.element(placeholder).removeClass('masked');
+            container.removeClass('grow-expansion-animation');
+            consoleContainer.css('overflow', 'auto');
 
-            setTimeout(function() {
-              angular.element(container).removeClass('grow-expansion-animation');
-              consoleContainer.css('overflow', 'auto');
+            $scope.$apply('resource = undefined');
+            $scope.$apply('selectedMethod = undefined');
+          }, 200);
+        });
+      },
+    };
+  }
 
-              $scope.$apply('resource = undefined');
-              $scope.$apply('selectedMethod = undefined');
-            }, 200);
-          });
-        };
+  RAML.Directives.resourceDocumentation = function($rootScope, DataStore) {
+    var popover;
+    function prepare($scope, $element, $resourceEl, resource, method) {
+      DataStore.set(resource.toString() + ':method', method.method);
+      popover = createPopover($element);
+      popover.open($scope, $resourceEl, resource, method);
+
+      $scope.selectMethod = function(method) {
+        DataStore.set(resource.toString() + ':method', method.method);
+        $scope.selectedMethod = method;
+      };
+
+      $scope.closePopover = function(e) {
+        e.preventDefault();
+
+        DataStore.set(resource.toString() + ':method', undefined);
+        popover.close($scope);
+        popover = undefined;
+      };
+    }
+
+    function Controller($scope, $element) {
+      var receipt;
+
+      $rootScope.$on('console:resource:destroyed', function(event, resource) {
+        if ($scope.resource && $scope.resource.toString() === resource.toString()) {
+          receipt = setTimeout(function() {
+            popover.close($scope);
+            popover = undefined;
+          }, 100);
+        }
+      });
+
+      $rootScope.$on('console:resource:rendered', function(event, resource, $resourceEl) {
+        var methodName = DataStore.get(resource.toString() + ':method');
+        if (methodName) {
+          var method = resource.methods.filter(function(method) {
+            return method.method === methodName;
+          })[0] || resource.methods[0];
+
+          if (method) {
+            if (receipt && $scope.resource && $scope.resource.toString() === resource.toString()) {
+              clearTimeout(receipt);
+              $scope.resource = resource;
+              $scope.selectedMethod = method;
+              console.log(method);
+            } else {
+              prepare($scope, $element, $resourceEl, resource, method);
+            }
+          }
+        }
+      });
+
+      $rootScope.$on('console:expand', function(event, resource, method, $resourceEl) {
+        prepare($scope, $element, $resourceEl, resource, method);
       });
     }
 
@@ -2670,7 +2671,10 @@ RAML.Inspector = (function() {
       restrict: 'E',
       templateUrl: 'views/resource_documentation.tmpl.html',
       controller: Controller,
-      scope: { api: '=', ramlConsole: '=' }
+      scope: {
+        api: '=',
+        ramlConsole: '='
+      }
     };
   };
 })();
@@ -3368,7 +3372,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
-    "  <tabset key-base='{{ generateKey() }}' heading='{{ method.method }}'>\n" +
+    "  <tabset key-base='{{ generateKey(resource.toString(), method) }}' heading='{{ method.method }}'>\n" +
     "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
     "      <div class=\"modifiers\">\n" +
     "        <span class=\"modifier-group\" ng-if=\"method.is\">\n" +
@@ -3399,7 +3403,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "\n" +
     "      <div class=\"documentation-section\" ng-if='method.body && documentation.requestsActive'>\n" +
-    "        <body-documentation body=\"method.body\" key-base=\"generateKey() + ':request'\"></body-documentation>\n" +
+    "        <body-documentation body=\"method.body\" key-base=\"generateKey(resource.toString(), method) + ':request'\"></body-documentation>\n" +
     "      </div>\n" +
     "\n" +
     "    </tab>\n" +
@@ -3599,7 +3603,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/resource.tmpl.html',
-    "<div class=\"resource-placeholder\" ng-class=\"{'pop-up': methodToAdd}\" role=\"resource-placeholder\">\n" +
+    "<div class=\"resource-placeholder\" role=\"resource-placeholder\">\n" +
     "  <div class=\"resource-container\">\n" +
     "    <div ng-class=\"{expanded: resourceView.expanded || selectedMethod}\" class='resource' role=\"resource\" ng-click='resourceView.toggleExpansion()'>\n" +
     "      <div>\n" +
@@ -3623,7 +3627,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <span role='segment' ng-repeat='segment in resource.pathSegments'>{{segment.toString()}} </span>\n" +
     "          </h3>\n" +
     "          <ul class='methods' role=\"methods\" ng-if=\"resource.methods\">\n" +
-    "            <li class='method-name' ng-class='method.method' ng-click=\"resourceView.prepareForAnimation($event, method)\" ng-repeat=\"method in resource.methods\">{{method.method}}</li>\n" +
+    "            <li class='method-name' ng-class='method.method' ng-click=\"resourceView.openDocumentation($event, method)\" ng-repeat=\"method in resource.methods\">{{method.method}}</li>\n" +
     "          </ul>\n" +
     "        </div>\n" +
     "      </div>\n" +
@@ -3633,8 +3637,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "           ng-show='resourceView.expanded && resource.description'\n" +
     "           markdown='resource.description'>\n" +
     "      </div>\n" +
-    "\n" +
-    "      <method ng-repeat=\"method in resource.methods\" ng-if=\"method === selectedMethod\"></method>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -3646,7 +3648,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div class=\"resource-container\">\n" +
     "    <div class=\"resource expanded\" ng-if=\"resource\">\n" +
     "      <div>\n" +
-    "        <i class=\"icon-remove collapse\" ng-click='resourceView.closePopover($event)'></i>\n" +
+    "        <i class=\"icon-remove collapse\" ng-click='closePopover($event)'></i>\n" +
     "\n" +
     "        <div class=\"summary accordion-toggle\" role=\"resource-summary\">\n" +
     "          <div class=\"modifiers expanded\">\n" +
@@ -3659,7 +3661,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <span class=\"modifier-group\" ng-if='resource.traits.length > 0'>\n" +
     "              <span class=\"caption\">Traits:</span>\n" +
     "              <ul>\n" +
-    "                <li class=\"trait\" ng-show='resourceView.expanded' role=\"trait\" ng-repeat=\"trait in resource.traits\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
+    "                <li class=\"trait\" role=\"trait\" ng-repeat=\"trait in resource.traits\" ng-bind=\"trait|nameFromParameterizable\"></li>\n" +
     "              </ul>\n" +
     "            </span>\n" +
     "          </div>\n" +
@@ -3671,12 +3673,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <li class='method-name' ng-class='method.method' ng-repeat=\"method in resource.methods\" ng-click=\"selectMethod(method)\">{{method.method}}</li>\n" +
     "          </ul>\n" +
     "        </div>\n" +
-    "      </div>\n" +
-    "\n" +
-    "      <div role='description'\n" +
-    "           class='description'\n" +
-    "           ng-show='resourceView.expanded && resource.description'\n" +
-    "           markdown='resource.description'>\n" +
     "      </div>\n" +
     "\n" +
     "      <method ng-repeat=\"method in resource.methods\" ng-if=\"method === selectedMethod\"></method>\n" +

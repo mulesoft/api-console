@@ -1,58 +1,112 @@
 (function() {
   'use strict';
 
-  RAML.Directives.resourceDocumentation = function() {
-    function Controller($rootScope, $scope, $element) {
-      var consoleContainer = angular.element(document.body).find('raml-console').parent();
-      var resourceList = angular.element(document.getElementById('#raml-console'));
-      var placeholder = $element[0].querySelector('.resource-placeholder');
-      var container = $element[0].querySelector('.resource-container');
+  function calculateContainerHeight(container, consoleContainer, rect) {
+    container.style.top = consoleContainer.scrollTop + rect.top - consoleContainer.offsetTop + 'px';
+    container.style.bottom = consoleContainer.scrollTop + rect.bottom + 'px';
+    container.style.height = rect.bottom - rect.top + 'px';
+  }
 
-      $scope.selectMethod = function(method) {
-        $scope.selectedMethod = method;
-      };
+  function createPopover(element) {
+    var consoleContainer = angular.element(document.body).find('raml-console').parent(),
+        resourceList = angular.element(document.getElementById('#raml-console')),
+        placeholder = angular.element(element[0].querySelector('.resource-placeholder')),
+        container = angular.element(element[0].querySelector('.resource-container')),
+        rect;
 
-      $rootScope.$on('console:expand', function(event, resource, method, $resourceEl) {
-        var rect;
-
+    return {
+      open: function($scope, $resourceEl, resource, method) {
         $scope.resource = resource;
 
         consoleContainer.css('overflow', 'hidden');
-        angular.element(placeholder).css('height', resourceList.css('height'));
-        angular.element(container).addClass('grow-expansion-animation');
+        placeholder.css('height', resourceList.css('height'));
+        container.addClass('grow-expansion-animation');
 
         setTimeout(function() {
           rect = $resourceEl[0].getBoundingClientRect();
-          container.style.top = consoleContainer[0].scrollTop + rect.top - consoleContainer[0].offsetTop + 'px';
-          container.style.bottom = consoleContainer[0].scrollTop + rect.bottom + 'px';
-          container.style.height = rect.bottom - rect.top + 'px';
+          calculateContainerHeight(container[0], consoleContainer[0], rect);
 
           setTimeout(function() {
-            angular.element(placeholder).addClass('masked');
-            angular.element(container).css('height', consoleContainer[0].clientHeight - 10 + 'px');
-            container.style.top = consoleContainer[0].scrollTop + 5 + 'px';
+            placeholder.addClass('masked');
+            container.css('height', consoleContainer[0].clientHeight - 10 + 'px');
+            container[0].style.top = consoleContainer[0].scrollTop + 5 + 'px';
             $scope.selectedMethod = method;
             $scope.$digest();
           });
         });
+      },
 
-        $scope.closePopover = function(e) {
-          e.preventDefault();
-          container.style.top = consoleContainer[0].scrollTop + rect.top - consoleContainer[0].offsetTop + 'px';
-          container.style.bottom = consoleContainer[0].scrollTop + rect.bottom + 'px';
-          container.style.height = rect.bottom - rect.top + 'px';
+      close: function($scope) {
+        calculateContainerHeight(container[0], consoleContainer[0], rect);
+        setTimeout(function() {
+          placeholder.removeClass('masked');
+
           setTimeout(function() {
-            angular.element(placeholder).removeClass('masked');
+            container.removeClass('grow-expansion-animation');
+            consoleContainer.css('overflow', 'auto');
 
-            setTimeout(function() {
-              angular.element(container).removeClass('grow-expansion-animation');
-              consoleContainer.css('overflow', 'auto');
+            $scope.$apply('resource = undefined');
+            $scope.$apply('selectedMethod = undefined');
+          }, 200);
+        });
+      },
+    };
+  }
 
-              $scope.$apply('resource = undefined');
-              $scope.$apply('selectedMethod = undefined');
-            }, 200);
-          });
-        };
+  RAML.Directives.resourceDocumentation = function($rootScope, DataStore) {
+    var popover;
+    function prepare($scope, $element, $resourceEl, resource, method) {
+      DataStore.set(resource.toString() + ':method', method.method);
+      popover = createPopover($element);
+      popover.open($scope, $resourceEl, resource, method);
+
+      $scope.selectMethod = function(method) {
+        DataStore.set(resource.toString() + ':method', method.method);
+        $scope.selectedMethod = method;
+      };
+
+      $scope.closePopover = function(e) {
+        e.preventDefault();
+
+        DataStore.set(resource.toString() + ':method', undefined);
+        popover.close($scope);
+        popover = undefined;
+      };
+    }
+
+    function Controller($scope, $element) {
+      var receipt;
+
+      $rootScope.$on('console:resource:destroyed', function(event, resource) {
+        if ($scope.resource && $scope.resource.toString() === resource.toString()) {
+          receipt = setTimeout(function() {
+            popover.close($scope);
+            popover = undefined;
+          }, 100);
+        }
+      });
+
+      $rootScope.$on('console:resource:rendered', function(event, resource, $resourceEl) {
+        var methodName = DataStore.get(resource.toString() + ':method');
+        if (methodName) {
+          var method = resource.methods.filter(function(method) {
+            return method.method === methodName;
+          })[0] || resource.methods[0];
+
+          if (method) {
+            if (receipt && $scope.resource && $scope.resource.toString() === resource.toString()) {
+              clearTimeout(receipt);
+              $scope.resource = resource;
+              $scope.selectedMethod = method;
+            } else {
+              prepare($scope, $element, $resourceEl, resource, method);
+            }
+          }
+        }
+      });
+
+      $rootScope.$on('console:expand', function(event, resource, method, $resourceEl) {
+        prepare($scope, $element, $resourceEl, resource, method);
       });
     }
 

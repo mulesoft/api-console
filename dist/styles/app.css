@@ -204,11 +204,6 @@ raml-console article#raml-console .resource-placeholder.masked,
 #raml-console-loader .resource-placeholder.masked {
   opacity: 1;
 }
-raml-console article#raml-console.scroll-disabled,
-#raml-console-loader.scroll-disabled {
-  height: 0px;
-  overflow: hidden;
-}
 @font-face {
   font-family: 'FontAwesome';
   src: url('../font/fontawesome-webfont.eot?v=3.2.1');
