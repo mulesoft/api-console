@@ -26,7 +26,7 @@ describe("RAML.Directives.responses", function() {
       scope.method = scope.resource.methods[0];
 
       dataStore.set('/resource:get', '500');
-      el = compileTemplate('<tabset><tab active="true" disabled="false"><responses></responses></tab></tabset>', scope);
+      el = compileTemplate('<console-tabset><console-tab active="true" disabled="false"><responses></responses></console-tab></console-tabset>', scope);
       setFixtures(el);
     }));
 

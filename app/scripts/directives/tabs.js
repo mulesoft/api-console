@@ -2,7 +2,7 @@
   'use strict';
 
   (function() {
-    RAML.Directives.tabset = function() {
+    RAML.Directives.consoleTabset = function() {
       return {
         restrict: 'E',
         templateUrl: 'views/tabset.tmpl.html',
@@ -29,13 +29,13 @@
       };
     }
 
-    RAML.Directives.tab = function($location, $anchorScroll, DataStore) {
+    RAML.Directives.consoleTab = function($location, $anchorScroll, DataStore) {
       return {
         restrict: 'E',
         templateUrl: 'views/tab.tmpl.html',
         replace: true,
         transclude: true,
-        require: '^tabset',
+        require: '^consoleTabset',
         controller: Controller,
         link: function($scope, $element, $attrs, tabsetCtrl) {
           var selected = DataStore.get($scope.keyBase);
@@ -67,7 +67,7 @@
     RAML.Directives.subtabs = function() {
       return {
         restrict: 'E',
-        require: '^tab',
+        require: '^consoleTab',
         link: function($scope, $element, $attrs, tabCtrl) {
           tabCtrl.registerSubtabs($scope.tabs, $scope.keyBase);
         },
@@ -83,7 +83,7 @@
     RAML.Directives.uriBar = function() {
       return {
         restrict: 'E',
-        require: '^tab',
+        require: '^consoleTab',
         link: function($scope, $element, $attrs, tabCtrl) {
           $attrs.$observe('pathBuilder', function(pathBuilder) {
             if (!pathBuilder) {

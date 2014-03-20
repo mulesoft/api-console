@@ -10,13 +10,15 @@
 
     var definitions = this.definitions = {};
     this.contentTypes.forEach(function(contentType) {
+      var definition = contentTypes[contentType] || {};
+
       switch (contentType) {
       case FORM_URLENCODED:
       case FORM_DATA:
-        definitions[contentType] = new RAML.Controllers.TryIt.NamedParameters(contentTypes[contentType].formParameters);
+        definitions[contentType] = new RAML.Controllers.TryIt.NamedParameters(definition.formParameters);
         break;
       default:
-        definitions[contentType] = new RAML.Controllers.TryIt.BodyType(contentTypes[contentType]);
+        definitions[contentType] = new RAML.Controllers.TryIt.BodyType(definition);
       }
     });
   };

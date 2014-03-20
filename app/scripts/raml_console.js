@@ -15,7 +15,6 @@
   module.directive('collapsibleToggle', RAML.Directives.collapsibleToggle);
   module.directive('documentation', RAML.Directives.documentation);
   module.directive('enum', RAML.Directives.enum);
-  // module.directive('input', RAML.Directives.input);
   module.directive('markdown', RAML.Directives.markdown);
   module.directive('method', RAML.Directives.method);
   module.directive('namedParameters', RAML.Directives.namedParameters);
@@ -34,8 +33,8 @@
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
-  module.directive('tab', RAML.Directives.tab);
-  module.directive('tabset', RAML.Directives.tabset);
+  module.directive('consoleTab', RAML.Directives.consoleTab);
+  module.directive('consoleTabset', RAML.Directives.consoleTabset);
   module.directive('subtabs', RAML.Directives.subtabs);
   module.directive('uriBar', RAML.Directives.uriBar);
   module.directive('toggle', RAML.Directives.toggle);

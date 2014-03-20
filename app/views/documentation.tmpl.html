@@ -1,6 +1,6 @@
 <section class='documentation' role='documentation'>
-  <tabset key-base='{{ generateKey() }}' heading='{{ method.method }}'>
-    <tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
+  <console-tabset key-base='{{ generateKey() }}' heading='{{ method.method }}'>
+    <console-tab role='documentation-requests' heading="Request" active='documentation.requestsActive' disabled="!documentation.hasRequestDocumentation()">
       <div class="modifiers">
         <span class="modifier-group" ng-if="method.is">
           <span class="caption">Traits:</span>
@@ -32,15 +32,14 @@
       <div class="documentation-section" ng-if='method.body && documentation.requestsActive'>
         <body-documentation body="method.body" key-base="generateKey() + ':request'"></body-documentation>
       </div>
+    </console-tab>
 
-    </tab>
-
-    <tab role="documentation-responses" heading="Responses"  active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>
+    <console-tab role="documentation-responses" heading="Responses"  active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>
       <responses></responses>
-    </tab>
+    </console-tab>
 
-    <tab role="try-it" heading="Try It" active="documentation.tryItActive" disabled="!ramlConsole.tryItEnabled()">
+    <console-tab role="try-it" heading="Try It" active="documentation.tryItActive" disabled="!ramlConsole.tryItEnabled()">
       <try-it></try-it>
-    </tab>
-  </tabset>
+    </console-tab>
+  </console-tabset>
 </section>

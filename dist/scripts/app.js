@@ -1841,13 +1841,15 @@ RAML.Inspector = (function() {
 
     var definitions = this.definitions = {};
     this.contentTypes.forEach(function(contentType) {
+      var definition = contentTypes[contentType] || {};
+
       switch (contentType) {
       case FORM_URLENCODED:
       case FORM_DATA:
-        definitions[contentType] = new RAML.Controllers.TryIt.NamedParameters(contentTypes[contentType].formParameters);
+        definitions[contentType] = new RAML.Controllers.TryIt.NamedParameters(definition.formParameters);
         break;
       default:
-        definitions[contentType] = new RAML.Controllers.TryIt.BodyType(contentTypes[contentType]);
+        definitions[contentType] = new RAML.Controllers.TryIt.BodyType(definition);
       }
     });
   };
@@ -2891,7 +2893,7 @@ RAML.Inspector = (function() {
   'use strict';
 
   (function() {
-    RAML.Directives.tabset = function() {
+    RAML.Directives.consoleTabset = function() {
       return {
         restrict: 'E',
         templateUrl: 'views/tabset.tmpl.html',
@@ -2918,13 +2920,13 @@ RAML.Inspector = (function() {
       };
     }
 
-    RAML.Directives.tab = function($location, $anchorScroll, DataStore) {
+    RAML.Directives.consoleTab = function($location, $anchorScroll, DataStore) {
       return {
         restrict: 'E',
         templateUrl: 'views/tab.tmpl.html',
         replace: true,
         transclude: true,
-        require: '^tabset',
+        require: '^consoleTabset',
         controller: Controller,
         link: function($scope, $element, $attrs, tabsetCtrl) {
           var selected = DataStore.get($scope.keyBase);
@@ -2956,7 +2958,7 @@ RAML.Inspector = (function() {
     RAML.Directives.subtabs = function() {
       return {
         restrict: 'E',
-        require: '^tab',
+        require: '^consoleTab',
         link: function($scope, $element, $attrs, tabCtrl) {
           tabCtrl.registerSubtabs($scope.tabs, $scope.keyBase);
         },
@@ -2972,7 +2974,7 @@ RAML.Inspector = (function() {
     RAML.Directives.uriBar = function() {
       return {
         restrict: 'E',
-        require: '^tab',
+        require: '^consoleTab',
         link: function($scope, $element, $attrs, tabCtrl) {
           $attrs.$observe('pathBuilder', function(pathBuilder) {
             if (!pathBuilder) {
@@ -3303,7 +3305,6 @@ RAML.Filters = {};
   module.directive('collapsibleToggle', RAML.Directives.collapsibleToggle);
   module.directive('documentation', RAML.Directives.documentation);
   module.directive('enum', RAML.Directives.enum);
-  // module.directive('input', RAML.Directives.input);
   module.directive('markdown', RAML.Directives.markdown);
   module.directive('method', RAML.Directives.method);
   module.directive('namedParameters', RAML.Directives.namedParameters);
@@ -3322,8 +3323,8 @@ RAML.Filters = {};
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
-  module.directive('tab', RAML.Directives.tab);
-  module.directive('tabset', RAML.Directives.tabset);
+  module.directive('consoleTab', RAML.Directives.consoleTab);
+  module.directive('consoleTabset', RAML.Directives.consoleTabset);
   module.directive('subtabs', RAML.Directives.subtabs);
   module.directive('uriBar', RAML.Directives.uriBar);
   module.directive('toggle', RAML.Directives.toggle);
@@ -3447,8 +3448,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('views/documentation.tmpl.html',
     "<section class='documentation' role='documentation'>\n" +
-    "  <tabset key-base='{{ generateKey() }}' heading='{{ method.method }}'>\n" +
-    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
+    "  <console-tabset key-base='{{ generateKey() }}' heading='{{ method.method }}'>\n" +
+    "    <console-tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
     "      <div class=\"modifiers\">\n" +
     "        <span class=\"modifier-group\" ng-if=\"method.is\">\n" +
     "          <span class=\"caption\">Traits:</span>\n" +
@@ -3480,17 +3481,16 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <div class=\"documentation-section\" ng-if='method.body && documentation.requestsActive'>\n" +
     "        <body-documentation body=\"method.body\" key-base=\"generateKey() + ':request'\"></body-documentation>\n" +
     "      </div>\n" +
+    "    </console-tab>\n" +
     "\n" +
-    "    </tab>\n" +
-    "\n" +
-    "    <tab role=\"documentation-responses\" heading=\"Responses\"  active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
+    "    <console-tab role=\"documentation-responses\" heading=\"Responses\"  active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
     "      <responses></responses>\n" +
-    "    </tab>\n" +
+    "    </console-tab>\n" +
     "\n" +
-    "    <tab role=\"try-it\" heading=\"Try It\" active=\"documentation.tryItActive\" disabled=\"!ramlConsole.tryItEnabled()\">\n" +
+    "    <console-tab role=\"try-it\" heading=\"Try It\" active=\"documentation.tryItActive\" disabled=\"!ramlConsole.tryItEnabled()\">\n" +
     "      <try-it></try-it>\n" +
-    "    </tab>\n" +
-    "  </tabset>\n" +
+    "    </console-tab>\n" +
+    "  </console-tabset>\n" +
     "</section>\n"
   );
 
