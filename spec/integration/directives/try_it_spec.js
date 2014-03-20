@@ -22,11 +22,11 @@ describe("RAML.Controllers.tryIt", function() {
 
   function compileTryIt(scope) {
     return compileTemplate(
-      '<tabset key-base="whatever" heading="whatever">' +
-        '<tab heading="Try It" active="true" disabled="false">' +
+      '<console-tabset key-base="whatever" heading="whatever">' +
+        '<console-tab heading="Try It" active="true" disabled="false">' +
           '<try-it></try-it>' +
-        '</tab>' +
-      '</tabset>',
+        '</console-tab>' +
+      '</console-tabset>',
       scope);
   }
 
