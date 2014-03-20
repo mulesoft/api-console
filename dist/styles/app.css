@@ -2108,6 +2108,8 @@ raml-console article#raml-console .CodeMirror-linenumber,
   min-width: 20px;
   text-align: right;
   color: #999;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
 raml-console article#raml-console .CodeMirror div.CodeMirror-cursor,
 #raml-console-loader .CodeMirror div.CodeMirror-cursor {
@@ -2128,6 +2130,11 @@ raml-console article#raml-console .CodeMirror.cm-keymap-fat-cursor div.CodeMirro
 raml-console article#raml-console .cm-tab,
 #raml-console-loader .cm-tab {
   display: inline-block;
+}
+raml-console article#raml-console .CodeMirror-ruler,
+#raml-console-loader .CodeMirror-ruler {
+  border-left: 1px solid #ccc;
+  position: absolute;
 }
 raml-console article#raml-console .cm-s-default .cm-keyword,
 #raml-console-loader .cm-s-default .cm-keyword {
@@ -2276,7 +2283,6 @@ raml-console article#raml-console .CodeMirror-scroll,
   margin-bottom: -30px;
   margin-right: -30px;
   padding-bottom: 30px;
-  padding-right: 30px;
   height: 100%;
   outline: none;
   /* Prevent dragging from highlighting the element */
@@ -2288,6 +2294,9 @@ raml-console article#raml-console .CodeMirror-scroll,
 raml-console article#raml-console .CodeMirror-sizer,
 #raml-console-loader .CodeMirror-sizer {
   position: relative;
+  border-right: 30px solid transparent;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
 raml-console article#raml-console .CodeMirror-vscrollbar,
 #raml-console-loader .CodeMirror-vscrollbar,
@@ -2382,18 +2391,6 @@ raml-console article#raml-console .CodeMirror-wrap pre,
   word-wrap: break-word;
   white-space: pre-wrap;
   word-break: normal;
-}
-raml-console article#raml-console .CodeMirror-code pre,
-#raml-console-loader .CodeMirror-code pre {
-  border-right: 30px solid transparent;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-}
-raml-console article#raml-console .CodeMirror-wrap .CodeMirror-code pre,
-#raml-console-loader .CodeMirror-wrap .CodeMirror-code pre {
-  border-right: none;
-  width: auto;
 }
 raml-console article#raml-console .CodeMirror-linebackground,
 #raml-console-loader .CodeMirror-linebackground {

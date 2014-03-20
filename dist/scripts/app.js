@@ -2672,7 +2672,7 @@ RAML.Inspector = (function() {
   // tabset
   ////////////
 
-  RAML.Directives.tabset = function() {
+  RAML.Directives.consoleTabset = function() {
     return {
       restrict: 'E',
       replace: true,
@@ -2693,10 +2693,10 @@ RAML.Inspector = (function() {
     tabsetCtrl.addTab($scope);
   };
 
-  RAML.Directives.tab = function() {
+  RAML.Directives.consoleTab = function() {
     return {
       restrict: 'E',
-      require: '^tabset',
+      require: '^consoleTabset',
       replace: true,
       transclude: true,
       link: link,
@@ -2992,8 +2992,8 @@ RAML.Filters = {};
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
-  module.directive('tab', RAML.Directives.tab);
-  module.directive('tabset', RAML.Directives.tabset);
+  module.directive('consoleTab', RAML.Directives.consoleTab);               //<- prepend 'console' to avoid collision w/angular-bootstrap tab
+  module.directive('consoleTabset', RAML.Directives.consoleTabset);         //<- prepend 'console' to avoid collision w/angular-bootstrap tabset
   module.directive('tryIt', RAML.Directives.tryIt);
   module.directive('validatedInput', RAML.Directives.validatedInput);
 
@@ -3082,18 +3082,18 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "       markdown=\"method.description\">\n" +
     "  </div>\n" +
     "\n" +
-    "  <tabset key-base='{{methodView.methodKey()}}'>\n" +
-    "    <tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
+    "  <console-tabset key-base='{{methodView.methodKey()}}'>\n" +
+    "    <console-tab role='documentation-requests' heading=\"Request\" active='documentation.requestsActive' disabled=\"!documentation.hasRequestDocumentation()\">\n" +
     "      <parameters></parameters>\n" +
     "      <requests></requests>\n" +
-    "    </tab>\n" +
-    "    <tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
+    "    </console-tab>\n" +
+    "    <console-tab role='documentation-responses' class=\"responses\" heading=\"Responses\" active='documentation.responsesActive' disabled='!documentation.hasResponseDocumentation()'>\n" +
     "      <responses></responses>\n" +
-    "    </tab>\n" +
-    "    <tab role=\"try-it\" heading=\"Try It\" active=\"documentation.tryItActive\" disabled=\"!ramlConsole.tryItEnabled()\">\n" +
+    "    </console-tab>\n" +
+    "    <console-tab role=\"try-it\" heading=\"Try It\" active=\"documentation.tryItActive\" disabled=\"!ramlConsole.tryItEnabled()\">\n" +
     "      <try-it></try-it>\n" +
-    "    </tab>\n" +
-    "  </tabset>\n" +
+    "    </console-tab>\n" +
+    "  </console-tabset>\n" +
     "</section>\n"
   );
 

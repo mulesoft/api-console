@@ -5,7 +5,7 @@
   // tabset
   ////////////
 
-  RAML.Directives.tabset = function() {
+  RAML.Directives.consoleTabset = function() {
     return {
       restrict: 'E',
       replace: true,
@@ -26,10 +26,10 @@
     tabsetCtrl.addTab($scope);
   };
 
-  RAML.Directives.tab = function() {
+  RAML.Directives.consoleTab = function() {
     return {
       restrict: 'E',
-      require: '^tabset',
+      require: '^consoleTabset',
       replace: true,
       transclude: true,
       link: link,

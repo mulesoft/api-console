@@ -33,8 +33,8 @@
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
-  module.directive('tab', RAML.Directives.tab);
-  module.directive('tabset', RAML.Directives.tabset);
+  module.directive('consoleTab', RAML.Directives.consoleTab);               //<- prepend 'console' to avoid collision w/angular-bootstrap tab
+  module.directive('consoleTabset', RAML.Directives.consoleTabset);         //<- prepend 'console' to avoid collision w/angular-bootstrap tabset
   module.directive('tryIt', RAML.Directives.tryIt);
   module.directive('validatedInput', RAML.Directives.validatedInput);
 
