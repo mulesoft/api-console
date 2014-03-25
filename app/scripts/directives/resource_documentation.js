@@ -9,7 +9,7 @@
 
   function createPopover(element) {
     var consoleContainer = angular.element(document.body).find('raml-console').parent(),
-        resourceList = angular.element(document.getElementById('#raml-console')),
+        resourceList = angular.element(document.getElementById('raml-console')),
         placeholder = angular.element(element[0].querySelector('.resource-placeholder')),
         container = angular.element(element[0].querySelector('.resource-container')),
         rect;
@@ -19,7 +19,7 @@
         $scope.resource = resource;
 
         consoleContainer.css('overflow', 'hidden');
-        placeholder.css('height', resourceList.css('height'));
+        placeholder.css('height', resourceList[0].scrollHeight + 'px');
         container.addClass('grow-expansion-animation');
 
         setTimeout(function() {
