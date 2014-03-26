@@ -31,7 +31,7 @@
       $scope.$watch('$parent.model', filterEnumElements);
 
       $scope.selectItem = function(item) {
-        $scope.model = item;
+        $scope.model = $scope.$parent.model = item;
         $scope.focused = false;
       };
 
@@ -81,8 +81,7 @@
           var selection = $scope.filteredEnum[$scope.selectedIndex];
 
           if (selection) {
-            $scope.model = selection;
-            $scope.focused = false;
+            $scope.selectItem(selection);
           }
           e.preventDefault();
           break;
