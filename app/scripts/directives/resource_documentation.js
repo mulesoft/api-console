@@ -56,22 +56,23 @@
   RAML.Directives.resourceDocumentation = function($rootScope, DataStore) {
     var popover;
     function prepare($scope, $element, $resourceEl, resource, method) {
-      DataStore.set(resource.toString() + ':method', method.method);
-      popover = createPopover($element);
-      popover.open($scope, $resourceEl, resource, method);
-
       $scope.selectMethod = function(method) {
-        DataStore.set(resource.toString() + ':method', method.method);
+        DataStore.set(resource.toString() + ':method:', method.method);
         $scope.selectedMethod = method;
+        $scope.keyBase = resource.toString() +':' + method.method;
       };
 
       $scope.closePopover = function(e) {
         e.preventDefault();
 
-        DataStore.set(resource.toString() + ':method', undefined);
+        DataStore.set(resource.toString() + ':method:', undefined);
         popover.close($scope);
         popover = undefined;
       };
+
+      popover = createPopover($element);
+      popover.open($scope, $resourceEl, resource, method);
+      $scope.selectMethod(method);
     }
 
     function Controller($scope, $element) {
@@ -108,6 +109,7 @@
       $rootScope.$on('console:expand', function(event, resource, method, $resourceEl) {
         prepare($scope, $element, $resourceEl, resource, method);
       });
+
     }
 
     return {

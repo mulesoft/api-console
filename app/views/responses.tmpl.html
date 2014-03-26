@@ -9,7 +9,7 @@
       </div>
 
       <div ng-if="response.body && documentation.responsesActive" class='body-documentation'>
-        <body-documentation body="response.body" key-base='keyBase + "responses"'></body-documentation>
+        <body-documentation body="response.body" key-base='keyBase + ":responses:" + responseCode'></body-documentation>
       </div>
     </section>
   </div>
