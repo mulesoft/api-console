@@ -2572,10 +2572,15 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  function calculateContainerHeight(container, consoleContainer, rect) {
+  function calculateContainerPosition(container, consoleContainer, rect) {
     container.style.top = consoleContainer.scrollTop + rect.top - consoleContainer.offsetTop + 'px';
     container.style.bottom = consoleContainer.scrollTop + rect.bottom + 'px';
     container.style.height = rect.bottom - rect.top + 'px';
+  }
+
+  function calculateContainerHeight(container, consoleContainer) {
+    container.css('height', consoleContainer[0].clientHeight - 10 + 'px');
+    container[0].style.top = consoleContainer[0].scrollTop + 5 + 'px';
   }
 
   function createPopover(element) {
@@ -2595,12 +2600,11 @@ RAML.Inspector = (function() {
 
         setTimeout(function() {
           rect = $resourceEl[0].getBoundingClientRect();
-          calculateContainerHeight(container[0], consoleContainer[0], rect);
+          calculateContainerPosition(container[0], consoleContainer[0], rect);
 
           setTimeout(function() {
             placeholder.addClass('masked');
-            container.css('height', consoleContainer[0].clientHeight - 10 + 'px');
-            container[0].style.top = consoleContainer[0].scrollTop + 5 + 'px';
+            calculateContainerHeight(container, consoleContainer);
             $scope.selectedMethod = method;
             $scope.$digest();
           });
@@ -2608,7 +2612,7 @@ RAML.Inspector = (function() {
       },
 
       close: function($scope) {
-        calculateContainerHeight(container[0], consoleContainer[0], rect);
+        calculateContainerPosition(container[0], consoleContainer[0], rect);
         setTimeout(function() {
           placeholder.removeClass('masked');
 
@@ -2621,28 +2625,38 @@ RAML.Inspector = (function() {
           }, 200);
         });
       },
+
+      resize: function() {
+        calculateContainerHeight(container, consoleContainer);
+      }
     };
   }
 
-  RAML.Directives.resourceDocumentation = function($rootScope, DataStore) {
+  RAML.Directives.resourceDocumentation = function($rootScope, $window, DataStore) {
     var popover;
+    angular.element($window).bind('resize', function() {
+      if (popover) {
+        popover.resize();
+      }
+    });
     function prepare($scope, $element, $resourceEl, resource, method) {
-      DataStore.set(resource.toString() + ':method', method.method);
-      popover = createPopover($element);
-      popover.open($scope, $resourceEl, resource, method);
-
       $scope.selectMethod = function(method) {
-        DataStore.set(resource.toString() + ':method', method.method);
+        DataStore.set(resource.toString() + ':method:', method.method);
         $scope.selectedMethod = method;
+        $scope.keyBase = resource.toString() +':' + method.method;
       };
 
       $scope.closePopover = function(e) {
         e.preventDefault();
 
-        DataStore.set(resource.toString() + ':method', undefined);
+        DataStore.set(resource.toString() + ':method:', undefined);
         popover.close($scope);
         popover = undefined;
       };
+
+      popover = createPopover($element);
+      popover.open($scope, $resourceEl, resource, method);
+      $scope.selectMethod(method);
     }
 
     function Controller($scope, $element) {
@@ -2679,6 +2693,7 @@ RAML.Inspector = (function() {
       $rootScope.$on('console:expand', function(event, resource, method, $resourceEl) {
         prepare($scope, $element, $resourceEl, resource, method);
       });
+
     }
 
     return {
@@ -3705,7 +3720,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "\n" +
     "      <div ng-if=\"response.body && documentation.responsesActive\" class='body-documentation'>\n" +
-    "        <body-documentation body=\"response.body\" key-base='keyBase + \"responses\"'></body-documentation>\n" +
+    "        <body-documentation body=\"response.body\" key-base='keyBase + \":responses:\" + responseCode'></body-documentation>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
