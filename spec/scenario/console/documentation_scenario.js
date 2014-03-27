@@ -36,6 +36,7 @@ describe('API Documentation', function() {
       '      x-custom-header:',
       '        description: API Key',
       '        type: string',
+      '        required: true',
       '        pattern: /^[0-9a-f]{32}$/',
       '        example: 0a724bfa133666c5041019ef5bf5a659',
       '  post:',
