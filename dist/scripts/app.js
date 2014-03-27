@@ -3527,7 +3527,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/parameter_field.tmpl.html',
-    "<ng-switch on='inputType'>\n" +
+    "<ng-switch on='inputType' class='parameter-field-input'>\n" +
     "  <span ng-switch-when=\"file\">\n" +
     "    <input name=\"{{name}}\" type='file' ng-model='$parent.model'/>\n" +
     "  </span>\n" +

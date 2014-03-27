@@ -2122,8 +2122,6 @@ raml-console article#raml-console .CodeMirror-linenumber,
   min-width: 20px;
   text-align: right;
   color: #999;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
 }
 raml-console article#raml-console .CodeMirror div.CodeMirror-cursor,
 #raml-console-loader .CodeMirror div.CodeMirror-cursor {
@@ -2144,11 +2142,6 @@ raml-console article#raml-console .CodeMirror.cm-keymap-fat-cursor div.CodeMirro
 raml-console article#raml-console .cm-tab,
 #raml-console-loader .cm-tab {
   display: inline-block;
-}
-raml-console article#raml-console .CodeMirror-ruler,
-#raml-console-loader .CodeMirror-ruler {
-  border-left: 1px solid #ccc;
-  position: absolute;
 }
 raml-console article#raml-console .cm-s-default .cm-keyword,
 #raml-console-loader .cm-s-default .cm-keyword {
@@ -2297,6 +2290,7 @@ raml-console article#raml-console .CodeMirror-scroll,
   margin-bottom: -30px;
   margin-right: -30px;
   padding-bottom: 30px;
+  padding-right: 30px;
   height: 100%;
   outline: none;
   /* Prevent dragging from highlighting the element */
@@ -2308,9 +2302,6 @@ raml-console article#raml-console .CodeMirror-scroll,
 raml-console article#raml-console .CodeMirror-sizer,
 #raml-console-loader .CodeMirror-sizer {
   position: relative;
-  border-right: 30px solid transparent;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
 }
 raml-console article#raml-console .CodeMirror-vscrollbar,
 #raml-console-loader .CodeMirror-vscrollbar,
@@ -2401,6 +2392,18 @@ raml-console article#raml-console .CodeMirror-wrap pre,
   word-wrap: break-word;
   white-space: pre-wrap;
   word-break: normal;
+}
+raml-console article#raml-console .CodeMirror-code pre,
+#raml-console-loader .CodeMirror-code pre {
+  border-right: 30px solid transparent;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+raml-console article#raml-console .CodeMirror-wrap .CodeMirror-code pre,
+#raml-console-loader .CodeMirror-wrap .CodeMirror-code pre {
+  border-right: none;
+  width: auto;
 }
 raml-console article#raml-console .CodeMirror-linebackground,
 #raml-console-loader .CodeMirror-linebackground {
@@ -2809,6 +2812,11 @@ raml-console article#raml-console input[type="password"],
   width: 206px;
   height: 20px;
   line-height: 20px;
+}
+raml-console article#raml-console .parameter-field-input input[type="text"],
+#raml-console-loader .parameter-field-input input[type="text"] {
+  font-size: 12px;
+  padding: 1px 3px;
 }
 raml-console article#raml-console select[multiple],
 #raml-console-loader select[multiple],
@@ -4646,7 +4654,7 @@ raml-console article#raml-console .documentation .named-parameters .parameter .c
   font-weight: normal;
   font-style: italic;
   margin-left: 5px;
-  font-size: 13px;
+  font-size: 12px;
 }
 raml-console article#raml-console .documentation .named-parameters .parameter .info,
 #raml-console-loader .documentation .named-parameters .parameter .info {
@@ -4818,6 +4826,10 @@ raml-console article#raml-console .try-it form .form-actions .error,
 raml-console article#raml-console .try-it form .form-actions .warning,
 #raml-console-loader .try-it form .form-actions .warning {
   color: #fbb03b;
+}
+raml-console article#raml-console .try-it form .form-actions button,
+#raml-console-loader .try-it form .form-actions button {
+  font-size: 12px;
 }
 raml-console article#raml-console .try-it form .parameter-field,
 #raml-console-loader .try-it form .parameter-field {
