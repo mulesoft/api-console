@@ -2640,7 +2640,7 @@ RAML.Inspector = (function() {
     });
     function prepare($scope, $element, $resourceEl, resource, method) {
       $scope.selectMethod = function(method) {
-        DataStore.set(resource.toString() + ':method:', method.method);
+        DataStore.set(resource.toString() + ':method', method.method);
         $scope.selectedMethod = method;
         $scope.keyBase = resource.toString() +':' + method.method;
       };
@@ -2648,7 +2648,7 @@ RAML.Inspector = (function() {
       $scope.closePopover = function(e) {
         e.preventDefault();
 
-        DataStore.set(resource.toString() + ':method:', undefined);
+        DataStore.set(resource.toString() + ':method', undefined);
         popover.close($scope);
         popover = undefined;
       };
