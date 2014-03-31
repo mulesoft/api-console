@@ -1,41 +1,21 @@
 {
-  "name": "console",
-  "version": "1.0.0",
-  "homepage": "https://github.com/mulesoft/api-console",
-  "authors": [],
-  "main": [
-    "dist/scripts/**/*.*",
-    "dist/styles/**/*.*",
-    "dist/font/**/*.*",
-    "dist/authentication/oauth1.html",
-    "dist/authentication/oauth2.html"
-  ],
-  "description": "RAML API Console",
-  "license": "CPAL-1.0",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "app",
-    "bower_components",
-    "Gruntfile.js",
-    "node_modules",
-    "package.json",
-    "selenium",
-    "spec",
-    "tasks",
-    "test"
-  ],
+  "name": "api-console",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mulesoft/api-console.git"
+  },
   "dependencies": {
-    "raml-js-parser": "raml-org/raml-js-parser#01bf587031db75b1e91b29ce71e05125b9c5314a",
+    "angular": "~1.2.9",
+    "angular-sanitize": "~1.2.9",
+    "codemirror": "~3.23.0",
     "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
-    "angular": "1.2.9",
-    "angular-sanitize": "1.2.9",
-    "codemirror": "3.x",
-    "font-awesome": "3.x",
-    "showdown": "0.3.1",
+    "font-awesome": "~3.2.1",
+    "raml-js-parser": "raml-org/raml-js-parser#01bf587031db75b1e91b29ce71e05125b9c5314a",
+    "showdown": "~0.3.1",
     "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.9"
+    "angular-mocks": "~1.2.9"
   }
 }
