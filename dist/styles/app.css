@@ -164,14 +164,7 @@ raml-console article#raml-console .resource-placeholder.popover,
 }
 raml-console article#raml-console .resource-placeholder.popover .resource-container,
 #raml-console-loader .resource-placeholder.popover .resource-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
   position: relative;
   width: 100%;
@@ -180,24 +173,16 @@ raml-console article#raml-console .resource-placeholder.popover .resource-contai
 }
 raml-console article#raml-console .resource-placeholder.popover .resource-container.grow-expansion-animation,
 #raml-console-loader .resource-placeholder.popover .resource-container.grow-expansion-animation {
-  -webkit-transition: height 0.33s, top 0.33s;
   transition: height 0.33s, top 0.33s;
 }
 raml-console article#raml-console .resource-placeholder.popover .resource-container .resource,
 #raml-console-loader .resource-placeholder.popover .resource-container .resource {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   border: none;
 }
 raml-console article#raml-console .mask-resource-list,
 #raml-console-loader .mask-resource-list {
-  -webkit-transition: opacity 0.33s;
   transition: opacity 0.33s;
 }
 raml-console article#raml-console .resource-placeholder.masked,
@@ -295,6 +280,8 @@ raml-console article#raml-console .icon-border,
 #raml-console-loader .icon-border {
   border: solid 1px #eeeeee;
   padding: .2em .25em .15em;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
   border-radius: 3px;
 }
 raml-console article#raml-console .icon-2x,
@@ -304,6 +291,8 @@ raml-console article#raml-console .icon-2x,
 raml-console article#raml-console .icon-2x.icon-border,
 #raml-console-loader .icon-2x.icon-border {
   border-width: 2px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
   border-radius: 4px;
 }
 raml-console article#raml-console .icon-3x,
@@ -313,6 +302,8 @@ raml-console article#raml-console .icon-3x,
 raml-console article#raml-console .icon-3x.icon-border,
 #raml-console-loader .icon-3x.icon-border {
   border-width: 3px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
   border-radius: 5px;
 }
 raml-console article#raml-console .icon-4x,
@@ -322,6 +313,8 @@ raml-console article#raml-console .icon-4x,
 raml-console article#raml-console .icon-4x.icon-border,
 #raml-console-loader .icon-4x.icon-border {
   border-width: 4px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
   border-radius: 6px;
 }
 raml-console article#raml-console .icon-5x,
@@ -331,6 +324,8 @@ raml-console article#raml-console .icon-5x,
 raml-console article#raml-console .icon-5x.icon-border,
 #raml-console-loader .icon-5x.icon-border {
   border-width: 5px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
   border-radius: 7px;
 }
 raml-console article#raml-console .pull-right,
@@ -523,6 +518,8 @@ raml-console article#raml-console .icon-stack .icon-stack-base,
 raml-console article#raml-console .icon-spin,
 #raml-console-loader .icon-spin {
   display: inline-block;
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
   -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
 }
@@ -533,12 +530,28 @@ raml-console article#raml-console a .icon-spin,
   display: inline-block;
   text-decoration: none;
 }
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
+}
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
   }
   100% {
     -webkit-transform: rotate(359deg);
+  }
+}
+@-o-keyframes spin {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
   }
 }
 @-ms-keyframes spin {
@@ -551,40 +564,53 @@ raml-console article#raml-console a .icon-spin,
 }
 @keyframes spin {
   0% {
-    -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(359deg);
     transform: rotate(359deg);
   }
 }
 raml-console article#raml-console .icon-rotate-90:before,
 #raml-console-loader .icon-rotate-90:before {
   -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
   transform: rotate(90deg);
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
 }
 raml-console article#raml-console .icon-rotate-180:before,
 #raml-console-loader .icon-rotate-180:before {
   -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
   transform: rotate(180deg);
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
 }
 raml-console article#raml-console .icon-rotate-270:before,
 #raml-console-loader .icon-rotate-270:before {
   -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
   transform: rotate(270deg);
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 raml-console article#raml-console .icon-flip-horizontal:before,
 #raml-console-loader .icon-flip-horizontal:before {
   -webkit-transform: scale(-1, 1);
+  -moz-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
   transform: scale(-1, 1);
 }
 raml-console article#raml-console .icon-flip-vertical:before,
 #raml-console-loader .icon-flip-vertical:before {
   -webkit-transform: scale(1, -1);
+  -moz-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
   transform: scale(1, -1);
 }
 raml-console article#raml-console a .icon-rotate-90:before,
@@ -2382,6 +2408,10 @@ raml-console article#raml-console .CodeMirror-lines,
 }
 raml-console article#raml-console .CodeMirror pre,
 #raml-console-loader .CodeMirror pre {
+  /* Reset some styles that the rest of the page might have set */
+
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
   border-radius: 0;
   border-width: 0;
   background: transparent;
@@ -2756,7 +2786,6 @@ raml-console article#raml-console .autocomplete ul,
   left: 0;
   border-radius: 3px;
   border: 1px solid #cccccc;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   overflow: scroll;
 }
@@ -3055,12 +3084,10 @@ raml-console article#raml-console .btn-connect,
 raml-console article#raml-console .resource-placeholder,
 #raml-console-loader .resource-placeholder {
   margin: 5px 0;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container,
 #raml-console-loader .resource-placeholder.pop-up .resource-container {
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   position: absolute;
   z-index: 2;
@@ -3075,7 +3102,6 @@ raml-console article#raml-console .resource-placeholder.pop-up .resource-contain
 }
 raml-console article#raml-console .resource-placeholder.pop-up .resource-container .resource,
 #raml-console-loader .resource-placeholder.pop-up .resource-container .resource {
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   height: 100%;
 }
@@ -3098,28 +3124,15 @@ raml-console article#raml-console .resource-placeholder .resource-container .res
   border: 1px solid #cccccc;
   padding: 0 5px 0 10px;
   overflow: hidden;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource > *,
 #raml-console-loader .resource-placeholder .resource-container .resource > * {
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 0 auto;
-  -ms-flex: 0 0 auto;
   flex: 0 0 auto;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource .method,
 #raml-console-loader .resource-placeholder .resource-container .resource .method {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-  -ms-flex: 1 1 auto;
   flex: 1 1 auto;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .resource:hover,
@@ -3213,8 +3226,6 @@ raml-console article#raml-console .resource-placeholder .resource-container .mod
 }
 raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group,
 #raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group {
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
   display: inline-flex;
   background-color: #F3F3F6;
   padding: 0px 5px;
@@ -3224,9 +3235,6 @@ raml-console article#raml-console .resource-placeholder .resource-container .mod
 }
 raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group .caption,
 #raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group .caption {
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 0 auto;
-  -ms-flex: 0 0 auto;
   flex: 0 0 auto;
   display: inline-block;
   font-weight: bold;
@@ -3237,9 +3245,6 @@ raml-console article#raml-console .resource-placeholder .resource-container .mod
 }
 raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul,
 #raml-console-loader .resource-placeholder .resource-container .modifiers .modifier-group ul {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-  -ms-flex: 1 1 auto;
   flex: 1 1 auto;
 }
 raml-console article#raml-console .resource-placeholder .resource-container .modifiers .modifier-group ul li,
@@ -3273,18 +3278,8 @@ raml-console article#raml-console .get.method-name:hover,
 }
 raml-console article#raml-console .get .method-nav-container,
 #raml-console-loader .get .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .get .method-nav,
@@ -3300,9 +3295,6 @@ raml-console article#raml-console .get .method-nav .method-nav-group,
 raml-console article#raml-console .get .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .get .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -3372,18 +3364,8 @@ raml-console article#raml-console .get .method-nav .method-nav-group .method-nav
 raml-console article#raml-console .get .method-content-container,
 #raml-console-loader .get .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
@@ -3398,18 +3380,8 @@ raml-console article#raml-console .post.method-name:hover,
 }
 raml-console article#raml-console .post .method-nav-container,
 #raml-console-loader .post .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .post .method-nav,
@@ -3425,9 +3397,6 @@ raml-console article#raml-console .post .method-nav .method-nav-group,
 raml-console article#raml-console .post .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .post .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -3497,18 +3466,8 @@ raml-console article#raml-console .post .method-nav .method-nav-group .method-na
 raml-console article#raml-console .post .method-content-container,
 #raml-console-loader .post .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
@@ -3523,18 +3482,8 @@ raml-console article#raml-console .delete.method-name:hover,
 }
 raml-console article#raml-console .delete .method-nav-container,
 #raml-console-loader .delete .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .delete .method-nav,
@@ -3550,9 +3499,6 @@ raml-console article#raml-console .delete .method-nav .method-nav-group,
 raml-console article#raml-console .delete .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .delete .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -3622,18 +3568,8 @@ raml-console article#raml-console .delete .method-nav .method-nav-group .method-
 raml-console article#raml-console .delete .method-content-container,
 #raml-console-loader .delete .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
@@ -3648,18 +3584,8 @@ raml-console article#raml-console .put.method-name:hover,
 }
 raml-console article#raml-console .put .method-nav-container,
 #raml-console-loader .put .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .put .method-nav,
@@ -3675,9 +3601,6 @@ raml-console article#raml-console .put .method-nav .method-nav-group,
 raml-console article#raml-console .put .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .put .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -3747,18 +3670,8 @@ raml-console article#raml-console .put .method-nav .method-nav-group .method-nav
 raml-console article#raml-console .put .method-content-container,
 #raml-console-loader .put .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
@@ -3773,18 +3686,8 @@ raml-console article#raml-console .patch.method-name:hover,
 }
 raml-console article#raml-console .patch .method-nav-container,
 #raml-console-loader .patch .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .patch .method-nav,
@@ -3800,9 +3703,6 @@ raml-console article#raml-console .patch .method-nav .method-nav-group,
 raml-console article#raml-console .patch .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .patch .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -3872,18 +3772,8 @@ raml-console article#raml-console .patch .method-nav .method-nav-group .method-n
 raml-console article#raml-console .patch .method-content-container,
 #raml-console-loader .patch .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
@@ -3898,18 +3788,8 @@ raml-console article#raml-console .head.method-name:hover,
 }
 raml-console article#raml-console .head .method-nav-container,
 #raml-console-loader .head .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .head .method-nav,
@@ -3925,9 +3805,6 @@ raml-console article#raml-console .head .method-nav .method-nav-group,
 raml-console article#raml-console .head .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .head .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -3997,18 +3874,8 @@ raml-console article#raml-console .head .method-nav .method-nav-group .method-na
 raml-console article#raml-console .head .method-content-container,
 #raml-console-loader .head .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
@@ -4023,18 +3890,8 @@ raml-console article#raml-console .trace.method-name:hover,
 }
 raml-console article#raml-console .trace .method-nav-container,
 #raml-console-loader .trace .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .trace .method-nav,
@@ -4050,9 +3907,6 @@ raml-console article#raml-console .trace .method-nav .method-nav-group,
 raml-console article#raml-console .trace .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .trace .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -4122,18 +3976,8 @@ raml-console article#raml-console .trace .method-nav .method-nav-group .method-n
 raml-console article#raml-console .trace .method-content-container,
 #raml-console-loader .trace .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
@@ -4148,18 +3992,8 @@ raml-console article#raml-console .connect.method-name:hover,
 }
 raml-console article#raml-console .connect .method-nav-container,
 #raml-console-loader .connect .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .connect .method-nav,
@@ -4175,9 +4009,6 @@ raml-console article#raml-console .connect .method-nav .method-nav-group,
 raml-console article#raml-console .connect .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .connect .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -4247,18 +4078,8 @@ raml-console article#raml-console .connect .method-nav .method-nav-group .method
 raml-console article#raml-console .connect .method-content-container,
 #raml-console-loader .connect .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
@@ -4273,18 +4094,8 @@ raml-console article#raml-console .options.method-name:hover,
 }
 raml-console article#raml-console .options .method-nav-container,
 #raml-console-loader .options .method-nav-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 }
 raml-console article#raml-console .options .method-nav,
@@ -4300,9 +4111,6 @@ raml-console article#raml-console .options .method-nav .method-nav-group,
 raml-console article#raml-console .options .method-nav .method-nav-group > li:nth-child(1),
 #raml-console-loader .options .method-nav .method-nav-group > li:nth-child(1) {
   float: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-weight: 600;
   text-transform: uppercase;
@@ -4372,26 +4180,13 @@ raml-console article#raml-console .options .method-nav .method-nav-group .method
 raml-console article#raml-console .options .method-content-container,
 #raml-console-loader .options .method-content-container {
   overflow: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
   padding: 0 10px;
 }
 raml-console article#raml-console .method-name,
 #raml-console-loader .method-name {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-size: 9px;
   text-transform: uppercase;
@@ -4406,14 +4201,7 @@ raml-console article#raml-console .method,
   position: relative;
   margin: 0 -8px 10px -10px;
   background: white;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
 }
 raml-console article#raml-console .method:first-child,
@@ -4434,9 +4222,6 @@ raml-console article#raml-console .method .description p:first-child,
 }
 raml-console article#raml-console .method-summary,
 #raml-console-loader .method-summary {
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 0 auto;
-  -ms-flex: 0 0 auto;
   flex: 0 0 auto;
   *zoom: 1;
 }
@@ -4522,18 +4307,8 @@ raml-console article#raml-console .method-summary:after,
 }
 raml-console article#raml-console .documentation,
 #raml-console-loader .documentation {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
   flex: 1;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
 }
 raml-console article#raml-console .documentation .documentation-section,
@@ -4785,7 +4560,6 @@ raml-console article#raml-console .try-it form .parameter-factory,
 }
 raml-console article#raml-console .try-it form textarea,
 #raml-console-loader .try-it form textarea {
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 100%;
   font-family: monospace;

@@ -36,7 +36,7 @@ files = [
     'app/scripts/settings.js',
     'app/scripts/utils.js',
     'app/scripts/raml_console.js',
-    'dist/templates.js',
+    '.tmp/templates.js',
     'spec/matchers/**/*.js',
     'spec/support/helpers/**/*.js',
     'spec/integration/support/jasmine-jquery.js',

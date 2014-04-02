@@ -1,13 +1,14 @@
-// Generated on 2013-07-08 using generator-angular 0.3.0
 'use strict';
 
 var LIVERELOAD_PORT = 35729;
-var lrSnippet = require('connect-livereload')({
+var lrSnippet       = require('connect-livereload')({
   port: LIVERELOAD_PORT
 });
-var mountFolder = function (connect, dir) {
+
+function mountFolder(connect, dir) {
   return connect.static(require('path').resolve(dir));
-};
+}
+
 function stripFontPathPrefix(connect) {
   return function(req, res, next) {
     var pathname = connect.utils.parseUrl(req).pathname;
@@ -21,56 +22,41 @@ function stripFontPathPrefix(connect) {
 
 module.exports = function (grunt) {
   // load all grunt tasks
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  require('load-grunt-tasks')(grunt);
   require('./tasks/protractor')(grunt);
 
   // configurable paths
   var yeomanConfig = {
-    app: 'app',
+    app:  'app',
     dist: 'dist'
   };
 
   grunt.initConfig({
+    yeoman: yeomanConfig,
+
     ngtemplates: {
-      dist: {
+      ramlConsoleApp: {
         options: {
           module: 'ramlConsoleApp'
         },
+
         cwd: 'app',
         src: 'views/**.html',
         dest: '.tmp/templates.js'
-      },
-      test: {
-        options: {
-          module: 'ramlConsoleApp'
-        },
-        cwd: 'app',
-        src: 'views/**.html',
-        dest: 'dist/templates.js' // FIXME: put this into a test directory
       }
     },
-    cssmin: {
-      dist: {
-        files: {
-          '<%= yeoman.dist %>/styles/app.min.css': [
-            '<%= yeoman.dist %>/styles/app.min.css'
-          ]
-        },
-        options: {
-          keepSpecialComments: '0'
-        }
-      }
-    },
-    yeoman: yeomanConfig,
+
     watch: {
       less: {
-        files: ['app/styles/less/**/*.less'],
-        tasks: ['less:development', 'autoprefixer']
+        files: ['app/styles/**/*.less'],
+        tasks: ['less-and-autoprefixer']
       },
+
       livereload: {
         options: {
           livereload: LIVERELOAD_PORT
         },
+
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
           '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
@@ -79,11 +65,27 @@ module.exports = function (grunt) {
         ]
       }
     },
+
+    less: {
+      '.tmp/styles/app.css': 'app/styles/app.less'
+    },
+
+    autoprefixer: {
+      options: {
+        browsers: ['last 2 versions']
+      },
+
+      files: [
+        '.tmp/styles/app.css'
+      ]
+    },
+
     connect: {
       options: {
-        port: 9000,
-        hostname: '0.0.0.0' // Change this to '0.0.0.0' to access the server from outside.
+        hostname: '0.0.0.0',
+        port:     9000
       },
+
       livereload: {
         options: {
           middleware: function (connect) {
@@ -100,6 +102,7 @@ module.exports = function (grunt) {
           }
         }
       },
+
       test: {
         options: {
           port: 9001,
@@ -116,196 +119,173 @@ module.exports = function (grunt) {
         }
       }
     },
+
     open: {
       server: {
         url: 'http://localhost:<%= connect.options.port %>'
       }
     },
+
     clean: {
-      dist: {
-        files: [{
-          dot: true,
-          src: [
-            '.tmp',
-            '<%= yeoman.dist %>/*',
-            '!<%= yeoman.dist %>/.git*'
-          ]
-        }]
-      },
-      postCompilation: {
-        src: ['dist/templates.js']
-      },
-      server: '.tmp'
+      tmp: [
+        '.tmp'
+      ],
+
+      dist: [
+        '<%= yeoman.dist %>'
+      ]
     },
+
     jshint: {
       options: {
         jshintrc: '.jshintrc'
       },
+
       all: [
         'Gruntfile.js',
         '<%= yeoman.app %>/scripts/**/*.js'
       ]
     },
-    rev: {
-      dist: {
-        files: {
-          src: [
-            '<%= yeoman.dist %>/scripts/*.min.js',
-            '<%= yeoman.dist %>/styles/*.min.css'
-          ]
-        }
-      }
-    },
+
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
       options: {
         dest: '<%= yeoman.dist %>',
         flow: {
           steps: {
-            js: [require('./tasks/copy_vendor'), 'concat', 'uglifyjs'],
-            css: ['concat', 'cssmin'],
+            js:  [require('./tasks/copy_vendor'), 'concat'],
+            css: ['concat']
           },
           post: {}
         }
-      }
+      },
+
+      html: '<%= yeoman.app %>/index.html'
     },
+
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
-      css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
-        dirs: ['<%= yeoman.dist %>']
-      }
+        dirs: [
+          '.tmp',
+          '<%= yeoman.dist %>'
+        ]
+      },
+
+      html: ['<%= yeoman.dist %>/{,*/}*.html'],
+
+      css: ['<%= yeoman.dist %>/styles/{,*/}*.css']
     },
+
     concat: {
-      addTemplate: {
-        src: [ '.tmp/concat/scripts/app.min.js', '.tmp/templates.js' ],
-        dest: '.tmp/concat/scripts/app.min.js'
+      templates: {
+        src:  ['<%= yeoman.dist %>/scripts/app.js', '.tmp/templates.js'],
+        dest: '<%= yeoman.dist %>/scripts/app.js'
       }
     },
+
+    uglify: {
+      options: {
+        mangle: false
+      },
+
+      '<%= yeoman.dist %>/scripts/app.min.js': '<%= yeoman.dist %>/scripts/app.js',
+      '<%= yeoman.dist %>/scripts/vendor.min.js': '<%= yeoman.dist %>/scripts/vendor.js'
+    },
+
+    cssmin: {
+      options: {
+        keepSpecialComments: '0'
+      },
+
+      '<%= yeoman.dist %>/styles/app.min.css': '<%= yeoman.dist %>/styles/app.css'
+    },
+
     copy: {
       dist: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.app %>',
-          dest: '<%= yeoman.dist %>',
-          src: [
-            'index.html',
-            'examples/*',
-            'authentication/oauth1.html',
-            'authentication/oauth2.html'
-          ]
-        },
-        {
-          expand: true,
-          cwd: 'app/vendor/bower_components/font-awesome/font',
-          src: ['*'],
-          dest: 'dist/font/'
-        },
-        {
-          expand: true,
-          cwd: 'app/vendor/open-sans',
-          src: ['*'],
-          dest: 'dist/font/'
-        }]
-      },
-      backupOriginal: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/concat',
-          dest: '<%= yeoman.dist %>',
-          src: ['scripts/*.min.js', 'styles/*.min.css'],
-          rename: function(dest, src) {
-            var regex = /(.*)\.min(.*)/;
-            return dest + '/' + src.replace(regex, '$1$2');
+        files: [
+          {
+            expand: true,
+            dot:    true,
+            cwd:    '<%= yeoman.app %>',
+            dest:   '<%= yeoman.dist %>',
+            src:    [
+              'index.html',
+              'examples/*',
+              'authentication/oauth1.html',
+              'authentication/oauth2.html'
+            ]
+          },
+          {
+            expand: true,
+            cwd:    'app/vendor/bower_components/font-awesome/font',
+            src:    '*',
+            dest:   'dist/font/'
+          },
+          {
+            expand: true,
+            cwd:    'app/vendor/open-sans',
+            src:    '*',
+            dest:   'dist/font/'
           }
-        }]
+        ]
       }
     },
+
     protractor: {
       scenario: {
         configFile: 'spec/scenario/support/protractor.<%= process.env.TRAVIS ? "ci" : "dev"%>.conf.js'
       },
+
       debug: {
         configFile: 'spec/scenario/support/protractor.dev.conf.js',
-        debug: true
+        debug:      true
       }
     },
+
     karma: {
       unit: {
         configFile: 'spec/unit/support/karma.conf.js'
       },
+
       parser: {
         configFile: 'spec/parser/support/karma.conf.js'
       },
+
       integration: {
         configFile: 'spec/integration/support/karma.conf.js'
       }
-    },
-    uglify: {
-      options: {
-        mangle: false
-      }
-    },
-    autoprefixer: {
-      options: {
-        browsers: ['last 2 versions']
-      },
-      app: {
-        src: 'app/styles/app.css'
-      },
-      dist: {
-        src: 'dist/styles/app.min.css'
-      },
-
-    },
-    less: {
-      development: {
-        options: {
-          paths: ['app/styles/less']
-        },
-        files: {
-          'app/styles/app.css': 'app/styles/less/app.less'
-        }
-      },
-      dist: {
-        options: {
-          paths: ['app/styles/less']
-        },
-        files: {
-          'dist/styles/app.min.css': 'app/styles/less/app.less'
-        }
-      }
-    }
-
-  });
-
-  var linted = false;
-
-  grunt.registerTask('lint', function() {
-    if (!linted) {
-      linted = true;
-      grunt.task.run(['jshint']);
     }
   });
+
+  grunt.registerTask('jshint-smart', (function () {
+    var jshinted = false;
+    return function () {
+      if (!jshinted) {
+        jshinted = true;
+        grunt.task.run(['jshint']);
+      }
+    };
+  })());
+
+  grunt.registerTask('less-and-autoprefixer', [
+    'less',
+    'autoprefixer'
+  ]);
 
   grunt.registerTask('server', [
-    'clean:server',
-    'less:development',
-    'autoprefixer',
+    'less-and-autoprefixer',
     'connect:livereload',
     'open',
     'watch'
   ]);
 
   grunt.registerTask('spec', [
-    'lint',
+    'jshint-smart',
     'karma:unit',
     'spec:integration'
   ]);
 
   grunt.registerTask('spec:unit', [
-    'lint',
+    'jshint-smart',
     'karma:unit'
   ]);
 
@@ -314,56 +294,49 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('spec:integration', [
-    'lint',
-    'ngtemplates:test',
-    'karma:integration',
-    'clean:postCompilation'
+    'jshint-smart',
+    'ngtemplates',
+    'karma:integration'
   ]);
 
   grunt.registerTask('scenario', [
-    'lint',
-    'clean:server',
-    'less:development',
-    'autoprefixer',
+    'jshint-smart',
+    'less-and-autoprefixer',
     'connect:test',
     'protractor:scenario'
   ]);
 
   grunt.registerTask('scenario:debug', [
-    'clean:server',
-    'less:development',
-    'autoprefixer',
+    'jshint-smart',
+    'less-and-autoprefixer',
     'connect:test',
     'protractor:debug'
   ]);
 
   grunt.registerTask('build', [
+    'jshint-smart',
     'clean',
     'useminPrepare',
-    'ngtemplates:dist',
-    'less',
-    'autoprefixer',
+    'ngtemplates',
+    'less-and-autoprefixer',
     'concat:generated',
-    'concat:addTemplate',
+    'concat:templates',
     'copy:dist',
     'copy:generated',
-    'copy:backupOriginal',
     'uglify',
     'cssmin',
-    'rev',
-    'usemin',
-    'clean:postCompilation'
-  ]);
-
-  grunt.registerTask('default', [
-    'lint',
-    'test',
-    'build'
+    'usemin'
   ]);
 
   grunt.registerTask('test', [
-    'lint',
+    'jshint-smart',
     'spec',
     'scenario'
+  ]);
+
+  grunt.registerTask('default', [
+    'jshint-smart',
+    'test',
+    'build'
   ]);
 };
