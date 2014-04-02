@@ -3,7 +3,7 @@
   <head>
     <title>api:Console</title>
 
-    <!-- build:css({.tmp,app}) styles/app.min.css -->
+    <!-- build:css({.tmp,app}) styles/app.css -->
     <link rel="stylesheet" href="styles/app.css" type="text/css" />
     <!-- endbuild -->
 
@@ -43,7 +43,7 @@
       <raml-console with-root-documentation></raml-console>
     </div>
 
-    <!-- build:js({.tmp,app}) scripts/vendor.min.js -->
+    <!-- build:js({.tmp,app}) scripts/vendor.js -->
     <script src="vendor/bower_components/vkbeautify/vkbeautify.js"></script>
     <script src="vendor/bower_components/angular/angular.js"></script>
     <script src="vendor/bower_components/angular-animate/angular-animate.js"></script>
@@ -59,7 +59,7 @@
     <script src="vendor/bower_components/codemirror/mode/javascript/javascript.js"></script>
     <!-- endbuild -->
 
-    <!-- build:js({.tmp,app}) scripts/app.min.js -->
+    <!-- build:js({.tmp,app}) scripts/app.js -->
     <script src="scripts/inspector.js"></script>
     <script src="scripts/inspector/method.js"></script>
     <script src="scripts/inspector/parameterized_header.js"></script>
@@ -143,6 +143,7 @@
     <script src="scripts/raml.js"></script>
     <script src="scripts/raml_console.js"></script>
     <!-- endbuild -->
+
     <script>
       RAML.Settings.proxy = '/proxy/';
     </script>

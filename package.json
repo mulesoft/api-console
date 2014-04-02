@@ -23,11 +23,11 @@
     "grunt-karma": "~0.4.3",
     "grunt-ngmin": "~0.0.2",
     "grunt-open": "~0.2.0",
-    "grunt-rev": "~0.1.0",
     "grunt-usemin": "~2.0.2",
     "matchdep": "~0.1.2",
     "protractor": "~0.16.0",
-    "selenium-webdriver": "*"
+    "selenium-webdriver": "*",
+    "load-grunt-tasks": "~0.4.0"
   },
   "scripts": {
     "test": "grunt test"
