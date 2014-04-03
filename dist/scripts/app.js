@@ -3669,7 +3669,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('views/resource_documentation.tmpl.html',
-    "<div class=\"resource-placeholder popover mask-resource-list\" ng-show=\"resource\">\n" +
+    "<div class=\"resource-placeholder resource-popover mask-resource-list\" ng-show=\"resource\">\n" +
     "  <div class=\"resource-container\">\n" +
     "    <div class=\"resource expanded\" ng-if=\"resource\">\n" +
     "      <div>\n" +
