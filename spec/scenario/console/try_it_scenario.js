@@ -19,7 +19,7 @@ describe("trying an API method", function() {
     var method = openMethod(1, resource);
     method.$('.method-nav-group li:last-child a').click();
 
-    return ptor.$('.popover');
+    return ptor.$('.resource-popover');
   };
 
   var tryIt = function(resource) {
