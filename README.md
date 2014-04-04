@@ -25,7 +25,7 @@ There are two ways you can include the console: directly, or within an iframe. T
 2. Include the `<raml-console>` directive, specifying your RAML as a `src` attribute.
        <raml-console src='path/to/your/api.raml' with-root-documentation></raml-console>
 
-3. Please ensure that the container for the console directive the CSS properties `overflow: auto` and `position: relative`.
+3. Please ensure that the container for the console directive provides the CSS properties `overflow: auto` and `position: relative`.
 
 #### Caveats
 
