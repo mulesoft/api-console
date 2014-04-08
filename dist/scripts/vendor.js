@@ -358,7 +358,7 @@ window.vkbeautify = new vkbeautify();
 
 
 /**
- * @license AngularJS v1.2.16
+ * @license AngularJS v1.2.17-build.104+sha.e987efd
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -427,7 +427,7 @@ function minErr(module) {
       return match;
     });
 
-    message = message + '\nhttp://errors.angularjs.org/1.2.16/' +
+    message = message + '\nhttp://errors.angularjs.org/1.2.17-build.104+sha.e987efd/' +
       (module ? module + '/' : '') + code;
     for (i = 2; i < arguments.length; i++) {
       message = message + (i == 2 ? '?' : '&') + 'p' + (i-2) + '=' +
@@ -2278,11 +2278,11 @@ function setupModuleLoader(window) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.2.16',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.2.17-build.104+sha.e987efd',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 2,
-  dot: 16,
-  codeName: 'badger-enumeration'
+  dot: 17,
+  codeName: 'snapshot'
 };
 
 
@@ -6648,7 +6648,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             if (jqLiteIsTextNode(directiveValue)) {
               $template = [];
             } else {
-              $template = jqLite(directiveValue);
+              $template = jqLite(trim(directiveValue));
             }
             compileNode = $template[0];
 
@@ -7075,7 +7075,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             if (jqLiteIsTextNode(content)) {
               $template = [];
             } else {
-              $template = jqLite(content);
+              $template = jqLite(trim(content));
             }
             compileNode = $template[0];
 
@@ -9695,15 +9695,37 @@ LocationHashbangInHtml5Url.prototype =
    *
    * Change search part when called with parameter and return `$location`.
    *
+   *
+   * ```js
+   * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
+   * var searchObject = $location.search();
+   * // => {foo: 'bar', baz: 'xoxo'}
+   *
+   *
+   * // set foo to 'yipee'
+   * $location.search('foo', 'yipee');
+   * // => $location
+   * ```
+   *
    * @param {string|Object.<string>|Object.<Array.<string>>} search New search params - string or
-   * hash object. Hash object may contain an array of values, which will be decoded as duplicates in
-   * the url.
+   * hash object.
    *
-   * @param {(string|Array<string>)=} paramValue If `search` is a string, then `paramValue` will override only a
-   * single search parameter. If `paramValue` is an array, it will set the parameter as a
-   * comma-separated value. If `paramValue` is `null`, the parameter will be deleted.
+   * When called with a single argument the method acts as a setter, setting the `search` component
+   * of `$location` to the specified value.
    *
-   * @return {string} search
+   * If the argument is a hash object containing an array of values, these values will be encoded
+   * as duplicate search parameters in the url.
+   *
+   * @param {(string|Array<string>)=} paramValue If `search` is a string, then `paramValue` will
+   * override only a single search property.
+   *
+   * If `paramValue` is an array, it will override the property of the `search` component of
+   * `$location` specified via the first argument.
+   *
+   * If `paramValue` is `null`, the property specified via the first argument will be deleted.
+   *
+   * @return {Object} If called with no arguments returns the parsed `search` object. If called with
+   * one or more arguments returns `$location` object itself.
    */
   search: function(search, paramValue) {
     switch (arguments.length) {
@@ -21822,7 +21844,7 @@ var styleDirective = valueFn({
 
 !angular.$$csp() && angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}</style>');
 /**
- * @license AngularJS v1.2.16
+ * @license AngularJS v1.2.17-build.104+sha.e987efd
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -31728,7 +31750,15 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
                   ownNodeProperty[1] = nonNullNode;
                 }
                 ownNodeProperty[1].combine(resourceProperty[1]);
-                _results1.push(ownNodeProperty[0].value = ownNodeProperty[0].value.replace(/\?$/, ''));
+                if (!((ownNodeProperty[0].value.slice(-1) === '?') && (resourceProperty[0].value.slice(-1) === '?'))) {
+                  if (ownNodeProperty[0].value.slice(-1) === '?') {
+                    _results1.push(ownNodeProperty[0].value = ownNodeProperty[0].value.slice(0, -1));
+                  } else {
+                    _results1.push(void 0);
+                  }
+                } else {
+                  _results1.push(void 0);
+                }
               } else {
                 _results1.push(void 0);
               }
@@ -32612,7 +32642,7 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
       }
     };
 
-    RamlParser.prototype.composeFile = function(file, settings) {
+    RamlParser.prototype.composeFile = function(file, settings, parent) {
       var error,
         _this = this;
       if (settings == null) {
