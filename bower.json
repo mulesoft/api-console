@@ -11,7 +11,7 @@
     "codemirror": "~3.23.0",
     "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
     "font-awesome": "~3.2.1",
-    "raml-js-parser": "raml-org/raml-js-parser#a329ee1d19179b8719494d439bd72ebd97eabd99",
+    "raml-js-parser": "raml-org/raml-js-parser#3d7f702b618a99afcc56f85deb4693921af8bbe5",
     "showdown": "~0.3.1",
     "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29"
   },
