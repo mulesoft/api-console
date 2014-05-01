@@ -144,7 +144,7 @@ describe("RAML.Controllers.tryIt", function() {
       });
 
       it("does not show the spinner", function() {
-        expect($el.find('.icon-spinner').css('display')).toEqual('none');
+        expect($el.find('.fa-spinner').css('display')).toEqual('none');
       });
     });
   });
@@ -786,7 +786,7 @@ describe("RAML.Controllers.tryIt", function() {
 
       it('executes a request to the parameterized URI', function() {
         $el.find('input[name=someParam]').eq(0).fillIn('1');
-        click($el.find('input[name=someParam]').eq(0).closest('.control-group').find('repeatable-add .icon'))
+        click($el.find('input[name=someParam]').eq(0).closest('.control-group').find('repeatable-add .fa'))
         $el.find('input[name=someParam]').eq(1).fillIn('2');
         click($el.find('button[role="try-it"]'))
 
@@ -806,7 +806,7 @@ describe("RAML.Controllers.tryIt", function() {
       it('executes a request to the parameterized URI', function() {
         click($el.find('.request-body .toggle .radio')[0]);
         $el.find('input[name="someFormParam"]').eq(0).fillIn('1');
-        click($el.find('input[name="someFormParam"]').eq(0).closest('.control-group').find('repeatable-add .icon'))
+        click($el.find('input[name="someFormParam"]').eq(0).closest('.control-group').find('repeatable-add .fa'))
         $el.find('input[name="someFormParam"]').eq(1).fillIn('2');
         click($el.find('button[role="try-it"]'))
 
@@ -833,7 +833,7 @@ describe("RAML.Controllers.tryIt", function() {
         click($el.find('.request-body .toggle .radio span')[1]);
 
         $el.find('input[name=someMultipartFormParam]').eq(0).fillIn('1');
-        click($el.find('input[name=someMultipartFormParam]').eq(0).closest('.control-group').find('repeatable-add .icon'))
+        click($el.find('input[name=someMultipartFormParam]').eq(0).closest('.control-group').find('repeatable-add .fa'))
         $el.find('input[name=someMultipartFormParam]').eq(1).fillIn('2');
         click($el.find('button[role="try-it"]'))
 
@@ -859,7 +859,7 @@ describe("RAML.Controllers.tryIt", function() {
 
       it('executes a request to the parameterized URI', function() {
         $el.find('input[name=someHeader]').eq(0).fillIn('1');
-        click($el.find('input[name=someHeader]').eq(0).closest('.control-group').find('repeatable-add .icon'))
+        click($el.find('input[name=someHeader]').eq(0).closest('.control-group').find('repeatable-add .fa'))
         $el.find('input[name=someHeader]').eq(1).fillIn('2');
         click($el.find('button[role="try-it"]'));
 

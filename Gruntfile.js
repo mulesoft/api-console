@@ -92,10 +92,10 @@ module.exports = function (grunt) {
             return [
               lrSnippet,
               mountFolder(connect, '.tmp'),
-              // For dist, fonts are copied to dist/font/ and hosted at /font
+              // For dist, fonts are copied to dist/fonts/ and hosted at /fonts
               // For dev, strip /font from path and host fonts at root
               stripFontPathPrefix(connect),
-              mountFolder(connect, 'app/vendor/bower_components/font-awesome/font'),
+              mountFolder(connect, 'app/vendor/bower_components/font-awesome/fonts'),
               mountFolder(connect, 'app/vendor/open-sans'),
               mountFolder(connect, yeomanConfig.app)
             ];
@@ -111,7 +111,7 @@ module.exports = function (grunt) {
               mountFolder(connect, '.tmp'),
               mountFolder(connect, 'test'),
               stripFontPathPrefix(connect),
-              mountFolder(connect, 'app/vendor/bower_components/font-awesome/font'),
+              mountFolder(connect, 'app/vendor/bower_components/font-awesome/fonts'),
               mountFolder(connect, 'app/vendor/open-sans'),
               mountFolder(connect, yeomanConfig.app)
             ];
@@ -216,15 +216,15 @@ module.exports = function (grunt) {
           },
           {
             expand: true,
-            cwd:    'app/vendor/bower_components/font-awesome/font',
+            cwd:    'app/vendor/bower_components/font-awesome/fonts',
             src:    '*',
-            dest:   'dist/font/'
+            dest:   'dist/fonts/'
           },
           {
             expand: true,
             cwd:    'app/vendor/open-sans',
             src:    '*',
-            dest:   'dist/font/'
+            dest:   'dist/fonts/'
           }
         ]
       }
