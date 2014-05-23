@@ -11,6 +11,7 @@
         <div ng-if="!body.isForm(contentType)" ng-show="body.isSelected(contentType)">
           <textarea name="{{contentType}}" ng-model="body.definitions[contentType].value"></textarea>
           <a href="#" class="body-prefill" ng-show="body.hasExample(contentType)" ng-click="body.fillWithExample($event)">Prefill with example</a>
+          <a href="#" class="body-prefill" ng-show="body.isCapableOfSchemaBasedTemplates(contentType)" ng-click="body.fillWithSchemaBasedTemplate($event)">Prefill with schema based template</a>
         </div>
       </toggle-item>
     </toggle>

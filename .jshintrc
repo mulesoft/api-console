@@ -26,6 +26,7 @@
     "RAML": false,
     "vkbeautify": false,
     "CodeMirror": false,
-    "CryptoJS": false
+    "CryptoJS": false,
+    "jsonTemplateGenerator": false
   }
 }

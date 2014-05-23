@@ -103,4 +103,80 @@ describe("trying an API method", function() {
       expect(queryParameterInput.getAttribute('class')).toContain('warning');
     });
   });
+
+  describe('with a JSON schema', function() {
+    var definition = createRAML(
+      'title: Example API',
+      'baseUri: ' + BASE_URI,
+      '/things:',
+      '  post:',
+      '    body:',
+      '      application/json:',
+      '        schema: |',
+      '          {',
+      '            "type": "object",',
+      '            "properties": {',
+      '              "name": { "type": "string" },',
+      '              "role": { "type": "string", "default": "user" },',
+      '              "age": { "type": "integer" }',
+      '            }',
+      '          }'
+    );
+    var fixturePath = loadRamlFixture(definition);
+    disableProxy();
+
+    it('should enable schema based template generation', function() {
+      var resource = toggleResource(1);
+      resource = openTryIt(resource);
+
+      // there is only one visible prefill option as we did not specify an
+      // example. For this reason this simple selector is sufficient and
+      // stable.
+      var prefillButton = resource.$('a.body-prefill:not(.ng-hide)');
+      prefillButton.click();
+
+      var output = resource.$('.item-content textarea');
+      // deliberately _not_ creating a JS Object and stringifying it
+      // via JSON.stringify() as this might lead to unstable results due to
+      // an unspecified iteration order
+      var expected = [
+        '{',
+        '  "name": "TODO",',
+        '  "role": "user",',
+        '  "age": 0',
+        '}'
+      ].join('\n');
+      expect(output.getAttribute('value')).toEqual(expected);
+    });
+  });
+
+  describe('with an XML schema', function() {
+    var definition = createRAML(
+      'title: Example API',
+      'baseUri: ' + BASE_URI,
+      '/things:',
+      '  post:',
+      '    body:',
+      '      application/xml:',
+      '        schema: |',
+      '          <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">',
+      '            <xs:element type="xs:int" name="id"/>',
+      '          </xs:schema>'
+    );
+    var fixturePath = loadRamlFixture(definition);
+    disableProxy();
+
+    it('should not offer prefill options', function() {
+      var resource = toggleResource(1);
+      resource = openTryIt(resource);
+
+      var prefillButtons = resource.$$('a.body-prefill');
+      prefillButtons.then(function(buttons) {
+        buttons.forEach(function(button) {
+          expect(button.getCssValue('display')).toBe('none');
+        });
+      });
+    });
+  });
+
 });

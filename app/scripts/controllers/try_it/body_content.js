@@ -18,7 +18,14 @@
         definitions[contentType] = new RAML.Controllers.TryIt.NamedParameters(definition.formParameters);
         break;
       default:
-        definitions[contentType] = new RAML.Controllers.TryIt.BodyType(definition);
+        // we need to copy the contentType definition so that additional
+        // properties are not exposed to the users and creators of BodyContent.
+        var definitionCopy = angular.copy(definition);
+        // Make the contentType an intrinsic property of the BodyType so that
+        // it can determine applicable schema based template generation
+        // strategies.
+        definitionCopy.contentType = contentType;
+        definitions[contentType] = new RAML.Controllers.TryIt.BodyType(definitionCopy);
       }
     });
   };
@@ -38,6 +45,15 @@
 
   BodyContent.prototype.hasExample = function(contentType) {
     return this.definitions[contentType].hasExample();
+  };
+
+  BodyContent.prototype.fillWithSchemaBasedTemplate = function($event) {
+    $event.preventDefault();
+    this.definitions[this.selected].fillWithSchemaBasedTemplate();
+  };
+
+  BodyContent.prototype.isCapableOfSchemaBasedTemplates = function(contentType) {
+    return this.definitions[contentType].isCapableOfSchemaBasedTemplates();
   };
 
   BodyContent.prototype.data = function() {
