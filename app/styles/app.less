@@ -1,13 +1,22 @@
 @import "variables.less";
-@import "font_face.less";
+
+body {
+  color: rgb(51, 51, 51);
+  font-face: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 20px;
+}
 
 body#raml-console-unembedded {
   margin: 0;
 }
 
 #raml-console-unembedded, raml-console article {
-  background-color: @grayE;
-  color: #333;
+  background-color: #ffffff;
+  color: rgb(51, 51, 51);
 }
 
 #raml-console-loader form {
@@ -32,7 +41,6 @@ raml-console article#raml-console, #raml-console-loader {
 
     width: 100%;
     margin: 0;
-    padding: 0 15px;
 
     background-color: @grayE;
     opacity: 0;
@@ -44,6 +52,9 @@ raml-console article#raml-console, #raml-console-loader {
       width: 100%;
       border-radius: 3px;
       background-color: white;
+      padding: 30px;
+      box-sizing: border-box;
+
       &.grow-expansion-animation {
         transition: height 0.33s, top 0.33s;
       }

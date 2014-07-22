@@ -21,6 +21,7 @@
   .method-nav {
     color: white;
     background-color: @color;
+    line-height: 50px;
 
     .method-nav-group {
       text-align: right;
@@ -36,7 +37,7 @@
       li:nth-child(1) > a,
       li:nth-child(1) > a:hover {
         color: white;
-        line-height: 24px;
+        line-height: 50px;
       }
 
       &.method-sub-nav {
@@ -58,7 +59,7 @@
       .method-nav-item {
         display: inline-block;
         cursor: pointer;
-        line-height: 24px;
+        line-height: 50px;
       }
 
       .method-nav-item {
@@ -66,7 +67,7 @@
           display: block;
           color: white;
           padding: 0 15px;
-          line-height: 24px;
+          line-height: 50px;
         }
 
         >a:hover, &.active > a, &.active > a:hover, &.active > a:focus {
@@ -104,15 +105,18 @@
 .options  { .method-color(@optionsColor, @optionsMediumColor, @optionsLightColor);       }
 
 .method-name {
-  user-select: none;
-  font-size: 9px;
-  text-transform: uppercase;
-  color: #FFF;
-  text-align: center;
+  color: #ffffff;
   display: inline-block;
-  border-radius: 3px;
-
-  width: 50px;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
 }
 
 .method {

@@ -1,6 +1,13 @@
+
+.resource-placeholder:hover {
+  background-color: #f9f9f9;
+}
+
 .resource-placeholder {
-  margin: 5px 0;
+  margin: 0 0;
   box-sizing: border-box;
+
+
 
   &.pop-up {
     .resource-container {
@@ -35,9 +42,8 @@
     background-color: transparent;
 
     .resource {
-      background-color: @veryLightGray;
-      border-radius: 3px;
-      border: 1px solid @lightGray;
+      background-color: transparent;
+      border-bottom: 1px solid @lightGray;
       padding: 0 5px 0 10px;
       overflow: hidden;
       display: flex;
@@ -54,6 +60,7 @@
       }
 
       i.collapse {
+        opacity: .5;
         display: block;
         float: right;
         position: relative;
@@ -62,12 +69,14 @@
         font-size: 15px;
         line-height: 14px;
         text-shadow: 1px 0 rgba(255,255,255,0.25);
-        color: #666;
+        color: #000000;
 
         cursor: pointer;
 
+        padding: 10px;
+
         &:hover {
-          color: #888;
+          opacity: 1;
         }
       }
 
@@ -78,15 +87,18 @@
         .path {
           float: left;
           margin: 0;
-          line-height: 30px;
+          line-height: 42px;
           max-width: 100%;
           word-wrap: break-word;
           font-size: 14px;
           color: @gray9;
 
           span:last-child {
-            font-weight: 600;
             color: @black;
+          }
+
+          span:hover {
+            text-decoration: underline;
           }
         }
 
@@ -95,6 +107,10 @@
 
       &.expanded {
         /* maybe put this on desription / header nav */
+
+        h3.path {
+          font-weight: bolder;
+        }
 
         .method {
           margin-top: 5px;
@@ -122,6 +138,7 @@
     .modifiers {
       font-size: 9px;
       letter-spacing: 0.5px;
+      margin: 12px 0;
 
       &.expanded {
         min-height: 23px;

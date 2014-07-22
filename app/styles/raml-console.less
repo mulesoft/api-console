@@ -1,8 +1,16 @@
 #raml-console-api-title {
-  float: left;
-  font-size: 20px;
-  line-height: 1em;
-  margin: 20px;
+  color: rgb(51, 51, 51);
+  display: block;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 36px;
+  font-weight: 500;
+  height: 39px;
+  line-height: 39.599998474121094px;
+  margin: 60px 30px 0px 30px;
+  padding-bottom: 17px;
+  border-bottom-color: rgb(238, 238, 238);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
 }
 
 #raml-console-main-nav {
@@ -12,26 +20,14 @@
 
 #raml-console-content {
   clear: both;
-  padding: 0 15px 15px;
+  padding: 10px 30px 30px 30px;
 }
 
 .toggle-resource-groups {
-  text-transform: lowercase;
-
-  a {
-    font-weight: bold;
-    cursor: pointer;
-    color: @black;
-  }
-
-  span {
-    color: @gray;
-  }
+  display: none;
 }
 
 .resource-group {
-  margin-bottom: 17px;
-
   &:last-of-type {
     margin-bottom: 0;
   }
@@ -45,6 +41,7 @@
     font-size: 15px;
 
     &.fa-caret-down {
+      display: none;
       left: -14px;
       top: 15px;
     }

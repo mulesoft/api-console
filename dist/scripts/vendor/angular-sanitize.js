@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.2.16
+ * @license AngularJS v1.2.20
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -42,7 +42,7 @@ var $sanitizeMinErr = angular.$$minErr('$sanitize');
 /**
  * @ngdoc service
  * @name $sanitize
- * @function
+ * @kind function
  *
  * @description
  *   The input is sanitized by parsing the html into tokens. All safe tokens (from a whitelist) are
@@ -57,20 +57,21 @@ var $sanitizeMinErr = angular.$$minErr('$sanitize');
  * @returns {string} Sanitized html.
  *
  * @example
-   <example module="ngSanitize" deps="angular-sanitize.js">
+   <example module="sanitizeExample" deps="angular-sanitize.js">
    <file name="index.html">
      <script>
-       function Ctrl($scope, $sce) {
-         $scope.snippet =
-           '<p style="color:blue">an html\n' +
-           '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
-           'snippet</p>';
-         $scope.deliberatelyTrustDangerousSnippet = function() {
-           return $sce.trustAsHtml($scope.snippet);
-         };
-       }
+         angular.module('sanitizeExample', ['ngSanitize'])
+           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
+             $scope.snippet =
+               '<p style="color:blue">an html\n' +
+               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+               'snippet</p>';
+             $scope.deliberatelyTrustDangerousSnippet = function() {
+               return $sce.trustAsHtml($scope.snippet);
+             };
+           }]);
      </script>
-     <div ng-controller="Ctrl">
+     <div ng-controller="ExampleController">
         Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
        <table>
          <tr>
@@ -166,6 +167,7 @@ var START_TAG_REGEXP =
   COMMENT_REGEXP = /<!--(.*?)-->/g,
   DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
   CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
   // Match everything outside of normal chars and " (quote character)
   NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
 
@@ -404,6 +406,11 @@ function decodeEntities(value) {
 function encodeEntities(value) {
   return value.
     replace(/&/g, '&amp;').
+    replace(SURROGATE_PAIR_REGEXP, function (value) {
+      var hi = value.charCodeAt(0);
+      var low = value.charCodeAt(1);
+      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+    }).
     replace(NON_ALPHANUMERIC_REGEXP, function(value){
       return '&#' + value.charCodeAt(0) + ';';
     }).
@@ -476,7 +483,7 @@ angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
 /**
  * @ngdoc filter
  * @name linky
- * @function
+ * @kind function
  *
  * @description
  * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
@@ -492,20 +499,21 @@ angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
    <span ng-bind-html="linky_expression | linky"></span>
  *
  * @example
-   <example module="ngSanitize" deps="angular-sanitize.js">
+   <example module="linkyExample" deps="angular-sanitize.js">
      <file name="index.html">
        <script>
-         function Ctrl($scope) {
-           $scope.snippet =
-             'Pretty text with some links:\n'+
-             'http://angularjs.org/,\n'+
-             'mailto:us@somewhere.org,\n'+
-             'another@somewhere.org,\n'+
-             'and one more: ftp://127.0.0.1/.';
-           $scope.snippetWithTarget = 'http://angularjs.org/';
-         }
+         angular.module('linkyExample', ['ngSanitize'])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.snippet =
+               'Pretty text with some links:\n'+
+               'http://angularjs.org/,\n'+
+               'mailto:us@somewhere.org,\n'+
+               'another@somewhere.org,\n'+
+               'and one more: ftp://127.0.0.1/.';
+             $scope.snippetWithTarget = 'http://angularjs.org/';
+           }]);
        </script>
-       <div ng-controller="Ctrl">
+       <div ng-controller="ExampleController">
        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
        <table>
          <tr>
