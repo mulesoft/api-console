@@ -2396,7 +2396,7 @@ raml-console article#raml-console h4,
 }
 raml-console article#raml-console h5,
 #raml-console-loader h5 {
-  font-size: 13px;
+  font-size: 14px;
 }
 raml-console article#raml-console h6,
 #raml-console-loader h6 {
@@ -2413,7 +2413,7 @@ raml-console article#raml-console code,
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   padding: 0;
   color: #333;
-  font-size: 11px;
+  font-size: 14px;
   background: transparent;
   border: none;
 }
@@ -2477,13 +2477,13 @@ raml-console article#raml-console [markdown] h3,
 }
 raml-console article#raml-console [markdown] h4,
 #raml-console-loader [markdown] h4 {
-  font-size: 13px;
+  font-size: 14px;
   text-transform: uppercase;
   font-weight: 600;
 }
 raml-console article#raml-console [markdown] h5,
 #raml-console-loader [markdown] h5 {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
 }
 raml-console article#raml-console [markdown] h6,
@@ -4333,19 +4333,19 @@ raml-console article#raml-console .try-it .path,
 }
 raml-console article#raml-console .try-it .path .segment,
 #raml-console-loader .try-it .path .segment {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 16px;
 }
 raml-console article#raml-console .try-it .path input,
 #raml-console-loader .try-it .path input {
   margin: 0 5px 0 2px;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 16px;
   width: 7em;
 }
 raml-console article#raml-console .try-it .path ul,
 #raml-console-loader .try-it .path ul {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 16px;
 }
 raml-console article#raml-console .try-it i,
@@ -4429,7 +4429,10 @@ raml-console article#raml-console .try-it form:after,
 raml-console article#raml-console .try-it .response,
 #raml-console-loader .try-it .response {
   color: #333;
-  padding: 0 25px 15px;
+}
+raml-console article#raml-console .try-it .response h4,
+#raml-console-loader .try-it .response h4 {
+  font-size: 30px;
 }
 raml-console article#raml-console .try-it .response .response-value,
 #raml-console-loader .try-it .response .response-value {

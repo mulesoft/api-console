@@ -1911,7 +1911,6 @@ RAML.Inspector = (function() {
     };
   };
 })();
-
 'use strict';
 
 (function() {
