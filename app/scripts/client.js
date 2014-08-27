@@ -36,7 +36,8 @@
     },
 
     createBaseUri: function(rootRAML) {
-      var baseUri = rootRAML.baseUri.toString();
+      var baseUri = rootRAML.baseUri.toString().replace(/\/+$/, '');
+
       return new RAML.Client.ParameterizedString(baseUri, rootRAML.baseUriParameters, { parameterValues: {version: rootRAML.version} });
     },
 
