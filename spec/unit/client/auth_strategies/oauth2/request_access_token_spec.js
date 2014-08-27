@@ -30,7 +30,10 @@ describe("RAML.Client.AuthStrategies.Oauth2.requestAccessToken", function() {
         expect(xhrStub).toHaveBeenCalledWith({
           url: settings.accessTokenUri,
           type: 'post',
-          data: 'data'
+          data: 'data',
+          contentType: false,
+          traditional: true,
+          processData: true
         });
       });
 

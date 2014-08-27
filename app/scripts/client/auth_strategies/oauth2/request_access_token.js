@@ -2,14 +2,6 @@
   /* jshint camelcase: false */
   'use strict';
 
-  function proxyRequest(url) {
-    if (RAML.Settings.proxy) {
-      url = RAML.Settings.proxy + url;
-    }
-
-    return url;
-  }
-
   function accessTokenFromObject(data) {
     return data.access_token;
   }
@@ -28,16 +20,13 @@
 
   RAML.Client.AuthStrategies.Oauth2.requestAccessToken = function(settings, credentialsManager) {
     return function(code) {
-      var url = proxyRequest(settings.accessTokenUri);
+      var request = RAML.Client.Request.create(settings.accessTokenUri, 'post');
 
-      var requestOptions = {
-        url: url,
-        type: 'post',
-        data: credentialsManager.accessTokenParameters(code)
-      };
+      request.data(credentialsManager.accessTokenParameters(code));
 
-      return $.ajax(requestOptions).then(function(data) {
+      return $.ajax(request.toOptions()).then(function(data) {
         var extract = accessTokenFromString;
+
         if (typeof data === 'object') {
           extract = accessTokenFromObject;
         }

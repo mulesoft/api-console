@@ -104,22 +104,6 @@ describe("RAML.Client.AuthStrategies.Oauth1.Signer.Hmac", function() {
       });
     });
 
-    describe("with a proxy", function() {
-      beforeEach(function() {
-         RAML.Settings.proxy = "http://myproxy.com/proxy/";
-      });
-
-      afterEach(function() {
-        delete RAML.Settings.proxy;
-      });
-
-      it('strips the proxy when encoding the URI', function() {
-        var result = encodeURI(RAML.Settings.proxy + "https://example.com/")
-        expect(result).toEqual('https%3A%2F%2Fexample.com%2F')
-      });
-    });
-
-
     describe("with a standard port", function() {
       it("does not include the non-ssl port", function() {
         var result = encodeURI("http://example.com:80/")

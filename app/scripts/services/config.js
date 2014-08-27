@@ -10,7 +10,7 @@
 
   /**
    * This is extremely hacky but done because the entire app avoids using
-   * the dependency injection of angular to the point where it's painful.
+   * the dependency injection in angular.
    *
    * @type {Object}
    */

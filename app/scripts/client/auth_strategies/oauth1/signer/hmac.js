@@ -7,13 +7,6 @@
       rfc3986Encode = RAML.Client.AuthStrategies.Oauth1.Signer.rfc3986Encode,
       setRequestHeader = RAML.Client.AuthStrategies.Oauth1.Signer.setRequestHeader;
 
-  function uriWithoutProxy(url) {
-    if (RAML.Settings.proxy) {
-      url = url.replace(RAML.Settings.proxy, '');
-    }
-    return url;
-  }
-
   function generateSignature(params, request, key) {
     params.oauth_signature_method = 'HMAC-SHA1';
     params.oauth_timestamp = Math.floor(Date.now() / 1000);
@@ -37,7 +30,7 @@
 
     encodeURI: function(uri) {
       var parser = document.createElement('a');
-      parser.href = uriWithoutProxy(uri);
+      parser.href = uri;
 
       var hostname = '';
       if (parser.protocol === 'https:' && parser.port === 443 || parser.protocol === 'http:' && parser.port === 80) {
