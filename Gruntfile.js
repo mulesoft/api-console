@@ -5,20 +5,9 @@ var lrSnippet       = require('connect-livereload')({
   port: LIVERELOAD_PORT
 });
 
-function mountFolder(connect, dir) {
-  return connect.static(require('path').resolve(dir));
-}
-
-function stripFontPathPrefix(connect) {
-  return function(req, res, next) {
-    var pathname = connect.utils.parseUrl(req).pathname;
-    var fontPrefix = '/font';
-    if (pathname.slice(0, fontPrefix.length) === fontPrefix) {
-      req.url = req.url.slice(fontPrefix.length);
-    }
-    next();
-  };
-}
+var resolve = function (dir) {
+  return require('path').resolve(__dirname, dir);
+};
 
 module.exports = function (grunt) {
   // load all grunt tasks
@@ -58,10 +47,10 @@ module.exports = function (grunt) {
         },
 
         files: [
-          '<%= yeoman.app %>/{,*/}*.html',
-          '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-          '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+          '<%= yeoman.app %>/**/*.html',
+          '{.tmp,<%= yeoman.app %>}/styles/**/*.css',
+          '{.tmp,<%= yeoman.app %>}/scripts/**/*.js',
+          '<%= yeoman.app %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -91,13 +80,9 @@ module.exports = function (grunt) {
           middleware: function (connect) {
             return [
               lrSnippet,
-              mountFolder(connect, '.tmp'),
-              // For dist, fonts are copied to dist/fonts/ and hosted at /fonts
-              // For dev, strip /font from path and host fonts at root
-              stripFontPathPrefix(connect),
-              mountFolder(connect, 'app/vendor/bower_components/font-awesome/fonts'),
-              mountFolder(connect, 'app/vendor/open-sans'),
-              mountFolder(connect, yeomanConfig.app)
+              connect.static(resolve('.tmp')),
+              connect.static(resolve(yeomanConfig.app)),
+              connect.static(resolve('dist'))
             ];
           }
         }
@@ -108,12 +93,10 @@ module.exports = function (grunt) {
           port: 9001,
           middleware: function (connect) {
             return [
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, 'test'),
-              stripFontPathPrefix(connect),
-              mountFolder(connect, 'app/vendor/bower_components/font-awesome/fonts'),
-              mountFolder(connect, 'app/vendor/open-sans'),
-              mountFolder(connect, yeomanConfig.app)
+              connect.static(resolve('.tmp')),
+              connect.static(resolve('test')),
+              connect.static(resolve(yeomanConfig.app)),
+              connect.static(resolve('dist'))
             ];
           }
         }
@@ -170,9 +153,9 @@ module.exports = function (grunt) {
         ]
       },
 
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
+      html: ['<%= yeoman.dist %>/**/*.html'],
 
-      css: ['<%= yeoman.dist %>/styles/{,*/}*.css']
+      css: ['<%= yeoman.dist %>/styles/**/*.css']
     },
 
     concat: {
@@ -272,6 +255,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('server', [
+    'copy:dist',
     'less-and-autoprefixer',
     'connect:livereload',
     'open',
