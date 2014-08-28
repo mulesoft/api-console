@@ -1328,7 +1328,7 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var controller = function($scope, $attrs, ramlParserWrapper, config) {
+  var controller = function($scope, $attrs, ramlParserWrapper) {
     $scope.ramlConsole = this;
 
     if ($attrs.hasOwnProperty('withRootDocumentation')) {
@@ -1340,7 +1340,7 @@ RAML.Inspector = (function() {
     }
 
     this.keychain = {};
-    this.config   = config;
+    this.config   = RAML.Services.Config.config;
     this.settings = RAML.Settings;
   };
 
@@ -3346,7 +3346,7 @@ RAML.Filters = {};
 
   module.controller('TryItController', RAML.Controllers.tryIt);
 
-  module.service('config', RAML.Services.Config);
+  module.service('ConfigService', RAML.Services.Config);
   module.service('DataStore', RAML.Services.DataStore);
   module.service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
 

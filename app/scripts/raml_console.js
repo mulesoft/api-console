@@ -43,7 +43,7 @@
 
   module.controller('TryItController', RAML.Controllers.tryIt);
 
-  module.service('config', RAML.Services.Config);
+  module.service('ConfigService', RAML.Services.Config);
   module.service('DataStore', RAML.Services.DataStore);
   module.service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
 

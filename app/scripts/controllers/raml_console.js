@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var controller = function($scope, $attrs, ramlParserWrapper, config) {
+  var controller = function($scope, $attrs, ramlParserWrapper) {
     $scope.ramlConsole = this;
 
     if ($attrs.hasOwnProperty('withRootDocumentation')) {
@@ -13,7 +13,7 @@
     }
 
     this.keychain = {};
-    this.config   = config;
+    this.config   = RAML.Services.Config.config;
     this.settings = RAML.Settings;
   };
 
