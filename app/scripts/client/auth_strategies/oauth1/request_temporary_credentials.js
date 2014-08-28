@@ -4,8 +4,7 @@
 
   RAML.Client.AuthStrategies.Oauth1.requestTemporaryCredentials = function(settings, signerFactory) {
     return function requestTemporaryCredentials() {
-      var url = RAML.Client.AuthStrategies.Oauth1.proxyRequest(settings.requestTokenUri);
-      var request = RAML.Client.Request.create(url, 'post');
+      var request = RAML.Client.Request.create(settings.requestTokenUri, 'post');
 
       signerFactory().sign(request);
 

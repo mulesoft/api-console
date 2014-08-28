@@ -57,8 +57,9 @@
     };
 
     this.toOptions = function() {
-      var o = RAML.Utils.clone(options);
+      var o = RAML.Utils.copy(options);
       o.traditional = true;
+
       if (rawData) {
         if (isMultipartRequest) {
           var data = new FormData();
@@ -80,9 +81,14 @@
           o.data = rawData;
         }
       }
+
       if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.url.match('\\?') ? '&' : '?');
         o.url = options.url + separator + $.param(queryParams, true);
+      }
+
+      if (RAML.Services.Config.config.proxy && RAML.Settings.proxy) {
+        o.url = RAML.Settings.proxy + o.url;
       }
 
       return o;
@@ -91,10 +97,7 @@
 
   RAML.Client.Request = {
     create: function(url, method) {
-      var request = {};
-      RequestDsl.call(request, { url: url, type: method, contentType: false });
-
-      return request;
+      return new RequestDsl({ url: url, type: method, contentType: false });
     }
   };
 })();

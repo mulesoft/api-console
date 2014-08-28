@@ -101,9 +101,6 @@
       return;
     }
 
-    if (RAML.Settings.proxy) {
-      url = RAML.Settings.proxy + url;
-    }
     var request = RAML.Client.Request.create(url, this.httpMethod);
 
     if (!RAML.Utils.isEmpty(this.context.queryParameters.data())) {

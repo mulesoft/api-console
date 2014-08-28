@@ -8,14 +8,6 @@
     this.requestTokenCredentials = RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials(scheme.settings, signerFactory);
   };
 
-  Oauth1.proxyRequest = function(url) {
-    if (RAML.Settings.proxy) {
-      url = RAML.Settings.proxy + url;
-    }
-
-    return url;
-  };
-
   Oauth1.parseUrlEncodedData = function(data) {
     var result = {};
 
