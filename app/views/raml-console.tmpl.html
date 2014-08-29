@@ -7,12 +7,8 @@
   <header id="raml-console-api-title">{{api.title}}</header>
 
   <nav id="raml-console-proxy-nav" ng-if="ramlConsole.settings.proxy">
-    <span ng-switch="ramlConsole.config.proxy">
-      <span ng-switch-when="true">Proxy Enabled</span>
-      <span ng-switch-default>Proxy Disabled</span>
-    </span>
-
-    <input type="checkbox" ng-model="ramlConsole.config.proxy">
+    <span>API is behind a firewall</span>
+    <input type="checkbox" ng-model="!ramlConsole.config.proxy">
   </nav>
 
   <nav id="raml-console-main-nav" ng-if='ramlConsole.showRootDocumentation()' ng-switch='ramlConsole.view'>
