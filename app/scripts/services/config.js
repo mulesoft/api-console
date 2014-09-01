@@ -15,7 +15,7 @@
    * @type {Object}
    */
   var config = {
-    proxy: true
+    disableProxy: false
   };
 
   /**

@@ -8,7 +8,7 @@
 
   <nav id="raml-console-proxy-nav" ng-if="ramlConsole.settings.proxy">
     <span>API is behind a firewall <a href="http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall" target="_blank">(?)</a></span>
-    <input type="checkbox" ng-model="!ramlConsole.config.proxy">
+    <input type="checkbox" ng-model="ramlConsole.config.disableProxy">
   </nav>
 
   <nav id="raml-console-main-nav" ng-if='ramlConsole.showRootDocumentation()' ng-switch='ramlConsole.view'>

@@ -87,7 +87,7 @@
         o.url = options.url + separator + $.param(queryParams, true);
       }
 
-      if (RAML.Services.Config.config.proxy && RAML.Settings.proxy) {
+      if (!RAML.Services.Config.config.disableProxy && RAML.Settings.proxy) {
         o.url = RAML.Settings.proxy + o.url;
       }
 
