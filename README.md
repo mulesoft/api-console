@@ -66,6 +66,13 @@ Given the above, trying a GET to `http://www.someapi.com/resource` would get
 
     http://www.someproxy.com/somepath/http://www.someapi.com/resource
 
+If Apache 2.x is your webserver then enable the mod_proxy and add the following configuration:
+
+        <LocationMatch "/somepath/http:\/\/(.*)$">
+           ProxyPassMatch http://$1
+           ProxyPassReverse http://$1
+        </LocationMatch>
+
 ### OAuth 2
 
 A redirect URI for OAuth 2 can be provided in a similar manner:
