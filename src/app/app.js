@@ -210,9 +210,10 @@ jQuery('.js-toggle-request-metadata').on('click', function(ev) {
 
 //// CODE ////
 
-RAML = {};
+// The RAML object is being created by the RAML Parser lib
 RAML.Directives = {};
+RAML.Services = {};
 
 angular.module('RAML.Directives', []);
-
-angular.module('ramlConsoleApp', ['RAML.Directives']);
+angular.module('RAML.Services', ['raml']);
+angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services']);

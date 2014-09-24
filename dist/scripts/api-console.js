@@ -1,3 +1,6 @@
+(function() { 
+ 'use strict';
+
 var $inactiveElements = jQuery('.tab').add('.resource').add('li');
 
 var completeAnimation = function (element) {
@@ -210,21 +213,19 @@ jQuery('.js-toggle-request-metadata').on('click', function(ev) {
 
 //// CODE ////
 
-RAML = {};
+// The RAML object is being created by the RAML Parser lib
 RAML.Directives = {};
+RAML.Services = {};
 
 angular.module('RAML.Directives', []);
-
-angular.module('ramlConsoleApp', ['RAML.Directives']);
+angular.module('RAML.Services', ['raml']);
+angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services']);
 
 RAML.Directives.theme = function($window) {
   return {
     restrict: 'E',
     templateUrl: 'common/theme-switcher.tpl.html',
     replace: true,
-    scope: { },
-    controller: function($scope, $element) {
-    },
     link: function($scope, $element, attrs) {
       $element.on('click', function(event) {
         var $link = jQuery('head link.theme');
@@ -245,13 +246,29 @@ RAML.Directives.theme = function($window) {
 angular.module('RAML.Directives')
   .directive('themeSwitcher', ['$window', RAML.Directives.theme]);
 
-RAML.Directives.resources = function() {
+RAML.Directives.resources = function(ramlParserWrapper) {
   return {
     restrict: 'E',
     templateUrl: 'resources/resources-list.tpl.html',
     replace: true,
-    scope: { },
+    scope: {
+        src: '@'
+      },
     controller: function($scope, $element) {
+      if ($scope.src) {
+        ramlParserWrapper.load($scope.src);
+      }
+    },
+    link: function($scope, $element) {
+      ramlParserWrapper.onParseSuccess(function(raml) {
+        // TODO: Make magic here!
+        console.log(raml);
+      });
+
+      ramlParserWrapper.onParseError(function(error) {
+        // Show errors!!!
+        // $scope.parseError = error;
+      });
     }
   };
 };
@@ -259,7 +276,75 @@ RAML.Directives.resources = function() {
 angular.module('RAML.Directives')
   .directive('ramlResources', RAML.Directives.resources);
 
-angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
+RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
+  var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
+
+  var load = function(file) {
+    setPromise(ramlParser.loadFile(file));
+  };
+
+  var parse = function(raml) {
+    setPromise(ramlParser.load(raml));
+  };
+
+  var onParseSuccess = function(cb) {
+    ramlProcessor = function() {
+      cb.apply(this, arguments);
+      if (!$rootScope.$$phase) {
+        // handle aggressive digesters!
+        $rootScope.$digest();
+      }
+    };
+
+    if (whenParsed) {
+      whenParsed.then(ramlProcessor);
+    }
+  };
+
+  var onParseError = function(cb) {
+    errorProcessor = function() {
+      cb.apply(this, arguments);
+      if (!$rootScope.$$phase) {
+        // handle aggressive digesters!
+        $rootScope.$digest();
+      }
+    };
+
+    if (whenParsed) {
+      whenParsed.then(undefined, errorProcessor);
+    }
+
+  };
+
+  var setPromise = function(promise) {
+    whenParsed = promise;
+
+    if (ramlProcessor || errorProcessor) {
+      whenParsed.then(ramlProcessor, errorProcessor);
+    }
+  };
+
+  $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
+    setPromise($q.when(raml));
+  });
+
+  return {
+    load: load,
+    parse: parse,
+    onParseSuccess: onParseSuccess,
+    onParseError: onParseError
+  };
+};
+
+angular.module('RAML.Services')
+  .service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
+
+angular.module('raml', [])
+  .factory('ramlParser', function () {
+    return RAML.Parser;
+  });
+
+angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('common/theme-switcher.tpl.html',
@@ -4168,3 +4253,4 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 }]);
+})();

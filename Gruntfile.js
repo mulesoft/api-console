@@ -17,7 +17,7 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     src: {
       // js: ['src/**/*.js'],
-      js: ['src/app/**/*.js'],
+      js: ['src/app/**/*.js', 'src/common/services/**/*.js', 'src/common/factories/**/*.js'],
       jsTpl: ['<%= distdir %>/templates/**/*.js'],
       html: ['src/index.html'],
       scss: ['src/scss/light-theme.scss', 'src/scss/dark-theme.scss'],
@@ -56,9 +56,9 @@ module.exports = function (grunt) {
     },
 
     ngtemplates: {
-      ramlConsoleApp: {
+      ramlConsole: {
         options: {
-          module: 'ramlConsoleApp'
+          module: 'ramlConsole'
         },
         cwd: 'src/app',
         src: '**/*.tpl.html',
@@ -69,7 +69,11 @@ module.exports = function (grunt) {
     concat:{
       dist:{
         src:['<%= src.js %>', '<%= src.jsTpl %>'],
-        dest:'<%= distdir %>/scripts/<%= pkg.name %>.js'
+        dest:'<%= distdir %>/scripts/<%= pkg.name %>.js',
+        options: {
+          banner: "(function() { \n 'use strict';\n\n",
+          footer: "})();"
+        }
       },
       index: {
         src: ['src/index.html'],
@@ -79,7 +83,7 @@ module.exports = function (grunt) {
         }
       },
       vendor: {
-        src:['vendor/angular/angular.js', 'vendor/jquery/*.js'],
+        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js'],
         dest: '<%= distdir %>/scripts/vendor.js'
       }
     },
@@ -93,7 +97,7 @@ module.exports = function (grunt) {
         dest:'<%= distdir %>/<%= pkg.name %>.js'
       },
       vendor: {
-        src:['vendor/angular/angular.js', 'vendor/jquery/*.js'],
+        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js'],
         dest: '<%= distdir %>/scripts/vendor.js'
       }
     },
