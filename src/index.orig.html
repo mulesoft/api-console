@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+  <title>api:Console</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="/styles/light-theme.css"/>
+
+  <script type="text/javascript" src="/scripts/vendor/jquery.js"></script>
+  <script type="text/javascript" src="/scripts/vendor/angular.js"></script>
+  <script type="text/javascript" src="/scripts/<%= grunt.config.get('pkg.name') %>.js"></script>
+</head>
+
+<body ng-controller="AppCtrl">
+  <div ng-include="'header.tpl.html'"></div>
+  <div ng-include="'notifications.tpl.html'" class="container-fluid" ng-show="notifications.getCurrent().length"></div>
+  <div ng-view class="container-fluid"></div>
+</body>
+</html>

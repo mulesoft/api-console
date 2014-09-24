@@ -1,0 +1,47 @@
+.title {
+  font-size: 24px;
+  text-align: center;
+
+  color: $color-console-heading-text;
+
+  @media only screen and (min-width: $medium-screen) {
+    font-size: 36px;
+  }
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  display: inline-block;
+  padding: 5px 8px;
+  border: solid rgba(0,0,0,0.1);
+  border-width: 0 1px 1px 0;
+  border-radius: 0 0 0 3px;
+
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  text-rendering: optimizeLegibility;
+  text-transform: uppercase;
+  transition: 0.2s ease background;
+
+  &:hover {
+    background: rgba(0,0,0,0.6);
+  }
+}
+
+.theme-toggle-dark {
+  border-color: rgba(255,255,255,0.1);
+
+  background: rgba(255,255,255,0.4);
+  color: #000;
+
+  &:hover {
+    background: rgba(255,255,255,0.6);
+  }
+}
