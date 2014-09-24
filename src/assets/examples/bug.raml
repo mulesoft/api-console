@@ -1,0 +1,12 @@
+#%RAML 0.8
+title: myapi
+baseUri: http://localhost:3000
+/resource:
+  post:
+    body:
+      multipart/form-data:
+        formParameters:
+          bar:
+            type: string
+          foo:
+            type: file

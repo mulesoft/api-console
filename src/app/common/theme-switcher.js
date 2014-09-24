@@ -3,9 +3,6 @@ RAML.Directives.theme = function($window) {
     restrict: 'E',
     templateUrl: 'common/theme-switcher.tpl.html',
     replace: true,
-    scope: { },
-    controller: function($scope, $element) {
-    },
     link: function($scope, $element, attrs) {
       $element.on('click', function(event) {
         var $link = jQuery('head link.theme');

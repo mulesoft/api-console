@@ -1,0 +1,85 @@
+#%RAML 0.8
+---
+title: Example API
+baseUri: http://www.example.com/
+/resource:
+  get:
+    queryParameters:
+      displayNameAndTypeDefaults:
+      displayNameProvided:
+        displayName: 'Display Name Provided'
+      withType:
+        type: integer
+      withPattern:
+        pattern: /some regex/
+      minLength:
+        minLength: 8
+      maxLength:
+        maxLength: 20
+      minAndMaxLength:
+        minLength: 8
+        maxLength: 20
+      minimum:
+        type: number
+        minimum: 8
+      maximum:
+        type: number
+        maximum: 20
+      minAndMaximum:
+        type: number
+        minimum: 8
+        maximum: 20
+      repeat:
+        repeat: true
+      simpleShortDescription:
+        description: |
+          This parameter is used to do something.
+      simpleLongDescription:
+        description: |
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+      markdownDescription:
+        description: |
+          An explanation of the purpose of this parameter, in **Markdown**!
+
+          # We can have headers
+
+          And text with *all* sorts of formatting.
+
+          * Such
+          * as
+          * lists
+      example:
+        example: 1a79a4d60de6718e8e5b326e338ae533
+      default:
+        default: 0
+      descriptionAndExample:
+        description: This parameter is used to do something.
+        example: 154
+      required:
+        required: true
+      enum:
+        enum:
+          - one
+          - two
+          - three
+      combo:
+        required: true
+        enum:
+          - any
+          - all
+          - exact match
+        description: This parameter does something
+      anotherCombo:
+        required: true
+        type: integer
+        minimum: 5
+        maximum: 20
+        default: 5
+        example: 18
+        description: This explains the function of this parameter.

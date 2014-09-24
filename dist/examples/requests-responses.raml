@@ -1,0 +1,47 @@
+#%RAML 0.8
+---
+title: Example API
+baseUri: http://example.com
+schemas:
+  - an_xml_schema: !include xml_schema.xsd
+  - a_json_schema: !include json_schema.json
+/resource:
+  post:
+    headers:
+      X-Some-Header:
+        description: This is an example header
+    body:
+      text/xml:
+        schema: an_xml_schema
+        example: !include xml_example.xml
+      application/json:
+        schema: a_json_schema
+        example: |
+          { "figure": true,
+            "out": true,
+            "your": true,
+            "life": true
+          }
+    responses:
+      200:
+        description: |
+          *Success* description
+        headers:
+          X-Some-Header:
+            type: integer
+            example: 5
+            description: A *description* of some header sent as part of the **response**.
+      404:
+        description: |
+          *Error* description
+        body:
+          text/xml:
+            example: |
+              <api-response><status>Error</status></api-response>
+            schema: an_xml_schema
+
+  /sub:
+    description: hi
+    get:
+      description: |
+        ### WHAT

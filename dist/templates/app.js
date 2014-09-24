@@ -1,4 +1,4 @@
-angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
+angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('common/theme-switcher.tpl.html',

@@ -1,0 +1,3369 @@
+#%RAML 0.8
+---
+title: Instagram API
+version: v1
+baseUri: https://api.instagram.com/{version}
+securitySchemes:
+  - oauth_2_0:
+      description: |
+        Instagram’s API uses the OAuth 2.0 protocol for simple, but effective
+        authentication and authorization. The one thing to keep in mind is that
+        all requests to the API must be made over SSL (https:// not http://)
+      type: OAuth 2.0
+      describedBy:
+        queryParameters:
+          access_token:
+            description: |
+              Used to send a valid OAuth 2 access token. Do not use together with
+              the "Authorization" header
+            type: string
+      settings:
+        authorizationUri: https://api.instagram.com/oauth/authorize
+        accessTokenUri: https://api.instagram.com/oauth/access_token
+        authorizationGrants: [ code, token ]
+        scopes:
+          - basic
+          - comments
+          - relationships
+          - likes
+securedBy: [ oauth_2_0 ]
+mediaType: application/json
+traits:
+  - limitableById:
+      queryParameters:
+        min_id:
+          description: Return media later than this min_id.
+          type: integer
+        max_id:
+          description: Return media earlier than this max_id.
+          type: integer
+  - limitableByTime:
+      queryParameters:
+        max_timestamp:
+          description: Return media before this UNIX timestamp.
+          type: integer
+        min_timestamp:
+          description: Return media after this UNIX timestamp.
+          type: integer
+resourceTypes:
+  - base:
+      get?:
+        queryParameters:
+          callback:
+            description: |
+              Callback function name. All output will be wrapper under this function name.
+            type: string
+            example: callbackFunction
+            required: false
+          count:
+            description: Number of items you would like to receive.
+            type: integer
+            example: 1
+            required: false
+        responses:
+          503:
+            description: |
+              Server Unavailable. Check Your Rate Limits.
+      post?:
+        responses:
+          503:
+            description: |
+              Server Unavailable. Check Your Rate Limits.
+      delete?:
+        responses:
+          503:
+            description: |
+              Server Unavailable. Check Your Rate Limits.
+documentation:
+  - title: Authentication
+    content: |
+      Instagram’s API uses the [OAuth 2.0 protocol](http://tools.ietf.org/html/draft-ietf-oauth-v2-12) for simple, but effective authentication and authorization. OAuth 2.0 is much easier to use than previous schemes; developers can start using the Instagram API almost immediately. The one thing to keep in mind is that all requests to the API must be made over SSL (https:// not http://)
+
+      ## Do you need to authenticate?
+
+      For the most part, Instagram’s API only requires the use of a _client_id). A client_id simply associates your server, script, or program with a specific application. However, some requests require authentication - specifically requests made on behalf of a user. Authenticated requests require an _access_token_. These tokens are unique to a user and should be stored securely. Access tokens may expire at any time in the future.
+
+      Note that in many situations, you may not need to authenticate users at all. For instance, you may request popular photos without authenticating (i.e. you do not need to provide an access_token; just use your client ID with your request). We only require authentication in cases where your application is making requests on behalf of a user (commenting, liking, browsing a user’s feed, etc.).
+
+      ## Receiving an access_token
+
+      In order to receive an access_token, you must do the following:
+
+      - Direct the user to our authorization url.
+        * If the user is not logged in, they will be asked to log in.
+        * The user will be asked if they’d like to give your application access to his/her Instagram data.
+      - The server will redirect the user in one of two ways that you choose:
+        * *Server-side* flow (reccommended):Redirect the user to a URI of your choice. Take the provided
+           code parameter and exchange it for an access_token by POSTing the code to our access_token url.
+        * *Implicit flow*: Instead of handling a code, we include the access_token as a fragment (#) in the URL.          This method allows applications without any server component to receive an access_token with ease.
+
+      ## Server-side (Explicit) Flow
+
+      Using the server-side flow is quite easy. Simply follow these steps:
+
+      ### Step One: Direct your user to our authorization URL
+
+      ```
+      https://api.instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=code
+      ```
+
+      *Note:* You may provide an optional *scope* parameter to request additional permissions outside of the “basic” permissions scope. [Learn more about scope](http://instagram.com/developer/authentication/#scope).
+
+      *Note*: You may provide an optional *state* parameter to carry through any server-specific state you need to, for example, protect against CSRF issues.
+
+      At this point, we present the user with a login screen and then a confirmation screen where they approve your app’s access to his/her Instagram data.
+
+      ### Step Two: Receive the redirect from Instagram
+
+      Once a user successfully authenticates and authorizes your application, we will redirect the user to your redirect_uri with a code parameter that you’ll use in step three.
+
+      ```
+      http://your-redirect-uri?code=CODE
+      ```
+
+      Note that your redirect URI's host and path MUST match exactly (including trailing slashes) to your registered redirect_uri. You may also include additional query parameters in the supplied redirect_uri, if you need to vary your behavior dynamically. Examples:
+
+      |REGISTERED REDIRECT URI           |REDIRECT URI SENT TO /AUTHORIZE                |VALID?|
+      |----------------------------------|-----------------------------------------------|------|
+      |http://yourcallback.com/          |http://yourcallback.com/                       |yes   |
+      |http://yourcallback.com/          |http://yourcallback.com/?this=that             |yes   |
+      |http://yourcallback.com/?this=that|http://yourcallback.com/                       |no    |
+      |http://yourcallback.com/?this=that|http://yourcallback.com/?this=that&another=true|yes   |
+      |http://yourcallback.com/?this=that|http://yourcallback.com/?another=true&this=that|no    |
+      |http://yourcallback.com/callback  |http://yourcallback.com/                       |no    |
+      |http://yourcallback.com/callback  |http://yourcallback.com/callback/?type=mobile  |yes   |
+
+      If your request for approval is denied by the user, then we will redirect the user to your *redirect_uri* with the following parameters:
+
+      * *error*: access_denied
+
+      * *error_reason*: user_denied
+
+      * *error_description*: The user denied your request
+
+      ```
+      http://your-redirect-uri?error=access_denied&error_reason=user_denied&error_description=The+user+denied+your+request
+      ```
+
+      It is your responsibility to fail gracefully in this situation and display a corresponding error message to your user.
+
+      ### Step Three: Request the access_token
+
+      In the previous step, you’ll have received a code which you’ll have to exchange in order to receive an access_token for the user. In order to make this exchange, you simply have to POST this code, along with some app identification parameters to our access_token endpoint. Here are the required parameters:
+
+      * *client_id*: your client id
+      * *client_secret*: your client secret
+      * *grant_type*: authorization_code is currently the only supported value
+      redirect_uri: the redirect_uri you used in the authorization request. Note: this has to be the same value as in the authorization request.
+      * *code*: the exact code you received during the authorization step.
+
+      For example, you could request an access_token like so:
+
+      ```
+      curl \-F 'client_id=CLIENT-ID' \
+          -F 'client_secret=CLIENT-SECRET' \
+          -F 'grant_type=authorization_code' \
+          -F 'redirect_uri=YOUR-REDIRECT-URI' \
+          -F 'code=CODE' \https://api.instagram.com/oauth/access_token
+      ```
+
+      If successful, this call will return a neatly packaged OAuth Token that you can use to make authenticated calls to the API. We also include the user who just authenticated for your convenience:
+
+      ```json
+      {
+          "access_token": "fb2e77d.47a0479900504cb3ab4a1f626d174d2d",
+          "user": {
+              "id": "1574083",
+              "username": "snoopdogg",
+              "full_name": "Snoop Dogg",
+              "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg"
+          }
+      }
+      ```
+
+      Note that we do not include an expiry time. Our access_tokens have no explicit expiry, though your app should handle the case that either the user revokes access or we expire the token after some period of time. In this case, your response’s meta will contain an “error_type=OAuthAccessTokenError”. In other words: do do not assume your access_token is valid forever.
+
+      ##Client-Side (Implicit) Authentication
+
+      If you’re building an app that does not have a server component (a purely javascript app, for instance), you’ll notice that it’s impossible to complete step three above to receive your access_token without also having to ship your client secret. You should never ship your client secret onto devices you don’t control. Then how do you get an access_token? Well the smart folks in charge of the OAuth 2.0 spec anticipated this problem and created the Implicit Authentication Flow.
+
+      ### Step One: Direct your user to our authorization URL
+
+      ```
+      https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=token
+      ```
+
+      At this point, we present the user with a login screen and then a confirmation screen where they approve your app’s access to their Instagram data. Note that unlike the explicit flow the response type here is “token”.
+
+      ### Step Two: Receive the access_token via the URL fragment
+
+      Once the user has authenticated and then authorized your application, we’ll redirect them to your redirect_uri with the access_token in the url fragment. It’ll look like so:
+
+      ```
+      http://your-redirect-uri#access_token=ACCESS-TOKEN
+      ```
+
+      Simply grab the access_token off the URL fragment and you’re good to go. If the user chooses not to authorize your application, you’ll receive the same error response as in the explicit flow
+
+      ## Scope (Permissions)
+
+      The OAuth 2.0 spec allows you to specify the scope of the access you’re requesting from the user. Currently, all apps have basic read access by default. If all you want to do is access data then you do not need to specify a scope (the “basic” scope will be granted automatically).
+
+      However, if you plan on asking for extended access such as liking, commenting, or managing friendships, you’ll have to specify these scopes in your authorization request. Here are the scopes we currently support:
+
+      * basic - to read any and all data related to a user (e.g. following/followed-by lists, photos, etc.) (granted by default)
+      * comments - to create or delete comments on a user’s behalf
+      * relationships - to follow and unfollow users on a user’s behalf
+      * likes - to like and unlike items on a user’s behalf
+
+      You should only request the scope you need at the time of authorization. If in the future you require additional scope, you may forward the user to the authorization URL with that additional scope to be granted. If you attempt to perform a request with an access token that isn’t authorized for that scope, you will receive an OAuthPermissionsException error return.
+
+      If you’d like to request multiple scopes at once, simply separate the scopes by a space. In the url, this equates to an escaped space (“+”). So if you’re requesting the likes and comments permission, the parameter will look like this:
+
+      ```
+      scope=likes+comments
+      ```
+
+      Note that an empty scope parameter (scope=) is invalid; you must either omit the scope, or specify a non-empty scope list.
+# Media
+/media:
+  /{mediaId}:
+    uriParameters:
+      mediaId:
+        type: integer
+    type: base
+    get:
+      # TODO can be different outcomes, so need to define a couple of examples and
+      # a couple of schemas instead of given one for 'image'.
+      description: |
+        Get information about a media object. The returned type key will allow you
+        to differentiate between image and video media.
+        Note: if you authenticate with an OAuth Token, you will receive the
+        user_has_liked key which quickly tells you whether the current user has liked
+        this media item.
+      responses:
+        200:
+          body:
+            schema: |
+              {          "": "http://json-schema.org/draft-03/schema",
+              "type": "object",
+              "properties": {
+                  "data": {
+                      "type": "array",
+                      "users_in_photo": [
+                          {
+                "properties": {
+                    "user": {
+                        "properties": {
+                            "username": {
+                                "type": "string"
+                            },
+                            "full_name": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "profile_picture": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                                      "position": {
+                                          "properties": {
+                                              "x": {
+                                                  "type": "number"
+                                              },
+                                              "y": {
+                                                  "type": "number"
+                                              }
+                                          },
+                                          "type": "object"
+                                      }
+                                  },
+                                  "type": "object"
+                              }
+                          ],
+                          "filter": {
+                              "type": "string"
+                          },
+                          "tags": [
+                              {
+                                  "type": "string"
+                              }
+                          ],
+                          "comments": {
+                              "properties": {
+                                  "data": [
+                                      {
+                                          "properties": {
+                                              "created_time": {
+                                                  "type": "string"
+                                              },
+                                              "text": {
+                                                  "type": "string"
+                                              },
+                                              "from": {
+                                                  "properties": {
+                                                      "username": {
+                                                          "type": "string"
+                                                      },
+                                                      "full_name": {
+                                                          "type": "string"
+                                                      },
+                                                      "id": {
+                                                          "type": "string"
+                                                      },
+                                                      "profile_picture": {
+                                                          "type": "string"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "id": {
+                                                  "type": "string"
+                                              }
+                                          },
+                                          "type": "object"
+                                      }
+                                  ],
+                                  "type": "array",
+                                  "count": {
+                                      "type": "integer"
+                                  }
+                              },
+                              "type": "object"
+                          },
+                          "caption": {
+                              "type": "string"
+                          },
+                          "likes": {
+                              "properties": {
+                                  "count": {
+                                      "type": "integer"
+                                  },
+                                  "data": [
+                                      {
+                                          "properties": {
+                                              "username": {
+                                                  "type": "string"
+                                              },
+                                              "full_name": {
+                                                  "type": "string"
+                                              },
+                                              "id": {
+                                                  "type": "string"
+                                              },
+                                              "profile_picture": {
+                                                  "type": "string"
+                                              }
+                                          },
+                                          "type": "object"
+                                      }
+                                  ],
+                                  "type": "array"
+                              },
+                              "type": "object"
+                          },
+                          "link": {
+                              "type": "string"
+                          },
+                          "user": {
+                              "properties": {
+                                  "username": {
+                                      "type": "string"
+                                  },
+                                  "full_name": {
+                                      "type": "string"
+                                  },
+                                  "profile_picture": {
+                                      "type": "string"
+                                  },
+                                  "bio": {
+                                      "type": "string"
+                                  },
+                                  "website": {
+                                      "type": "string"
+                                  },
+                                  "id": {
+                                      "type": "string"
+                                  }
+                              },
+                              "type": "object"
+                          },
+                          "created_time": {
+                              "type": "string"
+                          },
+                          "images": {
+                              "properties": {
+                                  "low_resolution": {
+                                      "properties": {
+                                          "url": {
+                                              "type": "string"
+                                          },
+                                          "width": {
+                                              "type": "integer"
+                                          },
+                                          "height": {
+                                              "type": "integer"
+                                          }
+                                      },
+                                      "type": "object"
+                                  },
+                                  "thumbnail": {
+                                      "properties": {
+                                          "url": {
+                                              "type": "string"
+                                          },
+                                          "width": {
+                                              "type": "integer"
+                                          },
+                                          "height": {
+                                              "type": "integer"
+                                          }
+                                      },
+                                      "type": "object"
+                                  },
+                                  "standard_resolution": {
+                                      "properties": {
+                                          "url": {
+                                              "type": "string"
+                                          },
+                                          "width": {
+                                              "type": "integer"
+                                          },
+                                          "height": {
+                                              "type": "integer"
+                                          }
+                                      },
+                                      "type": "object"
+                                  }
+                              },
+                              "type": "object"
+                          },
+                          "id": {
+                              "type": "string"
+                          },
+                          "location": {
+                              "type": "string"
+                          }
+                      }
+                  }
+              }
+            example: |
+              {
+                  "data": {
+                      "type": "image",
+                      "users_in_photo": [{
+                          "user": {
+                              "username": "kevin",
+                              "full_name": "Kevin S",
+                              "id": "3",
+                              "profile_picture": "..."
+                          },
+                          "position": {
+                              "x": 0.315,
+                              "y": 0.9111
+                          }
+                      }],
+                      "filter": "Walden",
+                      "tags": [],
+                      "comments": {
+                          "data": [{
+                              "created_time": "1279332030",
+                              "text": "Love the sign here",
+                              "from": {
+                                  "username": "mikeyk",
+                                  "full_name": "Mikey Krieger",
+                                  "id": "4",
+                                  "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1242695_75sq_1293915800.jpg"
+                              },
+                              "id": "8"
+                          }],
+                          "count": 2
+                      },
+                      "caption": null,
+                      "likes": {
+                          "count": 1,
+                          "data": [{
+                              "username": "mikeyk",
+                              "full_name": "Mikeyk",
+                              "id": "4",
+                              "profile_picture": "..."
+                          }]
+                      },
+                      "link": "http://instagr.am/p/D/",
+                      "user": {
+                          "username": "kevin",
+                          "full_name": "Kevin S",
+                          "profile_picture": "...",
+                          "bio": "...",
+                          "website": "...",
+                          "id": "3"
+                      },
+                      "created_time": "1279340983",
+                      "images": {
+                          "low_resolution": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2010/07/16/4de37e03aa4b4372843a7eb33fa41cad_6.jpg",
+                              "width": 306,
+                              "height": 306
+                          },
+                          "thumbnail": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2010/07/16/4de37e03aa4b4372843a7eb33fa41cad_5.jpg",
+                              "width": 150,
+                              "height": 150
+                          },
+                          "standard_resolution": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2010/07/16/4de37e03aa4b4372843a7eb33fa41cad_7.jpg",
+                              "width": 612,
+                              "height": 612
+                          }
+                      },
+                      "id": "3",
+                      "location": null
+                  }
+              }
+    /comments:
+      securedBy: [ oauth_2_0: { scopes: [ comments ] } ]
+      type: base
+      get:
+        description: Get a full list of comments on a media.
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                        "meta": {
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "data": [
+                            {
+                                "properties": {
+                                    "created_time": {
+                                        "type": "string"
+                                    },
+                                    "text": {
+                                        "type": "string"
+                                    },
+                                    "from": {
+                                        "properties": {
+                                            "username": {
+                                                "type": "string"
+                                            },
+                                            "profile_picture": {
+                                                "type": "string"
+                                            },
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "full_name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        ],
+                        "type": "array"
+                    }
+                }
+              example: |
+                {
+                    "meta": {
+                        "code": 200
+                    },
+                    "data": [
+                        {
+                            "created_time": "1280780324",
+                            "text": "Really amazing photo!",
+                            "from": {
+                                "username": "snoopdogg",
+                                "profile_picture": "http://images.instagram.com/profiles/profile_16_75sq_1305612434.jpg",
+                                "id": "1574083",
+                                "full_name": "Snoop Dogg"
+                            },
+                            "id": "420"
+                        },
+                        ...
+                    ]
+                }
+      post:
+        description: Create a comment on a media. Please email apidevelopers[at]instagram.com for access.
+        body:
+          application/x-www-form-urlencoded:
+            formParameters:
+              text:
+                description: Text to post as a comment on the media as specified in {mediaId}.
+                type: string
+                required: true
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                        "meta": {
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "data": [
+                            {
+                                "properties": {
+                                    "created_time": {
+                                        "type": "string"
+                                    },
+                                    "text": {
+                                        "type": "string"
+                                    },
+                                    "from": {
+                                        "properties": {
+                                            "username": {
+                                                "type": "string"
+                                            },
+                                            "profile_picture": {
+                                                "type": "string"
+                                            },
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "full_name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        ],
+                        "type": "array"
+                    }
+                }
+              example: |
+                {
+                    "meta": {
+                        "code": 200
+                    },
+                    "data": [
+                        {
+                            "created_time": "1280780324",
+                            "text": "Really amazing photo!",
+                            "from": {
+                                "username": "snoopdogg",
+                                "profile_picture": "http://images.instagram.com/profiles/profile_16_75sq_1305612434.jpg",
+                                "id": "1574083",
+                                "full_name": "Snoop Dogg"
+                            },
+                            "id": "420"
+                        },
+                        ...
+                    ]
+                }
+      /{commentId}:
+        type: base
+        uriParameters:
+          commentId:
+            type: integer
+            description: Idenifier of the comment
+        delete:
+          description: |
+            Remove a comment either on the authenticated user's media or authored by the authenticated user.
+          responses:
+            200:
+              description: Comment removed.
+    /likes:
+      securedBy: [ oauth_2_0: { scopes: [ likes ] } ]
+      type: base
+      get:
+        description: |
+          Get a list of users who have liked this media.
+          Required scope: likes.
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                    	"data": [
+                    		{
+                    			"properties": {
+                    				"username": {
+                    					"type": "string"
+                    				},
+                			        "first_name": {
+                			        	"type": "string"
+                			        },
+                			        "last_name": {
+                			        	"type": "string"
+                			        },
+                			        "type": {
+                			        	"type": "string"
+                			        },
+                			        "id": {
+                			        	"type": "string"
+                			        }
+                    			},
+                    			"type": "object"
+                    		}
+                    	],
+                    	"type": "array"
+                    }
+                }
+              example: |
+                {
+                    "data": [{
+                        "username": "jack",
+                        "first_name": "Jack",
+                        "last_name": "Dorsey",
+                        "type": "user",
+                        "id": "66"
+                    },
+                    {
+                        "username": "sammyjack",
+                        "first_name": "Sammy",
+                        "last_name": "Jack",
+                        "type": "user",
+                        "id": "29648"
+                    }]
+                }
+      post:
+        description: Set a like on this media by the currently authenticated user.
+        responses:
+          201:
+            description: |
+              Successfully liked a media object
+      delete:
+        description: Remove a like on this media by the currently authenticated user.
+        responses:
+          204:
+            description: |
+              Like removed succesfully
+  /search:
+    type: base
+    get:
+      is: [ limitableByTime ]
+      description: |
+        Search for media in a given area. The default time span is set to 5 days.
+        The time span must not exceed 7 days. Defaults time stamps cover the
+        last 5 days.
+    # TODO oneOf
+      queryParameters:
+        lat:
+          description: Latitude of the center search coordinate. If used, lng is required.
+          type: number
+        lng:
+          description: Longitude of the center search coordinate. If used, lat is required.
+          type: number
+        distance:
+          description: Default is 1km (distance=1000), max distance is 5km.
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                  "": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                      "data": [
+                          {
+                              "oneOf": [
+                                  {
+                                      "properties": {
+                                          "distance": {
+                                              "type": "number"
+                                          },
+                                          "type": "array",
+                                          "users_in_photo": [
+                                              {
+                                                  "type": "string"
+                                              }
+                                          ],
+                                          "filter": {
+                                              "type": "string"
+                                          },
+                                          "tags": [
+                                              {
+                                                  "type": "string"
+                                              }
+                                          ],
+                                          "comments": {
+                                              "properties": {
+                                                  "data": [
+                                                      {
+                                                          "properties": {
+                                                              "created_time": {
+                                                                  "type": "string"
+                                                              },
+                                                              "text": {
+                                                                  "type": "string"
+                                                              },
+                                                              "from": {
+                                                                  "properties": {
+                                                                      "username": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "full_name": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "id": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "profile_picture": {
+                                                                          "type": "string"
+                                                                      }
+                                                                  },
+                                                                  "type": "object"
+                                                              },
+                                                              "id": {
+                                                                  "type": "string"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      }
+                                                  ],
+                                                  "type": "array",
+                                                  "count": {
+                                                      "type": "integer"
+                                                  }
+                                              },
+                                              "type": "object"
+                                          },
+                                          "caption": {
+                                              "type": "string"
+                                          },
+                                          "likes": {
+                                              "properties": {
+                                                  "count": {
+                                                      "type": "integer"
+                                                  },
+                                                  "data": [
+                                                      {
+                                                          "properties": {
+                                                              "username": {
+                                                                  "type": "string"
+                                                              },
+                                                              "full_name": {
+                                                                  "type": "string"
+                                                              },
+                                                              "id": {
+                                                                  "type": "string"
+                                                              },
+                                                              "profile_picture": {
+                                                                  "type": "string"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      }
+                                                  ],
+                                                  "type": "array"
+                                              },
+                                              "type": "object"
+                                          },
+                                          "link": {
+                                              "type": "string"
+                                          },
+                                          "user": {
+                                              "properties": {
+                                                  "username": {
+                                                      "type": "string"
+                                                  },
+                                                  "profile_picture": {
+                                                      "type": "string"
+                                                  },
+                                                  "id": {
+                                                      "type": "string"
+                                                  }
+                                              },
+                                              "type": "object"
+                                          },
+                                          "created_time": {
+                                              "type": "string"
+                                          },
+                                          "images": {
+                                              "properties": {
+                                                  "low_resolution": {
+                                                      "properties": {
+                                                          "url": {
+                                                              "type": "string"
+                                                          },
+                                                          "width": {
+                                                              "type": "integer"
+                                                          },
+                                                          "height": {
+                                                              "type": "integer"
+                                                          }
+                                                      },
+                                                      "type": "object"
+                                                  },
+                                                  "thumbnail": {
+                                                      "properties": {
+                                                          "url": {
+                                                              "type": "string"
+                                                          },
+                                                          "width": {
+                                                              "type": "integer"
+                                                          },
+                                                          "height": {
+                                                              "type": "integer"
+                                                          }
+                                                      },
+                                                      "type": "object"
+                                                  },
+                                                  "standard_resolution": {
+                                                      "properties": {
+                                                          "url": {
+                                                              "type": "string"
+                                                          },
+                                                          "width": {
+                                                              "type": "integer"
+                                                          },
+                                                          "height": {
+                                                              "type": "integer"
+                                                          }
+                                                      },
+                                                      "type": "object"
+                                                  }
+                                              },
+                                              "type": "object"
+                                          },
+                                          "id": {
+                                              "type": "string"
+                                          },
+                                          "location": {
+                                              "type": "string"
+                                          }
+                                      },
+                                      "type": "object"
+                                  },
+                                  {
+                                      "properties": {
+                                          "distance": {
+                                              "type": "number"
+                                          },
+                                          "type": "object",
+                                          "videos": {
+                                              "low_resolution": {
+                                                  "properties": {
+                                                      "url": {
+                                                          "type": "string"
+                                                      },
+                                                      "width": {
+                                                          "type": "integer"
+                                                      },
+                                                      "height": {
+                                                          "type": "integer"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "standard_resolution": {
+                                                  "properties": {
+                                                      "url": {
+                                                          "type": "string"
+                                                      },
+                                                      "width": {
+                                                          "type": "integer"
+                                                      },
+                                                      "height": {
+                                                          "type": "integer"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "users_in_photo": {
+                                                  "type": "string"
+                                              },
+                                              "filter": {
+                                                  "type": "string"
+                                              },
+                                              "tags": [
+                                                  {
+                                                      "type": "string"
+                                                  }
+                                              ],
+                                              "type": "array",
+                                              "comments": {
+                                                  "data": [
+                                                      {
+                                                          "properties": {
+                                                              "created_time": {
+                                                                  "type": "string"
+                                                              },
+                                                              "text": {
+                                                                  "type": "string"
+                                                              },
+                                                              "from": {
+                                                                  "properties": {
+                                                                      "username": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "full_name": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "id": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "profile_picture": {
+                                                                          "type": "string"
+                                                                      }
+                                                                  },
+                                                                  "type": "object"
+                                                              },
+                                                              "id": {
+                                                                  "type": "string"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      }
+                                                  ],
+                                                  "count": {
+                                                      "type": "integer"
+                                                  }
+                                              },
+                                              "caption": {
+                                                  "type": "string"
+                                              },
+                                              "likes": {
+                                                  "properties": {
+                                                      "count": {
+                                                          "type": "integer"
+                                                      },
+                                                      "data": [
+                                                          {
+                                                              "properties": {
+                                                                  "username": {
+                                                                      "type": "string"
+                                                                  },
+                                                                  "full_name": {
+                                                                      "type": "string"
+                                                                  },
+                                                                  "id": {
+                                                                      "type": "string"
+                                                                  },
+                                                                  "profile_picture": {
+                                                                      "type": "string"
+                                                                  }
+                                                              },
+                                                              "type": "object"
+                                                          }
+                                                      ],
+                                                      "type": "array"
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "link": {
+                                                  "type": "string"
+                                              },
+                                              "user": {
+                                                  "properties": {
+                                                      "username": {
+                                                          "type": "string"
+                                                      },
+                                                      "full_name": {
+                                                          "type": "string"
+                                                      },
+                                                      "profile_picture": {
+                                                          "type": "string"
+                                                      },
+                                                      "bio": {
+                                                          "type": "string"
+                                                      },
+                                                      "website": {
+                                                          "type": "string"
+                                                      },
+                                                      "id": {
+                                                          "type": "string"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "created_time": {
+                                                  "type": "string"
+                                              },
+                                              "images": {
+                                                  "properties": {
+                                                      "low_resolution": {
+                                                          "properties": {
+                                                              "url": {
+                                                                  "type": "string"
+                                                              },
+                                                              "width": {
+                                                                  "type": "integer"
+                                                              },
+                                                              "height": {
+                                                                  "type": "integer"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      },
+                                                      "thumbnail": {
+                                                          "properties": {
+                                                              "url": {
+                                                                  "type": "string"
+                                                              },
+                                                              "width": {
+                                                                  "type": "integer"
+                                                              },
+                                                              "height": {
+                                                                  "type": "integer"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      },
+                                                      "standard_resolution": {
+                                                          "properties": {
+                                                              "url": {
+                                                                  "type": "string"
+                                                              },
+                                                              "width": {
+                                                                  "type": "integer"
+                                                              },
+                                                              "height": {
+                                                                  "type": "integer"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "id": {
+                                                  "type": "string"
+                                              },
+                                              "location": {
+                                                  "type": "string"
+                                              }
+                                          }
+                                      }
+                                  }
+                              ]
+                          }
+                      ],
+                      "type": "array"
+                  }
+              }
+            example: |
+              {
+                  "meta": {
+                      "code": 200
+                  },
+                  "data": [{
+                      "distance": 41.741369194629698,
+                      "type": "image",
+                      "users_in_photo": [],
+                      "filter": "Earlybird",
+                      "tags": [],
+                      "comments": { ... },
+                      "caption": null,
+                      "likes": { ... },
+                      "link": "http://instagr.am/p/BQEEq/",
+                      "user": {
+                          "username": "mahaface",
+                          "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1329896_75sq_1294131373.jpg",
+                          "id": "1329896"
+                      },
+                      "created_time": "1296251679",
+                      "images": {
+                          "low_resolution": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2011/01/28/0cc4f24f25654b1c8d655835c58b850a_6.jpg",
+                              "width": 306,
+                              "height": 306
+                          },
+                          "thumbnail": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2011/01/28/0cc4f24f25654b1c8d655835c58b850a_5.jpg",
+                              "width": 150,
+                              "height": 150
+                          },
+                          "standard_resolution": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2011/01/28/0cc4f24f25654b1c8d655835c58b850a_7.jpg",
+                              "width": 612,
+                              "height": 612
+                          }
+                      },
+                      "id": "20988202",
+                      "location": null
+                  },
+                  ...
+                  ]
+              }
+  /popular:
+    type: base
+    get:
+      description: |
+        Get a list of what media is most popular at the moment.
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                  "": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                      "data": [
+                          {
+                              "oneOf": [
+                                  {
+                                      "properties": {
+                                          "distance": {
+                                              "type": "number"
+                                          },
+                                          "type": "array",
+                                          "users_in_photo": [
+                                              {
+                                                  "type": "string"
+                                              }
+                                          ],
+                                          "filter": {
+                                              "type": "string"
+                                          },
+                                          "tags": [
+                                              {
+                                                  "type": "string"
+                                              }
+                                          ],
+                                          "comments": {
+                                              "properties": {
+                                                  "data": [
+                                                      {
+                                                          "properties": {
+                                                              "created_time": {
+                                                                  "type": "string"
+                                                              },
+                                                              "text": {
+                                                                  "type": "string"
+                                                              },
+                                                              "from": {
+                                                                  "properties": {
+                                                                      "username": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "full_name": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "id": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "profile_picture": {
+                                                                          "type": "string"
+                                                                      }
+                                                                  },
+                                                                  "type": "object"
+                                                              },
+                                                              "id": {
+                                                                  "type": "string"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      }
+                                                  ],
+                                                  "type": "array",
+                                                  "count": {
+                                                      "type": "integer"
+                                                  }
+                                              },
+                                              "type": "object"
+                                          },
+                                          "caption": {
+                                              "type": "string"
+                                          },
+                                          "likes": {
+                                              "properties": {
+                                                  "count": {
+                                                      "type": "integer"
+                                                  },
+                                                  "data": [
+                                                      {
+                                                          "properties": {
+                                                              "username": {
+                                                                  "type": "string"
+                                                              },
+                                                              "full_name": {
+                                                                  "type": "string"
+                                                              },
+                                                              "id": {
+                                                                  "type": "string"
+                                                              },
+                                                              "profile_picture": {
+                                                                  "type": "string"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      }
+                                                  ],
+                                                  "type": "array"
+                                              },
+                                              "type": "object"
+                                          },
+                                          "link": {
+                                              "type": "string"
+                                          },
+                                          "user": {
+                                              "properties": {
+                                                  "username": {
+                                                      "type": "string"
+                                                  },
+                                                  "profile_picture": {
+                                                      "type": "string"
+                                                  },
+                                                  "id": {
+                                                      "type": "string"
+                                                  }
+                                              },
+                                              "type": "object"
+                                          },
+                                          "created_time": {
+                                              "type": "string"
+                                          },
+                                          "images": {
+                                              "properties": {
+                                                  "low_resolution": {
+                                                      "properties": {
+                                                          "url": {
+                                                              "type": "string"
+                                                          },
+                                                          "width": {
+                                                              "type": "integer"
+                                                          },
+                                                          "height": {
+                                                              "type": "integer"
+                                                          }
+                                                      },
+                                                      "type": "object"
+                                                  },
+                                                  "thumbnail": {
+                                                      "properties": {
+                                                          "url": {
+                                                              "type": "string"
+                                                          },
+                                                          "width": {
+                                                              "type": "integer"
+                                                          },
+                                                          "height": {
+                                                              "type": "integer"
+                                                          }
+                                                      },
+                                                      "type": "object"
+                                                  },
+                                                  "standard_resolution": {
+                                                      "properties": {
+                                                          "url": {
+                                                              "type": "string"
+                                                          },
+                                                          "width": {
+                                                              "type": "integer"
+                                                          },
+                                                          "height": {
+                                                              "type": "integer"
+                                                          }
+                                                      },
+                                                      "type": "object"
+                                                  }
+                                              },
+                                              "type": "object"
+                                          },
+                                          "id": {
+                                              "type": "string"
+                                          },
+                                          "location": {
+                                              "type": "string"
+                                          }
+                                      },
+                                      "type": "object"
+                                  },
+                                  {
+                                      "properties": {
+                                          "distance": {
+                                              "type": "number"
+                                          },
+                                          "type": "object",
+                                          "videos": {
+                                              "low_resolution": {
+                                                  "properties": {
+                                                      "url": {
+                                                          "type": "string"
+                                                      },
+                                                      "width": {
+                                                          "type": "integer"
+                                                      },
+                                                      "height": {
+                                                          "type": "integer"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "standard_resolution": {
+                                                  "properties": {
+                                                      "url": {
+                                                          "type": "string"
+                                                      },
+                                                      "width": {
+                                                          "type": "integer"
+                                                      },
+                                                      "height": {
+                                                          "type": "integer"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "users_in_photo": {
+                                                  "type": "string"
+                                              },
+                                              "filter": {
+                                                  "type": "string"
+                                              },
+                                              "tags": [
+                                                  {
+                                                      "type": "string"
+                                                  }
+                                              ],
+                                              "type": "array",
+                                              "comments": {
+                                                  "data": [
+                                                      {
+                                                          "properties": {
+                                                              "created_time": {
+                                                                  "type": "string"
+                                                              },
+                                                              "text": {
+                                                                  "type": "string"
+                                                              },
+                                                              "from": {
+                                                                  "properties": {
+                                                                      "username": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "full_name": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "id": {
+                                                                          "type": "string"
+                                                                      },
+                                                                      "profile_picture": {
+                                                                          "type": "string"
+                                                                      }
+                                                                  },
+                                                                  "type": "object"
+                                                              },
+                                                              "id": {
+                                                                  "type": "string"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      }
+                                                  ],
+                                                  "count": {
+                                                      "type": "integer"
+                                                  }
+                                              },
+                                              "caption": {
+                                                  "type": "string"
+                                              },
+                                              "likes": {
+                                                  "properties": {
+                                                      "count": {
+                                                          "type": "integer"
+                                                      },
+                                                      "data": [
+                                                          {
+                                                              "properties": {
+                                                                  "username": {
+                                                                      "type": "string"
+                                                                  },
+                                                                  "full_name": {
+                                                                      "type": "string"
+                                                                  },
+                                                                  "id": {
+                                                                      "type": "string"
+                                                                  },
+                                                                  "profile_picture": {
+                                                                      "type": "string"
+                                                                  }
+                                                              },
+                                                              "type": "object"
+                                                          }
+                                                      ],
+                                                      "type": "array"
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "link": {
+                                                  "type": "string"
+                                              },
+                                              "user": {
+                                                  "properties": {
+                                                      "username": {
+                                                          "type": "string"
+                                                      },
+                                                      "full_name": {
+                                                          "type": "string"
+                                                      },
+                                                      "profile_picture": {
+                                                          "type": "string"
+                                                      },
+                                                      "bio": {
+                                                          "type": "string"
+                                                      },
+                                                      "website": {
+                                                          "type": "string"
+                                                      },
+                                                      "id": {
+                                                          "type": "string"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "created_time": {
+                                                  "type": "string"
+                                              },
+                                              "images": {
+                                                  "properties": {
+                                                      "low_resolution": {
+                                                          "properties": {
+                                                              "url": {
+                                                                  "type": "string"
+                                                              },
+                                                              "width": {
+                                                                  "type": "integer"
+                                                              },
+                                                              "height": {
+                                                                  "type": "integer"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      },
+                                                      "thumbnail": {
+                                                          "properties": {
+                                                              "url": {
+                                                                  "type": "string"
+                                                              },
+                                                              "width": {
+                                                                  "type": "integer"
+                                                              },
+                                                              "height": {
+                                                                  "type": "integer"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      },
+                                                      "standard_resolution": {
+                                                          "properties": {
+                                                              "url": {
+                                                                  "type": "string"
+                                                              },
+                                                              "width": {
+                                                                  "type": "integer"
+                                                              },
+                                                              "height": {
+                                                                  "type": "integer"
+                                                              }
+                                                          },
+                                                          "type": "object"
+                                                      }
+                                                  },
+                                                  "type": "object"
+                                              },
+                                              "id": {
+                                                  "type": "string"
+                                              },
+                                              "location": {
+                                                  "type": "string"
+                                              }
+                                          }
+                                      }
+                                  }
+                              ]
+                          }
+                      ],
+                      "type": "array"
+                  }
+              }
+            example: |
+              {
+                  "meta": {
+                      "code": 200
+                  },
+                  "data": [{
+                      "distance": 41.741369194629698,
+                      "type": "image",
+                      "users_in_photo": [],
+                      "filter": "Earlybird",
+                      "tags": [],
+                      "comments": { ... },
+                      "caption": null,
+                      "likes": { ... },
+                      "link": "http://instagr.am/p/BQEEq/",
+                      "user": {
+                          "username": "mahaface",
+                          "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1329896_75sq_1294131373.jpg",
+                          "id": "1329896"
+                      },
+                      "created_time": "1296251679",
+                      "images": {
+                          "low_resolution": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2011/01/28/0cc4f24f25654b1c8d655835c58b850a_6.jpg",
+                              "width": 306,
+                              "height": 306
+                          },
+                          "thumbnail": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2011/01/28/0cc4f24f25654b1c8d655835c58b850a_5.jpg",
+                              "width": 150,
+                              "height": 150
+                          },
+                          "standard_resolution": {
+                              "url": "http://distillery.s3.amazonaws.com/media/2011/01/28/0cc4f24f25654b1c8d655835c58b850a_7.jpg",
+                              "width": 612,
+                              "height": 612
+                          }
+                      },
+                      "id": "20988202",
+                      "location": null
+                  },
+                  ...
+                  ]
+              }
+# Tags
+/tags:
+  /{tagName}:
+    uriParameters:
+      tagName:
+        description: Name of tag.
+        type: string
+    type: base
+    get:
+      description: Get information about a tag object.
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                  "": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                  	"data": {
+                  		"properties": {
+                  			"media_count": {
+                  				"type": "integer"
+                  			},
+                  			"name": {
+                  				"type": "string"
+                  			}
+                  		},
+                  		"type": "object"
+                  	}
+                  }
+              }
+            example: |
+              {
+                  "data": {
+                      "media_count": 472,
+                      "name": "nofilter",
+                  }
+              }
+    /media/recent:
+      type: base
+      get:
+        is: [ limitableById ]
+        description: |
+          Get a list of recently tagged media. Note that this media is ordered by when the media was tagged
+          with this tag, rather than the order it was posted. Use the max_tag_id and min_tag_id parameters
+          in the pagination response to paginate through these objects.
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                        "data": [
+                            {
+                                "properties": {
+                                    "data": [
+                                        {
+                                            "type": "array",
+                                            "users_in_photo": [
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ],
+                                            "filter": {
+                                                "type": "string"
+                                            },
+                                            "tags": [
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ],
+                                            "comments": {
+                                                "properties": {
+                                                    "data": [
+                                                        {
+                                                            "properties": {
+                                                                "created_time": {
+                                                                    "type": "string"
+                                                                },
+                                                                "text": {
+                                                                    "type": "string"
+                                                                },
+                                                                "from": {
+                                                                    "properties": {
+                                                                        "username": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "id": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "id": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    ],
+                                                    "type": "array",
+                                                    "count": {
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "caption": {
+                                                "properties": {
+                                                    "created_time": {
+                                                        "type": "string"
+                                                    },
+                                                    "text": {
+                                                        "type": "string"
+                                                    },
+                                                    "from": {
+                                                        "properties": {
+                                                            "username": {
+                                                                "type": "string"
+                                                            },
+                                                            "id": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "id": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "likes": {
+                                                "count": {
+                                                    "type": "integer"
+                                                },
+                                                "data": [
+                                                    {
+                                                        "properties": {
+                                                            "username": {
+                                                                "type": "string"
+                                                            },
+                                                            "full_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "id": {
+                                                                "type": "string"
+                                                            },
+                                                            "profile_picture": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                ],
+                                                "type": "array"
+                                            },
+                                            "link": {
+                                                "type": "string"
+                                            },
+                                            "user": {
+                                                "properties": {
+                                                    "username": {
+                                                        "type": "string"
+                                                    },
+                                                    "profile_picture": {
+                                                        "type": "string"
+                                                    },
+                                                    "id": {
+                                                        "type": "string"
+                                                    },
+                                                    "full_name": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "created_time": {
+                                                "type": "string"
+                                            },
+                                            "images": {
+                                                "properties": {
+                                                    "low_resolution": {
+                                                        "properties": {
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "width": {
+                                                                "type": "integer"
+                                                            },
+                                                            "height": {
+                                                                "type": "integer"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "thumbnail": {
+                                                        "properties": {
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "width": {
+                                                                "type": "integer"
+                                                            },
+                                                            "height": {
+                                                                "type": "integer"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "standard_resolution": {
+                                                        "properties": {
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "width": {
+                                                                "type": "integer"
+                                                            },
+                                                            "height": {
+                                                                "type": "integer"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "location": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    ],
+                                    "type": "array"
+                                },
+                                "type": "object"
+                            }
+                        ],
+                        "type": "array"
+                    }
+                }
+              example: |
+                {
+                    "data": [{
+                        "type": "image",
+                        "users_in_photo": [],
+                        "filter": "Earlybird",
+                        "tags": ["snow"],
+                        "comments": {
+                            "data": [{
+                                "created_time": "1296703540",
+                                "text": "Snow",
+                                "from": {
+                                    "username": "emohatch",
+                                    "username": "Dave",
+                                    "id": "1242695"
+                                },
+                                "id": "26589964"
+                            },
+                            {
+                                "created_time": "1296707889",
+                                "text": "#snow",
+                                "from": {
+                                    "username": "emohatch",
+                                    "username": "Emo Hatch",
+                                    "id": "1242695"
+                                },
+                                "id": "26609649"
+                            }],
+                            "count": 3
+                        },
+                        "caption": {
+                            "created_time": "1296703540",
+                            "text": "#Snow",
+                            "from": {
+                                "username": "emohatch",
+                                "id": "1242695"
+                            },
+                            "id": "26589964"
+                        },
+                        "likes": {
+                            "count": 1,
+                            "data": [{
+                                "username": "mikeyk",
+                                "full_name": "Mike Krieger",
+                                "id": "4",
+                                "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1242695_75sq_1293915800.jpg"
+                            }]
+                        },
+                        "link": "http://instagr.am/p/BWl6P/",
+                        "user": {
+                            "username": "emohatch",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1242695_75sq_1293915800.jpg",
+                            "id": "1242695",
+                            "full_name": "Dave"
+                        },
+                        "created_time": "1296703536",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/02/f9443f3443484c40b4792fa7c76214d5_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/02/f9443f3443484c40b4792fa7c76214d5_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/02/f9443f3443484c40b4792fa7c76214d5_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "id": "22699663",
+                        "location": null
+                    }
+                    ]
+                }
+  /search:
+    type: base
+    get:
+      description: |
+        Search for tags by name. Results are ordered first as an exact match, then by popularity.
+        Short tags will be treated as exact matches.
+      queryParameters:
+        q:
+          description: |
+            A valid tag name without a leading #.
+          type: string
+          required: true
+          example: nofilter
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                  "": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                  	"data": [
+                  		{
+                  			"properties": {
+                  				"media_count": {
+                  					"type": "integer"
+                  				},
+                  				"name": {
+                  					"type": "string"
+                  				}
+                  			},
+                  			"type": "object"
+                  		}
+                  	],
+                  	"type": "array"
+                  }
+              }
+            example: |
+              {
+                "data": [
+                      {
+                          "media_count": 43590,
+                          "name": "snowy"
+                      },
+                      {
+                          "media_count": 3264,
+                          "name": "snowyday"
+                      },
+                      {
+                          "media_count": 1880,
+                          "name": "snowymountains"
+                      },
+                      {
+                          "media_count": 1164,
+                          "name": "snowydays"
+                      },
+                      {
+                          "media_count": 776,
+                          "name": "snowyowl"
+                      },
+                      {
+                          "media_count": 680,
+                          "name": "snowynight"
+                      },
+                      {
+                          "media_count": 568,
+                          "name": "snowylebanon"
+                      },
+                      {
+                          "media_count": 522,
+                          "name": "snowymountain"
+                      },
+                      {
+                          "media_count": 490,
+                          "name": "snowytrees"
+                      },
+                      {
+                          "media_count": 260,
+                          "name": "snowynights"
+                      },
+                      {
+                          "media_count": 253,
+                          "name": "snowyegret"
+                      },
+                      {
+                          "media_count": 223,
+                          "name": "snowytree"
+                      },
+                      {
+                          "media_count": 214,
+                          "name": "snowymorning"
+                      },
+                      {
+                          "media_count": 212,
+                          "name": "snowyweather"
+                      },
+                      {
+                          "media_count": 161,
+                          "name": "snowyoursupport"
+                      },
+                      {
+                          "media_count": 148,
+                          "name": "snowyrange"
+                      },
+                      {
+                          "media_count": 136,
+                          "name": "snowynui3z"
+                      },
+                      {
+                          "media_count": 128,
+                          "name": "snowypeaks"
+                      },
+                      {
+                          "media_count": 124,
+                          "name": "snowy_dog"
+                      },
+                      {
+                          "media_count": 120,
+                          "name": "snowyroad"
+                      },
+                      {
+                          "media_count": 108,
+                          "name": "snowyoghurt"
+                      },
+                      {
+                          "media_count": 107,
+                          "name": "snowyriver"
+                      }
+                  ],
+                  "meta": {
+                      "code": 200
+                  }
+              }
+# Users
+/users:
+  /{userId}:
+    uriParameters:
+      userId:
+        type: integer
+    type: base
+    get:
+      description: Get basic information about a user.
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                  "": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                      "data": {
+                          "properties": {
+                              "id": {
+                                  "type": "string"
+                              },
+                              "username": {
+                                  "type": "string"
+                              },
+                              "full_name": {
+                                  "type": "string"
+                              },
+                              "profile_picture": {
+                                  "type": "string"
+                              },
+                              "bio": {
+                                  "type": "string"
+                              },
+                              "website": {
+                                  "type": "string"
+                              },
+                              "counts": {
+                                  "properties": {
+                                      "media": {
+                                          "type": "integer"
+                                      },
+                                      "follows": {
+                                          "type": "integer"
+                                      },
+                                      "followed_by": {
+                                          "type": "integer"
+                                      }
+                                  },
+                                  "type": "object"
+                              }
+                          },
+                          "type": "object"
+                      }
+                  }
+              }
+            example: |
+              {
+                  "data": {
+                      "id": "1574083",
+                      "username": "snoopdogg",
+                      "full_name": "Snoop Dogg",
+                      "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg",
+                      "bio": "This is my bio",
+                      "website": "http://snoopdogg.com",
+                      "counts": {
+                          "media": 1320,
+                          "follows": 420,
+                          "followed_by": 3410
+                      }
+                  }
+              }
+    # Follows
+    /follows:
+      securedBy: [ oauth_2_0: { scopes: [ relationships ] } ]
+      type: base
+      get:
+        description: Get the list of users this user follows.
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                        "data": [
+                            {
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "profile_picture": {
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        ],
+                        "type": "array"
+                    }
+                }
+              example: |
+                {
+                    "data": [{
+                        "username": "jack",
+                        "first_name": "Jack",
+                        "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_66_75sq.jpg",
+                        "id": "66",
+                        "last_name": "Dorsey"
+                    },
+                    {
+                        "username": "sammyjack",
+                        "first_name": "Sammy",
+                        "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_29648_75sq_1294520029.jpg",
+                        "id": "29648",
+                        "last_name": "Jack"
+                    },
+                    {
+                        "username": "jacktiddy",
+                        "first_name": "Jack",
+                        "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_13096_75sq_1286441317.jpg",
+                        "id": "13096",
+                        "last_name": "Tiddy"
+                    }]
+                }
+    # Followed by
+    /followed-by:
+      securedBy: [ oauth_2_0: { scopes: [ relationships ] } ]
+      type: base
+      get:
+        description: Get the list of users this user is followed by.
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                        "data": [
+                            {
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "profile_picture": {
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        ],
+                        "type": "array"
+                    }
+                }
+              example: |
+                {
+                    "data": [{
+                        "username": "jack",
+                        "first_name": "Jack",
+                        "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_66_75sq.jpg",
+                        "id": "66",
+                        "last_name": "Dorsey"
+                    },
+                    {
+                        "username": "sammyjack",
+                        "first_name": "Sammy",
+                        "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_29648_75sq_1294520029.jpg",
+                        "id": "29648",
+                        "last_name": "Jack"
+                    },
+                    {
+                        "username": "jacktiddy",
+                        "first_name": "Jack",
+                        "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_13096_75sq_1286441317.jpg",
+                        "id": "13096",
+                        "last_name": "Tiddy"
+                    }]
+                }
+    # Requested by
+    /self/requested-by:
+      securedBy: [ oauth_2_0: { scopes: [ relationships ] } ]
+      get:
+        description: List the users who have requested this user's permission to follow.
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                        "meta": {
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "data": [
+                            {
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "profile_picture": {
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        ]
+                    }
+                }
+              example: |
+                {
+                    "meta": {
+                        "code": 200
+                    },
+                    "data": [
+                        {
+                            "username": "mikeyk",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_4_75sq_1292324747_debug.jpg",
+                            "id": "4"
+                        }
+                    ]
+                }
+    /media/recent:
+      type: base
+      get:
+        is: [ limitableById, limitableByTime ]
+        description: |
+          See the authenticated user's feed. May return a mix of both image and
+          video types.
+        responses:
+          200:
+            body:
+              example: |
+                {
+                    "data": [{
+                        "location": {
+                            "id": "833",
+                            "latitude": 37.77956816727314,
+                            "longitude": -122.41387367248539,
+                            "name": "Civic Center BART"
+                        },
+                        "comments": {
+                            "count": 16,
+                            "data": [ ... ]
+                        },
+                        "caption": null,
+                        "link": "http://instagr.am/p/BXsFz/",
+                        "likes": {
+                            "count": 190,
+                            "data": [{
+                                "username": "shayne",
+                                "full_name": "Shayne Sweeney",
+                                "id": "20",
+                                "profile_picture": "..."
+                            }, {...subset of likers...}]
+                        },
+                        "created_time": "1296748524",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "type": "image",
+                        "users_in_photo": [],
+                        "filter": "Earlybird",
+                        "tags": [],
+                        "id": "22987123",
+                        "user": {
+                            "username": "kevin",
+                            "full_name": "Kevin S",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_3_75sq_1295574122.jpg",
+                            "id": "3"
+                        }
+                    },
+                    {
+                        "videos": {
+                            "low_resolution": {
+                                "url": "http://distilleryvesper9-13.ak.instagram.com/090d06dad9cd11e2aa0912313817975d_102.mp4",
+                                "width": 480,
+                                "height": 480
+                            },
+                            "standard_resolution": {
+                                "url": "http://distilleryvesper9-13.ak.instagram.com/090d06dad9cd11e2aa0912313817975d_101.mp4",
+                                "width": 640,
+                                "height": 640
+                            },
+                        "comments": {
+                            "data": [{
+                                "created_time": "1279332030",
+                                "text": "Love the sign here",
+                                "from": {
+                                    "username": "mikeyk",
+                                    "full_name": "Mikey Krieger",
+                                    "id": "4",
+                                    "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1242695_75sq_1293915800.jpg"
+                                },
+                                "id": "8"
+                            },
+                            {
+                                "created_time": "1279341004",
+                                "text": "Chilako taco",
+                                "from": {
+                                    "username": "kevin",
+                                    "full_name": "Kevin S",
+                                    "id": "3",
+                                    "profile_picture": "..."
+                                },
+                                "id": "3"
+                            }],
+                            "count": 2
+                        },
+                        "caption": null,
+                        "likes": {
+                            "count": 1,
+                            "data": [{
+                                "username": "mikeyk",
+                                "full_name": "Mikeyk",
+                                "id": "4",
+                                "profile_picture": "..."
+                            }]
+                        },
+                        "link": "http://instagr.am/p/D/",
+                        "created_time": "1279340983",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "type": "video",
+                        "users_in_photo": null,
+                        "filter": "Vesper",
+                        "tags": [],
+                        "id": "363839373298",
+                        "user": {
+                            "username": "kevin",
+                            "full_name": "Kevin S",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_3_75sq_1295574122.jpg",
+                            "id": "3"
+                        },
+                        "location": null
+                    },
+                    ...]
+                }
+    /relationship:
+      securedBy: [ oauth_2_0: { scopes: [ relationships ] } ]
+      type: base
+      get:
+        description: Get information about a relationship to another user.
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                        "meta": {
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "data": {
+                            "properties": {
+                                "outgoing_status": {
+                                    "enum": [
+                                        "follows",
+                                        "requested",
+                                        "none"
+                                    ]
+                                },
+                                "incoming_status": {
+                                    "enum": [
+                                        "followed_by",
+                                        "requested_by",
+                                        "blocked_by_you",
+                                        "none"
+                                    ]
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+              example: |
+                {
+                    "meta": {
+                        "code": 200
+                    },
+                    "data": {
+                        "outgoing_status": "none",
+                        "incoming_status": "requested_by"
+                    }
+                }
+      post:
+        description: Modify the relationship between the current user and the target user.
+        body:
+          formParameters:
+            action:
+              description: One of follow/unfollow/block/unblock/approve/deny.
+              enum:
+                - follow
+                - unfollow
+                - block
+                - unblock
+                - approve
+                - deny
+        responses:
+          200:
+            body:
+              schema: |
+                {
+                    "": "http://json-schema.org/draft-03/schema",
+                    "type": "object",
+                    "properties": {
+                        "meta": {
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "data": {
+                            "properties": {
+                                "outgoing_status": {
+                                    "enum": [
+                                        "follows",
+                                        "requested",
+                                        "none"
+                                    ]
+                                },
+                                "incoming_status": {
+                                    "enum": [
+                                        "followed_by",
+                                        "requested_by",
+                                        "blocked_by_you",
+                                        "none"
+                                    ]
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+              example: |
+                {
+                    "meta": {
+                        "code": 200
+                    },
+                    "data": {
+                        "outgoing_status": "none",
+                        "incoming_status": "requested_by"
+                    }
+                }
+  /search:
+    type: base
+    get:
+      description: Search for a user by name.
+      queryParameters:
+        q:
+          description: A query string.
+          type: string
+          required: true
+        count:
+          description: Number of users to return.
+          type: integer
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                  "": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                      "data": [
+                          {
+                              "properties": {
+                                  "username": {
+                                      "type": "string"
+                                  },
+                                  "first_name": {
+                                      "type": "string"
+                                  },
+                                  "profile_picture": {
+                                      "type": "string"
+                                  },
+                                  "id": {
+                                      "type": "string"
+                                  },
+                                  "last_name": {
+                                      "type": "string"
+                                  }
+                              },
+                              "type": "object"
+                          }
+                      ],
+                      "type": "array"
+                  }
+              }
+            example: |
+              {
+                  "data": [{
+                      "username": "jack",
+                      "first_name": "Jack",
+                      "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_66_75sq.jpg",
+                      "id": "66",
+                      "last_name": "Dorsey"
+                  },
+                  {
+                      "username": "sammyjack",
+                      "first_name": "Sammy",
+                      "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_29648_75sq_1294520029.jpg",
+                      "id": "29648",
+                      "last_name": "Jack"
+                  },
+                  {
+                      "username": "jacktiddy",
+                      "first_name": "Jack",
+                      "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_13096_75sq_1286441317.jpg",
+                      "id": "13096",
+                      "last_name": "Tiddy"
+                  }]
+              }
+  /self:
+    /feed:
+      type: base
+      get:
+        is: [ limitableById ]
+        description: |
+          See the authenticated user's feed. May return a mix of both image and
+          video types.
+        responses:
+          200:
+            body:
+              example: |
+                {
+                    "data": [{
+                        "location": {
+                            "id": "833",
+                            "latitude": 37.77956816727314,
+                            "longitude": -122.41387367248539,
+                            "name": "Civic Center BART"
+                        },
+                        "comments": {
+                            "count": 16,
+                            "data": [ ... ]
+                        },
+                        "caption": null,
+                        "link": "http://instagr.am/p/BXsFz/",
+                        "likes": {
+                            "count": 190,
+                            "data": [{
+                                "username": "shayne",
+                                "full_name": "Shayne Sweeney",
+                                "id": "20",
+                                "profile_picture": "..."
+                            }, {...subset of likers...}]
+                        },
+                        "created_time": "1296748524",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "type": "image",
+                        "users_in_photo": [],
+                        "filter": "Earlybird",
+                        "tags": [],
+                        "id": "22987123",
+                        "user": {
+                            "username": "kevin",
+                            "full_name": "Kevin S",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_3_75sq_1295574122.jpg",
+                            "id": "3"
+                        }
+                    },
+                    {
+                        "videos": {
+                            "low_resolution": {
+                                "url": "http://distilleryvesper9-13.ak.instagram.com/090d06dad9cd11e2aa0912313817975d_102.mp4",
+                                "width": 480,
+                                "height": 480
+                            },
+                            "standard_resolution": {
+                                "url": "http://distilleryvesper9-13.ak.instagram.com/090d06dad9cd11e2aa0912313817975d_101.mp4",
+                                "width": 640,
+                                "height": 640
+                            },
+                        "comments": {
+                            "data": [{
+                                "created_time": "1279332030",
+                                "text": "Love the sign here",
+                                "from": {
+                                    "username": "mikeyk",
+                                    "full_name": "Mikey Krieger",
+                                    "id": "4",
+                                    "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1242695_75sq_1293915800.jpg"
+                                },
+                                "id": "8"
+                            },
+                            {
+                                "created_time": "1279341004",
+                                "text": "Chilako taco",
+                                "from": {
+                                    "username": "kevin",
+                                    "full_name": "Kevin S",
+                                    "id": "3",
+                                    "profile_picture": "..."
+                                },
+                                "id": "3"
+                            }],
+                            "count": 2
+                        },
+                        "caption": null,
+                        "likes": {
+                            "count": 1,
+                            "data": [{
+                                "username": "mikeyk",
+                                "full_name": "Mikeyk",
+                                "id": "4",
+                                "profile_picture": "..."
+                            }]
+                        },
+                        "link": "http://instagr.am/p/D/",
+                        "created_time": "1279340983",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "type": "video",
+                        "users_in_photo": null,
+                        "filter": "Vesper",
+                        "tags": [],
+                        "id": "363839373298",
+                        "user": {
+                            "username": "kevin",
+                            "full_name": "Kevin S",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_3_75sq_1295574122.jpg",
+                            "id": "3"
+                        },
+                        "location": null
+                    },
+                    ...]
+                }
+    /media/liked:
+      type: base
+      get:
+        description: |
+          See the authenticated user's list of media they've liked. May return a mix
+          of both image and video types.
+          Note: This list is ordered by the order in which the user liked the media.
+          Private media is returned as long as the authenticated user has permission
+          to view that media. Liked media lists are only available for the currently
+          authenticated user.
+        queryParameters:
+          max_like_id:
+            description: Return media liked before this id.
+            type: integer
+        responses:
+          200:
+            body:
+              example: |
+                {
+                    "data": [{
+                        "location": {
+                            "id": "833",
+                            "latitude": 37.77956816727314,
+                            "longitude": -122.41387367248539,
+                            "name": "Civic Center BART"
+                        },
+                        "comments": {
+                            "count": 16,
+                            "data": [ ... ]
+                        },
+                        "caption": null,
+                        "link": "http://instagr.am/p/BXsFz/",
+                        "likes": {
+                            "count": 190,
+                            "data": [{
+                                "username": "shayne",
+                                "full_name": "Shayne Sweeney",
+                                "id": "20",
+                                "profile_picture": "..."
+                            }, {...subset of likers...}]
+                        },
+                        "created_time": "1296748524",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "type": "image",
+                        "users_in_photo": [],
+                        "filter": "Earlybird",
+                        "tags": [],
+                        "id": "22987123",
+                        "user": {
+                            "username": "kevin",
+                            "full_name": "Kevin S",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_3_75sq_1295574122.jpg",
+                            "id": "3"
+                        }
+                    },
+                    {
+                        "videos": {
+                            "low_resolution": {
+                                "url": "http://distilleryvesper9-13.ak.instagram.com/090d06dad9cd11e2aa0912313817975d_102.mp4",
+                                "width": 480,
+                                "height": 480
+                            },
+                            "standard_resolution": {
+                                "url": "http://distilleryvesper9-13.ak.instagram.com/090d06dad9cd11e2aa0912313817975d_101.mp4",
+                                "width": 640,
+                                "height": 640
+                            },
+                        "comments": {
+                            "data": [{
+                                "created_time": "1279332030",
+                                "text": "Love the sign here",
+                                "from": {
+                                    "username": "mikeyk",
+                                    "full_name": "Mikey Krieger",
+                                    "id": "4",
+                                    "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1242695_75sq_1293915800.jpg"
+                                },
+                                "id": "8"
+                            },
+                            {
+                                "created_time": "1279341004",
+                                "text": "Chilako taco",
+                                "from": {
+                                    "username": "kevin",
+                                    "full_name": "Kevin S",
+                                    "id": "3",
+                                    "profile_picture": "..."
+                                },
+                                "id": "3"
+                            }],
+                            "count": 2
+                        },
+                        "caption": null,
+                        "likes": {
+                            "count": 1,
+                            "data": [{
+                                "username": "mikeyk",
+                                "full_name": "Mikeyk",
+                                "id": "4",
+                                "profile_picture": "..."
+                            }]
+                        },
+                        "link": "http://instagr.am/p/D/",
+                        "created_time": "1279340983",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "type": "video",
+                        "users_in_photo": null,
+                        "filter": "Vesper",
+                        "tags": [],
+                        "id": "363839373298",
+                        "user": {
+                            "username": "kevin",
+                            "full_name": "Kevin S",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_3_75sq_1295574122.jpg",
+                            "id": "3"
+                        },
+                        "location": null
+                    },
+                    ...]
+                }
+# Oembed
+/oembed:
+  type: base
+  get:
+    description: |
+      Given a short link, returns information about the media associated with
+      that link.
+    queryParameters:
+      url:
+        type: string
+      maxheight:
+        type: integer
+      maxwidth:
+        type: integer
+    responses:
+        200:
+          body:
+            schema: |
+              {
+                  "": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                      "author_id": {
+                          "type": "integer"
+                      },
+                      "author_name": {
+                          "type": "string"
+                      },
+                      "author_url": {
+                          "type": "string"
+                      },
+                      "height": {
+                          "type": "integer"
+                      },
+                      "media_id": {
+                          "type": "string"
+                      },
+                      "provider_name": {
+                          "type": "string"
+                      },
+                      "provider_url": {
+                          "type": "string"
+                      },
+                      "title": {
+                          "type": "string"
+                      },
+                      "type": {
+                          "type": "string"
+                      },
+                      "url": {
+                          "type": "string"
+                      },
+                      "version": {
+                          "type": "string"
+                      },
+                      "width": {
+                          "type": "integer"
+                      }
+                  }
+              }
+            example: |
+              {
+                  "author_id": 72,
+                  "author_name": "danrubin",
+                  "author_url": "http://instagram.com/",
+                  "height": 612,
+                  "media_id": "5382_72",
+                  "provider_name": "Instagram",
+                  "provider_url": "http://instagram.com/",
+                  "title": "Rays",
+                  "type": "photo",
+                  "url": "http://distillery.s3.amazonaws.com/media/2010/10/02/7e4051fdcf1d45ab9bc1fba2582c0c6b_7.jpg",
+                  "version": "1.0",
+                  "width": 612
+              }
+/p/{shortcode}/media:
+  uriParameters:
+    shortcode:
+      type: string
+      required: true
+  type: base
+  get:
+    description: |
+      Given a short link, issues a redirect to that media's JPG file.
+    queryParameters:
+      size:
+        enum:
+          - t,
+          - m,
+          - l
+        default: m
+    responses:
+      302:
+        body:
+          text/html:
+            example: |
+              HTTP/1.1 302 FOUND
+              Location: http://distillery.s3.amazonaws.com/media/2010/10/02/7e4051fdcf1d45ab9bc1fba2582c0c6b_6.jpg
+# Locations
+/locations:
+  /{locId}:
+    uriParameters:
+      locId:
+        type: integer
+    get:
+      description: Get information about a location.
+    /media/recent:
+      type: base
+      get:
+        is: [ limitableById, limitableByTime ]
+        description: |
+          Get a list of recent media objects from a given location. May return a
+          mix of both image and video types.
+        responses:
+          200:
+            body:
+              example: |
+                {
+                    "data": [{
+                        "location": {
+                            "id": "833",
+                            "latitude": 37.77956816727314,
+                            "longitude": -122.41387367248539,
+                            "name": "Civic Center BART"
+                        },
+                        "comments": {
+                            "count": 16,
+                            "data": [ ... ]
+                        },
+                        "caption": null,
+                        "link": "http://instagr.am/p/BXsFz/",
+                        "likes": {
+                            "count": 190,
+                            "data": [{
+                                "username": "shayne",
+                                "full_name": "Shayne Sweeney",
+                                "id": "20",
+                                "profile_picture": "..."
+                            }, {...subset of likers...}]
+                        },
+                        "created_time": "1296748524",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distillery.s3.amazonaws.com/media/2011/02/03/efc502667a554329b52d9a6bab35b24a_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "type": "image",
+                        "users_in_photo": [],
+                        "filter": "Earlybird",
+                        "tags": [],
+                        "id": "22987123",
+                        "user": {
+                            "username": "kevin",
+                            "full_name": "Kevin S",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_3_75sq_1295574122.jpg",
+                            "id": "3"
+                        }
+                    },
+                    {
+                        "videos": {
+                            "low_resolution": {
+                                "url": "http://distilleryvesper9-13.ak.instagram.com/090d06dad9cd11e2aa0912313817975d_102.mp4",
+                                "width": 480,
+                                "height": 480
+                            },
+                            "standard_resolution": {
+                                "url": "http://distilleryvesper9-13.ak.instagram.com/090d06dad9cd11e2aa0912313817975d_101.mp4",
+                                "width": 640,
+                                "height": 640
+                            },
+                        "comments": {
+                            "data": [{
+                                "created_time": "1279332030",
+                                "text": "Love the sign here",
+                                "from": {
+                                    "username": "mikeyk",
+                                    "full_name": "Mikey Krieger",
+                                    "id": "4",
+                                    "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1242695_75sq_1293915800.jpg"
+                                },
+                                "id": "8"
+                            },
+                            {
+                                "created_time": "1279341004",
+                                "text": "Chilako taco",
+                                "from": {
+                                    "username": "kevin",
+                                    "full_name": "Kevin S",
+                                    "id": "3",
+                                    "profile_picture": "..."
+                                },
+                                "id": "3"
+                            }],
+                            "count": 2
+                        },
+                        "caption": null,
+                        "likes": {
+                            "count": 1,
+                            "data": [{
+                                "username": "mikeyk",
+                                "full_name": "Mikeyk",
+                                "id": "4",
+                                "profile_picture": "..."
+                            }]
+                        },
+                        "link": "http://instagr.am/p/D/",
+                        "created_time": "1279340983",
+                        "images": {
+                            "low_resolution": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_6.jpg",
+                                "width": 306,
+                                "height": 306
+                            },
+                            "thumbnail": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_5.jpg",
+                                "width": 150,
+                                "height": 150
+                            },
+                            "standard_resolution": {
+                                "url": "http://distilleryimage2.ak.instagram.com/11f75f1cd9cc11e2a0fd22000aa8039a_7.jpg",
+                                "width": 612,
+                                "height": 612
+                            }
+                        },
+                        "type": "video",
+                        "users_in_photo": null,
+                        "filter": "Vesper",
+                        "tags": [],
+                        "id": "363839373298",
+                        "user": {
+                            "username": "kevin",
+                            "full_name": "Kevin S",
+                            "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_3_75sq_1295574122.jpg",
+                            "id": "3"
+                        },
+                        "location": null
+                    },
+                    ...]
+                }
+  /search:
+    type: base
+    get:
+      #TODO oneOf
+      description: Search for a location by geographic coordinate.
+      queryParameters:
+        lat:
+          description: Latitude of the center search coordinate. If used, lng is required.
+          type: number
+        lng:
+          description: Longitude of the center search coordinate. If used, lat is required.
+          type: number
+        distance:
+          description: Default is 1000m (distance=1000), max distance is 5000.
+          type: integer
+          maximum: 5000
+          default: 1000
+        foursquare_v2_id:
+          description: |
+            Returns a location mapped off of a foursquare v2 api location id. If
+            used, you are not required to use lat and lng.
+        foursquare_id:
+          description: |
+            Returns a location mapped off of a foursquare v1 api location id. If used,
+            you are not required to use lat and lng. Note that this method is deprecated;
+            you should use the new foursquare IDs with V2 of their API.
+      responses:
+        200:
+          body:
+            schema: |
+              {
+                  "": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                      "meta": {
+                          "properties": {
+                              "code": {
+                                  "type": "integer"
+                              }
+                          },
+                          "type": "object"
+                      },
+                      "data": [
+                          {
+                              "properties": {
+                                  "latitude": {
+                                      "type": "number"
+                                  },
+                                  "id": {
+                                      "type": "string"
+                                  },
+                                  "longitude": {
+                                      "type": "number"
+                                  },
+                                  "name": {
+                                      "type": "string"
+                                  }
+                              },
+                              "type": "object"
+                          }
+                      ]
+                  }
+              }
+            example: |
+              {
+                "meta": {
+                  "code": 200
+                },
+                "data": [
+                  {
+                    "latitude": 48.850059509,
+                    "id": "125983371",
+                    "longitude": 2.294613838,
+                    "name": "cairo universty, ElSheikh Zaid branch"
+                  },
+                  {
+                    "latitude": 48.850191,
+                    "id": "46295095",
+                    "longitude": 2.294195,
+                    "name": "82 Boulevard De Grenelle"
+                  },
+                  {
+                    "latitude": 48.850232,
+                    "id": "17463171",
+                    "longitude": 2.294276,
+                    "name": "Monan chaussure"
+                  },
+                  {
+                    "latitude": 48.849993048,
+                    "id": "58664053",
+                    "longitude": 2.294816312,
+                    "name": "Rue Juge"
+                  },
+                  {
+                    "latitude": 48.850235602,
+                    "id": "3277432",
+                    "longitude": 2.294731778,
+                    "name": "Pizza Di Napoli"
+                  },
+                  {
+                    "latitude": 48.85030795,
+                    "id": "3632655",
+                    "longitude": 2.294114341,
+                    "name": "Marche Grenelle"
+                  },
+                  {
+                    "latitude": 48.850311575,
+                    "id": "47202559",
+                    "longitude": 2.294123981,
+                    "name": "London Styl'"
+                  },
+                  {
+                    "latitude": 48.84975,
+                    "id": "16095374",
+                    "longitude": 2.294726,
+                    "name": "Sami Coiffure 2000"
+                  }
+                ]
+              }
+# Geo
+/geographies/{geoId}/media/recent:
+  type: base
+  uriParameters:
+    geoId:
+      type: integer
+  get:
+    description: |
+      Get recent media from a geography subscription that you created.
+      Note: You can only access Geographies that were explicitly created by your
+      OAuth client. Check the Geography Subscriptions section of the real-time
+      updates page. When you create a subscription to some geography that you
+      define, you will be returned a unique geo-id that can be used in this
+      query. To backfill photos from the location covered by this geography,
+      use the media search endpoint.
+    queryParameters:
+      min_id:
+        description: Return media before this min_id.
+        type: integer
