@@ -1,0 +1,269 @@
+.resource-panel {
+  position: relative;
+
+  display: none;
+  border: solid $color-resource-border;
+  border-width: 0 1px 1px;
+  border-radius: 0 0 5px 5px;
+
+  background: $color-resource-bg;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  color: $color-resource-text;
+
+  @media only screen and (min-width: $large-screen) {
+    border-width: 0 1px 1px 0;
+
+    &.has-sidebar-collapsed {
+      box-shadow: inset 1px 0 0 rgba(0,0,0,.15);
+      .resource-panel-subheader {
+        padding-left: 100px;
+      }
+    }
+  }
+}
+
+.resource-panel-wrapper {
+  display: flex;
+}
+
+/* Resource Panel Primary */
+
+.resource-panel-primary {
+  overflow: hidden;
+  width: 100%;
+
+  font-size: 16px;
+
+  @media only screen and (min-width: $large-screen) {
+    padding-left: 430px;
+
+    font-size: 18px;
+
+    .has-sidebar-collapsed & {
+      padding-left: 0;
+    }
+  }
+
+  p {
+    font-family: $georgia;
+  }
+
+  a {
+    color: $color-resource-a;
+  }
+}
+
+.resource-panel-primary-row {
+  padding: 10px;
+
+  @media only screen and (min-width: $medium-screen) {
+    padding: 24px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    padding: 32px;
+  }
+}
+
+.resource-panel-content {
+  display: none;
+}
+
+.resource-panel-content.is-active {
+  display: block;
+}
+
+.resource-panel-description {
+  .description {
+    margin-bottom: 0;
+
+    font-family: $lato;
+    font-size: 14px;
+  }
+}
+
+.resource-panel-flag-list {
+  margin-top: 5px;
+  padding-left: 0;
+
+  .flag {
+    margin-top: 8px;
+    border: 1px solid $color-flag-border;
+
+    background: $color-flag-bg;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.resource-panel-subheader {
+  padding: 14px 32px 18px 100px;
+  border-bottom: solid $color-resource-subheader-border;
+  border-width: 1px 0;
+
+  @media only screen and (min-width: $medium-screen) {
+    padding-right: 24px;
+    padding-left: 100px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    padding-right: 24px;
+    padding-left: 32px;
+  }
+}
+
+.resource-panel-subheader-section {
+  width: 50%;
+}
+
+.resource-panel-tabs {
+  padding-top: 0;
+}
+
+.resource-panel-toggle-group {
+  float: left;
+}
+
+.resource-heading-a {
+  margin: 0 0 18px;
+  color: $color-resource-heading;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.resource-section {
+  margin-top: 32px;
+
+  @media only screen and (min-width: $large-screen) {
+    margin-top: 48px;
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.resource-response-section {
+  margin-top: 24px;
+}
+
+.resource-param {
+  margin-bottom: 24px;
+
+  @media only screen and (min-width: $large-screen) {
+    margin-bottom: 36px;
+  }
+
+  p {
+    margin-bottom: 0;
+    padding-top: 5px;
+    padding-left: 12px;
+
+    font-size: 14px;
+
+    @media only screen and (min-width: $medium-screen) {
+      padding-left: 24px;
+
+      font-size: 16px;
+    }
+  }
+}
+
+.resource-param-heading {
+  margin-bottom: 0;
+  padding-bottom: 3px;
+  border-bottom: 1px solid $color-resource-param-border;
+
+  font-size: 14px;
+}
+
+.resource-param-instructional {
+  margin-left: 5px;
+
+  color: $color-resource-param-instructional;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+
+  @media only screen and (min-width: $medium-screen) {
+    font-size: 16px;
+  }
+}
+
+.resource-param-example {
+  font-family: $lato;
+
+  b {
+    margin-right: 3px;
+
+    color: $color-resource-param-instructional;
+    font-style: italic;
+    font-weight: 400;
+  }
+}
+
+.resource-response-jump {
+  font-size: 14px;
+}
+
+.resource-btns {
+  padding-left: 5px;
+}
+
+.resource-btn {
+  margin: 0 5px 0 0;
+  padding: 5px 10px 6px 10px;
+  border: 1px solid $color-toggle-border;
+  border-radius: 4px;
+
+  background-color: $color-toggle-bg;
+  color: $color-resource-a;
+  cursor: pointer;
+  font-family: $lato;
+  font-size: 16px;
+  font-weight: 700;
+  transition: 0.2s ease color, 0.2s ease border-color;
+  -webkit-font-smoothing: antialiased;
+
+  &.is-active, &:hover {
+    border-color: rgba(0,0,0,0.25);
+
+    background-color: $color-resource-a;
+    color: $color-toggle-active-text;
+  }
+}
+
+.resource-response .flag {
+  border: 1px solid $color-flag-border;
+
+  font-size: 16px;
+  background: $color-flag-bg;
+  color: $color-flag-text-bold;
+}
+
+.resource-pre {
+  margin: 0 0 18px 0;
+  padding: 8px 12px;
+  border: 1px solid $color-sidebar-pre-border;
+  border-radius: 3px;
+
+  background: $color-sidebar-pre-bg;
+  font-family: Source Code Pro;
+  font-size: 14px;
+}
+
+.resource-pre-toggle {
+  display: none;
+
+  &.is-active {
+    display: block;
+  }
+}

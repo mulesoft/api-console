@@ -1,0 +1,17 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  background: $color-console-bg;
+  color: $color-console-text;
+  font-family: $lato;
+  font-size: 18px;
+  line-height: 1.4;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, ol {
+  margin-top: 0;
+}

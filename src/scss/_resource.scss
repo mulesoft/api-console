@@ -1,0 +1,291 @@
+/* Resource List */
+
+.resource-list {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.resource-list-root {
+  border-top: 1px solid $color-console-border;
+}
+
+.resource-list-item.is-active + .resource-list-item {
+  border-top: 1px solid $color-console-border;
+}
+
+/* Resource Items */
+
+.resource {
+  position: relative;
+
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 50px;
+  padding-left: 20px;
+  border-bottom: 1px solid $color-console-border;
+
+  transition: 0.3s ease all;
+
+  @media only screen and (min-width: $large-screen) {
+    padding-left: 24px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    min-height: 60px;
+    padding-left: 32px;
+  }
+
+  &.is-active {
+    min-height: 50px;
+    margin: 10px 0 0;
+    border-color: $color-resource-path-active-border;
+
+    background: $color-resource-path-active-bg;
+
+    @media only screen and (min-width: $medium-screen) {
+      border-radius: 5px 5px 0 0;
+    }
+  }
+}
+
+.resource-path-container {
+  flex-grow: 1;
+  padding: 6px 0;
+
+  @media only screen and (min-width: $medium-screen) {
+    padding-top: 11px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    padding-top: 16px;
+  }
+}
+
+.resource-root .resource-path-container {
+  @media only screen and (min-width: $medium-screen) {
+    padding-top: 9px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    padding-top: 11px;
+  }
+}
+
+.resource.is-active .resource-path-container {
+  padding-top: 11px;
+}
+
+.resource-root.is-active .resource-path-container {
+  @media only screen and (min-width: $medium-screen) {
+    padding-top: 8px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    padding-top: 6px;
+  }
+}
+
+.resource-close-btn {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+
+  display: none;
+  padding: 0 18px 0 3px;
+  border-radius: 5px;
+  border: none;
+
+  background: transparent;
+  color: $color-resource-close;
+  font-size: 10px;
+  text-transform: uppercase;
+  transition: 0.2s ease color;
+
+  &:before {
+    content: "\00d7";
+
+    position: absolute;
+    top: -2px;
+    right: 3px;
+    border: none;
+
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  &:hover {
+    color: $color-resource-close-bg-hover;
+  }
+}
+
+.resource-list-root > .resource-list-item.is-active + .resource-list-item {
+  border-top: 0;
+}
+
+.resource.is-active + .resource-list {
+  border-top: 1px solid $color-console-border;
+}
+
+.resource.is-active .resource-path-active {
+  color: $color-resource-path-active;
+  transition: 0.3s ease all;
+}
+
+.resource.is-active .resource-root-toggle,
+.resource.is-active .resource-heading-flag {
+  display: none;
+}
+
+.resource.is-active .resource-close-btn {
+  display: block;
+}
+
+.resource-root-toggle {
+  position: absolute;
+  top: 7px;
+  left: -2px;
+
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  background: transparent;
+  opacity: 0.25;
+  transition: 0.2s ease transform, 0.2s ease opacity;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.is-active {
+    transform: rotate(-90deg);
+  }
+
+  &:before {
+    content: "";
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 0;
+    height: 0;
+    margin-top: -2.5px;
+    margin-left: -5px;
+    border: 5px solid transparent;
+    border-top-color: $color-console-toggle;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @media only screen and (min-width: $medium-screen) {
+    top: 13px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    top: 18px;
+    left: 0;
+
+    &:before {
+      margin-top: -3.5px;
+      margin-left: -7px;
+      border-width: 7px;
+    }
+  }
+}
+
+.resource-heading {
+  display: inline-block;
+  margin: 0;
+  margin-right: 4px;
+
+  color: $color-console-text;
+  font-size: 14px;
+
+  .resource:not(.is-active) &:hover {
+    background-image: linear-gradient(to top, rgba(255,255,255,0) 1px, #999 2px, rgba(255,255,255,0) 1px);
+  }
+
+  .resource &:hover {
+    cursor: pointer;
+  }
+
+  @media only screen and (min-width: $medium-screen) {
+    margin-right: 10px;
+  }
+
+  @media only screen and (min-width: $medium-screen) {
+    font-size: 16px;
+  }
+}
+
+.resource-heading-large {
+  font-size: 16px;
+
+  @media only screen and (min-width: $medium-screen) {
+    font-size: 21px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    font-size: 24px;
+  }
+}
+
+.flag-list {
+  font-size: 0;
+}
+
+.flag-list .flag {
+  margin-left: 10px;
+}
+
+.flag {
+  display: inline-block;
+
+  padding: 2px 8px;
+  border: 1px solid $color-console-flag-border;
+  border-radius: 5px;
+
+  background: $color-console-flag-bg;
+  color: $color-console-flag-text;
+  font-size: 12px;
+}
+
+.resource-heading-flag {
+  position: relative;
+  top: -1px;
+
+  padding: 0px 3px;
+  border-radius: 3px;
+
+  background: $color-console-flag-bg;
+
+  @media only screen and (min-width: $medium-screen) {
+    top: -2px;
+
+    padding: 2px 8px;
+    border-radius: 5px;
+  }
+}
+
+.resource-heading-flag-root {
+  @media only screen and (min-width: $medium-screen) {
+    top: -3px;
+  }
+}
+
+.flag b {
+  color: $color-console-flag-text-b;
+}
+
+.resource-path-active {
+  color: $color-console-heading-text;
+}

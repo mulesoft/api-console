@@ -1,0 +1,121 @@
+.tab-list {
+  position: relative;
+  bottom: -1px;
+
+  display: flex;
+  flex-grow: 1;
+  flex-flow: row-reverse;
+  align-self: flex-end;
+  padding-left: 16px;
+
+  @media only screen and (min-width: $medium-screen) {
+    padding-left: 24px;
+  }
+}
+
+.tab {
+  position: relative;
+
+  align-self: flex-end;
+  height: 18px;
+  margin-left: -20px;
+
+  color: $color-console-tab-text;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+
+  @media only screen and (min-width: $medium-screen) {
+    height: 24px;
+    margin-left: -28px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    height: 27px;
+  }
+}
+
+.tab-label {
+  position: absolute;
+  right: 16px;
+  bottom: 2px;
+  left: 16px;
+
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
+
+  @media only screen and (min-width: $medium-screen) {
+    right: 24px;
+    bottom: 4px;
+    left: 24px;
+
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    bottom: 5px;
+
+    font-size: 14px;
+  }
+}
+
+.tab-image {
+  width: 82px;
+  height: 100%;
+
+  @media only screen and (min-width: $medium-screen) {
+    width: 112px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    width: 126px;
+  }
+}
+
+.tab-get {
+  fill: $color-console-tab-get;
+}
+
+.tab-put {
+  fill: $color-console-tab-put;
+}
+
+.tab-delete {
+  fill: $color-console-tab-delete;
+}
+
+.tab-post {
+  fill: $color-console-tab-post;
+}
+
+.tab:hover,
+.resource:not(.is-active) .tab.is-hovered {
+  .tab-get {
+    fill: $color-console-tab-get-hover;
+  }
+
+  .tab-put {
+    fill: $color-console-tab-put-hover;
+  }
+
+  .tab-delete {
+    fill: $color-console-tab-delete-hover;
+  }
+
+  .tab-post {
+    fill: $color-console-tab-post-hover;
+  }
+}
+
+.tab.is-active {
+  z-index: 1;
+
+  color: $color-console-tab-active;
+}
+
+.tab.is-active .tab-image {
+  fill: $color-console-tab-active-bg;
+}
