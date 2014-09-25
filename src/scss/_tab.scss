@@ -91,6 +91,26 @@
   fill: $color-console-tab-post;
 }
 
+.tab-patch {
+  fill: $color-console-tab-patch;
+}
+
+.tab-connect {
+  fill: $color-console-tab-connect;
+}
+
+.tab-head {
+  fill: $color-console-tab-head;
+}
+
+.tab-options {
+  fill: $color-console-tab-options;
+}
+
+.tab-trace {
+  fill: $color-console-tab-trace;
+}
+
 .tab:hover,
 .resource:not(.is-active) .tab.is-hovered {
   .tab-get {
@@ -107,6 +127,26 @@
 
   .tab-post {
     fill: $color-console-tab-post-hover;
+  }
+
+  .tab-patch {
+    fill: $color-console-tab-patch-hover;
+  }
+
+  .tab-connect {
+    fill: $color-console-tab-connect-hover;
+  }
+
+  .tab-head {
+    fill: $color-console-tab-head-hover;
+  }
+
+  .tab-options {
+    fill: $color-console-tab-options-hover;
+  }
+
+  .tab-trace {
+    fill: $color-console-tab-trace-hover;
   }
 }
 

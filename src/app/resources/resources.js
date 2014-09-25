@@ -13,8 +13,8 @@ RAML.Directives.resources = function(ramlParserWrapper) {
     },
     link: function($scope, $element) {
       ramlParserWrapper.onParseSuccess(function(raml) {
-        // TODO: Make magic here!
-        console.log(raml);
+        $scope.raml = RAML.Inspector.create(raml);
+        console.log($scope.raml);
       });
 
       ramlParserWrapper.onParseError(function(error) {

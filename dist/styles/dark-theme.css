@@ -644,6 +644,26 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   fill: #859900;
 }
 
+.tab-patch {
+  fill: #02B0E2;
+}
+
+.tab-connect {
+  fill: #E48F0A;
+}
+
+.tab-head {
+  fill: #8A45A2;
+}
+
+.tab-options {
+  fill: #1EBD77;
+}
+
+.tab-trace {
+  fill: #98B805;
+}
+
 .tab:hover .tab-get,
 .resource:not(.is-active) .tab.is-hovered .tab-get {
   fill: #5F9ACA;
@@ -659,6 +679,26 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 .tab:hover .tab-post,
 .resource:not(.is-active) .tab.is-hovered .tab-post {
   fill: #77C5A2;
+}
+.tab:hover .tab-patch,
+.resource:not(.is-active) .tab.is-hovered .tab-patch {
+  fill: #02B0E2;
+}
+.tab:hover .tab-connect,
+.resource:not(.is-active) .tab.is-hovered .tab-connect {
+  fill: #E48F0A;
+}
+.tab:hover .tab-head,
+.resource:not(.is-active) .tab.is-hovered .tab-head {
+  fill: #8A45A2;
+}
+.tab:hover .tab-options,
+.resource:not(.is-active) .tab.is-hovered .tab-options {
+  fill: #1EBD77;
+}
+.tab:hover .tab-trace,
+.resource:not(.is-active) .tab.is-hovered .tab-trace {
+  fill: #98B805;
 }
 
 .tab.is-active {
@@ -1562,6 +1602,78 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 .sidebar-action-get:hover {
   background-color: #5F9ACA;
+}
+
+.sidebar-action-put {
+  width: 47%;
+  background-color: #6c71c4;
+  letter-spacing: 2px;
+}
+.sidebar-action-put:hover {
+  background-color: #B16DBB;
+}
+
+.sidebar-action-post {
+  width: 47%;
+  background-color: #859900;
+  letter-spacing: 2px;
+}
+.sidebar-action-post:hover {
+  background-color: #77C5A2;
+}
+
+.sidebar-action-delete {
+  width: 47%;
+  background-color: #cb4b16;
+  letter-spacing: 2px;
+}
+.sidebar-action-delete:hover {
+  background-color: #EC5D5E;
+}
+
+.sidebar-action-patch {
+  width: 47%;
+  background-color: #02B0E2;
+  letter-spacing: 2px;
+}
+.sidebar-action-patch:hover {
+  background-color: #02B0E2;
+}
+
+.sidebar-action-connect {
+  width: 47%;
+  background-color: #E48F0A;
+  letter-spacing: 2px;
+}
+.sidebar-action-connect:hover {
+  background-color: #E48F0A;
+}
+
+.sidebar-action-head {
+  width: 47%;
+  background-color: #8A45A2;
+  letter-spacing: 2px;
+}
+.sidebar-action-head:hover {
+  background-color: #8A45A2;
+}
+
+.sidebar-action-options {
+  width: 47%;
+  background-color: #1EBD77;
+  letter-spacing: 2px;
+}
+.sidebar-action-options:hover {
+  background-color: #1EBD77;
+}
+
+.sidebar-action-trace {
+  width: 47%;
+  background-color: #98B805;
+  letter-spacing: 2px;
+}
+.sidebar-action-trace:hover {
+  background-color: #98B805;
 }
 
 .sidebar-action-clear {
