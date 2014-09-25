@@ -441,6 +441,86 @@
   }
 }
 
+.sidebar-action-put {
+  width: 47%;
+  background-color: $color-console-tab-put;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: $color-console-tab-put-hover;
+  }
+}
+
+.sidebar-action-post {
+  width: 47%;
+  background-color: $color-console-tab-post;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: $color-console-tab-post-hover;
+  }
+}
+
+.sidebar-action-delete {
+  width: 47%;
+  background-color: $color-console-tab-delete;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: $color-console-tab-delete-hover;
+  }
+}
+
+.sidebar-action-patch {
+  width: 47%;
+  background-color: $color-console-tab-patch;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: $color-console-tab-patch-hover;
+  }
+}
+
+.sidebar-action-connect {
+  width: 47%;
+  background-color: $color-console-tab-connect;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: $color-console-tab-connect-hover;
+  }
+}
+
+.sidebar-action-head {
+  width: 47%;
+  background-color: $color-console-tab-head;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: $color-console-tab-head-hover;
+  }
+}
+
+.sidebar-action-options {
+  width: 47%;
+  background-color: $color-console-tab-options;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: $color-console-tab-options-hover;
+  }
+}
+
+.sidebar-action-trace {
+  width: 47%;
+  background-color: $color-console-tab-trace;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: $color-console-tab-trace-hover;
+  }
+}
+
 .sidebar-action-clear {
   width: 25%;
   margin-left: 1.5%;

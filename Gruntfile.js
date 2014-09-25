@@ -16,8 +16,7 @@ module.exports = function (grunt) {
     distdir: 'dist',
     pkg: grunt.file.readJSON('package.json'),
     src: {
-      // js: ['src/**/*.js'],
-      js: ['src/app/**/*.js', 'src/common/services/**/*.js', 'src/common/factories/**/*.js'],
+      js: ['src/**/*.js'],
       jsTpl: ['<%= distdir %>/templates/**/*.js'],
       html: ['src/index.html'],
       scss: ['src/scss/light-theme.scss', 'src/scss/dark-theme.scss'],
