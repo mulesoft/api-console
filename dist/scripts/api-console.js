@@ -222,10 +222,21 @@ angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);
 angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services']);
 
+RAML.Directives.methodList = function($window) {
+  return {
+    restrict: 'E',
+    templateUrl: 'directives/method-list.tpl.html',
+    replace: true
+  };
+};
+
+angular.module('RAML.Directives')
+  .directive('methodList', ['$window', RAML.Directives.methodList]);
+
 RAML.Directives.spinner = function($window) {
   return {
     restrict: 'E',
-    templateUrl: 'common/spinner.tpl.html',
+    templateUrl: 'directives/spinner.tpl.html',
     replace: true,
     link: function($scope, $element, attrs) {
       $scope.$on("loading-started", function(e) {
@@ -245,7 +256,7 @@ angular.module('RAML.Directives')
 RAML.Directives.theme = function($window) {
   return {
     restrict: 'E',
-    templateUrl: 'common/theme-switcher.tpl.html',
+    templateUrl: 'directives/theme-switcher.tpl.html',
     replace: true,
     link: function($scope, $element, attrs) {
       $element.on('click', function(event) {
@@ -267,10 +278,26 @@ RAML.Directives.theme = function($window) {
 angular.module('RAML.Directives')
   .directive('themeSwitcher', ['$window', RAML.Directives.theme]);
 
+angular.module('raml', [])
+  .factory('ramlParser', function () {
+    return RAML.Parser;
+  });
+
+RAML.Directives.resourceType = function($window) {
+  return {
+    restrict: 'E',
+    templateUrl: 'resources/resource-type.tpl.html',
+    replace: true
+  };
+};
+
+angular.module('RAML.Directives')
+  .directive('resourceType', ['$window', RAML.Directives.resourceType]);
+
 RAML.Directives.resources = function(ramlParserWrapper) {
   return {
     restrict: 'E',
-    templateUrl: 'resources/resources-list.tpl.html',
+    templateUrl: 'resources/resources.tpl.html',
     replace: true,
     scope: {
         src: '@'
@@ -279,6 +306,26 @@ RAML.Directives.resources = function(ramlParserWrapper) {
       if ($scope.src) {
         ramlParserWrapper.load($scope.src);
       }
+
+      $scope.toggle = function ($event) {
+        var $this = jQuery($event.currentTarget);
+        var $section = $this
+          .closest('.resource-list-item')
+          .find('.resource-list');
+
+        if ($section.hasClass('is-collapsed')) {
+          $section.velocity('slideDown', {
+            duration: 200
+          });
+        } else {
+          $section.velocity('slideUp', {
+            duration: 200
+          });
+        }
+
+        $section.toggleClass('is-collapsed');
+        $this.toggleClass('is-active');
+      };
     },
     link: function($scope, $element) {
       ramlParserWrapper.onParseSuccess(function(raml) {
@@ -296,6 +343,69 @@ RAML.Directives.resources = function(ramlParserWrapper) {
 
 angular.module('RAML.Directives')
   .directive('ramlResources', RAML.Directives.resources);
+
+RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
+  var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
+
+  var load = function(file) {
+    setPromise(ramlParser.loadFile(file));
+  };
+
+  var parse = function(raml) {
+    setPromise(ramlParser.load(raml));
+  };
+
+  var onParseSuccess = function(cb) {
+    ramlProcessor = function() {
+      cb.apply(this, arguments);
+      if (!$rootScope.$$phase) {
+        // handle aggressive digesters!
+        $rootScope.$digest();
+      }
+    };
+
+    if (whenParsed) {
+      whenParsed.then(ramlProcessor);
+    }
+  };
+
+  var onParseError = function(cb) {
+    errorProcessor = function() {
+      cb.apply(this, arguments);
+      if (!$rootScope.$$phase) {
+        // handle aggressive digesters!
+        $rootScope.$digest();
+      }
+    };
+
+    if (whenParsed) {
+      whenParsed.then(undefined, errorProcessor);
+    }
+
+  };
+
+  var setPromise = function(promise) {
+    whenParsed = promise;
+
+    if (ramlProcessor || errorProcessor) {
+      whenParsed.then(ramlProcessor, errorProcessor);
+    }
+  };
+
+  $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
+    setPromise($q.when(raml));
+  });
+
+  return {
+    load: load,
+    parse: parse,
+    onParseSuccess: onParseSuccess,
+    onParseError: onParseError
+  };
+};
+
+angular.module('RAML.Services')
+  .service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
 
 'use strict';
 
@@ -1242,11 +1352,6 @@ angular.module('RAML.Directives')
   RAML.Client.Validator = Validator;
 })();
 
-angular.module('raml', [])
-  .factory('ramlParser', function () {
-    return RAML.Parser;
-  });
-
 (function() {
   'use strict';
 
@@ -1517,69 +1622,6 @@ RAML.Inspector = (function() {
   };
 })();
 
-RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
-  var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
-
-  var load = function(file) {
-    setPromise(ramlParser.loadFile(file));
-  };
-
-  var parse = function(raml) {
-    setPromise(ramlParser.load(raml));
-  };
-
-  var onParseSuccess = function(cb) {
-    ramlProcessor = function() {
-      cb.apply(this, arguments);
-      if (!$rootScope.$$phase) {
-        // handle aggressive digesters!
-        $rootScope.$digest();
-      }
-    };
-
-    if (whenParsed) {
-      whenParsed.then(ramlProcessor);
-    }
-  };
-
-  var onParseError = function(cb) {
-    errorProcessor = function() {
-      cb.apply(this, arguments);
-      if (!$rootScope.$$phase) {
-        // handle aggressive digesters!
-        $rootScope.$digest();
-      }
-    };
-
-    if (whenParsed) {
-      whenParsed.then(undefined, errorProcessor);
-    }
-
-  };
-
-  var setPromise = function(promise) {
-    whenParsed = promise;
-
-    if (ramlProcessor || errorProcessor) {
-      whenParsed.then(ramlProcessor, errorProcessor);
-    }
-  };
-
-  $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
-    setPromise($q.when(raml));
-  });
-
-  return {
-    load: load,
-    parse: parse,
-    onParseSuccess: onParseSuccess,
-    onParseError: onParseError
-  };
-};
-
-angular.module('RAML.Services')
-  .service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
-
 (function() {
   'use strict';
 
@@ -1612,17 +1654,35 @@ angular.module('RAML.Services')
 angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   'use strict';
 
-  $templateCache.put('common/spinner.tpl.html',
+  $templateCache.put('directives/method-list.tpl.html',
+    "<div class=\"tab-list\">\n" +
+    "  <a class=\"tab\" href=\"#\" ng-repeat=\"method in resource.methods\">\n" +
+    "    <svg class=\"tab-image tab-{{method.method}}\">\n" +
+    "      <use xlink:href=\"img/tab.svg#shape\" />\n" +
+    "    </svg>\n" +
+    "\n" +
+    "    <span class=\"tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
+    "  </a>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('directives/spinner.tpl.html',
     "<img src=\"img/spinner.gif\">\n"
   );
 
 
-  $templateCache.put('common/theme-switcher.tpl.html',
+  $templateCache.put('directives/theme-switcher.tpl.html',
     "<a class=\"theme-toggle\" href=\"#\">Switch Theme</a>\n"
   );
 
 
-  $templateCache.put('resources/resources-list.tpl.html',
+  $templateCache.put('resources/resource-type.tpl.html',
+    "<span ng-show=\"resource.resourceType\" class=\"flag resource-heading-flag\"><b>Type:</b> {{resource.resourceType}}</span>\n"
+  );
+
+
+  $templateCache.put('resources/resources.tpl.html',
     "<main class=\"container primary\">\n" +
     "  <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +
@@ -1630,7 +1690,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "      <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
     "        <div class=\"resource-path-container\">\n" +
-    "          <button class=\"resource-root-toggle\">\n" +
+    "          <button class=\"resource-root-toggle is-active\" ng-show=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\">\n" +
     "            <span class=\"visuallyhidden\">See Nested Resources</span>\n" +
     "          </button>\n" +
     "\n" +
@@ -1638,18 +1698,10 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            <span class=\"resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>\n" +
     "          </h2>\n" +
     "\n" +
-    "          <span ng-show=\"resource.resourceType\" class=\"flag resource-heading-flag resource-heading-flag-root\"><b>Type:</b> {{resource.resourceType}}</span>\n" +
+    "          <resource-type></resource-type>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"tab-list\">\n" +
-    "          <a class=\"tab\" href=\"#\" ng-repeat=\"method in resource.methods\">\n" +
-    "            <svg class=\"tab-image tab-{{method.method}}\">\n" +
-    "              <use xlink:href=\"img/tab.svg#shape\" />\n" +
-    "            </svg>\n" +
-    "\n" +
-    "            <span class=\"tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
-    "          </a>\n" +
-    "        </div>\n" +
+    "        <method-list></method-list>\n" +
     "\n" +
     "        <button class=\"resource-close-btn\">\n" +
     "          Close\n" +
@@ -1657,7 +1709,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      </header>\n" +
     "\n" +
     "      <!-- Child Resources -->\n" +
-    "      <ol class=\"resource-list\">\n" +
+    "      <ol class=\"resource-list is-collapsed\" style=\"display: none;\">\n" +
     "        <li class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
     "          <div class=\"resource clearfix\">\n" +
     "            <div class=\"resource-path-container\">\n" +
@@ -1665,18 +1717,10 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                <span ng-repeat-start='segment in resource.pathSegments' ng-if=\"!$last\">{{segment.toString()}}</span><span ng-repeat-end ng-if=\"$last\" class=\"resource-path-active\">{{segment.toString()}}</span>\n" +
     "              </h3>\n" +
     "\n" +
-    "              <span ng-show=\"resource.resourceType\" class=\"flag resource-heading-flag\"><b>Type:</b> {{resource.resourceType}}</span>\n" +
+    "              <resource-type></resource-type>\n" +
     "            </div>\n" +
     "\n" +
-    "            <div class=\"tab-list\">\n" +
-    "              <a class=\"tab\" href=\"#\" ng-repeat=\"method in resource.methods\">\n" +
-    "                <svg class=\"tab-image tab-{{method.method}}\">\n" +
-    "                  <use xlink:href=\"img/tab.svg#shape\" />\n" +
-    "                </svg>\n" +
-    "\n" +
-    "                <span class=\"tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
-    "              </a>\n" +
-    "            </div>\n" +
+    "            <method-list></method-list>\n" +
     "\n" +
     "            <button class=\"resource-close-btn\">\n" +
     "              Close\n" +

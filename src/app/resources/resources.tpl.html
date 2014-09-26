@@ -5,7 +5,7 @@
     <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
       <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
         <div class="resource-path-container">
-          <button class="resource-root-toggle">
+          <button class="resource-root-toggle is-active" ng-show="resourceGroup.length > 1" ng-click="toggle($event)">
             <span class="visuallyhidden">See Nested Resources</span>
           </button>
 
@@ -13,18 +13,10 @@
             <span class="resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
           </h2>
 
-          <span ng-show="resource.resourceType" class="flag resource-heading-flag resource-heading-flag-root"><b>Type:</b> {{resource.resourceType}}</span>
+          <resource-type></resource-type>
         </div>
 
-        <div class="tab-list">
-          <a class="tab" href="#" ng-repeat="method in resource.methods">
-            <svg class="tab-image tab-{{method.method}}">
-              <use xlink:href="img/tab.svg#shape" />
-            </svg>
-
-            <span class="tab-label">{{method.method.toLocaleUpperCase()}}</span>
-          </a>
-        </div>
+        <method-list></method-list>
 
         <button class="resource-close-btn">
           Close
@@ -32,7 +24,7 @@
       </header>
 
       <!-- Child Resources -->
-      <ol class="resource-list">
+      <ol class="resource-list is-collapsed" style="display: none;">
         <li class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
           <div class="resource clearfix">
             <div class="resource-path-container">
@@ -40,18 +32,10 @@
                 <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="resource-path-active">{{segment.toString()}}</span>
               </h3>
 
-              <span ng-show="resource.resourceType" class="flag resource-heading-flag"><b>Type:</b> {{resource.resourceType}}</span>
+              <resource-type></resource-type>
             </div>
 
-            <div class="tab-list">
-              <a class="tab" href="#" ng-repeat="method in resource.methods">
-                <svg class="tab-image tab-{{method.method}}">
-                  <use xlink:href="img/tab.svg#shape" />
-                </svg>
-
-                <span class="tab-label">{{method.method.toLocaleUpperCase()}}</span>
-              </a>
-            </div>
+            <method-list></method-list>
 
             <button class="resource-close-btn">
               Close

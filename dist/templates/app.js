@@ -1,17 +1,35 @@
 angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   'use strict';
 
-  $templateCache.put('common/spinner.tpl.html',
+  $templateCache.put('directives/method-list.tpl.html',
+    "<div class=\"tab-list\">\n" +
+    "  <a class=\"tab\" href=\"#\" ng-repeat=\"method in resource.methods\">\n" +
+    "    <svg class=\"tab-image tab-{{method.method}}\">\n" +
+    "      <use xlink:href=\"img/tab.svg#shape\" />\n" +
+    "    </svg>\n" +
+    "\n" +
+    "    <span class=\"tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
+    "  </a>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('directives/spinner.tpl.html',
     "<img src=\"img/spinner.gif\">\n"
   );
 
 
-  $templateCache.put('common/theme-switcher.tpl.html',
+  $templateCache.put('directives/theme-switcher.tpl.html',
     "<a class=\"theme-toggle\" href=\"#\">Switch Theme</a>\n"
   );
 
 
-  $templateCache.put('resources/resources-list.tpl.html',
+  $templateCache.put('resources/resource-type.tpl.html',
+    "<span ng-show=\"resource.resourceType\" class=\"flag resource-heading-flag\"><b>Type:</b> {{resource.resourceType}}</span>\n"
+  );
+
+
+  $templateCache.put('resources/resources.tpl.html',
     "<main class=\"container primary\">\n" +
     "  <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +
@@ -19,7 +37,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "      <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
     "        <div class=\"resource-path-container\">\n" +
-    "          <button class=\"resource-root-toggle\">\n" +
+    "          <button class=\"resource-root-toggle is-active\" ng-show=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\">\n" +
     "            <span class=\"visuallyhidden\">See Nested Resources</span>\n" +
     "          </button>\n" +
     "\n" +
@@ -27,18 +45,10 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            <span class=\"resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>\n" +
     "          </h2>\n" +
     "\n" +
-    "          <span ng-show=\"resource.resourceType\" class=\"flag resource-heading-flag resource-heading-flag-root\"><b>Type:</b> {{resource.resourceType}}</span>\n" +
+    "          <resource-type></resource-type>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"tab-list\">\n" +
-    "          <a class=\"tab\" href=\"#\" ng-repeat=\"method in resource.methods\">\n" +
-    "            <svg class=\"tab-image tab-{{method.method}}\">\n" +
-    "              <use xlink:href=\"img/tab.svg#shape\" />\n" +
-    "            </svg>\n" +
-    "\n" +
-    "            <span class=\"tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
-    "          </a>\n" +
-    "        </div>\n" +
+    "        <method-list></method-list>\n" +
     "\n" +
     "        <button class=\"resource-close-btn\">\n" +
     "          Close\n" +
@@ -46,7 +56,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      </header>\n" +
     "\n" +
     "      <!-- Child Resources -->\n" +
-    "      <ol class=\"resource-list\">\n" +
+    "      <ol class=\"resource-list is-collapsed\" style=\"display: none;\">\n" +
     "        <li class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
     "          <div class=\"resource clearfix\">\n" +
     "            <div class=\"resource-path-container\">\n" +
@@ -54,18 +64,10 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                <span ng-repeat-start='segment in resource.pathSegments' ng-if=\"!$last\">{{segment.toString()}}</span><span ng-repeat-end ng-if=\"$last\" class=\"resource-path-active\">{{segment.toString()}}</span>\n" +
     "              </h3>\n" +
     "\n" +
-    "              <span ng-show=\"resource.resourceType\" class=\"flag resource-heading-flag\"><b>Type:</b> {{resource.resourceType}}</span>\n" +
+    "              <resource-type></resource-type>\n" +
     "            </div>\n" +
     "\n" +
-    "            <div class=\"tab-list\">\n" +
-    "              <a class=\"tab\" href=\"#\" ng-repeat=\"method in resource.methods\">\n" +
-    "                <svg class=\"tab-image tab-{{method.method}}\">\n" +
-    "                  <use xlink:href=\"img/tab.svg#shape\" />\n" +
-    "                </svg>\n" +
-    "\n" +
-    "                <span class=\"tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
-    "              </a>\n" +
-    "            </div>\n" +
+    "            <method-list></method-list>\n" +
     "\n" +
     "            <button class=\"resource-close-btn\">\n" +
     "              Close\n" +

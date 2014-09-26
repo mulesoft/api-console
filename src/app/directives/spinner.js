@@ -1,7 +1,7 @@
 RAML.Directives.spinner = function($window) {
   return {
     restrict: 'E',
-    templateUrl: 'common/spinner.tpl.html',
+    templateUrl: 'directives/spinner.tpl.html',
     replace: true,
     link: function($scope, $element, attrs) {
       $scope.$on("loading-started", function(e) {
