@@ -1,7 +1,7 @@
 RAML.Directives.theme = function($window) {
   return {
     restrict: 'E',
-    templateUrl: 'common/theme-switcher.tpl.html',
+    templateUrl: 'directives/theme-switcher.tpl.html',
     replace: true,
     link: function($scope, $element, attrs) {
       $element.on('click', function(event) {
