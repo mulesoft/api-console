@@ -1,0 +1,212 @@
+  <div class="sidebar">
+    <div class="sidebar-flex-wrapper">
+      <div class="sidebar-content">
+        <header class="sidebar-row sidebar-header">
+          <h3 class="sidebar-head">
+            Try it
+            <a href="#" class="sidebar-fullscreen-toggle js-sidebar-fullscreen" ng-click="toggleSidebar($event)">
+              <img src="img/icn-expand.svg" alt="">
+              <span class="visuallyhidden">Expand</span>
+            </a>
+          </h3>
+        </header>
+
+        <!-- Show more -->
+        <div class="sidebar-show-more">
+          <p>
+            more <img src="img/icn-chevron-down.svg" alt="">
+          </p>
+        </div>
+
+        <div class="sidebar-content-wrapper">
+          <section>
+            <header class="sidebar-row sidebar-subheader sidebar-subheader-top">
+              <h4 class="sidebar-subhead">Authentication</h4>
+            </header>
+
+            <div class="sidebar-row">
+              <div class="toggle-group sidebar-toggle-group">
+                <button class="toggle toggle-mini is-active">Anonymous</button>
+                <button class="toggle toggle-mini">oauth_2_0</button>
+              </div>
+            </div>
+          </section>
+
+          <section id="sidebar-uri-parameters" ng-show="resource.uriParametersForDocumentation">
+            <header class="sidebar-row sidebar-subheader">
+              <h4 class="sidebar-subhead">URI Parameters</h4>
+            </header>
+
+            <div class="sidebar-row">
+              <p class="sidebar-input-container" ng-repeat="uriParam in resource.uriParametersForDocumentation">
+                <button class="sidebar-input-reset"><span class="visuallyhidden">Reset field</span></button>
+                <span class="sidebar-input-tooltip-container">
+                  <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
+                  <span class="sidebar-tooltip-flyout">
+                    <span>{{uriParam[0].description}}</span>
+                  </span>
+                </span>
+                <label for="{{uriParam[0].displayName}}" class="sidebar-label">{{uriParam[0].displayName}}</label>
+                <input id="{{uriParam[0].displayName}}" class="sidebar-input" ng-model="uriParameters[uriParam[0].displayName]">
+              </p>
+            </div>
+          </section>
+
+          <section id="sidebar-headers" ng-show="methodInfo.headers.plain">
+            <header class="sidebar-row sidebar-subheader">
+              <h4 class="sidebar-subhead">Headers</h4>
+            </header>
+
+            <div class="sidebar-row">
+              <p class="sidebar-input-container" ng-repeat="header in methodInfo.headers.plain">
+                <button class="sidebar-input-reset"><span class="visuallyhidden">Reset field</span></button>
+                <span class="sidebar-input-tooltip-container">
+                  <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
+                  <span class="sidebar-tooltip-flyout">
+                    <span>{{header[0].description}}</span>
+                  </span>
+                </span>
+                <label for="{{header[0].displayName}}" class="sidebar-label">{{header[0].displayName}}</label>
+                <input id="{{header[0].displayName}}" class="sidebar-input" value="{{header[0].default}}" ng-model="headers[header[0].displayName]">
+              </p>
+            </div>
+          </section>
+
+          <section id="sidebar-query-parameters" ng-show="methodInfo.queryParameters">
+            <header class="sidebar-row sidebar-subheader">
+              <h4 class="sidebar-subhead">Query Parameters</h4>
+            </header>
+
+            <div class="sidebar-row">
+              <p id="sidebar-query-parameters-all" class="sidebar-input-container" ng-repeat="queryParam in methodInfo.queryParameters">
+                <button class="sidebar-input-reset"><span class="visuallyhidden">Reset field</span></button>
+                <span class="sidebar-input-tooltip-container">
+                  <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
+                  <span class="sidebar-tooltip-flyout">
+                    <span>{{queryParam[0].description}}</span>
+                  </span>
+                </span>
+                <label for="{{queryParam[0].displayName}}" class="sidebar-label">{{queryParam[0].displayName}}</label>
+                <input id="{{queryParam[0].displayName}}" class="sidebar-input" ng-model="queryParameters[queryParam[0].displayName]">
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <header class="sidebar-row sidebar-subheader">
+              <h4 class="sidebar-subhead">Request URI</h4>
+            </header>
+
+            <div class="sidebar-row">
+              <p class="sidebar-response-item sidebar-request-url">https://api.github.com/notifications?<b>all</b>=<i>true</i></p>
+
+              <div class="sidebar-action-group">
+                <button class="sidebar-action sidebar-action-get">GET</button>
+                <button class="sidebar-action sidebar-action-clear">Clear</button>
+                <button class="sidebar-action sidebar-action-reset">Reset</button>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <header class="sidebar-row sidebar-header">
+              <h3 class="sidebar-head sidebar-head-expand">
+                <button class="sidebar-expand-btn is-collapsed js-toggle-request-metadata" ng-click="toggleRequestMetadata($event)">
+                  Request
+                </button>
+              </h3>
+              <button class="resource-btn">Copy</button>
+            </header>
+            <div class="sidebar-request-metadata">
+
+              <div class="sidebar-row">
+                <h3 class="sidebar-response-head">Headers</h3>
+                <div class="sidebar-response-item">
+                  <p class="sidebar-response-metadata">
+                    <b>Accept:</b> <br>bytes
+                  </p>
+                  <p class="sidebar-response-metadata">
+                    <b>X-GitHub-Media-Type:</b> <br>keep-alive
+                  </p>
+                  <p class="sidebar-response-metadata">
+                    <b>X-GitHub-Request-Id:</b> <br>gzip
+                  </p>
+                  <p class="sidebar-response-metadata">
+                    <b>X-RateLimit-Limit:</b> <br>86
+                  </p>
+                  <p class="sidebar-response-metadata">
+                    <b>X-RateLimit-Remaining:</b> <br>application/json; charset=utf-8
+                  </p>
+                  <p class="sidebar-response-metadata">
+                    <b>X-RateLimit-Reset:</b> <br>Thu, 05 Jun 2014 02:09:20 GMT
+                  </p>
+                </div>
+
+                <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
+                <pre class="sidebar-pre"><code>Some Code Here</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <header class="sidebar-row sidebar-header">
+              <h3 class="sidebar-head">Response</h3>
+            </header>
+
+            <div class="sidebar-row">
+              <h3 class="sidebar-response-head">Status</h3>
+              <p class="sidebar-response-item">200</p>
+
+              <h3 class="sidebar-response-head">Headers</h3>
+              <div class="sidebar-response-item">
+                <p class="sidebar-response-metadata">
+                  <b>accept-ranges:</b> <br>bytes
+                </p>
+                <p class="sidebar-response-metadata">
+                  <b>connection:</b> <br>keep-alive
+                </p>
+                <p class="sidebar-response-metadata">
+                  <b>content-encoding:</b> <br>gzip
+                </p>
+                <p class="sidebar-response-metadata">
+                  <b>content-length:</b> <br>86
+                </p>
+                <p class="sidebar-response-metadata">
+                  <b>content-type:</b> <br>application/json; charset=utf-8
+                </p>
+                <p class="sidebar-response-metadata">
+                  <b>date:</b> <br>Thu, 05 Jun 2014 02:09:20 GMT
+                </p>
+                <p class="sidebar-response-metadata">
+                  <b>strict-transport-security:</b> <br>max-age=631138519
+                </p>
+                <p class="sidebar-response-metadata">
+                  <b>x-varnish-cache:</b> <br>MISS
+                </p>
+              </p>
+            </div>
+
+            <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
+            <pre class="sidebar-pre"><code>Some Code Here</code></pre>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Sidebar control to intermediate view -->
+    <div class="sidebar-controls sidebar-controls-collapse js-sidebar-collapse-toggle" ng-click="collapseSidebar($event)">
+      <button class="collapse">
+        <span class="discoverable">Try it</span>
+        <img src="img/icn-expand.svg" alt="">
+      </button>
+    </div>
+
+    <!-- Sidebar control to full-screen/full-width view -->
+    <div class="sidebar-controls sidebar-controls-fullscreen js-sidebar-fullscreen">
+      <button class="collapse">
+        <span class="discoverable">Try it</span>
+        <img src="img/icn-expand.svg" alt="">
+      </button>
+    </div>
+  </div>
+</div>

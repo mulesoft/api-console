@@ -37,6 +37,10 @@
       }
     });
 
+    if(Object.keys(filtered.plain).length === 0) {
+      filtered.plain = null;
+    }
+
     return filtered;
   }
 

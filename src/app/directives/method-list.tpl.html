@@ -1,5 +1,5 @@
 <div class="tab-list">
-  <a class="tab" href="#" ng-repeat="method in resource.methods">
+  <a class="tab" href="#" ng-repeat="method in resource.methods" ng-click="showResource($event, $index)">
     <svg class="tab-image tab-{{method.method}}">
       <use xlink:href="img/tab.svg#shape" />
     </svg>

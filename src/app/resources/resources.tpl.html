@@ -5,9 +5,7 @@
     <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
       <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
         <div class="resource-path-container">
-          <button class="resource-root-toggle is-active" ng-show="resourceGroup.length > 1" ng-click="toggle($event)">
-            <span class="visuallyhidden">See Nested Resources</span>
-          </button>
+          <button class="resource-root-toggle is-active" ng-show="resourceGroup.length > 1" ng-click="toggle($event)"></button>
 
           <h2 class="resource-heading resource-heading-large">
             <span class="resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
@@ -17,11 +15,10 @@
         </div>
 
         <method-list></method-list>
-
-        <button class="resource-close-btn">
-          Close
-        </button>
+        <close-button></close-button>
       </header>
+
+      <resource-panel></resource-panel>
 
       <!-- Child Resources -->
       <ol class="resource-list is-collapsed" style="display: none;">
@@ -36,11 +33,10 @@
             </div>
 
             <method-list></method-list>
-
-            <button class="resource-close-btn">
-              Close
-            </button>
+            <close-button></close-button>
           </div>
+
+          <resource-panel></resource-panel>
         </li>
       </ol>
 
