@@ -1,3 +1,12 @@
+.resource-body-heading > span {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.resource-body-heading > span.isActive {
+  background: #bbbbbb;
+}
+
 .resource-panel {
   position: relative;
 
@@ -219,6 +228,7 @@
 }
 
 .resource-btn {
+  text-decoration: none;
   margin: 0 5px 0 0;
   padding: 5px 10px 6px 10px;
   border: 1px solid $color-toggle-border;

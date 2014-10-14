@@ -77,6 +77,10 @@ RAML.Inspector = (function() {
         return accum;
       }, {});
 
+    if (Object.keys(clone.uriParametersForDocumentation).length === 0) {
+      clone.uriParametersForDocumentation = null;
+    }
+
     clone.toString = function() {
       return this.pathSegments.map(function(segment) { return segment.toString(); }).join('');
     };
