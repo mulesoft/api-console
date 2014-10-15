@@ -95,7 +95,7 @@
           <section>
             <div class="sidebar-row">
               <div class="sidebar-action-group">
-                <button class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt()">{{methodInfo.method.toUpperCase()}}</button>
+                <button class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)">{{methodInfo.method.toUpperCase()}}</button>
                 <button class="sidebar-action sidebar-action-clear" ng-click="clearFields()">Clear</button>
                 <button class="sidebar-action sidebar-action-reset" ng-click="resetFields()">Reset</button>
               </div>
@@ -109,7 +109,6 @@
                   Request
                 </button>
               </h3>
-              <button class="resource-btn">Copy</button>
             </header>
             <div class="sidebar-request-metadata">
 

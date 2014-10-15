@@ -88,15 +88,15 @@ RAML.Directives.sidebar = function($window) {
         $scope.context.headers.reset($scope.methodInfo.headers.plain);
       };
 
-      //// TODO: Switch try-it to fullscreen
       //// TOOD: Add an spinner to the response tab
-      //// TODO: Request tab should be automatically open
-      $scope.tryIt = function () {
+      $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
         var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
 
         $scope.requestEnd = false;
+        $scope.toggleSidebar($event, true);
+        $scope.toggleRequestMetadata($event, true);
 
         try {
           var pathBuilder = context.pathBuilder;
@@ -134,7 +134,7 @@ RAML.Directives.sidebar = function($window) {
         );
       };
 
-      $scope.toggleSidebar = function ($event) {
+      $scope.toggleSidebar = function ($event, fullscreenEnable) {
         var $this = jQuery($event.currentTarget);
         var $panel = $this.closest('.resource-panel');
         var $sidebar = $panel.find('.sidebar');
@@ -145,7 +145,7 @@ RAML.Directives.sidebar = function($window) {
           sidebarWidth = 430;
         }
 
-        if ($sidebar.hasClass('is-fullscreen')) {
+        if ($sidebar.hasClass('is-fullscreen') && !fullscreenEnable) {
           $sidebar.velocity(
             { width: sidebarWidth },
             {
@@ -153,6 +153,8 @@ RAML.Directives.sidebar = function($window) {
               complete: completeAnimation
             }
           );
+          $sidebar.removeClass('is-fullscreen');
+          $panel.removeClass('has-sidebar-fullscreen');
         } else {
           $sidebar.velocity(
             { width: '100%' },
@@ -161,10 +163,9 @@ RAML.Directives.sidebar = function($window) {
               complete: completeAnimation
             }
           );
+          $sidebar.addClass('is-fullscreen');
+          $panel.addClass('has-sidebar-fullscreen');
         }
-
-        $sidebar.toggleClass('is-fullscreen');
-        $panel.toggleClass('has-sidebar-fullscreen');
       };
 
       $scope.collapseSidebar = function ($event) {
@@ -212,19 +213,22 @@ RAML.Directives.sidebar = function($window) {
         $panel.toggleClass('has-sidebar-collapsed');
       };
 
-      $scope.toggleRequestMetadata = function ($event) {
+      $scope.toggleRequestMetadata = function ($event, enabled) {
         var $this = jQuery($event.currentTarget);
+        var $btn = $this.closest('.sidebar-content-wrapper').find('.js-toggle-request-metadata');
         var $panel = $this.closest('.resource-panel');
         var $metadata = $panel.find('.sidebar-request-metadata');
 
         $metadata.toggleClass('is-active');
 
-        if (!$metadata.hasClass('is-active')) {
-          $this.removeClass('is-open');
-          $this.addClass('is-collapsed');
+        if (!$metadata.hasClass('is-active') && !enabled) {
+          $btn.removeClass('is-open');
+          $btn.addClass('is-collapsed');
+          $metadata.removeClass('is-active');
         } else {
-          $this.removeClass('is-collapsed');
-          $this.addClass('is-open');
+          $btn.removeClass('is-collapsed');
+          $btn.addClass('is-open');
+          $metadata.addClass('is-active');
         }
       };
     }

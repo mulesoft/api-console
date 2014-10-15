@@ -997,6 +997,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .resource-panel {
   position: relative;
+  min-height: 500px;
   display: none;
   border: solid #ccc;
   border-width: 0 1px 1px;

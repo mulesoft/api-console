@@ -226,7 +226,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "          <section>\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"sidebar-action-group\">\n" +
-    "                <button class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt()\">{{methodInfo.method.toUpperCase()}}</button>\n" +
+    "                <button class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\">{{methodInfo.method.toUpperCase()}}</button>\n" +
     "                <button class=\"sidebar-action sidebar-action-clear\" ng-click=\"clearFields()\">Clear</button>\n" +
     "                <button class=\"sidebar-action sidebar-action-reset\" ng-click=\"resetFields()\">Reset</button>\n" +
     "              </div>\n" +
@@ -240,7 +240,6 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  Request\n" +
     "                </button>\n" +
     "              </h3>\n" +
-    "              <button class=\"resource-btn\">Copy</button>\n" +
     "            </header>\n" +
     "            <div class=\"sidebar-request-metadata\">\n" +
     "\n" +
