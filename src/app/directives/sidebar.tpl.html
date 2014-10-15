@@ -39,7 +39,7 @@
 
             <div class="sidebar-row">
               <p class="sidebar-input-container" ng-repeat="uriParam in resource.uriParametersForDocumentation">
-                <button class="sidebar-input-reset"><span class="visuallyhidden">Reset field</span></button>
+                <button class="sidebar-input-reset" ng-click="resetUriParameter(uriParam)"><span class="visuallyhidden">Reset field</span></button>
                 <span class="sidebar-input-tooltip-container">
                   <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
@@ -59,7 +59,7 @@
 
             <div class="sidebar-row">
               <p class="sidebar-input-container" ng-repeat="header in methodInfo.headers.plain">
-                <button class="sidebar-input-reset"><span class="visuallyhidden">Reset field</span></button>
+                <button class="sidebar-input-reset" ng-click="resetHeader(header)"><span class="visuallyhidden">Reset field</span></button>
                 <span class="sidebar-input-tooltip-container">
                   <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
@@ -79,7 +79,7 @@
 
             <div class="sidebar-row">
               <p id="sidebar-query-parameters-all" class="sidebar-input-container" ng-repeat="queryParam in methodInfo.queryParameters">
-                <button class="sidebar-input-reset"><span class="visuallyhidden">Reset field</span></button>
+                <button class="sidebar-input-reset" ng-click="resetQueryParam(queryParam)"><span class="visuallyhidden">Reset field</span></button>
                 <span class="sidebar-input-tooltip-container">
                   <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
