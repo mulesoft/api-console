@@ -10,6 +10,8 @@
 .resource-panel {
   position: relative;
 
+  min-height: 500px;
+
   display: none;
   border: solid $color-resource-border;
   border-width: 0 1px 1px;
