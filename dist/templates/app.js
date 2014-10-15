@@ -12,8 +12,8 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "<div class=\"resource-panel-primary\">\n" +
     "  <div class=\"resource-panel-subheader resource-panel-primary-row clearfix\">\n" +
     "    <ul class=\"flag-list resource-panel-flag-list\">\n" +
-    "      <li class=\"flag\"><b>Type:</b> collection</li>\n" +
-    "      <li class=\"flag\"><b>Trait:</b> filterable</li>\n" +
+    "      <li class=\"flag\" ng-show=\"resource.resourceType\"><b>Type:</b> {{resource.resourceType}}</li>\n" +
+    "      <li class=\"flag\" ng-show=\"methodInfo.is\"><b>Trait:</b> {{methodInfo.is.join(', ')}}</li>\n" +
     "    </ul>\n" +
     "  </div>\n" +
     "\n" +
@@ -198,7 +198,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{header[0].displayName}}\" class=\"sidebar-label\">{{header[0].displayName}}</label>\n" +
-    "                <input id=\"{{header[0].displayName}}\" class=\"sidebar-input\" value=\"{{header[0].default}}\" ng-model=\"headers[header[0].displayName]\">\n" +
+    "                <input id=\"{{header[0].displayName}}\" class=\"sidebar-input\" ng-model=\"context.headers.values[header[0].displayName][0]\">\n" +
     "              </p>\n" +
     "            </div>\n" +
     "          </section>\n" +
@@ -218,23 +218,17 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{queryParam[0].displayName}}\" class=\"sidebar-label\">{{queryParam[0].displayName}}</label>\n" +
-    "                <input id=\"{{queryParam[0].displayName}}\" class=\"sidebar-input\" ng-model=\"queryParameters[queryParam[0].displayName]\">\n" +
+    "                <input id=\"{{queryParam[0].displayName}}\" class=\"sidebar-input\" ng-model=\"context.queryParameters.values[queryParam[0].displayName][0]\">\n" +
     "              </p>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
     "          <section>\n" +
-    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
-    "              <h4 class=\"sidebar-subhead\">Request URI</h4>\n" +
-    "            </header>\n" +
-    "\n" +
     "            <div class=\"sidebar-row\">\n" +
-    "              <p class=\"sidebar-response-item sidebar-request-url\">https://api.github.com/notifications?<b>all</b>=<i>true</i></p>\n" +
-    "\n" +
     "              <div class=\"sidebar-action-group\">\n" +
-    "                <button class=\"sidebar-action sidebar-action-get\">GET</button>\n" +
-    "                <button class=\"sidebar-action sidebar-action-clear\">Clear</button>\n" +
-    "                <button class=\"sidebar-action sidebar-action-reset\">Reset</button>\n" +
+    "                <button class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt()\">{{methodInfo.method.toUpperCase()}}</button>\n" +
+    "                <button class=\"sidebar-action sidebar-action-clear\" ng-click=\"clearFields()\">Clear</button>\n" +
+    "                <button class=\"sidebar-action sidebar-action-reset\" ng-click=\"resetFields()\">Reset</button>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "          </section>\n" +
@@ -251,26 +245,20 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            <div class=\"sidebar-request-metadata\">\n" +
     "\n" +
     "              <div class=\"sidebar-row\">\n" +
-    "                <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
-    "                <div class=\"sidebar-response-item\">\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>Accept:</b> <br>bytes\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-GitHub-Media-Type:</b> <br>keep-alive\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-GitHub-Request-Id:</b> <br>gzip\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-RateLimit-Limit:</b> <br>86\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-RateLimit-Remaining:</b> <br>application/json; charset=utf-8\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-RateLimit-Reset:</b> <br>Thu, 05 Jun 2014 02:09:20 GMT\n" +
-    "                  </p>\n" +
+    "                <div>\n" +
+    "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Request URI</h3>\n" +
+    "                  <div class=\"sidebar-response-item\">\n" +
+    "                    <p class=\"sidebar-response-metadata\">{{requestOptions.url}}</p>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div ng-show=\"requestOptions.headers\">\n" +
+    "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
+    "                  <div class=\"sidebar-response-item\">\n" +
+    "                    <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
+    "                      <b>{{key}}:</b> <br>{{value[0]}}\n" +
+    "                    </p>\n" +
+    "                  </div>\n" +
     "                </div>\n" +
     "\n" +
     "                <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
@@ -284,41 +272,20 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "              <h3 class=\"sidebar-head\">Response</h3>\n" +
     "            </header>\n" +
     "\n" +
-    "            <div class=\"sidebar-row\">\n" +
+    "            <div class=\"sidebar-row sidebar-response\" ng-class=\"{'is-active':requestEnd}\">\n" +
     "              <h3 class=\"sidebar-response-head\">Status</h3>\n" +
-    "              <p class=\"sidebar-response-item\">200</p>\n" +
+    "              <p class=\"sidebar-response-item\">{{response.status}}</p>\n" +
     "\n" +
     "              <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
     "              <div class=\"sidebar-response-item\">\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>accept-ranges:</b> <br>bytes\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>connection:</b> <br>keep-alive\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>content-encoding:</b> <br>gzip\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>content-length:</b> <br>86\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>content-type:</b> <br>application/json; charset=utf-8\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>date:</b> <br>Thu, 05 Jun 2014 02:09:20 GMT\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>strict-transport-security:</b> <br>max-age=631138519\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>x-varnish-cache:</b> <br>MISS\n" +
+    "                <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in response.headers\">\n" +
+    "                  <b>{{key}}:</b> <br>{{value}}\n" +
     "                </p>\n" +
     "              </p>\n" +
     "            </div>\n" +
     "\n" +
     "            <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "            <pre class=\"sidebar-pre\"><code>Some Code Here</code></pre>\n" +
+    "            <pre class=\"sidebar-pre\"><code>{{response.body}}</code></pre>\n" +
     "          </div>\n" +
     "        </section>\n" +
     "      </div>\n" +

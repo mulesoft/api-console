@@ -140,6 +140,7 @@ traits:
   /repositories:
     type: collection
     get:
+      is: [filterable]
       description: Search repositories.
       queryParameters:
         q:
@@ -782,7 +783,9 @@ traits:
 # Events
 /events:
   type: collection
+  is: [filterable]
   get:
+   is: [filterable, historical]
    description: List public events.
    responses:
     200:

@@ -5,9 +5,6 @@ RAML.Directives.resourcePanel = function($window) {
     replace: true,
     controller: function($scope) {
       $scope.uriParameters = {};
-      $scope.headers = {};
-      $scope.queryParameters = {};
-      console.log($scope.resource);
     }
   };
 };

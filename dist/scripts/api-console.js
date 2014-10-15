@@ -24,6 +24,7 @@
 RAML.Directives = {};
 RAML.Services = {};
 RAML.Filters = {};
+RAML.Services.TryIt = {};
 
 angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);
@@ -128,8 +129,6 @@ RAML.Directives.methodList = function($window) {
           }
         });
 
-        console.log(responseInfo);
-
         return responseInfo;
       };
 
@@ -142,10 +141,11 @@ RAML.Directives.methodList = function($window) {
 
         $scope.methodInfo = $scope.resource.methods[$index];
         $scope.responseInfo = getResponseInfo();
-
-        console.log('-----');
-        console.log($scope.methodInfo);
-        console.log('-----');
+        $scope.context = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
+        $scope.requestUrl = '';
+        $scope.response = {};
+        $scope.requestOptions = {};
+        $scope.resetFields();
 
         if (!$resource.hasClass('is-active')) {
           $closingEl = $inactiveElements
@@ -187,9 +187,6 @@ RAML.Directives.resourcePanel = function($window) {
     replace: true,
     controller: function($scope) {
       $scope.uriParameters = {};
-      $scope.headers = {};
-      $scope.queryParameters = {};
-      console.log($scope.resource);
     }
   };
 };
@@ -203,6 +200,136 @@ RAML.Directives.sidebar = function($window) {
     templateUrl: 'directives/sidebar.tpl.html',
     replace: true,
     controller: function ($scope) {
+      function completeAnimation (element) {
+        jQuery(element).removeAttr('style');
+      };
+
+      function parseHeaders(headers) {
+        var parsed = {}, key, val, i;
+
+        if (!headers) {
+          return parsed;
+        }
+
+        headers.split('\n').forEach(function(line) {
+          i = line.indexOf(':');
+          key = line.substr(0, i).trim().toLowerCase();
+          val = line.substr(i + 1).trim();
+
+          if (key) {
+            if (parsed[key]) {
+              parsed[key] += ', ' + val;
+            } else {
+              parsed[key] = val;
+            }
+          }
+        });
+
+        return parsed;
+      };
+
+      function apply () {
+        $scope.$apply.apply($scope, arguments);
+      };
+
+      function handleResponse(jqXhr) {
+        $scope.response.body = jqXhr.responseText,
+        $scope.response.status = jqXhr.status,
+        $scope.response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
+
+        if ($scope.response.headers['content-type']) {
+          $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
+        }
+
+        $scope.requestEnd = true;
+
+        apply();
+      };
+
+      function resolveSegementContexts(pathSegments, uriParameters) {
+        var segmentContexts = [];
+
+        pathSegments.forEach(function (element) {
+          if (element.templated) {
+            Object.keys(element.parameters).map(function (key) {
+              var segment = {};
+              segment[key] = uriParameters[key];
+              segmentContexts.push(segment);
+            });
+          } else {
+            segmentContexts.push({});
+          }
+        });
+
+        return segmentContexts;
+      };
+
+      $scope.clearFields = function () {
+        $scope.uriParameters = {};
+        $scope.context.queryParameters.clear();
+        $scope.context.headers.clear();
+      };
+
+      $scope.resetFields = function () {
+        var uriParameters = $scope.resource.uriParametersForDocumentation;
+
+        if (uriParameters) {
+          Object.keys(uriParameters).map(function (key) {
+            var param = uriParameters[key][0];
+            $scope.uriParameters[param.displayName] = param['default'];
+          });
+        }
+
+        $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
+        $scope.context.headers.reset($scope.methodInfo.headers.plain);
+      };
+
+      //// TODO: Switch try-it to fullscreen
+      //// TOOD: Add an spinner to the response tab
+      //// TODO: Request tab should be automatically open
+      $scope.tryIt = function () {
+        var url;
+        var context = $scope.context;
+        var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
+
+        $scope.requestEnd = false;
+
+        try {
+          var pathBuilder = context.pathBuilder;
+          var client = RAML.Client.create($scope.raml, function(client) {
+            client.baseUriParameters(pathBuilder.baseUriContext);
+          });
+          url = client.baseUri + pathBuilder(segmentContexts);
+        } catch (e) {
+          $scope.response = {};
+          return;
+        }
+
+        var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
+
+        if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
+          request.queryParams(context.queryParameters.data());
+        }
+
+        if (!RAML.Utils.isEmpty(context.headers.data())) {
+          request.headers(context.headers.data());
+        }
+
+        //// Fix Body
+        if (context.bodyContent) {
+          request.header('Content-Type', context.bodyContent.selected);
+          request.data(context.bodyContent.data());
+        }
+
+        $scope.requestOptions = request.toOptions();
+        // $scope.request.requestUrl = requestOptions.url;
+
+        jQuery.ajax($scope.requestOptions).then(
+          function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+          function(jqXhr) { handleResponse(jqXhr); }
+        );
+      };
+
       $scope.toggleSidebar = function ($event) {
         var $this = jQuery($event.currentTarget);
         var $panel = $this.closest('.resource-panel');
@@ -400,7 +527,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
     link: function($scope, $element) {
       ramlParserWrapper.onParseSuccess(function(raml) {
         $scope.raml = RAML.Inspector.create(raml);
-        console.log($scope.raml);
+        // console.log($scope.raml);
       });
 
       ramlParserWrapper.onParseError(function(error) {
@@ -1246,12 +1373,13 @@ angular.module('RAML.Services')
 
       if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.url.match('\\?') ? '&' : '?');
-        o.url = options.url + separator + $.param(queryParams, true);
+        o.url = options.url + separator + jQuery.param(queryParams, true);
       }
 
-      if (!RAML.Services.Config.config.disableProxy && RAML.Settings.proxy) {
-        o.url = RAML.Settings.proxy + o.url;
-      }
+      //// TODO: Fix it
+      // if (!RAML.Services.Config.config.disableProxy && RAML.Settings.proxy) {
+      //   o.url = RAML.Settings.proxy + o.url;
+      // }
 
       return o;
     };
@@ -1703,6 +1831,254 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
+  var FORM_URLENCODED = 'application/x-www-form-urlencoded';
+  var FORM_DATA = 'multipart/form-data';
+
+  var BodyContent = function(contentTypes) {
+    this.contentTypes = Object.keys(contentTypes);
+    this.selected = this.contentTypes[0];
+
+    var definitions = this.definitions = {};
+    this.contentTypes.forEach(function(contentType) {
+      var definition = contentTypes[contentType] || {};
+
+      switch (contentType) {
+      case FORM_URLENCODED:
+      case FORM_DATA:
+        definitions[contentType] = new RAML.Services.TryIt.NamedParameters(definition.formParameters);
+        break;
+      default:
+        definitions[contentType] = new RAML.Services.TryIt.BodyType(definition);
+      }
+    });
+  };
+
+  BodyContent.prototype.isForm = function(contentType) {
+    return contentType === FORM_URLENCODED || contentType === FORM_DATA;
+  };
+
+  BodyContent.prototype.isSelected = function(contentType) {
+    return contentType === this.selected;
+  };
+
+  BodyContent.prototype.fillWithExample = function($event) {
+    $event.preventDefault();
+    this.definitions[this.selected].fillWithExample();
+  };
+
+  BodyContent.prototype.hasExample = function(contentType) {
+    return this.definitions[contentType].hasExample();
+  };
+
+  BodyContent.prototype.data = function() {
+    if (this.selected) {
+      return this.definitions[this.selected].data();
+    }
+  };
+
+  BodyContent.prototype.copyFrom = function(oldContent) {
+    var content = this;
+
+    oldContent.contentTypes.forEach(function(contentType) {
+      if (content.definitions[contentType]) {
+        content.definitions[contentType].copyFrom(oldContent.definitions[contentType]);
+      }
+    });
+
+    if (this.contentTypes.some(function(contentType) { return contentType === oldContent.selected; })) {
+      this.selected = oldContent.selected;
+    }
+  };
+
+  RAML.Services.TryIt.BodyContent = BodyContent;
+})();
+
+(function() {
+  'use strict';
+
+  var BodyType = function(contentType) {
+    this.contentType = contentType || {};
+    this.value = undefined;
+  };
+
+  BodyType.prototype.fillWithExample = function() {
+    this.value = this.contentType.example;
+  };
+
+  BodyType.prototype.hasExample = function() {
+    return !!this.contentType.example;
+  };
+
+  BodyType.prototype.data = function() {
+    return this.value;
+  };
+
+  BodyType.prototype.copyFrom = function(oldBodyType) {
+    this.value = oldBodyType.value;
+  };
+
+  RAML.Services.TryIt.BodyType = BodyType;
+})();
+
+(function() {
+  'use strict';
+
+  var Context = function(resource, method) {
+    this.headers = new RAML.Services.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
+    this.queryParameters = new RAML.Services.TryIt.NamedParameters(method.queryParameters);
+    if (method.body) {
+      this.bodyContent = new RAML.Services.TryIt.BodyContent(method.body);
+    }
+
+    this.pathBuilder = new RAML.Client.PathBuilder.create(resource.pathSegments);
+    this.pathBuilder.baseUriContext = {};
+    this.pathBuilder.segmentContexts = resource.pathSegments.map(function() {
+      return {};
+    });
+  };
+
+  Context.prototype.merge = function(oldContext) {
+    this.headers.copyFrom(oldContext.headers);
+    this.queryParameters.copyFrom(oldContext.queryParameters);
+    if (this.bodyContent && oldContext.bodyContent) {
+      this.bodyContent.copyFrom(oldContext.bodyContent);
+    }
+
+    this.pathBuilder.baseUriContext = oldContext.pathBuilder.baseUriContext;
+    this.pathBuilder.segmentContexts = oldContext.pathBuilder.segmentContexts;
+  };
+
+  RAML.Services.TryIt.Context = Context;
+})();
+
+(function() {
+  'use strict';
+
+  var NamedParameter = function(definitions) {
+    this.definitions = definitions;
+    this.selected = definitions[0].type;
+  };
+
+  NamedParameter.prototype.hasMultipleTypes = function() {
+    return this.definitions.length > 1;
+  };
+
+  NamedParameter.prototype.isSelected = function(definition) {
+    return this.selected === definition.type;
+  };
+
+  RAML.Services.TryIt.NamedParameter = NamedParameter;
+})();
+
+(function() {
+  'use strict';
+
+  function copy(object) {
+    var shallow = {};
+    Object.keys(object || {}).forEach(function(key) {
+      shallow[key] = new RAML.Services.TryIt.NamedParameter(object[key]);
+    });
+
+    return shallow;
+  }
+
+  function filterEmpty(object) {
+    var copy = {};
+
+    Object.keys(object).forEach(function(key) {
+      var values = object[key].filter(function(value) {
+        return value !== undefined && value !== null && (typeof value !== 'string' || value.trim().length > 0);
+      });
+
+      if (values.length > 0) {
+        copy[key] = values;
+      }
+    });
+
+    return copy;
+  }
+
+  var NamedParameters = function(plain, parameterized) {
+    this.plain = copy(plain);
+    this.parameterized = parameterized;
+
+    Object.keys(parameterized || {}).forEach(function(key) {
+      parameterized[key].created = [];
+    });
+
+    this.values = {};
+    Object.keys(this.plain).forEach(function(key) {
+      this.values[key] = [undefined];
+    }.bind(this));
+  };
+
+  NamedParameters.prototype.clear = function () {
+    var that = this;
+    Object.keys(this.values).map(function (key) {
+      that.values[key] = [''];
+    })
+  };
+
+  NamedParameters.prototype.reset = function (info) {
+    var that = this;
+    if (info) {
+      Object.keys(info).map(function (key) {
+        var defaultValue = info[key][0]['default'];
+        that.values[key][0] = defaultValue;
+      });
+    }
+  };
+
+  NamedParameters.prototype.create = function(name, value) {
+    var parameters = this.parameterized[name];
+
+    var definition = parameters.map(function(parameterizedHeader) {
+      return parameterizedHeader.create(value);
+    });
+
+    var parameterizedName = definition[0].displayName;
+
+    parameters.created.push(parameterizedName);
+    this.plain[parameterizedName] = new RAML.Services.TryIt.NamedParameter(definition);
+    this.values[parameterizedName] = [undefined];
+  };
+
+  NamedParameters.prototype.remove = function(name) {
+    delete this.plain[name];
+    delete this.values[name];
+    return;
+  };
+
+  NamedParameters.prototype.data = function() {
+    return filterEmpty(this.values);
+  };
+
+  NamedParameters.prototype.copyFrom = function(oldParameters) {
+    var parameters = this;
+
+    Object.keys(oldParameters.parameterized || {}).forEach(function(key) {
+      if (parameters.parameterized[key]) {
+        oldParameters.parameterized[key].created.forEach(function(createdParam) {
+          parameters.plain[createdParam] = oldParameters.plain[createdParam];
+        });
+      }
+    });
+
+    var keys = Object.keys(oldParameters.plain || {}).filter(function(key) {
+      return parameters.plain[key];
+    });
+
+    keys.forEach(function(key) {
+      parameters.values[key] = oldParameters.values[key];
+    });
+  };
+
+  RAML.Services.TryIt.NamedParameters = NamedParameters;
+})();
+
+(function() {
+  'use strict';
+
   function Clone() {}
 
   RAML.Utils = {
@@ -1743,8 +2119,8 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "<div class=\"resource-panel-primary\">\n" +
     "  <div class=\"resource-panel-subheader resource-panel-primary-row clearfix\">\n" +
     "    <ul class=\"flag-list resource-panel-flag-list\">\n" +
-    "      <li class=\"flag\"><b>Type:</b> collection</li>\n" +
-    "      <li class=\"flag\"><b>Trait:</b> filterable</li>\n" +
+    "      <li class=\"flag\" ng-show=\"resource.resourceType\"><b>Type:</b> {{resource.resourceType}}</li>\n" +
+    "      <li class=\"flag\" ng-show=\"methodInfo.is\"><b>Trait:</b> {{methodInfo.is.join(', ')}}</li>\n" +
     "    </ul>\n" +
     "  </div>\n" +
     "\n" +
@@ -1929,7 +2305,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{header[0].displayName}}\" class=\"sidebar-label\">{{header[0].displayName}}</label>\n" +
-    "                <input id=\"{{header[0].displayName}}\" class=\"sidebar-input\" value=\"{{header[0].default}}\" ng-model=\"headers[header[0].displayName]\">\n" +
+    "                <input id=\"{{header[0].displayName}}\" class=\"sidebar-input\" ng-model=\"context.headers.values[header[0].displayName][0]\">\n" +
     "              </p>\n" +
     "            </div>\n" +
     "          </section>\n" +
@@ -1949,23 +2325,17 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{queryParam[0].displayName}}\" class=\"sidebar-label\">{{queryParam[0].displayName}}</label>\n" +
-    "                <input id=\"{{queryParam[0].displayName}}\" class=\"sidebar-input\" ng-model=\"queryParameters[queryParam[0].displayName]\">\n" +
+    "                <input id=\"{{queryParam[0].displayName}}\" class=\"sidebar-input\" ng-model=\"context.queryParameters.values[queryParam[0].displayName][0]\">\n" +
     "              </p>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
     "          <section>\n" +
-    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
-    "              <h4 class=\"sidebar-subhead\">Request URI</h4>\n" +
-    "            </header>\n" +
-    "\n" +
     "            <div class=\"sidebar-row\">\n" +
-    "              <p class=\"sidebar-response-item sidebar-request-url\">https://api.github.com/notifications?<b>all</b>=<i>true</i></p>\n" +
-    "\n" +
     "              <div class=\"sidebar-action-group\">\n" +
-    "                <button class=\"sidebar-action sidebar-action-get\">GET</button>\n" +
-    "                <button class=\"sidebar-action sidebar-action-clear\">Clear</button>\n" +
-    "                <button class=\"sidebar-action sidebar-action-reset\">Reset</button>\n" +
+    "                <button class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt()\">{{methodInfo.method.toUpperCase()}}</button>\n" +
+    "                <button class=\"sidebar-action sidebar-action-clear\" ng-click=\"clearFields()\">Clear</button>\n" +
+    "                <button class=\"sidebar-action sidebar-action-reset\" ng-click=\"resetFields()\">Reset</button>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "          </section>\n" +
@@ -1982,26 +2352,20 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            <div class=\"sidebar-request-metadata\">\n" +
     "\n" +
     "              <div class=\"sidebar-row\">\n" +
-    "                <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
-    "                <div class=\"sidebar-response-item\">\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>Accept:</b> <br>bytes\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-GitHub-Media-Type:</b> <br>keep-alive\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-GitHub-Request-Id:</b> <br>gzip\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-RateLimit-Limit:</b> <br>86\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-RateLimit-Remaining:</b> <br>application/json; charset=utf-8\n" +
-    "                  </p>\n" +
-    "                  <p class=\"sidebar-response-metadata\">\n" +
-    "                    <b>X-RateLimit-Reset:</b> <br>Thu, 05 Jun 2014 02:09:20 GMT\n" +
-    "                  </p>\n" +
+    "                <div>\n" +
+    "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Request URI</h3>\n" +
+    "                  <div class=\"sidebar-response-item\">\n" +
+    "                    <p class=\"sidebar-response-metadata\">{{requestOptions.url}}</p>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div ng-show=\"requestOptions.headers\">\n" +
+    "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
+    "                  <div class=\"sidebar-response-item\">\n" +
+    "                    <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
+    "                      <b>{{key}}:</b> <br>{{value[0]}}\n" +
+    "                    </p>\n" +
+    "                  </div>\n" +
     "                </div>\n" +
     "\n" +
     "                <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
@@ -2015,41 +2379,20 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "              <h3 class=\"sidebar-head\">Response</h3>\n" +
     "            </header>\n" +
     "\n" +
-    "            <div class=\"sidebar-row\">\n" +
+    "            <div class=\"sidebar-row sidebar-response\" ng-class=\"{'is-active':requestEnd}\">\n" +
     "              <h3 class=\"sidebar-response-head\">Status</h3>\n" +
-    "              <p class=\"sidebar-response-item\">200</p>\n" +
+    "              <p class=\"sidebar-response-item\">{{response.status}}</p>\n" +
     "\n" +
     "              <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
     "              <div class=\"sidebar-response-item\">\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>accept-ranges:</b> <br>bytes\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>connection:</b> <br>keep-alive\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>content-encoding:</b> <br>gzip\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>content-length:</b> <br>86\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>content-type:</b> <br>application/json; charset=utf-8\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>date:</b> <br>Thu, 05 Jun 2014 02:09:20 GMT\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>strict-transport-security:</b> <br>max-age=631138519\n" +
-    "                </p>\n" +
-    "                <p class=\"sidebar-response-metadata\">\n" +
-    "                  <b>x-varnish-cache:</b> <br>MISS\n" +
+    "                <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in response.headers\">\n" +
+    "                  <b>{{key}}:</b> <br>{{value}}\n" +
     "                </p>\n" +
     "              </p>\n" +
     "            </div>\n" +
     "\n" +
     "            <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "            <pre class=\"sidebar-pre\"><code>Some Code Here</code></pre>\n" +
+    "            <pre class=\"sidebar-pre\"><code>{{response.body}}</code></pre>\n" +
     "          </div>\n" +
     "        </section>\n" +
     "      </div>\n" +

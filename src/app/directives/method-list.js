@@ -21,8 +21,6 @@ RAML.Directives.methodList = function($window) {
           }
         });
 
-        console.log(responseInfo);
-
         return responseInfo;
       };
 
@@ -35,10 +33,11 @@ RAML.Directives.methodList = function($window) {
 
         $scope.methodInfo = $scope.resource.methods[$index];
         $scope.responseInfo = getResponseInfo();
-
-        console.log('-----');
-        console.log($scope.methodInfo);
-        console.log('-----');
+        $scope.context = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
+        $scope.requestUrl = '';
+        $scope.response = {};
+        $scope.requestOptions = {};
+        $scope.resetFields();
 
         if (!$resource.hasClass('is-active')) {
           $closingEl = $inactiveElements
