@@ -55,11 +55,11 @@ RAML.Directives.sidebar = function($window) {
 
         pathSegments.forEach(function (element) {
           if (element.templated) {
+            var segment = {};
             Object.keys(element.parameters).map(function (key) {
-              var segment = {};
               segment[key] = uriParameters[key];
-              segmentContexts.push(segment);
             });
+            segmentContexts.push(segment);
           } else {
             segmentContexts.push({});
           }
@@ -88,7 +88,32 @@ RAML.Directives.sidebar = function($window) {
         $scope.context.headers.reset($scope.methodInfo.headers.plain);
       };
 
+      $scope.resetQueryParam = function (queryParam) {
+        $scope.context.queryParameters.reset($scope.methodInfo.queryParameters, queryParam[0].displayName);
+      };
+
+      $scope.resetHeader = function (header) {
+        $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].displayName);
+      };
+
+      $scope.resetUriParameter = function (uriParam) {
+        // $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].displayName);
+        var uriParameters = $scope.resource.uriParametersForDocumentation;
+
+        if (uriParameters) {
+          Object.keys(uriParameters).filter(function (key) {
+            return key === uriParam[0].displayName;
+          }).map(function (key) {
+            var param = uriParameters[key][0];
+            $scope.uriParameters[param.displayName] = param['default'];
+          });
+        }
+      };
+
       //// TOOD: Add an spinner to the response tab
+      //// TODO: More should disapear once the scroll is on bottom
+      //// TODO: Add an spinner for RAML loading
+      //// TODO: Show RAML errors
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;

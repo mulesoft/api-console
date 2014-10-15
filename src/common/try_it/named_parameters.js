@@ -47,12 +47,17 @@
     })
   };
 
-  NamedParameters.prototype.reset = function (info) {
+  NamedParameters.prototype.reset = function (info, field) {
     var that = this;
     if (info) {
       Object.keys(info).map(function (key) {
-        var defaultValue = info[key][0]['default'];
-        that.values[key][0] = defaultValue;
+        if (typeof field === 'undefined') {
+          var defaultValue = info[key][0]['default'];
+          that.values[key][0] = defaultValue;
+        } else if(field === key) {
+          var defaultValue = info[key][0]['default'];
+          that.values[key][0] = defaultValue;
+        }
       });
     }
   };

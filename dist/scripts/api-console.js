@@ -251,11 +251,11 @@ RAML.Directives.sidebar = function($window) {
 
         pathSegments.forEach(function (element) {
           if (element.templated) {
+            var segment = {};
             Object.keys(element.parameters).map(function (key) {
-              var segment = {};
               segment[key] = uriParameters[key];
-              segmentContexts.push(segment);
             });
+            segmentContexts.push(segment);
           } else {
             segmentContexts.push({});
           }
@@ -284,7 +284,32 @@ RAML.Directives.sidebar = function($window) {
         $scope.context.headers.reset($scope.methodInfo.headers.plain);
       };
 
+      $scope.resetQueryParam = function (queryParam) {
+        $scope.context.queryParameters.reset($scope.methodInfo.queryParameters, queryParam[0].displayName);
+      };
+
+      $scope.resetHeader = function (header) {
+        $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].displayName);
+      };
+
+      $scope.resetUriParameter = function (uriParam) {
+        // $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].displayName);
+        var uriParameters = $scope.resource.uriParametersForDocumentation;
+
+        if (uriParameters) {
+          Object.keys(uriParameters).filter(function (key) {
+            return key === uriParam[0].displayName;
+          }).map(function (key) {
+            var param = uriParameters[key][0];
+            $scope.uriParameters[param.displayName] = param['default'];
+          });
+        }
+      };
+
       //// TOOD: Add an spinner to the response tab
+      //// TODO: More should disapear once the scroll is on bottom
+      //// TODO: Add an spinner for RAML loading
+      //// TODO: Show RAML errors
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
@@ -2023,12 +2048,17 @@ RAML.Inspector = (function() {
     })
   };
 
-  NamedParameters.prototype.reset = function (info) {
+  NamedParameters.prototype.reset = function (info, field) {
     var that = this;
     if (info) {
       Object.keys(info).map(function (key) {
-        var defaultValue = info[key][0]['default'];
-        that.values[key][0] = defaultValue;
+        if (typeof field === 'undefined') {
+          var defaultValue = info[key][0]['default'];
+          that.values[key][0] = defaultValue;
+        } else if(field === key) {
+          var defaultValue = info[key][0]['default'];
+          that.values[key][0] = defaultValue;
+        }
       });
     }
   };
@@ -2281,7 +2311,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p class=\"sidebar-input-container\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
-    "                <button class=\"sidebar-input-reset\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <button class=\"sidebar-input-reset\" ng-click=\"resetUriParameter(uriParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
@@ -2301,7 +2331,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p class=\"sidebar-input-container\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
-    "                <button class=\"sidebar-input-reset\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <button class=\"sidebar-input-reset\" ng-click=\"resetHeader(header)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
@@ -2321,7 +2351,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p id=\"sidebar-query-parameters-all\" class=\"sidebar-input-container\" ng-repeat=\"queryParam in methodInfo.queryParameters\">\n" +
-    "                <button class=\"sidebar-input-reset\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <button class=\"sidebar-input-reset\" ng-click=\"resetQueryParam(queryParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +

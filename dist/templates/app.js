@@ -170,7 +170,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p class=\"sidebar-input-container\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
-    "                <button class=\"sidebar-input-reset\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <button class=\"sidebar-input-reset\" ng-click=\"resetUriParameter(uriParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
@@ -190,7 +190,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p class=\"sidebar-input-container\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
-    "                <button class=\"sidebar-input-reset\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <button class=\"sidebar-input-reset\" ng-click=\"resetHeader(header)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
@@ -210,7 +210,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p id=\"sidebar-query-parameters-all\" class=\"sidebar-input-container\" ng-repeat=\"queryParam in methodInfo.queryParameters\">\n" +
-    "                <button class=\"sidebar-input-reset\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <button class=\"sidebar-input-reset\" ng-click=\"resetQueryParam(queryParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
