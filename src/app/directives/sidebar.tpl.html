@@ -67,7 +67,7 @@
                   </span>
                 </span>
                 <label for="{{header[0].displayName}}" class="sidebar-label">{{header[0].displayName}}</label>
-                <input id="{{header[0].displayName}}" class="sidebar-input" value="{{header[0].default}}" ng-model="headers[header[0].displayName]">
+                <input id="{{header[0].displayName}}" class="sidebar-input" ng-model="context.headers.values[header[0].displayName][0]">
               </p>
             </div>
           </section>
@@ -87,23 +87,17 @@
                   </span>
                 </span>
                 <label for="{{queryParam[0].displayName}}" class="sidebar-label">{{queryParam[0].displayName}}</label>
-                <input id="{{queryParam[0].displayName}}" class="sidebar-input" ng-model="queryParameters[queryParam[0].displayName]">
+                <input id="{{queryParam[0].displayName}}" class="sidebar-input" ng-model="context.queryParameters.values[queryParam[0].displayName][0]">
               </p>
             </div>
           </section>
 
           <section>
-            <header class="sidebar-row sidebar-subheader">
-              <h4 class="sidebar-subhead">Request URI</h4>
-            </header>
-
             <div class="sidebar-row">
-              <p class="sidebar-response-item sidebar-request-url">https://api.github.com/notifications?<b>all</b>=<i>true</i></p>
-
               <div class="sidebar-action-group">
-                <button class="sidebar-action sidebar-action-get">GET</button>
-                <button class="sidebar-action sidebar-action-clear">Clear</button>
-                <button class="sidebar-action sidebar-action-reset">Reset</button>
+                <button class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt()">{{methodInfo.method.toUpperCase()}}</button>
+                <button class="sidebar-action sidebar-action-clear" ng-click="clearFields()">Clear</button>
+                <button class="sidebar-action sidebar-action-reset" ng-click="resetFields()">Reset</button>
               </div>
             </div>
           </section>
@@ -120,26 +114,20 @@
             <div class="sidebar-request-metadata">
 
               <div class="sidebar-row">
-                <h3 class="sidebar-response-head">Headers</h3>
-                <div class="sidebar-response-item">
-                  <p class="sidebar-response-metadata">
-                    <b>Accept:</b> <br>bytes
-                  </p>
-                  <p class="sidebar-response-metadata">
-                    <b>X-GitHub-Media-Type:</b> <br>keep-alive
-                  </p>
-                  <p class="sidebar-response-metadata">
-                    <b>X-GitHub-Request-Id:</b> <br>gzip
-                  </p>
-                  <p class="sidebar-response-metadata">
-                    <b>X-RateLimit-Limit:</b> <br>86
-                  </p>
-                  <p class="sidebar-response-metadata">
-                    <b>X-RateLimit-Remaining:</b> <br>application/json; charset=utf-8
-                  </p>
-                  <p class="sidebar-response-metadata">
-                    <b>X-RateLimit-Reset:</b> <br>Thu, 05 Jun 2014 02:09:20 GMT
-                  </p>
+                <div>
+                  <h3 class="sidebar-response-head sidebar-response-head-pre">Request URI</h3>
+                  <div class="sidebar-response-item">
+                    <p class="sidebar-response-metadata">{{requestOptions.url}}</p>
+                  </div>
+                </div>
+
+                <div ng-show="requestOptions.headers">
+                  <h3 class="sidebar-response-head">Headers</h3>
+                  <div class="sidebar-response-item">
+                    <p class="sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
+                      <b>{{key}}:</b> <br>{{value[0]}}
+                    </p>
+                  </div>
                 </div>
 
                 <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
@@ -153,41 +141,20 @@
               <h3 class="sidebar-head">Response</h3>
             </header>
 
-            <div class="sidebar-row">
+            <div class="sidebar-row sidebar-response" ng-class="{'is-active':requestEnd}">
               <h3 class="sidebar-response-head">Status</h3>
-              <p class="sidebar-response-item">200</p>
+              <p class="sidebar-response-item">{{response.status}}</p>
 
               <h3 class="sidebar-response-head">Headers</h3>
               <div class="sidebar-response-item">
-                <p class="sidebar-response-metadata">
-                  <b>accept-ranges:</b> <br>bytes
-                </p>
-                <p class="sidebar-response-metadata">
-                  <b>connection:</b> <br>keep-alive
-                </p>
-                <p class="sidebar-response-metadata">
-                  <b>content-encoding:</b> <br>gzip
-                </p>
-                <p class="sidebar-response-metadata">
-                  <b>content-length:</b> <br>86
-                </p>
-                <p class="sidebar-response-metadata">
-                  <b>content-type:</b> <br>application/json; charset=utf-8
-                </p>
-                <p class="sidebar-response-metadata">
-                  <b>date:</b> <br>Thu, 05 Jun 2014 02:09:20 GMT
-                </p>
-                <p class="sidebar-response-metadata">
-                  <b>strict-transport-security:</b> <br>max-age=631138519
-                </p>
-                <p class="sidebar-response-metadata">
-                  <b>x-varnish-cache:</b> <br>MISS
+                <p class="sidebar-response-metadata" ng-repeat="(key, value) in response.headers">
+                  <b>{{key}}:</b> <br>{{value}}
                 </p>
               </p>
             </div>
 
             <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-            <pre class="sidebar-pre"><code>Some Code Here</code></pre>
+            <pre class="sidebar-pre"><code>{{response.body}}</code></pre>
           </div>
         </section>
       </div>

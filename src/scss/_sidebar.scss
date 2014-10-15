@@ -776,6 +776,14 @@
   }
 }
 
+.sidebar-response {
+  display: none;
+
+  &.is-active {
+    display: block;
+  }
+}
+
 .sidebar-response-head {
   margin: 0;
   margin-bottom: 2px;

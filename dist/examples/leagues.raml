@@ -1,0 +1,572 @@
+#%RAML 0.8
+title: "La Liga"
+version: "1.0"
+baseUri: "http://localhost:3000/api"
+/teams:
+  displayName: Teams
+  get:
+    description: Obtain information from a collection of teams simultaneously
+    queryParameters:
+      city:
+        description: |
+          Filter the list of teams by home city.
+        type: string
+        required: false
+        default: BAR
+        example: Barcelona
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/draft-03/schema",
+                "items": {
+                  "description": "The team is the basic unit for keeping track of a roster of players. With the Team APIs, you can obtain team-related information, like the team name, stats, points, and more.",
+                  "name": "Team",
+                  "properties": {
+                    "homeCity": {
+                      "description": "Name of the city to which this team belongs",
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "A three-letter code that identifies the team id",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "Name of the team",
+                      "type": "string"
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "homeCity"
+                    ],
+                    "stadium": {
+                      "description": "Name of the stadium",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "name": "Teams",
+                "required": true,
+                "type": "array"
+              }
+            example: |
+              [{
+                "name": "Athletic Bilbao",
+                "id": "ATH",
+                "homeCity": "Bilbao",
+                "stadium": "San Mames"
+              },
+              {
+                "name": "Atletico Madrid",
+                "id": "ATL",
+                "homeCity": "Madrid",
+                "stadium": "Vicente Calderon"
+              },
+              {
+                "name": "Barcelona",
+                "id": "BAR",
+                "homeCity": "Barcelona",
+                "stadium": "Camp Nou"
+              },
+              {
+                "name": "Betis",
+                "id": "BET",
+                "homeCity": "Seville",
+                "stadium": "Benito Villamarin"
+              },
+              {
+                "name": "Espanyol",
+                "id": "ESP",
+                "homeCity": "Barcelona",
+                "stadium": "Cornella-El Prat"
+              },
+              {
+                "name": "Getafe",
+                "id": "GET",
+                "homeCity": "Getafe",
+                "stadium": "Coliseum Alfonso Perez"
+              },
+              {
+                "name": "Granada",
+                "id": "GRA",
+                "homeCity": "Granada",
+                "stadium": "Nuevo Los Carmenes"
+              },
+              {
+                "name": "Levante",
+                "id": "LEV",
+                "homeCity": "Valencia",
+                "stadium": "Ciutat de Valencia"
+              },
+              {
+                "name": "Malaga",
+                "id": "MAL",
+                "homeCity": "Malaga",
+                "stadium": "La Roselda"
+              },
+              {
+                "name": "Mallorca",
+                "id": "MAL",
+                "homeCity": "Palma",
+                "stadium": "Iberostar Stadium"
+              },
+              {
+                "name": "Osasuna",
+                "id": "OSA",
+                "homeCity": "Pamplona",
+                "stadium": "El Sadar"
+              },
+              {
+                "name": "Racing Santander",
+                "id": "RAC",
+                "homeCity": "Santander",
+                "stadium": "El Sardinero"
+              },
+              {
+                "name": "Rayo Vallecano",
+                "id": "RAY",
+                "homeCity": "Madrid",
+                "stadium": "Campo de Vallecas"
+              },
+              {
+                "name": "Real Madrid",
+                "id": "RMA",
+                "homeCity": "Madrid",
+                "stadium": "Santiago Bernabeu"
+              },
+              {
+                "name": "Real Sociedad",
+                "id": "RSC",
+                "homeCity": "San Sebastian",
+                "stadium": "Anoeta"
+              },
+              {
+                "name": "Sevilla",
+                "id": "SEV",
+                "homeCity": "Seville",
+                "stadium": "Ramon Sanchez Pizjuan"
+              },
+              {
+                "name": "Sporting de Gijon",
+                "id": "SPG",
+                "homeCity": "Gijon",
+                "stadium": "El Molinon"
+              },
+              {
+                "name": "Valencia",
+                "id": "VAL",
+                "homeCity": "Valencia",
+                "stadium": "Mestalla"
+              },
+              {
+                "name": "Villareal",
+                "id": "VIL",
+                "homeCity": "Vila-real",
+                "stadium": "El Madrigal"
+              },
+              {
+                "name": "Zaragoza",
+                "id": "ZAR",
+                "homeCity": "Zaragoza",
+                "stadium": "La Romareda"
+              }]
+  post:
+    description: Add a new team to the league
+    body:
+      application/json:
+        example: |
+          {
+            "name": "Barcelona",
+            "id": "BAR",
+            "homeCity": "Barcelona",
+            "stadium": "Camp Nou"
+          }
+        schema: |
+          {
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "properties": {
+              "homeCity": {
+                "description": "Name of the city to which this team belongs",
+                "type": "string"
+              },
+              "id": {
+                "description": "A three-letter code that identifies the team id",
+                "maxLength": 3,
+                "minLength": 3,
+                "type": "string"
+              },
+              "name": {
+                "description": "Name of the team",
+                "type": "string"
+              },
+              "stadium": {
+                "description": "Name of the stadium",
+                "type": "string"
+              }
+            },
+            "type": "object",
+            "name": "Team"
+          }
+    responses:
+      201:
+        description: |
+          The team has been succesfully created
+        headers:
+          Location:
+            type: string
+            description: Location of the newly created team
+        body:
+          application/json:
+            example: |
+              {
+                "name": test"
+              }
+      409:
+        description: |
+          The team already exists
+  /{teamId}:
+    displayName: Team
+    #description: |
+    #  The team is the basic unit for keeping track of a roster of players that are participating together in La Liga. With the Team APIs, you can obtain team-related information, like the team name, stats, points, and more.
+    uriParameters:
+      teamId:
+        description: |
+          Three letter code that identifies the team.
+        type: string
+        minLength: 3
+        maxLength: 3
+        example: BAR
+    get:
+      description: Retrieve team-related information such as the name, the home city, the stadium, current position, and other statistical information about a team.
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "name": "Barcelona",
+                  "id": "BAR",
+                  "homeCity": "Barcelona",
+                  "stadium": "Camp Nou",
+                  "matches": 24
+                }
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/draft-03/schema",
+                  "properties": {
+                    "homeCity": {
+                      "description": "Name of the city to which this team belongs",
+                      "type": "string"
+                    },
+                    "matches": {
+                      "description": "The total number of matches that has been played by this team between all seasons",
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "id": {
+                      "description": "A three-letter code that identifies the team id",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "Name of the team",
+                      "type": "string"
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "homeCity"
+                    ],
+                    "stadium": {
+                      "description": "Name of the stadium",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object",
+                  "name": "Team"
+                }
+        404:
+          description: |
+            Unable to find a team with that identifier
+    put:
+      description: Update team details such as the name of the home stadium, or the name of the team itself.
+      body:
+        application/json:
+          example: |
+            {
+              "name": "Barcelona",
+              "stadium": "Camp Nou"
+            }
+          schema: |
+            {
+              "$schema": "http://json-schema.org/draft-03/schema",
+              "properties": {
+                  "homeCity": {
+                    "description": "Name of the city to which this team belongs",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "Name of the team",
+                    "type": "string"
+                  },
+                  "stadium": {
+                    "description": "Name of the stadium",
+                    "type": "string"
+                  }
+              },
+              "type": "object",
+              "name": "Team"
+            }
+      responses:
+        204:
+          description: |
+            The team has been succesfully updated
+        404:
+          description: |
+            Unable to find a team with that identifier
+    delete:
+      description: Remove a team from the league. Notice that this operation is non-reversible and all data associated with the team, including its statistics will be lost. Use with caution.
+      responses:
+        204:
+          description: |
+            The resource has been succesfully removed.
+        404:
+          description: |
+            Unable to find a team with that identifier
+/positions:
+  displayName: Position Table
+  get:
+    description: Retrieve the current standing for the current season
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              [{
+                "position": 1,
+                "team": "BAR",
+                "points": 36,
+                "matchesPlayed": 12,
+                "matchesWon": 10,
+                "matchesDraw": 0,
+                "matchesLost": 2,
+                "goalsInFavor": 15,
+                "goalsAgainst": 6
+              },
+              {
+                "position": 2,
+                "team": "RMA",
+                "points": 34,
+                "matchesPlayed": 12,
+                "matchesWon": 11,
+                "matchesDraw": 1,
+                "matchesLost": 2,
+                "goalsInFavor": 14,
+                "goalsAgainst": 3
+              }]
+            schema: |
+              {
+                "$schema": "http://json-schema.org/draft-03/schema",
+                "items": {
+                  "description": "An standing position of a team whitin a tournament",
+                  "name": "Position",
+                  "properties": {
+                      "position": {
+                        "description": "Current ranking",
+                        "type": "integer"
+                      },
+                      "team": {
+                        "description": "Code of the team in the current position",
+                        "type": "string",
+                        "maxLength": 3,
+                        "minLength": 3
+                      },
+                      "points": {
+                        "description": "Number of points accumulated to date",
+                        "type": "integer"
+                      },
+                      "matchesPlayed": {
+                        "description": "Number of matches played to date",
+                        "type": "integer"
+                      },
+                      "matchesWon": {
+                        "description": "Number of matches won to date",
+                        "type": "integer"
+                      },
+                      "matchesLost": {
+                        "description": "Number of matches lost to date",
+                        "type": "integer"
+                      },
+                      "matchesDraw": {
+                        "description": "Number of matches draw to date",
+                        "type": "integer"
+                      },
+                      "goalsInFavor": {
+                        "description": "Number of goals scored against other teams",
+                        "type": "integer"
+                      },
+                      "goalsAgainst": {
+                        "description": "Number of goals scored by other teams against this team",
+                        "type": "integer"
+                      }
+                  },
+                  "type": "object"
+                },
+                "name": "Positions",
+                "required": true,
+                "type": "array"
+              }
+
+/fixture:
+  displayName: Fixture
+  #description: |
+  #  A collection of teams that are participating in La Liga. Teams API allow you add, remove and retrieve individual team information from La Liga.
+  get:
+    description: Retrieve a list of matches for the current season
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              [{
+                "homeTeam": "BAR",
+                "awayTeam": "RMA",
+                "date": "2014-01-12T20:00:00"
+              }]
+            schema: |
+              {
+                "$schema": "http://json-schema.org/draft-03/schema",
+                "items": {
+                  "description": "A match between two teams in the league.",
+                  "name": "Match",
+                  "properties": {
+                    "homeTeam": {
+                      "description": "Code of the home team",
+                      "type": "string",
+                      "maxLength": 3,
+                      "minLength": 3
+                    },
+                    "awayTeam": {
+                      "description": "Code of the away team",
+                      "type": "string",
+                      "maxLength": 3,
+                      "minLength": 3
+                    },
+                    "date": {
+                      "description": "The date on which the match will be played",
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "type": "object"
+                },
+                "name": "Matches",
+                "required": true,
+                "type": "array"
+              }
+
+  /{homeTeamId}/{awayTeamId}:
+    displayName: Match
+    uriParameters:
+      homeTeamId:
+        description: Id of the team that plays in its home stadium
+        type: string
+        minLength: 3
+        maxLength: 3
+        example: BAR
+      awayTeamId:
+        description: Id of the away team
+        type: string
+        minLength: 3
+        maxLength: 3
+        example: RMA
+    get:
+      description: Retrieve details of the match between the two teams
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                [{
+                  "homeTeam": "BAR",
+                  "awayTeam": "RMA",
+                  "date": "2014-01-12T20:00:00",
+                  "homeTeamScore": 3,
+                  "awayTeamScore": 0,
+                }]
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/draft-03/schema",
+                  "properties": {
+                    "homeTeam": {
+                      "description": "Code of the home team",
+                      "type": "string",
+                      "maxLength": 3,
+                      "minLength": 3
+                    },
+                    "awayTeam": {
+                      "description": "Code of the away team",
+                      "type": "string",
+                      "maxLength": 3,
+                      "minLength": 3
+                    },
+                    "date": {
+                      "description": "The date on which the match will be played",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "homeTeamScore": {
+                      "description": "Goals scored by the home team",
+                      "type": "integer"
+                    },
+                    "awayTeamScore": {
+                      "description": "Goals scored by the away tam",
+                      "type": "integer"
+                    }
+                  },
+                  "required": true,
+                  "type": "object"
+                }
+    put:
+      description: Update match results. Can only be done after the game has ended.
+      body:
+        application/json:
+            example: |
+              {
+                "homeTeamScore": 3,
+                "awayTeamScore": 0
+              }
+            schema: |
+              {
+                "$schema": "http://json-schema.org/draft-03/schema",
+                "properties": {
+                  "homeTeamScore": {
+                    "description": "Goals scored by the home team",
+                    "type": "integer"
+                  },
+                  "awayTeamScore": {
+                    "description": "Goals scored by the away tam",
+                    "type": "integer"
+                  }
+                },
+                "required": true,
+                "type": "object"
+              }
+
+      responses:
+        204:
+          description: |
+            Match successfully updated
+        404:
+          description: |
+            The match cannot be found
+        409:
+          description: |
+            Cannot update match before the match is actually played.

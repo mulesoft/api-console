@@ -21,6 +21,7 @@
 RAML.Directives = {};
 RAML.Services = {};
 RAML.Filters = {};
+RAML.Services.TryIt = {};
 
 angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);

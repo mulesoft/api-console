@@ -1,8 +1,8 @@
 <div class="resource-panel-primary">
   <div class="resource-panel-subheader resource-panel-primary-row clearfix">
     <ul class="flag-list resource-panel-flag-list">
-      <li class="flag"><b>Type:</b> collection</li>
-      <li class="flag"><b>Trait:</b> filterable</li>
+      <li class="flag" ng-show="resource.resourceType"><b>Type:</b> {{resource.resourceType}}</li>
+      <li class="flag" ng-show="methodInfo.is"><b>Trait:</b> {{methodInfo.is.join(', ')}}</li>
     </ul>
   </div>
 

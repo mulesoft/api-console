@@ -3,11 +3,6 @@
 title: Twitter API
 version: "1.1"
 baseUri: https://api.twitter.com/{version}
-# baseUri: https://{apiDomain}.twitter.com/{version}/
-# baseUriParameters:
-#   apiDomain:
-#     description: The sub-domain at which the API is accessible.
-#     enum: [ "api" ]
 securitySchemes:
   - oauth_1_0:
       description: |
@@ -15345,7 +15340,7 @@ traits:
       description: |
         Returns a cursored collection of user objects for every user the specified
         user is following (otherwise known as their "friends").
-        At this time, results are ordered with the most recent following first - 
+        At this time, results are ordered with the most recent following first -
         however, this ordering is subject to unannounced change and eventual consistency
         issues. Results are given in groups of 20 users and multiple "pages" of results
         can be navigated through using the next_cursor value in subsequent requests.
@@ -16270,7 +16265,7 @@ traits:
       description: |
         Returns a cursored collection of user IDs for every user following the
         specified user.
-        At this time, results are ordered with the most recent following first - 
+        At this time, results are ordered with the most recent following first -
         however, this ordering is subject to unannounced change and eventual
         consistency issues. Results are given in groups of 5,000 user IDs and
         multiple "pages" of results can be navigated through using the next_cursor
@@ -16392,7 +16387,7 @@ traits:
       description: |
         Returns a cursored collection of user objects for users following the
         specified user.
-        At this time, results are ordered with the most recent following first - 
+        At this time, results are ordered with the most recent following first -
         however, this ordering is subject to unannounced change and eventual
         consistency issues. Results are given in groups of 20 users and multiple
         "pages" of results can be navigated through using the next_cursor value in

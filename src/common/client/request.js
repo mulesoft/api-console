@@ -84,12 +84,13 @@
 
       if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.url.match('\\?') ? '&' : '?');
-        o.url = options.url + separator + $.param(queryParams, true);
+        o.url = options.url + separator + jQuery.param(queryParams, true);
       }
 
-      if (!RAML.Services.Config.config.disableProxy && RAML.Settings.proxy) {
-        o.url = RAML.Settings.proxy + o.url;
-      }
+      //// TODO: Fix it
+      // if (!RAML.Services.Config.config.disableProxy && RAML.Settings.proxy) {
+      //   o.url = RAML.Settings.proxy + o.url;
+      // }
 
       return o;
     };
