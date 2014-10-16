@@ -25,4 +25,22 @@ RAML.Services.TryIt = {};
 
 angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);
-angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services']);
+angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'hc.marked']);
+
+// Marked Config
+var renderer = new window.marked.Renderer();
+
+renderer.paragraph = function (text, level) {
+  return text;
+};
+
+window.marked.setOptions({
+  renderer: renderer,
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});

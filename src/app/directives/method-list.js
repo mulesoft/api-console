@@ -39,8 +39,8 @@ RAML.Directives.methodList = function($window) {
         $scope.requestOptions = {};
         $scope.resetFields();
         $scope.requestEnd = false;
-
-        console.log($scope.methodInfo);
+        $scope.showRequestMetadata = false;
+        $scope.showMoreEnable = true;
 
         if (!$resource.hasClass('is-active')) {
           $closingEl = $inactiveElements

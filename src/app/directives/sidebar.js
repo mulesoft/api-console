@@ -3,6 +3,21 @@ RAML.Directives.sidebar = function($window) {
     restrict: 'E',
     templateUrl: 'directives/sidebar.tpl.html',
     replace: true,
+    link: function ($scope, $element) {
+      var el = angular.element(angular.element($element.children().children()[0]).children()[2]);
+
+      el.bind('scroll', function ($event) {
+        var $el = $event.srcElement;
+
+        if ($el.scrollHeight === $el.offsetHeight + $el.scrollTop) {
+          $scope.showMoreEnable = false;
+        } else {
+          $scope.showMoreEnable = true;
+        }
+
+        $scope.$apply.apply($scope, null);
+      });
+    },
     controller: function ($scope) {
       function completeAnimation (element) {
         jQuery(element).removeAttr('style');
@@ -46,6 +61,7 @@ RAML.Directives.sidebar = function($window) {
         }
 
         $scope.requestEnd = true;
+        $scope.showMoreEnable = true;
 
         apply();
       };
@@ -72,7 +88,10 @@ RAML.Directives.sidebar = function($window) {
         $scope.uriParameters = {};
         $scope.context.queryParameters.clear();
         $scope.context.headers.clear();
-        $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
+
+        if ($scope.context.bodyContent) {
+          $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
+        }
       };
 
       $scope.resetFields = function () {
@@ -127,10 +146,12 @@ RAML.Directives.sidebar = function($window) {
 
       //// TODO: Add support for form-parameters
       //// TOOD: Add an spinner to the response tab
-      //// TODO: More should disapear once the scroll is on bottom
       //// TODO: Add an spinner for RAML loading
       //// TODO: Show RAML errors
       //// TODO: Show required errors!
+      //// TODO: Scroll to the current window
+      //// TODO: Remove jQuery code as much as possible
+      //// TOOD: Add a code highligther
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
@@ -160,14 +181,12 @@ RAML.Directives.sidebar = function($window) {
           request.headers(context.headers.data());
         }
 
-        //// Fix Body
         if (context.bodyContent) {
           request.header('Content-Type', context.bodyContent.selected);
           request.data(context.bodyContent.data());
         }
 
         $scope.requestOptions = request.toOptions();
-        // $scope.request.requestUrl = requestOptions.url;
 
         jQuery.ajax($scope.requestOptions).then(
           function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
@@ -254,22 +273,11 @@ RAML.Directives.sidebar = function($window) {
         $panel.toggleClass('has-sidebar-collapsed');
       };
 
-      $scope.toggleRequestMetadata = function ($event, enabled) {
-        var $this = jQuery($event.currentTarget);
-        var $btn = $this.closest('.sidebar-content-wrapper').find('.js-toggle-request-metadata');
-        var $panel = $this.closest('.resource-panel');
-        var $metadata = $panel.find('.sidebar-request-metadata');
-
-        $metadata.toggleClass('is-active');
-
-        if (!$metadata.hasClass('is-active') && !enabled) {
-          $btn.removeClass('is-open');
-          $btn.addClass('is-collapsed');
-          $metadata.removeClass('is-active');
+      $scope.toggleRequestMetadata = function (enabled) {
+        if ($scope.showRequestMetadata && !enabled) {
+          $scope.showRequestMetadata = false;
         } else {
-          $btn.removeClass('is-collapsed');
-          $btn.addClass('is-open');
-          $metadata.addClass('is-active');
+          $scope.showRequestMetadata = true;
         }
       };
     }
