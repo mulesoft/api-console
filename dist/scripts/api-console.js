@@ -28,7 +28,25 @@ RAML.Services.TryIt = {};
 
 angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);
-angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services']);
+angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'hc.marked']);
+
+// Marked Config
+var renderer = new window.marked.Renderer();
+
+renderer.paragraph = function (text, level) {
+  return text;
+};
+
+window.marked.setOptions({
+  renderer: renderer,
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});
 
 RAML.Directives.closeButton = function($window) {
   return {
@@ -147,8 +165,8 @@ RAML.Directives.methodList = function($window) {
         $scope.requestOptions = {};
         $scope.resetFields();
         $scope.requestEnd = false;
-
-        console.log($scope.methodInfo);
+        $scope.showRequestMetadata = false;
+        $scope.showMoreEnable = true;
 
         if (!$resource.hasClass('is-active')) {
           $closingEl = $inactiveElements
@@ -202,6 +220,21 @@ RAML.Directives.sidebar = function($window) {
     restrict: 'E',
     templateUrl: 'directives/sidebar.tpl.html',
     replace: true,
+    link: function ($scope, $element) {
+      var el = angular.element(angular.element($element.children().children()[0]).children()[2]);
+
+      el.bind('scroll', function ($event) {
+        var $el = $event.srcElement;
+
+        if ($el.scrollHeight === $el.offsetHeight + $el.scrollTop) {
+          $scope.showMoreEnable = false;
+        } else {
+          $scope.showMoreEnable = true;
+        }
+
+        $scope.$apply.apply($scope, null);
+      });
+    },
     controller: function ($scope) {
       function completeAnimation (element) {
         jQuery(element).removeAttr('style');
@@ -245,6 +278,7 @@ RAML.Directives.sidebar = function($window) {
         }
 
         $scope.requestEnd = true;
+        $scope.showMoreEnable = true;
 
         apply();
       };
@@ -271,7 +305,10 @@ RAML.Directives.sidebar = function($window) {
         $scope.uriParameters = {};
         $scope.context.queryParameters.clear();
         $scope.context.headers.clear();
-        $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
+
+        if ($scope.context.bodyContent) {
+          $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
+        }
       };
 
       $scope.resetFields = function () {
@@ -326,10 +363,12 @@ RAML.Directives.sidebar = function($window) {
 
       //// TODO: Add support for form-parameters
       //// TOOD: Add an spinner to the response tab
-      //// TODO: More should disapear once the scroll is on bottom
       //// TODO: Add an spinner for RAML loading
       //// TODO: Show RAML errors
       //// TODO: Show required errors!
+      //// TODO: Scroll to the current window
+      //// TODO: Remove jQuery code as much as possible
+      //// TOOD: Add a code highligther
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
@@ -359,14 +398,12 @@ RAML.Directives.sidebar = function($window) {
           request.headers(context.headers.data());
         }
 
-        //// Fix Body
         if (context.bodyContent) {
           request.header('Content-Type', context.bodyContent.selected);
           request.data(context.bodyContent.data());
         }
 
         $scope.requestOptions = request.toOptions();
-        // $scope.request.requestUrl = requestOptions.url;
 
         jQuery.ajax($scope.requestOptions).then(
           function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
@@ -453,22 +490,11 @@ RAML.Directives.sidebar = function($window) {
         $panel.toggleClass('has-sidebar-collapsed');
       };
 
-      $scope.toggleRequestMetadata = function ($event, enabled) {
-        var $this = jQuery($event.currentTarget);
-        var $btn = $this.closest('.sidebar-content-wrapper').find('.js-toggle-request-metadata');
-        var $panel = $this.closest('.resource-panel');
-        var $metadata = $panel.find('.sidebar-request-metadata');
-
-        $metadata.toggleClass('is-active');
-
-        if (!$metadata.hasClass('is-active') && !enabled) {
-          $btn.removeClass('is-open');
-          $btn.addClass('is-collapsed');
-          $metadata.removeClass('is-active');
+      $scope.toggleRequestMetadata = function (enabled) {
+        if ($scope.showRequestMetadata && !enabled) {
+          $scope.showRequestMetadata = false;
         } else {
-          $btn.removeClass('is-collapsed');
-          $btn.addClass('is-open');
-          $metadata.addClass('is-active');
+          $scope.showRequestMetadata = true;
         }
       };
     }
@@ -2188,14 +2214,14 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "  <div class=\"resource-panel-primary-row resource-panel-content is-active\">\n" +
     "    <h3 class=\"resource-heading-a\">Description</h3>\n" +
     "\n" +
-    "    <p>{{methodInfo.description}}</p>\n" +
+    "    <p marked=\"methodInfo.description\"></p>\n" +
     "\n" +
     "    <section class=\"resource-section\" id=\"docs-uri-parameters\" ng-show=\"resource.uriParametersForDocumentation\">\n" +
     "      <h3 class=\"resource-heading-a\">URI Parameters</h3>\n" +
     "\n" +
     "      <div class=\"resource-param\" id=\"docs-uri-parameters-{{uriParam[0].displayName}}\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
     "        <h4 class=\"resource-param-heading\">{{uriParam[0].displayName}} <span class=\"resource-param-instructional\" ng-show=\"uriParam[0].required\">required</span></h4>\n" +
-    "        <p>{{uriParam[0].description}}</p>\n" +
+    "        <p marked=\"uriParam[0].description\"></p>\n" +
     "\n" +
     "        <p>\n" +
     "          <span class=\"resource-param-example\" ng-show=\"uriParam[0].example\"><b>Example:</b> {{uriParam[0].example}}</span>\n" +
@@ -2209,7 +2235,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      <div class=\"resource-param\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
     "        <h4 class=\"resource-param-heading\">{{header[0].displayName}} <span class=\"resource-param-instructional\">{{header[0].type}}</span></h4>\n" +
     "\n" +
-    "        <p>{{header[0].description}}</p>\n" +
+    "        <p marked=\"header[0].description\"></p>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "\n" +
@@ -2219,7 +2245,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      <div class=\"resource-param\" ng-repeat=\"queryParam in methodInfo.queryParameters\">\n" +
     "        <h4 class=\"resource-param-heading\">{{queryParam[0].displayName}} <span class=\"resource-param-instructional\">{{queryParam[0].type}}</span></h4>\n" +
     "\n" +
-    "        <p>{{queryParam[0].description}}</p>\n" +
+    "        <p marked=\"queryParam[0].description\"></p>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
@@ -2240,7 +2266,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      <h3 class=\"resource-heading-a\">Status {{code}}</h3>\n" +
     "\n" +
     "      <div class=\"resource-response\">\n" +
-    "        <p>{{methodInfo.responses[code].description}}</p>\n" +
+    "        <p marked=\"methodInfo.responses[code].description\"></p>\n" +
     "      </div>\n" +
     "\n" +
     "      <div class=\"resource-response\" ng-show=\"methodInfo.responses[code].body\">\n" +
@@ -2303,7 +2329,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "        </header>\n" +
     "\n" +
     "        <!-- Show more -->\n" +
-    "        <div class=\"sidebar-show-more\">\n" +
+    "        <div class=\"sidebar-show-more\" ng-show=\"showMoreEnable\">\n" +
     "          <p>\n" +
     "            more <img src=\"img/icn-chevron-down.svg\" alt=\"\">\n" +
     "          </p>\n" +
@@ -2334,7 +2360,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
-    "                    <span>{{uriParam[0].description}}</span>\n" +
+    "                    <span marked=\"uriParam[0].description\"></span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{uriParam[0].displayName}}\" class=\"sidebar-label\">{{uriParam[0].displayName}}</label>\n" +
@@ -2354,7 +2380,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
-    "                    <span>{{header[0].description}}</span>\n" +
+    "                    <span marked=\"header[0].description\"></span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{header[0].displayName}}\" class=\"sidebar-label\">{{header[0].displayName}}</label>\n" +
@@ -2374,7 +2400,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                <span class=\"sidebar-input-tooltip-container\">\n" +
     "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
-    "                    <span>{{queryParam[0].description}}</span>\n" +
+    "                    <span marked=\"queryParam[0].description\"></span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{queryParam[0].displayName}}\" class=\"sidebar-label\">{{queryParam[0].displayName}}</label>\n" +
@@ -2416,15 +2442,15 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "          <section>\n" +
     "            <header class=\"sidebar-row sidebar-header\">\n" +
     "              <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
-    "                <button class=\"sidebar-expand-btn is-collapsed js-toggle-request-metadata\" ng-click=\"toggleRequestMetadata($event)\">\n" +
+    "                <button ng-class=\"{'is-open':showRequestMetadata, 'is-collapsed':!showRequestMetadata}\" class=\"sidebar-expand-btn js-toggle-request-metadata\" ng-click=\"toggleRequestMetadata()\">\n" +
     "                  Request\n" +
     "                </button>\n" +
     "              </h3>\n" +
     "            </header>\n" +
-    "            <div class=\"sidebar-request-metadata\">\n" +
+    "            <div class=\"sidebar-request-metadata\" ng-class=\"{'is-active':showRequestMetadata}\">\n" +
     "\n" +
     "              <div class=\"sidebar-row\">\n" +
-    "                <div>\n" +
+    "                <div ng-show=\"requestOptions.url\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Request URI</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
     "                    <p class=\"sidebar-response-metadata\">{{requestOptions.url}}</p>\n" +
@@ -2440,8 +2466,10 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +
-    "                <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "                <pre class=\"sidebar-pre\"><code>{{context.bodyContent.definitions[context.bodyContent.selected].value}}</code></pre>\n" +
+    "                <div ng-show=\"requestOptions.data\">\n" +
+    "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
+    "                  <pre class=\"sidebar-pre\"><code>{{requestOptions.data}}</code></pre>\n" +
+    "                </div>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "          </section>\n" +

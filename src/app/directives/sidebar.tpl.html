@@ -12,7 +12,7 @@
         </header>
 
         <!-- Show more -->
-        <div class="sidebar-show-more">
+        <div class="sidebar-show-more" ng-show="showMoreEnable">
           <p>
             more <img src="img/icn-chevron-down.svg" alt="">
           </p>
@@ -43,7 +43,7 @@
                 <span class="sidebar-input-tooltip-container">
                   <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
-                    <span>{{uriParam[0].description}}</span>
+                    <span marked="uriParam[0].description"></span>
                   </span>
                 </span>
                 <label for="{{uriParam[0].displayName}}" class="sidebar-label">{{uriParam[0].displayName}}</label>
@@ -63,7 +63,7 @@
                 <span class="sidebar-input-tooltip-container">
                   <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
-                    <span>{{header[0].description}}</span>
+                    <span marked="header[0].description"></span>
                   </span>
                 </span>
                 <label for="{{header[0].displayName}}" class="sidebar-label">{{header[0].displayName}}</label>
@@ -83,7 +83,7 @@
                 <span class="sidebar-input-tooltip-container">
                   <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
-                    <span>{{queryParam[0].description}}</span>
+                    <span marked="queryParam[0].description"></span>
                   </span>
                 </span>
                 <label for="{{queryParam[0].displayName}}" class="sidebar-label">{{queryParam[0].displayName}}</label>
@@ -125,15 +125,15 @@
           <section>
             <header class="sidebar-row sidebar-header">
               <h3 class="sidebar-head sidebar-head-expand">
-                <button class="sidebar-expand-btn is-collapsed js-toggle-request-metadata" ng-click="toggleRequestMetadata($event)">
+                <button ng-class="{'is-open':showRequestMetadata, 'is-collapsed':!showRequestMetadata}" class="sidebar-expand-btn js-toggle-request-metadata" ng-click="toggleRequestMetadata()">
                   Request
                 </button>
               </h3>
             </header>
-            <div class="sidebar-request-metadata">
+            <div class="sidebar-request-metadata" ng-class="{'is-active':showRequestMetadata}">
 
               <div class="sidebar-row">
-                <div>
+                <div ng-show="requestOptions.url">
                   <h3 class="sidebar-response-head sidebar-response-head-pre">Request URI</h3>
                   <div class="sidebar-response-item">
                     <p class="sidebar-response-metadata">{{requestOptions.url}}</p>
@@ -149,8 +149,10 @@
                   </div>
                 </div>
 
-                <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-                <pre class="sidebar-pre"><code>{{context.bodyContent.definitions[context.bodyContent.selected].value}}</code></pre>
+                <div ng-show="requestOptions.data">
+                  <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
+                  <pre class="sidebar-pre"><code>{{requestOptions.data}}</code></pre>
+                </div>
               </div>
             </div>
           </section>
