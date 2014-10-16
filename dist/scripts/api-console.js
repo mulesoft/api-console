@@ -146,6 +146,9 @@ RAML.Directives.methodList = function($window) {
         $scope.response = {};
         $scope.requestOptions = {};
         $scope.resetFields();
+        $scope.requestEnd = false;
+
+        console.log($scope.methodInfo);
 
         if (!$resource.hasClass('is-active')) {
           $closingEl = $inactiveElements
@@ -268,6 +271,7 @@ RAML.Directives.sidebar = function($window) {
         $scope.uriParameters = {};
         $scope.context.queryParameters.clear();
         $scope.context.headers.clear();
+        $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
       };
 
       $scope.resetFields = function () {
@@ -306,16 +310,31 @@ RAML.Directives.sidebar = function($window) {
         }
       };
 
+      $scope.toggleBodyType = function ($event, bodyType) {
+        var $this = jQuery($event.currentTarget);
+        var $panel = $this.closest('.sidebar-toggle-type').find('button');
+
+        $panel.removeClass('is-active');
+        $this.addClass('is-active');
+        $scope.context.bodyContent.selected = bodyType;
+      };
+
+      $scope.prefillBody = function (current) {
+        var definition = $scope.context.bodyContent.definitions[current];
+        definition.value = definition.contentType.example;
+      };
+
+      //// TODO: Add support for form-parameters
       //// TOOD: Add an spinner to the response tab
       //// TODO: More should disapear once the scroll is on bottom
       //// TODO: Add an spinner for RAML loading
       //// TODO: Show RAML errors
+      //// TODO: Show required errors!
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
         var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
 
-        $scope.requestEnd = false;
         $scope.toggleSidebar($event, true);
         $scope.toggleRequestMetadata($event, true);
 
@@ -1864,7 +1883,7 @@ RAML.Inspector = (function() {
   var FORM_DATA = 'multipart/form-data';
 
   var BodyContent = function(contentTypes) {
-    this.contentTypes = Object.keys(contentTypes);
+    this.contentTypes = Object.keys(contentTypes).sort();
     this.selected = this.contentTypes[0];
 
     var definitions = this.definitions = {};
@@ -2364,6 +2383,26 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
+    "          <section id=\"sidebar-body\" ng-show=\"methodInfo.body\">\n" +
+    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
+    "              <h4 class=\"sidebar-subhead\">Body</h4>\n" +
+    "            </header>\n" +
+    "\n" +
+    "            <div class=\"sidebar-row\">\n" +
+    "              <div class=\"toggle-group sidebar-toggle-group sidebar-toggle-type\">\n" +
+    "                <button class=\"toggle toggle-mini\" ng-click=\"toggleBodyType($event, key)\" ng-class=\"{'is-active': $first}\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</button>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"sidebar-row\">\n" +
+    "              <textarea rows=\"10\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></textarea>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-show=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
+    "              <button class=\"sidebar-action-prefill\" ng-click=\"prefillBody(context.bodyContent.selected)\">Prefill with example</button>\n" +
+    "            </div>\n" +
+    "          </section>\n" +
+    "\n" +
     "          <section>\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"sidebar-action-group\">\n" +
@@ -2396,13 +2435,13 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
     "                    <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
-    "                      <b>{{key}}:</b> <br>{{value[0]}}\n" +
+    "                      <b>{{key}}:</b> <br>{{value}}\n" +
     "                    </p>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +
     "                <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "                <pre class=\"sidebar-pre\"><code>Some Code Here</code></pre>\n" +
+    "                <pre class=\"sidebar-pre\"><code>{{context.bodyContent.definitions[context.bodyContent.selected].value}}</code></pre>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "          </section>\n" +
