@@ -223,6 +223,26 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
+    "          <section id=\"sidebar-body\" ng-show=\"methodInfo.body\">\n" +
+    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
+    "              <h4 class=\"sidebar-subhead\">Body</h4>\n" +
+    "            </header>\n" +
+    "\n" +
+    "            <div class=\"sidebar-row\">\n" +
+    "              <div class=\"toggle-group sidebar-toggle-group sidebar-toggle-type\">\n" +
+    "                <button class=\"toggle toggle-mini\" ng-click=\"toggleBodyType($event, key)\" ng-class=\"{'is-active': $first}\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</button>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"sidebar-row\">\n" +
+    "              <textarea rows=\"10\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></textarea>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-show=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
+    "              <button class=\"sidebar-action-prefill\" ng-click=\"prefillBody(context.bodyContent.selected)\">Prefill with example</button>\n" +
+    "            </div>\n" +
+    "          </section>\n" +
+    "\n" +
     "          <section>\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"sidebar-action-group\">\n" +
@@ -255,13 +275,13 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
     "                    <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
-    "                      <b>{{key}}:</b> <br>{{value[0]}}\n" +
+    "                      <b>{{key}}:</b> <br>{{value}}\n" +
     "                    </p>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +
     "                <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "                <pre class=\"sidebar-pre\"><code>Some Code Here</code></pre>\n" +
+    "                <pre class=\"sidebar-pre\"><code>{{context.bodyContent.definitions[context.bodyContent.selected].value}}</code></pre>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "          </section>\n" +

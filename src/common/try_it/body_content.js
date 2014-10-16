@@ -5,7 +5,7 @@
   var FORM_DATA = 'multipart/form-data';
 
   var BodyContent = function(contentTypes) {
-    this.contentTypes = Object.keys(contentTypes);
+    this.contentTypes = Object.keys(contentTypes).sort();
     this.selected = this.contentTypes[0];
 
     var definitions = this.definitions = {};

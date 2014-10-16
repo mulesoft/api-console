@@ -72,6 +72,7 @@ RAML.Directives.sidebar = function($window) {
         $scope.uriParameters = {};
         $scope.context.queryParameters.clear();
         $scope.context.headers.clear();
+        $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
       };
 
       $scope.resetFields = function () {
@@ -110,16 +111,31 @@ RAML.Directives.sidebar = function($window) {
         }
       };
 
+      $scope.toggleBodyType = function ($event, bodyType) {
+        var $this = jQuery($event.currentTarget);
+        var $panel = $this.closest('.sidebar-toggle-type').find('button');
+
+        $panel.removeClass('is-active');
+        $this.addClass('is-active');
+        $scope.context.bodyContent.selected = bodyType;
+      };
+
+      $scope.prefillBody = function (current) {
+        var definition = $scope.context.bodyContent.definitions[current];
+        definition.value = definition.contentType.example;
+      };
+
+      //// TODO: Add support for form-parameters
       //// TOOD: Add an spinner to the response tab
       //// TODO: More should disapear once the scroll is on bottom
       //// TODO: Add an spinner for RAML loading
       //// TODO: Show RAML errors
+      //// TODO: Show required errors!
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
         var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
 
-        $scope.requestEnd = false;
         $scope.toggleSidebar($event, true);
         $scope.toggleRequestMetadata($event, true);
 

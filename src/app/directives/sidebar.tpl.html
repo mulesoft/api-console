@@ -92,6 +92,26 @@
             </div>
           </section>
 
+          <section id="sidebar-body" ng-show="methodInfo.body">
+            <header class="sidebar-row sidebar-subheader">
+              <h4 class="sidebar-subhead">Body</h4>
+            </header>
+
+            <div class="sidebar-row">
+              <div class="toggle-group sidebar-toggle-group sidebar-toggle-type">
+                <button class="toggle toggle-mini" ng-click="toggleBodyType($event, key)" ng-class="{'is-active': $first}" ng-repeat="(key, value) in methodInfo.body">{{key}}</button>
+              </div>
+            </div>
+
+            <div class="sidebar-row">
+              <textarea rows="10" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></textarea>
+            </div>
+
+            <div class="sidebar-prefill sidebar-row" align="right" ng-show="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
+              <button class="sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
+            </div>
+          </section>
+
           <section>
             <div class="sidebar-row">
               <div class="sidebar-action-group">
@@ -124,13 +144,13 @@
                   <h3 class="sidebar-response-head">Headers</h3>
                   <div class="sidebar-response-item">
                     <p class="sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
-                      <b>{{key}}:</b> <br>{{value[0]}}
+                      <b>{{key}}:</b> <br>{{value}}
                     </p>
                   </div>
                 </div>
 
                 <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-                <pre class="sidebar-pre"><code>Some Code Here</code></pre>
+                <pre class="sidebar-pre"><code>{{context.bodyContent.definitions[context.bodyContent.selected].value}}</code></pre>
               </div>
             </div>
           </section>
