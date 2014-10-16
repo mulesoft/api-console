@@ -62,6 +62,7 @@ RAML.Directives.sidebar = function($window) {
 
         $scope.requestEnd = true;
         $scope.showMoreEnable = true;
+        $scope.showSpinner = false;
 
         apply();
       };
@@ -145,9 +146,7 @@ RAML.Directives.sidebar = function($window) {
       };
 
       //// TODO: Add support for form-parameters
-      //// TOOD: Add an spinner to the response tab
       //// TODO: Add an spinner for RAML loading
-      //// TODO: Show RAML errors
       //// TODO: Show required errors!
       //// TODO: Scroll to the current window
       //// TODO: Remove jQuery code as much as possible
@@ -157,6 +156,7 @@ RAML.Directives.sidebar = function($window) {
         var context = $scope.context;
         var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
 
+        $scope.showSpinner = true;
         $scope.toggleSidebar($event, true);
         $scope.toggleRequestMetadata($event, true);
 
