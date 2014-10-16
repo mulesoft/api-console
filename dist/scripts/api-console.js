@@ -28,7 +28,7 @@ RAML.Services.TryIt = {};
 
 angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);
-angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'hc.marked']);
+angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'hc.marked', 'ui.codemirror']);
 
 // Marked Config
 var renderer = new window.marked.Renderer();
@@ -167,6 +167,7 @@ RAML.Directives.methodList = function($window) {
         $scope.requestEnd = false;
         $scope.showRequestMetadata = false;
         $scope.showMoreEnable = true;
+        $scope.showSpinner = false;
 
         if (!$resource.hasClass('is-active')) {
           $closingEl = $inactiveElements
@@ -279,6 +280,7 @@ RAML.Directives.sidebar = function($window) {
 
         $scope.requestEnd = true;
         $scope.showMoreEnable = true;
+        $scope.showSpinner = false;
 
         apply();
       };
@@ -362,9 +364,7 @@ RAML.Directives.sidebar = function($window) {
       };
 
       //// TODO: Add support for form-parameters
-      //// TOOD: Add an spinner to the response tab
       //// TODO: Add an spinner for RAML loading
-      //// TODO: Show RAML errors
       //// TODO: Show required errors!
       //// TODO: Scroll to the current window
       //// TODO: Remove jQuery code as much as possible
@@ -374,6 +374,7 @@ RAML.Directives.sidebar = function($window) {
         var context = $scope.context;
         var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
 
+        $scope.showSpinner = true;
         $scope.toggleSidebar($event, true);
         $scope.toggleRequestMetadata($event, true);
 
@@ -597,16 +598,48 @@ RAML.Directives.resources = function(ramlParserWrapper) {
         $section.toggleClass('is-collapsed');
         $this.toggleClass('is-active');
       };
+
+      // The ui-codemirror config
+      $scope.cmOption = {
+        lineNumbers: true,
+        indentWithTabs: true,
+        readOnly: 'nocursor',
+        lineWrapping : true,
+        mode: 'yaml'
+      };
     },
     link: function($scope, $element) {
+      $scope.parseError = {};
+
       ramlParserWrapper.onParseSuccess(function(raml) {
         $scope.raml = RAML.Inspector.create(raml);
-        // console.log($scope.raml);
+        $scope.parseError = null;
       });
 
       ramlParserWrapper.onParseError(function(error) {
-        // Show errors!!!
-        // $scope.parseError = error;
+        var context = error.context_mark || error.problem_mark;
+        var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
+
+        $scope.cmModel = context.buffer;
+
+        $scope.parseError = {
+          column: context.column + 1,
+          line: context.line + 1,
+          message: error.message,
+          snippet: snippet,
+          raml: context.buffer,
+          fileName: context.name
+        };
+
+        // Hack to update codemirror
+        setTimeout(function () {
+          var editor = jQuery('.CodeMirror')[0].CodeMirror;
+          editor.doc.addLineClass(context.line, 'background', 'line-error');
+          editor.doc.setCursor(context.line);
+          $scope.$apply.apply($scope, null);
+        }, 10);
+
+        $scope.$apply.apply($scope, null);
       });
     }
   };
@@ -2432,7 +2465,8 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "          <section>\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"sidebar-action-group\">\n" +
-    "                <button class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\">{{methodInfo.method.toUpperCase()}}</button>\n" +
+    "                <button class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\">{{methodInfo.method.toUpperCase()}}\n" +
+    "                </button>\n" +
     "                <button class=\"sidebar-action sidebar-action-clear\" ng-click=\"clearFields()\">Clear</button>\n" +
     "                <button class=\"sidebar-action sidebar-action-reset\" ng-click=\"resetFields()\">Reset</button>\n" +
     "              </div>\n" +
@@ -2446,6 +2480,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  Request\n" +
     "                </button>\n" +
     "              </h3>\n" +
+    "              <img src=\"img/spinner.gif\" style=\"height: 21px; width: 21px; float: right; margin-right: 10px; margin-top: 3px;\" ng-show=\"showSpinner\"/>\n" +
     "            </header>\n" +
     "            <div class=\"sidebar-request-metadata\" ng-class=\"{'is-active':showRequestMetadata}\">\n" +
     "\n" +
@@ -2535,50 +2570,86 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('resources/resources.tpl.html',
     "<main class=\"container primary\">\n" +
-    "  <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +
-    "  <ol class=\"resource-list resource-list-root\">\n" +
-    "    <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
-    "      <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
-    "        <div class=\"resource-path-container\">\n" +
-    "          <button class=\"resource-root-toggle is-active\" ng-show=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
+    "  <div class=\"sidebar-content-wrapper\" ng-show=\"parseError\">\n" +
+    "    <h3 style=\"border-bottom: 1px solid; border-bottom-color: darkgray; font-weight: normal;\">Error while loading <b>{{parseError.fileName}}</b></h3>\n" +
     "\n" +
-    "          <h2 class=\"resource-heading resource-heading-large\">\n" +
-    "            <span class=\"resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>\n" +
-    "          </h2>\n" +
-    "\n" +
-    "          <resource-type></resource-type>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <method-list></method-list>\n" +
-    "        <close-button></close-button>\n" +
+    "    <section>\n" +
+    "      <header class=\"sidebar-row sidebar-header\">\n" +
+    "        <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
+    "          <button class=\"sidebar-expand-btn js-toggle-request-metadata\">\n" +
+    "            Message\n" +
+    "          </button>\n" +
+    "        </h3>\n" +
     "      </header>\n" +
+    "      <pre class=\"sidebar-pre\"><code>{{parseError.message}}</code></pre>\n" +
     "\n" +
-    "      <resource-panel></resource-panel>\n" +
+    "      <header class=\"sidebar-row sidebar-header\">\n" +
+    "        <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
+    "          <button class=\"sidebar-expand-btn js-toggle-request-metadata\" style=\"padding: 0;\">\n" +
+    "            Snippet <span style=\"font-size: 13px; color: #727379;\">(Line {{parseError.line}}, Column {{parseError.column}})</span>\n" +
+    "          </button>\n" +
+    "        </h3>\n" +
+    "      </header>\n" +
+    "      <pre class=\"sidebar-pre\"><code style=\"display: block; text-overflow: ellipsis; overflow: hidden;\">{{parseError.snippet}}</code></pre>\n" +
     "\n" +
-    "      <!-- Child Resources -->\n" +
-    "      <ol class=\"resource-list is-collapsed\" style=\"display: none;\">\n" +
-    "        <li class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
-    "          <div class=\"resource clearfix\">\n" +
-    "            <div class=\"resource-path-container\">\n" +
-    "              <h3 class=\"resource-heading\">\n" +
-    "                <span ng-repeat-start='segment in resource.pathSegments' ng-if=\"!$last\">{{segment.toString()}}</span><span ng-repeat-end ng-if=\"$last\" class=\"resource-path-active\">{{segment.toString()}}</span>\n" +
-    "              </h3>\n" +
+    "      <header class=\"sidebar-row sidebar-header\">\n" +
+    "        <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
+    "          <button class=\"sidebar-expand-btn js-toggle-request-metadata\">\n" +
+    "            RAML\n" +
+    "          </button>\n" +
+    "        </h3>\n" +
+    "      </header>\n" +
+    "      <pre class=\"sidebar-pre\" style=\"padding: 0;\"><code ui-codemirror=\"cmOption\" ng-model=\"parseError.raml\"></code></pre>\n" +
+    "    </section>\n" +
+    "  </div>\n" +
     "\n" +
-    "              <resource-type></resource-type>\n" +
-    "            </div>\n" +
+    "  <div ng-hide=\"parseError\">\n" +
+    "    <theme-switcher></theme-switcher>\n" +
+    "    <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +
-    "            <method-list></method-list>\n" +
-    "            <close-button></close-button>\n" +
+    "    <ol class=\"resource-list resource-list-root\">\n" +
+    "      <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
+    "        <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
+    "          <div class=\"resource-path-container\">\n" +
+    "            <button class=\"resource-root-toggle is-active\" ng-show=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
+    "\n" +
+    "            <h2 class=\"resource-heading resource-heading-large\">\n" +
+    "              <span class=\"resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>\n" +
+    "            </h2>\n" +
+    "\n" +
+    "            <resource-type></resource-type>\n" +
     "          </div>\n" +
     "\n" +
-    "          <resource-panel></resource-panel>\n" +
-    "        </li>\n" +
-    "      </ol>\n" +
+    "          <method-list></method-list>\n" +
+    "          <close-button></close-button>\n" +
+    "        </header>\n" +
     "\n" +
-    "    </li>\n" +
-    "  </ol>\n" +
+    "        <resource-panel></resource-panel>\n" +
     "\n" +
+    "        <!-- Child Resources -->\n" +
+    "        <ol class=\"resource-list is-collapsed\" style=\"display: none;\">\n" +
+    "          <li class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
+    "            <div class=\"resource clearfix\">\n" +
+    "              <div class=\"resource-path-container\">\n" +
+    "                <h3 class=\"resource-heading\">\n" +
+    "                  <span ng-repeat-start='segment in resource.pathSegments' ng-if=\"!$last\">{{segment.toString()}}</span><span ng-repeat-end ng-if=\"$last\" class=\"resource-path-active\">{{segment.toString()}}</span>\n" +
+    "                </h3>\n" +
+    "\n" +
+    "                <resource-type></resource-type>\n" +
+    "              </div>\n" +
+    "\n" +
+    "              <method-list></method-list>\n" +
+    "              <close-button></close-button>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <resource-panel></resource-panel>\n" +
+    "          </li>\n" +
+    "        </ol>\n" +
+    "\n" +
+    "      </li>\n" +
+    "    </ol>\n" +
+    "  </div>\n" +
     "</main>\n"
   );
 

@@ -1,46 +1,82 @@
 <main class="container primary">
-  <h1 class="title">{{raml.title}}</h1>
 
-  <ol class="resource-list resource-list-root">
-    <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
-      <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
-        <div class="resource-path-container">
-          <button class="resource-root-toggle is-active" ng-show="resourceGroup.length > 1" ng-click="toggle($event)"></button>
+  <div class="sidebar-content-wrapper" ng-show="parseError">
+    <h3 style="border-bottom: 1px solid; border-bottom-color: darkgray; font-weight: normal;">Error while loading <b>{{parseError.fileName}}</b></h3>
 
-          <h2 class="resource-heading resource-heading-large">
-            <span class="resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
-          </h2>
-
-          <resource-type></resource-type>
-        </div>
-
-        <method-list></method-list>
-        <close-button></close-button>
+    <section>
+      <header class="sidebar-row sidebar-header">
+        <h3 class="sidebar-head sidebar-head-expand">
+          <button class="sidebar-expand-btn js-toggle-request-metadata">
+            Message
+          </button>
+        </h3>
       </header>
+      <pre class="sidebar-pre"><code>{{parseError.message}}</code></pre>
 
-      <resource-panel></resource-panel>
+      <header class="sidebar-row sidebar-header">
+        <h3 class="sidebar-head sidebar-head-expand">
+          <button class="sidebar-expand-btn js-toggle-request-metadata" style="padding: 0;">
+            Snippet <span style="font-size: 13px; color: #727379;">(Line {{parseError.line}}, Column {{parseError.column}})</span>
+          </button>
+        </h3>
+      </header>
+      <pre class="sidebar-pre"><code style="display: block; text-overflow: ellipsis; overflow: hidden;">{{parseError.snippet}}</code></pre>
 
-      <!-- Child Resources -->
-      <ol class="resource-list is-collapsed" style="display: none;">
-        <li class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
-          <div class="resource clearfix">
-            <div class="resource-path-container">
-              <h3 class="resource-heading">
-                <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="resource-path-active">{{segment.toString()}}</span>
-              </h3>
+      <header class="sidebar-row sidebar-header">
+        <h3 class="sidebar-head sidebar-head-expand">
+          <button class="sidebar-expand-btn js-toggle-request-metadata">
+            RAML
+          </button>
+        </h3>
+      </header>
+      <pre class="sidebar-pre" style="padding: 0;"><code ui-codemirror="cmOption" ng-model="parseError.raml"></code></pre>
+    </section>
+  </div>
 
-              <resource-type></resource-type>
-            </div>
+  <div ng-hide="parseError">
+    <theme-switcher></theme-switcher>
+    <h1 class="title">{{raml.title}}</h1>
 
-            <method-list></method-list>
-            <close-button></close-button>
+    <ol class="resource-list resource-list-root">
+      <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
+        <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
+          <div class="resource-path-container">
+            <button class="resource-root-toggle is-active" ng-show="resourceGroup.length > 1" ng-click="toggle($event)"></button>
+
+            <h2 class="resource-heading resource-heading-large">
+              <span class="resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
+            </h2>
+
+            <resource-type></resource-type>
           </div>
 
-          <resource-panel></resource-panel>
-        </li>
-      </ol>
+          <method-list></method-list>
+          <close-button></close-button>
+        </header>
 
-    </li>
-  </ol>
+        <resource-panel></resource-panel>
 
+        <!-- Child Resources -->
+        <ol class="resource-list is-collapsed" style="display: none;">
+          <li class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
+            <div class="resource clearfix">
+              <div class="resource-path-container">
+                <h3 class="resource-heading">
+                  <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="resource-path-active">{{segment.toString()}}</span>
+                </h3>
+
+                <resource-type></resource-type>
+              </div>
+
+              <method-list></method-list>
+              <close-button></close-button>
+            </div>
+
+            <resource-panel></resource-panel>
+          </li>
+        </ol>
+
+      </li>
+    </ol>
+  </div>
 </main>

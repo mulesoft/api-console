@@ -25,7 +25,7 @@ RAML.Services.TryIt = {};
 
 angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);
-angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'hc.marked']);
+angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'hc.marked', 'ui.codemirror']);
 
 // Marked Config
 var renderer = new window.marked.Renderer();

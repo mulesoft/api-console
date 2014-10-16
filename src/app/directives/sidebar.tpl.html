@@ -115,7 +115,8 @@
           <section>
             <div class="sidebar-row">
               <div class="sidebar-action-group">
-                <button class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)">{{methodInfo.method.toUpperCase()}}</button>
+                <button class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)">{{methodInfo.method.toUpperCase()}}
+                </button>
                 <button class="sidebar-action sidebar-action-clear" ng-click="clearFields()">Clear</button>
                 <button class="sidebar-action sidebar-action-reset" ng-click="resetFields()">Reset</button>
               </div>
@@ -129,6 +130,7 @@
                   Request
                 </button>
               </h3>
+              <img src="img/spinner.gif" style="height: 21px; width: 21px; float: right; margin-right: 10px; margin-top: 3px;" ng-show="showSpinner"/>
             </header>
             <div class="sidebar-request-metadata" ng-class="{'is-active':showRequestMetadata}">
 
