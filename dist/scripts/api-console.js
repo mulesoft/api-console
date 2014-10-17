@@ -236,7 +236,7 @@ RAML.Directives.sidebar = function($window) {
         $scope.$apply.apply($scope, null);
       });
     },
-    controller: function ($scope) {
+    controller: function ($scope, $element) {
       function completeAnimation (element) {
         jQuery(element).removeAttr('style');
       };
@@ -281,6 +281,14 @@ RAML.Directives.sidebar = function($window) {
         $scope.requestEnd = true;
         $scope.showMoreEnable = true;
         $scope.showSpinner = false;
+
+        $scope.editors.map(function (index) {
+          var codeMirror = $scope.editors[index].CodeMirror;
+          codeMirror.setOption('mode', $scope.response.contentType);
+          setTimeout(function () {
+            codeMirror.refresh();
+          }, 1);
+        });
 
         apply();
       };
@@ -336,7 +344,6 @@ RAML.Directives.sidebar = function($window) {
       };
 
       $scope.resetUriParameter = function (uriParam) {
-        // $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].displayName);
         var uriParameters = $scope.resource.uriParametersForDocumentation;
 
         if (uriParameters) {
@@ -356,6 +363,15 @@ RAML.Directives.sidebar = function($window) {
         $panel.removeClass('is-active');
         $this.addClass('is-active');
         $scope.context.bodyContent.selected = bodyType;
+
+        var editor = $this.closest('.sidebar-row')
+                          .parent()
+                          .find('.codemirror-body-editor .CodeMirror')[0]
+                          .CodeMirror;
+        editor.setOption('mode', bodyType);
+        setTimeout(function () {
+          editor.refresh();
+        }, 1);
       };
 
       $scope.prefillBody = function (current) {
@@ -379,6 +395,7 @@ RAML.Directives.sidebar = function($window) {
         $scope.showSpinner = true;
         $scope.toggleSidebar($event, true);
         $scope.toggleRequestMetadata($event, true);
+        $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
 
         try {
           var pathBuilder = context.pathBuilder;
@@ -604,7 +621,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
       // The ui-codemirror config
       $scope.cmOption = {
         lineNumbers: true,
-        indentWithTabs: true,
         readOnly: 'nocursor',
         lineWrapping : true,
         mode: 'yaml'
@@ -2456,7 +2472,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
-    "              <textarea rows=\"10\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></textarea>\n" +
+    "              <div class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
     "            </div>\n" +
     "\n" +
     "            <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-show=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
@@ -2505,7 +2521,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <div ng-show=\"requestOptions.data\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "                  <pre class=\"sidebar-pre\"><code>{{requestOptions.data}}</code></pre>\n" +
+    "                  <pre class=\"sidebar-pre\"><code ui-codemirror=\"{ readOnly: 'nocursor' }\" ng-model=\"requestOptions.data\"></code></pre>\n" +
     "                </div>\n" +
     "              </div>\n" +
     "            </div>\n" +
@@ -2529,7 +2545,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "            <pre class=\"sidebar-pre\"><code>{{response.body}}</code></pre>\n" +
+    "            <pre class=\"sidebar-pre\"><code ui-codemirror=\"{ readOnly: 'nocursor' }\" ng-model=\"response.body\"></code></pre>\n" +
     "          </div>\n" +
     "        </section>\n" +
     "      </div>\n" +

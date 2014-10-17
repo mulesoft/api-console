@@ -235,7 +235,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
-    "              <textarea rows=\"10\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></textarea>\n" +
+    "              <div class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
     "            </div>\n" +
     "\n" +
     "            <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-show=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
@@ -284,7 +284,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <div ng-show=\"requestOptions.data\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "                  <pre class=\"sidebar-pre\"><code>{{requestOptions.data}}</code></pre>\n" +
+    "                  <pre class=\"sidebar-pre\"><code ui-codemirror=\"{ readOnly: 'nocursor' }\" ng-model=\"requestOptions.data\"></code></pre>\n" +
     "                </div>\n" +
     "              </div>\n" +
     "            </div>\n" +
@@ -308,7 +308,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "            <pre class=\"sidebar-pre\"><code>{{response.body}}</code></pre>\n" +
+    "            <pre class=\"sidebar-pre\"><code ui-codemirror=\"{ readOnly: 'nocursor' }\" ng-model=\"response.body\"></code></pre>\n" +
     "          </div>\n" +
     "        </section>\n" +
     "      </div>\n" +
