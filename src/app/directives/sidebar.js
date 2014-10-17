@@ -156,18 +156,30 @@ RAML.Directives.sidebar = function($window) {
         }, 1);
       };
 
+      $scope.toggleSecurity = function ($event, schemaType, name) {
+        var $this = jQuery($event.currentTarget);
+        var $panel = $this.closest('.sidebar-toggle-group').find('button');
+
+        $panel.removeClass('is-active');
+        $this.addClass('is-active');
+        $scope.currentScheme = {
+          type: schemaType,
+          name: name
+        };
+      };
+
       $scope.prefillBody = function (current) {
         var definition = $scope.context.bodyContent.definitions[current];
         definition.value = definition.contentType.example;
       };
 
-      //// TOOD: Add a code highligther
-      //// TODO: Scroll to request whene make a try-it
+      //// TODO: Scroll to request when make a try-it
+      //// TODO: Add search plug-in for response body -> if greater than 1000 lines
       //// TODO: Show required errors!
       //// TODO: Add support for form-parameters
       //// TODO: Add an spinner for RAML loading
-      //// TODO: Scroll to the current window when open a resource-method
-      //// TODO: Add support to securitySchemas
+      //// TODO: Scroll to the current window when open a resource-method (display-name is optional :()
+      //// TODO: Fix open/close resource
       //// TODO: Remove jQuery code as much as possible
       //// TODO: Make Fonts locals
       $scope.tryIt = function ($event) {
@@ -208,10 +220,25 @@ RAML.Directives.sidebar = function($window) {
 
         $scope.requestOptions = request.toOptions();
 
-        jQuery.ajax($scope.requestOptions).then(
-          function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-          function(jqXhr) { handleResponse(jqXhr); }
-        );
+         var authStrategy;
+
+        try {
+          var securitySchemes = $scope.methodInfo.securitySchemes();
+
+          var scheme = securitySchemes && securitySchemes[$scope.currentScheme.name];
+          authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+        } catch (e) {
+          // custom strategies aren't supported yet.
+        }
+
+        authStrategy.authenticate().then(function(token) {
+          token.sign(request);
+
+          jQuery.ajax($scope.requestOptions).then(
+            function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+            function(jqXhr) { handleResponse(jqXhr); }
+          );
+        });
       };
 
       $scope.toggleSidebar = function ($event, fullscreenEnable) {

@@ -5,7 +5,7 @@
 
   RAML.Client.AuthStrategies.Oauth2.requestAuthorization = function(settings, credentialsManager) {
     var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUri),
-        deferred = $.Deferred();
+        deferred = jQuery.Deferred();
 
     window.RAML.authorizationSuccess = function(code) { deferred.resolve(code); };
     window.open(authorizationUrl, WINDOW_NAME);

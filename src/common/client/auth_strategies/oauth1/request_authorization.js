@@ -7,7 +7,7 @@
   RAML.Client.AuthStrategies.Oauth1.requestAuthorization = function(settings) {
     return function requestAuthorization(temporaryCredentials) {
       var authorizationUrl = settings.authorizationUri + '?oauth_token=' + temporaryCredentials.token,
-      deferred = $.Deferred();
+      deferred = jQuery.Deferred();
 
       window.RAML.authorizationSuccess = function(authResult) {
         temporaryCredentials.verifier = authResult.verifier;

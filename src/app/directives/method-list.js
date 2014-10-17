@@ -43,6 +43,20 @@ RAML.Directives.methodList = function($window) {
         $scope.showRequestMetadata = false;
         $scope.showMoreEnable = true;
         $scope.showSpinner = false;
+        $scope.securitySchemes = $scope.methodInfo.securitySchemes();
+        $scope.credentials = {};
+
+        if ($scope.methodInfo.allowsAnonymousAccess()) {
+          $scope.securitySchemes.anonymous = {
+            type: "Anonymous"
+          };
+        }
+
+        var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
+        $scope.currentScheme = {
+          type: $scope.securitySchemes[defaultScheme].type,
+          name: defaultScheme
+        };
 
         editors.map(function (index) {
           setTimeout(function () {

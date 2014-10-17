@@ -4,7 +4,7 @@
         <header class="sidebar-row sidebar-header">
           <h3 class="sidebar-head">
             Try it
-            <a href="#" class="sidebar-fullscreen-toggle js-sidebar-fullscreen" ng-click="toggleSidebar($event)">
+            <a class="sidebar-fullscreen-toggle js-sidebar-fullscreen" ng-click="toggleSidebar($event)">
               <img src="img/icn-expand.svg" alt="">
               <span class="visuallyhidden">Expand</span>
             </a>
@@ -26,9 +26,14 @@
 
             <div class="sidebar-row">
               <div class="toggle-group sidebar-toggle-group">
-                <button class="toggle toggle-mini is-active">Anonymous</button>
-                <button class="toggle toggle-mini">oauth_2_0</button>
+                <button ng-click="toggleSecurity($event, scheme.type, key)" class="toggle toggle-mini" ng-class="{'is-active': $first}" ng-repeat="(key, scheme) in securitySchemes">{{scheme.type}}</button>
               </div>
+            </div>
+
+            <div ng-switch="currentScheme.type">
+              <basic-auth ng-switch-when="Basic Authentication" credentials='credentials'></basic-auth>
+              <oauth1 ng-switch-when="OAuth 1.0" credentials='credentials'></oauth1>
+              <oauth2 ng-switch-when="OAuth 2.0" credentials='credentials'></oauth2>
             </div>
           </section>
 
@@ -177,7 +182,7 @@
             </div>
 
             <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-            <pre class="sidebar-pre sidebar-response-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="response.body"></code></pre>
+            <pre class="sidebar-pre"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, lineWrapping : true }" ng-model="response.body"></code></pre>
           </div>
         </section>
       </div>

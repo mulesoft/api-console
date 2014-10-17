@@ -22,10 +22,12 @@ RAML.Directives = {};
 RAML.Services = {};
 RAML.Filters = {};
 RAML.Services.TryIt = {};
+RAML.Security = {};
 
 angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);
-angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'hc.marked', 'ui.codemirror']);
+angular.module('RAML.Security', []);
+angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
 
 // Marked Config
 var renderer = new window.marked.Renderer();
@@ -44,3 +46,13 @@ window.marked.setOptions({
   smartLists: true,
   smartypants: false
 });
+
+
+  RAML.Settings = RAML.Settings || {};
+
+  var location = window.location;
+  var uri      = location.protocol + '//' + location.host + location.pathname.replace(/\/$/, '');
+
+  RAML.Settings.proxy = RAML.Settings.proxy || false;
+  RAML.Settings.oauth2RedirectUri = RAML.Settings.oauth2RedirectUri || uri + '/authentication/oauth2.html';
+  RAML.Settings.oauth1RedirectUri = RAML.Settings.oauth1RedirectUri || uri + '/authentication/oauth2.html';
