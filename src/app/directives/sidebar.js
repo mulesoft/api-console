@@ -18,7 +18,7 @@ RAML.Directives.sidebar = function($window) {
         $scope.$apply.apply($scope, null);
       });
     },
-    controller: function ($scope) {
+    controller: function ($scope, $element) {
       function completeAnimation (element) {
         jQuery(element).removeAttr('style');
       };
@@ -63,6 +63,14 @@ RAML.Directives.sidebar = function($window) {
         $scope.requestEnd = true;
         $scope.showMoreEnable = true;
         $scope.showSpinner = false;
+
+        $scope.editors.map(function (index) {
+          var codeMirror = $scope.editors[index].CodeMirror;
+          codeMirror.setOption('mode', $scope.response.contentType);
+          setTimeout(function () {
+            codeMirror.refresh();
+          }, 1);
+        });
 
         apply();
       };
@@ -118,7 +126,6 @@ RAML.Directives.sidebar = function($window) {
       };
 
       $scope.resetUriParameter = function (uriParam) {
-        // $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].displayName);
         var uriParameters = $scope.resource.uriParametersForDocumentation;
 
         if (uriParameters) {
@@ -138,6 +145,15 @@ RAML.Directives.sidebar = function($window) {
         $panel.removeClass('is-active');
         $this.addClass('is-active');
         $scope.context.bodyContent.selected = bodyType;
+
+        var editor = $this.closest('.sidebar-row')
+                          .parent()
+                          .find('.codemirror-body-editor .CodeMirror')[0]
+                          .CodeMirror;
+        editor.setOption('mode', bodyType);
+        setTimeout(function () {
+          editor.refresh();
+        }, 1);
       };
 
       $scope.prefillBody = function (current) {
@@ -161,6 +177,7 @@ RAML.Directives.sidebar = function($window) {
         $scope.showSpinner = true;
         $scope.toggleSidebar($event, true);
         $scope.toggleRequestMetadata($event, true);
+        $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
 
         try {
           var pathBuilder = context.pathBuilder;

@@ -34,7 +34,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
       // The ui-codemirror config
       $scope.cmOption = {
         lineNumbers: true,
-        indentWithTabs: true,
         readOnly: 'nocursor',
         lineWrapping : true,
         mode: 'yaml'
