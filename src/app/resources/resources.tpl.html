@@ -1,35 +1,35 @@
-<main class="container primary">
+<main class="error-container error-primary">
 
-  <div class="sidebar-content-wrapper" ng-show="parseError">
-    <h3 style="border-bottom: 1px solid; border-bottom-color: darkgray; font-weight: normal;">Error while loading <b>{{parseError.fileName}}</b></h3>
+  <div class="error-content" ng-show="parseError">
+    <h3 class="heading">Error while loading <b>{{parseError.fileName}}</b></h3>
 
     <section>
-      <header class="sidebar-row sidebar-header">
-        <h3 class="sidebar-head sidebar-head-expand">
-          <button class="sidebar-expand-btn js-toggle-request-metadata">
+      <header class="error-row error-header">
+        <h3 class="error-head error-head-expand">
+          <div class="error-expand-btn">
             Message
-          </button>
+          </div>
         </h3>
       </header>
-      <pre class="sidebar-pre"><code>{{parseError.message}}</code></pre>
+      <pre class="error-pre"><code>{{parseError.message}}</code></pre>
 
-      <header class="sidebar-row sidebar-header">
-        <h3 class="sidebar-head sidebar-head-expand">
-          <button class="sidebar-expand-btn js-toggle-request-metadata" style="padding: 0;">
-            Snippet <span style="font-size: 13px; color: #727379;">(Line {{parseError.line}}, Column {{parseError.column}})</span>
-          </button>
+      <header class="error-row error-header">
+        <h3 class="error-head error-head-expand">
+          <div class="error-expand-btn">
+            Snippet <span class="error-subhead">(Line {{parseError.line}}, Column {{parseError.column}})</span>
+          </div>
         </h3>
       </header>
-      <pre class="sidebar-pre"><code style="display: block; text-overflow: ellipsis; overflow: hidden;">{{parseError.snippet}}</code></pre>
+      <pre class="error-pre"><code class="error-snippet">{{parseError.snippet}}</code></pre>
 
-      <header class="sidebar-row sidebar-header">
-        <h3 class="sidebar-head sidebar-head-expand">
-          <button class="sidebar-expand-btn js-toggle-request-metadata">
+      <header class="error-row error-header">
+        <h3 class="error-head error-head-expand">
+          <div class="error-expand-btn">
             RAML
-          </button>
+          </div>
         </h3>
       </header>
-      <pre class="sidebar-pre" style="padding: 0;"><code ui-codemirror="cmOption" ng-model="parseError.raml"></code></pre>
+      <pre class="error-pre error-codemirror-container"><code ui-codemirror="cmOption" ng-model="parseError.raml"></code></pre>
     </section>
   </div>
 
