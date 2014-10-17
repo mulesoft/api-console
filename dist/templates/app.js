@@ -20,7 +20,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "  <div class=\"resource-panel-tabs clearfix\">\n" +
     "\n" +
     "    <div class=\"toggle-tabs resource-panel-toggle-tabs\" ng-click=\"toggleTab($event)\">\n" +
-    "      <a href=\"#\" class=\"toggle-tab is-active\">Request</a><a href=\"#\" class=\"toggle-tab\">Response</a>\n" +
+    "      <a class=\"toggle-tab is-active\">Request</a><a class=\"toggle-tab\">Response</a>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
@@ -135,7 +135,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "        <header class=\"sidebar-row sidebar-header\">\n" +
     "          <h3 class=\"sidebar-head\">\n" +
     "            Try it\n" +
-    "            <a href=\"#\" class=\"sidebar-fullscreen-toggle js-sidebar-fullscreen\" ng-click=\"toggleSidebar($event)\">\n" +
+    "            <a class=\"sidebar-fullscreen-toggle js-sidebar-fullscreen\" ng-click=\"toggleSidebar($event)\">\n" +
     "              <img src=\"img/icn-expand.svg\" alt=\"\">\n" +
     "              <span class=\"visuallyhidden\">Expand</span>\n" +
     "            </a>\n" +
@@ -157,9 +157,14 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"toggle-group sidebar-toggle-group\">\n" +
-    "                <button class=\"toggle toggle-mini is-active\">Anonymous</button>\n" +
-    "                <button class=\"toggle toggle-mini\">oauth_2_0</button>\n" +
+    "                <button ng-click=\"toggleSecurity($event, scheme.type, key)\" class=\"toggle toggle-mini\" ng-class=\"{'is-active': $first}\" ng-repeat=\"(key, scheme) in securitySchemes\">{{scheme.type}}</button>\n" +
     "              </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div ng-switch=\"currentScheme.type\">\n" +
+    "              <basic-auth ng-switch-when=\"Basic Authentication\" credentials='credentials'></basic-auth>\n" +
+    "              <oauth1 ng-switch-when=\"OAuth 1.0\" credentials='credentials'></oauth1>\n" +
+    "              <oauth2 ng-switch-when=\"OAuth 2.0\" credentials='credentials'></oauth2>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
@@ -308,7 +313,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "            <pre class=\"sidebar-pre sidebar-response-body\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }\" ng-model=\"response.body\"></code></pre>\n" +
+    "            <pre class=\"sidebar-pre\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, lineWrapping : true }\" ng-model=\"response.body\"></code></pre>\n" +
     "          </div>\n" +
     "        </section>\n" +
     "      </div>\n" +
@@ -432,6 +437,51 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    </ol>\n" +
     "  </div>\n" +
     "</main>\n"
+  );
+
+
+  $templateCache.put('security/basic_auth.tpl.html',
+    "<div class=\"sidebar-row\">\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"username\" class=\"sidebar-label\">Username</label>\n" +
+    "    <input type=\"text\" id=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\"/>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"password\" class=\"sidebar-label\">Password</label>\n" +
+    "    <input type=\"password\" id=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\"/>\n" +
+    "  </p>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('security/oauth1.tpl.html',
+    "<div class=\"sidebar-row\">\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"consumerKey\" class=\"sidebar-label\">Consumer Key</label>\n" +
+    "    <input type=\"text\" id=\"consumerKey\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerKey\"/>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"consumerSecret\" class=\"sidebar-label\">Consumer Secret</label>\n" +
+    "    <input type=\"password\" id=\"consumerSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerSecret\"/>\n" +
+    "  </p>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('security/oauth2.tpl.html',
+    "<div class=\"sidebar-row\">\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"clientId\" class=\"sidebar-label\">Client ID</label>\n" +
+    "    <input type=\"text\" id=\"clientId\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientId\"/>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"clientSecret\" class=\"sidebar-label\">Client Secret</label>\n" +
+    "    <input type=\"password\" id=\"clientSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientSecret\"/>\n" +
+    "  </p>\n" +
+    "</div>\n"
   );
 
 }]);

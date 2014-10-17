@@ -25,10 +25,12 @@ RAML.Directives = {};
 RAML.Services = {};
 RAML.Filters = {};
 RAML.Services.TryIt = {};
+RAML.Security = {};
 
 angular.module('RAML.Directives', []);
 angular.module('RAML.Services', ['raml']);
-angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'hc.marked', 'ui.codemirror']);
+angular.module('RAML.Security', []);
+angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
 
 // Marked Config
 var renderer = new window.marked.Renderer();
@@ -47,6 +49,16 @@ window.marked.setOptions({
   smartLists: true,
   smartypants: false
 });
+
+
+  RAML.Settings = RAML.Settings || {};
+
+  var location = window.location;
+  var uri      = location.protocol + '//' + location.host + location.pathname.replace(/\/$/, '');
+
+  RAML.Settings.proxy = RAML.Settings.proxy || false;
+  RAML.Settings.oauth2RedirectUri = RAML.Settings.oauth2RedirectUri || uri + '/authentication/oauth2.html';
+  RAML.Settings.oauth1RedirectUri = RAML.Settings.oauth1RedirectUri || uri + '/authentication/oauth2.html';
 
 RAML.Directives.closeButton = function($window) {
   return {
@@ -169,6 +181,20 @@ RAML.Directives.methodList = function($window) {
         $scope.showRequestMetadata = false;
         $scope.showMoreEnable = true;
         $scope.showSpinner = false;
+        $scope.securitySchemes = $scope.methodInfo.securitySchemes();
+        $scope.credentials = {};
+
+        if ($scope.methodInfo.allowsAnonymousAccess()) {
+          $scope.securitySchemes.anonymous = {
+            type: "Anonymous"
+          };
+        }
+
+        var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
+        $scope.currentScheme = {
+          type: $scope.securitySchemes[defaultScheme].type,
+          name: defaultScheme
+        };
 
         editors.map(function (index) {
           setTimeout(function () {
@@ -386,18 +412,30 @@ RAML.Directives.sidebar = function($window) {
         }, 1);
       };
 
+      $scope.toggleSecurity = function ($event, schemaType, name) {
+        var $this = jQuery($event.currentTarget);
+        var $panel = $this.closest('.sidebar-toggle-group').find('button');
+
+        $panel.removeClass('is-active');
+        $this.addClass('is-active');
+        $scope.currentScheme = {
+          type: schemaType,
+          name: name
+        };
+      };
+
       $scope.prefillBody = function (current) {
         var definition = $scope.context.bodyContent.definitions[current];
         definition.value = definition.contentType.example;
       };
 
-      //// TOOD: Add a code highligther
-      //// TODO: Scroll to request whene make a try-it
+      //// TODO: Scroll to request when make a try-it
+      //// TODO: Add search plug-in for response body -> if greater than 1000 lines
       //// TODO: Show required errors!
       //// TODO: Add support for form-parameters
       //// TODO: Add an spinner for RAML loading
-      //// TODO: Scroll to the current window when open a resource-method
-      //// TODO: Add support to securitySchemas
+      //// TODO: Scroll to the current window when open a resource-method (display-name is optional :()
+      //// TODO: Fix open/close resource
       //// TODO: Remove jQuery code as much as possible
       //// TODO: Make Fonts locals
       $scope.tryIt = function ($event) {
@@ -438,10 +476,25 @@ RAML.Directives.sidebar = function($window) {
 
         $scope.requestOptions = request.toOptions();
 
-        jQuery.ajax($scope.requestOptions).then(
-          function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-          function(jqXhr) { handleResponse(jqXhr); }
-        );
+         var authStrategy;
+
+        try {
+          var securitySchemes = $scope.methodInfo.securitySchemes();
+
+          var scheme = securitySchemes && securitySchemes[$scope.currentScheme.name];
+          authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+        } catch (e) {
+          // custom strategies aren't supported yet.
+        }
+
+        authStrategy.authenticate().then(function(token) {
+          token.sign(request);
+
+          jQuery.ajax($scope.requestOptions).then(
+            function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+            function(jqXhr) { handleResponse(jqXhr); }
+          );
+        });
       };
 
       $scope.toggleSidebar = function ($event, fullscreenEnable) {
@@ -680,6 +733,48 @@ RAML.Directives.resources = function(ramlParserWrapper) {
 angular.module('RAML.Directives')
   .directive('ramlResources', RAML.Directives.resources);
 
+RAML.Security.basicAuth = function($window) {
+  return {
+    restrict: 'E',
+    templateUrl: 'security/basic_auth.tpl.html',
+    replace: true,
+    scope: {
+      credentials: '='
+    }
+  };
+};
+
+angular.module('RAML.Security')
+  .directive('basicAuth', ['$window', RAML.Security.basicAuth]);
+
+RAML.Security.oauth1 = function($window) {
+  return {
+    restrict: 'E',
+    templateUrl: 'security/oauth1.tpl.html',
+    replace: true,
+    scope: {
+      credentials: '='
+    }
+  };
+};
+
+angular.module('RAML.Security')
+  .directive('oauth1', ['$window', RAML.Security.oauth1]);
+
+RAML.Security.oauth2 = function($window) {
+  return {
+    restrict: 'E',
+    templateUrl: 'security/oauth2.tpl.html',
+    replace: true,
+    scope: {
+      credentials: '='
+    }
+  };
+};
+
+angular.module('RAML.Security')
+  .directive('oauth2', ['$window', RAML.Security.oauth2]);
+
 RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
   var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
 
@@ -902,7 +997,7 @@ angular.module('RAML.Services')
   RAML.Client.AuthStrategies.Oauth1.requestAuthorization = function(settings) {
     return function requestAuthorization(temporaryCredentials) {
       var authorizationUrl = settings.authorizationUri + '?oauth_token=' + temporaryCredentials.token,
-      deferred = $.Deferred();
+      deferred = jQuery.Deferred();
 
       window.RAML.authorizationSuccess = function(authResult) {
         temporaryCredentials.verifier = authResult.verifier;
@@ -1303,7 +1398,7 @@ angular.module('RAML.Services')
 
   RAML.Client.AuthStrategies.Oauth2.requestAuthorization = function(settings, credentialsManager) {
     var authorizationUrl = credentialsManager.authorizationUrl(settings.authorizationUri),
-        deferred = $.Deferred();
+        deferred = jQuery.Deferred();
 
     window.RAML.authorizationSuccess = function(code) { deferred.resolve(code); };
     window.open(authorizationUrl, WINDOW_NAME);
@@ -1515,10 +1610,9 @@ angular.module('RAML.Services')
         o.url = options.url + separator + jQuery.param(queryParams, true);
       }
 
-      //// TODO: Fix it
-      // if (!RAML.Services.Config.config.disableProxy && RAML.Settings.proxy) {
-      //   o.url = RAML.Settings.proxy + o.url;
-      // }
+      if (RAML.Settings.proxy) {
+        o.url = RAML.Settings.proxy + o.url;
+      }
 
       return o;
     };
@@ -2271,7 +2365,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "  <div class=\"resource-panel-tabs clearfix\">\n" +
     "\n" +
     "    <div class=\"toggle-tabs resource-panel-toggle-tabs\" ng-click=\"toggleTab($event)\">\n" +
-    "      <a href=\"#\" class=\"toggle-tab is-active\">Request</a><a href=\"#\" class=\"toggle-tab\">Response</a>\n" +
+    "      <a class=\"toggle-tab is-active\">Request</a><a class=\"toggle-tab\">Response</a>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
@@ -2386,7 +2480,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "        <header class=\"sidebar-row sidebar-header\">\n" +
     "          <h3 class=\"sidebar-head\">\n" +
     "            Try it\n" +
-    "            <a href=\"#\" class=\"sidebar-fullscreen-toggle js-sidebar-fullscreen\" ng-click=\"toggleSidebar($event)\">\n" +
+    "            <a class=\"sidebar-fullscreen-toggle js-sidebar-fullscreen\" ng-click=\"toggleSidebar($event)\">\n" +
     "              <img src=\"img/icn-expand.svg\" alt=\"\">\n" +
     "              <span class=\"visuallyhidden\">Expand</span>\n" +
     "            </a>\n" +
@@ -2408,9 +2502,14 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"toggle-group sidebar-toggle-group\">\n" +
-    "                <button class=\"toggle toggle-mini is-active\">Anonymous</button>\n" +
-    "                <button class=\"toggle toggle-mini\">oauth_2_0</button>\n" +
+    "                <button ng-click=\"toggleSecurity($event, scheme.type, key)\" class=\"toggle toggle-mini\" ng-class=\"{'is-active': $first}\" ng-repeat=\"(key, scheme) in securitySchemes\">{{scheme.type}}</button>\n" +
     "              </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div ng-switch=\"currentScheme.type\">\n" +
+    "              <basic-auth ng-switch-when=\"Basic Authentication\" credentials='credentials'></basic-auth>\n" +
+    "              <oauth1 ng-switch-when=\"OAuth 1.0\" credentials='credentials'></oauth1>\n" +
+    "              <oauth2 ng-switch-when=\"OAuth 2.0\" credentials='credentials'></oauth2>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
@@ -2559,7 +2658,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "            <pre class=\"sidebar-pre sidebar-response-body\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }\" ng-model=\"response.body\"></code></pre>\n" +
+    "            <pre class=\"sidebar-pre\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, lineWrapping : true }\" ng-model=\"response.body\"></code></pre>\n" +
     "          </div>\n" +
     "        </section>\n" +
     "      </div>\n" +
@@ -2683,6 +2782,51 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    </ol>\n" +
     "  </div>\n" +
     "</main>\n"
+  );
+
+
+  $templateCache.put('security/basic_auth.tpl.html',
+    "<div class=\"sidebar-row\">\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"username\" class=\"sidebar-label\">Username</label>\n" +
+    "    <input type=\"text\" id=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\"/>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"password\" class=\"sidebar-label\">Password</label>\n" +
+    "    <input type=\"password\" id=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\"/>\n" +
+    "  </p>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('security/oauth1.tpl.html',
+    "<div class=\"sidebar-row\">\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"consumerKey\" class=\"sidebar-label\">Consumer Key</label>\n" +
+    "    <input type=\"text\" id=\"consumerKey\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerKey\"/>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"consumerSecret\" class=\"sidebar-label\">Consumer Secret</label>\n" +
+    "    <input type=\"password\" id=\"consumerSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerSecret\"/>\n" +
+    "  </p>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('security/oauth2.tpl.html',
+    "<div class=\"sidebar-row\">\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"clientId\" class=\"sidebar-label\">Client ID</label>\n" +
+    "    <input type=\"text\" id=\"clientId\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientId\"/>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"clientSecret\" class=\"sidebar-label\">Client Secret</label>\n" +
+    "    <input type=\"password\" id=\"clientSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientSecret\"/>\n" +
+    "  </p>\n" +
+    "</div>\n"
   );
 
 }]);
