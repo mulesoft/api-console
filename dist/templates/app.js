@@ -350,38 +350,38 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('resources/resources.tpl.html',
-    "<main class=\"container primary\">\n" +
+    "<main class=\"error-container error-primary\">\n" +
     "\n" +
-    "  <div class=\"sidebar-content-wrapper\" ng-show=\"parseError\">\n" +
-    "    <h3 style=\"border-bottom: 1px solid; border-bottom-color: darkgray; font-weight: normal;\">Error while loading <b>{{parseError.fileName}}</b></h3>\n" +
+    "  <div class=\"error-content\" ng-show=\"parseError\">\n" +
+    "    <h3 class=\"heading\">Error while loading <b>{{parseError.fileName}}</b></h3>\n" +
     "\n" +
     "    <section>\n" +
-    "      <header class=\"sidebar-row sidebar-header\">\n" +
-    "        <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
-    "          <button class=\"sidebar-expand-btn js-toggle-request-metadata\">\n" +
+    "      <header class=\"error-row error-header\">\n" +
+    "        <h3 class=\"error-head error-head-expand\">\n" +
+    "          <div class=\"error-expand-btn\">\n" +
     "            Message\n" +
-    "          </button>\n" +
+    "          </div>\n" +
     "        </h3>\n" +
     "      </header>\n" +
-    "      <pre class=\"sidebar-pre\"><code>{{parseError.message}}</code></pre>\n" +
+    "      <pre class=\"error-pre\"><code>{{parseError.message}}</code></pre>\n" +
     "\n" +
-    "      <header class=\"sidebar-row sidebar-header\">\n" +
-    "        <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
-    "          <button class=\"sidebar-expand-btn js-toggle-request-metadata\" style=\"padding: 0;\">\n" +
-    "            Snippet <span style=\"font-size: 13px; color: #727379;\">(Line {{parseError.line}}, Column {{parseError.column}})</span>\n" +
-    "          </button>\n" +
+    "      <header class=\"error-row error-header\">\n" +
+    "        <h3 class=\"error-head error-head-expand\">\n" +
+    "          <div class=\"error-expand-btn\">\n" +
+    "            Snippet <span class=\"error-subhead\">(Line {{parseError.line}}, Column {{parseError.column}})</span>\n" +
+    "          </div>\n" +
     "        </h3>\n" +
     "      </header>\n" +
-    "      <pre class=\"sidebar-pre\"><code style=\"display: block; text-overflow: ellipsis; overflow: hidden;\">{{parseError.snippet}}</code></pre>\n" +
+    "      <pre class=\"error-pre\"><code class=\"error-snippet\">{{parseError.snippet}}</code></pre>\n" +
     "\n" +
-    "      <header class=\"sidebar-row sidebar-header\">\n" +
-    "        <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
-    "          <button class=\"sidebar-expand-btn js-toggle-request-metadata\">\n" +
+    "      <header class=\"error-row error-header\">\n" +
+    "        <h3 class=\"error-head error-head-expand\">\n" +
+    "          <div class=\"error-expand-btn\">\n" +
     "            RAML\n" +
-    "          </button>\n" +
+    "          </div>\n" +
     "        </h3>\n" +
     "      </header>\n" +
-    "      <pre class=\"sidebar-pre\" style=\"padding: 0;\"><code ui-codemirror=\"cmOption\" ng-model=\"parseError.raml\"></code></pre>\n" +
+    "      <pre class=\"error-pre error-codemirror-container\"><code ui-codemirror=\"cmOption\" ng-model=\"parseError.raml\"></code></pre>\n" +
     "    </section>\n" +
     "  </div>\n" +
     "\n" +

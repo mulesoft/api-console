@@ -145,12 +145,14 @@ RAML.Directives.sidebar = function($window) {
         definition.value = definition.contentType.example;
       };
 
+      //// TOOD: Add a code highligther
+      //// TODO: Scroll to request whene make a try-it
+      //// TODO: Show required errors!
       //// TODO: Add support for form-parameters
       //// TODO: Add an spinner for RAML loading
-      //// TODO: Show required errors!
-      //// TODO: Scroll to the current window
+      //// TODO: Scroll to the current window when open a resource-method
+      //// TODO: Add support to securitySchemas
       //// TODO: Remove jQuery code as much as possible
-      //// TOOD: Add a code highligther
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
