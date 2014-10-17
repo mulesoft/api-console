@@ -156,6 +156,7 @@ RAML.Directives.methodList = function($window) {
         var $resource = $this.closest('.resource');
         var $resourceListItem = $resource.parent('li');
         var $closingEl;
+        var editors = jQuery('.sidebar-content-wrapper #sidebar-body .CodeMirror');
 
         $scope.methodInfo = $scope.resource.methods[$index];
         $scope.responseInfo = getResponseInfo();
@@ -168,6 +169,17 @@ RAML.Directives.methodList = function($window) {
         $scope.showRequestMetadata = false;
         $scope.showMoreEnable = true;
         $scope.showSpinner = false;
+
+        editors.map(function (index) {
+          setTimeout(function () {
+            var bodyEditor = editors[index].CodeMirror;
+
+            if (bodyEditor && $scope.context.bodyContent) {
+              bodyEditor.setOption('mode', $scope.context.bodyContent.selected);
+              bodyEditor.refresh();
+            }
+          }, 1);
+        });
 
         if (!$resource.hasClass('is-active')) {
           $closingEl = $inactiveElements
@@ -387,6 +399,7 @@ RAML.Directives.sidebar = function($window) {
       //// TODO: Scroll to the current window when open a resource-method
       //// TODO: Add support to securitySchemas
       //// TODO: Remove jQuery code as much as possible
+      //// TODO: Make Fonts locals
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
@@ -623,6 +636,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
         lineNumbers: true,
         readOnly: 'nocursor',
         lineWrapping : true,
+        tabSize: 2,
         mode: 'yaml'
       };
     },
@@ -2472,7 +2486,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
-    "              <div class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
+    "              <div class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2 }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
     "            </div>\n" +
     "\n" +
     "            <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-show=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
@@ -2521,7 +2535,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <div ng-show=\"requestOptions.data\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "                  <pre class=\"sidebar-pre\"><code ui-codemirror=\"{ readOnly: 'nocursor' }\" ng-model=\"requestOptions.data\"></code></pre>\n" +
+    "                  <pre class=\"sidebar-pre sidebar-request-body\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }\" ng-model=\"requestOptions.data\"></code></pre>\n" +
     "                </div>\n" +
     "              </div>\n" +
     "            </div>\n" +
@@ -2545,7 +2559,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "            <pre class=\"sidebar-pre\"><code ui-codemirror=\"{ readOnly: 'nocursor' }\" ng-model=\"response.body\"></code></pre>\n" +
+    "            <pre class=\"sidebar-pre sidebar-response-body\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }\" ng-model=\"response.body\"></code></pre>\n" +
     "          </div>\n" +
     "        </section>\n" +
     "      </div>\n" +

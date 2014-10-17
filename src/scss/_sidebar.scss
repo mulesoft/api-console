@@ -265,6 +265,7 @@
   resize: none;
   font-family: Source Code Pro;
   font-size: 14px;
+  border: 1px solid #c6cada;
 }
 
 .sidebar-header {
@@ -899,4 +900,20 @@
     width: 15px;
     vertical-align: middle;
   }
+}
+
+.sidebar-response-body {
+  padding: 0 !important;
+}
+
+.sidebar-response-body .CodeMirror {
+  height: 100% !important;
+}
+
+.sidebar-request-body {
+  padding: 0 !important;
+}
+
+.sidebar-request-body .CodeMirror {
+  height: 100% !important;
 }

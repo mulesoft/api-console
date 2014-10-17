@@ -104,7 +104,7 @@
             </div>
 
             <div class="sidebar-row">
-              <div class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+              <div class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
             </div>
 
             <div class="sidebar-prefill sidebar-row" align="right" ng-show="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
@@ -153,7 +153,7 @@
 
                 <div ng-show="requestOptions.data">
                   <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-                  <pre class="sidebar-pre"><code ui-codemirror="{ readOnly: 'nocursor' }" ng-model="requestOptions.data"></code></pre>
+                  <pre class="sidebar-pre sidebar-request-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="requestOptions.data"></code></pre>
                 </div>
               </div>
             </div>
@@ -177,7 +177,7 @@
             </div>
 
             <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-            <pre class="sidebar-pre"><code ui-codemirror="{ readOnly: 'nocursor' }" ng-model="response.body"></code></pre>
+            <pre class="sidebar-pre sidebar-response-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="response.body"></code></pre>
           </div>
         </section>
       </div>

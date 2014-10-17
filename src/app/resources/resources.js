@@ -36,6 +36,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
         lineNumbers: true,
         readOnly: 'nocursor',
         lineWrapping : true,
+        tabSize: 2,
         mode: 'yaml'
       };
     },
