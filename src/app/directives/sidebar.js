@@ -177,7 +177,6 @@ RAML.Directives.sidebar = function($window) {
       //// TODO: Add search plug-in for response body -> if greater than 1000 lines
       //// TODO: Show required errors!
       //// TODO: Add support for form-parameters
-      //// TODO: Add an spinner for RAML loading
       //// TODO: Scroll to the current window when open a resource-method (display-name is optional :()
       //// TODO: Fix open/close resource
       //// TODO: Remove jQuery code as much as possible

@@ -1,5 +1,17 @@
 <main class="error-container error-primary">
 
+  <div ng-hide="parseError">
+    <div ng-hide="loaded">
+      <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="error-content" ng-show="parseError">
     <h3 class="heading">Error while loading <b>{{parseError.fileName}}</b></h3>
 
@@ -33,7 +45,7 @@
     </section>
   </div>
 
-  <div ng-hide="parseError">
+  <div ng-show="loaded">
     <theme-switcher></theme-switcher>
     <h1 class="title">{{raml.title}}</h1>
 
