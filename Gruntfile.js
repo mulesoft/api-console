@@ -82,7 +82,7 @@ module.exports = function (grunt) {
         }
       },
       vendor: {
-        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/codemirror/codemirror.js', 'vendor/angular-codemirror/angular-codemirror.js'],
+        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/codemirror/codemirror.js', 'vendor/angular-codemirror/angular-codemirror.js', 'vendor/crypto-js/hmac-sha1.js', 'vendor/crypto-js/enc-base64.js'],
         dest: '<%= distdir %>/scripts/vendor.js'
       }
     },
@@ -96,7 +96,7 @@ module.exports = function (grunt) {
         dest:'<%= distdir %>/<%= pkg.name %>.js'
       },
       vendor: {
-        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/codemirror/codemirror.js', 'vendor/angular-codemirror/angular-codemirror.js'],
+        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/codemirror/codemirror.js', 'vendor/angular-codemirror/angular-codemirror.js', 'vendor/crypto-js/hmac-sha1.js', 'vendor/crypto-js/enc-base64.js'],
         dest: '<%= distdir %>/scripts/vendor.js'
       }
     },

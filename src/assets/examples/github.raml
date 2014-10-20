@@ -4,6 +4,8 @@ title: GitHub API
 version: v3
 baseUri: https://api.github.com/
 securitySchemes:
+  - basic:
+      type: Basic Authentication
   - oauth_2_0:
       description: |
         OAuth2 is a protocol that lets external apps request authorization to private
@@ -41,7 +43,7 @@ securitySchemes:
           - "delete_repo"
           - "notifications"
           - "gist"
-securedBy: [ oauth_2_0 ]
+securedBy: [ oauth_2_0, basic ]
 mediaType: application/json
 resourceTypes:
   - base:
