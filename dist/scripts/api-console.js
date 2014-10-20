@@ -437,7 +437,6 @@ RAML.Directives.sidebar = function($window) {
       //// TODO: Scroll to the current window when open a resource-method (display-name is optional :()
       //// TODO: Fix open/close resource
       //// TODO: Remove jQuery code as much as possible
-      //// TODO: Make Fonts locals
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
