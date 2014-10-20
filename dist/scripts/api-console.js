@@ -433,7 +433,6 @@ RAML.Directives.sidebar = function($window) {
       //// TODO: Add search plug-in for response body -> if greater than 1000 lines
       //// TODO: Show required errors!
       //// TODO: Add support for form-parameters
-      //// TODO: Add an spinner for RAML loading
       //// TODO: Scroll to the current window when open a resource-method (display-name is optional :()
       //// TODO: Fix open/close resource
       //// TODO: Remove jQuery code as much as possible
@@ -693,11 +692,13 @@ RAML.Directives.resources = function(ramlParserWrapper) {
       };
     },
     link: function($scope, $element) {
-      $scope.parseError = {};
+      $scope.loaded = false;
+      $scope.parseError = null;
 
       ramlParserWrapper.onParseSuccess(function(raml) {
         $scope.raml = RAML.Inspector.create(raml);
         $scope.parseError = null;
+        $scope.loaded = true;
       });
 
       ramlParserWrapper.onParseError(function(error) {
@@ -706,6 +707,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
 
         $scope.cmModel = context.buffer;
 
+        // $scope.loaded = true;
         $scope.parseError = {
           column: context.column + 1,
           line: context.line + 1,
@@ -2701,6 +2703,18 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   $templateCache.put('resources/resources.tpl.html',
     "<main class=\"error-container error-primary\">\n" +
     "\n" +
+    "  <div ng-hide=\"parseError\">\n" +
+    "    <div ng-hide=\"loaded\">\n" +
+    "      <div class=\"spinner\">\n" +
+    "        <div class=\"rect1\"></div>\n" +
+    "        <div class=\"rect2\"></div>\n" +
+    "        <div class=\"rect3\"></div>\n" +
+    "        <div class=\"rect4\"></div>\n" +
+    "        <div class=\"rect5\"></div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
     "  <div class=\"error-content\" ng-show=\"parseError\">\n" +
     "    <h3 class=\"heading\">Error while loading <b>{{parseError.fileName}}</b></h3>\n" +
     "\n" +
@@ -2734,7 +2748,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    </section>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div ng-hide=\"parseError\">\n" +
+    "  <div ng-show=\"loaded\">\n" +
     "    <theme-switcher></theme-switcher>\n" +
     "    <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +

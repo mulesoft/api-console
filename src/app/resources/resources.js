@@ -41,11 +41,13 @@ RAML.Directives.resources = function(ramlParserWrapper) {
       };
     },
     link: function($scope, $element) {
-      $scope.parseError = {};
+      $scope.loaded = false;
+      $scope.parseError = null;
 
       ramlParserWrapper.onParseSuccess(function(raml) {
         $scope.raml = RAML.Inspector.create(raml);
         $scope.parseError = null;
+        $scope.loaded = true;
       });
 
       ramlParserWrapper.onParseError(function(error) {
@@ -54,6 +56,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
 
         $scope.cmModel = context.buffer;
 
+        // $scope.loaded = true;
         $scope.parseError = {
           column: context.column + 1,
           line: context.line + 1,

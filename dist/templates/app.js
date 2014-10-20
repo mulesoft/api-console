@@ -357,6 +357,18 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   $templateCache.put('resources/resources.tpl.html',
     "<main class=\"error-container error-primary\">\n" +
     "\n" +
+    "  <div ng-hide=\"parseError\">\n" +
+    "    <div ng-hide=\"loaded\">\n" +
+    "      <div class=\"spinner\">\n" +
+    "        <div class=\"rect1\"></div>\n" +
+    "        <div class=\"rect2\"></div>\n" +
+    "        <div class=\"rect3\"></div>\n" +
+    "        <div class=\"rect4\"></div>\n" +
+    "        <div class=\"rect5\"></div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
     "  <div class=\"error-content\" ng-show=\"parseError\">\n" +
     "    <h3 class=\"heading\">Error while loading <b>{{parseError.fileName}}</b></h3>\n" +
     "\n" +
@@ -390,7 +402,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    </section>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div ng-hide=\"parseError\">\n" +
+    "  <div ng-show=\"loaded\">\n" +
     "    <theme-switcher></theme-switcher>\n" +
     "    <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +
