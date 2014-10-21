@@ -117,6 +117,54 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('directives/raml-initializer.tpl.html',
+    "<div>\n" +
+    "  <div class=\"initializer-container initializer-primary\" ng-hide=\"ramlLoaded\">\n" +
+    "    <h1 class=\"title\">RAML Console</h1>\n" +
+    "\n" +
+    "    <div class=\"initializer-content-wrapper\">\n" +
+    "      <section>\n" +
+    "        <header class=\"initializer-row initializer-subheader\">\n" +
+    "          <h4 class=\"initializer-subhead\">Initialize from the URL of a RAML file</h4>\n" +
+    "        </header>\n" +
+    "\n" +
+    "        <div class=\"initializer-row\">\n" +
+    "          <p class=\"initializer-input-container\">\n" +
+    "            <input class=\"initializer-input initializer-raml-field\" ng-model=\"ramlUrl\">\n" +
+    "          </p>\n" +
+    "\n" +
+    "          <div class=\"initializer-action-group\" align=\"right\">\n" +
+    "            <button class=\"initializer-action initializer-action-btn\" ng-click=\"loadFromUrl()\">Load from URL</button>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "\n" +
+    "      <section>\n" +
+    "        <header class=\"initializer-row initializer-subheader\">\n" +
+    "          <h4 class=\"initializer-subhead\">or parse RAML in here</h4>\n" +
+    "        </header>\n" +
+    "\n" +
+    "        <div class=\"initializer-row\">\n" +
+    "          <p class=\"initializer-input-container\">\n" +
+    "            <textarea ui-codemirror=\"{\n" +
+    "              lineNumbers: true,\n" +
+    "              lineWrapping : true,\n" +
+    "              tabSize: 2,\n" +
+    "              mode: 'yaml'\n" +
+    "            }\" ng-model=\"raml\"></textarea>\n" +
+    "          </p>\n" +
+    "          <div class=\"initializer-action-group\" align=\"right\">\n" +
+    "            <button class=\"initializer-action initializer-action-btn\" ng-click=\"loadRaml()\">Load RAML</button>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "  <raml-resources ng-show=\"ramlLoaded\"></raml-resources>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('directives/resource-panel.tpl.html',
     "<div class=\"resource-panel\">\n" +
     "  <div class=\"resource-panel-wrapper\">\n" +
