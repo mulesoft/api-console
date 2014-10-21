@@ -716,10 +716,16 @@ RAML.Directives.resources = function(ramlParserWrapper) {
     scope: {
         src: '@'
       },
-    controller: function($scope, $element) {
+    controller: function($scope, $window) {
+      $scope.proxy = $window.RAML.Settings.proxy;
+
       if ($scope.src) {
         ramlParserWrapper.load($scope.src);
       }
+
+      $scope.updateProxyConfig = function (status) {
+        $window.RAML.Settings.disableProxy = status;
+      };
 
       $scope.toggle = function ($event) {
         var $this = jQuery($event.currentTarget);
@@ -749,7 +755,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
         mode: 'yaml'
       };
     },
-    link: function($scope, $element) {
+    link: function($scope) {
       $scope.loaded = false;
       $scope.parseError = null;
 
@@ -1671,7 +1677,7 @@ angular.module('RAML.Services')
         o.url = options.url + separator + jQuery.param(queryParams, true);
       }
 
-      if (RAML.Settings.proxy) {
+      if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
         o.url = RAML.Settings.proxy + o.url;
       }
 
@@ -2863,6 +2869,11 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "  <div ng-show=\"loaded\">\n" +
     "    <theme-switcher></theme-switcher>\n" +
     "    <h1 class=\"title\">{{raml.title}}</h1>\n" +
+    "\n" +
+    "    <div ng-if=\"proxy\" align=\"right\" class=\"resource-proxy\">\n" +
+    "      <span>API is behind a firewall <a href=\"http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall\" target=\"_blank\">(?)</a></span>\n" +
+    "      <input type=\"checkbox\" ng-model=\"disableProxy\" ng-change=\"updateProxyConfig(disableProxy)\">\n" +
+    "    </div>\n" +
     "\n" +
     "    <ol class=\"resource-list resource-list-root\">\n" +
     "      <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +

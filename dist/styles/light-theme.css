@@ -995,6 +995,12 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   color: #333;
 }
 
+.resource-proxy {
+  color: #585961;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
 .resource-body-heading > span {
   margin-left: 5px;
   cursor: pointer;

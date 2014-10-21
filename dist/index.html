@@ -10,11 +10,15 @@
 </head>
 <body ng-app="ramlConsole" ng-cloak>
   <raml-initializer></raml-initializer>
+  <!-- <raml-resources src="http://localhost:9000/examples/leagues.raml"></raml-resources> -->
 
   <script type="text/javascript" src="scripts/vendor.js"></script>
   <script type="text/javascript" src="scripts/api-console.js"></script>
   <script type="text/javascript">
     $.noConflict();
   </script>
+   <script>
+      RAML.Settings.proxy = '/proxy/';
+    </script>
 </body>
 </html>
