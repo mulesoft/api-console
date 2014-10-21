@@ -6,10 +6,16 @@ RAML.Directives.resources = function(ramlParserWrapper) {
     scope: {
         src: '@'
       },
-    controller: function($scope, $element) {
+    controller: function($scope, $window) {
+      $scope.proxy = $window.RAML.Settings.proxy;
+
       if ($scope.src) {
         ramlParserWrapper.load($scope.src);
       }
+
+      $scope.updateProxyConfig = function (status) {
+        $window.RAML.Settings.disableProxy = status;
+      };
 
       $scope.toggle = function ($event) {
         var $this = jQuery($event.currentTarget);
@@ -39,7 +45,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
         mode: 'yaml'
       };
     },
-    link: function($scope, $element) {
+    link: function($scope) {
       $scope.loaded = false;
       $scope.parseError = null;
 

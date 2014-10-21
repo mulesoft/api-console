@@ -458,6 +458,11 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    <theme-switcher></theme-switcher>\n" +
     "    <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +
+    "    <div ng-if=\"proxy\" align=\"right\" class=\"resource-proxy\">\n" +
+    "      <span>API is behind a firewall <a href=\"http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall\" target=\"_blank\">(?)</a></span>\n" +
+    "      <input type=\"checkbox\" ng-model=\"disableProxy\" ng-change=\"updateProxyConfig(disableProxy)\">\n" +
+    "    </div>\n" +
+    "\n" +
     "    <ol class=\"resource-list resource-list-root\">\n" +
     "      <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "        <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +

@@ -87,7 +87,7 @@
         o.url = options.url + separator + jQuery.param(queryParams, true);
       }
 
-      if (RAML.Settings.proxy) {
+      if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
         o.url = RAML.Settings.proxy + o.url;
       }
 

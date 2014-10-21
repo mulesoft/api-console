@@ -53,6 +53,11 @@
     <theme-switcher></theme-switcher>
     <h1 class="title">{{raml.title}}</h1>
 
+    <div ng-if="proxy" align="right" class="resource-proxy">
+      <span>API is behind a firewall <a href="http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall" target="_blank">(?)</a></span>
+      <input type="checkbox" ng-model="disableProxy" ng-change="updateProxyConfig(disableProxy)">
+    </div>
+
     <ol class="resource-list resource-list-root">
       <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
         <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
