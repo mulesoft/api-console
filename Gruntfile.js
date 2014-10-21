@@ -9,6 +9,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('default', [/*'jshint',*/ 'build', 'connect:livereload', 'open:server', 'watch:build']);
+  grunt.registerTask('server', ['build', 'connect:livereload', 'watch:build']);
   grunt.registerTask('build', ['clean', 'ngtemplates', 'concat', 'sass:build', 'copy:assets']);
   grunt.registerTask('release', ['clean', 'ngtemplates', 'uglify', 'jshint', 'karma:unit', 'concat:index', 'sass:min', 'copy:assets']);
 
