@@ -52,27 +52,31 @@ RAML.Directives.resources = function(ramlParserWrapper) {
 
       ramlParserWrapper.onParseError(function(error) {
         var context = error.context_mark || error.problem_mark;
-        var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
+        $scope.parseError = { message: error.message };
 
-        $scope.cmModel = context.buffer;
+        if (context) {
+          var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
 
-        // $scope.loaded = true;
-        $scope.parseError = {
-          column: context.column + 1,
-          line: context.line + 1,
-          message: error.message,
-          snippet: snippet,
-          raml: context.buffer,
-          fileName: context.name
-        };
+          $scope.cmModel = context.buffer;
 
-        // Hack to update codemirror
-        setTimeout(function () {
-          var editor = jQuery('.CodeMirror')[0].CodeMirror;
-          editor.doc.addLineClass(context.line, 'background', 'line-error');
-          editor.doc.setCursor(context.line);
-          $scope.$apply.apply($scope, null);
-        }, 10);
+          // $scope.loaded = true;
+          $scope.parseError = {
+            column: context.column + 1,
+            line: context.line + 1,
+            message: error.message,
+            snippet: snippet,
+            raml: context.buffer,
+            fileName: context.name
+          };
+
+          // Hack to update codemirror
+          setTimeout(function () {
+            var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
+            editor.doc.addLineClass(context.line, 'background', 'line-error');
+            editor.doc.setCursor(context.line);
+            editor.refresh();
+          }, 10);
+        }
 
         $scope.$apply.apply($scope, null);
       });

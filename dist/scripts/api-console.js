@@ -732,27 +732,31 @@ RAML.Directives.resources = function(ramlParserWrapper) {
 
       ramlParserWrapper.onParseError(function(error) {
         var context = error.context_mark || error.problem_mark;
-        var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
+        $scope.parseError = { message: error.message };
 
-        $scope.cmModel = context.buffer;
+        if (context) {
+          var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
 
-        // $scope.loaded = true;
-        $scope.parseError = {
-          column: context.column + 1,
-          line: context.line + 1,
-          message: error.message,
-          snippet: snippet,
-          raml: context.buffer,
-          fileName: context.name
-        };
+          $scope.cmModel = context.buffer;
 
-        // Hack to update codemirror
-        setTimeout(function () {
-          var editor = jQuery('.CodeMirror')[0].CodeMirror;
-          editor.doc.addLineClass(context.line, 'background', 'line-error');
-          editor.doc.setCursor(context.line);
-          $scope.$apply.apply($scope, null);
-        }, 10);
+          // $scope.loaded = true;
+          $scope.parseError = {
+            column: context.column + 1,
+            line: context.line + 1,
+            message: error.message,
+            snippet: snippet,
+            raml: context.buffer,
+            fileName: context.name
+          };
+
+          // Hack to update codemirror
+          setTimeout(function () {
+            var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
+            editor.doc.addLineClass(context.line, 'background', 'line-error');
+            editor.doc.setCursor(context.line);
+            editor.refresh();
+          }, 10);
+        }
 
         $scope.$apply.apply($scope, null);
       });
@@ -2803,25 +2807,29 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "          </div>\n" +
     "        </h3>\n" +
     "      </header>\n" +
-    "      <pre class=\"error-pre\"><code>{{parseError.message}}</code></pre>\n" +
+    "      <pre class=\"error-pre\"><code class=\"error-message\">{{parseError.message}}</code></pre>\n" +
     "\n" +
-    "      <header class=\"error-row error-header\">\n" +
-    "        <h3 class=\"error-head error-head-expand\">\n" +
-    "          <div class=\"error-expand-btn\">\n" +
-    "            Snippet <span class=\"error-subhead\">(Line {{parseError.line}}, Column {{parseError.column}})</span>\n" +
-    "          </div>\n" +
-    "        </h3>\n" +
-    "      </header>\n" +
-    "      <pre class=\"error-pre\"><code class=\"error-snippet\">{{parseError.snippet}}</code></pre>\n" +
+    "      <div ng-show=\"parseError.snippet\">\n" +
+    "        <header class=\"error-row error-header\">\n" +
+    "          <h3 class=\"error-head error-head-expand\">\n" +
+    "            <div class=\"error-expand-btn\">\n" +
+    "              Snippet <span class=\"error-subhead\">(Line {{parseError.line}}, Column {{parseError.column}})</span>\n" +
+    "            </div>\n" +
+    "          </h3>\n" +
+    "        </header>\n" +
+    "        <pre class=\"error-pre\"><code class=\"error-snippet\">{{parseError.snippet}}</code></pre>\n" +
+    "      </div>\n" +
     "\n" +
-    "      <header class=\"error-row error-header\">\n" +
-    "        <h3 class=\"error-head error-head-expand\">\n" +
-    "          <div class=\"error-expand-btn\">\n" +
-    "            RAML\n" +
-    "          </div>\n" +
-    "        </h3>\n" +
-    "      </header>\n" +
-    "      <pre class=\"error-pre error-codemirror-container\"><code ui-codemirror=\"cmOption\" ng-model=\"parseError.raml\"></code></pre>\n" +
+    "      <div ng-show=\"parseError.raml\">\n" +
+    "        <header class=\"error-row error-header\">\n" +
+    "          <h3 class=\"error-head error-head-expand\">\n" +
+    "            <div class=\"error-expand-btn\">\n" +
+    "              RAML\n" +
+    "            </div>\n" +
+    "          </h3>\n" +
+    "        </header>\n" +
+    "        <pre class=\"error-pre error-codemirror-container\"><code ui-codemirror=\"cmOption\" ng-model=\"parseError.raml\"></code></pre>\n" +
+    "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
     "\n" +

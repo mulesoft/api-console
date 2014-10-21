@@ -2142,6 +2142,10 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   font-weight: normal;
 }
 
+.error-message {
+  word-wrap: break-word;
+}
+
 .error-row {
   padding: 12px 16px 16px;
 }

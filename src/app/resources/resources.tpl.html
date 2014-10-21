@@ -23,25 +23,29 @@
           </div>
         </h3>
       </header>
-      <pre class="error-pre"><code>{{parseError.message}}</code></pre>
+      <pre class="error-pre"><code class="error-message">{{parseError.message}}</code></pre>
 
-      <header class="error-row error-header">
-        <h3 class="error-head error-head-expand">
-          <div class="error-expand-btn">
-            Snippet <span class="error-subhead">(Line {{parseError.line}}, Column {{parseError.column}})</span>
-          </div>
-        </h3>
-      </header>
-      <pre class="error-pre"><code class="error-snippet">{{parseError.snippet}}</code></pre>
+      <div ng-show="parseError.snippet">
+        <header class="error-row error-header">
+          <h3 class="error-head error-head-expand">
+            <div class="error-expand-btn">
+              Snippet <span class="error-subhead">(Line {{parseError.line}}, Column {{parseError.column}})</span>
+            </div>
+          </h3>
+        </header>
+        <pre class="error-pre"><code class="error-snippet">{{parseError.snippet}}</code></pre>
+      </div>
 
-      <header class="error-row error-header">
-        <h3 class="error-head error-head-expand">
-          <div class="error-expand-btn">
-            RAML
-          </div>
-        </h3>
-      </header>
-      <pre class="error-pre error-codemirror-container"><code ui-codemirror="cmOption" ng-model="parseError.raml"></code></pre>
+      <div ng-show="parseError.raml">
+        <header class="error-row error-header">
+          <h3 class="error-head error-head-expand">
+            <div class="error-expand-btn">
+              RAML
+            </div>
+          </h3>
+        </header>
+        <pre class="error-pre error-codemirror-container"><code ui-codemirror="cmOption" ng-model="parseError.raml"></code></pre>
+      </div>
     </section>
   </div>
 
