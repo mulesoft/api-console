@@ -3,7 +3,7 @@ RAML.Directives.documentation = function($window) {
     restrict: 'E',
     templateUrl: 'directives/documentation.tpl.html',
     replace: true,
-    controller: function($rootScope, $scope, $element) {
+    controller: function($scope, $element) {
       $scope.toggleTab = function ($event) {
         var $this = jQuery($event.currentTarget);
         var $eachTab = $this.children('.toggle-tab');

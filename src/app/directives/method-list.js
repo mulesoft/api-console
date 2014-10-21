@@ -24,6 +24,22 @@ RAML.Directives.methodList = function($window) {
         return responseInfo;
       };
 
+      $scope.readTraits = function (traits) {
+        var list = [];
+
+        if (traits) {
+          traits.map(function (trait) {
+            if (typeof trait === 'string') {
+              list.push(trait);
+            } else if (typeof trait === 'object') {
+              list.push(Object.keys(trait).join(', '));
+            }
+          });
+        }
+
+        return list.join(', ');
+      }
+
       $scope.showResource = function ($event, $index) {
         var $this = jQuery($event.currentTarget);
         var $inactiveElements = jQuery('.tab').add('.resource').add('li');
@@ -45,6 +61,7 @@ RAML.Directives.methodList = function($window) {
         $scope.showSpinner = false;
         $scope.securitySchemes = $scope.methodInfo.securitySchemes();
         $scope.credentials = {};
+        $scope.traits = $scope.readTraits($scope.methodInfo.is);
 
         if ($scope.methodInfo.allowsAnonymousAccess()) {
           $scope.securitySchemes.anonymous = {
