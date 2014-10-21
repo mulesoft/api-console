@@ -7,6 +7,12 @@ RAML.Directives.ramlInitializer = function(ramlParserWrapper) {
       $scope.ramlLoaded = false;
       $scope.ramlUrl = '';
 
+      $scope.onKeyPressRamlUrl = function ($event) {
+        if ($event.keyCode === 13) {
+          $scope.loadFromUrl();
+        }
+      };
+
       $scope.loadFromUrl = function () {
         if ($scope.ramlUrl) {
           ramlParserWrapper.load($scope.ramlUrl);

@@ -266,6 +266,12 @@ RAML.Directives.ramlInitializer = function(ramlParserWrapper) {
       $scope.ramlLoaded = false;
       $scope.ramlUrl = '';
 
+      $scope.onKeyPressRamlUrl = function ($event) {
+        if ($event.keyCode === 13) {
+          $scope.loadFromUrl();
+        }
+      };
+
       $scope.loadFromUrl = function () {
         if ($scope.ramlUrl) {
           ramlParserWrapper.load($scope.ramlUrl);
@@ -776,7 +782,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
             var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
             editor.doc.addLineClass(context.line, 'background', 'line-error');
             editor.doc.setCursor(context.line);
-            editor.refresh();
           }, 10);
         }
 
@@ -2531,7 +2536,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"initializer-row\">\n" +
     "          <p class=\"initializer-input-container\">\n" +
-    "            <input class=\"initializer-input initializer-raml-field\" ng-model=\"ramlUrl\">\n" +
+    "            <input autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\">\n" +
     "          </p>\n" +
     "\n" +
     "          <div class=\"initializer-action-group\" align=\"right\">\n" +

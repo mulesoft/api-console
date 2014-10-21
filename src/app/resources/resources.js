@@ -72,7 +72,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
             var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
             editor.doc.addLineClass(context.line, 'background', 'line-error');
             editor.doc.setCursor(context.line);
-            editor.refresh();
           }, 10);
         }
 
