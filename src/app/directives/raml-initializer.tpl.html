@@ -10,7 +10,7 @@
 
         <div class="initializer-row">
           <p class="initializer-input-container">
-            <input class="initializer-input initializer-raml-field" ng-model="ramlUrl">
+            <input autofocus class="initializer-input initializer-raml-field" ng-model="ramlUrl" ng-keypress="onKeyPressRamlUrl($event)">
           </p>
 
           <div class="initializer-action-group" align="right">

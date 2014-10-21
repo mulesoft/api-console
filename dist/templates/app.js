@@ -130,7 +130,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"initializer-row\">\n" +
     "          <p class=\"initializer-input-container\">\n" +
-    "            <input class=\"initializer-input initializer-raml-field\" ng-model=\"ramlUrl\">\n" +
+    "            <input autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\">\n" +
     "          </p>\n" +
     "\n" +
     "          <div class=\"initializer-action-group\" align=\"right\">\n" +
