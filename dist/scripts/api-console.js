@@ -240,6 +240,35 @@ RAML.Directives.methodList = function($window) {
 angular.module('RAML.Directives')
   .directive('methodList', ['$window', RAML.Directives.methodList]);
 
+RAML.Directives.ramlInitializer = function(ramlParserWrapper) {
+  return {
+    restrict: 'E',
+    templateUrl: 'directives/raml-initializer.tpl.html',
+    replace: true,
+    controller: function($rootScope, $scope, $element) {
+      $scope.ramlLoaded = false;
+      $scope.ramlUrl = '';
+
+      $scope.loadFromUrl = function () {
+        if ($scope.ramlUrl) {
+          ramlParserWrapper.load($scope.ramlUrl);
+          $scope.ramlLoaded = true;
+        }
+      };
+
+      $scope.loadRaml = function() {
+        if ($scope.raml) {
+          ramlParserWrapper.parse($scope.raml);
+          $scope.ramlLoaded = true;
+        }
+      };
+    }
+  };
+};
+
+angular.module('RAML.Directives')
+  .directive('ramlInitializer', RAML.Directives.ramlInitializer);
+
 RAML.Directives.resourcePanel = function($window) {
   return {
     restrict: 'E',
@@ -2459,6 +2488,54 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <span class=\"tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
     "  </a>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('directives/raml-initializer.tpl.html',
+    "<div>\n" +
+    "  <div class=\"initializer-container initializer-primary\" ng-hide=\"ramlLoaded\">\n" +
+    "    <h1 class=\"title\">RAML Console</h1>\n" +
+    "\n" +
+    "    <div class=\"initializer-content-wrapper\">\n" +
+    "      <section>\n" +
+    "        <header class=\"initializer-row initializer-subheader\">\n" +
+    "          <h4 class=\"initializer-subhead\">Initialize from the URL of a RAML file</h4>\n" +
+    "        </header>\n" +
+    "\n" +
+    "        <div class=\"initializer-row\">\n" +
+    "          <p class=\"initializer-input-container\">\n" +
+    "            <input class=\"initializer-input initializer-raml-field\" ng-model=\"ramlUrl\">\n" +
+    "          </p>\n" +
+    "\n" +
+    "          <div class=\"initializer-action-group\" align=\"right\">\n" +
+    "            <button class=\"initializer-action initializer-action-btn\" ng-click=\"loadFromUrl()\">Load from URL</button>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "\n" +
+    "      <section>\n" +
+    "        <header class=\"initializer-row initializer-subheader\">\n" +
+    "          <h4 class=\"initializer-subhead\">or parse RAML in here</h4>\n" +
+    "        </header>\n" +
+    "\n" +
+    "        <div class=\"initializer-row\">\n" +
+    "          <p class=\"initializer-input-container\">\n" +
+    "            <textarea ui-codemirror=\"{\n" +
+    "              lineNumbers: true,\n" +
+    "              lineWrapping : true,\n" +
+    "              tabSize: 2,\n" +
+    "              mode: 'yaml'\n" +
+    "            }\" ng-model=\"raml\"></textarea>\n" +
+    "          </p>\n" +
+    "          <div class=\"initializer-action-group\" align=\"right\">\n" +
+    "            <button class=\"initializer-action initializer-action-btn\" ng-click=\"loadRaml()\">Load RAML</button>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "  <raml-resources ng-show=\"ramlLoaded\"></raml-resources>\n" +
     "</div>\n"
   );
 

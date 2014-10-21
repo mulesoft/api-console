@@ -1,0 +1,44 @@
+<div>
+  <div class="initializer-container initializer-primary" ng-hide="ramlLoaded">
+    <h1 class="title">RAML Console</h1>
+
+    <div class="initializer-content-wrapper">
+      <section>
+        <header class="initializer-row initializer-subheader">
+          <h4 class="initializer-subhead">Initialize from the URL of a RAML file</h4>
+        </header>
+
+        <div class="initializer-row">
+          <p class="initializer-input-container">
+            <input class="initializer-input initializer-raml-field" ng-model="ramlUrl">
+          </p>
+
+          <div class="initializer-action-group" align="right">
+            <button class="initializer-action initializer-action-btn" ng-click="loadFromUrl()">Load from URL</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <header class="initializer-row initializer-subheader">
+          <h4 class="initializer-subhead">or parse RAML in here</h4>
+        </header>
+
+        <div class="initializer-row">
+          <p class="initializer-input-container">
+            <textarea ui-codemirror="{
+              lineNumbers: true,
+              lineWrapping : true,
+              tabSize: 2,
+              mode: 'yaml'
+            }" ng-model="raml"></textarea>
+          </p>
+          <div class="initializer-action-group" align="right">
+            <button class="initializer-action initializer-action-btn" ng-click="loadRaml()">Load RAML</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <raml-resources ng-show="ramlLoaded"></raml-resources>
+</div>
