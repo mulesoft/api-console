@@ -13,7 +13,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "  <div class=\"resource-panel-subheader resource-panel-primary-row clearfix\">\n" +
     "    <ul class=\"flag-list resource-panel-flag-list\">\n" +
     "      <li class=\"flag\" ng-show=\"resource.resourceType\"><b>Type:</b> {{resource.resourceType}}</li>\n" +
-    "      <li class=\"flag\" ng-show=\"methodInfo.is\"><b>Trait:</b> {{methodInfo.is.join(', ')}}</li>\n" +
+    "      <li class=\"flag\" ng-show=\"methodInfo.is\"><b>Trait:</b> {{traits}}</li>\n" +
     "    </ul>\n" +
     "  </div>\n" +
     "\n" +
@@ -90,7 +90,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "        </h4>\n" +
     "\n" +
     "        <span>Example:</span>\n" +
-    "        <pre ng-show=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code>{{responseInfo[code][responseInfo.currentType].example}}</code></pre>\n" +
+    "        <pre ng-show=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code >{{responseInfo[code][responseInfo.currentType].example}}</code></pre>\n" +
     "        <pre ng-hide=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code>Example not defined</code></pre>\n" +
     "\n" +
     "        <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +

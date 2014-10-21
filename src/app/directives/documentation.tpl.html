@@ -2,7 +2,7 @@
   <div class="resource-panel-subheader resource-panel-primary-row clearfix">
     <ul class="flag-list resource-panel-flag-list">
       <li class="flag" ng-show="resource.resourceType"><b>Type:</b> {{resource.resourceType}}</li>
-      <li class="flag" ng-show="methodInfo.is"><b>Trait:</b> {{methodInfo.is.join(', ')}}</li>
+      <li class="flag" ng-show="methodInfo.is"><b>Trait:</b> {{traits}}</li>
     </ul>
   </div>
 
@@ -79,7 +79,7 @@
         </h4>
 
         <span>Example:</span>
-        <pre ng-show="responseInfo[code][responseInfo.currentType].example" class="resource-pre"><code>{{responseInfo[code][responseInfo.currentType].example}}</code></pre>
+        <pre ng-show="responseInfo[code][responseInfo.currentType].example" class="resource-pre"><code >{{responseInfo[code][responseInfo.currentType].example}}</code></pre>
         <pre ng-hide="responseInfo[code][responseInfo.currentType].example" class="resource-pre"><code>Example not defined</code></pre>
 
         <p><button ng-click="showSchema($event)" class="resource-btn js-schema-toggle">Show Schema</button></p>

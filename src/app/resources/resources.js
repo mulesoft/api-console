@@ -31,7 +31,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
         $this.toggleClass('is-active');
       };
 
-      // The ui-codemirror config
       $scope.cmOption = {
         lineNumbers: true,
         readOnly: 'nocursor',
@@ -59,7 +58,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
 
           $scope.cmModel = context.buffer;
 
-          // $scope.loaded = true;
           $scope.parseError = {
             column: context.column + 1,
             line: context.line + 1,

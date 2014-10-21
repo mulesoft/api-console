@@ -90,7 +90,7 @@ RAML.Directives.documentation = function($window) {
     restrict: 'E',
     templateUrl: 'directives/documentation.tpl.html',
     replace: true,
-    controller: function($rootScope, $scope, $element) {
+    controller: function($scope, $element) {
       $scope.toggleTab = function ($event) {
         var $this = jQuery($event.currentTarget);
         var $eachTab = $this.children('.toggle-tab');
@@ -162,6 +162,22 @@ RAML.Directives.methodList = function($window) {
         return responseInfo;
       };
 
+      $scope.readTraits = function (traits) {
+        var list = [];
+
+        if (traits) {
+          traits.map(function (trait) {
+            if (typeof trait === 'string') {
+              list.push(trait);
+            } else if (typeof trait === 'object') {
+              list.push(Object.keys(trait).join(', '));
+            }
+          });
+        }
+
+        return list.join(', ');
+      }
+
       $scope.showResource = function ($event, $index) {
         var $this = jQuery($event.currentTarget);
         var $inactiveElements = jQuery('.tab').add('.resource').add('li');
@@ -183,6 +199,7 @@ RAML.Directives.methodList = function($window) {
         $scope.showSpinner = false;
         $scope.securitySchemes = $scope.methodInfo.securitySchemes();
         $scope.credentials = {};
+        $scope.traits = $scope.readTraits($scope.methodInfo.is);
 
         if ($scope.methodInfo.allowsAnonymousAccess()) {
           $scope.securitySchemes.anonymous = {
@@ -671,7 +688,14 @@ RAML.Directives.resourceType = function($window) {
   return {
     restrict: 'E',
     templateUrl: 'resources/resource-type.tpl.html',
-    replace: true
+    replace: true,
+    controller: function ($scope) {
+      var resourceType = $scope.resource.resourceType;
+
+      if (typeof resourceType === 'object') {
+        $scope.resource.resourceType = Object.keys(resourceType).join();
+      }
+    }
   };
 };
 
@@ -711,7 +735,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
         $this.toggleClass('is-active');
       };
 
-      // The ui-codemirror config
       $scope.cmOption = {
         lineNumbers: true,
         readOnly: 'nocursor',
@@ -739,7 +762,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
 
           $scope.cmModel = context.buffer;
 
-          // $scope.loaded = true;
           $scope.parseError = {
             column: context.column + 1,
             line: context.line + 1,
@@ -2392,7 +2414,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "  <div class=\"resource-panel-subheader resource-panel-primary-row clearfix\">\n" +
     "    <ul class=\"flag-list resource-panel-flag-list\">\n" +
     "      <li class=\"flag\" ng-show=\"resource.resourceType\"><b>Type:</b> {{resource.resourceType}}</li>\n" +
-    "      <li class=\"flag\" ng-show=\"methodInfo.is\"><b>Trait:</b> {{methodInfo.is.join(', ')}}</li>\n" +
+    "      <li class=\"flag\" ng-show=\"methodInfo.is\"><b>Trait:</b> {{traits}}</li>\n" +
     "    </ul>\n" +
     "  </div>\n" +
     "\n" +
@@ -2469,7 +2491,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "        </h4>\n" +
     "\n" +
     "        <span>Example:</span>\n" +
-    "        <pre ng-show=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code>{{responseInfo[code][responseInfo.currentType].example}}</code></pre>\n" +
+    "        <pre ng-show=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code >{{responseInfo[code][responseInfo.currentType].example}}</code></pre>\n" +
     "        <pre ng-hide=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code>Example not defined</code></pre>\n" +
     "\n" +
     "        <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +
