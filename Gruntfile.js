@@ -9,9 +9,9 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('default', [/*'jshint',*/ 'build', 'connect:livereload', 'open:server', 'watch:build']);
-  grunt.registerTask('server', ['build', 'connect:livereload', 'watch:build']);
-  grunt.registerTask('build', ['clean', 'ngtemplates', 'concat', 'sass:build', 'copy:assets']);
-  grunt.registerTask('release', ['clean', 'ngtemplates', 'uglify', 'jshint', 'karma:unit', 'concat:index', 'sass:min', 'copy:assets']);
+  grunt.registerTask('server', ['release', 'connect:livereload', 'watch:build']);
+  grunt.registerTask('build', ['clean', 'ngtemplates', 'concat', 'copy:assets', 'clean:styles', 'sass:build', 'cssmin', 'clean:templates']);
+  grunt.registerTask('release', ['clean', 'ngtemplates', 'concat:index', 'uglify', 'concat:codemirror', 'copy:assets', 'clean:styles', 'sass:min', 'cssmin', 'clean:templates' ]);
 
   grunt.initConfig({
     distdir: 'dist',
@@ -47,7 +47,11 @@ module.exports = function (grunt) {
       }
     },
 
-    clean: ['<%= distdir %>/*'],
+    clean: {
+      build: ['<%= distdir %>/*'],
+      styles: ['<%= distdir %>/styles/*'],
+      templates: ['<%= distdir %>/templates']
+    },
 
     copy: {
       assets: {
@@ -83,22 +87,30 @@ module.exports = function (grunt) {
         }
       },
       vendor: {
-        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/codemirror/codemirror.js', 'vendor/angular-codemirror/angular-codemirror.js', 'vendor/crypto-js/hmac-sha1.js', 'vendor/crypto-js/enc-base64.js'],
+        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/crypto-js/hmac-sha1.js', 'vendor/crypto-js/enc-base64.js'],
+        dest: '<%= distdir %>/scripts/vendor.js'
+      },
+      codemirror: {
+        src: ['<%= distdir %>/scripts/vendor.js', 'vendor/codemirror/codemirror.js', 'vendor/angular-codemirror/angular-codemirror.js'],
         dest: '<%= distdir %>/scripts/vendor.js'
       }
     },
 
     uglify: {
       dist:{
-        options: {
-          banner: "<%= banner %>"
-        },
         src:['<%= src.js %>' ,'<%= src.jsTpl %>'],
-        dest:'<%= distdir %>/<%= pkg.name %>.js'
+        dest:'<%= distdir %>/scripts/<%= pkg.name %>.js',
+        options: {
+          wrap: true,
+          mangle: false
+        }
       },
       vendor: {
-        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/codemirror/codemirror.js', 'vendor/angular-codemirror/angular-codemirror.js', 'vendor/crypto-js/hmac-sha1.js', 'vendor/crypto-js/enc-base64.js'],
-        dest: '<%= distdir %>/scripts/vendor.js'
+        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/crypto-js/hmac-sha1.js', 'vendor/crypto-js/enc-base64.js'],
+        dest: '<%= distdir %>/scripts/vendor.js',
+        options: {
+          mangle: true
+        }
       }
     },
 
@@ -118,6 +130,7 @@ module.exports = function (grunt) {
           '<%= distdir %>/styles/dark-theme.css': 'src/scss/dark-theme.scss'
         },
         options: {
+          sourcemap: 'none',
           style: 'compressed'
         }
       }
@@ -130,6 +143,14 @@ module.exports = function (grunt) {
         },
         files:['<%= src.js %>', '<%= src.scssWatch %>', 'src/app/**/*.tpl.html', '<%= src.html %>'],
         tasks:['build']
+      }
+    },
+
+    cssmin: {
+      vendor: {
+        files: {
+          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/codemirror.css', 'src/assets/styles/fonts.css']
+        }
       }
     },
 
