@@ -36,14 +36,6 @@ RAML.Directives.resources = function(ramlParserWrapper) {
         $section.toggleClass('is-collapsed');
         $this.toggleClass('is-active');
       };
-
-      $scope.cmOption = {
-        lineNumbers: true,
-        readOnly: 'nocursor',
-        lineWrapping : true,
-        tabSize: 2,
-        mode: 'yaml'
-      };
     },
     link: function($scope) {
       $scope.loaded = false;
