@@ -181,8 +181,10 @@
               </p>
             </div>
 
-            <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-            <pre class="sidebar-pre"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, lineWrapping : true }" ng-model="response.body"></code></pre>
+            <div ng-if="response.body">
+              <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
+              <pre class="sidebar-pre"><code ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true }" ng-model="response.body"></code></pre>
+            </div>
           </div>
         </section>
       </div>
