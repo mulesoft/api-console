@@ -46,7 +46,6 @@ RAML.Directives.methodList = function($window) {
         var $resource = $this.closest('.resource');
         var $resourceListItem = $resource.parent('li');
         var $closingEl;
-        var editors = jQuery('.sidebar-content-wrapper #sidebar-body .CodeMirror');
 
         $scope.methodInfo = $scope.resource.methods[$index];
         $scope.responseInfo = getResponseInfo();
@@ -75,16 +74,19 @@ RAML.Directives.methodList = function($window) {
           name: defaultScheme
         };
 
-        editors.map(function (index) {
-          setTimeout(function () {
+        // Hack for codemirror
+        setTimeout(function () {
+          var editors = jQuery('.sidebar-content-wrapper #sidebar-body .codemirror-body-editor .CodeMirror');
+
+          editors.map(function (index) {
             var bodyEditor = editors[index].CodeMirror;
 
             if (bodyEditor && $scope.context.bodyContent) {
               bodyEditor.setOption('mode', $scope.context.bodyContent.selected);
               bodyEditor.refresh();
             }
-          }, 1);
-        });
+          });
+        }, 10);
 
         if (!$resource.hasClass('is-active')) {
           $closingEl = $inactiveElements
