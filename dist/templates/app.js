@@ -12,8 +12,8 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "<div class=\"resource-panel-primary\">\n" +
     "  <div class=\"resource-panel-subheader resource-panel-primary-row clearfix\">\n" +
     "    <ul class=\"flag-list resource-panel-flag-list\">\n" +
-    "      <li class=\"flag\" ng-show=\"resource.resourceType\"><b>Type:</b> {{resource.resourceType}}</li>\n" +
-    "      <li class=\"flag\" ng-show=\"methodInfo.is\"><b>Trait:</b> {{traits}}</li>\n" +
+    "      <li class=\"flag\" ng-if=\"resource.resourceType\"><b>Type:</b> {{resource.resourceType}}</li>\n" +
+    "      <li class=\"flag\" ng-if=\"methodInfo.is\"><b>Trait:</b> {{traits}}</li>\n" +
     "    </ul>\n" +
     "  </div>\n" +
     "\n" +
@@ -30,20 +30,20 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <p marked=\"methodInfo.description\"></p>\n" +
     "\n" +
-    "    <section class=\"resource-section\" id=\"docs-uri-parameters\" ng-show=\"resource.uriParametersForDocumentation\">\n" +
+    "    <section class=\"resource-section\" id=\"docs-uri-parameters\" ng-if=\"resource.uriParametersForDocumentation\">\n" +
     "      <h3 class=\"resource-heading-a\">URI Parameters</h3>\n" +
     "\n" +
     "      <div class=\"resource-param\" id=\"docs-uri-parameters-{{uriParam[0].displayName}}\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
-    "        <h4 class=\"resource-param-heading\">{{uriParam[0].displayName}} <span class=\"resource-param-instructional\" ng-show=\"uriParam[0].required\">required</span></h4>\n" +
+    "        <h4 class=\"resource-param-heading\">{{uriParam[0].displayName}} <span class=\"resource-param-instructional\" ng-if=\"uriParam[0].required\">required</span></h4>\n" +
     "        <p marked=\"uriParam[0].description\"></p>\n" +
     "\n" +
     "        <p>\n" +
-    "          <span class=\"resource-param-example\" ng-show=\"uriParam[0].example\"><b>Example:</b> {{uriParam[0].example}}</span>\n" +
+    "          <span class=\"resource-param-example\" ng-if=\"uriParam[0].example\"><b>Example:</b> {{uriParam[0].example}}</span>\n" +
     "        </p>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "\n" +
-    "    <section class=\"resource-section\" id=\"docs-headers\" ng-show=\"methodInfo.headers.plain\">\n" +
+    "    <section class=\"resource-section\" id=\"docs-headers\" ng-if=\"methodInfo.headers.plain\">\n" +
     "      <h3 class=\"resource-heading-a\">Headers</h3>\n" +
     "\n" +
     "      <div class=\"resource-param\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
@@ -53,7 +53,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      </div>\n" +
     "    </section>\n" +
     "\n" +
-    "    <section class=\"resource-section\" id=\"docs-query-parameters\" ng-show=\"methodInfo.queryParameters\">\n" +
+    "    <section class=\"resource-section\" id=\"docs-query-parameters\" ng-if=\"methodInfo.queryParameters\">\n" +
     "      <h3 class=\"resource-heading-a\">Query Parameters</h3>\n" +
     "\n" +
     "      <div class=\"resource-param\" ng-repeat=\"queryParam in methodInfo.queryParameters\">\n" +
@@ -83,19 +83,19 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "        <p marked=\"methodInfo.responses[code].description\"></p>\n" +
     "      </div>\n" +
     "\n" +
-    "      <div class=\"resource-response\" ng-show=\"methodInfo.responses[code].body\">\n" +
+    "      <div class=\"resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
     "        <h4 class=\"resource-body-heading\">\n" +
     "          Body\n" +
     "          <span ng-click=\"changeType($event, key)\" ng-class=\"{isActive: $first}\" class=\"flag\" ng-repeat=\"(key, value) in methodInfo.responses[code].body\">{{key}}</span>\n" +
     "        </h4>\n" +
     "\n" +
     "        <span>Example:</span>\n" +
-    "        <pre ng-show=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code >{{responseInfo[code][responseInfo.currentType].example}}</code></pre>\n" +
-    "        <pre ng-hide=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code>Example not defined</code></pre>\n" +
+    "        <pre ng-if=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code >{{responseInfo[code][responseInfo.currentType].example}}</code></pre>\n" +
+    "        <pre ng-if=\"!responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code>Example not defined</code></pre>\n" +
     "\n" +
     "        <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +
-    "        <pre ng-show=\"responseInfo[code][responseInfo.currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>{{responseInfo[code][responseInfo.currentType].schema}}</code></pre>\n" +
-    "        <pre ng-hide=\"responseInfo[code][responseInfo.currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>Schema not defined</code></pre>\n" +
+    "        <pre ng-if=\"responseInfo[code][responseInfo.currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>{{responseInfo[code][responseInfo.currentType].schema}}</code></pre>\n" +
+    "        <pre ng-if=\"!responseInfo[code][responseInfo.currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>Schema not defined</code></pre>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "\n" +
@@ -118,8 +118,8 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('directives/raml-initializer.tpl.html',
-    "<div>\n" +
-    "  <div class=\"initializer-container initializer-primary\" ng-hide=\"ramlLoaded\">\n" +
+    "<div ng-switch=\"ramlLoaded\">\n" +
+    "  <div class=\"initializer-container initializer-primary\" ng-switch-when=\"false\">\n" +
     "    <h1 class=\"title\">RAML Console</h1>\n" +
     "\n" +
     "    <div class=\"initializer-content-wrapper\">\n" +
@@ -130,7 +130,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"initializer-row\">\n" +
     "          <p class=\"initializer-input-container\">\n" +
-    "            <input autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\">\n" +
+    "            <input autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"$parent.ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\">\n" +
     "          </p>\n" +
     "\n" +
     "          <div class=\"initializer-action-group\" align=\"right\">\n" +
@@ -151,7 +151,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "              lineWrapping : true,\n" +
     "              tabSize: 2,\n" +
     "              mode: 'yaml'\n" +
-    "            }\" ng-model=\"raml\"></textarea>\n" +
+    "            }\" ng-model=\"$parent.raml\"></textarea>\n" +
     "          </p>\n" +
     "          <div class=\"initializer-action-group\" align=\"right\">\n" +
     "            <button class=\"initializer-action initializer-action-btn\" ng-click=\"loadRaml()\">Load RAML</button>\n" +
@@ -160,7 +160,8 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      </section>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "  <raml-resources ng-show=\"ramlLoaded\"></raml-resources>\n" +
+    "\n" +
+    "  <raml-resources ng-switch-when=\"true\"></raml-resources>\n" +
     "</div>\n"
   );
 
@@ -216,7 +217,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section id=\"sidebar-uri-parameters\" ng-show=\"resource.uriParametersForDocumentation\">\n" +
+    "          <section id=\"sidebar-uri-parameters\" ng-if=\"resource.uriParametersForDocumentation\">\n" +
     "            <header class=\"sidebar-row sidebar-subheader\">\n" +
     "              <h4 class=\"sidebar-subhead\">URI Parameters</h4>\n" +
     "            </header>\n" +
@@ -236,7 +237,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section id=\"sidebar-headers\" ng-show=\"methodInfo.headers.plain\">\n" +
+    "          <section id=\"sidebar-headers\" ng-if=\"methodInfo.headers.plain\">\n" +
     "            <header class=\"sidebar-row sidebar-subheader\">\n" +
     "              <h4 class=\"sidebar-subhead\">Headers</h4>\n" +
     "            </header>\n" +
@@ -256,7 +257,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section id=\"sidebar-query-parameters\" ng-show=\"methodInfo.queryParameters\">\n" +
+    "          <section id=\"sidebar-query-parameters\" ng-if=\"methodInfo.queryParameters\">\n" +
     "            <header class=\"sidebar-row sidebar-subheader\">\n" +
     "              <h4 class=\"sidebar-subhead\">Query Parameters</h4>\n" +
     "            </header>\n" +
@@ -276,7 +277,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section id=\"sidebar-body\" ng-show=\"methodInfo.body\">\n" +
+    "          <section id=\"sidebar-body\" ng-if=\"methodInfo.body\">\n" +
     "            <header class=\"sidebar-row sidebar-subheader\">\n" +
     "              <h4 class=\"sidebar-subhead\">Body</h4>\n" +
     "            </header>\n" +
@@ -291,7 +292,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "              <div class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2 }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
     "            </div>\n" +
     "\n" +
-    "            <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-show=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
+    "            <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-if=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
     "              <button class=\"sidebar-action-prefill\" ng-click=\"prefillBody(context.bodyContent.selected)\">Prefill with example</button>\n" +
     "            </div>\n" +
     "          </section>\n" +
@@ -314,19 +315,19 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  Request\n" +
     "                </button>\n" +
     "              </h3>\n" +
-    "              <img src=\"img/spinner.gif\" style=\"height: 21px; width: 21px; float: right; margin-right: 10px; margin-top: 3px;\" ng-show=\"showSpinner\"/>\n" +
+    "              <img src=\"img/spinner.gif\" style=\"height: 21px; width: 21px; float: right; margin-right: 10px; margin-top: 3px;\" ng-if=\"showSpinner\"/>\n" +
     "            </header>\n" +
     "            <div class=\"sidebar-request-metadata\" ng-class=\"{'is-active':showRequestMetadata}\">\n" +
     "\n" +
     "              <div class=\"sidebar-row\">\n" +
-    "                <div ng-show=\"requestOptions.url\">\n" +
+    "                <div ng-if=\"requestOptions.url\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Request URI</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
     "                    <p class=\"sidebar-response-metadata\">{{requestOptions.url}}</p>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div ng-show=\"requestOptions.headers\">\n" +
+    "                <div ng-if=\"requestOptions.headers\">\n" +
     "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
     "                    <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
@@ -335,7 +336,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div ng-show=\"requestOptions.data\">\n" +
+    "                <div ng-if=\"requestOptions.data\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
     "                  <pre class=\"sidebar-pre sidebar-request-body\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }\" ng-model=\"requestOptions.data\"></code></pre>\n" +
     "                </div>\n" +
@@ -398,15 +399,15 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('resources/resource-type.tpl.html',
-    "<span ng-show=\"resource.resourceType\" class=\"flag resource-heading-flag\"><b>Type:</b> {{resource.resourceType}}</span>\n"
+    "<span ng-if=\"resource.resourceType\" class=\"flag resource-heading-flag\"><b>Type:</b> {{resource.resourceType}}</span>\n"
   );
 
 
   $templateCache.put('resources/resources.tpl.html',
     "<main class=\"error-container error-primary\">\n" +
     "\n" +
-    "  <div ng-hide=\"parseError\">\n" +
-    "    <div ng-hide=\"loaded\">\n" +
+    "  <div ng-if=\"!parseError\">\n" +
+    "    <div ng-if=\"!loaded\">\n" +
     "      <div class=\"spinner\">\n" +
     "        <div class=\"rect1\"></div>\n" +
     "        <div class=\"rect2\"></div>\n" +
@@ -417,7 +418,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div class=\"error-content\" ng-show=\"parseError\">\n" +
+    "  <div class=\"error-content\" ng-if=\"parseError\">\n" +
     "    <h3 class=\"heading\">Error while loading <b>{{parseError.fileName}}</b></h3>\n" +
     "\n" +
     "    <section>\n" +
@@ -430,7 +431,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      </header>\n" +
     "      <pre class=\"error-pre\"><code class=\"error-message\">{{parseError.message}}</code></pre>\n" +
     "\n" +
-    "      <div ng-show=\"parseError.snippet\">\n" +
+    "      <div ng-if=\"parseError.snippet\">\n" +
     "        <header class=\"error-row error-header\">\n" +
     "          <h3 class=\"error-head error-head-expand\">\n" +
     "            <div class=\"error-expand-btn\">\n" +
@@ -441,7 +442,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "        <pre class=\"error-pre\"><code class=\"error-snippet\">{{parseError.snippet}}</code></pre>\n" +
     "      </div>\n" +
     "\n" +
-    "      <div ng-show=\"parseError.raml\">\n" +
+    "      <div ng-if=\"parseError.raml\">\n" +
     "        <header class=\"error-row error-header\">\n" +
     "          <h3 class=\"error-head error-head-expand\">\n" +
     "            <div class=\"error-expand-btn\">\n" +
@@ -449,12 +450,18 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "          </h3>\n" +
     "        </header>\n" +
-    "        <pre class=\"error-pre error-codemirror-container\"><code ui-codemirror=\"cmOption\" ng-model=\"parseError.raml\"></code></pre>\n" +
+    "        <pre class=\"error-pre error-codemirror-container\"><code ui-codemirror=\"{\n" +
+    "            lineNumbers: true,\n" +
+    "            readOnly: 'nocursor',\n" +
+    "            lineWrapping : true,\n" +
+    "            tabSize: 2,\n" +
+    "            mode: 'yaml'\n" +
+    "          }\" ng-model=\"parseError.raml\"></code></pre>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div ng-show=\"loaded\">\n" +
+    "  <div ng-if=\"loaded\">\n" +
     "    <theme-switcher></theme-switcher>\n" +
     "    <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +
@@ -467,7 +474,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "        <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
     "          <div class=\"resource-path-container\">\n" +
-    "            <button class=\"resource-root-toggle is-active\" ng-show=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
+    "            <button class=\"resource-root-toggle is-active\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
     "\n" +
     "            <h2 class=\"resource-heading resource-heading-large\">\n" +
     "              <span class=\"resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>\n" +

@@ -1,5 +1,5 @@
-<div>
-  <div class="initializer-container initializer-primary" ng-hide="ramlLoaded">
+<div ng-switch="ramlLoaded">
+  <div class="initializer-container initializer-primary" ng-switch-when="false">
     <h1 class="title">RAML Console</h1>
 
     <div class="initializer-content-wrapper">
@@ -10,7 +10,7 @@
 
         <div class="initializer-row">
           <p class="initializer-input-container">
-            <input autofocus class="initializer-input initializer-raml-field" ng-model="ramlUrl" ng-keypress="onKeyPressRamlUrl($event)">
+            <input autofocus class="initializer-input initializer-raml-field" ng-model="$parent.ramlUrl" ng-keypress="onKeyPressRamlUrl($event)">
           </p>
 
           <div class="initializer-action-group" align="right">
@@ -31,7 +31,7 @@
               lineWrapping : true,
               tabSize: 2,
               mode: 'yaml'
-            }" ng-model="raml"></textarea>
+            }" ng-model="$parent.raml"></textarea>
           </p>
           <div class="initializer-action-group" align="right">
             <button class="initializer-action initializer-action-btn" ng-click="loadRaml()">Load RAML</button>
@@ -40,5 +40,6 @@
       </section>
     </div>
   </div>
-  <raml-resources ng-show="ramlLoaded"></raml-resources>
+
+  <raml-resources ng-switch-when="true"></raml-resources>
 </div>

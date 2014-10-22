@@ -37,7 +37,7 @@
             </div>
           </section>
 
-          <section id="sidebar-uri-parameters" ng-show="resource.uriParametersForDocumentation">
+          <section id="sidebar-uri-parameters" ng-if="resource.uriParametersForDocumentation">
             <header class="sidebar-row sidebar-subheader">
               <h4 class="sidebar-subhead">URI Parameters</h4>
             </header>
@@ -57,7 +57,7 @@
             </div>
           </section>
 
-          <section id="sidebar-headers" ng-show="methodInfo.headers.plain">
+          <section id="sidebar-headers" ng-if="methodInfo.headers.plain">
             <header class="sidebar-row sidebar-subheader">
               <h4 class="sidebar-subhead">Headers</h4>
             </header>
@@ -77,7 +77,7 @@
             </div>
           </section>
 
-          <section id="sidebar-query-parameters" ng-show="methodInfo.queryParameters">
+          <section id="sidebar-query-parameters" ng-if="methodInfo.queryParameters">
             <header class="sidebar-row sidebar-subheader">
               <h4 class="sidebar-subhead">Query Parameters</h4>
             </header>
@@ -97,7 +97,7 @@
             </div>
           </section>
 
-          <section id="sidebar-body" ng-show="methodInfo.body">
+          <section id="sidebar-body" ng-if="methodInfo.body">
             <header class="sidebar-row sidebar-subheader">
               <h4 class="sidebar-subhead">Body</h4>
             </header>
@@ -112,7 +112,7 @@
               <div class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
             </div>
 
-            <div class="sidebar-prefill sidebar-row" align="right" ng-show="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
+            <div class="sidebar-prefill sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
               <button class="sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
             </div>
           </section>
@@ -135,19 +135,19 @@
                   Request
                 </button>
               </h3>
-              <img src="img/spinner.gif" style="height: 21px; width: 21px; float: right; margin-right: 10px; margin-top: 3px;" ng-show="showSpinner"/>
+              <img src="img/spinner.gif" style="height: 21px; width: 21px; float: right; margin-right: 10px; margin-top: 3px;" ng-if="showSpinner"/>
             </header>
             <div class="sidebar-request-metadata" ng-class="{'is-active':showRequestMetadata}">
 
               <div class="sidebar-row">
-                <div ng-show="requestOptions.url">
+                <div ng-if="requestOptions.url">
                   <h3 class="sidebar-response-head sidebar-response-head-pre">Request URI</h3>
                   <div class="sidebar-response-item">
                     <p class="sidebar-response-metadata">{{requestOptions.url}}</p>
                   </div>
                 </div>
 
-                <div ng-show="requestOptions.headers">
+                <div ng-if="requestOptions.headers">
                   <h3 class="sidebar-response-head">Headers</h3>
                   <div class="sidebar-response-item">
                     <p class="sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
@@ -156,7 +156,7 @@
                   </div>
                 </div>
 
-                <div ng-show="requestOptions.data">
+                <div ng-if="requestOptions.data">
                   <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
                   <pre class="sidebar-pre sidebar-request-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="requestOptions.data"></code></pre>
                 </div>

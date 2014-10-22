@@ -1,7 +1,7 @@
 <main class="error-container error-primary">
 
-  <div ng-hide="parseError">
-    <div ng-hide="loaded">
+  <div ng-if="!parseError">
+    <div ng-if="!loaded">
       <div class="spinner">
         <div class="rect1"></div>
         <div class="rect2"></div>
@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <div class="error-content" ng-show="parseError">
+  <div class="error-content" ng-if="parseError">
     <h3 class="heading">Error while loading <b>{{parseError.fileName}}</b></h3>
 
     <section>
@@ -25,7 +25,7 @@
       </header>
       <pre class="error-pre"><code class="error-message">{{parseError.message}}</code></pre>
 
-      <div ng-show="parseError.snippet">
+      <div ng-if="parseError.snippet">
         <header class="error-row error-header">
           <h3 class="error-head error-head-expand">
             <div class="error-expand-btn">
@@ -36,7 +36,7 @@
         <pre class="error-pre"><code class="error-snippet">{{parseError.snippet}}</code></pre>
       </div>
 
-      <div ng-show="parseError.raml">
+      <div ng-if="parseError.raml">
         <header class="error-row error-header">
           <h3 class="error-head error-head-expand">
             <div class="error-expand-btn">
@@ -44,12 +44,18 @@
             </div>
           </h3>
         </header>
-        <pre class="error-pre error-codemirror-container"><code ui-codemirror="cmOption" ng-model="parseError.raml"></code></pre>
+        <pre class="error-pre error-codemirror-container"><code ui-codemirror="{
+            lineNumbers: true,
+            readOnly: 'nocursor',
+            lineWrapping : true,
+            tabSize: 2,
+            mode: 'yaml'
+          }" ng-model="parseError.raml"></code></pre>
       </div>
     </section>
   </div>
 
-  <div ng-show="loaded">
+  <div ng-if="loaded">
     <theme-switcher></theme-switcher>
     <h1 class="title">{{raml.title}}</h1>
 
@@ -62,7 +68,7 @@
       <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
         <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
           <div class="resource-path-container">
-            <button class="resource-root-toggle is-active" ng-show="resourceGroup.length > 1" ng-click="toggle($event)"></button>
+            <button class="resource-root-toggle is-active" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
 
             <h2 class="resource-heading resource-heading-large">
               <span class="resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
