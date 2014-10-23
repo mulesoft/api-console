@@ -14,7 +14,7 @@ RAML.Directives.documentation = function($window) {
         $eachContent.toggleClass('is-active');
       };
 
-      $scope.changeType = function ($event, type) {
+      $scope.changeType = function ($event, type, code) {
         var $this = jQuery($event.currentTarget);
         var $panel = $this.closest('.resource-body-heading');
         var $eachContent = $panel.find('span');
@@ -22,7 +22,7 @@ RAML.Directives.documentation = function($window) {
         $eachContent.removeClass('isActive');
         $this.addClass('isActive');
 
-        $scope.responseInfo.currentType = type;
+        $scope.responseInfo[code].currentType = type;
       };
 
       $scope.showSchema = function ($event) {
