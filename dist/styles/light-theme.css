@@ -1804,6 +1804,10 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   width: 100%;
 }
 
+.sidebar-input-left {
+  position: static;
+}
+
 .sidebar-input-tooltip {
   position: absolute;
   right: 0;
@@ -1867,6 +1871,37 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   position: absolute;
   top: -5px;
   right: 12px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #2d2d30;
+}
+
+.sidebar-tooltip-flyout-left {
+  position: absolute;
+  top: 57px;
+  left: 0;
+  z-index: 20;
+  display: none;
+  max-width: 100%;
+  margin: 0 0 18px 0;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background-color: #2d2d30;
+  color: #fff;
+  font-size: 14px;
+  text-align: left;
+}
+.sidebar-input-tooltip-container:hover .sidebar-tooltip-flyout-left {
+  display: block;
+  animation: flyout-slide 0.15s ease forwards;
+}
+.sidebar-tooltip-flyout-left:before {
+  content: ' ';
+  position: absolute;
+  top: -5px;
+  left: 12px;
   width: 0;
   height: 0;
   border-left: 5px solid transparent;
@@ -2048,6 +2083,10 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 
 .sidebar-security-field {
+  padding: 0 0 0 11px !important;
+}
+
+.sidebar-field-no-default {
   padding: 0 0 0 11px !important;
 }
 
