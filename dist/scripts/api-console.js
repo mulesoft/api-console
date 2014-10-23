@@ -101,7 +101,7 @@ RAML.Directives.documentation = function($window) {
         $eachContent.toggleClass('is-active');
       };
 
-      $scope.changeType = function ($event, type) {
+      $scope.changeType = function ($event, type, code) {
         var $this = jQuery($event.currentTarget);
         var $panel = $this.closest('.resource-body-heading');
         var $eachContent = $panel.find('span');
@@ -109,7 +109,7 @@ RAML.Directives.documentation = function($window) {
         $eachContent.removeClass('isActive');
         $this.addClass('isActive');
 
-        $scope.responseInfo.currentType = type;
+        $scope.responseInfo[code].currentType = type;
       };
 
       $scope.showSchema = function ($event) {
@@ -143,9 +143,7 @@ RAML.Directives.methodList = function($window) {
     replace: true,
     controller: function($rootScope, $scope, $element) {
       function getResponseInfo() {
-        var responseInfo = {
-          currentType: ''
-        };
+        var responseInfo = {};
         var responses = $scope.methodInfo.responses;
 
         if (responses) {
@@ -155,7 +153,7 @@ RAML.Directives.methodList = function($window) {
 
               Object.keys(responses[key].body).sort().reverse().map(function (type) {
                 responseInfo[key][type] = responses[key].body[type]
-                responseInfo.currentType = type;
+                responseInfo[key].currentType = type;
               });
             }
           });
@@ -2508,16 +2506,16 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      <div class=\"resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
     "        <h4 class=\"resource-body-heading\">\n" +
     "          Body\n" +
-    "          <span ng-click=\"changeType($event, key)\" ng-class=\"{isActive: $first}\" class=\"flag\" ng-repeat=\"(key, value) in methodInfo.responses[code].body\">{{key}}</span>\n" +
+    "          <span ng-click=\"changeType($event, key, code)\" ng-class=\"{isActive: $first}\" class=\"flag\" ng-repeat=\"(key, value) in methodInfo.responses[code].body\">{{key}}</span>\n" +
     "        </h4>\n" +
     "\n" +
     "        <span>Example:</span>\n" +
-    "        <pre ng-if=\"responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code >{{responseInfo[code][responseInfo.currentType].example}}</code></pre>\n" +
-    "        <pre ng-if=\"!responseInfo[code][responseInfo.currentType].example\" class=\"resource-pre\"><code>Example not defined</code></pre>\n" +
+    "        <pre ng-if=\"responseInfo[code][responseInfo[code].currentType].example\" class=\"resource-pre\"><code >{{responseInfo[code][responseInfo[code].currentType].example}}</code></pre>\n" +
+    "        <pre ng-if=\"!responseInfo[code][responseInfo[code].currentType].example\" class=\"resource-pre\"><code>Example not defined</code></pre>\n" +
     "\n" +
     "        <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +
-    "        <pre ng-if=\"responseInfo[code][responseInfo.currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>{{responseInfo[code][responseInfo.currentType].schema}}</code></pre>\n" +
-    "        <pre ng-if=\"!responseInfo[code][responseInfo.currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>Schema not defined</code></pre>\n" +
+    "        <pre ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>{{responseInfo[code][responseInfo[code].currentType].schema}}</code></pre>\n" +
+    "        <pre ng-if=\"!responseInfo[code][responseInfo[code].currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>Schema not defined</code></pre>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "\n" +

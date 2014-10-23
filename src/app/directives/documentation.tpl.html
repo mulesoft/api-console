@@ -75,16 +75,16 @@
       <div class="resource-response" ng-if="methodInfo.responses[code].body">
         <h4 class="resource-body-heading">
           Body
-          <span ng-click="changeType($event, key)" ng-class="{isActive: $first}" class="flag" ng-repeat="(key, value) in methodInfo.responses[code].body">{{key}}</span>
+          <span ng-click="changeType($event, key, code)" ng-class="{isActive: $first}" class="flag" ng-repeat="(key, value) in methodInfo.responses[code].body">{{key}}</span>
         </h4>
 
         <span>Example:</span>
-        <pre ng-if="responseInfo[code][responseInfo.currentType].example" class="resource-pre"><code >{{responseInfo[code][responseInfo.currentType].example}}</code></pre>
-        <pre ng-if="!responseInfo[code][responseInfo.currentType].example" class="resource-pre"><code>Example not defined</code></pre>
+        <pre ng-if="responseInfo[code][responseInfo[code].currentType].example" class="resource-pre"><code >{{responseInfo[code][responseInfo[code].currentType].example}}</code></pre>
+        <pre ng-if="!responseInfo[code][responseInfo[code].currentType].example" class="resource-pre"><code>Example not defined</code></pre>
 
         <p><button ng-click="showSchema($event)" class="resource-btn js-schema-toggle">Show Schema</button></p>
-        <pre ng-if="responseInfo[code][responseInfo.currentType].schema" class="resource-pre resource-pre-toggle"><code>{{responseInfo[code][responseInfo.currentType].schema}}</code></pre>
-        <pre ng-if="!responseInfo[code][responseInfo.currentType].schema" class="resource-pre resource-pre-toggle"><code>Schema not defined</code></pre>
+        <pre ng-if="responseInfo[code][responseInfo[code].currentType].schema" class="resource-pre resource-pre-toggle"><code>{{responseInfo[code][responseInfo[code].currentType].schema}}</code></pre>
+        <pre ng-if="!responseInfo[code][responseInfo[code].currentType].schema" class="resource-pre resource-pre-toggle"><code>Schema not defined</code></pre>
       </div>
     </section>
 

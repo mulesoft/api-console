@@ -5,9 +5,7 @@ RAML.Directives.methodList = function($window) {
     replace: true,
     controller: function($rootScope, $scope, $element) {
       function getResponseInfo() {
-        var responseInfo = {
-          currentType: ''
-        };
+        var responseInfo = {};
         var responses = $scope.methodInfo.responses;
 
         if (responses) {
@@ -17,7 +15,7 @@ RAML.Directives.methodList = function($window) {
 
               Object.keys(responses[key].body).sort().reverse().map(function (type) {
                 responseInfo[key][type] = responses[key].body[type]
-                responseInfo.currentType = type;
+                responseInfo[key].currentType = type;
               });
             }
           });
