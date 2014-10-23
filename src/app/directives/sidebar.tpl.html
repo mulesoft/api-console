@@ -1,4 +1,4 @@
-  <div class="sidebar">
+  <form name="form" class="sidebar" novalidate ng-class="{ 'is-fullscreen': documentationHidden }">
     <div class="sidebar-flex-wrapper">
       <div class="sidebar-content">
         <header class="sidebar-row sidebar-header">
@@ -44,15 +44,16 @@
 
             <div class="sidebar-row">
               <p class="sidebar-input-container" ng-repeat="uriParam in resource.uriParametersForDocumentation">
-                <button class="sidebar-input-reset" ng-click="resetUriParameter(uriParam)"><span class="visuallyhidden">Reset field</span></button>
-                <span class="sidebar-input-tooltip-container">
-                  <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
+                <button tabindex="-1" class="sidebar-input-reset" ng-click="resetUriParameter(uriParam)"><span class="visuallyhidden">Reset field</span></button>
+                <span class="sidebar-input-tooltip-container" ng-if="uriParam[0].description">
+                  <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
                     <span marked="uriParam[0].description"></span>
                   </span>
                 </span>
-                <label for="{{uriParam[0].displayName}}" class="sidebar-label">{{uriParam[0].displayName}}</label>
-                <input id="{{uriParam[0].displayName}}" class="sidebar-input" ng-model="uriParameters[uriParam[0].displayName]">
+                <label for="{{uriParam[0].displayName}}" class="sidebar-label">{{uriParam[0].displayName}} <span class="side-bar-required-field" ng-if="uriParam[0].required">*</span></label>
+                <input name="{{uriParam[0].displayName}}" ng-required="{{uriParam[0].required}}" class="sidebar-input" ng-model="uriParameters[uriParam[0].displayName]">
+                <span class="field-validation-error"></span>
               </p>
             </div>
           </section>
@@ -64,15 +65,16 @@
 
             <div class="sidebar-row">
               <p class="sidebar-input-container" ng-repeat="header in methodInfo.headers.plain">
-                <button class="sidebar-input-reset" ng-click="resetHeader(header)"><span class="visuallyhidden">Reset field</span></button>
-                <span class="sidebar-input-tooltip-container">
-                  <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
+                <button tabindex="-1" class="sidebar-input-reset" ng-click="resetHeader(header)"><span class="visuallyhidden">Reset field</span></button>
+                <span class="sidebar-input-tooltip-container" ng-if="header[0].description">
+                  <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
                     <span marked="header[0].description"></span>
                   </span>
                 </span>
-                <label for="{{header[0].displayName}}" class="sidebar-label">{{header[0].displayName}}</label>
-                <input id="{{header[0].displayName}}" class="sidebar-input" ng-model="context.headers.values[header[0].displayName][0]">
+                <label for="{{header[0].displayName}}" class="sidebar-label">{{header[0].displayName}} <span class="side-bar-required-field" ng-if="header[0].required">*</span></label>
+                <input name="{{header[0].displayName}}" ng-required="{{header[0].required}}" class="sidebar-input" ng-model="context.headers.values[header[0].displayName][0]">
+                <span class="field-validation-error"></span>
               </p>
             </div>
           </section>
@@ -84,15 +86,16 @@
 
             <div class="sidebar-row">
               <p id="sidebar-query-parameters-all" class="sidebar-input-container" ng-repeat="queryParam in methodInfo.queryParameters">
-                <button class="sidebar-input-reset" ng-click="resetQueryParam(queryParam)"><span class="visuallyhidden">Reset field</span></button>
-                <span class="sidebar-input-tooltip-container">
-                  <button class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
+                <button tabindex="-1" class="sidebar-input-reset" ng-click="resetQueryParam(queryParam)"><span class="visuallyhidden">Reset field</span></button>
+                <span class="sidebar-input-tooltip-container" ng-if="queryParam[0].description">
+                  <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
                   <span class="sidebar-tooltip-flyout">
                     <span marked="queryParam[0].description"></span>
                   </span>
                 </span>
-                <label for="{{queryParam[0].displayName}}" class="sidebar-label">{{queryParam[0].displayName}}</label>
-                <input id="{{queryParam[0].displayName}}" class="sidebar-input" ng-model="context.queryParameters.values[queryParam[0].displayName][0]">
+                <label for="{{queryParam[0].displayName}}" class="sidebar-label">{{queryParam[0].displayName}} <span class="side-bar-required-field" ng-if="queryParam[0].required">*</span></label>
+                <input name="{{queryParam[0].displayName}}" ng-required="{{queryParam[0].required}}"  class="sidebar-input" ng-model="context.queryParameters.values[queryParam[0].displayName][0]">
+                <span class="field-validation-error"></span>
               </p>
             </div>
           </section>
@@ -120,7 +123,7 @@
           <section>
             <div class="sidebar-row">
               <div class="sidebar-action-group">
-                <button class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)">{{methodInfo.method.toUpperCase()}}
+                <button type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)">{{methodInfo.method.toUpperCase()}}
                 </button>
                 <button class="sidebar-action sidebar-action-clear" ng-click="clearFields()">Clear</button>
                 <button class="sidebar-action sidebar-action-reset" ng-click="resetFields()">Reset</button>
@@ -206,4 +209,4 @@
       </button>
     </div>
   </div>
-</div>
+</form>

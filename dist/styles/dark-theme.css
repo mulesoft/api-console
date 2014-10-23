@@ -1384,6 +1384,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .sidebar-fullscreen-toggle {
   position: relative;
+  cursor: pointer;
   float: right;
   height: 100%;
   margin-top: 3px;
@@ -2213,6 +2214,25 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   background: rgba(255, 255, 255, 0.75);
   font-family: Source Code Pro;
   font-size: 14px;
+}
+
+span.side-bar-required-field {
+  color: red;
+}
+
+input.ng-touched.ng-invalid {
+  border: 1px solid red;
+}
+
+input.ng-touched.ng-invalid-required + span.field-validation-error::after {
+  content: 'required';
+  color: white;
+  position: absolute;
+  margin-top: -20px;
+  font-size: 13px;
+  background-color: red;
+  width: 100%;
+  text-align: center;
 }
 
 .spinner {
