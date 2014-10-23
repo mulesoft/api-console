@@ -93,6 +93,18 @@ RAML.Directives.sidebar = function($window) {
         return segmentContexts;
       };
 
+      function validateForm(form, currentTarget) {
+        var errors = form.$error;
+        Object.keys(form.$error).map(function (key) {
+          for (var i = 0; i < errors[key].length; i++) {
+            var fieldName = errors[key][i].$name;
+            // form[fieldName].$setViewValue(form[fieldName].$viewValue);
+            form[fieldName].$setTouched();
+          };
+        });
+        jQuery(currentTarget).closest('form').find('.ng-invalid').first().focus();
+      };
+
       $scope.clearFields = function () {
         $scope.uriParameters = {};
         $scope.context.queryParameters.clear();
@@ -174,69 +186,74 @@ RAML.Directives.sidebar = function($window) {
       };
 
       //// TODO: Scroll to request when make a try-it
-      //// TODO: Show required errors!
       //// TODO: Add support for form-parameters
       //// TODO: Scroll to the current window when open a resource-method (display-name is optional :()
       //// TODO: Fix open/close resource
       //// TODO: Remove jQuery code as much as possible
       //// TODO: Change codemirror theme on switch-theme
+      //// TODO: Make the console work with IFrames
+      //// TODO: Create more services to make code more testable
       $scope.tryIt = function ($event) {
-        var url;
-        var context = $scope.context;
-        var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
+        if($scope.form.$valid) {
+          var url;
+          var context = $scope.context;
+          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
 
-        $scope.showSpinner = true;
-        $scope.toggleSidebar($event, true);
-        $scope.toggleRequestMetadata($event, true);
-        $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+          $scope.showSpinner = true;
+          $scope.toggleSidebar($event, true);
+          $scope.toggleRequestMetadata($event, true);
+          $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
 
-        try {
-          var pathBuilder = context.pathBuilder;
-          var client = RAML.Client.create($scope.raml, function(client) {
-            client.baseUriParameters(pathBuilder.baseUriContext);
+          try {
+            var pathBuilder = context.pathBuilder;
+            var client = RAML.Client.create($scope.raml, function(client) {
+              client.baseUriParameters(pathBuilder.baseUriContext);
+            });
+            url = client.baseUri + pathBuilder(segmentContexts);
+          } catch (e) {
+            $scope.response = {};
+            return;
+          }
+
+          var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
+
+          if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
+            request.queryParams(context.queryParameters.data());
+          }
+
+          if (!RAML.Utils.isEmpty(context.headers.data())) {
+            request.headers(context.headers.data());
+          }
+
+          if (context.bodyContent) {
+            request.header('Content-Type', context.bodyContent.selected);
+            request.data(context.bodyContent.data());
+          }
+
+          $scope.requestOptions = request.toOptions();
+
+           var authStrategy;
+
+          try {
+            var securitySchemes = $scope.methodInfo.securitySchemes();
+
+            var scheme = securitySchemes && securitySchemes[$scope.currentScheme.name];
+            authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+          } catch (e) {
+            // custom strategies aren't supported yet.
+          }
+
+          authStrategy.authenticate().then(function(token) {
+            token.sign(request);
+
+            jQuery.ajax($scope.requestOptions).then(
+              function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+              function(jqXhr) { handleResponse(jqXhr); }
+            );
           });
-          url = client.baseUri + pathBuilder(segmentContexts);
-        } catch (e) {
-          $scope.response = {};
-          return;
+        } else {
+          validateForm($scope.form, $event.currentTarget)
         }
-
-        var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
-
-        if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
-          request.queryParams(context.queryParameters.data());
-        }
-
-        if (!RAML.Utils.isEmpty(context.headers.data())) {
-          request.headers(context.headers.data());
-        }
-
-        if (context.bodyContent) {
-          request.header('Content-Type', context.bodyContent.selected);
-          request.data(context.bodyContent.data());
-        }
-
-        $scope.requestOptions = request.toOptions();
-
-         var authStrategy;
-
-        try {
-          var securitySchemes = $scope.methodInfo.securitySchemes();
-
-          var scheme = securitySchemes && securitySchemes[$scope.currentScheme.name];
-          authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
-        } catch (e) {
-          // custom strategies aren't supported yet.
-        }
-
-        authStrategy.authenticate().then(function(token) {
-          token.sign(request);
-
-          jQuery.ajax($scope.requestOptions).then(
-            function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-            function(jqXhr) { handleResponse(jqXhr); }
-          );
-        });
       };
 
       $scope.toggleSidebar = function ($event, fullscreenEnable) {

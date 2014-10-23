@@ -403,6 +403,18 @@ RAML.Directives.sidebar = function($window) {
         return segmentContexts;
       };
 
+      function validateForm(form, currentTarget) {
+        var errors = form.$error;
+        Object.keys(form.$error).map(function (key) {
+          for (var i = 0; i < errors[key].length; i++) {
+            var fieldName = errors[key][i].$name;
+            // form[fieldName].$setViewValue(form[fieldName].$viewValue);
+            form[fieldName].$setTouched();
+          };
+        });
+        jQuery(currentTarget).closest('form').find('.ng-invalid').first().focus();
+      };
+
       $scope.clearFields = function () {
         $scope.uriParameters = {};
         $scope.context.queryParameters.clear();
@@ -484,69 +496,74 @@ RAML.Directives.sidebar = function($window) {
       };
 
       //// TODO: Scroll to request when make a try-it
-      //// TODO: Show required errors!
       //// TODO: Add support for form-parameters
       //// TODO: Scroll to the current window when open a resource-method (display-name is optional :()
       //// TODO: Fix open/close resource
       //// TODO: Remove jQuery code as much as possible
       //// TODO: Change codemirror theme on switch-theme
+      //// TODO: Make the console work with IFrames
+      //// TODO: Create more services to make code more testable
       $scope.tryIt = function ($event) {
-        var url;
-        var context = $scope.context;
-        var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
+        if($scope.form.$valid) {
+          var url;
+          var context = $scope.context;
+          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
 
-        $scope.showSpinner = true;
-        $scope.toggleSidebar($event, true);
-        $scope.toggleRequestMetadata($event, true);
-        $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+          $scope.showSpinner = true;
+          $scope.toggleSidebar($event, true);
+          $scope.toggleRequestMetadata($event, true);
+          $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
 
-        try {
-          var pathBuilder = context.pathBuilder;
-          var client = RAML.Client.create($scope.raml, function(client) {
-            client.baseUriParameters(pathBuilder.baseUriContext);
+          try {
+            var pathBuilder = context.pathBuilder;
+            var client = RAML.Client.create($scope.raml, function(client) {
+              client.baseUriParameters(pathBuilder.baseUriContext);
+            });
+            url = client.baseUri + pathBuilder(segmentContexts);
+          } catch (e) {
+            $scope.response = {};
+            return;
+          }
+
+          var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
+
+          if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
+            request.queryParams(context.queryParameters.data());
+          }
+
+          if (!RAML.Utils.isEmpty(context.headers.data())) {
+            request.headers(context.headers.data());
+          }
+
+          if (context.bodyContent) {
+            request.header('Content-Type', context.bodyContent.selected);
+            request.data(context.bodyContent.data());
+          }
+
+          $scope.requestOptions = request.toOptions();
+
+           var authStrategy;
+
+          try {
+            var securitySchemes = $scope.methodInfo.securitySchemes();
+
+            var scheme = securitySchemes && securitySchemes[$scope.currentScheme.name];
+            authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+          } catch (e) {
+            // custom strategies aren't supported yet.
+          }
+
+          authStrategy.authenticate().then(function(token) {
+            token.sign(request);
+
+            jQuery.ajax($scope.requestOptions).then(
+              function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+              function(jqXhr) { handleResponse(jqXhr); }
+            );
           });
-          url = client.baseUri + pathBuilder(segmentContexts);
-        } catch (e) {
-          $scope.response = {};
-          return;
+        } else {
+          validateForm($scope.form, $event.currentTarget)
         }
-
-        var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
-
-        if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
-          request.queryParams(context.queryParameters.data());
-        }
-
-        if (!RAML.Utils.isEmpty(context.headers.data())) {
-          request.headers(context.headers.data());
-        }
-
-        if (context.bodyContent) {
-          request.header('Content-Type', context.bodyContent.selected);
-          request.data(context.bodyContent.data());
-        }
-
-        $scope.requestOptions = request.toOptions();
-
-         var authStrategy;
-
-        try {
-          var securitySchemes = $scope.methodInfo.securitySchemes();
-
-          var scheme = securitySchemes && securitySchemes[$scope.currentScheme.name];
-          authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
-        } catch (e) {
-          // custom strategies aren't supported yet.
-        }
-
-        authStrategy.authenticate().then(function(token) {
-          token.sign(request);
-
-          jQuery.ajax($scope.requestOptions).then(
-            function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-            function(jqXhr) { handleResponse(jqXhr); }
-          );
-        });
       };
 
       $scope.toggleSidebar = function ($event, fullscreenEnable) {
@@ -720,6 +737,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
       },
     controller: function($scope, $window) {
       $scope.proxy = $window.RAML.Settings.proxy;
+      $scope.documentationHidden = $window.RAML.Settings.documentationHidden;
 
       if ($scope.src) {
         ramlParserWrapper.load($scope.src);
@@ -2573,7 +2591,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('directives/resource-panel.tpl.html',
-    "<div class=\"resource-panel\">\n" +
+    "<div class=\"resource-panel\" ng-class=\"{ 'has-sidebar-fullscreen': documentationHidden }\">\n" +
     "  <div class=\"resource-panel-wrapper\">\n" +
     "    <sidebar></sidebar>\n" +
     "\n" +
@@ -2584,7 +2602,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('directives/sidebar.tpl.html',
-    "  <div class=\"sidebar\">\n" +
+    "  <form name=\"form\" class=\"sidebar\" novalidate ng-class=\"{ 'is-fullscreen': documentationHidden }\">\n" +
     "    <div class=\"sidebar-flex-wrapper\">\n" +
     "      <div class=\"sidebar-content\">\n" +
     "        <header class=\"sidebar-row sidebar-header\">\n" +
@@ -2630,15 +2648,16 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p class=\"sidebar-input-container\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
-    "                <button class=\"sidebar-input-reset\" ng-click=\"resetUriParameter(uriParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
-    "                <span class=\"sidebar-input-tooltip-container\">\n" +
-    "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
+    "                <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetUriParameter(uriParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <span class=\"sidebar-input-tooltip-container\" ng-if=\"uriParam[0].description\">\n" +
+    "                  <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
     "                    <span marked=\"uriParam[0].description\"></span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
-    "                <label for=\"{{uriParam[0].displayName}}\" class=\"sidebar-label\">{{uriParam[0].displayName}}</label>\n" +
-    "                <input id=\"{{uriParam[0].displayName}}\" class=\"sidebar-input\" ng-model=\"uriParameters[uriParam[0].displayName]\">\n" +
+    "                <label for=\"{{uriParam[0].displayName}}\" class=\"sidebar-label\">{{uriParam[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"uriParam[0].required\">*</span></label>\n" +
+    "                <input name=\"{{uriParam[0].displayName}}\" ng-required=\"{{uriParam[0].required}}\" class=\"sidebar-input\" ng-model=\"uriParameters[uriParam[0].displayName]\">\n" +
+    "                <span class=\"field-validation-error\"></span>\n" +
     "              </p>\n" +
     "            </div>\n" +
     "          </section>\n" +
@@ -2650,15 +2669,16 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p class=\"sidebar-input-container\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
-    "                <button class=\"sidebar-input-reset\" ng-click=\"resetHeader(header)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
-    "                <span class=\"sidebar-input-tooltip-container\">\n" +
-    "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
+    "                <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetHeader(header)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <span class=\"sidebar-input-tooltip-container\" ng-if=\"header[0].description\">\n" +
+    "                  <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
     "                    <span marked=\"header[0].description\"></span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
-    "                <label for=\"{{header[0].displayName}}\" class=\"sidebar-label\">{{header[0].displayName}}</label>\n" +
-    "                <input id=\"{{header[0].displayName}}\" class=\"sidebar-input\" ng-model=\"context.headers.values[header[0].displayName][0]\">\n" +
+    "                <label for=\"{{header[0].displayName}}\" class=\"sidebar-label\">{{header[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"header[0].required\">*</span></label>\n" +
+    "                <input name=\"{{header[0].displayName}}\" ng-required=\"{{header[0].required}}\" class=\"sidebar-input\" ng-model=\"context.headers.values[header[0].displayName][0]\">\n" +
+    "                <span class=\"field-validation-error\"></span>\n" +
     "              </p>\n" +
     "            </div>\n" +
     "          </section>\n" +
@@ -2670,15 +2690,16 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p id=\"sidebar-query-parameters-all\" class=\"sidebar-input-container\" ng-repeat=\"queryParam in methodInfo.queryParameters\">\n" +
-    "                <button class=\"sidebar-input-reset\" ng-click=\"resetQueryParam(queryParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
-    "                <span class=\"sidebar-input-tooltip-container\">\n" +
-    "                  <button class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
+    "                <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetQueryParam(queryParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                <span class=\"sidebar-input-tooltip-container\" ng-if=\"queryParam[0].description\">\n" +
+    "                  <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout\">\n" +
     "                    <span marked=\"queryParam[0].description\"></span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
-    "                <label for=\"{{queryParam[0].displayName}}\" class=\"sidebar-label\">{{queryParam[0].displayName}}</label>\n" +
-    "                <input id=\"{{queryParam[0].displayName}}\" class=\"sidebar-input\" ng-model=\"context.queryParameters.values[queryParam[0].displayName][0]\">\n" +
+    "                <label for=\"{{queryParam[0].displayName}}\" class=\"sidebar-label\">{{queryParam[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"queryParam[0].required\">*</span></label>\n" +
+    "                <input name=\"{{queryParam[0].displayName}}\" ng-required=\"{{queryParam[0].required}}\"  class=\"sidebar-input\" ng-model=\"context.queryParameters.values[queryParam[0].displayName][0]\">\n" +
+    "                <span class=\"field-validation-error\"></span>\n" +
     "              </p>\n" +
     "            </div>\n" +
     "          </section>\n" +
@@ -2706,7 +2727,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "          <section>\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"sidebar-action-group\">\n" +
-    "                <button class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\">{{methodInfo.method.toUpperCase()}}\n" +
+    "                <button type=\"submit\" class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\">{{methodInfo.method.toUpperCase()}}\n" +
     "                </button>\n" +
     "                <button class=\"sidebar-action sidebar-action-clear\" ng-click=\"clearFields()\">Clear</button>\n" +
     "                <button class=\"sidebar-action sidebar-action-reset\" ng-click=\"resetFields()\">Reset</button>\n" +
@@ -2792,7 +2813,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "      </button>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "</div>\n"
+    "</form>\n"
   );
 
 
@@ -2927,13 +2948,15 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   $templateCache.put('security/basic_auth.tpl.html',
     "<div class=\"sidebar-row\">\n" +
     "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"username\" class=\"sidebar-label\">Username</label>\n" +
-    "    <input type=\"text\" id=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\"/>\n" +
+    "    <label for=\"username\" class=\"sidebar-label\">Username <span class=\"side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\"/>\n" +
+    "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"password\" class=\"sidebar-label\">Password</label>\n" +
-    "    <input type=\"password\" id=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\"/>\n" +
+    "    <label for=\"password\" class=\"sidebar-label\">Password <span class=\"side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\"/>\n" +
+    "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
   );
@@ -2942,13 +2965,15 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   $templateCache.put('security/oauth1.tpl.html',
     "<div class=\"sidebar-row\">\n" +
     "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"consumerKey\" class=\"sidebar-label\">Consumer Key</label>\n" +
-    "    <input type=\"text\" id=\"consumerKey\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerKey\"/>\n" +
+    "    <label for=\"consumerKey\" class=\"sidebar-label\">Consumer Key <span class=\"side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"consumerKey\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerKey\"/>\n" +
+    "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"consumerSecret\" class=\"sidebar-label\">Consumer Secret</label>\n" +
-    "    <input type=\"password\" id=\"consumerSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerSecret\"/>\n" +
+    "    <label for=\"consumerSecret\" class=\"sidebar-label\">Consumer Secret <span class=\"side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"consumerSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerSecret\"/>\n" +
+    "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
   );
@@ -2957,13 +2982,15 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   $templateCache.put('security/oauth2.tpl.html',
     "<div class=\"sidebar-row\">\n" +
     "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"clientId\" class=\"sidebar-label\">Client ID</label>\n" +
-    "    <input type=\"text\" id=\"clientId\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientId\"/>\n" +
+    "    <label for=\"clientId\" class=\"sidebar-label\">Client ID <span class=\"side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"clientId\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientId\"/>\n" +
+    "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"clientSecret\" class=\"sidebar-label\">Client Secret</label>\n" +
-    "    <input type=\"password\" id=\"clientSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientSecret\"/>\n" +
+    "    <label for=\"clientSecret\" class=\"sidebar-label\">Client Secret <span class=\"side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"clientSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientSecret\"/>\n" +
+    "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
   );

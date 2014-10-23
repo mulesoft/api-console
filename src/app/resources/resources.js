@@ -8,6 +8,7 @@ RAML.Directives.resources = function(ramlParserWrapper) {
       },
     controller: function($scope, $window) {
       $scope.proxy = $window.RAML.Settings.proxy;
+      $scope.documentationHidden = $window.RAML.Settings.documentationHidden;
 
       if ($scope.src) {
         ramlParserWrapper.load($scope.src);

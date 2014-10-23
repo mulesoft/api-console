@@ -95,3 +95,22 @@
   font-family: Source Code Pro;
   font-size: 14px;
 }
+
+span.side-bar-required-field {
+  color: red;
+}
+
+input.ng-touched.ng-invalid {
+  border: 1px solid red;
+}
+
+input.ng-touched.ng-invalid-required+span.field-validation-error::after {
+  content: 'required';
+  color: white;
+  position: absolute;
+  margin-top: -20px;
+  font-size: 13px;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+}
