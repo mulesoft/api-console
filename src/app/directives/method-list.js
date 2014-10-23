@@ -10,16 +10,18 @@ RAML.Directives.methodList = function($window) {
         };
         var responses = $scope.methodInfo.responses;
 
-        Object.keys(responses).map(function (key) {
-          if(typeof responses[key].body !== 'undefined') {
-            responseInfo[key] = {};
+        if (responses) {
+          Object.keys(responses).map(function (key) {
+            if(typeof responses[key].body !== 'undefined') {
+              responseInfo[key] = {};
 
-            Object.keys(responses[key].body).sort().reverse().map(function (type) {
-              responseInfo[key][type] = responses[key].body[type]
-              responseInfo.currentType = type;
-            });
-          }
-        });
+              Object.keys(responses[key].body).sort().reverse().map(function (type) {
+                responseInfo[key][type] = responses[key].body[type]
+                responseInfo.currentType = type;
+              });
+            }
+          });
+        }
 
         return responseInfo;
       };
