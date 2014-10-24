@@ -509,14 +509,6 @@ RAML.Directives.sidebar = function($window) {
         return typeof value !== 'undefined' ? true : false;
       };
 
-      //// TODO: Scroll to request when make a try-it
-      //// TODO: Add support for form-parameters
-      //// TODO: Scroll to the current window when open a resource-method (display-name is optional :()
-      //// TODO: Fix open/close resource
-      //// TODO: Remove jQuery code as much as possible
-      //// TODO: Change codemirror theme on switch-theme
-      //// TODO: Make the console work with IFrames
-      //// TODO: Create more services to make code more testable
       $scope.tryIt = function ($event) {
         var url;
         var context = $scope.context;
