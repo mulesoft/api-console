@@ -128,11 +128,11 @@ RAML.Directives.sidebar = function($window) {
       };
 
       $scope.resetQueryParam = function (queryParam) {
-        $scope.context.queryParameters.reset($scope.methodInfo.queryParameters, queryParam[0].displayName);
+        $scope.context.queryParameters.reset($scope.methodInfo.queryParameters, queryParam[0].id);
       };
 
       $scope.resetHeader = function (header) {
-        $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].displayName);
+        $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].id);
       };
 
       $scope.resetUriParameter = function (uriParam) {
@@ -181,6 +181,10 @@ RAML.Directives.sidebar = function($window) {
       $scope.prefillBody = function (current) {
         var definition = $scope.context.bodyContent.definitions[current];
         definition.value = definition.contentType.example;
+      };
+
+      $scope.hasDefaultValue = function (value) {
+        return typeof value !== 'undefined' ? true : false;
       };
 
       //// TODO: Scroll to request when make a try-it
