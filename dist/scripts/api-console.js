@@ -1,925 +1,970 @@
-(function() { 
- 'use strict';
+(function (window) {
+  'use strict';
 
-// var findTab = function (element) {
-//   return jQuery(element).closest('.resource')
-//     .find('.tab-list')
-//     .children()
-//     .first();
-// };
+  // Namespaces
+  RAML.Directives     = {};
+  RAML.Services       = {};
+  RAML.Filters        = {};
+  RAML.Services.TryIt = {};
+  RAML.Security       = {};
+  RAML.Settings       = RAML.Settings || {};
 
-//// TODO: Add this code!
-// jQuery('.resource-heading')
-//   .on('mouseenter', function () {
-//     findTab(this).addClass('is-hovered');
-//   }).on('mouseleave', function () {
-//     findTab(this).removeClass('is-hovered');
-//   }).on('click', function () {
-//     findTab(this).trigger('click');
-//   });
+  // Angular Modules
+  angular.module('RAML.Directives', []);
+  angular.module('RAML.Services', ['raml']);
+  angular.module('RAML.Security', []);
+  angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
 
-//// CODE ////
+  var renderer = new window.marked.Renderer();
+  var loc      = window.location;
+  var uri      = loc.protocol + '//' + loc.host + loc.pathname.replace(/\/$/, '');
 
-// The RAML object is being created by the RAML Parser lib
-RAML.Directives = {};
-RAML.Services = {};
-RAML.Filters = {};
-RAML.Services.TryIt = {};
-RAML.Security = {};
+  // Marked Settings
+  renderer.paragraph = function (text) {
+    return text;
+  };
 
-angular.module('RAML.Directives', []);
-angular.module('RAML.Services', ['raml']);
-angular.module('RAML.Security', []);
-angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
+  window.marked.setOptions({
+    renderer: renderer,
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false
+  });
 
-// Marked Config
-var renderer = new window.marked.Renderer();
-
-renderer.paragraph = function (text, level) {
-  return text;
-};
-
-window.marked.setOptions({
-  renderer: renderer,
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false
-});
-
-
-  RAML.Settings = RAML.Settings || {};
-
-  var location = window.location;
-  var uri      = location.protocol + '//' + location.host + location.pathname.replace(/\/$/, '');
-
-  RAML.Settings.proxy = RAML.Settings.proxy || false;
+  // Settings
+  RAML.Settings.proxy             = RAML.Settings.proxy || false;
   RAML.Settings.oauth2RedirectUri = RAML.Settings.oauth2RedirectUri || uri + '/authentication/oauth2.html';
   RAML.Settings.oauth1RedirectUri = RAML.Settings.oauth1RedirectUri || uri + '/authentication/oauth2.html';
+})(window);
 
-RAML.Directives.closeButton = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/close-button.tpl.html',
-    replace: true,
-    controller: function($scope, $element) {
-      $scope.close = function ($event) {
-        var $this = jQuery($event.currentTarget);
-        var $inactiveElements = jQuery('.tab').add('.resource').add('li');
-        var $resource = $this.closest('.resource');
-        var $resourceListItem = $resource.parent('li');
+(function () {
+  'use strict';
 
-        $resourceListItem
-          .children('.resource-panel')
-          .velocity('slideUp');
-
-        $inactiveElements.removeClass('is-active');
-      };
-    }
-  };
-};
-
-angular.module('RAML.Directives')
-  .directive('closeButton', ['$window', RAML.Directives.closeButton]);
-
-RAML.Directives.documentation = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/documentation.tpl.html',
-    replace: true,
-    controller: function($scope, $element) {
-      $scope.toggleTab = function ($event) {
-        var $this = jQuery($event.currentTarget);
-        var $eachTab = $this.children('.toggle-tab');
-        var $panel = $this.closest('.resource-panel');
-        var $eachContent = $panel.find('.resource-panel-content');
-
-        $eachTab.toggleClass('is-active');
-        $eachContent.toggleClass('is-active');
-      };
-
-      $scope.changeType = function ($event, type, code) {
-        var $this = jQuery($event.currentTarget);
-        var $panel = $this.closest('.resource-body-heading');
-        var $eachContent = $panel.find('span');
-
-        $eachContent.removeClass('isActive');
-        $this.addClass('isActive');
-
-        $scope.responseInfo[code].currentType = type;
-      };
-
-      $scope.showSchema = function ($event) {
-        var $this = jQuery($event.currentTarget);
-        var $panel = $this.closest('.resource-panel');
-        var $schema = $panel.find('.resource-pre-toggle');
-
-        $this.toggleClass('is-active');
-
-        if (!$schema.hasClass('is-active')) {
-          $schema
-            .addClass('is-active')
-            .velocity('slideDown');
-        } else {
-          $schema
-            .removeClass('is-active')
-            .velocity('slideUp');
-        }
-      };
-    }
-  };
-};
-
-angular.module('RAML.Directives')
-  .directive('documentation', ['$window', RAML.Directives.documentation]);
-
-RAML.Directives.methodList = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/method-list.tpl.html',
-    replace: true,
-    controller: function($rootScope, $scope, $element) {
-      function getResponseInfo() {
-        var responseInfo = {};
-        var responses = $scope.methodInfo.responses;
-
-        if (responses) {
-          Object.keys(responses).map(function (key) {
-            if(typeof responses[key].body !== 'undefined') {
-              responseInfo[key] = {};
-
-              Object.keys(responses[key].body).sort().reverse().map(function (type) {
-                responseInfo[key][type] = responses[key].body[type]
-                responseInfo[key].currentType = type;
-              });
-            }
-          });
-        }
-
-        return responseInfo;
-      };
-
-      $scope.readTraits = function (traits) {
-        var list = [];
-
-        if (traits) {
-          traits.map(function (trait) {
-            if (typeof trait === 'string') {
-              list.push(trait);
-            } else if (typeof trait === 'object') {
-              list.push(Object.keys(trait).join(', '));
-            }
-          });
-        }
-
-        return list.join(', ');
-      }
-
-      function toUIModel (collection) {
-        if(collection) {
-          Object.keys(collection).map(function (key) {
-            collection[key][0].id = key;
-          });
-        }
-      }
-
-      $scope.showResource = function ($event, $index) {
-        var $this = jQuery($event.currentTarget);
-        var $inactiveElements = jQuery('.tab').add('.resource').add('li');
-        var $resource = $this.closest('.resource');
-        var $resourceListItem = $resource.parent('li');
-        var $closingEl;
-
-        $scope.methodInfo = $scope.resource.methods[$index];
-        $scope.responseInfo = getResponseInfo();
-        $scope.context = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
-        $scope.requestUrl = '';
-        $scope.response = {};
-        $scope.requestOptions = {};
-        $scope.resetFields();
-        $scope.requestEnd = false;
-        $scope.showRequestMetadata = false;
-        $scope.showMoreEnable = true;
-        $scope.showSpinner = false;
-        $scope.securitySchemes = $scope.methodInfo.securitySchemes();
-        $scope.credentials = {};
-        $scope.traits = $scope.readTraits($scope.methodInfo.is);
-
-        toUIModel($scope.methodInfo.queryParameters);
-        toUIModel($scope.methodInfo.headers.plain);
-        toUIModel($scope.resource.uriParametersForDocumentation);
-
-        if ($scope.methodInfo.allowsAnonymousAccess()) {
-          $scope.securitySchemes.anonymous = {
-            type: "Anonymous"
-          };
-        }
-
-        var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
-        $scope.currentScheme = {
-          type: $scope.securitySchemes[defaultScheme].type,
-          name: defaultScheme
-        };
-
-        // Hack for codemirror
-        setTimeout(function () {
-          var editors = jQuery('.sidebar-content-wrapper #sidebar-body .codemirror-body-editor .CodeMirror');
-
-          editors.map(function (index) {
-            var bodyEditor = editors[index].CodeMirror;
-
-            if (bodyEditor && $scope.context.bodyContent) {
-              bodyEditor.setOption('mode', $scope.context.bodyContent.selected);
-              bodyEditor.refresh();
-            }
-          });
-        }, 10);
-
-        if (!$resource.hasClass('is-active')) {
-          $closingEl = $inactiveElements
-            .filter('.is-active')
-            .children('.resource-panel');
-
-          $closingEl.velocity('slideUp');
+  RAML.Directives.closeButton = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/close-button.tpl.html',
+      replace: true,
+      controller: function($scope) {
+        $scope.close = function ($event) {
+          var $this             = jQuery($event.currentTarget);
+          var $inactiveElements = jQuery('.tab').add('.resource').add('li');
+          var $resource         = $this.closest('.resource');
+          var $resourceListItem = $resource.parent('li');
 
           $resourceListItem
             .children('.resource-panel')
-            .velocity('slideDown');
-
-          $inactiveElements.removeClass('is-active');
-
-          $resource
-            .add($resourceListItem)
-            .add($this)
-            .addClass('is-active');
-        } else if (jQuery($this).hasClass('is-active')) {
-          $resourceListItem.children('.resource-panel')
             .velocity('slideUp');
+
           $inactiveElements.removeClass('is-active');
-        } else {
-          jQuery($this).addClass('is-active');
-          jQuery($this).siblings('.tab').removeClass('is-active');
-        }
-      };
-    }
+        };
+      }
+    };
   };
-};
 
-angular.module('RAML.Directives')
-  .directive('methodList', ['$window', RAML.Directives.methodList]);
+  angular.module('RAML.Directives')
+    .directive('closeButton', RAML.Directives.closeButton);
+})();
 
-RAML.Directives.ramlInitializer = function(ramlParserWrapper) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/raml-initializer.tpl.html',
-    replace: true,
-    controller: function($rootScope, $scope, $element) {
-      $scope.ramlLoaded = false;
-      $scope.ramlUrl = '';
+(function () {
+  'use strict';
 
-      $scope.onKeyPressRamlUrl = function ($event) {
-        if ($event.keyCode === 13) {
-          $scope.loadFromUrl();
-        }
-      };
+  RAML.Directives.documentation = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/documentation.tpl.html',
+      replace: true,
+      controller: function($scope) {
+        $scope.toggleTab = function ($event) {
+          var $this        = jQuery($event.currentTarget);
+          var $eachTab     = $this.children('.toggle-tab');
+          var $panel       = $this.closest('.resource-panel');
+          var $eachContent = $panel.find('.resource-panel-content');
 
-      $scope.loadFromUrl = function () {
-        if ($scope.ramlUrl) {
-          ramlParserWrapper.load($scope.ramlUrl);
-          $scope.ramlLoaded = true;
-        }
-      };
+          $eachTab.toggleClass('is-active');
+          $eachContent.toggleClass('is-active');
+        };
 
-      $scope.loadRaml = function() {
-        if ($scope.raml) {
-          ramlParserWrapper.parse($scope.raml);
-          $scope.ramlLoaded = true;
-        }
-      };
-    }
+        $scope.changeType = function ($event, type, code) {
+          var $this        = jQuery($event.currentTarget);
+          var $panel       = $this.closest('.resource-body-heading');
+          var $eachContent = $panel.find('span');
+
+          $eachContent.removeClass('isActive');
+          $this.addClass('isActive');
+
+          $scope.responseInfo[code].currentType = type;
+        };
+
+        $scope.showSchema = function ($event) {
+          var $this   = jQuery($event.currentTarget);
+          var $panel  = $this.closest('.resource-panel');
+          var $schema = $panel.find('.resource-pre-toggle');
+
+          $this.toggleClass('is-active');
+
+          if (!$schema.hasClass('is-active')) {
+            $schema
+              .addClass('is-active')
+              .velocity('slideDown');
+          } else {
+            $schema
+              .removeClass('is-active')
+              .velocity('slideUp');
+          }
+        };
+      }
+    };
   };
-};
 
-angular.module('RAML.Directives')
-  .directive('ramlInitializer', RAML.Directives.ramlInitializer);
+  angular.module('RAML.Directives')
+    .directive('documentation', RAML.Directives.documentation);
+})();
 
-RAML.Directives.resourcePanel = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/resource-panel.tpl.html',
-    replace: true,
-    controller: function($scope) {
-      $scope.uriParameters = {};
-    }
-  };
-};
+(function () {
+  'use strict';
 
-angular.module('RAML.Directives')
-  .directive('resourcePanel', ['$window', RAML.Directives.resourcePanel]);
+  RAML.Directives.methodList = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/method-list.tpl.html',
+      replace: true,
+      controller: function($scope) {
+        function getResponseInfo() {
+          var responseInfo = {};
+          var responses    = $scope.methodInfo.responses;
 
-RAML.Directives.sidebar = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/sidebar.tpl.html',
-    replace: true,
-    link: function ($scope, $element) {
-      var el = angular.element(angular.element($element.children().children()[0]).children()[2]);
+          if (responses) {
+            Object.keys(responses).map(function (key) {
+              if(typeof responses[key].body !== 'undefined') {
+                responseInfo[key] = {};
 
-      el.bind('scroll', function ($event) {
-        var $el = $event.srcElement;
+                Object.keys(responses[key].body).sort().reverse().map(function (type) {
+                  responseInfo[key][type] = responses[key].body[type];
+                  responseInfo[key].currentType = type;
+                });
+              }
+            });
+          }
 
-        if ($el.scrollHeight === $el.offsetHeight + $el.scrollTop) {
-          $scope.showMoreEnable = false;
-        } else {
-          $scope.showMoreEnable = true;
+          return responseInfo;
         }
 
-        $scope.$apply.apply($scope, null);
-      });
-    },
-    controller: function ($scope, $element) {
-      function completeAnimation (element) {
-        jQuery(element).removeAttr('style');
-      };
+        function toUIModel (collection) {
+          if(collection) {
+            Object.keys(collection).map(function (key) {
+              collection[key][0].id = key;
+            });
+          }
+        }
 
-      function parseHeaders(headers) {
-        var parsed = {}, key, val, i;
+        $scope.readTraits = function (traits) {
+          var list = [];
 
-        if (!headers) {
+          if (traits) {
+            traits.map(function (trait) {
+              if (typeof trait === 'string') {
+                list.push(trait);
+              } else if (typeof trait === 'object') {
+                list.push(Object.keys(trait).join(', '));
+              }
+            });
+          }
+
+          return list.join(', ');
+        };
+
+        $scope.showResource = function ($event, $index) {
+          var $this             = jQuery($event.currentTarget);
+          var $inactiveElements = jQuery('.tab').add('.resource').add('li');
+          var $resource         = $this.closest('.resource');
+          var $resourceListItem = $resource.parent('li');
+          var $closingEl;
+
+          $scope.methodInfo          = $scope.resource.methods[$index];
+          $scope.responseInfo        = getResponseInfo();
+          $scope.context             = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
+          $scope.requestUrl          = '';
+          $scope.response            = {};
+          $scope.requestOptions      = {};
+          $scope.resetFields();
+          $scope.requestEnd          = false;
+          $scope.showRequestMetadata = false;
+          $scope.showMoreEnable      = true;
+          $scope.showSpinner         = false;
+          $scope.securitySchemes     = $scope.methodInfo.securitySchemes();
+          $scope.credentials         = {};
+          $scope.traits              = $scope.readTraits($scope.methodInfo.is);
+
+          toUIModel($scope.methodInfo.queryParameters);
+          toUIModel($scope.methodInfo.headers.plain);
+          toUIModel($scope.resource.uriParametersForDocumentation);
+
+          if ($scope.methodInfo.allowsAnonymousAccess()) {
+            $scope.securitySchemes.anonymous = {
+              type: 'Anonymous'
+            };
+          }
+
+          var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
+          $scope.currentScheme = {
+            type: $scope.securitySchemes[defaultScheme].type,
+            name: defaultScheme
+          };
+
+          // Hack for codemirror
+          setTimeout(function () {
+            var editors = jQuery('.sidebar-content-wrapper #sidebar-body .codemirror-body-editor .CodeMirror');
+
+            editors.map(function (index) {
+              var bodyEditor = editors[index].CodeMirror;
+
+              if (bodyEditor && $scope.context.bodyContent) {
+                bodyEditor.setOption('mode', $scope.context.bodyContent.selected);
+                bodyEditor.refresh();
+              }
+            });
+          }, 10);
+
+          if (!$resource.hasClass('is-active')) {
+            $closingEl = $inactiveElements
+              .filter('.is-active')
+              .children('.resource-panel');
+
+            $closingEl.velocity('slideUp');
+
+            $resourceListItem
+              .children('.resource-panel')
+              .velocity('slideDown');
+
+            $inactiveElements.removeClass('is-active');
+
+            $resource
+              .add($resourceListItem)
+              .add($this)
+              .addClass('is-active');
+          } else if (jQuery($this).hasClass('is-active')) {
+            $resourceListItem.children('.resource-panel')
+              .velocity('slideUp');
+            $inactiveElements.removeClass('is-active');
+          } else {
+            jQuery($this).addClass('is-active');
+            jQuery($this).siblings('.tab').removeClass('is-active');
+          }
+        };
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('methodList', RAML.Directives.methodList);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.ramlInitializer = function(ramlParserWrapper) {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/raml-initializer.tpl.html',
+      replace: true,
+      controller: function($scope) {
+        $scope.ramlLoaded = false;
+        $scope.ramlUrl    = '';
+
+        $scope.onKeyPressRamlUrl = function ($event) {
+          if ($event.keyCode === 13) {
+            $scope.loadFromUrl();
+          }
+        };
+
+        $scope.loadFromUrl = function () {
+          if ($scope.ramlUrl) {
+            ramlParserWrapper.load($scope.ramlUrl);
+            $scope.ramlLoaded = true;
+          }
+        };
+
+        $scope.loadRaml = function() {
+          if ($scope.raml) {
+            ramlParserWrapper.parse($scope.raml);
+            $scope.ramlLoaded = true;
+          }
+        };
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('ramlInitializer', RAML.Directives.ramlInitializer);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.resourcePanel = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/resource-panel.tpl.html',
+      replace: true,
+      controller: function($scope) {
+        $scope.uriParameters = {};
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('resourcePanel', RAML.Directives.resourcePanel);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.sidebar = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/sidebar.tpl.html',
+      replace: true,
+      link: function ($scope, $element) {
+        var el = angular.element(angular.element($element.children().children()[0]).children()[2]);
+
+        el.bind('scroll', function ($event) {
+          var $el = $event.srcElement;
+
+          if ($el.scrollHeight === $el.offsetHeight + $el.scrollTop) {
+            $scope.showMoreEnable = false;
+          } else {
+            $scope.showMoreEnable = true;
+          }
+
+          $scope.$apply.apply($scope, null);
+        });
+      },
+      controller: function ($scope) {
+        function completeAnimation (element) {
+          jQuery(element).removeAttr('style');
+        }
+
+        function parseHeaders(headers) {
+          var parsed = {}, key, val, i;
+
+          if (!headers) {
+            return parsed;
+          }
+
+          headers.split('\n').forEach(function(line) {
+            i   = line.indexOf(':');
+            key = line.substr(0, i).trim().toLowerCase();
+            val = line.substr(i + 1).trim();
+
+            if (key) {
+              if (parsed[key]) {
+                parsed[key] += ', ' + val;
+              } else {
+                parsed[key] = val;
+              }
+            }
+          });
+
           return parsed;
         }
 
-        headers.split('\n').forEach(function(line) {
-          i = line.indexOf(':');
-          key = line.substr(0, i).trim().toLowerCase();
-          val = line.substr(i + 1).trim();
+        function apply () {
+          $scope.$apply.apply($scope, arguments);
+        }
 
-          if (key) {
-            if (parsed[key]) {
-              parsed[key] += ', ' + val;
+        function handleResponse(jqXhr) {
+          $scope.response.body    = jqXhr.responseText,
+          $scope.response.status  = jqXhr.status,
+          $scope.response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
+
+          if ($scope.response.headers['content-type']) {
+            $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
+          }
+
+          $scope.requestEnd     = true;
+          $scope.showMoreEnable = true;
+          $scope.showSpinner    = false;
+
+          $scope.editors.map(function (index) {
+            var codeMirror = $scope.editors[index].CodeMirror;
+            codeMirror.setOption('mode', $scope.response.contentType);
+            setTimeout(function () {
+              codeMirror.refresh();
+            }, 1);
+          });
+
+          apply();
+        }
+
+        function resolveSegementContexts(pathSegments, uriParameters) {
+          var segmentContexts = [];
+
+          pathSegments.forEach(function (element) {
+            if (element.templated) {
+              var segment = {};
+              Object.keys(element.parameters).map(function (key) {
+                segment[key] = uriParameters[key];
+              });
+              segmentContexts.push(segment);
             } else {
-              parsed[key] = val;
+              segmentContexts.push({});
             }
-          }
-        });
+          });
 
-        return parsed;
-      };
-
-      function apply () {
-        $scope.$apply.apply($scope, arguments);
-      };
-
-      function handleResponse(jqXhr) {
-        $scope.response.body = jqXhr.responseText,
-        $scope.response.status = jqXhr.status,
-        $scope.response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
-
-        if ($scope.response.headers['content-type']) {
-          $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
+          return segmentContexts;
         }
 
-        $scope.requestEnd = true;
-        $scope.showMoreEnable = true;
-        $scope.showSpinner = false;
-
-        $scope.editors.map(function (index) {
-          var codeMirror = $scope.editors[index].CodeMirror;
-          codeMirror.setOption('mode', $scope.response.contentType);
-          setTimeout(function () {
-            codeMirror.refresh();
-          }, 1);
-        });
-
-        apply();
-      };
-
-      function resolveSegementContexts(pathSegments, uriParameters) {
-        var segmentContexts = [];
-
-        pathSegments.forEach(function (element) {
-          if (element.templated) {
-            var segment = {};
-            Object.keys(element.parameters).map(function (key) {
-              segment[key] = uriParameters[key];
-            });
-            segmentContexts.push(segment);
-          } else {
-            segmentContexts.push({});
-          }
-        });
-
-        return segmentContexts;
-      };
-
-      function validateForm(form) {
-        var errors = form.$error;
-        Object.keys(form.$error).map(function (key) {
-          for (var i = 0; i < errors[key].length; i++) {
-            var fieldName = errors[key][i].$name;
-            form[fieldName].$setTouched();
-          };
-        });
-      };
-
-      $scope.clearFields = function () {
-        $scope.uriParameters = {};
-        $scope.context.queryParameters.clear();
-        $scope.context.headers.clear();
-
-        if ($scope.context.bodyContent) {
-          $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
-        }
-      };
-
-      $scope.resetFields = function () {
-        var uriParameters = $scope.resource.uriParametersForDocumentation;
-
-        if (uriParameters) {
-          Object.keys(uriParameters).map(function (key) {
-            var param = uriParameters[key][0];
-            $scope.uriParameters[param.displayName] = param['default'];
+        function validateForm(form) {
+          var errors = form.$error;
+          Object.keys(form.$error).map(function (key) {
+            for (var i = 0; i < errors[key].length; i++) {
+              var fieldName = errors[key][i].$name;
+              form[fieldName].$setTouched();
+            }
           });
         }
 
-        $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
-        $scope.context.headers.reset($scope.methodInfo.headers.plain);
-      };
+        $scope.clearFields = function () {
+          $scope.uriParameters = {};
+          $scope.context.queryParameters.clear();
+          $scope.context.headers.clear();
 
-      $scope.resetQueryParam = function (queryParam) {
-        $scope.context.queryParameters.reset($scope.methodInfo.queryParameters, queryParam[0].id);
-      };
-
-      $scope.resetHeader = function (header) {
-        $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].id);
-      };
-
-      $scope.resetUriParameter = function (uriParam) {
-        var uriParameters = $scope.resource.uriParametersForDocumentation;
-
-        if (uriParameters) {
-          Object.keys(uriParameters).filter(function (key) {
-            return key === uriParam[0].displayName;
-          }).map(function (key) {
-            var param = uriParameters[key][0];
-            $scope.uriParameters[param.displayName] = param['default'];
-          });
-        }
-      };
-
-      $scope.toggleBodyType = function ($event, bodyType) {
-        var $this = jQuery($event.currentTarget);
-        var $panel = $this.closest('.sidebar-toggle-type').find('button');
-
-        $panel.removeClass('is-active');
-        $this.addClass('is-active');
-        $scope.context.bodyContent.selected = bodyType;
-
-        var editor = $this.closest('.sidebar-row')
-                          .parent()
-                          .find('.codemirror-body-editor .CodeMirror')[0]
-                          .CodeMirror;
-        editor.setOption('mode', bodyType);
-        setTimeout(function () {
-          editor.refresh();
-        }, 1);
-      };
-
-      $scope.toggleSecurity = function ($event, schemaType, name) {
-        var $this = jQuery($event.currentTarget);
-        var $panel = $this.closest('.sidebar-toggle-group').find('button');
-
-        $panel.removeClass('is-active');
-        $this.addClass('is-active');
-        $scope.currentScheme = {
-          type: schemaType,
-          name: name
+          if ($scope.context.bodyContent) {
+            $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
+          }
         };
-      };
 
-      $scope.prefillBody = function (current) {
-        var definition = $scope.context.bodyContent.definitions[current];
-        definition.value = definition.contentType.example;
-      };
+        $scope.resetFields = function () {
+          var uriParameters = $scope.resource.uriParametersForDocumentation;
 
-      $scope.hasDefaultValue = function (value) {
-        return typeof value !== 'undefined' ? true : false;
-      };
+          if (uriParameters) {
+            Object.keys(uriParameters).map(function (key) {
+              var param = uriParameters[key][0];
+              $scope.uriParameters[param.displayName] = param['default'];
+            });
+          }
 
-      $scope.tryIt = function ($event) {
-        var url;
-        var context = $scope.context;
-        var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
+          $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
+          $scope.context.headers.reset($scope.methodInfo.headers.plain);
+        };
 
-        validateForm($scope.form);
+        $scope.resetQueryParam = function (queryParam) {
+          $scope.context.queryParameters.reset($scope.methodInfo.queryParameters, queryParam[0].id);
+        };
 
-        $scope.showSpinner = true;
-        $scope.toggleSidebar($event, true);
-        $scope.toggleRequestMetadata($event, true);
-        $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+        $scope.resetHeader = function (header) {
+          $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].id);
+        };
 
-        try {
-          var pathBuilder = context.pathBuilder;
-          var client = RAML.Client.create($scope.raml, function(client) {
-            client.baseUriParameters(pathBuilder.baseUriContext);
+        $scope.resetUriParameter = function (uriParam) {
+          var uriParameters = $scope.resource.uriParametersForDocumentation;
+
+          if (uriParameters) {
+            Object.keys(uriParameters).filter(function (key) {
+              return key === uriParam[0].displayName;
+            }).map(function (key) {
+              var param = uriParameters[key][0];
+              $scope.uriParameters[param.displayName] = param['default'];
+            });
+          }
+        };
+
+        $scope.toggleBodyType = function ($event, bodyType) {
+          var $this  = jQuery($event.currentTarget);
+          var $panel = $this.closest('.sidebar-toggle-type').find('button');
+
+          $panel.removeClass('is-active');
+          $this.addClass('is-active');
+          $scope.context.bodyContent.selected = bodyType;
+
+          var editor = $this.closest('.sidebar-row')
+                            .parent()
+                            .find('.codemirror-body-editor .CodeMirror')[0]
+                            .CodeMirror;
+          editor.setOption('mode', bodyType);
+          setTimeout(function () {
+            editor.refresh();
+          }, 1);
+        };
+
+        $scope.toggleSecurity = function ($event, schemaType, name) {
+          var $this  = jQuery($event.currentTarget);
+          var $panel = $this.closest('.sidebar-toggle-group').find('button');
+
+          $panel.removeClass('is-active');
+          $this.addClass('is-active');
+          $scope.currentScheme = {
+            type: schemaType,
+            name: name
+          };
+        };
+
+        $scope.prefillBody = function (current) {
+          var definition   = $scope.context.bodyContent.definitions[current];
+          definition.value = definition.contentType.example;
+        };
+
+        $scope.hasDefaultValue = function (value) {
+          return typeof value !== 'undefined' ? true : false;
+        };
+
+        $scope.tryIt = function ($event) {
+          var url;
+          var context         = $scope.context;
+          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
+
+          validateForm($scope.form);
+
+          $scope.showSpinner = true;
+          $scope.toggleSidebar($event, true);
+          $scope.toggleRequestMetadata($event, true);
+          $scope.editors     = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+
+          try {
+            var pathBuilder = context.pathBuilder;
+            var client      = RAML.Client.create($scope.raml, function(client) {
+              client.baseUriParameters(pathBuilder.baseUriContext);
+            });
+            url = client.baseUri + pathBuilder(segmentContexts);
+          } catch (e) {
+            $scope.response = {};
+            return;
+          }
+
+          var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
+
+          if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
+            request.queryParams(context.queryParameters.data());
+          }
+
+          if (!RAML.Utils.isEmpty(context.headers.data())) {
+            request.headers(context.headers.data());
+          }
+
+          if (context.bodyContent) {
+            request.header('Content-Type', context.bodyContent.selected);
+            request.data(context.bodyContent.data());
+          }
+
+          $scope.requestOptions = request.toOptions();
+
+          var authStrategy;
+
+          try {
+            var securitySchemes = $scope.methodInfo.securitySchemes();
+            var scheme          = securitySchemes && securitySchemes[$scope.currentScheme.name];
+
+            /* jshint es5: true */
+            authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+            /* jshint es5: false */
+          } catch (e) {
+            // custom strategies aren't supported yet.
+          }
+
+          authStrategy.authenticate().then(function(token) {
+            token.sign(request);
+
+            jQuery.ajax($scope.requestOptions).then(
+              function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+              function(jqXhr) { handleResponse(jqXhr); }
+            );
           });
-          url = client.baseUri + pathBuilder(segmentContexts);
-        } catch (e) {
-          $scope.response = {};
-          return;
-        }
+        };
 
-        var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
+        $scope.toggleSidebar = function ($event, fullscreenEnable) {
+          var $this        = jQuery($event.currentTarget);
+          var $panel       = $this.closest('.resource-panel');
+          var $sidebar     = $panel.find('.sidebar');
+          var sidebarWidth = 0;
 
-        if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
-          request.queryParams(context.queryParameters.data());
-        }
+          if (jQuery(window).width() > 960) {
+            sidebarWidth = 430;
+          }
 
-        if (!RAML.Utils.isEmpty(context.headers.data())) {
-          request.headers(context.headers.data());
-        }
+          if ($sidebar.hasClass('is-fullscreen') && !fullscreenEnable) {
+            $sidebar.velocity(
+              { width: sidebarWidth },
+              {
+                duration: 200,
+                complete: completeAnimation
+              }
+            );
+            $sidebar.removeClass('is-fullscreen');
+            $panel.removeClass('has-sidebar-fullscreen');
+          } else {
+            $sidebar.velocity(
+              { width: '100%' },
+              {
+                duration: 200,
+                complete: completeAnimation
+              }
+            );
+            $sidebar.addClass('is-fullscreen');
+            $panel.addClass('has-sidebar-fullscreen');
+          }
+        };
 
-        if (context.bodyContent) {
-          request.header('Content-Type', context.bodyContent.selected);
-          request.data(context.bodyContent.data());
-        }
+        $scope.collapseSidebar = function ($event) {
+          var $this         = jQuery($event.currentTarget);
+          var $panel        = $this.closest('.resource-panel');
+          var $panelContent = $panel.find('.resource-panel-primary');
+          var $sidebar      = $panel.find('.sidebar');
 
-        $scope.requestOptions = request.toOptions();
+          if ($sidebar.hasClass('is-collapsed')) {
+            $sidebar.velocity(
+              { width: 430 },
+              {
+                duration: 200,
+                complete: completeAnimation
+              }
+            );
 
-         var authStrategy;
+            $panelContent.velocity(
+              { 'padding-left': 430 },
+              {
+                duration: 200,
+                complete: completeAnimation
+              }
+            );
+          } else {
+            $sidebar.velocity(
+              { width: 0 },
+              {
+                duration: 200,
+                complete: completeAnimation
+              }
+            );
 
-        try {
-          var securitySchemes = $scope.methodInfo.securitySchemes();
+            $panelContent.velocity(
+              { 'padding-left': 0 },
+              {
+                duration: 200,
+                complete: completeAnimation
+              }
+            );
+          }
 
-          var scheme = securitySchemes && securitySchemes[$scope.currentScheme.name];
-          authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
-        } catch (e) {
-          // custom strategies aren't supported yet.
-        }
+          $sidebar.toggleClass('is-collapsed');
+          $panel.toggleClass('has-sidebar-collapsed');
+        };
 
-        authStrategy.authenticate().then(function(token) {
-          token.sign(request);
-
-          jQuery.ajax($scope.requestOptions).then(
-            function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-            function(jqXhr) { handleResponse(jqXhr); }
-          );
-        });
-      };
-
-      $scope.toggleSidebar = function ($event, fullscreenEnable) {
-        var $this = jQuery($event.currentTarget);
-        var $panel = $this.closest('.resource-panel');
-        var $sidebar = $panel.find('.sidebar');
-        var $sidebarContent = $panel.find('.sidebar-content');
-        var sidebarWidth = 0;
-
-        if (jQuery(window).width() > 960) {
-          sidebarWidth = 430;
-        }
-
-        if ($sidebar.hasClass('is-fullscreen') && !fullscreenEnable) {
-          $sidebar.velocity(
-            { width: sidebarWidth },
-            {
-              duration: 200,
-              complete: completeAnimation
-            }
-          );
-          $sidebar.removeClass('is-fullscreen');
-          $panel.removeClass('has-sidebar-fullscreen');
-        } else {
-          $sidebar.velocity(
-            { width: '100%' },
-            {
-              duration: 200,
-              complete: completeAnimation
-            }
-          );
-          $sidebar.addClass('is-fullscreen');
-          $panel.addClass('has-sidebar-fullscreen');
-        }
-      };
-
-      $scope.collapseSidebar = function ($event) {
-        var $this = jQuery($event.currentTarget);
-        var $panel = $this.closest('.resource-panel');
-        var $panelContent = $panel.find('.resource-panel-primary');
-        var $sidebar = $panel.find('.sidebar');
-        var $sidebarContent = $panel.find('.sidebar-content');
-
-        if ($sidebar.hasClass('is-collapsed')) {
-          $sidebar.velocity(
-            { width: 430 },
-            {
-              duration: 200,
-              complete: completeAnimation
-            }
-          );
-
-          $panelContent.velocity(
-            { "padding-left": 430 },
-            {
-              duration: 200,
-              complete: completeAnimation
-            }
-          );
-        } else {
-          $sidebar.velocity(
-            { width: 0 },
-            {
-              duration: 200,
-              complete: completeAnimation
-            }
-          );
-
-          $panelContent.velocity(
-            { "padding-left": 0 },
-            {
-              duration: 200,
-              complete: completeAnimation
-            }
-          );
-        }
-
-        $sidebar.toggleClass('is-collapsed');
-        $panel.toggleClass('has-sidebar-collapsed');
-      };
-
-      $scope.toggleRequestMetadata = function (enabled) {
-        if ($scope.showRequestMetadata && !enabled) {
-          $scope.showRequestMetadata = false;
-        } else {
-          $scope.showRequestMetadata = true;
-        }
-      };
-    }
-  };
-};
-
-angular.module('RAML.Directives')
-  .directive('sidebar', ['$window', RAML.Directives.sidebar]);
-
-RAML.Directives.spinner = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/spinner.tpl.html',
-    replace: true,
-    link: function($scope, $element, attrs) {
-      $scope.$on("loading-started", function(e) {
-        $element.css({"display" : ""});
-      });
-
-      $scope.$on("loading-complete", function(e) {
-        $element.css({"display" : "none"});
-      });
-    }
-  };
-};
-
-angular.module('RAML.Directives')
-  .directive('spinner', ['$window', RAML.Directives.spinner]);
-
-RAML.Directives.theme = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/theme-switcher.tpl.html',
-    replace: true,
-    link: function($scope, $element, attrs) {
-      $element.on('click', function(event) {
-        var $link = jQuery('head link.theme');
-        var theme = $link.attr('href');
-
-        $link.attr('href', 'styles/light-theme.css');
-        $element.removeClass('theme-toggle-dark');
-
-        if (theme === 'styles/light-theme.css') {
-          $link.attr('href', 'styles/dark-theme.css');
-          $element.addClass('theme-toggle-dark');
-        }
-      });
-    }
-  };
-};
-
-angular.module('RAML.Directives')
-  .directive('themeSwitcher', ['$window', RAML.Directives.theme]);
-
-angular.module('raml', [])
-  .factory('ramlParser', function () {
-    return RAML.Parser;
-  });
-
-RAML.Directives.resourceType = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'resources/resource-type.tpl.html',
-    replace: true,
-    controller: function ($scope) {
-      var resourceType = $scope.resource.resourceType;
-
-      if (typeof resourceType === 'object') {
-        $scope.resource.resourceType = Object.keys(resourceType).join();
+        $scope.toggleRequestMetadata = function (enabled) {
+          if ($scope.showRequestMetadata && !enabled) {
+            $scope.showRequestMetadata = false;
+          } else {
+            $scope.showRequestMetadata = true;
+          }
+        };
       }
-    }
+    };
   };
-};
 
-angular.module('RAML.Directives')
-  .directive('resourceType', ['$window', RAML.Directives.resourceType]);
+  angular.module('RAML.Directives')
+    .directive('sidebar', RAML.Directives.sidebar);
+})();
 
-RAML.Directives.resources = function(ramlParserWrapper) {
-  return {
-    restrict: 'E',
-    templateUrl: 'resources/resources.tpl.html',
-    replace: true,
-    scope: {
+(function () {
+  'use strict';
+
+  RAML.Directives.spinner = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/spinner.tpl.html',
+      replace: true,
+      link: function($scope, $element) {
+        $scope.$on('loading-started', function() {
+          $element.css({ 'display': ''});
+        });
+
+        $scope.$on('loading-complete', function() {
+          $element.css({ 'display': 'none' });
+        });
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('spinner', RAML.Directives.spinner);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.theme = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/theme-switcher.tpl.html',
+      replace: true,
+      link: function($scope, $element) {
+        $element.on('click', function() {
+          var $link = jQuery('head link.theme');
+          var theme = $link.attr('href');
+
+          $link.attr('href', 'styles/light-theme.css');
+          $element.removeClass('theme-toggle-dark');
+
+          if (theme === 'styles/light-theme.css') {
+            $link.attr('href', 'styles/dark-theme.css');
+            $element.addClass('theme-toggle-dark');
+          }
+        });
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('themeSwitcher', RAML.Directives.theme);
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('raml', [])
+    .factory('ramlParser', function () {
+      return RAML.Parser;
+    });
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.resourceType = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'resources/resource-type.tpl.html',
+      replace: true,
+      controller: function ($scope) {
+        var resourceType = $scope.resource.resourceType;
+
+        if (typeof resourceType === 'object') {
+          $scope.resource.resourceType = Object.keys(resourceType).join();
+        }
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('resourceType', RAML.Directives.resourceType);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.resources = function(ramlParserWrapper) {
+    return {
+      restrict: 'E',
+      templateUrl: 'resources/resources.tpl.html',
+      replace: true,
+      scope: {
         src: '@'
       },
-    controller: function($scope, $window) {
-      $scope.proxy = $window.RAML.Settings.proxy;
-      $scope.documentationHidden = $window.RAML.Settings.documentationHidden;
+      controller: function($scope, $window) {
+        $scope.proxy               = $window.RAML.Settings.proxy;
+        $scope.documentationHidden = $window.RAML.Settings.documentationHidden;
 
-      if ($scope.src) {
-        ramlParserWrapper.load($scope.src);
-      }
-
-      $scope.updateProxyConfig = function (status) {
-        $window.RAML.Settings.disableProxy = status;
-      };
-
-      $scope.toggle = function ($event) {
-        var $this = jQuery($event.currentTarget);
-        var $section = $this
-          .closest('.resource-list-item')
-          .find('.resource-list');
-
-        if ($section.hasClass('is-collapsed')) {
-          $section.velocity('slideDown', {
-            duration: 200
-          });
-        } else {
-          $section.velocity('slideUp', {
-            duration: 200
-          });
+        if ($scope.src) {
+          ramlParserWrapper.load($scope.src);
         }
 
-        $section.toggleClass('is-collapsed');
-        $this.toggleClass('is-active');
-      };
-    },
-    link: function($scope) {
-      $scope.loaded = false;
-      $scope.parseError = null;
+        $scope.updateProxyConfig = function (status) {
+          $window.RAML.Settings.disableProxy = status;
+        };
 
-      ramlParserWrapper.onParseSuccess(function(raml) {
-        $scope.raml = RAML.Inspector.create(raml);
+        $scope.toggle = function ($event) {
+          var $this    = jQuery($event.currentTarget);
+          var $section = $this
+            .closest('.resource-list-item')
+            .find('.resource-list');
+
+          if ($section.hasClass('is-collapsed')) {
+            $section.velocity('slideDown', {
+              duration: 200
+            });
+          } else {
+            $section.velocity('slideUp', {
+              duration: 200
+            });
+          }
+
+          $section.toggleClass('is-collapsed');
+          $this.toggleClass('is-active');
+        };
+      },
+      link: function($scope) {
+        $scope.loaded     = false;
         $scope.parseError = null;
-        $scope.loaded = true;
-      });
 
-      ramlParserWrapper.onParseError(function(error) {
-        var context = error.context_mark || error.problem_mark;
-        $scope.parseError = { message: error.message };
+        ramlParserWrapper.onParseSuccess(function(raml) {
+          $scope.raml = RAML.Inspector.create(raml);
+          $scope.parseError = null;
+          $scope.loaded = true;
+        });
 
-        if (context) {
-          var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
+        ramlParserWrapper.onParseError(function(error) {
+          /*jshint camelcase: false */
+          var context = error.context_mark || error.problem_mark;
+          /*jshint camelcase: true */
+          $scope.parseError = { message: error.message };
 
-          $scope.cmModel = context.buffer;
+          if (context) {
+            /*jshint camelcase: false */
+            var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
+            /*jshint camelcase: true */
 
-          $scope.parseError = {
-            column: context.column + 1,
-            line: context.line + 1,
-            message: error.message,
-            snippet: snippet,
-            raml: context.buffer,
-            fileName: context.name
-          };
+            $scope.cmModel = context.buffer;
 
-          // Hack to update codemirror
-          setTimeout(function () {
-            var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
-            editor.doc.addLineClass(context.line, 'background', 'line-error');
-            editor.doc.setCursor(context.line);
-          }, 10);
+            $scope.parseError = {
+              column: context.column + 1,
+              line: context.line + 1,
+              message: error.message,
+              snippet: snippet,
+              raml: context.buffer,
+              fileName: context.name
+            };
+
+            // Hack to update codemirror
+            setTimeout(function () {
+              var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
+              editor.doc.addLineClass(context.line, 'background', 'line-error');
+              editor.doc.setCursor(context.line);
+            }, 10);
+          }
+
+          $scope.$apply.apply($scope, null);
+        });
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('ramlResources', RAML.Directives.resources);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Security.basicAuth = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'security/basic_auth.tpl.html',
+      replace: true,
+      scope: {
+        credentials: '='
+      }
+    };
+  };
+
+  angular.module('RAML.Security')
+    .directive('basicAuth', RAML.Security.basicAuth);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Security.oauth1 = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'security/oauth1.tpl.html',
+      replace: true,
+      scope: {
+        credentials: '='
+      }
+    };
+  };
+
+  angular.module('RAML.Security')
+    .directive('oauth1', RAML.Security.oauth1);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Security.oauth2 = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'security/oauth2.tpl.html',
+      replace: true,
+      scope: {
+        credentials: '='
+      }
+    };
+  };
+
+  angular.module('RAML.Security')
+    .directive('oauth2', RAML.Security.oauth2);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
+    var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
+
+    var load = function(file) {
+      setPromise(ramlParser.loadFile(file));
+    };
+
+    var parse = function(raml) {
+      setPromise(ramlParser.load(raml));
+    };
+
+    var onParseSuccess = function(cb) {
+      ramlProcessor = function() {
+        cb.apply(this, arguments);
+        if (!$rootScope.$$phase) {
+          // handle aggressive digesters!
+          $rootScope.$digest();
         }
+      };
 
-        $scope.$apply.apply($scope, null);
-      });
-    }
-  };
-};
-
-angular.module('RAML.Directives')
-  .directive('ramlResources', RAML.Directives.resources);
-
-RAML.Security.basicAuth = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'security/basic_auth.tpl.html',
-    replace: true,
-    scope: {
-      credentials: '='
-    }
-  };
-};
-
-angular.module('RAML.Security')
-  .directive('basicAuth', ['$window', RAML.Security.basicAuth]);
-
-RAML.Security.oauth1 = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'security/oauth1.tpl.html',
-    replace: true,
-    scope: {
-      credentials: '='
-    }
-  };
-};
-
-angular.module('RAML.Security')
-  .directive('oauth1', ['$window', RAML.Security.oauth1]);
-
-RAML.Security.oauth2 = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'security/oauth2.tpl.html',
-    replace: true,
-    scope: {
-      credentials: '='
-    }
-  };
-};
-
-angular.module('RAML.Security')
-  .directive('oauth2', ['$window', RAML.Security.oauth2]);
-
-RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
-  var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
-
-  var load = function(file) {
-    setPromise(ramlParser.loadFile(file));
-  };
-
-  var parse = function(raml) {
-    setPromise(ramlParser.load(raml));
-  };
-
-  var onParseSuccess = function(cb) {
-    ramlProcessor = function() {
-      cb.apply(this, arguments);
-      if (!$rootScope.$$phase) {
-        // handle aggressive digesters!
-        $rootScope.$digest();
+      if (whenParsed) {
+        whenParsed.then(ramlProcessor);
       }
     };
 
-    if (whenParsed) {
-      whenParsed.then(ramlProcessor);
-    }
-  };
+    var onParseError = function(cb) {
+      errorProcessor = function() {
+        cb.apply(this, arguments);
+        if (!$rootScope.$$phase) {
+          // handle aggressive digesters!
+          $rootScope.$digest();
+        }
+      };
 
-  var onParseError = function(cb) {
-    errorProcessor = function() {
-      cb.apply(this, arguments);
-      if (!$rootScope.$$phase) {
-        // handle aggressive digesters!
-        $rootScope.$digest();
+      if (whenParsed) {
+        whenParsed.then(undefined, errorProcessor);
+      }
+
+    };
+
+    var setPromise = function(promise) {
+      whenParsed = promise;
+
+      if (ramlProcessor || errorProcessor) {
+        whenParsed.then(ramlProcessor, errorProcessor);
       }
     };
 
-    if (whenParsed) {
-      whenParsed.then(undefined, errorProcessor);
-    }
+    $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
+      setPromise($q.when(raml));
+    });
 
+    return {
+      load: load,
+      parse: parse,
+      onParseSuccess: onParseSuccess,
+      onParseError: onParseError
+    };
   };
 
-  var setPromise = function(promise) {
-    whenParsed = promise;
-
-    if (ramlProcessor || errorProcessor) {
-      whenParsed.then(ramlProcessor, errorProcessor);
-    }
-  };
-
-  $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
-    setPromise($q.when(raml));
-  });
-
-  return {
-    load: load,
-    parse: parse,
-    onParseSuccess: onParseSuccess,
-    onParseError: onParseError
-  };
-};
-
-angular.module('RAML.Services')
-  .service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
+  angular.module('RAML.Services')
+    .service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
+})();
 
 'use strict';
 
@@ -973,6 +1018,7 @@ angular.module('RAML.Services')
 (function() {
   'use strict';
 
+  /* jshint es5: true */
   RAML.Client.AuthStrategies = {
     for: function(scheme, credentials) {
       if (!scheme) {
@@ -991,6 +1037,7 @@ angular.module('RAML.Services')
       }
     }
   };
+  /* jshint es5: false */
 })();
 
 'use strict';
@@ -1102,7 +1149,7 @@ angular.module('RAML.Services')
 
       signerFactory().sign(request);
 
-      return $.ajax(request.toOptions()).then(function(rawFormData) {
+      return jQuery.ajax(request.toOptions()).then(function(rawFormData) {
         var data = RAML.Client.AuthStrategies.Oauth1.parseUrlEncodedData(rawFormData);
 
         return {
@@ -1125,7 +1172,7 @@ angular.module('RAML.Services')
 
       signerFactory(temporaryCredentials).sign(request);
 
-      return $.ajax(request.toOptions()).then(function(rawFormData) {
+      return jQuery.ajax(request.toOptions()).then(function(rawFormData) {
         var credentials = RAML.Client.AuthStrategies.Oauth1.parseUrlEncodedData(rawFormData);
 
         return signerFactory({
@@ -1461,7 +1508,7 @@ angular.module('RAML.Services')
 
       request.data(credentialsManager.accessTokenParameters(code));
 
-      return $.ajax(request.toOptions()).then(function(data) {
+      return jQuery.ajax(request.toOptions()).then(function(data) {
         var extract = accessTokenFromString;
 
         if (typeof data === 'object') {
@@ -2332,19 +2379,15 @@ RAML.Inspector = (function() {
     var that = this;
     Object.keys(this.values).map(function (key) {
       that.values[key] = [''];
-    })
+    });
   };
 
   NamedParameters.prototype.reset = function (info, field) {
     var that = this;
     if (info) {
       Object.keys(info).map(function (key) {
-        if (typeof field === 'undefined') {
-          var defaultValue = info[key][0]['default'];
-          that.values[key][0] = defaultValue;
-        } else if(field === key) {
-          var defaultValue = info[key][0]['default'];
-          that.values[key][0] = defaultValue;
+        if (typeof field === 'undefined' || field === key) {
+          that.values[key][0] = info[key][0]['default'];
         }
       });
     }
@@ -3018,4 +3061,3 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
   );
 
 }]);
-})();

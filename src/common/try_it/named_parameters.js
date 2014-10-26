@@ -44,19 +44,15 @@
     var that = this;
     Object.keys(this.values).map(function (key) {
       that.values[key] = [''];
-    })
+    });
   };
 
   NamedParameters.prototype.reset = function (info, field) {
     var that = this;
     if (info) {
       Object.keys(info).map(function (key) {
-        if (typeof field === 'undefined') {
-          var defaultValue = info[key][0]['default'];
-          that.values[key][0] = defaultValue;
-        } else if(field === key) {
-          var defaultValue = info[key][0]['default'];
-          that.values[key][0] = defaultValue;
+        if (typeof field === 'undefined' || field === key) {
+          that.values[key][0] = info[key][0]['default'];
         }
       });
     }

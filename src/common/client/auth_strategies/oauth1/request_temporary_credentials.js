@@ -8,7 +8,7 @@
 
       signerFactory().sign(request);
 
-      return $.ajax(request.toOptions()).then(function(rawFormData) {
+      return jQuery.ajax(request.toOptions()).then(function(rawFormData) {
         var data = RAML.Client.AuthStrategies.Oauth1.parseUrlEncodedData(rawFormData);
 
         return {

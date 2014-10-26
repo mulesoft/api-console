@@ -8,10 +8,10 @@ var resolve         = function (dir) {
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
-  grunt.registerTask('default', [/*'jshint',*/ 'build', 'connect:livereload', 'open:server', 'watch:build']);
+  grunt.registerTask('default', ['build', 'connect:livereload', 'open:server', 'watch:build']);
   grunt.registerTask('server', ['release', 'connect:livereload', 'watch:build']);
-  grunt.registerTask('build', ['clean', 'ngtemplates', 'concat', 'copy:assets', 'clean:styles', 'sass:build', 'cssmin', 'clean:templates']);
-  grunt.registerTask('release', ['clean', 'ngtemplates', 'concat:index', 'uglify', 'concat:codemirror', 'copy:assets', 'clean:styles', 'sass:min', 'cssmin', 'clean:templates' ]);
+  grunt.registerTask('build', ['jshint', 'clean', 'ngtemplates', 'concat', 'copy:assets', 'clean:styles', 'sass:build', 'cssmin', 'clean:templates']);
+  grunt.registerTask('release', ['jshint', 'clean', 'ngtemplates', 'concat:index', 'uglify', 'concat:codemirror', 'copy:assets', 'clean:styles', 'sass:min', 'cssmin', 'clean:templates' ]);
 
   grunt.initConfig({
     distdir: 'dist',
@@ -73,11 +73,7 @@ module.exports = function (grunt) {
     concat:{
       dist:{
         src:['<%= src.js %>', '<%= src.jsTpl %>'],
-        dest:'<%= distdir %>/scripts/<%= pkg.name %>.js',
-        options: {
-          banner: "(function() { \n 'use strict';\n\n",
-          footer: "})();"
-        }
+        dest:'<%= distdir %>/scripts/<%= pkg.name %>.js'
       },
       index: {
         src: ['src/index.html'],
@@ -155,20 +151,10 @@ module.exports = function (grunt) {
     },
 
     jshint:{
-      files:['gruntFile.js', '<%= src.js %>', '<%= src.jsTpl %>'],
-      options:{
-        curly:true,
-        eqeqeq:true,
-        immed:true,
-        latedef:true,
-        newcap:true,
-        noarg:true,
-        sub:true,
-        boss:true,
-        eqnull:true,
-        globals:{}
+      files:['gruntFile.js', '<%= src.js %>'],
+      options: {
+        jshintrc: '.jshintrc'
       }
     }
   });
-
 };

@@ -8,7 +8,7 @@
 
       signerFactory(temporaryCredentials).sign(request);
 
-      return $.ajax(request.toOptions()).then(function(rawFormData) {
+      return jQuery.ajax(request.toOptions()).then(function(rawFormData) {
         var credentials = RAML.Client.AuthStrategies.Oauth1.parseUrlEncodedData(rawFormData);
 
         return signerFactory({
