@@ -17,7 +17,7 @@ There are two ways you can include the console: directly, or within an iframe. T
           <link href="styles/vendor.css" rel="stylesheet" type="text/css">
           <link rel="stylesheet" href="path/to/dist/styles/light-theme.css" type="text/css" />
         </head>
-        <body ng-app="ramlConsole" ng-cloak>
+        <body ng-app="ramlConsoleApp" ng-cloak>
           …
           <script src="path/to/dist/scripts/vendor.js"></script>
           <script type="text/javascript" src="scripts/api-console.js"></script>
@@ -27,7 +27,7 @@ There are two ways you can include the console: directly, or within an iframe. T
         </body>
 
 2. Include the `<raml-console>` directive, specifying your RAML as a `src` attribute.
-       <raml-resources src='path/to/your/api.raml'></raml-resources>
+       <raml-console src='path/to/your/api.raml'></raml-console>
 
 3. Please ensure that the container for the console directive provides the CSS properties `overflow: auto` and `position: relative`.
 

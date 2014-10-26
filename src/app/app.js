@@ -13,7 +13,7 @@
   angular.module('RAML.Directives', []);
   angular.module('RAML.Services', ['raml']);
   angular.module('RAML.Security', []);
-  angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
+  angular.module('ramlConsoleApp', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
 
   var renderer = new window.marked.Renderer();
   var loc      = window.location;
