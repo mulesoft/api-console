@@ -122,7 +122,7 @@
           if (uriParameters) {
             Object.keys(uriParameters).map(function (key) {
               var param = uriParameters[key][0];
-              $scope.uriParameters[param.displayName] = param['default'];
+              $scope.uriParameters[param.displayName] = param.example;
             });
           }
 
@@ -146,7 +146,7 @@
               return key === uriParam[0].displayName;
             }).map(function (key) {
               var param = uriParameters[key][0];
-              $scope.uriParameters[param.displayName] = param['default'];
+              $scope.uriParameters[param.displayName] = param.example;
             });
           }
         };
@@ -186,7 +186,7 @@
           definition.value = definition.contentType.example;
         };
 
-        $scope.hasDefaultValue = function (value) {
+        $scope.hasExampleValue = function (value) {
           return typeof value !== 'undefined' ? true : false;
         };
 

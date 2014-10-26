@@ -445,7 +445,7 @@
           if (uriParameters) {
             Object.keys(uriParameters).map(function (key) {
               var param = uriParameters[key][0];
-              $scope.uriParameters[param.displayName] = param['default'];
+              $scope.uriParameters[param.displayName] = param.example;
             });
           }
 
@@ -469,7 +469,7 @@
               return key === uriParam[0].displayName;
             }).map(function (key) {
               var param = uriParameters[key][0];
-              $scope.uriParameters[param.displayName] = param['default'];
+              $scope.uriParameters[param.displayName] = param.example;
             });
           }
         };
@@ -509,7 +509,7 @@
           definition.value = definition.contentType.example;
         };
 
-        $scope.hasDefaultValue = function (value) {
+        $scope.hasExampleValue = function (value) {
           return typeof value !== 'undefined' ? true : false;
         };
 
@@ -2387,7 +2387,7 @@ RAML.Inspector = (function() {
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          that.values[key][0] = info[key][0]['default'];
+          that.values[key][0] = info[key][0].example;
         }
       });
     }
@@ -2695,10 +2695,10 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p class=\"sidebar-input-container\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
-    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasDefaultValue(uriParam[0].default)\">\n" +
+    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(uriParam[0].example)\">\n" +
     "                  <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetUriParameter(uriParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout-left\">\n" +
-    "                    <span>Use default value</span>\n" +
+    "                    <span>Use example value</span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
     "                <span class=\"sidebar-input-tooltip-container\" ng-if=\"uriParam[0].description\">\n" +
@@ -2708,7 +2708,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{uriParam[0].id}}\" class=\"sidebar-label\">{{uriParam[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"uriParam[0].required\">*</span></label>\n" +
-    "                <input name=\"{{uriParam[0].id}}\" ng-required=\"{{uriParam[0].required}}\" class=\"sidebar-input\" ng-model=\"uriParameters[uriParam[0].id]\" ng-class=\"{'sidebar-field-no-default': !hasDefaultValue(uriParam[0].default)}\">\n" +
+    "                <input name=\"{{uriParam[0].id}}\" ng-required=\"{{uriParam[0].required}}\" class=\"sidebar-input\" ng-model=\"uriParameters[uriParam[0].id]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(uriParam[0].example)}\">\n" +
     "                <span class=\"field-validation-error\"></span>\n" +
     "              </p>\n" +
     "            </div>\n" +
@@ -2721,10 +2721,10 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <p class=\"sidebar-input-container\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
-    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasDefaultValue(header[0].default)\">\n" +
+    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(header[0].example)\">\n" +
     "                  <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetHeader(header)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout-left\">\n" +
-    "                    <span>Use default value</span>\n" +
+    "                    <span>Use example value</span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
     "\n" +
@@ -2735,7 +2735,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                  </span>\n" +
     "                </span>\n" +
     "                <label for=\"{{header[0].id}}\" class=\"sidebar-label\">{{header[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"header[0].required\">*</span></label>\n" +
-    "                <input name=\"{{header[0].id}}\" ng-required=\"{{header[0].required}}\" class=\"sidebar-input\" ng-model=\"context.headers.values[header[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasDefaultValue(header[0].default)}\">\n" +
+    "                <input name=\"{{header[0].id}}\" ng-required=\"{{header[0].required}}\" class=\"sidebar-input\" ng-model=\"context.headers.values[header[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(header[0].example)}\">\n" +
     "                <span class=\"field-validation-error\"></span>\n" +
     "              </p>\n" +
     "            </div>\n" +
@@ -2756,13 +2756,13 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "                </span>\n" +
     "                <label for=\"{{queryParam[0].id}}\" class=\"sidebar-label\">{{queryParam[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"queryParam[0].required\">*</span></label>\n" +
     "\n" +
-    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasDefaultValue(queryParam[0].default)\">\n" +
+    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(queryParam[0].example)\">\n" +
     "                  <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetQueryParam(queryParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                  <span class=\"sidebar-tooltip-flyout-left\">\n" +
-    "                    <span>Use default value</span>\n" +
+    "                    <span>Use example value</span>\n" +
     "                  </span>\n" +
     "                </span>\n" +
-    "                <input name=\"{{queryParam[0].id}}\" ng-required=\"{{queryParam[0].required}}\"  class=\"sidebar-input\" ng-model=\"context.queryParameters.values[queryParam[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasDefaultValue(queryParam[0].default)}\" />\n" +
+    "                <input name=\"{{queryParam[0].id}}\" ng-required=\"{{queryParam[0].required}}\"  class=\"sidebar-input\" ng-model=\"context.queryParameters.values[queryParam[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(queryParam[0].example)}\" />\n" +
     "                <span class=\"field-validation-error\"></span>\n" +
     "\n" +
     "              </p>\n" +

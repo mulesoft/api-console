@@ -52,7 +52,7 @@
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          that.values[key][0] = info[key][0]['default'];
+          that.values[key][0] = info[key][0].example;
         }
       });
     }
