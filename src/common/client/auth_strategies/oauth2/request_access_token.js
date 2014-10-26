@@ -24,7 +24,7 @@
 
       request.data(credentialsManager.accessTokenParameters(code));
 
-      return $.ajax(request.toOptions()).then(function(data) {
+      return jQuery.ajax(request.toOptions()).then(function(data) {
         var extract = accessTokenFromString;
 
         if (typeof data === 'object') {

@@ -1,6 +1,7 @@
 (function() {
   'use strict';
 
+  /* jshint es5: true */
   RAML.Client.AuthStrategies = {
     for: function(scheme, credentials) {
       if (!scheme) {
@@ -19,4 +20,5 @@
       }
     }
   };
+  /* jshint es5: false */
 })();

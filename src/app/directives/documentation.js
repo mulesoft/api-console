@@ -1,50 +1,54 @@
-RAML.Directives.documentation = function($window) {
-  return {
-    restrict: 'E',
-    templateUrl: 'directives/documentation.tpl.html',
-    replace: true,
-    controller: function($scope, $element) {
-      $scope.toggleTab = function ($event) {
-        var $this = jQuery($event.currentTarget);
-        var $eachTab = $this.children('.toggle-tab');
-        var $panel = $this.closest('.resource-panel');
-        var $eachContent = $panel.find('.resource-panel-content');
+(function () {
+  'use strict';
 
-        $eachTab.toggleClass('is-active');
-        $eachContent.toggleClass('is-active');
-      };
+  RAML.Directives.documentation = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/documentation.tpl.html',
+      replace: true,
+      controller: function($scope) {
+        $scope.toggleTab = function ($event) {
+          var $this        = jQuery($event.currentTarget);
+          var $eachTab     = $this.children('.toggle-tab');
+          var $panel       = $this.closest('.resource-panel');
+          var $eachContent = $panel.find('.resource-panel-content');
 
-      $scope.changeType = function ($event, type, code) {
-        var $this = jQuery($event.currentTarget);
-        var $panel = $this.closest('.resource-body-heading');
-        var $eachContent = $panel.find('span');
+          $eachTab.toggleClass('is-active');
+          $eachContent.toggleClass('is-active');
+        };
 
-        $eachContent.removeClass('isActive');
-        $this.addClass('isActive');
+        $scope.changeType = function ($event, type, code) {
+          var $this        = jQuery($event.currentTarget);
+          var $panel       = $this.closest('.resource-body-heading');
+          var $eachContent = $panel.find('span');
 
-        $scope.responseInfo[code].currentType = type;
-      };
+          $eachContent.removeClass('isActive');
+          $this.addClass('isActive');
 
-      $scope.showSchema = function ($event) {
-        var $this = jQuery($event.currentTarget);
-        var $panel = $this.closest('.resource-panel');
-        var $schema = $panel.find('.resource-pre-toggle');
+          $scope.responseInfo[code].currentType = type;
+        };
 
-        $this.toggleClass('is-active');
+        $scope.showSchema = function ($event) {
+          var $this   = jQuery($event.currentTarget);
+          var $panel  = $this.closest('.resource-panel');
+          var $schema = $panel.find('.resource-pre-toggle');
 
-        if (!$schema.hasClass('is-active')) {
-          $schema
-            .addClass('is-active')
-            .velocity('slideDown');
-        } else {
-          $schema
-            .removeClass('is-active')
-            .velocity('slideUp');
-        }
-      };
-    }
+          $this.toggleClass('is-active');
+
+          if (!$schema.hasClass('is-active')) {
+            $schema
+              .addClass('is-active')
+              .velocity('slideDown');
+          } else {
+            $schema
+              .removeClass('is-active')
+              .velocity('slideUp');
+          }
+        };
+      }
+    };
   };
-};
 
-angular.module('RAML.Directives')
-  .directive('documentation', ['$window', RAML.Directives.documentation]);
+  angular.module('RAML.Directives')
+    .directive('documentation', RAML.Directives.documentation);
+})();

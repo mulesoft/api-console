@@ -20,12 +20,10 @@
   "smarttabs": true,
   "expr": true,
   "globals": {
-    "angular": false,
-    "Showdown": false,
-    "$": false,
-    "RAML": false,
-    "vkbeautify": false,
-    "CodeMirror": false,
-    "CryptoJS": false
+    "angular": true,
+    "jQuery": true,
+    "RAML": true,
+    "CodeMirror": true,
+    "CryptoJS": true
   }
 }
