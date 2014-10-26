@@ -13,7 +13,7 @@
   angular.module('RAML.Directives', []);
   angular.module('RAML.Services', ['raml']);
   angular.module('RAML.Security', []);
-  angular.module('ramlConsole', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
+  angular.module('ramlConsoleApp', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
 
   var renderer = new window.marked.Renderer();
   var loc      = window.location;
@@ -842,7 +842,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlResources', RAML.Directives.resources);
+    .directive('ramlConsole', RAML.Directives.resources);
 })();
 
 (function () {
@@ -2469,7 +2469,7 @@ RAML.Inspector = (function() {
   };
 })();
 
-angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
+angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('directives/close-button.tpl.html',
@@ -2632,7 +2632,7 @@ angular.module('ramlConsole').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
-    "  <raml-resources ng-switch-when=\"true\"></raml-resources>\n" +
+    "  <raml-console ng-switch-when=\"true\"></raml-console>\n" +
     "</div>\n"
   );
 

@@ -62,7 +62,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       ramlConsole: {
         options: {
-          module: 'ramlConsole'
+          module: 'ramlConsoleApp'
         },
         cwd: 'src/app',
         src: '**/*.tpl.html',

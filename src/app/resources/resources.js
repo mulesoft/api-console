@@ -88,5 +88,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlResources', RAML.Directives.resources);
+    .directive('ramlConsole', RAML.Directives.resources);
 })();
