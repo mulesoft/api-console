@@ -4,7 +4,7 @@
   "description": "Api-Console for RAML based app",
   "main": "index.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
