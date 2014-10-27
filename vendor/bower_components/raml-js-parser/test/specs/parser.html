@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="/node_modules/mocha/mocha.js"></script>
+    <script src="/node_modules/chai/chai.js"></script>
+    <script src="/node_modules/chai-as-promised/lib/chai-as-promised.js"></script>
+    <script src="/dist/raml-parser.js"></script>
+    <script>
+      mocha.ui('bdd');
+      mocha.reporter('html');
+      expect = chai.expect;
+    </script>
+    <script src="regressions.js"></script>
+    <script src="parser.js"></script>
+    <script src="resourceTypesValidations.js"></script>
+    <script src="duplicateKeysValidations.js"></script>
+    <script src="transformations.js"></script>
+    <script src="raml.js"></script>
+    <script src="resourceTypes.js"></script>
+    <script src="traits.js"></script>
+    <script src="validator.js"></script>
+    <script src="errors.js"></script>
+    <script src="protocols.js"></script>
+    <script src="includeResolution.js"></script>
+    <script src="optionals.js"></script>
+    <script>
+      if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+      else { mocha.run(); }
+    </script>
+  </body>
+</html>

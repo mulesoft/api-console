@@ -1,0 +1,9 @@
+is: [ "customTrait" ]
+displayName: Root
+get:
+  description: Root resource
+/anotherResource:
+  is: [ "customTrait" ]
+  displayName: Another Resource
+  get:
+    description: Another resource

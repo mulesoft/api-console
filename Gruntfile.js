@@ -10,8 +10,36 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['build', 'connect:livereload', 'open:server', 'watch:build']);
   grunt.registerTask('server', ['release', 'connect:livereload', 'watch:build']);
-  grunt.registerTask('build', ['jshint', 'clean', 'ngtemplates', 'concat', 'copy:assets', 'clean:styles', 'sass:build', 'cssmin', 'clean:templates']);
-  grunt.registerTask('release', ['jshint', 'clean', 'ngtemplates', 'concat:index', 'uglify', 'concat:codemirror', 'copy:assets', 'clean:styles', 'sass:min', 'cssmin', 'clean:templates' ]);
+  grunt.registerTask('build', [
+    'env:build',
+    'jshint',
+    'clean',
+    'ngtemplates',
+    'concat:app',
+    'concat:index',
+    'preprocess:index',
+    'copy:assets',
+    'copy:vendor',
+    'clean:styles',
+    'sass:build',
+    'cssmin',
+    'clean:templates'
+  ]);
+  grunt.registerTask('release', [
+    'env:release',
+    'jshint',
+    'clean',
+    'ngtemplates',
+    'concat:index',
+    'concat:vendor',
+    'preprocess:index',
+    'uglify',
+    'copy:assets',
+    'clean:styles',
+    'sass:min',
+    'cssmin',
+    'clean:templates'
+  ]);
 
   grunt.initConfig({
     distdir: 'dist',
@@ -56,6 +84,42 @@ module.exports = function (grunt) {
     copy: {
       assets: {
         files: [{ dest: '<%= distdir %>', src : '**', expand: true, cwd: 'src/assets/' }]
+      },
+      vendor: {
+        files: [
+          { dest: '<%= distdir %>/scripts/vendor', src : 'raml-parser.js', expand: true, cwd: 'vendor/bower_components/raml-js-parser/dist/' },
+          { dest: '<%= distdir %>/scripts/vendor', src : 'marked.js', expand: true, cwd: 'vendor/bower_components/marked/lib/' },
+          { dest: '<%= distdir %>/scripts/vendor/jquery', src : 'jquery.js', expand: true, cwd: 'vendor/bower_components/jquery/dist/' },
+          { dest: '<%= distdir %>/scripts/vendor/jquery', src : 'velocity.js', expand: true, cwd: 'vendor/bower_components/velocity/' },
+          { dest: '<%= distdir %>/scripts/vendor/crypto-js', src : 'hmac-sha1.js', expand: true, cwd: 'vendor/bower_components/crypto-js/rollups/' },
+          { dest: '<%= distdir %>/scripts/vendor/crypto-js', src : 'enc-base64.js', expand: true, cwd: 'vendor/bower_components/crypto-js/components/' },
+          { dest: '<%= distdir %>/scripts/vendor/codemirror', src : 'codemirror.js', expand: true, cwd: 'vendor/bower_components/codemirror/lib/' },
+          { dest: '<%= distdir %>/scripts/vendor/codemirror/mode', src : 'javascript.js', expand: true, cwd: 'vendor/bower_components/codemirror/mode/javascript/' },
+          { dest: '<%= distdir %>/scripts/vendor/codemirror/mode', src : 'xml.js', expand: true, cwd: 'vendor/bower_components/codemirror/mode/xml/' },
+          { dest: '<%= distdir %>/scripts/vendor/codemirror/mode', src : 'yaml.js', expand: true, cwd: 'vendor/bower_components/codemirror/mode/yaml/' },
+          { dest: '<%= distdir %>/scripts/vendor/codemirror/addon', src : 'dialog.js', expand: true, cwd: 'vendor/bower_components/codemirror/addon/dialog/' },
+          { dest: '<%= distdir %>/scripts/vendor/codemirror/addon', src : 'search.js', expand: true, cwd: 'vendor/bower_components/codemirror/addon/search/' },
+          { dest: '<%= distdir %>/scripts/vendor/codemirror/addon', src : 'searchcursor.js', expand: true, cwd: 'vendor/bower_components/codemirror/addon/search/' },
+          { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular.js', expand: true, cwd: 'vendor/bower_components/angular/' },
+          { dest: '<%= distdir %>/scripts/vendor/angular', src : 'ui-codemirror.js', expand: true, cwd: 'vendor/bower_components/angular-ui-codemirror/' },
+          { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular-marked.js', expand: true, cwd: 'vendor/bower_components/angular-marked/' }
+        ]
+      }
+    },
+
+    env: {
+      build: {
+        NODE_ENV: 'DEVELOPMENT'
+      },
+      release: {
+        NODE_ENV: 'PRODUCTION'
+      }
+    },
+
+    preprocess: {
+      index: {
+        src: '<%= distdir %>/index.html',
+        dest: '<%= distdir %>/index.html'
       }
     },
 
@@ -71,38 +135,45 @@ module.exports = function (grunt) {
     },
 
     concat:{
-      dist:{
+      app:{
         src:['<%= src.js %>', '<%= src.jsTpl %>'],
         dest:'<%= distdir %>/scripts/<%= pkg.name %>.js'
       },
       index: {
-        src: ['src/index.html'],
+        src: 'src/index.html',
         dest: '<%= distdir %>/index.html',
         options: {
           process: true
         }
       },
       vendor: {
-        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/crypto-js/hmac-sha1.js', 'vendor/crypto-js/enc-base64.js'],
-        dest: '<%= distdir %>/scripts/vendor.js'
-      },
-      codemirror: {
-        src: ['<%= distdir %>/scripts/vendor.js', 'vendor/codemirror/codemirror.js', 'vendor/angular-codemirror/angular-codemirror.js'],
-        dest: '<%= distdir %>/scripts/vendor.js'
+        src: [
+          'vendor/bower_components/raml-js-parser/dist/raml-parser.js',
+          'vendor/bower_components/marked/lib/marked.js',
+          'vendor/bower_components/jquery/dist/jquery.min.js',
+          'vendor/bower_components/velocity/velocity.min.js',
+          'vendor/bower_components/crypto-js/rollups/hmac-sha1.js',
+          'vendor/bower_components/crypto-js/components/enc-base64-min.js',
+          'vendor/codemirror/codemirror.min.js',
+          'vendor/bower_components/angular/angular.min.js',
+          'vendor/bower_components/angular-ui-codemirror/ui-codemirror.min.js',
+          'vendor/bower_components/angular-marked/angular-marked.min.js'
+        ],
+        dest:'<%= distdir %>/scripts/vendor.js'
       }
     },
 
     uglify: {
-      dist:{
-        src:['<%= src.js %>' ,'<%= src.jsTpl %>'],
-        dest:'<%= distdir %>/scripts/<%= pkg.name %>.js',
+      app:{
+        src: ['<%= src.js %>' ,'<%= src.jsTpl %>'],
+        dest: '<%= distdir %>/scripts/<%= pkg.name %>.js',
         options: {
           wrap: true,
           mangle: false
         }
       },
       vendor: {
-        src:['vendor/angular/angular.js', 'vendor/jquery/*.js', 'vendor/raml-parser/raml-parser.js', 'vendor/marked/marked.js', 'vendor/angular-marked/angular-marked.js', 'vendor/crypto-js/hmac-sha1.js', 'vendor/crypto-js/enc-base64.js'],
+        src: '<%= distdir %>/scripts/vendor.js',
         dest: '<%= distdir %>/scripts/vendor.js',
         options: {
           mangle: true

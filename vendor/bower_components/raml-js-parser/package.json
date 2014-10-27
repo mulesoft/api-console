@@ -1,0 +1,38 @@
+{
+  "name": "raml-parser",
+  "version": "0.8.7",
+  "description": "A RAML parser based on PyYAML written in CoffeScript and available for use as NodeJs module or in-browser.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:raml-org/raml-js-parser.git"
+  },
+  "main": "./lib/raml.js",
+  "dependencies": {
+    "json-lint": "~0.1.0",
+    "q": "0.9.7",
+    "uritemplate": "0.3.4",
+    "xmlhttprequest": "1.6.0",
+    "inflection": "~1.3.3"
+  },
+  "devDependencies": {
+    "chai": "1.8.1",
+    "chai-as-promised": "4.1.0",
+    "coffeeify": "0.5.2",
+    "grunt": "0.4.1",
+    "grunt-cli": "0.1.11",
+    "grunt-coffeelint": "0.0.7",
+    "grunt-contrib-coffee": "0.7.0",
+    "grunt-contrib-connect": "0.5.0",
+    "grunt-contrib-uglify": "0.2.2",
+    "grunt-contrib-watch": "0.5.3",
+    "grunt-mocha-cli": "1.3.0",
+    "grunt-mocha-phantomjs": "0.3.1",
+    "load-grunt-tasks": "~0.3.0",
+    "mocha": "1.14.0",
+    "grunt-shell": "~0.6.4",
+    "browserify": "~3.24.13"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}

@@ -2259,11 +2259,11 @@ span.side-bar-required-field {
   color: red;
 }
 
-input.ng-touched.ng-invalid {
+input.ng-dirty.ng-invalid {
   border: 1px solid red;
 }
 
-input.ng-touched.ng-invalid-required + span.field-validation-error::after {
+input.ng-dirty.ng-invalid-required + span.field-validation-error::after {
   content: 'required';
   color: white;
   position: absolute;
