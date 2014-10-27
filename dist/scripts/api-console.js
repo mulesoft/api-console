@@ -763,9 +763,16 @@
       scope: {
         src: '@'
       },
-      controller: function($scope, $window) {
-        $scope.proxy               = $window.RAML.Settings.proxy;
-        $scope.documentationHidden = $window.RAML.Settings.documentationHidden;
+      controller: function($scope, $window, $attrs) {
+        $scope.proxy = $window.RAML.Settings.proxy;
+
+        if ($attrs.hasOwnProperty('withTryItOnFullscreen')) {
+          $scope.withTryItOnFullscreen = true;
+        }
+
+        if ($attrs.hasOwnProperty('disableThemeSwitcher')) {
+          $scope.disableThemeSwitcher = true;
+        }
 
         if ($scope.src) {
           ramlParserWrapper.load($scope.src);
@@ -2638,7 +2645,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/resource-panel.tpl.html',
-    "<div class=\"resource-panel\" ng-class=\"{ 'has-sidebar-fullscreen': documentationHidden }\">\n" +
+    "<div class=\"resource-panel\" ng-class=\"{ 'has-sidebar-fullscreen': withTryItOnFullscreen }\">\n" +
     "  <div class=\"resource-panel-wrapper\">\n" +
     "    <sidebar></sidebar>\n" +
     "\n" +
@@ -2649,7 +2656,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/sidebar.tpl.html',
-    "  <form name=\"form\" class=\"sidebar\" novalidate ng-class=\"{ 'is-fullscreen': documentationHidden }\">\n" +
+    "  <form name=\"form\" class=\"sidebar\" novalidate ng-class=\"{ 'is-fullscreen': withTryItOnFullscreen }\">\n" +
     "    <div class=\"sidebar-flex-wrapper\">\n" +
     "      <div class=\"sidebar-content\">\n" +
     "        <header class=\"sidebar-row sidebar-header\">\n" +
@@ -2956,7 +2963,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <div ng-if=\"loaded\">\n" +
-    "    <theme-switcher></theme-switcher>\n" +
+    "    <theme-switcher ng-if=\"!disableThemeSwitcher\"></theme-switcher>\n" +
     "    <h1 class=\"title\">{{raml.title}}</h1>\n" +
     "\n" +
     "    <div ng-if=\"proxy\" align=\"right\" class=\"resource-proxy\">\n" +

@@ -78,11 +78,17 @@ A redirect URI for OAuth 2 can be provided in a similar manner:
 
 Given the above, OAuth 2 requests would redirect back to that URL.
 
-### Documentation
+### Fullscreen Try-It
 
-*Documentation* can be hidden and show *try-it* in full screen by default.
+*Try It* can be started on fullscreen by default using the following setting:
 
-    RAML.Settings.documentationHidden = true
+    <raml-console with-try-it-on-fullscreen></raml-console>
+
+### Theme Switcher
+
+*Theme Switcher* can be disable if needed by adding the following setting:
+
+    <raml-console disable-theme-switcher></raml-console>
 
 ## Development
 

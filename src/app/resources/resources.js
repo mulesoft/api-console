@@ -9,9 +9,16 @@
       scope: {
         src: '@'
       },
-      controller: function($scope, $window) {
-        $scope.proxy               = $window.RAML.Settings.proxy;
-        $scope.documentationHidden = $window.RAML.Settings.documentationHidden;
+      controller: function($scope, $window, $attrs) {
+        $scope.proxy = $window.RAML.Settings.proxy;
+
+        if ($attrs.hasOwnProperty('withTryItOnFullscreen')) {
+          $scope.withTryItOnFullscreen = true;
+        }
+
+        if ($attrs.hasOwnProperty('disableThemeSwitcher')) {
+          $scope.disableThemeSwitcher = true;
+        }
 
         if ($scope.src) {
           ramlParserWrapper.load($scope.src);
