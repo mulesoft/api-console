@@ -1,0 +1,6 @@
+#%RAML 0.8
+---
+title: MyApi
+documentation:
+  - title: Getting Started
+    content: !include gettingstarted.md

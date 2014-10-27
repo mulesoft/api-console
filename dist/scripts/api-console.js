@@ -333,7 +333,7 @@
         var el = angular.element(angular.element($element.children().children()[0]).children()[2]);
 
         el.bind('scroll', function ($event) {
-          var $el = $event.srcElement;
+          var $el = $event.currentTarget;
 
           if ($el.scrollHeight === $el.offsetHeight + $el.scrollTop) {
             $scope.showMoreEnable = false;
@@ -424,7 +424,7 @@
           Object.keys(form.$error).map(function (key) {
             for (var i = 0; i < errors[key].length; i++) {
               var fieldName = errors[key][i].$name;
-              form[fieldName].$setTouched();
+              form[fieldName].$setViewValue(form[fieldName].$viewValue);
             }
           });
         }
