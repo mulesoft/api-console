@@ -56,7 +56,7 @@
   </div>
 
   <div ng-if="loaded">
-    <theme-switcher></theme-switcher>
+    <theme-switcher ng-if="!disableThemeSwitcher"></theme-switcher>
     <h1 class="title">{{raml.title}}</h1>
 
     <div ng-if="proxy" align="right" class="resource-proxy">
