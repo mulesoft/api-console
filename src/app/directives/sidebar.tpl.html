@@ -63,60 +63,9 @@
             </div>
           </section>
 
-          <section id="sidebar-headers" ng-if="methodInfo.headers.plain">
-            <header class="sidebar-row sidebar-subheader">
-              <h4 class="sidebar-subhead">Headers</h4>
-            </header>
+          <named-parameters src="methodInfo.headers.plain" context="context" type="headers" title="Headers"></named-parameters>
 
-            <div class="sidebar-row">
-              <p class="sidebar-input-container" ng-repeat="header in methodInfo.headers.plain">
-                <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(header[0].example)">
-                  <button tabindex="-1" class="sidebar-input-reset" ng-click="resetHeader(header)"><span class="visuallyhidden">Reset field</span></button>
-                  <span class="sidebar-tooltip-flyout-left">
-                    <span>Use example value</span>
-                  </span>
-                </span>
-
-                <span class="sidebar-input-tooltip-container" ng-if="header[0].description">
-                  <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
-                  <span class="sidebar-tooltip-flyout">
-                    <span marked="header[0].description"></span>
-                  </span>
-                </span>
-                <label for="{{header[0].id}}" class="sidebar-label">{{header[0].displayName}} <span class="side-bar-required-field" ng-if="header[0].required">*</span></label>
-                <input name="{{header[0].id}}" ng-required="{{header[0].required}}" class="sidebar-input" ng-model="context.headers.values[header[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(header[0].example)}">
-                <span class="field-validation-error"></span>
-              </p>
-            </div>
-          </section>
-
-          <section id="sidebar-query-parameters" ng-if="methodInfo.queryParameters">
-            <header class="sidebar-row sidebar-subheader">
-              <h4 class="sidebar-subhead">Query Parameters</h4>
-            </header>
-
-            <div class="sidebar-row">
-              <p id="sidebar-query-parameters-all" class="sidebar-input-container" ng-repeat="queryParam in methodInfo.queryParameters">
-                <span class="sidebar-input-tooltip-container" ng-if="queryParam[0].description">
-                  <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
-                  <span class="sidebar-tooltip-flyout">
-                    <span marked="queryParam[0].description"></span>
-                  </span>
-                </span>
-                <label for="{{queryParam[0].id}}" class="sidebar-label">{{queryParam[0].displayName}} <span class="side-bar-required-field" ng-if="queryParam[0].required">*</span></label>
-
-                <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(queryParam[0].example)">
-                  <button tabindex="-1" class="sidebar-input-reset" ng-click="resetQueryParam(queryParam)"><span class="visuallyhidden">Reset field</span></button>
-                  <span class="sidebar-tooltip-flyout-left">
-                    <span>Use example value</span>
-                  </span>
-                </span>
-                <input name="{{queryParam[0].id}}" ng-required="{{queryParam[0].required}}"  class="sidebar-input" ng-model="context.queryParameters.values[queryParam[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(queryParam[0].example)}" />
-                <span class="field-validation-error"></span>
-
-              </p>
-            </div>
-          </section>
+          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" title="Query Parameters"></named-parameters>
 
           <section id="sidebar-body" ng-if="methodInfo.body">
             <header class="sidebar-row sidebar-subheader">
@@ -172,7 +121,7 @@
                   <h3 class="sidebar-response-head">Headers</h3>
                   <div class="sidebar-response-item">
                     <p class="sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
-                      <b>{{key}}:</b> <br>{{value}}
+                      <b>{{key}}:</b> <br>{{value[0]}}
                     </p>
                   </div>
                 </div>
