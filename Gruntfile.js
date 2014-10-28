@@ -87,8 +87,10 @@ module.exports = function (grunt) {
       },
       vendor: {
         files: [
-          { dest: '<%= distdir %>/scripts/vendor', src : 'raml-parser.js', expand: true, cwd: 'vendor/bower_components/raml-js-parser/dist/' },
           { dest: '<%= distdir %>/scripts/vendor', src : 'marked.js', expand: true, cwd: 'vendor/bower_components/marked/lib/' },
+          { dest: '<%= distdir %>/scripts/vendor/raml', src : 'raml-parser.js', expand: true, cwd: 'vendor/bower_components/raml-js-parser/dist/' },
+          { dest: '<%= distdir %>/scripts/vendor/raml', src : 'raml-sanitize.js', expand: true, cwd: 'vendor/raml-sanitize/' },
+          { dest: '<%= distdir %>/scripts/vendor/raml', src : 'raml-validate.js', expand: true, cwd: 'vendor/raml-validate/' },
           { dest: '<%= distdir %>/scripts/vendor/jquery', src : 'jquery.js', expand: true, cwd: 'vendor/bower_components/jquery/dist/' },
           { dest: '<%= distdir %>/scripts/vendor/jquery', src : 'velocity.js', expand: true, cwd: 'vendor/bower_components/velocity/' },
           { dest: '<%= distdir %>/scripts/vendor/crypto-js', src : 'hmac-sha1.js', expand: true, cwd: 'vendor/bower_components/crypto-js/rollups/' },
@@ -148,8 +150,10 @@ module.exports = function (grunt) {
       },
       vendor: {
         src: [
-          'vendor/bower_components/raml-js-parser/dist/raml-parser.js',
           'vendor/bower_components/marked/lib/marked.js',
+          'vendor/bower_components/raml-js-parser/dist/raml-parser.js',
+          'vendor/raml-validate/raml-validate.js',
+          'vendor/raml-sanitize/raml-sanitize.js',
           'vendor/bower_components/jquery/dist/jquery.min.js',
           'vendor/bower_components/velocity/velocity.min.js',
           'vendor/bower_components/crypto-js/rollups/hmac-sha1.js',
