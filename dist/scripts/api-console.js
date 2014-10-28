@@ -185,20 +185,21 @@
           var $resourceListItem = $resource.parent('li');
           var $closingEl;
 
-          $scope.methodInfo          = $scope.resource.methods[$index];
-          $scope.responseInfo        = getResponseInfo();
-          $scope.context             = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
-          $scope.requestUrl          = '';
-          $scope.response            = {};
-          $scope.requestOptions      = {};
+          $scope.methodInfo               = $scope.resource.methods[$index];
+          $scope.responseInfo             = getResponseInfo();
+          $scope.context                  = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
+          $scope.requestUrl               = '';
+          $scope.response                 = {};
+          $scope.requestOptions           = {};
           $scope.resetFields();
-          $scope.requestEnd          = false;
-          $scope.showRequestMetadata = false;
-          $scope.showMoreEnable      = true;
-          $scope.showSpinner         = false;
-          $scope.securitySchemes     = $scope.methodInfo.securitySchemes();
-          $scope.credentials         = {};
-          $scope.traits              = $scope.readTraits($scope.methodInfo.is);
+          $scope.requestEnd               = false;
+          $scope.showRequestMetadata      = false;
+          $scope.showMoreEnable           = true;
+          $scope.showSpinner              = false;
+          $scope.securitySchemes          = $scope.methodInfo.securitySchemes();
+          $scope.credentials              = {};
+          $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
+          $scope.context.customParameters = { headers: [], queryParameters: [] };
 
           toUIModel($scope.methodInfo.queryParameters);
           toUIModel($scope.methodInfo.headers.plain);
@@ -262,6 +263,46 @@
 
   angular.module('RAML.Directives')
     .directive('methodList', RAML.Directives.methodList);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.namedParameters = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/named-parameters.tpl.html',
+      replace: true,
+      scope: {
+        src: '=',
+        context: '=',
+        type: '@',
+        title: '@'
+      },
+      controller: function ($scope) {
+        $scope.reset = function (param) {
+          $scope.context[$scope.type].reset($scope.src, param[0].id);
+        };
+
+        $scope.hasExampleValue = function (value) {
+          return typeof value !== 'undefined' ? true : false;
+        };
+
+        $scope.addCustomParameter = function () {
+          $scope.context.customParameters[$scope.type].push({});
+        };
+
+        $scope.removeCutomParam = function (param) {
+          $scope.context.customParameters[$scope.type] = $scope.context.customParameters[$scope.type].filter(function (el) {
+            return el.name !== param.name;
+          });
+        };
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('namedParameters', RAML.Directives.namedParameters);
 })();
 
 (function () {
@@ -429,6 +470,26 @@
           });
         }
 
+        function getParameters(context, type) {
+          var params           = {};
+          var customParameters = context.customParameters[type];
+
+          if (!RAML.Utils.isEmpty(context[type].data())) {
+            params = context[type].data();
+          }
+
+          if (customParameters.length > 0) {
+            for(var i = 0; i < customParameters.length; i++) {
+              var key = customParameters[i].name;
+
+              params[key] = [];
+              params[key].push(customParameters[i].value);
+            }
+          }
+
+          return params;
+        }
+
         $scope.clearFields = function () {
           $scope.uriParameters = {};
           $scope.context.queryParameters.clear();
@@ -451,14 +512,6 @@
 
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
-        };
-
-        $scope.resetQueryParam = function (queryParam) {
-          $scope.context.queryParameters.reset($scope.methodInfo.queryParameters, queryParam[0].id);
-        };
-
-        $scope.resetHeader = function (header) {
-          $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].id);
         };
 
         $scope.resetUriParameter = function (uriParam) {
@@ -538,13 +591,8 @@
 
           var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
 
-          if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
-            request.queryParams(context.queryParameters.data());
-          }
-
-          if (!RAML.Utils.isEmpty(context.headers.data())) {
-            request.headers(context.headers.data());
-          }
+          request.queryParams(getParameters(context, 'queryParameters'));
+          request.headers(getParameters(context, 'headers'));
 
           if (context.bodyContent) {
             request.header('Content-Type', context.bodyContent.selected);
@@ -2595,6 +2643,46 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('directives/named-parameters.tpl.html',
+    "<section>\n" +
+    "  <header class=\"sidebar-row sidebar-subheader\">\n" +
+    "    <h4 class=\"sidebar-subhead\">{{title}}</h4>\n" +
+    "    <button class=\"sidebar-add-btn\" ng-click=\"addCustomParameter()\"></button>\n" +
+    "  </header>\n" +
+    "\n" +
+    "  <div class=\"sidebar-row\">\n" +
+    "    <p class=\"sidebar-input-container sidebar-input-container-custom\" ng-repeat=\"customParam in context.customParameters[type]\">\n" +
+    "      <button class=\"sidebar-input-delete\" ng-click=\"removeCutomParam(customParam)\"></button>\n" +
+    "      <label for=\"custom-header\" class=\"sidebar-label sidebar-label-custom\">\n" +
+    "        <input class=\"sidebar-custom-input-for-label\" ng-model=\"customParam.name\" placeholder=\"custom key\">\n" +
+    "      </label>\n" +
+    "      <input name=\"custom-header\" class=\"sidebar-input sidebar-input-custom\" placeholder=\"custom value\" ng-model=\"customParam.value\">\n" +
+    "    </p>\n" +
+    "\n" +
+    "    <p class=\"sidebar-input-container\" ng-repeat=\"param in src\">\n" +
+    "      <span class=\"sidebar-input-tooltip-container\" ng-if=\"param[0].description\">\n" +
+    "        <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
+    "        <span class=\"sidebar-tooltip-flyout\">\n" +
+    "          <span marked=\"param[0].description\"></span>\n" +
+    "        </span>\n" +
+    "      </span>\n" +
+    "      <label for=\"{{param[0].id}}\" class=\"sidebar-label\">{{param[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"param[0].required\">*</span></label>\n" +
+    "\n" +
+    "      <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(param[0].example)\">\n" +
+    "        <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"reset(param)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "        <span class=\"sidebar-tooltip-flyout-left\">\n" +
+    "          <span>Use example value</span>\n" +
+    "        </span>\n" +
+    "      </span>\n" +
+    "      <input name=\"{{param[0].id}}\" ng-required=\"{{param[0].required}}\"  class=\"sidebar-input\" ng-model=\"context[type].values[param[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(param[0].example)}\" />\n" +
+    "      <span class=\"field-validation-error\"></span>\n" +
+    "\n" +
+    "    </p>\n" +
+    "  </div>\n" +
+    "</section>\n"
+  );
+
+
   $templateCache.put('directives/raml-initializer.tpl.html',
     "<div ng-switch=\"ramlLoaded\">\n" +
     "  <div class=\"initializer-container initializer-primary\" ng-switch-when=\"false\">\n" +
@@ -2721,60 +2809,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section id=\"sidebar-headers\" ng-if=\"methodInfo.headers.plain\">\n" +
-    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
-    "              <h4 class=\"sidebar-subhead\">Headers</h4>\n" +
-    "            </header>\n" +
+    "          <named-parameters src=\"methodInfo.headers.plain\" context=\"context\" type=\"headers\" title=\"Headers\"></named-parameters>\n" +
     "\n" +
-    "            <div class=\"sidebar-row\">\n" +
-    "              <p class=\"sidebar-input-container\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
-    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(header[0].example)\">\n" +
-    "                  <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetHeader(header)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
-    "                  <span class=\"sidebar-tooltip-flyout-left\">\n" +
-    "                    <span>Use example value</span>\n" +
-    "                  </span>\n" +
-    "                </span>\n" +
-    "\n" +
-    "                <span class=\"sidebar-input-tooltip-container\" ng-if=\"header[0].description\">\n" +
-    "                  <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
-    "                  <span class=\"sidebar-tooltip-flyout\">\n" +
-    "                    <span marked=\"header[0].description\"></span>\n" +
-    "                  </span>\n" +
-    "                </span>\n" +
-    "                <label for=\"{{header[0].id}}\" class=\"sidebar-label\">{{header[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"header[0].required\">*</span></label>\n" +
-    "                <input name=\"{{header[0].id}}\" ng-required=\"{{header[0].required}}\" class=\"sidebar-input\" ng-model=\"context.headers.values[header[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(header[0].example)}\">\n" +
-    "                <span class=\"field-validation-error\"></span>\n" +
-    "              </p>\n" +
-    "            </div>\n" +
-    "          </section>\n" +
-    "\n" +
-    "          <section id=\"sidebar-query-parameters\" ng-if=\"methodInfo.queryParameters\">\n" +
-    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
-    "              <h4 class=\"sidebar-subhead\">Query Parameters</h4>\n" +
-    "            </header>\n" +
-    "\n" +
-    "            <div class=\"sidebar-row\">\n" +
-    "              <p id=\"sidebar-query-parameters-all\" class=\"sidebar-input-container\" ng-repeat=\"queryParam in methodInfo.queryParameters\">\n" +
-    "                <span class=\"sidebar-input-tooltip-container\" ng-if=\"queryParam[0].description\">\n" +
-    "                  <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
-    "                  <span class=\"sidebar-tooltip-flyout\">\n" +
-    "                    <span marked=\"queryParam[0].description\"></span>\n" +
-    "                  </span>\n" +
-    "                </span>\n" +
-    "                <label for=\"{{queryParam[0].id}}\" class=\"sidebar-label\">{{queryParam[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"queryParam[0].required\">*</span></label>\n" +
-    "\n" +
-    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(queryParam[0].example)\">\n" +
-    "                  <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetQueryParam(queryParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
-    "                  <span class=\"sidebar-tooltip-flyout-left\">\n" +
-    "                    <span>Use example value</span>\n" +
-    "                  </span>\n" +
-    "                </span>\n" +
-    "                <input name=\"{{queryParam[0].id}}\" ng-required=\"{{queryParam[0].required}}\"  class=\"sidebar-input\" ng-model=\"context.queryParameters.values[queryParam[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(queryParam[0].example)}\" />\n" +
-    "                <span class=\"field-validation-error\"></span>\n" +
-    "\n" +
-    "              </p>\n" +
-    "            </div>\n" +
-    "          </section>\n" +
+    "          <named-parameters src=\"methodInfo.queryParameters\" context=\"context\" type=\"queryParameters\" title=\"Query Parameters\"></named-parameters>\n" +
     "\n" +
     "          <section id=\"sidebar-body\" ng-if=\"methodInfo.body\">\n" +
     "            <header class=\"sidebar-row sidebar-subheader\">\n" +
@@ -2830,7 +2867,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
     "                    <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
-    "                      <b>{{key}}:</b> <br>{{value}}\n" +
+    "                      <b>{{key}}:</b> <br>{{value[0]}}\n" +
     "                    </p>\n" +
     "                  </div>\n" +
     "                </div>\n" +

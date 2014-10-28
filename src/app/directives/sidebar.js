@@ -106,6 +106,26 @@
           });
         }
 
+        function getParameters(context, type) {
+          var params           = {};
+          var customParameters = context.customParameters[type];
+
+          if (!RAML.Utils.isEmpty(context[type].data())) {
+            params = context[type].data();
+          }
+
+          if (customParameters.length > 0) {
+            for(var i = 0; i < customParameters.length; i++) {
+              var key = customParameters[i].name;
+
+              params[key] = [];
+              params[key].push(customParameters[i].value);
+            }
+          }
+
+          return params;
+        }
+
         $scope.clearFields = function () {
           $scope.uriParameters = {};
           $scope.context.queryParameters.clear();
@@ -128,14 +148,6 @@
 
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
-        };
-
-        $scope.resetQueryParam = function (queryParam) {
-          $scope.context.queryParameters.reset($scope.methodInfo.queryParameters, queryParam[0].id);
-        };
-
-        $scope.resetHeader = function (header) {
-          $scope.context.headers.reset($scope.methodInfo.headers.plain, header[0].id);
         };
 
         $scope.resetUriParameter = function (uriParam) {
@@ -215,13 +227,8 @@
 
           var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
 
-          if (!RAML.Utils.isEmpty(context.queryParameters.data())) {
-            request.queryParams(context.queryParameters.data());
-          }
-
-          if (!RAML.Utils.isEmpty(context.headers.data())) {
-            request.headers(context.headers.data());
-          }
+          request.queryParams(getParameters(context, 'queryParameters'));
+          request.headers(getParameters(context, 'headers'));
 
           if (context.bodyContent) {
             request.header('Content-Type', context.bodyContent.selected);

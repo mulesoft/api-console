@@ -58,20 +58,21 @@
           var $resourceListItem = $resource.parent('li');
           var $closingEl;
 
-          $scope.methodInfo          = $scope.resource.methods[$index];
-          $scope.responseInfo        = getResponseInfo();
-          $scope.context             = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
-          $scope.requestUrl          = '';
-          $scope.response            = {};
-          $scope.requestOptions      = {};
+          $scope.methodInfo               = $scope.resource.methods[$index];
+          $scope.responseInfo             = getResponseInfo();
+          $scope.context                  = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
+          $scope.requestUrl               = '';
+          $scope.response                 = {};
+          $scope.requestOptions           = {};
           $scope.resetFields();
-          $scope.requestEnd          = false;
-          $scope.showRequestMetadata = false;
-          $scope.showMoreEnable      = true;
-          $scope.showSpinner         = false;
-          $scope.securitySchemes     = $scope.methodInfo.securitySchemes();
-          $scope.credentials         = {};
-          $scope.traits              = $scope.readTraits($scope.methodInfo.is);
+          $scope.requestEnd               = false;
+          $scope.showRequestMetadata      = false;
+          $scope.showMoreEnable           = true;
+          $scope.showSpinner              = false;
+          $scope.securitySchemes          = $scope.methodInfo.securitySchemes();
+          $scope.credentials              = {};
+          $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
+          $scope.context.customParameters = { headers: [], queryParameters: [] };
 
           toUIModel($scope.methodInfo.queryParameters);
           toUIModel($scope.methodInfo.headers.plain);
