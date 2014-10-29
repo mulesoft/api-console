@@ -4,4 +4,5 @@ node_modules
 .idea
 .idea/
 selenium
-vendor/bower_components/
+vendor/bower_components
+bower_components
