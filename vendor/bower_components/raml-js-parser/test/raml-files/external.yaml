@@ -1,6 +1,0 @@
-#%RAML 0.8
----
-title: MyApi
-documentation:
-  - title: Getting Started
-    content: !include http://localhost:9001/test/raml-files/gettingstarted.md
