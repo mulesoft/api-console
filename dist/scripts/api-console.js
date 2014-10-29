@@ -127,6 +127,23 @@
 
 (function () {
   'use strict';
+  angular.module('RAML.Directives').directive('dynamicName', ['$parse', function($parse) {
+    return {
+      restrict: 'A',
+      controller: function($scope, $element, $attrs){
+        var name = $parse($attrs.dynamicName)($scope);
+
+        delete($attrs.dynamicName);
+        $element.removeAttr('data-dynamic-name');
+        $element.removeAttr('dynamic-name');
+        $attrs.$set('name', name);
+      }
+    };
+  }]);
+})();
+
+(function () {
+  'use strict';
 
   RAML.Directives.methodList = function() {
     return {
@@ -279,7 +296,11 @@
         type: '@',
         title: '@'
       },
-      controller: function ($scope) {
+      controller: function ($scope, $attrs) {
+        if ($attrs.hasOwnProperty('enableCustomParameters')) {
+          $scope.enableCustomParameters = true;
+        }
+
         $scope.reset = function (param) {
           $scope.context[$scope.type].reset($scope.src, param[0].id);
         };
@@ -491,40 +512,18 @@
         }
 
         $scope.clearFields = function () {
-          $scope.uriParameters = {};
+          $scope.context.uriParameters.clear();
           $scope.context.queryParameters.clear();
           $scope.context.headers.clear();
-
           if ($scope.context.bodyContent) {
             $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
           }
         };
 
         $scope.resetFields = function () {
-          var uriParameters = $scope.resource.uriParametersForDocumentation;
-
-          if (uriParameters) {
-            Object.keys(uriParameters).map(function (key) {
-              var param = uriParameters[key][0];
-              $scope.uriParameters[param.displayName] = param.example;
-            });
-          }
-
+          $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
-        };
-
-        $scope.resetUriParameter = function (uriParam) {
-          var uriParameters = $scope.resource.uriParametersForDocumentation;
-
-          if (uriParameters) {
-            Object.keys(uriParameters).filter(function (key) {
-              return key === uriParam[0].displayName;
-            }).map(function (key) {
-              var param = uriParameters[key][0];
-              $scope.uriParameters[param.displayName] = param.example;
-            });
-          }
         };
 
         $scope.toggleBodyType = function ($event, bodyType) {
@@ -569,14 +568,14 @@
         $scope.tryIt = function ($event) {
           var url;
           var context         = $scope.context;
-          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
+          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
 
           validateForm($scope.form);
 
           $scope.showSpinner = true;
           $scope.toggleSidebar($event, true);
           $scope.toggleRequestMetadata($event, true);
-          $scope.editors     = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+          $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
 
           try {
             var pathBuilder = context.pathBuilder;
@@ -606,9 +605,14 @@
           try {
             var securitySchemes = $scope.methodInfo.securitySchemes();
             var scheme          = securitySchemes && securitySchemes[$scope.currentScheme.name];
+            var credentials     = RAML.Utils.filterEmpty($scope.credentials);
+
+            if (RAML.Utils.isEmpty(credentials)) {
+              scheme = null;
+            }
 
             /* jshint es5: true */
-            authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+            authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
             /* jshint es5: false */
           } catch (e) {
             // custom strategies aren't supported yet.
@@ -767,6 +771,80 @@
 
   angular.module('RAML.Directives')
     .directive('themeSwitcher', RAML.Directives.theme);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.validate = function($parse) {
+    return {
+      require: 'ngModel',
+      link: function ($scope, $element, $attrs, $ctrl) {
+        function clear ($ctrl, rules) {
+          Object.keys(rules).map(function (key) {
+            $ctrl.$setValidity(key, true);
+          });
+        }
+
+        function validate(value) {
+          var sanitizer = (new RAMLSanitize())(sanitationRules);
+          var validator = (new RAMLValidate())(validationRules);
+          var current   = {};
+          var errors;
+
+          current[validation.id] = value;
+
+          errors = validator(sanitizer(current)).errors;
+
+          if (errors.length > 0) {
+            control.$setValidity(errors[0].rule, errors[0].valid);
+            // Note: We want to allow invalid errors for testing purposes
+            return value;
+          } else {
+            clear(control, validationRules[validation.id]);
+            return value;
+          }
+        }
+
+        var validation      = $parse($attrs.validate)($scope);
+        var sanitationRules = {};
+        var validationRules = {};
+        var control         = $ctrl;
+
+        sanitationRules[validation.id] = {
+          type: validation.type || null,
+          repeat: validation.repeat || null
+        };
+
+        sanitationRules[validation.id] = RAML.Utils.filterEmpty(sanitationRules[validation.id]);
+
+        validationRules[validation.id] = {
+          type: validation.type || null,
+          minLength: validation.minLength || null,
+          maxLength: validation.maxLength || null,
+          required: validation.required || null,
+          enum: validation.enum || null,
+          pattern: validation.pattern || null,
+          minimum: validation.minimum || null,
+          maximum: validation.maximum || null,
+          repeat: validation.repeat || null
+        };
+
+        validationRules[validation.id] = RAML.Utils.filterEmpty(validationRules[validation.id]);
+
+        $ctrl.$formatters.unshift(function(value) {
+          return validate(value);
+        });
+
+        $ctrl.$parsers.unshift(function(value) {
+          return validate(value);
+        });
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('validate', RAML.Directives.validate);
 })();
 
 (function () {
@@ -2344,6 +2422,8 @@ RAML.Inspector = (function() {
   var Context = function(resource, method) {
     this.headers = new RAML.Services.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
     this.queryParameters = new RAML.Services.TryIt.NamedParameters(method.queryParameters);
+    this.uriParameters = new RAML.Services.TryIt.NamedParameters(resource.uriParametersForDocumentation);
+
     if (method.body) {
       this.bodyContent = new RAML.Services.TryIt.BodyContent(method.body);
     }
@@ -2358,6 +2438,7 @@ RAML.Inspector = (function() {
   Context.prototype.merge = function(oldContext) {
     this.headers.copyFrom(oldContext.headers);
     this.queryParameters.copyFrom(oldContext.queryParameters);
+    this.uriParameters.copyFrom(oldContext.uriParameters);
     if (this.bodyContent && oldContext.bodyContent) {
       this.bodyContent.copyFrom(oldContext.bodyContent);
     }
@@ -2520,6 +2601,21 @@ RAML.Inspector = (function() {
       } else {
         return true;
       }
+    },
+
+    filterEmpty: function (object) {
+      var copy = {};
+
+      Object.keys(object).forEach(function(key) {
+        var value = object[key];
+        var flag = value !== undefined && value !== null && (typeof value !== 'string' || value.trim().length > 0);
+
+        if (flag) {
+          copy[key] = value;
+        }
+      });
+
+      return copy;
     }
   };
 })();
@@ -2647,7 +2743,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<section>\n" +
     "  <header class=\"sidebar-row sidebar-subheader\">\n" +
     "    <h4 class=\"sidebar-subhead\">{{title}}</h4>\n" +
-    "    <button class=\"sidebar-add-btn\" ng-click=\"addCustomParameter()\"></button>\n" +
+    "    <button class=\"sidebar-add-btn\" ng-click=\"addCustomParameter()\" ng-if=\"enableCustomParameters\"></button>\n" +
     "  </header>\n" +
     "\n" +
     "  <div class=\"sidebar-row\">\n" +
@@ -2659,24 +2755,24 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <input name=\"custom-header\" class=\"sidebar-input sidebar-input-custom\" placeholder=\"custom value\" ng-model=\"customParam.value\">\n" +
     "    </p>\n" +
     "\n" +
-    "    <p class=\"sidebar-input-container\" ng-repeat=\"param in src\">\n" +
-    "      <span class=\"sidebar-input-tooltip-container\" ng-if=\"param[0].description\">\n" +
+    "    <p class=\"sidebar-input-container\" ng-repeat=\"param in context[type].plain\">\n" +
+    "      <span class=\"sidebar-input-tooltip-container\" ng-if=\"param.definitions[0].description\">\n" +
     "        <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
     "        <span class=\"sidebar-tooltip-flyout\">\n" +
-    "          <span marked=\"param[0].description\"></span>\n" +
+    "          <span marked=\"param.definitions[0].description\"></span>\n" +
     "        </span>\n" +
     "      </span>\n" +
-    "      <label for=\"{{param[0].id}}\" class=\"sidebar-label\">{{param[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"param[0].required\">*</span></label>\n" +
+    "      <label for=\"{{param.definitions[0].id}}\" class=\"sidebar-label\">{{param.definitions[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"param.definitions[0].required\">*</span></label>\n" +
     "\n" +
-    "      <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(param[0].example)\">\n" +
-    "        <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"reset(param)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "      <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(param.definitions[0].example)\">\n" +
+    "        <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"reset(param.definitions)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "        <span class=\"sidebar-tooltip-flyout-left\">\n" +
     "          <span>Use example value</span>\n" +
     "        </span>\n" +
     "      </span>\n" +
-    "      <input name=\"{{param[0].id}}\" ng-required=\"{{param[0].required}}\"  class=\"sidebar-input\" ng-model=\"context[type].values[param[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(param[0].example)}\" />\n" +
-    "      <span class=\"field-validation-error\"></span>\n" +
     "\n" +
+    "      <input class=\"sidebar-input\" ng-model=\"context[type].values[param.definitions[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(param.definitions[0].example)}\" validate=\"param.definitions[0]\" dynamic-name=\"param.definitions[0].id\" />\n" +
+    "      <span class=\"field-validation-error\"></span>\n" +
     "    </p>\n" +
     "  </div>\n" +
     "</section>\n"
@@ -2783,35 +2879,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section id=\"sidebar-uri-parameters\" ng-if=\"resource.uriParametersForDocumentation\">\n" +
-    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
-    "              <h4 class=\"sidebar-subhead\">URI Parameters</h4>\n" +
-    "            </header>\n" +
+    "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" title=\"URI Parameters\"></named-parameters>\n" +
     "\n" +
-    "            <div class=\"sidebar-row\">\n" +
-    "              <p class=\"sidebar-input-container\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
-    "                <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(uriParam[0].example)\">\n" +
-    "                  <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetUriParameter(uriParam)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
-    "                  <span class=\"sidebar-tooltip-flyout-left\">\n" +
-    "                    <span>Use example value</span>\n" +
-    "                  </span>\n" +
-    "                </span>\n" +
-    "                <span class=\"sidebar-input-tooltip-container\" ng-if=\"uriParam[0].description\">\n" +
-    "                  <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
-    "                  <span class=\"sidebar-tooltip-flyout\">\n" +
-    "                    <span marked=\"uriParam[0].description\"></span>\n" +
-    "                  </span>\n" +
-    "                </span>\n" +
-    "                <label for=\"{{uriParam[0].id}}\" class=\"sidebar-label\">{{uriParam[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"uriParam[0].required\">*</span></label>\n" +
-    "                <input name=\"{{uriParam[0].id}}\" ng-required=\"{{uriParam[0].required}}\" class=\"sidebar-input\" ng-model=\"uriParameters[uriParam[0].id]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(uriParam[0].example)}\">\n" +
-    "                <span class=\"field-validation-error\"></span>\n" +
-    "              </p>\n" +
-    "            </div>\n" +
-    "          </section>\n" +
+    "          <named-parameters src=\"methodInfo.headers.plain\" context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
-    "          <named-parameters src=\"methodInfo.headers.plain\" context=\"context\" type=\"headers\" title=\"Headers\"></named-parameters>\n" +
-    "\n" +
-    "          <named-parameters src=\"methodInfo.queryParameters\" context=\"context\" type=\"queryParameters\" title=\"Query Parameters\"></named-parameters>\n" +
+    "          <named-parameters src=\"methodInfo.queryParameters\" context=\"context\" type=\"queryParameters\" title=\"Query Parameters\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
     "          <section id=\"sidebar-body\" ng-if=\"methodInfo.body\">\n" +
     "            <header class=\"sidebar-row sidebar-subheader\">\n" +
@@ -2867,7 +2939,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
     "                    <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
-    "                      <b>{{key}}:</b> <br>{{value[0]}}\n" +
+    "                      <b>{{key}}:</b> <br>{{value}}\n" +
     "                    </p>\n" +
     "                  </div>\n" +
     "                </div>\n" +

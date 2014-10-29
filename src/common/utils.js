@@ -23,6 +23,21 @@
       } else {
         return true;
       }
+    },
+
+    filterEmpty: function (object) {
+      var copy = {};
+
+      Object.keys(object).forEach(function(key) {
+        var value = object[key];
+        var flag = value !== undefined && value !== null && (typeof value !== 'string' || value.trim().length > 0);
+
+        if (flag) {
+          copy[key] = value;
+        }
+      });
+
+      return copy;
     }
   };
 })();
