@@ -1,7 +1,7 @@
 <section>
   <header class="sidebar-row sidebar-subheader">
     <h4 class="sidebar-subhead">{{title}}</h4>
-    <button class="sidebar-add-btn" ng-click="addCustomParameter()"></button>
+    <button class="sidebar-add-btn" ng-click="addCustomParameter()" ng-if="enableCustomParameters"></button>
   </header>
 
   <div class="sidebar-row">
@@ -13,24 +13,24 @@
       <input name="custom-header" class="sidebar-input sidebar-input-custom" placeholder="custom value" ng-model="customParam.value">
     </p>
 
-    <p class="sidebar-input-container" ng-repeat="param in src">
-      <span class="sidebar-input-tooltip-container" ng-if="param[0].description">
+    <p class="sidebar-input-container" ng-repeat="param in context[type].plain">
+      <span class="sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
         <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
         <span class="sidebar-tooltip-flyout">
-          <span marked="param[0].description"></span>
+          <span marked="param.definitions[0].description"></span>
         </span>
       </span>
-      <label for="{{param[0].id}}" class="sidebar-label">{{param[0].displayName}} <span class="side-bar-required-field" ng-if="param[0].required">*</span></label>
+      <label for="{{param.definitions[0].id}}" class="sidebar-label">{{param.definitions[0].displayName}} <span class="side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
 
-      <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(param[0].example)">
-        <button tabindex="-1" class="sidebar-input-reset" ng-click="reset(param)"><span class="visuallyhidden">Reset field</span></button>
+      <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(param.definitions[0].example)">
+        <button tabindex="-1" class="sidebar-input-reset" ng-click="reset(param.definitions)"><span class="visuallyhidden">Reset field</span></button>
         <span class="sidebar-tooltip-flyout-left">
           <span>Use example value</span>
         </span>
       </span>
-      <input name="{{param[0].id}}" ng-required="{{param[0].required}}"  class="sidebar-input" ng-model="context[type].values[param[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param[0].example)}" />
-      <span class="field-validation-error"></span>
 
+      <input class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param.definitions[0].example)}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" />
+      <span class="field-validation-error"></span>
     </p>
   </div>
 </section>

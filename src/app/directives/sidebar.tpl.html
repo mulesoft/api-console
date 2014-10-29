@@ -37,35 +37,11 @@
             </div>
           </section>
 
-          <section id="sidebar-uri-parameters" ng-if="resource.uriParametersForDocumentation">
-            <header class="sidebar-row sidebar-subheader">
-              <h4 class="sidebar-subhead">URI Parameters</h4>
-            </header>
+          <named-parameters ng-if="resource.uriParametersForDocumentation" src="resource.uriParametersForDocumentation" context="context" type="uriParameters" title="URI Parameters"></named-parameters>
 
-            <div class="sidebar-row">
-              <p class="sidebar-input-container" ng-repeat="uriParam in resource.uriParametersForDocumentation">
-                <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(uriParam[0].example)">
-                  <button tabindex="-1" class="sidebar-input-reset" ng-click="resetUriParameter(uriParam)"><span class="visuallyhidden">Reset field</span></button>
-                  <span class="sidebar-tooltip-flyout-left">
-                    <span>Use example value</span>
-                  </span>
-                </span>
-                <span class="sidebar-input-tooltip-container" ng-if="uriParam[0].description">
-                  <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
-                  <span class="sidebar-tooltip-flyout">
-                    <span marked="uriParam[0].description"></span>
-                  </span>
-                </span>
-                <label for="{{uriParam[0].id}}" class="sidebar-label">{{uriParam[0].displayName}} <span class="side-bar-required-field" ng-if="uriParam[0].required">*</span></label>
-                <input name="{{uriParam[0].id}}" ng-required="{{uriParam[0].required}}" class="sidebar-input" ng-model="uriParameters[uriParam[0].id]" ng-class="{'sidebar-field-no-default': !hasExampleValue(uriParam[0].example)}">
-                <span class="field-validation-error"></span>
-              </p>
-            </div>
-          </section>
+          <named-parameters src="methodInfo.headers.plain" context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
 
-          <named-parameters src="methodInfo.headers.plain" context="context" type="headers" title="Headers"></named-parameters>
-
-          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" title="Query Parameters"></named-parameters>
+          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" title="Query Parameters" enable-custom-parameters></named-parameters>
 
           <section id="sidebar-body" ng-if="methodInfo.body">
             <header class="sidebar-row sidebar-subheader">
@@ -121,7 +97,7 @@
                   <h3 class="sidebar-response-head">Headers</h3>
                   <div class="sidebar-response-item">
                     <p class="sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
-                      <b>{{key}}:</b> <br>{{value[0]}}
+                      <b>{{key}}:</b> <br>{{value}}
                     </p>
                   </div>
                 </div>

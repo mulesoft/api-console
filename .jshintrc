@@ -24,6 +24,8 @@
     "jQuery": true,
     "RAML": true,
     "CodeMirror": true,
-    "CryptoJS": true
+    "CryptoJS": true,
+    "RAMLSanitize": true,
+    "RAMLValidate": true
   }
 }

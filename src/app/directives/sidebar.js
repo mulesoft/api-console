@@ -127,40 +127,18 @@
         }
 
         $scope.clearFields = function () {
-          $scope.uriParameters = {};
+          $scope.context.uriParameters.clear();
           $scope.context.queryParameters.clear();
           $scope.context.headers.clear();
-
           if ($scope.context.bodyContent) {
             $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
           }
         };
 
         $scope.resetFields = function () {
-          var uriParameters = $scope.resource.uriParametersForDocumentation;
-
-          if (uriParameters) {
-            Object.keys(uriParameters).map(function (key) {
-              var param = uriParameters[key][0];
-              $scope.uriParameters[param.displayName] = param.example;
-            });
-          }
-
+          $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
-        };
-
-        $scope.resetUriParameter = function (uriParam) {
-          var uriParameters = $scope.resource.uriParametersForDocumentation;
-
-          if (uriParameters) {
-            Object.keys(uriParameters).filter(function (key) {
-              return key === uriParam[0].displayName;
-            }).map(function (key) {
-              var param = uriParameters[key][0];
-              $scope.uriParameters[param.displayName] = param.example;
-            });
-          }
         };
 
         $scope.toggleBodyType = function ($event, bodyType) {
@@ -205,14 +183,14 @@
         $scope.tryIt = function ($event) {
           var url;
           var context         = $scope.context;
-          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.uriParameters);
+          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
 
           validateForm($scope.form);
 
           $scope.showSpinner = true;
           $scope.toggleSidebar($event, true);
           $scope.toggleRequestMetadata($event, true);
-          $scope.editors     = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+          $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
 
           try {
             var pathBuilder = context.pathBuilder;
@@ -242,9 +220,14 @@
           try {
             var securitySchemes = $scope.methodInfo.securitySchemes();
             var scheme          = securitySchemes && securitySchemes[$scope.currentScheme.name];
+            var credentials     = RAML.Utils.filterEmpty($scope.credentials);
+
+            if (RAML.Utils.isEmpty(credentials)) {
+              scheme = null;
+            }
 
             /* jshint es5: true */
-            authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+            authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
             /* jshint es5: false */
           } catch (e) {
             // custom strategies aren't supported yet.

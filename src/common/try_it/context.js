@@ -4,6 +4,8 @@
   var Context = function(resource, method) {
     this.headers = new RAML.Services.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
     this.queryParameters = new RAML.Services.TryIt.NamedParameters(method.queryParameters);
+    this.uriParameters = new RAML.Services.TryIt.NamedParameters(resource.uriParametersForDocumentation);
+
     if (method.body) {
       this.bodyContent = new RAML.Services.TryIt.BodyContent(method.body);
     }
@@ -18,6 +20,7 @@
   Context.prototype.merge = function(oldContext) {
     this.headers.copyFrom(oldContext.headers);
     this.queryParameters.copyFrom(oldContext.queryParameters);
+    this.uriParameters.copyFrom(oldContext.uriParameters);
     if (this.bodyContent && oldContext.bodyContent) {
       this.bodyContent.copyFrom(oldContext.bodyContent);
     }

@@ -12,7 +12,11 @@
         type: '@',
         title: '@'
       },
-      controller: function ($scope) {
+      controller: function ($scope, $attrs) {
+        if ($attrs.hasOwnProperty('enableCustomParameters')) {
+          $scope.enableCustomParameters = true;
+        }
+
         $scope.reset = function (param) {
           $scope.context[$scope.type].reset($scope.src, param[0].id);
         };
