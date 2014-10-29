@@ -17,6 +17,7 @@
           var current   = {};
           var errors;
 
+          value = typeof value !== 'undefined' && value !== null && value.length === 0 ? undefined : value;
           current[validation.id] = value;
 
           errors = validator(sanitizer(current)).errors;
