@@ -102,7 +102,9 @@ To run the console, you'll need the following:
 ### First Time Setup
 
 1. Install grunt-cli globally - `npm install -g grunt-cli`
-2. Install the console's NPM packages - `npm install`
+2. Install bower globally - `npm install -g bower`
+3. Install the console's NPM packages - `npm install`
+4. Install the console's Bower packages - `bower install`
 
 ### Running the server
 
