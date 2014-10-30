@@ -357,6 +357,11 @@
             $scope.ramlLoaded = true;
           }
         };
+
+        if (document.location.search.indexOf('?raml=') !== -1) {
+          $scope.ramlUrl = document.location.search.replace('?raml=', '');
+          $scope.loadFromUrl();
+        }
       }
     };
   };
