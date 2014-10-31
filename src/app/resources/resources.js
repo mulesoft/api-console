@@ -83,7 +83,7 @@
             // Hack to update codemirror
             setTimeout(function () {
               var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
-              editor.doc.addLineClass(context.line, 'background', 'line-error');
+              editor.addLineClass(context.line, 'background', 'line-error');
               editor.doc.setCursor(context.line);
             }, 10);
           }

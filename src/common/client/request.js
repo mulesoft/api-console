@@ -83,12 +83,12 @@
       }
 
       if (!RAML.Utils.isEmpty(queryParams)) {
-        var separator = (options.url.match('\\?') ? '&' : '?');
-        o.url = options.url + separator + jQuery.param(queryParams, true);
+        var separator = (options.uri.match('\\?') ? '&' : '?');
+        o.uri = options.uri + separator + jQuery.param(queryParams, true);
       }
 
       if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
-        o.url = RAML.Settings.proxy + o.url;
+        o.uri = RAML.Settings.proxy + o.uri;
       }
 
       return o;
@@ -96,8 +96,8 @@
   };
 
   RAML.Client.Request = {
-    create: function(url, method) {
-      return new RequestDsl({ url: url, type: method, contentType: false });
+    create: function(uri, method) {
+      return new RequestDsl({ uri: uri, method: method.toUpperCase(), contentType: false });
     }
   };
 })();

@@ -26,6 +26,7 @@
     "CodeMirror": true,
     "CryptoJS": true,
     "RAMLSanitize": true,
-    "RAMLValidate": true
+    "RAMLValidate": true,
+    "ClientOAuth2": true
   }
 }

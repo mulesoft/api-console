@@ -220,27 +220,28 @@
           try {
             var securitySchemes = $scope.methodInfo.securitySchemes();
             var scheme          = securitySchemes && securitySchemes[$scope.currentScheme.name];
-            var credentials     = RAML.Utils.filterEmpty($scope.credentials);
 
-            if (RAML.Utils.isEmpty(credentials)) {
-              scheme = null;
+            //// TODO: Make a uniform interface
+            if (scheme.type === 'OAuth 2.0') {
+              authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
+              authStrategy.authenticate($scope.requestOptions, handleResponse);
+              return;
             }
 
             /* jshint es5: true */
-            authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
+            authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+            authStrategy.authenticate().then(function(token) {
+              token.sign(request);
+
+              jQuery.ajax($scope.requestOptions).then(
+                function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+                function(jqXhr) { handleResponse(jqXhr); }
+              );
+            });
             /* jshint es5: false */
           } catch (e) {
             // custom strategies aren't supported yet.
           }
-
-          authStrategy.authenticate().then(function(token) {
-            token.sign(request);
-
-            jQuery.ajax($scope.requestOptions).then(
-              function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-              function(jqXhr) { handleResponse(jqXhr); }
-            );
-          });
         };
 
         $scope.toggleSidebar = function ($event, fullscreenEnable) {

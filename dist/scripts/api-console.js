@@ -610,27 +610,28 @@
           try {
             var securitySchemes = $scope.methodInfo.securitySchemes();
             var scheme          = securitySchemes && securitySchemes[$scope.currentScheme.name];
-            var credentials     = RAML.Utils.filterEmpty($scope.credentials);
 
-            if (RAML.Utils.isEmpty(credentials)) {
-              scheme = null;
+            //// TODO: Make a uniform interface
+            if (scheme.type === 'OAuth 2.0') {
+              authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
+              authStrategy.authenticate($scope.requestOptions, handleResponse);
+              return;
             }
 
             /* jshint es5: true */
-            authStrategy = RAML.Client.AuthStrategies.for(scheme, credentials);
+            authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+            authStrategy.authenticate().then(function(token) {
+              token.sign(request);
+
+              jQuery.ajax($scope.requestOptions).then(
+                function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+                function(jqXhr) { handleResponse(jqXhr); }
+              );
+            });
             /* jshint es5: false */
           } catch (e) {
             // custom strategies aren't supported yet.
           }
-
-          authStrategy.authenticate().then(function(token) {
-            token.sign(request);
-
-            jQuery.ajax($scope.requestOptions).then(
-              function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-              function(jqXhr) { handleResponse(jqXhr); }
-            );
-          });
         };
 
         $scope.toggleSidebar = function ($event, fullscreenEnable) {
@@ -969,7 +970,7 @@
             // Hack to update codemirror
             setTimeout(function () {
               var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
-              editor.doc.addLineClass(context.line, 'background', 'line-error');
+              editor.addLineClass(context.line, 'background', 'line-error');
               editor.doc.setCursor(context.line);
             }, 10);
           }
@@ -1030,6 +1031,45 @@
       replace: true,
       scope: {
         credentials: '='
+      },
+      controller: function ($scope) {
+        $scope.credentials.clientId = '8475f8d81e7b49a498ee2a829a8c2ca4';
+        $scope.credentials.clientSecret = '5408b34564534af5B6CBE61275B42CE3';
+
+        $scope.ownerOptionsEnabled = function () {
+          return $scope.credentials.grant.value === 'owner';
+        };
+
+        var grantsTypes = [
+          {
+            label: 'Implicit',
+            value: 'token'
+          },
+          {
+            label: 'Authorization Code',
+            value: 'code'
+          },
+          {
+            label: 'Resource Owner Password Credentials',
+            value: 'owner'
+          },
+          {
+            label: 'Client Credentials',
+            value: 'credentials'
+          }
+        ];
+
+        /* jshint camelcase: false */
+        var authorizationGrants = $scope.$parent.securitySchemes.oauth_2_0.settings.authorizationGrants;
+
+        if (authorizationGrants) {
+          $scope.grants = grantsTypes.filter(function (el) {
+            return authorizationGrants.indexOf(el.value) > -1;
+          });
+        }
+        /* jshint camelcase: true */
+
+        $scope.credentials.grant = $scope.grants[0];
       }
     };
   };
@@ -1522,12 +1562,66 @@
   'use strict';
 
   var Oauth2 = function(scheme, credentials) {
-    this.grant = RAML.Client.AuthStrategies.Oauth2.Grant.create(scheme.settings, credentials);
-    this.tokenFactory = RAML.Client.AuthStrategies.Oauth2.Token.createFactory(scheme);
+    this.scheme = scheme;
+    this.credentials = credentials;
   };
 
-  Oauth2.prototype.authenticate = function() {
-    return this.grant.request().then(Oauth2.createToken(this.tokenFactory));
+  Oauth2.prototype.authenticate = function(options, done) {
+    var githubAuth = new ClientOAuth2({
+      clientId:         this.credentials.clientId,
+      clientSecret:     this.credentials.clientSecret,
+      accessTokenUri:   this.scheme.settings.accessTokenUri,
+      authorizationUri: this.scheme.settings.authorizationUri,
+      redirectUri:      RAML.Settings.oauth2RedirectUri,
+      scopes:           this.scheme.settings.scopes
+    });
+    var grantType = this.credentials.grant.value;
+
+    if (grantType === 'token' || grantType === 'code') {
+      window.oauth2Callback = function (uri) {
+        githubAuth[grantType].getToken(uri, function (err, user, raw) {
+          if (err) {
+            done(raw);
+          }
+
+          if (user && user.accessToken) {
+            user.request(options, function (err, res) {
+              done(res.raw);
+            });
+          }
+        });
+      };
+      //// TODO: Find a way to handle 404
+      window.open(githubAuth[grantType].getUri());
+    }
+
+    if (grantType === 'owner') {
+      githubAuth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
+        if (err) {
+          done(raw);
+        }
+
+        if (user && user.accessToken) {
+          user.request(options, function (err, res) {
+            done(res.raw);
+          });
+        }
+      });
+    }
+
+    if (grantType === 'credentials') {
+      githubAuth.credentials.getToken(function (err, user, raw) {
+        if (err) {
+          done(raw);
+        }
+
+        if (user && user.accessToken) {
+          user.request(options, function (err, res) {
+            done(res.raw);
+          });
+        }
+      });
+    }
   };
 
   RAML.Client.AuthStrategies.Oauth2 = Oauth2;
@@ -1875,12 +1969,12 @@
       }
 
       if (!RAML.Utils.isEmpty(queryParams)) {
-        var separator = (options.url.match('\\?') ? '&' : '?');
-        o.url = options.url + separator + jQuery.param(queryParams, true);
+        var separator = (options.uri.match('\\?') ? '&' : '?');
+        o.uri = options.uri + separator + jQuery.param(queryParams, true);
       }
 
       if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
-        o.url = RAML.Settings.proxy + o.url;
+        o.uri = RAML.Settings.proxy + o.uri;
       }
 
       return o;
@@ -1888,8 +1982,8 @@
   };
 
   RAML.Client.Request = {
-    create: function(url, method) {
-      return new RequestDsl({ url: url, type: method, contentType: false });
+    create: function(uri, method) {
+      return new RequestDsl({ uri: uri, method: method.toUpperCase(), contentType: false });
     }
   };
 })();
@@ -2934,10 +3028,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <div class=\"sidebar-request-metadata\" ng-class=\"{'is-active':showRequestMetadata}\">\n" +
     "\n" +
     "              <div class=\"sidebar-row\">\n" +
-    "                <div ng-if=\"requestOptions.url\">\n" +
+    "                <div ng-if=\"requestOptions.uri\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Request URI</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
-    "                    <p class=\"sidebar-response-metadata\">{{requestOptions.url}}</p>\n" +
+    "                    <p class=\"sidebar-response-metadata\">{{requestOptions.uri}}</p>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +
@@ -3169,6 +3263,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('security/oauth2.tpl.html',
     "<div class=\"sidebar-row\">\n" +
     "  <p class=\"sidebar-input-container\">\n" +
+    "    <label for=\"clientId\" class=\"sidebar-label\">Authorization Grant</label>\n" +
+    "    <select class=\"sidebar-input\" ng-model=\"credentials.grant\" ng-options=\"grant.label for grant in grants\">\n" +
+    "    </select>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"clientId\" class=\"sidebar-label\">Client ID <span class=\"side-bar-required-field\">*</span></label>\n" +
     "    <input required=\"true\" type=\"text\" name=\"clientId\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientId\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
@@ -3177,6 +3277,18 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"clientSecret\" class=\"sidebar-label\">Client Secret <span class=\"side-bar-required-field\">*</span></label>\n" +
     "    <input required=\"true\" type=\"password\" name=\"clientSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientSecret\"/>\n" +
+    "    <span class=\"field-validation-error\"></span>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
+    "    <label for=\"username\" class=\"sidebar-label\">Username <span class=\"side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\"/>\n" +
+    "    <span class=\"field-validation-error\"></span>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
+    "    <label for=\"password\" class=\"sidebar-label\">Password <span class=\"side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
