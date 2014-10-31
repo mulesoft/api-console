@@ -1029,15 +1029,12 @@
       restrict: 'E',
       templateUrl: 'security/oauth2.tpl.html',
       replace: true,
-      scope: {
-        credentials: '='
-      },
       controller: function ($scope) {
         $scope.ownerOptionsEnabled = function () {
-          return $scope.credentials.grant.value === 'owner';
+          return $scope.credentials.grant === 'owner';
         };
 
-        var grantsTypes = [
+        $scope.grants = [
           {
             label: 'Implicit',
             value: 'token'
@@ -1060,13 +1057,13 @@
         var authorizationGrants = $scope.$parent.securitySchemes.oauth_2_0.settings.authorizationGrants;
 
         if (authorizationGrants) {
-          $scope.grants = grantsTypes.filter(function (el) {
+          $scope.grants = $scope.grants.filter(function (el) {
             return authorizationGrants.indexOf(el.value) > -1;
           });
         }
         /* jshint camelcase: true */
 
-        $scope.credentials.grant = $scope.grants[0];
+        $scope.credentials.grant = $scope.grants[0].value;
       }
     };
   };
@@ -1572,7 +1569,7 @@
       redirectUri:      RAML.Settings.oauth2RedirectUri,
       scopes:           this.scheme.settings.scopes
     });
-    var grantType = this.credentials.grant.value;
+    var grantType = this.credentials.grant;
 
     if (grantType === 'token' || grantType === 'code') {
       window.oauth2Callback = function (uri) {
@@ -3072,8 +3069,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div class=\"sidebar-row\">\n" +
     "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"clientId\" class=\"sidebar-label\">Authorization Grant</label>\n" +
-    "    <select class=\"sidebar-input\" ng-model=\"credentials.grant\" ng-options=\"grant.label for grant in grants\">\n" +
-    "    </select>\n" +
+    "    <select class=\"sidebar-input\" ng-model=\"credentials.grant\">\n" +
+    "     <option ng-repeat=\"grant in grants\" value=\"{{grant.value}}\" ng-selected=\"grant.value=='token'\">{{grant.label}}</option>\n" +
+    "  </select>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +
