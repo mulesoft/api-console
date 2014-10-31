@@ -6,15 +6,12 @@
       restrict: 'E',
       templateUrl: 'security/oauth2.tpl.html',
       replace: true,
-      scope: {
-        credentials: '='
-      },
       controller: function ($scope) {
         $scope.ownerOptionsEnabled = function () {
-          return $scope.credentials.grant.value === 'owner';
+          return $scope.credentials.grant === 'owner';
         };
 
-        var grantsTypes = [
+        $scope.grants = [
           {
             label: 'Implicit',
             value: 'token'
@@ -37,13 +34,13 @@
         var authorizationGrants = $scope.$parent.securitySchemes.oauth_2_0.settings.authorizationGrants;
 
         if (authorizationGrants) {
-          $scope.grants = grantsTypes.filter(function (el) {
+          $scope.grants = $scope.grants.filter(function (el) {
             return authorizationGrants.indexOf(el.value) > -1;
           });
         }
         /* jshint camelcase: true */
 
-        $scope.credentials.grant = $scope.grants[0];
+        $scope.credentials.grant = $scope.grants[0].value;
       }
     };
   };

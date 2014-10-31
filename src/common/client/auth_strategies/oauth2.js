@@ -15,7 +15,7 @@
       redirectUri:      RAML.Settings.oauth2RedirectUri,
       scopes:           this.scheme.settings.scopes
     });
-    var grantType = this.credentials.grant.value;
+    var grantType = this.credentials.grant;
 
     if (grantType === 'token' || grantType === 'code') {
       window.oauth2Callback = function (uri) {
