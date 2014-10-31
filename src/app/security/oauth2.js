@@ -10,9 +10,6 @@
         credentials: '='
       },
       controller: function ($scope) {
-        $scope.credentials.clientId = '8475f8d81e7b49a498ee2a829a8c2ca4';
-        $scope.credentials.clientSecret = '5408b34564534af5B6CBE61275B42CE3';
-
         $scope.ownerOptionsEnabled = function () {
           return $scope.credentials.grant.value === 'owner';
         };
