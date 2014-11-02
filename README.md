@@ -110,3 +110,24 @@ To run the console, you'll need the following:
 
     $ grunt server
     $ open http://localhost:9000
+
+## Testing
+
+### Prerequisites
+
+To run tests, you'll need the following:
+
+* [Node JS](http://nodejs.org/)
+* [NPM](https://npmjs.org/)
+* [Protractor](http://angular.github.io/protractor)
+
+### First Time Setup
+
+1. Install grunt-cli globally - `npm install -g grunt-cli`
+2. Install protractor globally - `npm install -g protractor`
+3. Install the console's NPM packages - `npm install`
+4. Run  `node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update`
+
+### Running Tests
+
+    $ grunt regression

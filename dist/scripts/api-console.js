@@ -2697,11 +2697,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"initializer-row\">\n" +
     "          <p class=\"initializer-input-container\">\n" +
-    "            <input autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"$parent.ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\">\n" +
+    "            <input id=\"ramlPath\" autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"$parent.ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\">\n" +
     "          </p>\n" +
     "\n" +
     "          <div class=\"initializer-action-group\" align=\"right\">\n" +
-    "            <button class=\"initializer-action initializer-action-btn\" ng-click=\"loadFromUrl()\">Load from URL</button>\n" +
+    "            <button id=\"loadRamlFromUrl\" class=\"initializer-action initializer-action-btn\" ng-click=\"loadFromUrl()\">Load from URL</button>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
@@ -2713,7 +2713,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"initializer-row\">\n" +
     "          <p class=\"initializer-input-container\">\n" +
-    "            <textarea ui-codemirror=\"{\n" +
+    "            <textarea id=\"raml\" ui-codemirror=\"{\n" +
     "              lineNumbers: true,\n" +
     "              lineWrapping : true,\n" +
     "              tabSize: 2,\n" +
@@ -2721,7 +2721,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            }\" ng-model=\"$parent.raml\"></textarea>\n" +
     "          </p>\n" +
     "          <div class=\"initializer-action-group\" align=\"right\">\n" +
-    "            <button class=\"initializer-action initializer-action-btn\" ng-click=\"loadRaml()\">Load RAML</button>\n" +
+    "            <button id=\"loadRaml\" class=\"initializer-action initializer-action-btn\" ng-click=\"loadRaml()\">Load RAML</button>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
