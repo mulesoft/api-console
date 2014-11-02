@@ -27,6 +27,15 @@
     "CryptoJS": true,
     "RAMLSanitize": true,
     "RAMLValidate": true,
-    "ClientOAuth2": true
+    "ClientOAuth2": true,
+    "jasmine": true,
+    "element": true,
+    "by": true,
+    "describe": true,
+    "it": true,
+    "browser": true,
+    "expect": true,
+    "beforeEach": true,
+    "afterEach": true
   }
 }

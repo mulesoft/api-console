@@ -10,6 +10,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['build', 'connect:livereload', 'open:server', 'watch:build']);
   grunt.registerTask('server', ['release', 'connect:livereload', 'watch:build']);
+  grunt.registerTask('regression', ['build', 'protractor:local']);
   grunt.registerTask('build', [
     'env:build',
     'jshint',
@@ -49,7 +50,8 @@ module.exports = function (grunt) {
       jsTpl: ['<%= distdir %>/templates/**/*.js'],
       html: ['src/index.html'],
       scss: ['src/scss/light-theme.scss', 'src/scss/dark-theme.scss'],
-      scssWatch: ['src/scss/**/*.scss']
+      scssWatch: ['src/scss/**/*.scss'],
+      test: ['test/**/*.js']
     },
 
     connect: {
@@ -228,9 +230,28 @@ module.exports = function (grunt) {
     },
 
     jshint:{
-      files:['gruntFile.js', '<%= src.js %>'],
+      files:['gruntFile.js', '<%= src.js %>', '<%= src.test %>'],
       options: {
         jshintrc: '.jshintrc'
+      }
+    },
+
+    protractor: {
+      options: {
+        configFile: 'test/regression/protractor.conf.js',
+        keepAlive:  false,
+        args:       {
+          browser: process.env.TRAVIS ? 'firefox' : 'chrome'
+        }
+      },
+
+      regression: {
+      },
+
+      local: {
+        options: {
+          configFile: 'test/regression/local.protractor.conf.js'
+        }
       }
     }
   });
