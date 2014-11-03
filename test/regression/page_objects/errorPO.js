@@ -1,5 +1,7 @@
 'use strict';
 
+var basePO = require('./basePO');
+
 function ErrorPO () {
   this.title        = element(by.css('.heading'));
   this.errorMessage = element(by.css('.error-message'));
@@ -21,5 +23,7 @@ function ErrorPO () {
     return browser.executeScript('return jQuery(".CodeMirror")[0].CodeMirror.getValue();');
   };
 }
+
+ErrorPO.prototype = basePO;
 
 module.exports = ErrorPO;
