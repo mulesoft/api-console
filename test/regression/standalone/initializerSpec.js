@@ -23,7 +23,7 @@ module.exports = function() {
   });
 
   describe('Load from URL', function () {
-    it('should diplay a RAML', function () {
+    it('should be able to diplay the API title', function () {
       // Arrange
       var po     = factory.create('initializer');
       var assert = assertions.create('resource');
@@ -35,6 +35,39 @@ module.exports = function() {
 
       // Assert
       assert.ifTitleIsPresent('Example API');
+    });
+
+    it('should be able to display resources correctly', function () {
+      // Arrange
+      var po     = factory.create('initializer');
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:3000');
+      po.setRamlPath('http://localhost:3000/raml/resources.raml');
+      po.loadRamlFromUrl();
+
+      // Assert
+      assert.ifResourceNameIsPresentAt('/resource1', 0);
+      assert.ifNestedResourceNameIsPresentAt('/resource1/nested', 1);
+      assert.ifNestedResourceNameIsPresentAt('/resource1/nested/{id}', 2);
+      assert.ifNestedResourceNameIsPresentAt('/resource1/nested/{id}/nested', 3);
+      assert.ifResourceNameIsPresentAt('/resource2', 4);
+    });
+
+    it('should be able to diplay all HTTP methods', function () {
+      // Arrange
+      var po     = factory.create('initializer');
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:3000');
+      po.setRamlPath('http://localhost:3000/raml/all-methods.raml');
+      po.loadRamlFromUrl();
+
+      // Assert
+      assert.ifResourceNameIsPresentAt('/resources', 0);
+      assert.ifShowingDefinedMethodsForResourceAt(0, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT']);
     });
 
     it('should display error page if RAML is wrong', function () {
@@ -56,7 +89,7 @@ module.exports = function() {
   });
 
   describe('Load from RAML text', function () {
-    it('should diplay a RAML', function () {
+    it('should be able to diplay the API title', function () {
       // Arrange
       var po     = factory.create('initializer');
       var assert = assertions.create('resource');
@@ -68,6 +101,39 @@ module.exports = function() {
 
       // Assert
       assert.ifTitleIsPresent('Example API');
+    });
+
+    it('should be able to display resources correctly', function () {
+      // Arrange
+      var po     = factory.create('initializer');
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:3000');
+      po.setRaml(po.examples.resources);
+      po.loadRaml();
+
+      // Assert
+      assert.ifResourceNameIsPresentAt('/resource1', 0);
+      assert.ifNestedResourceNameIsPresentAt('/resource1/nested', 1);
+      assert.ifNestedResourceNameIsPresentAt('/resource1/nested/{id}', 2);
+      assert.ifNestedResourceNameIsPresentAt('/resource1/nested/{id}/nested', 3);
+      assert.ifResourceNameIsPresentAt('/resource2', 4);
+    });
+
+    it('should be able to diplay all HTTP methods', function () {
+      // Arrange
+      var po     = factory.create('initializer');
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:3000');
+      po.setRaml(po.examples['all-methods']);
+      po.loadRaml();
+
+      // Assert
+      assert.ifResourceNameIsPresentAt('/resources', 0);
+      assert.ifShowingDefinedMethodsForResourceAt(0, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT']);
     });
 
     it('should display error page if RAML is wrong', function () {

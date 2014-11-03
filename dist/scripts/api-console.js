@@ -2989,7 +2989,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "        <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
     "          <div class=\"resource-path-container\">\n" +
-    "            <button class=\"resource-root-toggle is-active\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
+    "            <button class=\"resource-root-toggle\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
     "\n" +
     "            <h2 class=\"resource-heading resource-heading-large\">\n" +
     "              <span class=\"resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>\n" +
@@ -3005,7 +3005,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <resource-panel></resource-panel>\n" +
     "\n" +
     "        <!-- Child Resources -->\n" +
-    "        <ol class=\"resource-list is-collapsed\" style=\"display: none;\">\n" +
+    "        <ol class=\"resource-list is-collapsed\">\n" +
     "          <li class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
     "            <div class=\"resource clearfix\">\n" +
     "              <div class=\"resource-path-container\">\n" +
