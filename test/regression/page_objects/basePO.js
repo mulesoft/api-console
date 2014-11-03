@@ -2,13 +2,10 @@
 
 var fs       = require('fs');
 var path     = require('path');
-var basePath = process.cwd().indexOf('regression') > 0 ? path.join(process.cwd(), 'assets') : path.join(process.cwd(), 'test/regression/assets');
+var basePath = process.cwd().indexOf('regression') > 0 ? path.join(process.cwd(), 'assets/raml') : path.join(process.cwd(), 'test/regression/assets/raml');
 var files    = fs.readdirSync(basePath);
 var basePO   = {
-  examples: {},
-  get: function() {
-    browser.get('http://localhost:3000');
-  }
+  examples: {}
 };
 
 // Loading RAML examples

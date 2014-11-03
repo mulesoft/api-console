@@ -1,5 +1,7 @@
 'use strict';
 
+var basePO = require('./basePO');
+
 function ResourcesPO () {
   this.title = element(by.css('.title'));
 
@@ -7,5 +9,7 @@ function ResourcesPO () {
     return this.title.getText();
   };
 }
+
+ResourcesPO.prototype = basePO;
 
 module.exports = ResourcesPO;

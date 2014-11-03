@@ -2,14 +2,18 @@
 
 var url     = require('url');
 var factory = require('../page_objects');
+var connect = require('../helpers/connect');
 
 module.exports = function() {
+  beforeEach(connect.beforeEach);
+  afterEach(connect.afterEach);
+
   it('should be displayed', function() {
     // Arrange
     var po = factory.create('initializer');
 
     // Act
-    po.get();
+    browser.get('http://localhost:3000');
 
     // Assert
     expect(po.ramlPathInput.isPresent()).toBe(true);
@@ -25,8 +29,8 @@ module.exports = function() {
       var resourcesPO = factory.create('resources');
 
       // Act
-      po.get();
-      po.setRamlPath(url.resolve(browser.baseUrl, '/minimum.raml'));
+      browser.get('http://localhost:3000');
+      po.setRamlPath(url.resolve(browser.baseUrl, 'raml/minimum.raml'));
       po.loadRamlFromUrl();
 
       // Assert
@@ -40,13 +44,13 @@ module.exports = function() {
       var errorPO = factory.create('error');
 
       // Act
-      po.get();
-      po.setRamlPath(url.resolve(browser.baseUrl, '/wrong.raml'));
+      browser.get('http://localhost:3000');
+      po.setRamlPath(url.resolve(browser.baseUrl, 'raml/wrong.raml'));
       po.loadRamlFromUrl();
 
       // Assert
       expect(errorPO.title.isPresent()).toBe(true);
-      expect(errorPO.getTitle()).toBe('Error while loading http://localhost:3000/wrong.raml');
+      expect(errorPO.getTitle()).toBe('Error while loading http://localhost:3000/raml/wrong.raml');
 
       expect(errorPO.errorMessage.isPresent()).toBe(true);
       expect(errorPO.getErrorMessage()).toBe('unknown property ti tle');
@@ -71,7 +75,7 @@ module.exports = function() {
       var resourcesPO = factory.create('resources');
 
       // Act
-      po.get();
+      browser.get('http://localhost:3000');
       po.setRaml(po.examples.minimum);
       po.loadRaml();
 
@@ -86,7 +90,7 @@ module.exports = function() {
       var errorPO = factory.create('error');
 
       // Act
-      po.get();
+      browser.get('http://localhost:3000');
       po.setRaml(po.examples.wrong);
       po.loadRaml();
 
