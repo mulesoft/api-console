@@ -1,10 +1,6 @@
 'use strict';
 
 exports.config = {
-  specs: [
-    '**/*Spec.js'
-  ],
-
   capabilities: {
     'browserName': 'chrome'
   },
@@ -13,7 +9,8 @@ exports.config = {
   framework: 'jasmine',
 
   suites: {
-    standalone: 'standalone/**/*Spec.js'
+    standalone: 'standalone/*Suite.js',
+    all: '**/*Suite.js'
   },
 
   onPrepare: function() {
