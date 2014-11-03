@@ -7,7 +7,7 @@ module.exports = function() {
   beforeEach(connect.beforeEach);
   afterEach(connect.afterEach);
 
-  it('should diplay a RAML', function () {
+  it('should be able to diplay the API title', function () {
     // Arrange
     var assert = assertions.create('resource');
 
@@ -16,6 +16,33 @@ module.exports = function() {
 
     // Assert
     assert.ifTitleIsPresent('Example API');
+  });
+
+  it('should be able to display resources correctly', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+
+    // Act
+    browser.get('http://localhost:3000?raml=http://localhost:3000/raml/resources.raml');
+
+    // Assert
+    assert.ifResourceNameIsPresentAt('/resource1', 0);
+    assert.ifNestedResourceNameIsPresentAt('/resource1/nested', 1);
+    assert.ifNestedResourceNameIsPresentAt('/resource1/nested/{id}', 2);
+    assert.ifNestedResourceNameIsPresentAt('/resource1/nested/{id}/nested', 3);
+    assert.ifResourceNameIsPresentAt('/resource2', 4);
+  });
+
+  it('should be able to diplay all HTTP methods', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+
+    // Act
+    browser.get('http://localhost:3000?raml=http://localhost:3000/raml/all-methods.raml');
+
+    // Assert
+    assert.ifResourceNameIsPresentAt('/resources', 0);
+    assert.ifShowingDefinedMethodsForResourceAt(0, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT']);
   });
 
   it('should display error page if RAML is wrong', function () {

@@ -68,7 +68,7 @@
       <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
         <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
           <div class="resource-path-container">
-            <button class="resource-root-toggle is-active" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
+            <button class="resource-root-toggle" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
 
             <h2 class="resource-heading resource-heading-large">
               <span class="resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
@@ -84,7 +84,7 @@
         <resource-panel></resource-panel>
 
         <!-- Child Resources -->
-        <ol class="resource-list is-collapsed" style="display: none;">
+        <ol class="resource-list is-collapsed">
           <li class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
             <div class="resource clearfix">
               <div class="resource-path-container">

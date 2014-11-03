@@ -1,0 +1,14 @@
+#%RAML 0.8
+title: My API
+baseUri: http://localhost:9000
+/resource1:
+ get:
+ /nested:
+  get:
+  /{id}:
+   get:
+   /nested:
+    get:
+
+/resource2:
+  get:
