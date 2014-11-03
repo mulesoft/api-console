@@ -28,9 +28,9 @@ function Server(port, src, template) {
           template = template.replace('@src', 'http://localhost:' + that.port + '/raml/' + that.src);
           res.write(template);
           res.end();
+        } else {
+          next();
         }
-
-        next();
       });
     }
 
