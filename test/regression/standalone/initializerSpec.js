@@ -1,133 +1,112 @@
 'use strict';
 
-var url = require('url');
+var url     = require('url');
 var factory = require('../page_objects');
 
-describe('Standalone', function() {
-  var server;
+module.exports = function() {
+  it('should be displayed', function() {
+    // Arrange
+    var po = factory.create('initializer');
 
-  beforeEach(function() {
-    var serveStatic = require('serve-static');
-    var connect     = require('connect');
-    var app         = connect();
-    var http        = require('http');
+    // Act
+    po.get();
 
-    app.use(serveStatic('assets'));
-    app.use(serveStatic('../../dist'));
-
-    server = http.createServer(app);
-    server.listen(3000);
+    // Assert
+    expect(po.ramlPathInput.isPresent()).toBe(true);
+    expect(po.ramlEditor.isPresent()).toBe(true);
+    expect(po.loadRamlFromUrlBtn.isPresent()).toBe(true);
+    expect(po.loadRamlBtn.isPresent()).toBe(true);
   });
 
-  afterEach(function() {
-    server.close();
-  });
-
-  describe('Initializer', function() {
-    it('should be displayed', function() {
+  describe('Load from URL', function () {
+    it('should diplay a RAML', function () {
       // Arrange
-      var po = factory.create('initializer');
+      var po          = factory.create('initializer');
+      var resourcesPO = factory.create('resources');
 
       // Act
       po.get();
+      po.setRamlPath(url.resolve(browser.baseUrl, '/minimum.raml'));
+      po.loadRamlFromUrl();
 
       // Assert
-      expect(po.ramlPathInput.isPresent()).toBe(true);
-      expect(po.ramlEditor.isPresent()).toBe(true);
-      expect(po.loadRamlFromUrlBtn.isPresent()).toBe(true);
-      expect(po.loadRamlBtn.isPresent()).toBe(true);
+      expect(resourcesPO.title.isPresent()).toBe(true);
+      expect(resourcesPO.getTitle()).toBe('Example API');
     });
 
-    describe('Load from URL', function () {
-      it('should diplay a RAML', function () {
-        // Arrange
-        var po          = factory.create('initializer');
-        var resourcesPO = factory.create('resources');
+    it('should display error page if RAML is wrong', function () {
+      // Arrange
+      var po      = factory.create('initializer');
+      var errorPO = factory.create('error');
 
-        // Act
-        po.get();
-        po.setRamlPath(url.resolve(browser.baseUrl, '/minimum.raml'));
-        po.loadRamlFromUrl();
+      // Act
+      po.get();
+      po.setRamlPath(url.resolve(browser.baseUrl, '/wrong.raml'));
+      po.loadRamlFromUrl();
 
-        // Assert
-        expect(resourcesPO.title.isPresent()).toBe(true);
-        expect(resourcesPO.getTitle()).toBe('Example API');
-      });
+      // Assert
+      expect(errorPO.title.isPresent()).toBe(true);
+      expect(errorPO.getTitle()).toBe('Error while loading http://localhost:3000/wrong.raml');
 
-      it('should display error page if RAML is wrong', function () {
-        // Arrange
-        var po      = factory.create('initializer');
-        var errorPO = factory.create('error');
+      expect(errorPO.errorMessage.isPresent()).toBe(true);
+      expect(errorPO.getErrorMessage()).toBe('unknown property ti tle');
 
-        // Act
-        po.get();
-        po.setRamlPath(url.resolve(browser.baseUrl, '/wrong.raml'));
-        po.loadRamlFromUrl();
+      expect(errorPO.errorSnippet.isPresent()).toBe(true);
+      expect(errorPO.getErrorSnippet()).toBe('ti tle: Example API');
 
-        // Assert
-        expect(errorPO.title.isPresent()).toBe(true);
-        expect(errorPO.getTitle()).toBe('Error while loading http://localhost:3000/wrong.raml');
+      errorPO.getRaml().then(function (value) {
+        var expected = po.examples.minimum.join('').replace(/ /g, '');
 
-        expect(errorPO.errorMessage.isPresent()).toBe(true);
-        expect(errorPO.getErrorMessage()).toBe('unknown property ti tle');
+        value = value.split('\n').join('').replace(/ /g, '');
 
-        expect(errorPO.errorSnippet.isPresent()).toBe(true);
-        expect(errorPO.getErrorSnippet()).toBe('ti tle: Example API');
-
-        errorPO.getRaml().then(function (value) {
-          var expected = po.examples.minimum.join('').replace(/ /g, '');
-
-          value = value.split('\n').join('').replace(/ /g, '');
-
-          expect(value).toBe(expected);
-        });
-      });
-    });
-
-    describe('Load from RAML text', function () {
-      it('should diplay a RAML', function () {
-        // Arrange
-        var po          = factory.create('initializer');
-        var resourcesPO = factory.create('resources');
-
-        // Act
-        po.get();
-        po.setRaml(po.examples.minimum);
-        po.loadRaml();
-
-        // Assert
-        expect(resourcesPO.title.isPresent()).toBe(true);
-        expect(resourcesPO.getTitle()).toBe('Example API');
-      });
-
-      it('should display error page if RAML is wrong', function () {
-        // Arrange
-        var po      = factory.create('initializer');
-        var errorPO = factory.create('error');
-
-        // Act
-        po.get();
-        po.setRaml(po.examples.wrong);
-        po.loadRaml();
-
-        // Assert
-        expect(errorPO.title.isPresent()).toBe(true);
-        expect(errorPO.getTitle()).toBe('Error while loading');
-
-        expect(errorPO.errorMessage.isPresent()).toBe(true);
-        expect(errorPO.getErrorMessage()).toBe('unknown property ti tle');
-
-        expect(errorPO.errorSnippet.isPresent()).toBe(true);
-        expect(errorPO.getErrorSnippet()).toBe('ti tle: Example API');
-
-        errorPO.getRaml().then(function (value) {
-          var expected = po.examples.minimum.join('').replace(/ /g, '');
-
-          value = value.split('\n').join('').replace(/ /g, '');
-
-          expect(value).toBe(expected);
-        });
+        expect(value).toBe(expected);
       });
     });
   });
-});
+
+  describe('Load from RAML text', function () {
+    it('should diplay a RAML', function () {
+      // Arrange
+      var po          = factory.create('initializer');
+      var resourcesPO = factory.create('resources');
+
+      // Act
+      po.get();
+      po.setRaml(po.examples.minimum);
+      po.loadRaml();
+
+      // Assert
+      expect(resourcesPO.title.isPresent()).toBe(true);
+      expect(resourcesPO.getTitle()).toBe('Example API');
+    });
+
+    it('should display error page if RAML is wrong', function () {
+      // Arrange
+      var po      = factory.create('initializer');
+      var errorPO = factory.create('error');
+
+      // Act
+      po.get();
+      po.setRaml(po.examples.wrong);
+      po.loadRaml();
+
+      // Assert
+      expect(errorPO.title.isPresent()).toBe(true);
+      expect(errorPO.getTitle()).toBe('Error while loading');
+
+      expect(errorPO.errorMessage.isPresent()).toBe(true);
+      expect(errorPO.getErrorMessage()).toBe('unknown property ti tle');
+
+      expect(errorPO.errorSnippet.isPresent()).toBe(true);
+      expect(errorPO.getErrorSnippet()).toBe('ti tle: Example API');
+
+      errorPO.getRaml().then(function (value) {
+        var expected = po.examples.minimum.join('').replace(/ /g, '');
+
+        value = value.split('\n').join('').replace(/ /g, '');
+
+        expect(value).toBe(expected);
+      });
+    });
+  });
+};
