@@ -545,7 +545,9 @@
           if ($scope.context.bodyContent) {
             var current      = $scope.context.bodyContent.selected;
             var definition   = $scope.context.bodyContent.definitions[current];
-            $scope.context.bodyContent.definitions[current].value = definition.contentType.example;
+            if (definition.contentType) {
+              $scope.context.bodyContent.definitions[current].value = definition.contentType.example;
+            }
           }
         };
 
@@ -2256,6 +2258,12 @@ RAML.Inspector = (function() {
     this.contentTypes.forEach(function(contentType) {
       var definition = contentTypes[contentType] || {};
 
+      if (definition.formParameters) {
+        Object.keys(definition.formParameters).map(function (key) {
+          definition.formParameters[key][0].id = key;
+        });
+      }
+
       switch (contentType) {
       case FORM_URLENCODED:
       case FORM_DATA:
@@ -2846,8 +2854,30 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "              </div>\n" +
     "            </div>\n" +
     "\n" +
-    "            <div class=\"sidebar-row\">\n" +
-    "              <div class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2 }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
+    "            <div class=\"sidebar-row\" ng-switch=\"context.bodyContent.isForm(context.bodyContent.selected)\">\n" +
+    "              <div ng-switch-when=\"false\" class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2 }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
+    "\n" +
+    "              <div ng-switch-when=\"true\">\n" +
+    "                <p class=\"sidebar-input-container\" ng-repeat=\"param in context.bodyContent.definitions[context.bodyContent.selected].plain\">\n" +
+    "                  <span class=\"sidebar-input-tooltip-container\" ng-if=\"param.definitions[0].description\">\n" +
+    "                    <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
+    "                    <span class=\"sidebar-tooltip-flyout\">\n" +
+    "                      <span marked=\"param.definitions[0].description\"></span>\n" +
+    "                    </span>\n" +
+    "                  </span>\n" +
+    "                  <label for=\"{{param.definitions[0].id}}\" class=\"sidebar-label\">{{param.definitions[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"param.definitions[0].required\">*</span></label>\n" +
+    "\n" +
+    "                  <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(param.definitions[0].example)\">\n" +
+    "                    <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"reset(param.definitions)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                    <span class=\"sidebar-tooltip-flyout-left\">\n" +
+    "                      <span>Use example value</span>\n" +
+    "                    </span>\n" +
+    "                  </span>\n" +
+    "\n" +
+    "                  <input class=\"sidebar-input\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(param.definitions[0].example)}\" validate=\"param.definitions[0]\" dynamic-name=\"param.definitions[0].id\" />\n" +
+    "                  <span class=\"field-validation-error\"></span>\n" +
+    "                </p>\n" +
+    "              </div>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
@@ -2892,7 +2922,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "                <div ng-if=\"requestOptions.data\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Body</h3>\n" +
-    "                  <pre class=\"sidebar-pre sidebar-request-body\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }\" ng-model=\"requestOptions.data\"></code></pre>\n" +
+    "                  <div ng-switch=\"context.bodyContent.isForm(context.bodyContent.selected)\">\n" +
+    "                    <pre ng-switch-when=\"false\" class=\"sidebar-pre sidebar-request-body\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }\" ng-model=\"requestOptions.data\"></code></pre>\n" +
+    "                    <div ng-switch-when=\"true\" class=\"sidebar-response-item\">\n" +
+    "                      <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values\">\n" +
+    "                        <b>{{key}}:</b> <br>{{value}}\n" +
+    "                      </p>\n" +
+    "                    </div>\n" +
+    "                  </div>\n" +
     "                </div>\n" +
     "              </div>\n" +
     "            </div>\n" +

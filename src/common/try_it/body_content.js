@@ -12,6 +12,12 @@
     this.contentTypes.forEach(function(contentType) {
       var definition = contentTypes[contentType] || {};
 
+      if (definition.formParameters) {
+        Object.keys(definition.formParameters).map(function (key) {
+          definition.formParameters[key][0].id = key;
+        });
+      }
+
       switch (contentType) {
       case FORM_URLENCODED:
       case FORM_DATA:

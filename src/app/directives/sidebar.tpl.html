@@ -54,8 +54,30 @@
               </div>
             </div>
 
-            <div class="sidebar-row">
-              <div class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+            <div class="sidebar-row" ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
+              <div ng-switch-when="false" class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+
+              <div ng-switch-when="true">
+                <p class="sidebar-input-container" ng-repeat="param in context.bodyContent.definitions[context.bodyContent.selected].plain">
+                  <span class="sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
+                    <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
+                    <span class="sidebar-tooltip-flyout">
+                      <span marked="param.definitions[0].description"></span>
+                    </span>
+                  </span>
+                  <label for="{{param.definitions[0].id}}" class="sidebar-label">{{param.definitions[0].displayName}} <span class="side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
+
+                  <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(param.definitions[0].example)">
+                    <button tabindex="-1" class="sidebar-input-reset" ng-click="reset(param.definitions)"><span class="visuallyhidden">Reset field</span></button>
+                    <span class="sidebar-tooltip-flyout-left">
+                      <span>Use example value</span>
+                    </span>
+                  </span>
+
+                  <input class="sidebar-input" ng-model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param.definitions[0].example)}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" />
+                  <span class="field-validation-error"></span>
+                </p>
+              </div>
             </div>
           </section>
 
@@ -100,7 +122,14 @@
 
                 <div ng-if="requestOptions.data">
                   <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-                  <pre class="sidebar-pre sidebar-request-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="requestOptions.data"></code></pre>
+                  <div ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
+                    <pre ng-switch-when="false" class="sidebar-pre sidebar-request-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="requestOptions.data"></code></pre>
+                    <div ng-switch-when="true" class="sidebar-response-item">
+                      <p class="sidebar-response-metadata" ng-repeat="(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values">
+                        <b>{{key}}:</b> <br>{{value}}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
