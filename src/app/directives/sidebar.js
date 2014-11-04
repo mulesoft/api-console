@@ -222,7 +222,7 @@
             var scheme          = securitySchemes && securitySchemes[$scope.currentScheme.name];
 
             //// TODO: Make a uniform interface
-            if (scheme.type === 'OAuth 2.0') {
+            if (scheme && scheme.type === 'OAuth 2.0') {
               authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
               authStrategy.authenticate($scope.requestOptions, handleResponse);
               return;
