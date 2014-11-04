@@ -100,6 +100,17 @@
           $scope.responseInfo[code].currentType = type;
         };
 
+        $scope.changeResourceBodyType = function ($event, type) {
+          var $this        = jQuery($event.currentTarget);
+          var $panel       = $this.closest('.request-body-heading');
+          var $eachContent = $panel.find('span');
+
+          $eachContent.removeClass('isActive');
+          $this.addClass('isActive');
+
+          $scope.currentBodySelected = type;
+        };
+
         $scope.showSchema = function ($event) {
           var $this   = jQuery($event.currentTarget);
           var $panel  = $this.closest('.resource-panel');
@@ -108,10 +119,12 @@
           $this.toggleClass('is-active');
 
           if (!$schema.hasClass('is-active')) {
+            $this.text('Hide Schema');
             $schema
               .addClass('is-active')
               .velocity('slideDown');
           } else {
+            $this.text('Show Schema');
             $schema
               .removeClass('is-active')
               .velocity('slideUp');
@@ -201,8 +214,9 @@
           var $resource         = $this.closest('.resource');
           var $resourceListItem = $resource.parent('li');
           var $closingEl;
+          var methodInfo        = $scope.resource.methods[$index];
 
-          $scope.methodInfo               = $scope.resource.methods[$index];
+          $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
           $scope.context                  = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
           $scope.requestUrl               = '';
@@ -217,10 +231,13 @@
           $scope.credentials              = {};
           $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
           $scope.context.customParameters = { headers: [], queryParameters: [] };
+          $scope.currentBodySelected      = methodInfo.body ? Object.keys(methodInfo.body)[0] : 'application/json';
 
           toUIModel($scope.methodInfo.queryParameters);
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
+
+          console.log(methodInfo);
 
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
@@ -2587,6 +2604,26 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <p marked=\"queryParam[0].description\"></p>\n" +
     "      </div>\n" +
     "    </section>\n" +
+    "\n" +
+    "    <section class=\"resource-section\" ng-if=\"methodInfo.body\">\n" +
+    "      <h3 class=\"resource-heading-a\">\n" +
+    "        Body\n" +
+    "      </h3>\n" +
+    "\n" +
+    "      <h4 class=\"request-body-heading\">\n" +
+    "        <span ng-click=\"changeResourceBodyType($event, key)\" ng-class=\"{isActive: $first}\" class=\"flag\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</span>\n" +
+    "      </h4>\n" +
+    "\n" +
+    "      <div ng-if=\"methodInfo.body[currentBodySelected].example\">\n" +
+    "        <span>Example:</span>\n" +
+    "        <pre class=\"resource-pre\"><code >{{methodInfo.body[currentBodySelected].example}}</code></pre>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div ng-if=\"methodInfo.body[currentBodySelected].schema\">\n" +
+    "        <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +
+    "        <pre class=\"resource-pre resource-pre-toggle\"><code>{{methodInfo.body[currentBodySelected].schema}}</code></pre>\n" +
+    "      </div>\n" +
+    "    </section>\n" +
     "  </div>\n" +
     "\n" +
     "  <!-- Response -->\n" +
@@ -2606,6 +2643,16 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <div class=\"resource-response\">\n" +
     "        <p marked=\"methodInfo.responses[code].description\"></p>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"resource-response\" ng-if=\"methodInfo.responses[code].headers\">\n" +
+    "        <h4 class=\"resource-body-heading\">Headers</h4>\n" +
+    "\n" +
+    "        <div class=\"resource-param\" ng-repeat=\"header in methodInfo.responses[code].headers\">\n" +
+    "          <h4 class=\"resource-param-heading\">{{header[0].displayName}} <span class=\"resource-param-instructional\">{{header[0].type}}</span></h4>\n" +
+    "\n" +
+    "          <p marked=\"header[0].description\"></p>\n" +
+    "        </div>\n" +
     "      </div>\n" +
     "\n" +
     "      <div class=\"resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
