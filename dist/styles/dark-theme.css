@@ -1010,6 +1010,19 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   background: #bbbbbb;
 }
 
+.request-body-heading > span {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.request-body-heading > span.isActive {
+  background: #bbbbbb;
+}
+
+.request-body-heading span:first-child {
+  margin-left: 0;
+}
+
 .resource-panel {
   position: relative;
   min-height: 500px;

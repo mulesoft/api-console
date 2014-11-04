@@ -57,8 +57,9 @@
           var $resource         = $this.closest('.resource');
           var $resourceListItem = $resource.parent('li');
           var $closingEl;
+          var methodInfo        = $scope.resource.methods[$index];
 
-          $scope.methodInfo               = $scope.resource.methods[$index];
+          $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
           $scope.context                  = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
           $scope.requestUrl               = '';
@@ -73,10 +74,13 @@
           $scope.credentials              = {};
           $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
           $scope.context.customParameters = { headers: [], queryParameters: [] };
+          $scope.currentBodySelected      = methodInfo.body ? Object.keys(methodInfo.body)[0] : 'application/json';
 
           toUIModel($scope.methodInfo.queryParameters);
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
+
+          console.log(methodInfo);
 
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'

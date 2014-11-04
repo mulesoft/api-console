@@ -7,6 +7,19 @@
   background: #bbbbbb;
 }
 
+.request-body-heading > span {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.request-body-heading > span.isActive {
+  background: #bbbbbb;
+}
+
+.request-body-heading span:first-child {
+  margin-left: 0;
+}
+
 .resource-panel {
   position: relative;
 

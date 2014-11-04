@@ -51,6 +51,26 @@
         <p marked="queryParam[0].description"></p>
       </div>
     </section>
+
+    <section class="resource-section" ng-if="methodInfo.body">
+      <h3 class="resource-heading-a">
+        Body
+      </h3>
+
+      <h4 class="request-body-heading">
+        <span ng-click="changeResourceBodyType($event, key)" ng-class="{isActive: $first}" class="flag" ng-repeat="(key, value) in methodInfo.body">{{key}}</span>
+      </h4>
+
+      <div ng-if="methodInfo.body[currentBodySelected].example">
+        <span>Example:</span>
+        <pre class="resource-pre"><code >{{methodInfo.body[currentBodySelected].example}}</code></pre>
+      </div>
+
+      <div ng-if="methodInfo.body[currentBodySelected].schema">
+        <p><button ng-click="showSchema($event)" class="resource-btn js-schema-toggle">Show Schema</button></p>
+        <pre class="resource-pre resource-pre-toggle"><code>{{methodInfo.body[currentBodySelected].schema}}</code></pre>
+      </div>
+    </section>
   </div>
 
   <!-- Response -->
@@ -70,6 +90,16 @@
 
       <div class="resource-response">
         <p marked="methodInfo.responses[code].description"></p>
+      </div>
+
+      <div class="resource-response" ng-if="methodInfo.responses[code].headers">
+        <h4 class="resource-body-heading">Headers</h4>
+
+        <div class="resource-param" ng-repeat="header in methodInfo.responses[code].headers">
+          <h4 class="resource-param-heading">{{header[0].displayName}} <span class="resource-param-instructional">{{header[0].type}}</span></h4>
+
+          <p marked="header[0].description"></p>
+        </div>
       </div>
 
       <div class="resource-response" ng-if="methodInfo.responses[code].body">
