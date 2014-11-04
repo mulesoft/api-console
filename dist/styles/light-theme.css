@@ -1275,6 +1275,16 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   display: block;
 }
 
+.toggle-button, .toggle-button:visited, .toggle-button:active {
+  color: #585961;
+  text-decoration: none;
+  text-transform: capitalize;
+  font-size: 13px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  margin-left: 7px;
+}
+
 .sidebar {
   width: 0;
   flex-shrink: 0;
