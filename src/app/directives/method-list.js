@@ -80,8 +80,6 @@
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
 
-          console.log(methodInfo);
-
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
           };

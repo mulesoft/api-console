@@ -139,6 +139,11 @@
           $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
+          if ($scope.context.bodyContent) {
+            var current      = $scope.context.bodyContent.selected;
+            var definition   = $scope.context.bodyContent.definitions[current];
+            $scope.context.bodyContent.definitions[current].value = definition.contentType.example;
+          }
         };
 
         $scope.toggleBodyType = function ($event, bodyType) {
@@ -169,11 +174,6 @@
             type: schemaType,
             name: name
           };
-        };
-
-        $scope.prefillBody = function (current) {
-          var definition   = $scope.context.bodyContent.definitions[current];
-          definition.value = definition.contentType.example;
         };
 
         $scope.hasExampleValue = function (value) {

@@ -57,10 +57,6 @@
             <div class="sidebar-row">
               <div class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
             </div>
-
-            <div class="sidebar-prefill sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
-              <button class="sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
-            </div>
           </section>
 
           <section>
