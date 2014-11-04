@@ -2661,13 +2661,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <span ng-click=\"changeType($event, key, code)\" ng-class=\"{isActive: $first}\" class=\"flag\" ng-repeat=\"(key, value) in methodInfo.responses[code].body\">{{key}}</span>\n" +
     "        </h4>\n" +
     "\n" +
-    "        <span>Example:</span>\n" +
-    "        <pre ng-if=\"responseInfo[code][responseInfo[code].currentType].example\" class=\"resource-pre\"><code >{{responseInfo[code][responseInfo[code].currentType].example}}</code></pre>\n" +
-    "        <pre ng-if=\"!responseInfo[code][responseInfo[code].currentType].example\" class=\"resource-pre\"><code>Example not defined</code></pre>\n" +
+    "        <div ng-if=\"responseInfo[code][responseInfo[code].currentType].example\">\n" +
+    "          <span>Example:</span>\n" +
+    "          <pre class=\"resource-pre\"><code >{{responseInfo[code][responseInfo[code].currentType].example}}</code></pre>\n" +
+    "        </div>\n" +
     "\n" +
-    "        <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +
-    "        <pre ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>{{responseInfo[code][responseInfo[code].currentType].schema}}</code></pre>\n" +
-    "        <pre ng-if=\"!responseInfo[code][responseInfo[code].currentType].schema\" class=\"resource-pre resource-pre-toggle\"><code>Schema not defined</code></pre>\n" +
+    "        <div ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
+    "          <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +
+    "          <pre class=\"resource-pre resource-pre-toggle\"><code>{{responseInfo[code][responseInfo[code].currentType].schema}}</code></pre>\n" +
+    "        </div>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "\n" +
