@@ -237,8 +237,6 @@
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
 
-          console.log(methodInfo);
-
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
           };
@@ -544,6 +542,11 @@
           $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
+          if ($scope.context.bodyContent) {
+            var current      = $scope.context.bodyContent.selected;
+            var definition   = $scope.context.bodyContent.definitions[current];
+            $scope.context.bodyContent.definitions[current].value = definition.contentType.example;
+          }
         };
 
         $scope.toggleBodyType = function ($event, bodyType) {
@@ -574,11 +577,6 @@
             type: schemaType,
             name: name
           };
-        };
-
-        $scope.prefillBody = function (current) {
-          var definition   = $scope.context.bodyContent.definitions[current];
-          definition.value = definition.contentType.example;
         };
 
         $scope.hasExampleValue = function (value) {
@@ -2850,10 +2848,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2 }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-if=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
-    "              <button class=\"sidebar-action-prefill\" ng-click=\"prefillBody(context.bodyContent.selected)\">Prefill with example</button>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
