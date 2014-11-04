@@ -88,15 +88,14 @@ To run the console, you'll need the following:
 * [Node JS](http://nodejs.org/)
 * [NPM](https://npmjs.org/)
 * [PhantomJS](http://phantomjs.org/) for headless testing
-* [Ruby](https://www.ruby-lang.org/) and [Sass](http://sass-lang.com/) for CSS pre-processing
 * Firefox installed (for in-browser scenario tests)
 
 ### First Time Setup
-1. Install Sass - `gem install sass`
+
 1. Install grunt-cli globally - `npm install -g grunt-cli`
-1. Install bower globally - `npm install -g bower`
-1. Install the console's NPM packages - `npm install`
-1. Install the console's Bower packages - `bower install`
+2. Install bower globally - `npm install -g bower`
+3. Install the console's NPM packages - `npm install`
+4. Install the console's Bower packages - `bower install`
 
 ### Running the server
 
