@@ -949,6 +949,27 @@
           $section.toggleClass('is-collapsed');
           $this.toggleClass('is-active');
         };
+
+        $scope.collapseAll = function ($event) {
+          var $this = jQuery($event.currentTarget);
+
+          if ($this.hasClass('resources-expanded')) {
+            $this.text('expand all');
+            $this.removeClass('resources-expanded');
+            jQuery('body').find('.resource-list-root ol.resource-list').velocity('slideUp', {
+              duration: 200
+            });
+          } else {
+            $this.text('collapse all');
+            $this.addClass('resources-expanded');
+            jQuery('body').find('.resource-list-root ol.resource-list').velocity('slideDown', {
+              duration: 200
+            });
+          }
+
+          jQuery('body').find('.resource-list-root ol.resource-list').toggleClass('is-collapsed');
+          jQuery('body').find('.resource-list-root li.resource-list-item header button.resource-root-toggle').toggleClass('is-active');
+        };
       },
       link: function($scope) {
         $scope.loaded     = false;
@@ -3063,6 +3084,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <input type=\"checkbox\" ng-model=\"disableProxy\" ng-change=\"updateProxyConfig(disableProxy)\">\n" +
     "    </div>\n" +
     "\n" +
+    "    <div>\n" +
+    "      <a class=\"toggle-button resources-expanded\" href=\"\" ng-click=\"collapseAll($event)\">collapse All</a>\n" +
+    "    </div>\n" +
+    "\n" +
     "    <ol class=\"resource-list resource-list-root\">\n" +
     "      <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "        <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
@@ -3083,7 +3108,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <resource-panel></resource-panel>\n" +
     "\n" +
     "        <!-- Child Resources -->\n" +
-    "        <ol class=\"resource-list is-collapsed\">\n" +
+    "        <ol class=\"resource-list\">\n" +
     "          <li class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
     "            <div class=\"resource clearfix\">\n" +
     "              <div class=\"resource-path-container\">\n" +

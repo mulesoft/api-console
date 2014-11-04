@@ -64,6 +64,10 @@
       <input type="checkbox" ng-model="disableProxy" ng-change="updateProxyConfig(disableProxy)">
     </div>
 
+    <div>
+      <a class="toggle-button resources-expanded" href="" ng-click="collapseAll($event)">collapse All</a>
+    </div>
+
     <ol class="resource-list resource-list-root">
       <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
         <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
@@ -84,7 +88,7 @@
         <resource-panel></resource-panel>
 
         <!-- Child Resources -->
-        <ol class="resource-list is-collapsed">
+        <ol class="resource-list">
           <li class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
             <div class="resource clearfix">
               <div class="resource-path-container">

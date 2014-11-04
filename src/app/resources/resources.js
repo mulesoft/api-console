@@ -47,6 +47,27 @@
           $section.toggleClass('is-collapsed');
           $this.toggleClass('is-active');
         };
+
+        $scope.collapseAll = function ($event) {
+          var $this = jQuery($event.currentTarget);
+
+          if ($this.hasClass('resources-expanded')) {
+            $this.text('expand all');
+            $this.removeClass('resources-expanded');
+            jQuery('body').find('.resource-list-root ol.resource-list').velocity('slideUp', {
+              duration: 200
+            });
+          } else {
+            $this.text('collapse all');
+            $this.addClass('resources-expanded');
+            jQuery('body').find('.resource-list-root ol.resource-list').velocity('slideDown', {
+              duration: 200
+            });
+          }
+
+          jQuery('body').find('.resource-list-root ol.resource-list').toggleClass('is-collapsed');
+          jQuery('body').find('.resource-list-root li.resource-list-item header button.resource-root-toggle').toggleClass('is-active');
+        };
       },
       link: function($scope) {
         $scope.loaded     = false;
