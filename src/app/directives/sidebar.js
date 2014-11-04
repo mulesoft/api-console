@@ -142,7 +142,9 @@
           if ($scope.context.bodyContent) {
             var current      = $scope.context.bodyContent.selected;
             var definition   = $scope.context.bodyContent.definitions[current];
-            $scope.context.bodyContent.definitions[current].value = definition.contentType.example;
+            if (definition.contentType) {
+              $scope.context.bodyContent.definitions[current].value = definition.contentType.example;
+            }
           }
         };
 
