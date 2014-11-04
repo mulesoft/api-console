@@ -78,11 +78,9 @@
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
 
-          if ($scope.methodInfo.allowsAnonymousAccess()) {
-            $scope.securitySchemes.anonymous = {
-              type: 'Anonymous'
-            };
-          }
+          $scope.securitySchemes.anonymous = {
+            type: 'Anonymous'
+          };
 
           var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
           $scope.currentScheme = {
