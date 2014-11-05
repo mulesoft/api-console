@@ -33,6 +33,17 @@ module.exports = function() {
     assert.ifResourceNameIsPresentAt('/resource2', 4);
   });
 
+  it('should be able to display security schemes', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+
+    // Act
+    browser.get('http://localhost:3000?raml=http://localhost:3000/raml/security-schemes.raml');
+
+    // Assert
+    assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+  });
+
   it('should be able to diplay all HTTP methods', function () {
     // Arrange
     var assert = assertions.create('resource');

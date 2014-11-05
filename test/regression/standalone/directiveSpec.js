@@ -34,6 +34,19 @@ module.exports = function() {
     assert.ifResourceNameIsPresentAt('/resource2', 4);
   });
 
+  it('should be able to display security schemes', function () {
+    // Arrange
+    var server = new Server(3005, 'security-schemes.raml', 'directive.tpl.html');
+    var assert = assertions.create('resource');
+
+    // Act
+    server.start();
+    browser.get('http://localhost:3005');
+
+    // Assert
+    assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+  });
+
   it('should be able to diplay all HTTP methods', function () {
     // Arrange
     var server = new Server(3003, 'all-methods.raml', 'directive.tpl.html');

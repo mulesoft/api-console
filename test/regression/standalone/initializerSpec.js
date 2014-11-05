@@ -55,6 +55,20 @@ module.exports = function() {
       assert.ifResourceNameIsPresentAt('/resource2', 4);
     });
 
+    it('should be able to display security schemes', function () {
+      // Arrange
+      var po     = factory.create('initializer');
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:3000');
+      po.setRamlPath('http://localhost:3000/raml/security-schemes.raml');
+      po.loadRamlFromUrl();
+
+      // Assert
+      assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+    });
+
     it('should be able to diplay all HTTP methods', function () {
       // Arrange
       var po     = factory.create('initializer');
@@ -119,6 +133,20 @@ module.exports = function() {
       assert.ifNestedResourceNameIsPresentAt('/resource1/nested/{id}', 2);
       assert.ifNestedResourceNameIsPresentAt('/resource1/nested/{id}/nested', 3);
       assert.ifResourceNameIsPresentAt('/resource2', 4);
+    });
+
+    it('should be able to display security schemes', function () {
+      // Arrange
+      var po     = factory.create('initializer');
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:3000');
+      po.setRaml(po.examples['security-schemes']);
+      po.loadRaml();
+
+      // Assert
+      assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
     });
 
     it('should be able to diplay all HTTP methods', function () {
