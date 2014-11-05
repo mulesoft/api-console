@@ -3,8 +3,8 @@
 var basePO = require('./basePO');
 
 function ResourcesPO () {
-  this.title     = element(by.css('.title'));
-  this.resources = element.all(by.css('.resource-list-item'));
+  this.title           = element(by.css('.title'));
+  this.resources       = element.all(by.css('.resource-list-item'));
 
   this.getTitle = function () {
     return this.title.getText();
@@ -32,6 +32,14 @@ function ResourcesPO () {
 
   this.getMethodTitleAt = function (resource, method) {
     return this.getMethodsForResourceAt(resource).get(method).element(by.css('.tab-label')).getText();
+  };
+
+  this.getMethodBtn = function (resource, method) {
+    return this.getMethodsForResourceAt(resource).get(method).element(by.css('.tab-label'));
+  };
+
+  this.getSecuritySchemes = function (resource) {
+    return this.resources.get(resource).all(by.css('.sidebar-toggle-group .toggle'));
   };
 }
 
