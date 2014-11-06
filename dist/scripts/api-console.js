@@ -3023,7 +3023,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "\n" +
     "    <!-- Sidebar control to full-screen/full-width view -->\n" +
-    "    <div class=\"sidebar-controls sidebar-controls-fullscreen js-sidebar-fullscreen\">\n" +
+    "    <div class=\"sidebar-controls sidebar-controls-fullscreen js-sidebar-fullscreen\" ng-click=\"toggleSidebar($event)\">\n" +
     "      <button class=\"collapse\">\n" +
     "        <span class=\"discoverable\">Try it</span>\n" +
     "        <img src=\"img/icn-expand.svg\" alt=\"\">\n" +
