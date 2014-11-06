@@ -106,7 +106,7 @@
           });
         }
 
-        function getParameters(context, type) {
+        function getParameters (context, type) {
           var params           = {};
           var customParameters = context.customParameters[type];
 
@@ -197,6 +197,13 @@
           try {
             var pathBuilder = context.pathBuilder;
             var client      = RAML.Client.create($scope.raml, function(client) {
+              if ($scope.raml.baseUriParameters) {
+                Object.keys($scope.raml.baseUriParameters).map(function (key) {
+                  var uriParameters = $scope.context.uriParameters.data();
+                  pathBuilder.baseUriContext[key] = uriParameters[key][0];
+                  delete uriParameters[key];
+                });
+              }
               client.baseUriParameters(pathBuilder.baseUriContext);
             });
             url = client.baseUri + pathBuilder(segmentContexts);
@@ -207,7 +214,9 @@
 
           var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
 
-          request.queryParams(getParameters(context, 'queryParameters'));
+          $scope.parameters = getParameters(context, 'queryParameters');
+
+          request.queryParams($scope.parameters);
           request.headers(getParameters(context, 'headers'));
 
           if (context.bodyContent) {

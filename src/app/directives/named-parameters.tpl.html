@@ -13,6 +13,11 @@
       <input name="custom-header" class="sidebar-input sidebar-input-custom" placeholder="custom value" ng-model="customParam.value">
     </p>
 
+    <p ng-show="showBaseUrl" class="sidebar-method">{{$parent.methodInfo.method.toUpperCase()}}</p>
+    <div ng-show="showBaseUrl" class="sidebar-method-content">
+      <p class="sidebar-url">{{$parent.raml.baseUri.toString()}}</p>
+    </div>
+
     <p class="sidebar-input-container" ng-repeat="param in context[type].plain">
       <span class="sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
         <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>

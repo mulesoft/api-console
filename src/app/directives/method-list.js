@@ -61,7 +61,7 @@
 
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
-          $scope.context                  = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
+          $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, $scope.resource, $scope.methodInfo);
           $scope.requestUrl               = '';
           $scope.response                 = {};
           $scope.requestOptions           = {};

@@ -82,8 +82,12 @@
         }
       }
 
+      o.baseUrl = options.uri;
+
       if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.uri.match('\\?') ? '&' : '?');
+
+        o.baseUrl = options.uri + separator;
         o.uri = options.uri + separator + jQuery.param(queryParams, true);
       }
 
