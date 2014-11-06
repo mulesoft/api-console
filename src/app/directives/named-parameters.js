@@ -17,6 +17,10 @@
           $scope.enableCustomParameters = true;
         }
 
+        if ($attrs.hasOwnProperty('showBaseUrl')) {
+          $scope.showBaseUrl = true;
+        }
+
         $scope.reset = function (param) {
           $scope.context[$scope.type].reset($scope.src, param[0].id);
         };

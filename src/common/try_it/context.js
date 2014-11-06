@@ -1,9 +1,18 @@
 (function() {
   'use strict';
 
-  var Context = function(resource, method) {
+  var Context = function(baseUriParameters, resource, method) {
     this.headers = new RAML.Services.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
     this.queryParameters = new RAML.Services.TryIt.NamedParameters(method.queryParameters);
+
+    resource.uriParametersForDocumentation = resource.uriParametersForDocumentation || {};
+
+    if (baseUriParameters) {
+      Object.keys(baseUriParameters).map(function (key) {
+        resource.uriParametersForDocumentation[key] = [baseUriParameters[key]];
+      });
+    }
+
     this.uriParameters = new RAML.Services.TryIt.NamedParameters(resource.uriParametersForDocumentation);
 
     if (method.body) {

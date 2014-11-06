@@ -218,7 +218,7 @@
 
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
-          $scope.context                  = new RAML.Services.TryIt.Context($scope.resource, $scope.methodInfo);
+          $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, $scope.resource, $scope.methodInfo);
           $scope.requestUrl               = '';
           $scope.response                 = {};
           $scope.requestOptions           = {};
@@ -312,6 +312,10 @@
       controller: function ($scope, $attrs) {
         if ($attrs.hasOwnProperty('enableCustomParameters')) {
           $scope.enableCustomParameters = true;
+        }
+
+        if ($attrs.hasOwnProperty('showBaseUrl')) {
+          $scope.showBaseUrl = true;
         }
 
         $scope.reset = function (param) {
@@ -509,7 +513,7 @@
           });
         }
 
-        function getParameters(context, type) {
+        function getParameters (context, type) {
           var params           = {};
           var customParameters = context.customParameters[type];
 
@@ -600,6 +604,13 @@
           try {
             var pathBuilder = context.pathBuilder;
             var client      = RAML.Client.create($scope.raml, function(client) {
+              if ($scope.raml.baseUriParameters) {
+                Object.keys($scope.raml.baseUriParameters).map(function (key) {
+                  var uriParameters = $scope.context.uriParameters.data();
+                  pathBuilder.baseUriContext[key] = uriParameters[key][0];
+                  delete uriParameters[key];
+                });
+              }
               client.baseUriParameters(pathBuilder.baseUriContext);
             });
             url = client.baseUri + pathBuilder(segmentContexts);
@@ -610,7 +621,9 @@
 
           var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
 
-          request.queryParams(getParameters(context, 'queryParameters'));
+          $scope.parameters = getParameters(context, 'queryParameters');
+
+          request.queryParams($scope.parameters);
           request.headers(getParameters(context, 'headers'));
 
           if (context.bodyContent) {
@@ -1809,8 +1822,12 @@
         }
       }
 
+      o.baseUrl = options.uri;
+
       if (!RAML.Utils.isEmpty(queryParams)) {
         var separator = (options.uri.match('\\?') ? '&' : '?');
+
+        o.baseUrl = options.uri + separator;
         o.uri = options.uri + separator + jQuery.param(queryParams, true);
       }
 
@@ -2366,9 +2383,18 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  var Context = function(resource, method) {
+  var Context = function(baseUriParameters, resource, method) {
     this.headers = new RAML.Services.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
     this.queryParameters = new RAML.Services.TryIt.NamedParameters(method.queryParameters);
+
+    resource.uriParametersForDocumentation = resource.uriParametersForDocumentation || {};
+
+    if (baseUriParameters) {
+      Object.keys(baseUriParameters).map(function (key) {
+        resource.uriParametersForDocumentation[key] = [baseUriParameters[key]];
+      });
+    }
+
     this.uriParameters = new RAML.Services.TryIt.NamedParameters(resource.uriParametersForDocumentation);
 
     if (method.body) {
@@ -2734,6 +2760,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <input name=\"custom-header\" class=\"sidebar-input sidebar-input-custom\" placeholder=\"custom value\" ng-model=\"customParam.value\">\n" +
     "    </p>\n" +
     "\n" +
+    "    <p ng-show=\"showBaseUrl\" class=\"sidebar-method\">{{$parent.methodInfo.method.toUpperCase()}}</p>\n" +
+    "    <div ng-show=\"showBaseUrl\" class=\"sidebar-method-content\">\n" +
+    "      <p class=\"sidebar-url\">{{$parent.raml.baseUri.toString()}}</p>\n" +
+    "    </div>\n" +
+    "\n" +
     "    <p class=\"sidebar-input-container\" ng-repeat=\"param in context[type].plain\">\n" +
     "      <span class=\"sidebar-input-tooltip-container\" ng-if=\"param.definitions[0].description\">\n" +
     "        <button tabindex=\"-1\" class=\"sidebar-input-tooltip\"><span class=\"visuallyhidden\">Show documentation</span></button>\n" +
@@ -2841,7 +2872,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"sidebar-content-wrapper\">\n" +
     "          <section>\n" +
-    "            <header class=\"sidebar-row sidebar-subheader sidebar-subheader-top\">\n" +
+    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
     "              <h4 class=\"sidebar-subhead\">Authentication</h4>\n" +
     "            </header>\n" +
     "\n" +
@@ -2858,7 +2889,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" title=\"URI Parameters\"></named-parameters>\n" +
+    "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" title=\"URI Parameters\" show-base-url></named-parameters>\n" +
     "\n" +
     "          <named-parameters src=\"methodInfo.headers.plain\" context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
@@ -2928,7 +2959,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                <div ng-if=\"requestOptions.uri\">\n" +
     "                  <h3 class=\"sidebar-response-head sidebar-response-head-pre\">Request URI</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
-    "                    <p class=\"sidebar-response-metadata\">{{requestOptions.uri}}</p>\n" +
+    "                    <p class=\"sidebar-response-metadata sidebar-request-url\">{{requestOptions.baseUrl}}<span ng-repeat=\"(key, value) in parameters\"><span ng-hide=\"$first\">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>\n" +
+    "                    </p>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "\n" +
