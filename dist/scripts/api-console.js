@@ -473,6 +473,7 @@
           $scope.requestEnd     = true;
           $scope.showMoreEnable = true;
           $scope.showSpinner    = false;
+          $scope.responseDetails.show();
 
           $scope.editors.map(function (index) {
             var codeMirror = $scope.editors[index].CodeMirror;
@@ -600,6 +601,7 @@
           $scope.toggleSidebar($event, true);
           $scope.toggleRequestMetadata($event, true);
           $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+          $scope.responseDetails = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.side-bar-try-it-description');
 
           try {
             var pathBuilder = context.pathBuilder;
@@ -2944,7 +2946,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section>\n" +
+    "          <section class=\"side-bar-try-it-description\">\n" +
     "            <header class=\"sidebar-row sidebar-header\">\n" +
     "              <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
     "                <button ng-class=\"{'is-open':showRequestMetadata, 'is-collapsed':!showRequestMetadata}\" class=\"sidebar-expand-btn js-toggle-request-metadata\" ng-click=\"toggleRequestMetadata()\">\n" +
@@ -2988,7 +2990,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section>\n" +
+    "          <section class=\"side-bar-try-it-description\">\n" +
     "            <header class=\"sidebar-row sidebar-header\">\n" +
     "              <h3 class=\"sidebar-head\">Response</h3>\n" +
     "            </header>\n" +

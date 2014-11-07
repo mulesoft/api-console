@@ -66,6 +66,7 @@
           $scope.requestEnd     = true;
           $scope.showMoreEnable = true;
           $scope.showSpinner    = false;
+          $scope.responseDetails.show();
 
           $scope.editors.map(function (index) {
             var codeMirror = $scope.editors[index].CodeMirror;
@@ -193,6 +194,7 @@
           $scope.toggleSidebar($event, true);
           $scope.toggleRequestMetadata($event, true);
           $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+          $scope.responseDetails = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.side-bar-try-it-description');
 
           try {
             var pathBuilder = context.pathBuilder;
