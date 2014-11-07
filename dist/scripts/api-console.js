@@ -368,7 +368,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return typeof value !== 'undefined' ? true : false;
+          return value.type === 'boolean' ? false : typeof value.enum !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
         };
 
         $scope.addCustomParameter = function () {
@@ -379,6 +379,18 @@
           $scope.context.customParameters[$scope.type] = $scope.context.customParameters[$scope.type].filter(function (el) {
             return el.name !== param.name;
           });
+        };
+
+        $scope.isDefault = function (definition) {
+          return typeof definition.enum === 'undefined' && definition.type !== 'boolean';
+        };
+
+        $scope.isEnum = function (definition) {
+          return typeof definition.enum !== 'undefined';
+        };
+
+        $scope.isBoolean = function (definition) {
+          return definition.type === 'boolean';
         };
       }
     };
@@ -1831,6 +1843,10 @@
       for (var name in headers) {
         this.header(name, headers[name]);
       }
+
+      if (Object.keys(options.headers).length === 0) {
+        options.headers = null;
+      }
     };
 
     this.toOptions = function() {
@@ -1866,10 +1882,12 @@
 
         o.baseUrl = options.uri + separator;
         o.uri = options.uri + separator + jQuery.param(queryParams, true);
+        o.url = options.url + separator + jQuery.param(queryParams, true);
       }
 
       if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
         o.uri = RAML.Settings.proxy + o.uri;
+        o.url = RAML.Settings.proxy + o.url;
       }
 
       return o;
@@ -2823,14 +2841,21 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </span>\n" +
     "      <label for=\"{{param.definitions[0].id}}\" class=\"sidebar-label\">{{param.definitions[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"param.definitions[0].required\">*</span></label>\n" +
     "\n" +
-    "      <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(param.definitions[0].example)\">\n" +
+    "      <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(param.definitions[0])\">\n" +
     "        <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"reset(param.definitions)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "        <span class=\"sidebar-tooltip-flyout-left\">\n" +
     "          <span>Use example value</span>\n" +
     "        </span>\n" +
     "      </span>\n" +
     "\n" +
-    "      <input class=\"sidebar-input\" ng-model=\"context[type].values[param.definitions[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(param.definitions[0].example)}\" validate=\"param.definitions[0]\" dynamic-name=\"param.definitions[0].id\" />\n" +
+    "      <select ng-if=\"isEnum(param.definitions[0])\" name=\"param.definitions[0].id\" class=\"sidebar-input\" ng-model=\"context[type].values[param.definitions[0].id][0]\" style=\"margin-bottom: 0;\">\n" +
+    "       <option ng-repeat=\"enum in param.definitions[0].enum\" value=\"{{enum}}\">{{enum}}</option>\n" +
+    "      </select>\n" +
+    "\n" +
+    "      <input ng-if=\"isDefault(param.definitions[0])\" class=\"sidebar-input\" ng-model=\"context[type].values[param.definitions[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(param.definitions[0])}\" validate=\"param.definitions[0]\" dynamic-name=\"param.definitions[0].id\" />\n" +
+    "\n" +
+    "      <input ng-if=\"isBoolean(param.definitions[0])\" class=\"sidebar-input\" type=\"checkbox\" ng-model=\"context[type].values[param.definitions[0].id][0]\" dynamic-name=\"param.definitions[0].id\">\n" +
+    "\n" +
     "      <span class=\"field-validation-error\"></span>\n" +
     "    </p>\n" +
     "  </div>\n" +
@@ -3015,6 +3040,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                    </p>\n" +
     "                  </div>\n" +
     "                </div>\n" +
+    "\n" +
+    "                {{requestOptions.headers}}\n" +
     "\n" +
     "                <div ng-if=\"requestOptions.headers\">\n" +
     "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +

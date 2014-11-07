@@ -54,6 +54,10 @@
       for (var name in headers) {
         this.header(name, headers[name]);
       }
+
+      if (Object.keys(options.headers).length === 0) {
+        options.headers = null;
+      }
     };
 
     this.toOptions = function() {
@@ -89,10 +93,12 @@
 
         o.baseUrl = options.uri + separator;
         o.uri = options.uri + separator + jQuery.param(queryParams, true);
+        o.url = options.url + separator + jQuery.param(queryParams, true);
       }
 
       if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
         o.uri = RAML.Settings.proxy + o.uri;
+        o.url = RAML.Settings.proxy + o.url;
       }
 
       return o;

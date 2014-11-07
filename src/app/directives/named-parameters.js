@@ -26,7 +26,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return typeof value !== 'undefined' ? true : false;
+          return value.type === 'boolean' ? false : typeof value.enum !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
         };
 
         $scope.addCustomParameter = function () {
@@ -37,6 +37,18 @@
           $scope.context.customParameters[$scope.type] = $scope.context.customParameters[$scope.type].filter(function (el) {
             return el.name !== param.name;
           });
+        };
+
+        $scope.isDefault = function (definition) {
+          return typeof definition.enum === 'undefined' && definition.type !== 'boolean';
+        };
+
+        $scope.isEnum = function (definition) {
+          return typeof definition.enum !== 'undefined';
+        };
+
+        $scope.isBoolean = function (definition) {
+          return definition.type === 'boolean';
         };
       }
     };
