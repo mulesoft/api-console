@@ -69,7 +69,7 @@
     </div>
 
     <ol class="resource-list resource-list-root">
-      <li class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
+      <li id="{{generateId(resource.pathSegments)}}" class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
         <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
           <div class="resource-path-container">
             <button class="resource-root-toggle" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
@@ -89,7 +89,7 @@
 
         <!-- Child Resources -->
         <ol class="resource-list">
-          <li class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
+          <li id="{{generateId(resource.pathSegments)}}" class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
             <div class="resource clearfix">
               <div class="resource-path-container">
                 <h3 class="resource-heading">
