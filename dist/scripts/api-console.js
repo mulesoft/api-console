@@ -208,7 +208,7 @@
       restrict: 'E',
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
-      controller: function($scope) {
+      controller: function($scope, $location, $anchorScroll) {
         function getResponseInfo() {
           var responseInfo = {};
           var responses    = $scope.methodInfo.responses;
@@ -253,6 +253,10 @@
           return list.join(', ');
         };
 
+        $scope.generateId = function (path) {
+          return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
+        };
+
         $scope.showResource = function ($event, $index) {
           var $this             = jQuery($event.currentTarget);
           var $inactiveElements = jQuery('.tab').add('.resource').add('li');
@@ -260,6 +264,10 @@
           var $resourceListItem = $resource.parent('li');
           var $closingEl;
           var methodInfo        = $scope.resource.methods[$index];
+          var hash              = $scope.generateId($scope.resource.pathSegments);
+
+          $location.hash(hash);
+          $anchorScroll();
 
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
@@ -3224,7 +3232,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "\n" +
     "    <ol class=\"resource-list resource-list-root\">\n" +
-    "      <li class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
+    "      <li id=\"{{generateId(resource.pathSegments)}}\" class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "        <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
     "          <div class=\"resource-path-container\">\n" +
     "            <button class=\"resource-root-toggle\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
@@ -3244,7 +3252,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <!-- Child Resources -->\n" +
     "        <ol class=\"resource-list\">\n" +
-    "          <li class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
+    "          <li id=\"{{generateId(resource.pathSegments)}}\" class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
     "            <div class=\"resource clearfix\">\n" +
     "              <div class=\"resource-path-container\">\n" +
     "                <h3 class=\"resource-heading\">\n" +
