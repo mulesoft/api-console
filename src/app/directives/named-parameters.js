@@ -21,6 +21,30 @@
           $scope.showBaseUrl = true;
         }
 
+        $scope.canOverride = function (definition) {
+          return definition.type === 'boolean' ||  typeof definition.enum !== 'undefined';
+        };
+
+        $scope.overrideField = function ($event, definition) {
+          var $this      = jQuery($event.currentTarget);
+          var $container = $this.closest('p');
+          var $el        = $container.find('#' + definition.id);
+          var $checkbox  = $container.find('#checkbox_' + definition.id);
+          var $select    = $container.find('#select_' + definition.id);
+
+          $el.toggleClass('sidebar-override-show');
+          $checkbox.toggleClass('sidebar-override-hide');
+          $select.toggleClass('sidebar-override-hide');
+
+          $this.text('Override');
+
+          if($el.hasClass('sidebar-override-show')) {
+            $this.text('Cancel override');
+          } else {
+            $scope.context[$scope.type].values[definition.id][0] = definition.enum[0];
+          }
+        };
+
         $scope.reset = function (param) {
           $scope.context[$scope.type].reset($scope.src, param[0].id);
         };
