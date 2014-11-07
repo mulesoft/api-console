@@ -3,7 +3,7 @@
     <label for="clientId" class="sidebar-label">Authorization Grant</label>
     <select class="sidebar-input" ng-model="credentials.grant">
      <option ng-repeat="grant in grants" value="{{grant.value}}" ng-selected="grant.value=='token'">{{grant.label}}</option>
-  </select>
+    </select>
   </p>
 
   <p class="sidebar-input-container">
