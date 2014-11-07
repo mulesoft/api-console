@@ -429,6 +429,8 @@
         });
       },
       controller: function ($scope) {
+        $scope.currentSchemeType = 'anonymous';
+
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
         }
@@ -574,18 +576,6 @@
           }, 1);
         };
 
-        $scope.toggleSecurity = function ($event, schemaType, name) {
-          var $this  = jQuery($event.currentTarget);
-          var $panel = $this.closest('.sidebar-toggle-group').find('button');
-
-          $panel.removeClass('is-active');
-          $this.addClass('is-active');
-          $scope.currentScheme = {
-            type: schemaType,
-            name: name
-          };
-        };
-
         $scope.hasExampleValue = function (value) {
           return typeof value !== 'undefined' ? true : false;
         };
@@ -639,7 +629,7 @@
 
           try {
             var securitySchemes = $scope.methodInfo.securitySchemes();
-            var scheme          = securitySchemes && securitySchemes[$scope.currentScheme.name];
+            var scheme          = securitySchemes && securitySchemes[$scope.currentSchemeType];
 
             //// TODO: Make a uniform interface
             if (scheme && scheme.type === 'OAuth 2.0') {
@@ -2735,7 +2725,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/method-list.tpl.html',
     "<div class=\"tab-list\">\n" +
-    "  <a class=\"tab\" href=\"#\" ng-repeat=\"method in resource.methods\" ng-click=\"showResource($event, $index)\">\n" +
+    "  <a class=\"tab\" ng-repeat=\"method in resource.methods\" ng-click=\"showResource($event, $index)\">\n" +
     "    <svg class=\"tab-image tab-{{method.method}}\">\n" +
     "      <use xlink:href=\"img/tab.svg#shape\" />\n" +
     "    </svg>\n" +
@@ -2878,16 +2868,19 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "              <h4 class=\"sidebar-subhead\">Authentication</h4>\n" +
     "            </header>\n" +
     "\n" +
-    "            <div class=\"sidebar-row\">\n" +
+    "            <div class=\"sidebar-row sidebar-securty\">\n" +
     "              <div class=\"toggle-group sidebar-toggle-group\">\n" +
-    "                <button ng-click=\"toggleSecurity($event, scheme.type, key)\" class=\"toggle toggle-mini\" ng-class=\"{'is-active': $first}\" ng-repeat=\"(key, scheme) in securitySchemes\">{{scheme.type}}</button>\n" +
+    "                <label class=\"sidebar-label\">Security Scheme</label>\n" +
+    "                <select class=\"sidebar-input\" ng-model=\"currentSchemeType\" style=\"margin-bottom: 0;\">\n" +
+    "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{key}}\" ng-selected=\"key=='anonymous'\">{{scheme.type}}</option>\n" +
+    "                </select>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "\n" +
-    "            <div ng-switch=\"currentScheme.type\">\n" +
-    "              <basic-auth ng-switch-when=\"Basic Authentication\" credentials='credentials'></basic-auth>\n" +
-    "              <oauth1 ng-switch-when=\"OAuth 1.0\" credentials='credentials'></oauth1>\n" +
-    "              <oauth2 ng-switch-when=\"OAuth 2.0\" credentials='credentials'></oauth2>\n" +
+    "            <div ng-switch=\"currentSchemeType\">\n" +
+    "              <basic-auth ng-switch-when=\"basic\" credentials='credentials'></basic-auth>\n" +
+    "              <oauth1 ng-switch-when=\"oauth_1_0\" credentials='credentials'></oauth1>\n" +
+    "              <oauth2 ng-switch-when=\"oauth_2_0\" credentials='credentials'></oauth2>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
@@ -3042,7 +3035,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/theme-switcher.tpl.html',
-    "<a class=\"theme-toggle\" href=\"#\">Switch Theme</a>\n"
+    "<a class=\"theme-toggle\">Switch Theme</a>\n"
   );
 
 
@@ -3208,7 +3201,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <label for=\"clientId\" class=\"sidebar-label\">Authorization Grant</label>\n" +
     "    <select class=\"sidebar-input\" ng-model=\"credentials.grant\">\n" +
     "     <option ng-repeat=\"grant in grants\" value=\"{{grant.value}}\" ng-selected=\"grant.value=='token'\">{{grant.label}}</option>\n" +
-    "  </select>\n" +
+    "    </select>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +

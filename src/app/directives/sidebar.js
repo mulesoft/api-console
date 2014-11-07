@@ -22,6 +22,8 @@
         });
       },
       controller: function ($scope) {
+        $scope.currentSchemeType = 'anonymous';
+
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
         }
@@ -167,18 +169,6 @@
           }, 1);
         };
 
-        $scope.toggleSecurity = function ($event, schemaType, name) {
-          var $this  = jQuery($event.currentTarget);
-          var $panel = $this.closest('.sidebar-toggle-group').find('button');
-
-          $panel.removeClass('is-active');
-          $this.addClass('is-active');
-          $scope.currentScheme = {
-            type: schemaType,
-            name: name
-          };
-        };
-
         $scope.hasExampleValue = function (value) {
           return typeof value !== 'undefined' ? true : false;
         };
@@ -232,7 +222,7 @@
 
           try {
             var securitySchemes = $scope.methodInfo.securitySchemes();
-            var scheme          = securitySchemes && securitySchemes[$scope.currentScheme.name];
+            var scheme          = securitySchemes && securitySchemes[$scope.currentSchemeType];
 
             //// TODO: Make a uniform interface
             if (scheme && scheme.type === 'OAuth 2.0') {

@@ -576,6 +576,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .tab {
   position: relative;
+  cursor: pointer;
   align-self: flex-end;
   height: 18px;
   margin-left: -20px;
@@ -2119,6 +2120,11 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .side-bar-try-it-description {
   display: none;
+}
+
+.sidebar-securty {
+  padding-bottom: 0;
+  padding-top: 0;
 }
 
 /* ==========================================================================
