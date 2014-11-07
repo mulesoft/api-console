@@ -2127,6 +2127,21 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   padding-top: 0;
 }
 
+.sidebar-override-show {
+  display: block !important;
+}
+
+.sidebar-override-hide {
+  display: none;
+}
+
+.sidebar-override {
+  font-weight: normal;
+  float: right;
+  cursor: pointer;
+  margin-right: 1px;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */

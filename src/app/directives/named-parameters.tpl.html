@@ -25,7 +25,7 @@
           <span marked="param.definitions[0].description"></span>
         </span>
       </span>
-      <label for="{{param.definitions[0].id}}" class="sidebar-label">{{param.definitions[0].displayName}} <span class="side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
+      <label for="{{param.definitions[0].id}}" class="sidebar-label">{{param.definitions[0].displayName}} <a class="sidebar-override" ng-if="canOverride(param.definitions[0])" ng-click="overrideField($event, param.definitions[0])">Override</a> <span class="side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
 
       <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(param.definitions[0])">
         <button tabindex="-1" class="sidebar-input-reset" ng-click="reset(param.definitions)"><span class="visuallyhidden">Reset field</span></button>
@@ -34,13 +34,13 @@
         </span>
       </span>
 
-      <select ng-if="isEnum(param.definitions[0])" name="param.definitions[0].id" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" style="margin-bottom: 0;">
+      <select id="select_{{param.definitions[0].id}}" ng-if="isEnum(param.definitions[0])" name="param.definitions[0].id" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" style="margin-bottom: 0;">
        <option ng-repeat="enum in param.definitions[0].enum" value="{{enum}}">{{enum}}</option>
       </select>
 
-      <input ng-if="isDefault(param.definitions[0])" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param.definitions[0])}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" />
+      <input id="{{param.definitions[0].id}}" ng-hide="!isDefault(param.definitions[0])" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param.definitions[0])}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" />
 
-      <input ng-if="isBoolean(param.definitions[0])" class="sidebar-input" type="checkbox" ng-model="context[type].values[param.definitions[0].id][0]" dynamic-name="param.definitions[0].id">
+      <input id="checkbox_{{param.definitions[0].id}}" ng-if="isBoolean(param.definitions[0])" class="sidebar-input" type="checkbox" ng-model="context[type].values[param.definitions[0].id][0]" dynamic-name="param.definitions[0].id">
 
       <span class="field-validation-error"></span>
     </p>

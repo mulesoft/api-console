@@ -980,3 +980,18 @@
   padding-bottom: 0;
   padding-top: 0;
 }
+
+.sidebar-override-show {
+  display: block !important;
+}
+
+.sidebar-override-hide {
+  display: none;
+}
+
+.sidebar-override {
+  font-weight: normal;
+  float: right;
+  cursor: pointer;
+  margin-right: 1px;
+}
