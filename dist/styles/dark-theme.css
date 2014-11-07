@@ -638,19 +638,19 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 
 .tab-get {
-  fill: #268bd2;
+  fill: #0B88B9;
 }
 
 .tab-put {
-  fill: #6c71c4;
+  fill: #87538f;
 }
 
 .tab-delete {
-  fill: #cb4b16;
+  fill: #d14956;
 }
 
 .tab-post {
-  fill: #859900;
+  fill: #1EA18D;
 }
 
 .tab-patch {
@@ -691,23 +691,23 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 .tab:hover .tab-patch,
 .resource:not(.is-active) .tab.is-hovered .tab-patch {
-  fill: #02B0E2;
+  fill: #96e7fe;
 }
 .tab:hover .tab-connect,
 .resource:not(.is-active) .tab.is-hovered .tab-connect {
-  fill: #E48F0A;
+  fill: #f8ba58;
 }
 .tab:hover .tab-head,
 .resource:not(.is-active) .tab.is-hovered .tab-head {
-  fill: #8A45A2;
+  fill: #b680c9;
 }
 .tab:hover .tab-options,
 .resource:not(.is-active) .tab.is-hovered .tab-options {
-  fill: #1EBD77;
+  fill: #59e5a7;
 }
 .tab:hover .tab-trace,
 .resource:not(.is-active) .tab.is-hovered .tab-trace {
-  fill: #98B805;
+  fill: #c7f107;
 }
 
 .tab.is-active {
@@ -1659,7 +1659,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .sidebar-action-get {
   width: 47%;
-  background-color: #268bd2;
+  background-color: #0B88B9;
   letter-spacing: 2px;
 }
 .sidebar-action-get:hover {
@@ -1668,7 +1668,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .sidebar-action-put {
   width: 47%;
-  background-color: #6c71c4;
+  background-color: #87538f;
   letter-spacing: 2px;
 }
 .sidebar-action-put:hover {
@@ -1677,7 +1677,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .sidebar-action-post {
   width: 47%;
-  background-color: #859900;
+  background-color: #1EA18D;
   letter-spacing: 2px;
 }
 .sidebar-action-post:hover {
@@ -1686,7 +1686,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .sidebar-action-delete {
   width: 47%;
-  background-color: #cb4b16;
+  background-color: #d14956;
   letter-spacing: 2px;
 }
 .sidebar-action-delete:hover {
@@ -1699,7 +1699,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   letter-spacing: 2px;
 }
 .sidebar-action-patch:hover {
-  background-color: #02B0E2;
+  background-color: #96e7fe;
 }
 
 .sidebar-action-connect {
@@ -1708,7 +1708,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   letter-spacing: 2px;
 }
 .sidebar-action-connect:hover {
-  background-color: #E48F0A;
+  background-color: #f8ba58;
 }
 
 .sidebar-action-head {
@@ -1717,7 +1717,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   letter-spacing: 2px;
 }
 .sidebar-action-head:hover {
-  background-color: #8A45A2;
+  background-color: #b680c9;
 }
 
 .sidebar-action-options {
@@ -1726,7 +1726,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   letter-spacing: 2px;
 }
 .sidebar-action-options:hover {
-  background-color: #1EBD77;
+  background-color: #59e5a7;
 }
 
 .sidebar-action-trace {
@@ -1735,7 +1735,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   letter-spacing: 2px;
 }
 .sidebar-action-trace:hover {
-  background-color: #98B805;
+  background-color: #c7f107;
 }
 
 .sidebar-action-clear {
