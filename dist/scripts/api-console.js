@@ -79,6 +79,51 @@
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
       controller: function($scope) {
+        $scope.parameterDocumentation = function (parameter) {
+          var result = '';
+
+          if (parameter.required) {
+            result += 'required, ';
+          }
+
+          if (parameter.enum) {
+            result += 'one of (' + parameter.enum.join(', ') + ')';
+          } else {
+            result += parameter.type;
+          }
+
+          if (parameter.pattern) {
+            result += ' matching ' + parameter.pattern;
+          }
+
+          if (parameter.minLength && parameter.maxLength) {
+            result += ', ' + parameter.minLength + '-' + parameter.maxLength + ' characters';
+          } else if (parameter.minLength && !parameter.maxLength) {
+            result += ', at least ' + parameter.minLength + ' characters';
+          } else if (parameter.maxLength && !parameter.minLength) {
+            result += ', at most ' + parameter.maxLength + ' characters';
+          }
+
+
+          if (parameter.minimum && parameter.maximum) {
+            result += ' between ' + parameter.minimum + '-' + parameter.maximum;
+          } else if (parameter.minimum && !parameter.maximum) {
+            result += ' ≥ ' + parameter.minimum;
+          } else if (parameter.maximum && !parameter.minimum) {
+            result += ' ≤ ' + parameter.maximum;
+          }
+
+          if (parameter.repeat) {
+            result += ', repeatable';
+          }
+
+          if (parameter['default']) {
+            result += ', default: ' + parameter['default'];
+          }
+
+          return result;
+        };
+
         $scope.toggleTab = function ($event) {
           var $this        = jQuery($event.currentTarget);
           var $eachTab     = $this.children('.toggle-tab');
@@ -2387,6 +2432,10 @@ RAML.Inspector = (function() {
       });
     }
 
+    if (Object.keys(resource.uriParametersForDocumentation).length === 0) {
+      resource.uriParametersForDocumentation = null;
+    }
+
     this.uriParameters = new RAML.Services.TryIt.NamedParameters(resource.uriParametersForDocumentation);
 
     if (method.body) {
@@ -2621,11 +2670,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <h3 class=\"resource-heading-a\">URI Parameters</h3>\n" +
     "\n" +
     "      <div class=\"resource-param\" id=\"docs-uri-parameters-{{uriParam[0].displayName}}\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
-    "        <h4 class=\"resource-param-heading\">{{uriParam[0].displayName}} <span class=\"resource-param-instructional\" ng-if=\"uriParam[0].required\">required</span></h4>\n" +
+    "        <h4 class=\"resource-param-heading\">{{uriParam[0].displayName}}<span class=\"resource-param-instructional\">{{parameterDocumentation(uriParam[0])}}</span></h4>\n" +
     "        <p marked=\"uriParam[0].description\"></p>\n" +
     "\n" +
-    "        <p>\n" +
-    "          <span class=\"resource-param-example\" ng-if=\"uriParam[0].example\"><b>Example:</b> {{uriParam[0].example}}</span>\n" +
+    "        <p ng-if=\"uriParam[0].example\">\n" +
+    "          <span class=\"resource-param-example\"><b>Example:</b> {{uriParam[0].example}}</span>\n" +
     "        </p>\n" +
     "      </div>\n" +
     "    </section>\n" +
@@ -2634,9 +2683,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <h3 class=\"resource-heading-a\">Headers</h3>\n" +
     "\n" +
     "      <div class=\"resource-param\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
-    "        <h4 class=\"resource-param-heading\">{{header[0].displayName}} <span class=\"resource-param-instructional\">{{header[0].type}}</span></h4>\n" +
+    "        <h4 class=\"resource-param-heading\">{{header[0].displayName}}<span class=\"resource-param-instructional\">{{parameterDocumentation(header[0])}}</span></h4>\n" +
     "\n" +
     "        <p marked=\"header[0].description\"></p>\n" +
+    "\n" +
+    "        <p ng-if=\"header[0].example\">\n" +
+    "          <span class=\"resource-param-example\"><b>Example:</b> {{header[0].example}}</span>\n" +
+    "        </p>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "\n" +
@@ -2644,9 +2697,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <h3 class=\"resource-heading-a\">Query Parameters</h3>\n" +
     "\n" +
     "      <div class=\"resource-param\" ng-repeat=\"queryParam in methodInfo.queryParameters\">\n" +
-    "        <h4 class=\"resource-param-heading\">{{queryParam[0].displayName}} <span class=\"resource-param-instructional\">{{queryParam[0].type}}</span></h4>\n" +
+    "        <h4 class=\"resource-param-heading\">{{queryParam[0].displayName}}<span class=\"resource-param-instructional\">{{parameterDocumentation(queryParam[0])}}</span></h4>\n" +
     "\n" +
     "        <p marked=\"queryParam[0].description\"></p>\n" +
+    "\n" +
+    "        <p ng-if=\"queryParam[0].example\">\n" +
+    "          <span class=\"resource-param-example\"><b>Example:</b> {{queryParam[0].example}}</span>\n" +
+    "        </p>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "\n" +
