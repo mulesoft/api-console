@@ -13,6 +13,10 @@
       });
     }
 
+    if (Object.keys(resource.uriParametersForDocumentation).length === 0) {
+      resource.uriParametersForDocumentation = null;
+    }
+
     this.uriParameters = new RAML.Services.TryIt.NamedParameters(resource.uriParametersForDocumentation);
 
     if (method.body) {
