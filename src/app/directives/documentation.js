@@ -7,6 +7,10 @@
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
       controller: function($scope) {
+        $scope.unique = function (arr) {
+          return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
+        };
+
         $scope.parameterDocumentation = function (parameter) {
           var result = '';
 
@@ -15,7 +19,7 @@
           }
 
           if (parameter.enum) {
-            result += 'one of (' + parameter.enum.join(', ') + ')';
+            result += 'one of (' + $scope.unique(parameter.enum).join(', ') + ')';
           } else {
             result += parameter.type;
           }

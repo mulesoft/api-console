@@ -743,7 +743,6 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   min-height: 50px;
   padding-left: 20px;
   border-bottom: 1px solid #ccc;
-  transition: 0.3s ease all;
 }
 @media only screen and (min-width: 960px) {
   .resource {
@@ -847,7 +846,6 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .resource.is-active .resource-path-active {
   color: #fff;
-  transition: 0.3s ease all;
 }
 
 .resource.is-active .resource-root-toggle,
@@ -1027,7 +1025,6 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 .resource-panel {
   position: relative;
   min-height: 500px;
-  display: none;
   border: solid #ccc;
   border-width: 0 1px 1px;
   border-radius: 0 0 5px 5px;

@@ -7,17 +7,11 @@
       templateUrl: 'directives/close-button.tpl.html',
       replace: true,
       controller: function($scope) {
-        $scope.close = function ($event) {
-          var $this             = jQuery($event.currentTarget);
+        $scope.close = function () {
           var $inactiveElements = jQuery('.tab').add('.resource').add('li');
-          var $resource         = $this.closest('.resource');
-          var $resourceListItem = $resource.parent('li');
-
-          $resourceListItem
-            .children('.resource-panel')
-            .velocity('slideUp');
 
           $inactiveElements.removeClass('is-active');
+          $scope.showPanel = false;
         };
       }
     };
