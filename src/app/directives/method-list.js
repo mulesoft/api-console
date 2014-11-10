@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
-      controller: function($scope, $location, $anchorScroll) {
+      controller: function($scope, $location, $anchorScroll, $rootScope) {
         function getResponseInfo() {
           var responseInfo = {};
           var responses    = $scope.methodInfo.responses;
@@ -55,17 +55,20 @@
           return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
         };
 
+        var $inactiveElements = jQuery('.tab').add('.resource').add('li');
+
+        $scope.$on('openMethod', function(event, $currentScope) {
+          if ($scope.$id !== $currentScope.$id) {
+            $inactiveElements.removeClass('is-active');
+            $scope.showPanel = false;
+          }
+        });
+
         $scope.showResource = function ($event, $index) {
           var $this             = jQuery($event.currentTarget);
-          var $inactiveElements = jQuery('.tab').add('.resource').add('li');
           var $resource         = $this.closest('.resource');
-          var $resourceListItem = $resource.parent('li');
-          var $closingEl;
+          var $inactiveElements = jQuery('.tab').add('.resource').add('li');
           var methodInfo        = $scope.resource.methods[$index];
-          var hash              = $scope.generateId($scope.resource.pathSegments);
-
-          $location.hash(hash);
-          $anchorScroll();
 
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
@@ -73,7 +76,6 @@
           $scope.requestUrl               = '';
           $scope.response                 = {};
           $scope.requestOptions           = {};
-          $scope.resetFields();
           $scope.requestEnd               = false;
           $scope.showRequestMetadata      = false;
           $scope.showMoreEnable           = true;
@@ -113,25 +115,16 @@
           }, 10);
 
           if (!$resource.hasClass('is-active')) {
-            $closingEl = $inactiveElements
-              .filter('.is-active')
-              .children('.resource-panel');
+            var hash = $scope.generateId($scope.resource.pathSegments);
 
-            $closingEl.velocity('slideUp');
+            $rootScope.$broadcast('openMethod', $scope);
+            jQuery($this).addClass('is-active');
+            $scope.showPanel = true;
 
-            $resourceListItem
-              .children('.resource-panel')
-              .velocity('slideDown');
-
-            $inactiveElements.removeClass('is-active');
-
-            $resource
-              .add($resourceListItem)
-              .add($this)
-              .addClass('is-active');
+            $location.hash(hash);
+            $anchorScroll();
           } else if (jQuery($this).hasClass('is-active')) {
-            $resourceListItem.children('.resource-panel')
-              .velocity('slideUp');
+            $scope.showPanel = false;
             $inactiveElements.removeClass('is-active');
           } else {
             jQuery($this).addClass('is-active');

@@ -21,6 +21,18 @@
           $scope.showBaseUrl = true;
         }
 
+        Object.keys($scope.context[$scope.type].plain).map(function (key) {
+          var definition = $scope.context[$scope.type].plain[key].definitions[0];
+
+          if (typeof definition.enum !== 'undefined') {
+            $scope.context[$scope.type].values[definition.id][0] = definition.enum[0];
+          }
+        });
+
+        $scope.unique = function (arr) {
+          return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
+        };
+
         $scope.canOverride = function (definition) {
           return definition.type === 'boolean' ||  typeof definition.enum !== 'undefined';
         };

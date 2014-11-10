@@ -50,17 +50,11 @@
       templateUrl: 'directives/close-button.tpl.html',
       replace: true,
       controller: function($scope) {
-        $scope.close = function ($event) {
-          var $this             = jQuery($event.currentTarget);
+        $scope.close = function () {
           var $inactiveElements = jQuery('.tab').add('.resource').add('li');
-          var $resource         = $this.closest('.resource');
-          var $resourceListItem = $resource.parent('li');
-
-          $resourceListItem
-            .children('.resource-panel')
-            .velocity('slideUp');
 
           $inactiveElements.removeClass('is-active');
+          $scope.showPanel = false;
         };
       }
     };
@@ -79,6 +73,10 @@
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
       controller: function($scope) {
+        $scope.unique = function (arr) {
+          return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
+        };
+
         $scope.parameterDocumentation = function (parameter) {
           var result = '';
 
@@ -87,7 +85,7 @@
           }
 
           if (parameter.enum) {
-            result += 'one of (' + parameter.enum.join(', ') + ')';
+            result += 'one of (' + $scope.unique(parameter.enum).join(', ') + ')';
           } else {
             result += parameter.type;
           }
@@ -208,7 +206,7 @@
       restrict: 'E',
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
-      controller: function($scope, $location, $anchorScroll) {
+      controller: function($scope, $location, $anchorScroll, $rootScope) {
         function getResponseInfo() {
           var responseInfo = {};
           var responses    = $scope.methodInfo.responses;
@@ -257,17 +255,20 @@
           return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
         };
 
+        var $inactiveElements = jQuery('.tab').add('.resource').add('li');
+
+        $scope.$on('openMethod', function(event, $currentScope) {
+          if ($scope.$id !== $currentScope.$id) {
+            $inactiveElements.removeClass('is-active');
+            $scope.showPanel = false;
+          }
+        });
+
         $scope.showResource = function ($event, $index) {
           var $this             = jQuery($event.currentTarget);
-          var $inactiveElements = jQuery('.tab').add('.resource').add('li');
           var $resource         = $this.closest('.resource');
-          var $resourceListItem = $resource.parent('li');
-          var $closingEl;
+          var $inactiveElements = jQuery('.tab').add('.resource').add('li');
           var methodInfo        = $scope.resource.methods[$index];
-          var hash              = $scope.generateId($scope.resource.pathSegments);
-
-          $location.hash(hash);
-          $anchorScroll();
 
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
@@ -275,7 +276,6 @@
           $scope.requestUrl               = '';
           $scope.response                 = {};
           $scope.requestOptions           = {};
-          $scope.resetFields();
           $scope.requestEnd               = false;
           $scope.showRequestMetadata      = false;
           $scope.showMoreEnable           = true;
@@ -315,25 +315,16 @@
           }, 10);
 
           if (!$resource.hasClass('is-active')) {
-            $closingEl = $inactiveElements
-              .filter('.is-active')
-              .children('.resource-panel');
+            var hash = $scope.generateId($scope.resource.pathSegments);
 
-            $closingEl.velocity('slideUp');
+            $rootScope.$broadcast('openMethod', $scope);
+            jQuery($this).addClass('is-active');
+            $scope.showPanel = true;
 
-            $resourceListItem
-              .children('.resource-panel')
-              .velocity('slideDown');
-
-            $inactiveElements.removeClass('is-active');
-
-            $resource
-              .add($resourceListItem)
-              .add($this)
-              .addClass('is-active');
+            $location.hash(hash);
+            $anchorScroll();
           } else if (jQuery($this).hasClass('is-active')) {
-            $resourceListItem.children('.resource-panel')
-              .velocity('slideUp');
+            $scope.showPanel = false;
             $inactiveElements.removeClass('is-active');
           } else {
             jQuery($this).addClass('is-active');
@@ -370,6 +361,18 @@
         if ($attrs.hasOwnProperty('showBaseUrl')) {
           $scope.showBaseUrl = true;
         }
+
+        Object.keys($scope.context[$scope.type].plain).map(function (key) {
+          var definition = $scope.context[$scope.type].plain[key].definitions[0];
+
+          if (typeof definition.enum !== 'undefined') {
+            $scope.context[$scope.type].values[definition.id][0] = definition.enum[0];
+          }
+        });
+
+        $scope.unique = function (arr) {
+          return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
+        };
 
         $scope.canOverride = function (definition) {
           return definition.type === 'boolean' ||  typeof definition.enum !== 'undefined';
@@ -2881,7 +2884,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </span>\n" +
     "\n" +
     "      <select id=\"select_{{param.definitions[0].id}}\" ng-if=\"isEnum(param.definitions[0])\" name=\"param.definitions[0].id\" class=\"sidebar-input\" ng-model=\"context[type].values[param.definitions[0].id][0]\" style=\"margin-bottom: 0;\">\n" +
-    "       <option ng-repeat=\"enum in param.definitions[0].enum\" value=\"{{enum}}\">{{enum}}</option>\n" +
+    "       {{$index}}\n" +
+    "       <option ng-repeat=\"enum in unique(param.definitions[0].enum)\" value=\"{{enum}}\">{{enum}}</option>\n" +
     "      </select>\n" +
     "\n" +
     "      <input id=\"{{param.definitions[0].id}}\" ng-hide=\"!isDefault(param.definitions[0])\" class=\"sidebar-input\" ng-model=\"context[type].values[param.definitions[0].id][0]\" ng-class=\"{'sidebar-field-no-default': !hasExampleValue(param.definitions[0])}\" validate=\"param.definitions[0]\" dynamic-name=\"param.definitions[0].id\" />\n" +
@@ -2945,7 +2949,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/resource-panel.tpl.html',
-    "<div class=\"resource-panel\" ng-class=\"{ 'has-sidebar-fullscreen': withTryItOnFullscreen }\">\n" +
+    "<div class=\"resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'has-sidebar-fullscreen': withTryItOnFullscreen }\">\n" +
     "  <div class=\"resource-panel-wrapper\">\n" +
     "    <sidebar></sidebar>\n" +
     "\n" +
@@ -3233,7 +3237,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <ol class=\"resource-list resource-list-root\">\n" +
     "      <li id=\"{{generateId(resource.pathSegments)}}\" class=\"resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
-    "        <header class=\"resource resource-root clearfix\" ng-init=\"resource = resourceGroup[0]\">\n" +
+    "        <header class=\"resource resource-root clearfix\" ng-class=\"{ 'is-active':showPanel }\" ng-init=\"resource = resourceGroup[0]\">\n" +
     "          <div class=\"resource-path-container\">\n" +
     "            <button class=\"resource-root-toggle\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
     "\n" +
@@ -3253,7 +3257,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <!-- Child Resources -->\n" +
     "        <ol class=\"resource-list\">\n" +
     "          <li id=\"{{generateId(resource.pathSegments)}}\" class=\"resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
-    "            <div class=\"resource clearfix\">\n" +
+    "            <div class=\"resource clearfix\" ng-class=\"{ 'is-active':showPanel }\">\n" +
     "              <div class=\"resource-path-container\">\n" +
     "                <h3 class=\"resource-heading\">\n" +
     "                  <span ng-repeat-start='segment in resource.pathSegments' ng-if=\"!$last\">{{segment.toString()}}</span><span ng-repeat-end ng-if=\"$last\" class=\"resource-path-active\">{{segment.toString()}}</span>\n" +

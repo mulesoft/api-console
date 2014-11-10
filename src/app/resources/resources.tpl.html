@@ -70,7 +70,7 @@
 
     <ol class="resource-list resource-list-root">
       <li id="{{generateId(resource.pathSegments)}}" class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
-        <header class="resource resource-root clearfix" ng-init="resource = resourceGroup[0]">
+        <header class="resource resource-root clearfix" ng-class="{ 'is-active':showPanel }" ng-init="resource = resourceGroup[0]">
           <div class="resource-path-container">
             <button class="resource-root-toggle" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
 
@@ -90,7 +90,7 @@
         <!-- Child Resources -->
         <ol class="resource-list">
           <li id="{{generateId(resource.pathSegments)}}" class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
-            <div class="resource clearfix">
+            <div class="resource clearfix" ng-class="{ 'is-active':showPanel }">
               <div class="resource-path-container">
                 <h3 class="resource-heading">
                   <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="resource-path-active">{{segment.toString()}}</span>
