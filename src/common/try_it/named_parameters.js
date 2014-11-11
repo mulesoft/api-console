@@ -40,10 +40,12 @@
     }.bind(this));
   };
 
-  NamedParameters.prototype.clear = function () {
+  NamedParameters.prototype.clear = function (info) {
     var that = this;
     Object.keys(this.values).map(function (key) {
-      that.values[key] = [''];
+      if (typeof info[key][0].enum === 'undefined') {
+        that.values[key] = [''];
+      }
     });
   };
 
@@ -52,7 +54,9 @@
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          that.values[key][0] = info[key][0].example;
+          if (typeof info[key][0].enum === 'undefined') {
+            that.values[key][0] = info[key][0].example;
+          }
         }
       });
     }

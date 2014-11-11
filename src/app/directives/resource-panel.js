@@ -5,10 +5,7 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/resource-panel.tpl.html',
-      replace: true,
-      controller: function($scope) {
-        $scope.uriParameters = {};
-      }
+      replace: true
     };
   };
 

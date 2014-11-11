@@ -87,7 +87,7 @@
           <section>
             <div class="sidebar-row">
               <div class="sidebar-action-group">
-                <button type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)">{{methodInfo.method.toUpperCase()}}
+                <button type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
                 </button>
                 <button class="sidebar-action sidebar-action-clear" ng-click="clearFields()">Clear</button>
                 <button class="sidebar-action sidebar-action-reset" ng-click="resetFields()">Reset</button>
@@ -115,13 +115,11 @@
                   </div>
                 </div>
 
-                {{requestOptions.headers}}
-
                 <div ng-if="requestOptions.headers">
                   <h3 class="sidebar-response-head">Headers</h3>
                   <div class="sidebar-response-item">
                     <p class="sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
-                      <b>{{key}}:</b> <br>{{value}}
+                      <b>{{key}}:</b> <br>{{value.join()}}
                     </p>
                   </div>
                 </div>

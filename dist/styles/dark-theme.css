@@ -1736,6 +1736,15 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   background-color: #c7f107;
 }
 
+.sidebar-action-force {
+  width: 47%;
+  background-color: red;
+  letter-spacing: 2px;
+}
+.sidebar-action-force:hover {
+  background-color: #ff4d4d;
+}
+
 .sidebar-action-clear {
   width: 25%;
   margin-left: 1.5%;
@@ -2137,6 +2146,11 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   float: right;
   cursor: pointer;
   margin-right: 1px;
+}
+
+.sidebar-force-message {
+  font-size: 13px;
+  color: red;
 }
 
 /* ==========================================================================

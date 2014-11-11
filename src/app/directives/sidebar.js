@@ -100,13 +100,27 @@
         }
 
         function validateForm(form) {
-          var errors = form.$error;
+          var errors    = form.$error;
+          var uriParams = $scope.context.uriParameters.plain;
+          var flag      = false;
+
           Object.keys(form.$error).map(function (key) {
             for (var i = 0; i < errors[key].length; i++) {
               var fieldName = errors[key][i].$name;
+              var fieldValue = form[fieldName].$viewValue;
+
               form[fieldName].$setViewValue(form[fieldName].$viewValue);
+
+              if (typeof uriParams[fieldName] !== 'undefined' && (typeof fieldValue === 'undefined' || fieldValue === '')) {
+                flag = true;
+                break;
+              }
             }
           });
+
+          if (flag) {
+            $scope.context.forceRequest = false;
+          }
         }
 
         function getParameters (context, type) {
@@ -130,12 +144,13 @@
         }
 
         $scope.clearFields = function () {
-          $scope.context.uriParameters.clear();
-          $scope.context.queryParameters.clear();
-          $scope.context.headers.clear();
+          $scope.context.uriParameters.clear($scope.resource.uriParametersForDocumentation);
+          $scope.context.queryParameters.clear($scope.methodInfo.queryParameters);
+          $scope.context.headers.clear($scope.methodInfo.headers.plain);
           if ($scope.context.bodyContent) {
             $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
           }
+          $scope.context.forceRequest = false;
         };
 
         $scope.resetFields = function () {
@@ -149,6 +164,7 @@
               $scope.context.bodyContent.definitions[current].value = definition.contentType.example;
             }
           }
+          $scope.context.forceRequest = false;
         };
 
         $scope.toggleBodyType = function ($event, bodyType) {
@@ -173,77 +189,87 @@
           return typeof value !== 'undefined' ? true : false;
         };
 
-        $scope.tryIt = function ($event) {
-          var url;
-          var context         = $scope.context;
-          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
+        $scope.context.forceRequest = false;
 
+        $scope.tryIt = function ($event) {
           validateForm($scope.form);
 
-          $scope.showSpinner = true;
-          $scope.toggleSidebar($event, true);
-          $scope.toggleRequestMetadata($event, true);
-          $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
-          $scope.responseDetails = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.side-bar-try-it-description');
-
-          try {
-            var pathBuilder = context.pathBuilder;
-            var client      = RAML.Client.create($scope.raml, function(client) {
-              if ($scope.raml.baseUriParameters) {
-                Object.keys($scope.raml.baseUriParameters).map(function (key) {
-                  var uriParameters = $scope.context.uriParameters.data();
-                  pathBuilder.baseUriContext[key] = uriParameters[key][0];
-                  delete uriParameters[key];
-                });
-              }
-              client.baseUriParameters(pathBuilder.baseUriContext);
-            });
-            url = client.baseUri + pathBuilder(segmentContexts);
-          } catch (e) {
-            $scope.response = {};
-            return;
+          if (!$scope.context.forceRequest) {
+            jQuery($event.currentTarget).closest('form').find('.ng-invalid').first().focus();
           }
 
-          var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
+          if($scope.context.forceRequest || $scope.form.$valid) {
+            var url;
+            var context         = $scope.context;
+            var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
 
-          $scope.parameters = getParameters(context, 'queryParameters');
+            $scope.showSpinner = true;
+            // $scope.toggleSidebar($event, true);
+            $scope.toggleRequestMetadata($event, true);
+            $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
+            $scope.responseDetails = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.side-bar-try-it-description');
 
-          request.queryParams($scope.parameters);
-          request.headers(getParameters(context, 'headers'));
-
-          if (context.bodyContent) {
-            request.header('Content-Type', context.bodyContent.selected);
-            request.data(context.bodyContent.data());
-          }
-
-          $scope.requestOptions = request.toOptions();
-
-          var authStrategy;
-
-          try {
-            var securitySchemes = $scope.methodInfo.securitySchemes();
-            var scheme          = securitySchemes && securitySchemes[$scope.currentSchemeType];
-
-            //// TODO: Make a uniform interface
-            if (scheme && scheme.type === 'OAuth 2.0') {
-              authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
-              authStrategy.authenticate($scope.requestOptions, handleResponse);
+            try {
+              var pathBuilder = context.pathBuilder;
+              var client      = RAML.Client.create($scope.raml, function(client) {
+                if ($scope.raml.baseUriParameters) {
+                  Object.keys($scope.raml.baseUriParameters).map(function (key) {
+                    var uriParameters = $scope.context.uriParameters.data();
+                    pathBuilder.baseUriContext[key] = uriParameters[key][0];
+                    delete uriParameters[key];
+                  });
+                }
+                client.baseUriParameters(pathBuilder.baseUriContext);
+              });
+              url = client.baseUri + pathBuilder(segmentContexts);
+            } catch (e) {
+              $scope.response = {};
               return;
             }
 
-            /* jshint es5: true */
-            authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
-            authStrategy.authenticate().then(function(token) {
-              token.sign(request);
+            var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
 
-              jQuery.ajax($scope.requestOptions).then(
-                function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
-                function(jqXhr) { handleResponse(jqXhr); }
-              );
-            });
-            /* jshint es5: false */
-          } catch (e) {
-            // custom strategies aren't supported yet.
+            $scope.parameters = getParameters(context, 'queryParameters');
+
+            request.queryParams($scope.parameters);
+            request.headers(getParameters(context, 'headers'));
+
+            if (context.bodyContent) {
+              request.header('Content-Type', context.bodyContent.selected);
+              request.data(context.bodyContent.data());
+            }
+
+            $scope.requestOptions = request.toOptions();
+
+            var authStrategy;
+
+            try {
+              var securitySchemes = $scope.methodInfo.securitySchemes();
+              var scheme          = securitySchemes && securitySchemes[$scope.currentSchemeType];
+
+              //// TODO: Make a uniform interface
+              if (scheme && scheme.type === 'OAuth 2.0') {
+                authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
+                authStrategy.authenticate($scope.requestOptions, handleResponse);
+                return;
+              }
+
+              /* jshint es5: true */
+              authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+              authStrategy.authenticate().then(function(token) {
+                token.sign(request);
+
+                jQuery.ajax($scope.requestOptions).then(
+                  function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+                  function(jqXhr) { handleResponse(jqXhr); }
+                );
+              });
+              /* jshint es5: false */
+            } catch (e) {
+              // custom strategies aren't supported yet.
+            }
+          } else {
+            $scope.context.forceRequest = true;
           }
         };
 
