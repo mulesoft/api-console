@@ -21,7 +21,7 @@
           $scope.$apply.apply($scope, null);
         });
       },
-      controller: function ($scope) {
+      controller: function ($scope, $location, $anchorScroll) {
         $scope.currentSchemeType = 'anonymous';
 
         function completeAnimation (element) {
@@ -77,6 +77,10 @@
               codeMirror.refresh();
             }, 1);
           });
+
+          var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
+          $location.hash(hash);
+          $anchorScroll();
 
           apply();
         }
