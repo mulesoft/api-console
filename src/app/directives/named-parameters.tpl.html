@@ -34,14 +34,14 @@
         </span>
       </span>
 
-      <select id="select_{{param.definitions[0].id}}" ng-if="isEnum(param.definitions[0])" name="param.definitions[0].id" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" style="margin-bottom: 0;">
+      <select id="select_{{param.definitions[0].id}}" ng-if="isEnum(param.definitions[0])" name="param.definitions[0].id" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" style="margin-bottom: 0;" ng-change="onChange()">
        {{$index}}
        <option ng-repeat="enum in unique(param.definitions[0].enum)" value="{{enum}}">{{enum}}</option>
       </select>
 
-      <input id="{{param.definitions[0].id}}" ng-hide="!isDefault(param.definitions[0])" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param.definitions[0])}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" />
+      <input id="{{param.definitions[0].id}}" ng-hide="!isDefault(param.definitions[0])" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param.definitions[0])}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" ng-change="onChange()"/>
 
-      <input id="checkbox_{{param.definitions[0].id}}" ng-if="isBoolean(param.definitions[0])" class="sidebar-input" type="checkbox" ng-model="context[type].values[param.definitions[0].id][0]" dynamic-name="param.definitions[0].id">
+      <input id="checkbox_{{param.definitions[0].id}}" ng-if="isBoolean(param.definitions[0])" class="sidebar-input" type="checkbox" ng-model="context[type].values[param.definitions[0].id][0]" dynamic-name="param.definitions[0].id" ng-change="onChange()" />
 
       <span class="field-validation-error"></span>
     </p>

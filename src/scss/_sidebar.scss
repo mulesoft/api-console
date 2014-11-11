@@ -533,6 +533,16 @@
   }
 }
 
+.sidebar-action-force {
+  width: 47%;
+  background-color: red;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: #ff4d4d;
+  }
+}
+
 .sidebar-action-clear {
   width: 25%;
   margin-left: 1.5%;
@@ -994,4 +1004,9 @@
   float: right;
   cursor: pointer;
   margin-right: 1px;
+}
+
+.sidebar-force-message {
+  font-size: 13px;
+  color: red;
 }
