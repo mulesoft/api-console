@@ -521,7 +521,7 @@
           $scope.$apply.apply($scope, null);
         });
       },
-      controller: function ($scope) {
+      controller: function ($scope, $location, $anchorScroll) {
         $scope.currentSchemeType = 'anonymous';
 
         function completeAnimation (element) {
@@ -577,6 +577,10 @@
               codeMirror.refresh();
             }, 1);
           });
+
+          var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
+          $location.hash(hash);
+          $anchorScroll();
 
           apply();
         }
@@ -3080,22 +3084,24 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <section>\n" +
     "            <div class=\"sidebar-row\">\n" +
     "              <div class=\"sidebar-action-group\">\n" +
-    "                <button type=\"submit\" class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\" ng-class=\"{'sidebar-action-force':context.forceRequest}\"><span ng-if=\"context.forceRequest\">Force</span> {{methodInfo.method.toUpperCase()}}\n" +
+    "                <button ng-hide=\"showSpinner\" type=\"submit\" class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\" ng-class=\"{'sidebar-action-force':context.forceRequest}\"><span ng-if=\"context.forceRequest\">Force</span> {{methodInfo.method.toUpperCase()}}\n" +
     "                </button>\n" +
+    "                <button ng-if=\"showSpinner\" type=\"submit\" class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-class=\"{'sidebar-action-force':context.forceRequest}\" disabled=\"disabled\">Loading</button>\n" +
     "                <button class=\"sidebar-action sidebar-action-clear\" ng-click=\"clearFields()\">Clear</button>\n" +
     "                <button class=\"sidebar-action sidebar-action-reset\" ng-click=\"resetFields()\">Reset</button>\n" +
+    "\n" +
+    "                <div class=\"spinner_request\" ng-if=\"showSpinner\">Loading ...</div>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section class=\"side-bar-try-it-description\">\n" +
+    "          <section id=\"request_{{generateId(resource.pathSegments)}}\" class=\"side-bar-try-it-description\">\n" +
     "            <header class=\"sidebar-row sidebar-header\">\n" +
     "              <h3 class=\"sidebar-head sidebar-head-expand\">\n" +
     "                <button ng-class=\"{'is-open':showRequestMetadata, 'is-collapsed':!showRequestMetadata}\" class=\"sidebar-expand-btn js-toggle-request-metadata\" ng-click=\"toggleRequestMetadata()\">\n" +
     "                  Request\n" +
     "                </button>\n" +
     "              </h3>\n" +
-    "              <img src=\"img/spinner.gif\" style=\"height: 21px; width: 21px; float: right; margin-right: 10px; margin-top: 3px;\" ng-if=\"showSpinner\"/>\n" +
     "            </header>\n" +
     "            <div class=\"sidebar-request-metadata\" ng-class=\"{'is-active':showRequestMetadata}\">\n" +
     "\n" +

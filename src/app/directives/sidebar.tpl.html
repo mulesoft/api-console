@@ -87,22 +87,24 @@
           <section>
             <div class="sidebar-row">
               <div class="sidebar-action-group">
-                <button type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
+                <button ng-hide="showSpinner" type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
                 </button>
+                <button ng-if="showSpinner" type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-class="{'sidebar-action-force':context.forceRequest}" disabled="disabled">Loading</button>
                 <button class="sidebar-action sidebar-action-clear" ng-click="clearFields()">Clear</button>
                 <button class="sidebar-action sidebar-action-reset" ng-click="resetFields()">Reset</button>
+
+                <div class="spinner_request" ng-if="showSpinner">Loading ...</div>
               </div>
             </div>
           </section>
 
-          <section class="side-bar-try-it-description">
+          <section id="request_{{generateId(resource.pathSegments)}}" class="side-bar-try-it-description">
             <header class="sidebar-row sidebar-header">
               <h3 class="sidebar-head sidebar-head-expand">
                 <button ng-class="{'is-open':showRequestMetadata, 'is-collapsed':!showRequestMetadata}" class="sidebar-expand-btn js-toggle-request-metadata" ng-click="toggleRequestMetadata()">
                   Request
                 </button>
               </h3>
-              <img src="img/spinner.gif" style="height: 21px; width: 21px; float: right; margin-right: 10px; margin-top: 3px;" ng-if="showSpinner"/>
             </header>
             <div class="sidebar-request-metadata" ng-class="{'is-active':showRequestMetadata}">
 
