@@ -6,21 +6,6 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      link: function ($scope, $element) {
-        var el = angular.element(angular.element($element.children().children()[0]).children()[2]);
-
-        el.bind('scroll', function ($event) {
-          var $el = $event.currentTarget;
-
-          if ($el.scrollHeight === $el.offsetHeight + $el.scrollTop) {
-            $scope.showMoreEnable = false;
-          } else {
-            $scope.showMoreEnable = true;
-          }
-
-          $scope.$apply.apply($scope, null);
-        });
-      },
       controller: function ($scope, $location, $anchorScroll) {
         $scope.currentSchemeType = 'anonymous';
 

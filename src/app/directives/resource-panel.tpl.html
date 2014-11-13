@@ -1,5 +1,21 @@
 <div class="resource-panel" ng-if="showPanel" ng-class="{ 'has-sidebar-fullscreen': withTryItOnFullscreen }">
   <div class="resource-panel-wrapper">
+    <!-- Sidebar control to intermediate view -->
+    <div class="sidebar-controls sidebar-controls-collapse js-sidebar-collapse-toggle" ng-click="collapseSidebar($event)" style="left: 430px; position: absolute;">
+      <button class="collapse">
+        <span class="discoverable">Try it</span>
+        <img src="img/icn-expand.svg" alt="">
+      </button>
+    </div>
+
+    <!-- Sidebar control to full-screen/full-width view -->
+    <div class="sidebar-controls sidebar-controls-fullscreen js-sidebar-fullscreen" ng-click="toggleSidebar($event)" style="left: 0;">
+      <button class="collapse">
+        <span class="discoverable">Try it</span>
+        <img src="img/icn-expand.svg" alt="">
+      </button>
+    </div>
+
     <sidebar></sidebar>
 
     <documentation></documentation>

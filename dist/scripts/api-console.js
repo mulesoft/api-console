@@ -506,21 +506,6 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      link: function ($scope, $element) {
-        var el = angular.element(angular.element($element.children().children()[0]).children()[2]);
-
-        el.bind('scroll', function ($event) {
-          var $el = $event.currentTarget;
-
-          if ($el.scrollHeight === $el.offsetHeight + $el.scrollTop) {
-            $scope.showMoreEnable = false;
-          } else {
-            $scope.showMoreEnable = true;
-          }
-
-          $scope.$apply.apply($scope, null);
-        });
-      },
       controller: function ($scope, $location, $anchorScroll) {
         $scope.currentSchemeType = 'anonymous';
 
@@ -2986,6 +2971,22 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/resource-panel.tpl.html',
     "<div class=\"resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'has-sidebar-fullscreen': withTryItOnFullscreen }\">\n" +
     "  <div class=\"resource-panel-wrapper\">\n" +
+    "    <!-- Sidebar control to intermediate view -->\n" +
+    "    <div class=\"sidebar-controls sidebar-controls-collapse js-sidebar-collapse-toggle\" ng-click=\"collapseSidebar($event)\" style=\"left: 430px; position: absolute;\">\n" +
+    "      <button class=\"collapse\">\n" +
+    "        <span class=\"discoverable\">Try it</span>\n" +
+    "        <img src=\"img/icn-expand.svg\" alt=\"\">\n" +
+    "      </button>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <!-- Sidebar control to full-screen/full-width view -->\n" +
+    "    <div class=\"sidebar-controls sidebar-controls-fullscreen js-sidebar-fullscreen\" ng-click=\"toggleSidebar($event)\" style=\"left: 0;\">\n" +
+    "      <button class=\"collapse\">\n" +
+    "        <span class=\"discoverable\">Try it</span>\n" +
+    "        <img src=\"img/icn-expand.svg\" alt=\"\">\n" +
+    "      </button>\n" +
+    "    </div>\n" +
+    "\n" +
     "    <sidebar></sidebar>\n" +
     "\n" +
     "    <documentation></documentation>\n" +
@@ -3008,16 +3009,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          </h3>\n" +
     "        </header>\n" +
     "\n" +
-    "        <!-- Show more -->\n" +
-    "        <div class=\"sidebar-show-more\" ng-show=\"showMoreEnable\">\n" +
-    "          <p>\n" +
-    "            more <img src=\"img/icn-chevron-down.svg\" alt=\"\">\n" +
-    "          </p>\n" +
-    "        </div>\n" +
-    "\n" +
     "        <div class=\"sidebar-content-wrapper\">\n" +
     "          <section>\n" +
-    "            <header class=\"sidebar-row sidebar-subheader\">\n" +
+    "            <header class=\"sidebar-row sidebar-subheader sidebar-subheader-top\">\n" +
     "              <h4 class=\"sidebar-subhead\">Authentication</h4>\n" +
     "            </header>\n" +
     "\n" +
@@ -3162,22 +3156,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          </div>\n" +
     "        </section>\n" +
     "      </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <!-- Sidebar control to intermediate view -->\n" +
-    "    <div class=\"sidebar-controls sidebar-controls-collapse js-sidebar-collapse-toggle\" ng-click=\"collapseSidebar($event)\">\n" +
-    "      <button class=\"collapse\">\n" +
-    "        <span class=\"discoverable\">Try it</span>\n" +
-    "        <img src=\"img/icn-expand.svg\" alt=\"\">\n" +
-    "      </button>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <!-- Sidebar control to full-screen/full-width view -->\n" +
-    "    <div class=\"sidebar-controls sidebar-controls-fullscreen js-sidebar-fullscreen\" ng-click=\"toggleSidebar($event)\">\n" +
-    "      <button class=\"collapse\">\n" +
-    "        <span class=\"discoverable\">Try it</span>\n" +
-    "        <img src=\"img/icn-expand.svg\" alt=\"\">\n" +
-    "      </button>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</form>\n"

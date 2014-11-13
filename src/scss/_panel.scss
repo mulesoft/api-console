@@ -47,20 +47,27 @@
 }
 
 .resource-panel-wrapper {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  -ms-box-orient: horizontal;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
   display: flex;
 }
 
-/* Resource Panel Primary */
-
 .resource-panel-primary {
+  flex: 2;
+
   overflow: hidden;
   width: 100%;
 
   font-size: 16px;
 
   @media only screen and (min-width: $large-screen) {
-    padding-left: 430px;
-
     font-size: 18px;
 
     .has-sidebar-collapsed & {
@@ -75,6 +82,24 @@
   a {
     color: $color-resource-a;
   }
+}
+
+.resource-panel.has-sidebar-collapsed .sidebar-controls {
+  right: -80px;
+  width: 80px;
+  left: 0 !important;
+}
+
+.resource-panel.has-sidebar-collapsed .sidebar-controls .discoverable {
+  display: inline;
+}
+
+.resource-panel.has-sidebar-collapsed .sidebar-controls .collapse img {
+  visibility: visible;
+}
+
+.resource-panel.has-sidebar-collapsed .sidebar-controls .collapse:before {
+  content: "";
 }
 
 .resource-panel-primary-row {
