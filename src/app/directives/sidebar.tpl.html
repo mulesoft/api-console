@@ -21,15 +21,15 @@
               <div class="toggle-group sidebar-toggle-group">
                 <label class="sidebar-label">Security Scheme</label>
                 <select class="sidebar-input" ng-model="currentSchemeType" style="margin-bottom: 0;">
-                 <option ng-repeat="(key, scheme) in securitySchemes" value="{{key}}" ng-selected="key=='anonymous'">{{scheme.type}}</option>
+                 <option ng-repeat="(key, scheme) in securitySchemes" value="{{scheme.type}}" ng-selected="scheme.type=='Anonymous'">{{scheme.type}}</option>
                 </select>
               </div>
             </div>
 
             <div ng-switch="currentSchemeType">
-              <basic-auth ng-switch-when="basic" credentials='credentials'></basic-auth>
-              <oauth1 ng-switch-when="oauth_1_0" credentials='credentials'></oauth1>
-              <oauth2 ng-switch-when="oauth_2_0" credentials='credentials'></oauth2>
+              <basic-auth ng-switch-when="Basic Authentication" credentials='credentials'></basic-auth>
+              <oauth1 ng-switch-when="OAuth 1.0" credentials='credentials'></oauth1>
+              <oauth2 ng-switch-when="OAuth 2.0" credentials='credentials'></oauth2>
             </div>
           </section>
 

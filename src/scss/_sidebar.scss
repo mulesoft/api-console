@@ -176,6 +176,7 @@
 .sidebar.is-collapsed {
   width: 0;
   border-left: 0;
+  position: absolute;
 }
 
 .sidebar.is-collapsed .sidebar-controls {
