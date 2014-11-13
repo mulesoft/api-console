@@ -114,7 +114,7 @@
                   <h3 class="sidebar-response-head">Headers</h3>
                   <div class="sidebar-response-item">
                     <p class="sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
-                      <b>{{key}}:</b> <br>{{value.join()}}
+                      <b>{{key}}:</b> <br>{{getHeaderValue(value)}}
                     </p>
                   </div>
                 </div>

@@ -674,6 +674,14 @@
           }, 1);
         };
 
+        $scope.getHeaderValue = function (header) {
+          if (typeof header === 'string') {
+            return header;
+          }
+
+          return header[0];
+        };
+
         $scope.hasExampleValue = function (value) {
           return typeof value !== 'undefined' ? true : false;
         };
@@ -681,6 +689,7 @@
         $scope.context.forceRequest = false;
 
         $scope.tryIt = function ($event) {
+          $scope.requestOptions = null;
           validateForm($scope.form);
 
           if (!$scope.context.forceRequest) {
@@ -728,18 +737,23 @@
               request.data(context.bodyContent.data());
             }
 
-            $scope.requestOptions = request.toOptions();
-
             var authStrategy;
 
             try {
               var securitySchemes = $scope.methodInfo.securitySchemes();
-              var scheme          = securitySchemes && securitySchemes[$scope.currentSchemeType];
+              var scheme;
+
+              Object.keys(securitySchemes).map(function(key) {
+                if (securitySchemes[key].type === $scope.currentSchemeType) {
+                  scheme = securitySchemes && securitySchemes[key];
+                  return;
+                }
+              });
 
               //// TODO: Make a uniform interface
               if (scheme && scheme.type === 'OAuth 2.0') {
                 authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
-                authStrategy.authenticate($scope.requestOptions, handleResponse);
+                authStrategy.authenticate(request.toOptions(), handleResponse);
                 return;
               }
 
@@ -748,11 +762,13 @@
               authStrategy.authenticate().then(function(token) {
                 token.sign(request);
 
-                jQuery.ajax($scope.requestOptions).then(
+                jQuery.ajax(request.toOptions()).then(
                   function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
                   function(jqXhr) { handleResponse(jqXhr); }
                 );
               });
+
+              $scope.requestOptions = request.toOptions();
               /* jshint es5: false */
             } catch (e) {
               // custom strategies aren't supported yet.
@@ -3112,7 +3128,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                  <h3 class=\"sidebar-response-head\">Headers</h3>\n" +
     "                  <div class=\"sidebar-response-item\">\n" +
     "                    <p class=\"sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
-    "                      <b>{{key}}:</b> <br>{{value.join()}}\n" +
+    "                      <b>{{key}}:</b> <br>{{getHeaderValue(value)}}\n" +
     "                    </p>\n" +
     "                  </div>\n" +
     "                </div>\n" +
