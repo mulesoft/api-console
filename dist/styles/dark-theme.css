@@ -1045,18 +1045,26 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 
 .resource-panel-wrapper {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  -ms-box-orient: horizontal;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
   display: flex;
 }
 
-/* Resource Panel Primary */
 .resource-panel-primary {
+  flex: 2;
   overflow: hidden;
   width: 100%;
   font-size: 16px;
 }
 @media only screen and (min-width: 960px) {
   .resource-panel-primary {
-    padding-left: 430px;
     font-size: 18px;
   }
   .has-sidebar-collapsed .resource-panel-primary {
@@ -1068,6 +1076,24 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 .resource-panel-primary a {
   color: #217ec5;
+}
+
+.resource-panel.has-sidebar-collapsed .sidebar-controls {
+  right: -80px;
+  width: 80px;
+  left: 0 !important;
+}
+
+.resource-panel.has-sidebar-collapsed .sidebar-controls .discoverable {
+  display: inline;
+}
+
+.resource-panel.has-sidebar-collapsed .sidebar-controls .collapse img {
+  visibility: visible;
+}
+
+.resource-panel.has-sidebar-collapsed .sidebar-controls .collapse:before {
+  content: "";
 }
 
 .resource-panel-primary-row {
@@ -1286,7 +1312,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 .sidebar {
   width: 0;
   flex-shrink: 0;
-  overflow: visible;
+  overflow: hidden;
   border-bottom-left-radius: 4px;
   border-left: 3px solid #12171f;
   position: relative;
@@ -1296,7 +1322,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 @media only screen and (min-width: 960px) {
   .sidebar {
-    position: absolute;
+    position: relative;
     top: 0;
     bottom: 0;
     width: 430px;
@@ -1314,7 +1340,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 @media only screen and (min-width: 960px) {
   .sidebar-flex-wrapper {
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
   }
 }
 
@@ -1488,7 +1514,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 @media only screen and (min-width: 960px) {
   .sidebar-content-wrapper {
-    overflow: auto;
+    overflow: hidden;
     max-height: calc(100% - 43px);
     -webkit-overflow-scrolling: touch;
   }
