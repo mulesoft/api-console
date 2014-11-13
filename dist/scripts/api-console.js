@@ -507,7 +507,7 @@
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
-        $scope.currentSchemeType = 'anonymous';
+        $scope.currentSchemeType = 'Anonymous';
 
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
@@ -3019,15 +3019,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "              <div class=\"toggle-group sidebar-toggle-group\">\n" +
     "                <label class=\"sidebar-label\">Security Scheme</label>\n" +
     "                <select class=\"sidebar-input\" ng-model=\"currentSchemeType\" style=\"margin-bottom: 0;\">\n" +
-    "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{key}}\" ng-selected=\"key=='anonymous'\">{{scheme.type}}</option>\n" +
+    "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{scheme.type}}\" ng-selected=\"scheme.type=='Anonymous'\">{{scheme.type}}</option>\n" +
     "                </select>\n" +
     "              </div>\n" +
     "            </div>\n" +
     "\n" +
     "            <div ng-switch=\"currentSchemeType\">\n" +
-    "              <basic-auth ng-switch-when=\"basic\" credentials='credentials'></basic-auth>\n" +
-    "              <oauth1 ng-switch-when=\"oauth_1_0\" credentials='credentials'></oauth1>\n" +
-    "              <oauth2 ng-switch-when=\"oauth_2_0\" credentials='credentials'></oauth2>\n" +
+    "              <basic-auth ng-switch-when=\"Basic Authentication\" credentials='credentials'></basic-auth>\n" +
+    "              <oauth1 ng-switch-when=\"OAuth 1.0\" credentials='credentials'></oauth1>\n" +
+    "              <oauth2 ng-switch-when=\"OAuth 2.0\" credentials='credentials'></oauth2>\n" +
     "            </div>\n" +
     "          </section>\n" +
     "\n" +

@@ -1452,6 +1452,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 .sidebar.is-collapsed {
   width: 0;
   border-left: 0;
+  position: absolute;
 }
 
 .sidebar.is-collapsed .sidebar-controls {

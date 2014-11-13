@@ -7,7 +7,7 @@
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
-        $scope.currentSchemeType = 'anonymous';
+        $scope.currentSchemeType = 'Anonymous';
 
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
