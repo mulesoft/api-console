@@ -18,6 +18,7 @@ describe("RAML.Client.AuthStrategies.Oauth2.Grant", function() {
       beforeEach(function() {
         tokenSpy = spyOn(RAML.Client.AuthStrategies.Oauth2.Grant, 'Token');
         settings = { authorizationGrants: ['token'] };
+        credentials.grantType = { type: 'token' };
         RAML.Client.AuthStrategies.Oauth2.Grant.create(settings, credentials);
       });
 
@@ -36,6 +37,7 @@ describe("RAML.Client.AuthStrategies.Oauth2.Grant", function() {
       beforeEach(function() {
         codeSpy = spyOn(RAML.Client.AuthStrategies.Oauth2.Grant, 'Code');
         settings = { authorizationGrants: ['code'] };
+        credentials.grantType = { type: 'code' };
         RAML.Client.AuthStrategies.Oauth2.Grant.create(settings, credentials);
       });
 
@@ -51,6 +53,7 @@ describe("RAML.Client.AuthStrategies.Oauth2.Grant", function() {
     describe("with an unknown authorizationGrant", function() {
       beforeEach(function() {
         settings = { authorizationGrants: ['unknown'] };
+        credentials.grantType = { type: 'unknown' };
       });
 
       it("throws", function() {
@@ -63,6 +66,7 @@ describe("RAML.Client.AuthStrategies.Oauth2.Grant", function() {
     describe("when no authorizationGrant is present", function() {
       beforeEach(function() {
         settings = {};
+        credentials.grantType = {};
       });
 
       it("throws", function() {
