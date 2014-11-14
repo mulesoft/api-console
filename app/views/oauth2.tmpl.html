@@ -1,11 +1,36 @@
 <fieldset class="labelled-inline" role="oauth2">
   <div class="control-group">
-    <label for="clientId">Client ID</label>
-    <input type="text" name="clientId" ng-model='credentials.clientId'/>
+    <label for="grantType">Grant Type</label>
+    <select
+      name="grantType"
+      ng-model="credentials.grantType"
+      ng-options="grant.name for grant in grantTypes">
+    </select>
   </div>
 
   <div class="control-group">
-    <label for="clientSecret">Client Secret</label>
-    <input type="password" name="clientSecret" ng-model='credentials.clientSecret'/>
+    <label for="clientId" class="required">Client ID</label>
+
+    <input type="text" name="clientId" ng-model="credentials.clientId" required>
+  </div>
+
+  <div class="control-group" ng-if="hasClientSecret">
+    <label for="clientSecret" ng-class="{ required: requiresClientSecret }">
+      Client Secret
+    </label>
+
+    <input type="password" name="clientSecret" ng-model="credentials.clientSecret" ng-required="requiresClientSecret">
+  </div>
+
+  <div class="control-group" ng-if="hasOwnerCredentials">
+    <label for="username" class="required">Username</label>
+
+    <input type="text" name="username" ng-model="credentials.username" required>
+  </div>
+
+  <div class="control-group" ng-if="hasOwnerCredentials">
+    <label for="password" class="required">Password</label>
+
+    <input type="password" name="password" ng-model="credentials.password" required>
   </div>
 </fieldset>

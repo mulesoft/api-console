@@ -18,21 +18,44 @@
     return undefined;
   }
 
+  function extract(data) {
+    var method = accessTokenFromString;
+
+    if (typeof data === 'object') {
+      method = accessTokenFromObject;
+    }
+
+    return method(data);
+  }
+
   RAML.Client.AuthStrategies.Oauth2.requestAccessToken = function(settings, credentialsManager) {
     return function(code) {
       var request = RAML.Client.Request.create(settings.accessTokenUri, 'post');
 
       request.data(credentialsManager.accessTokenParameters(code));
 
-      return $.ajax(request.toOptions()).then(function(data) {
-        var extract = accessTokenFromString;
+      return $.ajax(request.toOptions()).then(extract);
+    };
+  };
 
-        if (typeof data === 'object') {
-          extract = accessTokenFromObject;
-        }
+  RAML.Client.AuthStrategies.Oauth2.requestCredentialsToken = function(settings, credentialsManager) {
+    return function() {
+      var request = RAML.Client.Request.create(settings.accessTokenUri, 'post');
 
-        return extract(data);
-      });
+      request.data(credentialsManager.clientCredentialsParameters());
+
+      return $.ajax(request.toOptions()).then(extract);
+    };
+  };
+
+  RAML.Client.AuthStrategies.Oauth2.requestOwnerToken = function(settings, credentialsManager) {
+    return function() {
+      var request = RAML.Client.Request.create(settings.accessTokenUri, 'post');
+
+      request.headers(credentialsManager.resourceOwnerHeaders());
+      request.data(credentialsManager.resourceOwnerParameters());
+
+      return $.ajax(request.toOptions()).then(extract);
     };
   };
 })();
