@@ -327,7 +327,7 @@
             );
 
             $panelContent.velocity(
-              { 'padding-left': 430 },
+              { 'padding-right': 430 },
               {
                 duration: 200,
                 complete: completeAnimation
@@ -343,7 +343,7 @@
             );
 
             $panelContent.velocity(
-              { 'padding-left': 0 },
+              { 'padding-right': 0 },
               {
                 duration: 200,
                 complete: completeAnimation

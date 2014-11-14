@@ -31,18 +31,11 @@
   border-radius: 0 0 5px 5px;
 
   background: $color-resource-bg;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  // box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
   color: $color-resource-text;
 
   @media only screen and (min-width: $large-screen) {
-    border-width: 0 1px 1px 0;
-
-    &.has-sidebar-collapsed {
-      box-shadow: inset 1px 0 0 rgba(0,0,0,.15);
-      .resource-panel-subheader {
-        padding-left: 100px;
-      }
-    }
+    border-width: 1px;
   }
 }
 
@@ -87,7 +80,7 @@
 .resource-panel.has-sidebar-collapsed .sidebar-controls {
   right: -80px;
   width: 80px;
-  left: 0 !important;
+  // left: 0 !important;
 }
 
 .resource-panel.has-sidebar-collapsed .sidebar-controls .discoverable {
