@@ -4,9 +4,10 @@
         <header class="sidebar-row sidebar-header">
           <h3 class="sidebar-head">
             Try it
-            <a class="sidebar-fullscreen-toggle js-sidebar-fullscreen" ng-click="toggleSidebar($event)">
-              <img src="img/icn-expand.svg" alt="">
-              <span class="visuallyhidden">Expand</span>
+            <a class="sidebar-fullscreen-toggle" ng-click="collapseSidebar($event)"><div class="close-sidebar">&times;</div></a>
+            <a class="sidebar-fullscreen-toggle sidebar-resize" ng-click="toggleSidebar($event)">
+              <img class="full-resize" src="img/resize-full-1.svg" alt="">
+              <img class="small-resize" src="img/resize-small-1.svg" alt="">
             </a>
           </h3>
         </header>

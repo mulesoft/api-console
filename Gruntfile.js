@@ -1,15 +1,14 @@
 'use strict';
 
-var LIVERELOAD_PORT = 35729;
-var resolve         = function (dir) {
+var resolve = function (dir) {
   return require('path').resolve(__dirname, dir);
 };
 
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
-  grunt.registerTask('default', ['build', 'connect:livereload', 'open:server', 'watch:build']);
-  grunt.registerTask('server', ['release', 'connect:livereload', 'watch:build']);
+  grunt.registerTask('default', ['build', 'connect:livereload', 'open:server', 'watch']);
+  grunt.registerTask('server', ['release', 'connect:server']);
   grunt.registerTask('regression', ['build', 'protractor:local']);
   grunt.registerTask('build', [
     'env:build',
@@ -57,15 +56,23 @@ module.exports = function (grunt) {
     connect: {
       options: {
         hostname: '0.0.0.0',
-        port:     9000
+        port: 9000
       },
-
       livereload: {
         options: {
           middleware: function (connect) {
             return [
+              require('connect-livereload')(),
               connect.static(resolve('dist'))
             ];
+          }
+        }
+      },
+      server: {
+        options: {
+          keepalive: true,
+          middleware: function (connect) {
+            return [ connect.static(resolve('dist')) ];
           }
         }
       }
@@ -214,10 +221,15 @@ module.exports = function (grunt) {
     watch:{
       build: {
         options: {
-          livereload: LIVERELOAD_PORT
+          livereload: true
         },
-        files:['<%= src.js %>', '<%= src.scssWatch %>', 'src/app/**/*.tpl.html', '<%= src.html %>'],
-        tasks:['build']
+        tasks:['build'],
+        files:[
+          '<%= src.js %>',
+          '<%= src.scssWatch %>',
+          'src/app/**/*.tpl.html',
+          '<%= src.html %>'
+        ]
       }
     },
 
