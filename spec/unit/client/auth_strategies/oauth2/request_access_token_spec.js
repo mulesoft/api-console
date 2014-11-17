@@ -31,7 +31,6 @@ describe("RAML.Client.AuthStrategies.Oauth2.requestAccessToken", function() {
           url: settings.accessTokenUri,
           type: 'post',
           data: 'data',
-          contentType: false,
           traditional: true,
           processData: true
         });

@@ -57,7 +57,7 @@ describe('RAML.Client.Request', function() {
         });
 
         it("removes the old contentType", function() {
-          expect(options.contentType).toBeFalsy()
+          expect(options.contentType).toNotEqual(headers.contentType);
         });
       });
 

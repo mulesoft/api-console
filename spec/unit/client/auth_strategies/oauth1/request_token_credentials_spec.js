@@ -23,7 +23,6 @@ describe("RAML.Client.AuthStrategies.Oauth1.requestTokenCredentials", function()
       var calledWith = xhrStub.mostRecentCall.args[0];
       expect(calledWith.url).toEqual(settings.tokenCredentialsUri);
       expect(calledWith.type).toEqual('post');
-      expect(calledWith.contentType).toEqual(false);
     });
 
     it("passes the temporary credentials to the token factory", function() {
