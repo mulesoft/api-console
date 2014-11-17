@@ -102,6 +102,7 @@
 // Control to switch to full-screen/full-width view
 .sidebar-controls-fullscreen {
   display: block;
+  border-left: 1px rgba(0, 0, 0, 0.1) solid;
 
   @media only screen and (min-width: $large-screen) {
     display: none;
@@ -161,6 +162,11 @@
 
 .sidebar-resize {
   margin-right: 5px;
+  display: none;
+
+  @media only screen and (min-width: $large-screen) {
+    display: block;
+  }
 }
 
 // End Sidebar Controls
@@ -259,6 +265,8 @@
 }
 
 .sidebar-content-wrapper {
+  min-height: 455px;
+
   @media only screen and (min-width: $large-screen) {
     overflow: hidden;
     max-height: calc(100% - 43px);
