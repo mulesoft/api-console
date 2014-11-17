@@ -61,7 +61,6 @@ describe("RAML.Controllers.TryIt", function() {
         var calledWith = httpService.mostRecentCall.args[0];
         expect(calledWith.url).toEqual("http://example.com/resources/search");
         expect(calledWith.type).toEqual("get");
-        expect(calledWith.contentType).toEqual(false);
       });
     });
 
