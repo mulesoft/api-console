@@ -778,7 +778,7 @@
           }
         };
 
-        $scope.toggleSidebar = function ($event, fullscreenEnable) {
+        $scope.toggleSidebar = function ($event) {
           var $this        = jQuery($event.currentTarget);
           var $panel       = $this.closest('.resource-panel');
           var $sidebar     = $panel.find('.sidebar');
@@ -788,7 +788,7 @@
             sidebarWidth = 430;
           }
 
-          if ($sidebar.hasClass('is-fullscreen') && !fullscreenEnable) {
+          if ($sidebar.hasClass('is-fullscreen')) {
             $sidebar.velocity(
               { width: sidebarWidth },
               {
@@ -796,6 +796,7 @@
                 complete: completeAnimation
               }
             );
+            $sidebar.removeClass('is-responsive');
             $sidebar.removeClass('is-fullscreen');
             $panel.removeClass('has-sidebar-fullscreen');
           } else {
@@ -807,8 +808,11 @@
               }
             );
             $sidebar.addClass('is-fullscreen');
+            $sidebar.addClass('is-responsive');
             $panel.addClass('has-sidebar-fullscreen');
           }
+
+          // $sidebar.removeClass('is-collapsed');
         };
 
         $scope.collapseSidebar = function ($event) {
@@ -816,43 +820,35 @@
           var $panel        = $this.closest('.resource-panel');
           var $panelContent = $panel.find('.resource-panel-primary');
           var $sidebar      = $panel.find('.sidebar');
+          var animation     = 430;
 
-          if ($sidebar.hasClass('is-collapsed')) {
-            $sidebar.velocity(
-              { width: 430 },
-              {
-                duration: 200,
-                complete: completeAnimation
-              }
-            );
-
-            $panelContent.velocity(
-              { 'padding-right': 430 },
-              {
-                duration: 200,
-                complete: completeAnimation
-              }
-            );
-          } else {
-            $sidebar.velocity(
-              { width: 0 },
-              {
-                duration: 200,
-                complete: completeAnimation
-              }
-            );
-
-            $panelContent.velocity(
-              { 'padding-right': 0 },
-              {
-                duration: 200,
-                complete: completeAnimation
-              }
-            );
+          if ((!$sidebar.hasClass('is-fullscreen') && !$sidebar.hasClass('is-collapsed')) || $sidebar.hasClass('is-responsive')) {
+            animation = 0;
           }
 
+          $sidebar.velocity(
+            { width: animation },
+            {
+              duration: 200,
+              complete: completeAnimation
+            }
+          );
+
+          $panelContent.velocity(
+            { 'padding-right': animation },
+            {
+              duration: 200,
+              complete: completeAnimation
+            }
+          );
+
           $sidebar.toggleClass('is-collapsed');
+          $sidebar.removeClass('is-responsive');
           $panel.toggleClass('has-sidebar-collapsed');
+
+          if ($sidebar.hasClass('is-fullscreen')) {
+            $sidebar.toggleClass('is-fullscreen');
+          }
         };
 
         $scope.toggleRequestMetadata = function (enabled) {
@@ -2988,6 +2984,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div class=\"resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'has-sidebar-fullscreen': withTryItOnFullscreen }\">\n" +
     "  <div class=\"resource-panel-wrapper\">\n" +
     "    <div class=\"sidebar-controls sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\">\n" +
+    "      <button class=\"collapse\">\n" +
+    "        <img src=\"img/icn-expand.svg\" alt=\"\" style=\"transform: rotate(-180deg);\">\n" +
+    "        <span class=\"discoverable\">Try it</span>\n" +
+    "      </button>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"sidebar-controls sidebar-controls-fullscreen\" ng-click=\"toggleSidebar($event)\" style=\"right: -1px; position: absolute;\">\n" +
     "      <button class=\"collapse\">\n" +
     "        <img src=\"img/icn-expand.svg\" alt=\"\" style=\"transform: rotate(-180deg);\">\n" +
     "        <span class=\"discoverable\">Try it</span>\n" +

@@ -1137,7 +1137,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 @media only screen and (min-width: 600px) {
   .resource-panel-subheader {
     padding-right: 24px;
-    padding-left: 100px;
+    padding-left: 32px;
   }
 }
 @media only screen and (min-width: 960px) {
@@ -1384,6 +1384,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .sidebar-controls-fullscreen {
   display: block;
+  border-left: 1px rgba(0, 0, 0, 0.1) solid;
 }
 @media only screen and (min-width: 960px) {
   .sidebar-controls-fullscreen {
@@ -1436,6 +1437,12 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .sidebar-resize {
   margin-right: 5px;
+  display: none;
+}
+@media only screen and (min-width: 960px) {
+  .sidebar-resize {
+    display: block;
+  }
 }
 
 .sidebar.is-collapsed {
@@ -1510,6 +1517,9 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   }
 }
 
+.sidebar-content-wrapper {
+  min-height: 455px;
+}
 @media only screen and (min-width: 960px) {
   .sidebar-content-wrapper {
     overflow: hidden;

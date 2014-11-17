@@ -278,7 +278,7 @@
           }
         };
 
-        $scope.toggleSidebar = function ($event, fullscreenEnable) {
+        $scope.toggleSidebar = function ($event) {
           var $this        = jQuery($event.currentTarget);
           var $panel       = $this.closest('.resource-panel');
           var $sidebar     = $panel.find('.sidebar');
@@ -288,7 +288,7 @@
             sidebarWidth = 430;
           }
 
-          if ($sidebar.hasClass('is-fullscreen') && !fullscreenEnable) {
+          if ($sidebar.hasClass('is-fullscreen')) {
             $sidebar.velocity(
               { width: sidebarWidth },
               {
@@ -296,6 +296,7 @@
                 complete: completeAnimation
               }
             );
+            $sidebar.removeClass('is-responsive');
             $sidebar.removeClass('is-fullscreen');
             $panel.removeClass('has-sidebar-fullscreen');
           } else {
@@ -307,8 +308,11 @@
               }
             );
             $sidebar.addClass('is-fullscreen');
+            $sidebar.addClass('is-responsive');
             $panel.addClass('has-sidebar-fullscreen');
           }
+
+          // $sidebar.removeClass('is-collapsed');
         };
 
         $scope.collapseSidebar = function ($event) {
@@ -316,43 +320,35 @@
           var $panel        = $this.closest('.resource-panel');
           var $panelContent = $panel.find('.resource-panel-primary');
           var $sidebar      = $panel.find('.sidebar');
+          var animation     = 430;
 
-          if ($sidebar.hasClass('is-collapsed')) {
-            $sidebar.velocity(
-              { width: 430 },
-              {
-                duration: 200,
-                complete: completeAnimation
-              }
-            );
-
-            $panelContent.velocity(
-              { 'padding-right': 430 },
-              {
-                duration: 200,
-                complete: completeAnimation
-              }
-            );
-          } else {
-            $sidebar.velocity(
-              { width: 0 },
-              {
-                duration: 200,
-                complete: completeAnimation
-              }
-            );
-
-            $panelContent.velocity(
-              { 'padding-right': 0 },
-              {
-                duration: 200,
-                complete: completeAnimation
-              }
-            );
+          if ((!$sidebar.hasClass('is-fullscreen') && !$sidebar.hasClass('is-collapsed')) || $sidebar.hasClass('is-responsive')) {
+            animation = 0;
           }
 
+          $sidebar.velocity(
+            { width: animation },
+            {
+              duration: 200,
+              complete: completeAnimation
+            }
+          );
+
+          $panelContent.velocity(
+            { 'padding-right': animation },
+            {
+              duration: 200,
+              complete: completeAnimation
+            }
+          );
+
           $sidebar.toggleClass('is-collapsed');
+          $sidebar.removeClass('is-responsive');
           $panel.toggleClass('has-sidebar-collapsed');
+
+          if ($sidebar.hasClass('is-fullscreen')) {
+            $sidebar.toggleClass('is-fullscreen');
+          }
         };
 
         $scope.toggleRequestMetadata = function (enabled) {
