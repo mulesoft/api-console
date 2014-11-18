@@ -207,6 +207,20 @@
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
       controller: function($scope, $location, $anchorScroll, $rootScope) {
+        function loadExamples () {
+          $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
+          $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
+          $scope.context.headers.reset($scope.methodInfo.headers.plain);
+
+          if ($scope.context.bodyContent) {
+            var definitions = $scope.context.bodyContent.definitions;
+
+            Object.keys(definitions).map(function (key) {
+              definitions[key].reset($scope.methodInfo.body[key].formParameters);
+            });
+          }
+        }
+
         function getResponseInfo() {
           var responseInfo = {};
           var responses    = $scope.methodInfo.responses;
@@ -293,6 +307,8 @@
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
           };
+
+          loadExamples();
 
           var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
           $scope.currentScheme = {
@@ -646,13 +662,14 @@
           $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
+
           if ($scope.context.bodyContent) {
             var current      = $scope.context.bodyContent.selected;
             var definition   = $scope.context.bodyContent.definitions[current];
-            if (definition.contentType) {
-              $scope.context.bodyContent.definitions[current].value = definition.contentType.example;
-            }
+
+            definition.reset($scope.methodInfo.body[current].formParameters);
           }
+
           $scope.context.forceRequest = false;
         };
 
@@ -666,12 +683,15 @@
 
           var editor = $this.closest('.sidebar-row')
                             .parent()
-                            .find('.codemirror-body-editor .CodeMirror')[0]
-                            .CodeMirror;
-          editor.setOption('mode', bodyType);
-          setTimeout(function () {
-            editor.refresh();
-          }, 1);
+                            .find('.codemirror-body-editor .CodeMirror')[0];
+
+          if (editor) {
+            editor = editor.CodeMirror;
+            editor.setOption('mode', bodyType);
+            setTimeout(function () {
+              editor.refresh();
+            }, 1);
+          }
         };
 
         $scope.getHeaderValue = function (header) {
