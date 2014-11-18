@@ -142,6 +142,10 @@
           });
         }
 
+        $scope.cancelRequest = function () {
+          $scope.showSpinner = false;
+        };
+
         $scope.prefillBody = function (current) {
           var definition   = $scope.context.bodyContent.definitions[current];
           definition.value = definition.contentType.example;

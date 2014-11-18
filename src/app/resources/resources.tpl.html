@@ -1,58 +1,13 @@
 <main class="error-container error-primary">
 
-  <div ng-if="!parseError">
-    <div ng-if="!loaded">
-      <div class="spinner">
-        <div class="rect1"></div>
-        <div class="rect2"></div>
-        <div class="rect3"></div>
-        <div class="rect4"></div>
-        <div class="rect5"></div>
-      </div>
+  <div ng-if="!loaded">
+    <div class="spinner">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
     </div>
-  </div>
-
-  <div class="error-content" ng-if="parseError">
-    <h3 class="heading">Error while loading <b>{{parseError.fileName}}</b></h3>
-
-    <section>
-      <header class="error-row error-header">
-        <h3 class="error-head error-head-expand">
-          <div class="error-expand-btn">
-            Message
-          </div>
-        </h3>
-      </header>
-      <pre class="error-pre"><code class="error-message">{{parseError.message}}</code></pre>
-
-      <div ng-if="parseError.snippet">
-        <header class="error-row error-header">
-          <h3 class="error-head error-head-expand">
-            <div class="error-expand-btn">
-              Snippet <span class="error-subhead">(Line {{parseError.line}}, Column {{parseError.column}})</span>
-            </div>
-          </h3>
-        </header>
-        <pre class="error-pre"><code class="error-snippet">{{parseError.snippet}}</code></pre>
-      </div>
-
-      <div ng-if="parseError.raml">
-        <header class="error-row error-header">
-          <h3 class="error-head error-head-expand">
-            <div class="error-expand-btn">
-              RAML
-            </div>
-          </h3>
-        </header>
-        <pre class="error-pre error-codemirror-container"><code ui-codemirror="{
-            lineNumbers: true,
-            readOnly: 'nocursor',
-            lineWrapping : true,
-            tabSize: 2,
-            mode: 'yaml'
-          }" ng-model="parseError.raml"></code></pre>
-      </div>
-    </section>
   </div>
 
   <div ng-if="loaded">

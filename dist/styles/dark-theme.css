@@ -433,6 +433,15 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   color: #8a1f11 !important;
 }
 
+.parser-error {
+  font-size: 13px;
+  color: red;
+  padding-left: 1px;
+  word-wrap: break-word;
+  background: #FBC2C4;
+  margin-top: 15px;
+}
+
 .title {
   font-size: 24px;
   text-align: center;
@@ -1784,6 +1793,15 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 .sidebar-action-force:hover {
   background-color: #ff4d4d;
+}
+
+.sidebar-action-cancel-request {
+  width: 47%;
+  background-color: #8f6953;
+  letter-spacing: 2px;
+}
+.sidebar-action-cancel-request:hover {
+  background-color: #a9826c;
 }
 
 .sidebar-action-clear {

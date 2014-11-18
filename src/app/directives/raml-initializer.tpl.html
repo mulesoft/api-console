@@ -1,5 +1,5 @@
-<div ng-switch="ramlLoaded">
-  <div class="initializer-container initializer-primary" ng-switch-when="false">
+<div ng-switch="ramlStatus">
+  <div class="initializer-container initializer-primary" ng-switch-default>
     <h1 class="title">RAML Console</h1>
 
     <div class="initializer-content-wrapper">
@@ -12,9 +12,11 @@
           <p class="initializer-input-container">
             <input id="ramlPath" autofocus class="initializer-input initializer-raml-field" ng-model="$parent.ramlUrl" ng-keypress="onKeyPressRamlUrl($event)">
           </p>
-
           <div class="initializer-action-group" align="right">
             <button id="loadRamlFromUrl" class="initializer-action initializer-action-btn" ng-click="loadFromUrl()">Load from URL</button>
+          </div>
+          <div class="parser-error" ng-if="isLoadedFromUrl">
+            <span>{{errorMessage}}</span>
           </div>
         </div>
       </section>
@@ -30,7 +32,9 @@
               lineNumbers: true,
               lineWrapping : true,
               tabSize: 2,
-              mode: 'yaml'
+              mode: 'yaml',
+              gutters: ['CodeMirror-lint-markers'],
+              lint: true
             }" ng-model="$parent.raml"></textarea>
           </p>
           <div class="initializer-action-group" align="right">
@@ -41,5 +45,15 @@
     </div>
   </div>
 
-  <raml-console ng-switch-when="true"></raml-console>
+  <raml-console ng-switch-when="loaded"></raml-console>
+
+  <div ng-switch-when="loading">
+    <div class="spinner">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
+    </div>
+  </div>
 </div>

@@ -70,46 +70,9 @@
         };
       },
       link: function($scope) {
-        $scope.loaded     = false;
-        $scope.parseError = null;
-
         ramlParserWrapper.onParseSuccess(function(raml) {
           $scope.raml = RAML.Inspector.create(raml);
-          $scope.parseError = null;
           $scope.loaded = true;
-        });
-
-        ramlParserWrapper.onParseError(function(error) {
-          /*jshint camelcase: false */
-          var context = error.context_mark || error.problem_mark;
-          /*jshint camelcase: true */
-          $scope.parseError = { message: error.message };
-
-          if (context) {
-            /*jshint camelcase: false */
-            var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
-            /*jshint camelcase: true */
-
-            $scope.cmModel = context.buffer;
-
-            $scope.parseError = {
-              column: context.column + 1,
-              line: context.line + 1,
-              message: error.message,
-              snippet: snippet,
-              raml: context.buffer,
-              fileName: context.name
-            };
-
-            // Hack to update codemirror
-            setTimeout(function () {
-              var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
-              editor.addLineClass(context.line, 'background', 'line-error');
-              editor.doc.setCursor(context.line);
-            }, 10);
-          }
-
-          $scope.$apply.apply($scope, null);
         });
       }
     };

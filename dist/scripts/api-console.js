@@ -471,9 +471,38 @@
       restrict: 'E',
       templateUrl: 'directives/raml-initializer.tpl.html',
       replace: true,
-      controller: function($scope) {
-        $scope.ramlLoaded = false;
+      controller: function($scope, $window) {
         $scope.ramlUrl    = '';
+
+        ramlParserWrapper.onParseError(function(error) {
+          /*jshint camelcase: false */
+          var context = error.context_mark || error.problem_mark;
+          /*jshint camelcase: true */
+
+          $scope.errorMessage = error.message;
+
+          if (context && !$scope.isLoadedFromUrl) {
+            $scope.raml = context.buffer;
+
+            $window.ramlErrors.line    = context.line;
+            $window.ramlErrors.message = error.message;
+
+            // Hack to update codemirror
+            setTimeout(function () {
+              var editor = jQuery('.initializer-input-container .CodeMirror')[0].CodeMirror;
+              editor.addLineClass(context.line, 'background', 'line-error');
+              editor.doc.setCursor(context.line);
+            }, 10);
+          }
+
+          $scope.ramlStatus = null;
+
+          $scope.$apply.apply($scope, null);
+        });
+
+        ramlParserWrapper.onParseSuccess(function() {
+          $scope.ramlStatus = 'loaded';
+        });
 
         $scope.onKeyPressRamlUrl = function ($event) {
           if ($event.keyCode === 13) {
@@ -483,15 +512,17 @@
 
         $scope.loadFromUrl = function () {
           if ($scope.ramlUrl) {
+            $scope.isLoadedFromUrl = true;
+            $scope.ramlStatus      = 'loading';
             ramlParserWrapper.load($scope.ramlUrl);
-            $scope.ramlLoaded = true;
           }
         };
 
         $scope.loadRaml = function() {
           if ($scope.raml) {
+            $scope.ramlStatus      = 'loading';
+            $scope.isLoadedFromUrl = false;
             ramlParserWrapper.parse($scope.raml);
-            $scope.ramlLoaded = true;
           }
         };
 
@@ -665,6 +696,10 @@
             }
           });
         }
+
+        $scope.cancelRequest = function () {
+          $scope.showSpinner = false;
+        };
 
         $scope.prefillBody = function (current) {
           var definition   = $scope.context.bodyContent.definitions[current];
@@ -1170,46 +1205,9 @@
         };
       },
       link: function($scope) {
-        $scope.loaded     = false;
-        $scope.parseError = null;
-
         ramlParserWrapper.onParseSuccess(function(raml) {
           $scope.raml = RAML.Inspector.create(raml);
-          $scope.parseError = null;
           $scope.loaded = true;
-        });
-
-        ramlParserWrapper.onParseError(function(error) {
-          /*jshint camelcase: false */
-          var context = error.context_mark || error.problem_mark;
-          /*jshint camelcase: true */
-          $scope.parseError = { message: error.message };
-
-          if (context) {
-            /*jshint camelcase: false */
-            var snippet = context.get_snippet(0, 10000).replace('^', '').trim();
-            /*jshint camelcase: true */
-
-            $scope.cmModel = context.buffer;
-
-            $scope.parseError = {
-              column: context.column + 1,
-              line: context.line + 1,
-              message: error.message,
-              snippet: snippet,
-              raml: context.buffer,
-              fileName: context.name
-            };
-
-            // Hack to update codemirror
-            setTimeout(function () {
-              var editor = jQuery('.error-codemirror-container .CodeMirror')[0].CodeMirror;
-              editor.addLineClass(context.line, 'background', 'line-error');
-              editor.doc.setCursor(context.line);
-            }, 10);
-          }
-
-          $scope.$apply.apply($scope, null);
         });
       }
     };
@@ -2490,6 +2488,25 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
+  window.ramlErrors = {};
+
+  CodeMirror.registerHelper('lint', 'yaml', function () {
+    var found = [];
+
+    found.push({
+      message: window.ramlErrors.message,
+      severity: 'error',
+      from: CodeMirror.Pos(window.ramlErrors.line),
+      to: CodeMirror.Pos(window.ramlErrors.line)
+    });
+
+    return found;
+  });
+})();
+
+(function() {
+  'use strict';
+
   var FORM_URLENCODED = 'application/x-www-form-urlencoded';
   var FORM_DATA = 'multipart/form-data';
 
@@ -3019,8 +3036,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/raml-initializer.tpl.html',
-    "<div ng-switch=\"ramlLoaded\">\n" +
-    "  <div class=\"initializer-container initializer-primary\" ng-switch-when=\"false\">\n" +
+    "<div ng-switch=\"ramlStatus\">\n" +
+    "  <div class=\"initializer-container initializer-primary\" ng-switch-default>\n" +
     "    <h1 class=\"title\">RAML Console</h1>\n" +
     "\n" +
     "    <div class=\"initializer-content-wrapper\">\n" +
@@ -3033,9 +3050,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <p class=\"initializer-input-container\">\n" +
     "            <input id=\"ramlPath\" autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"$parent.ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\">\n" +
     "          </p>\n" +
-    "\n" +
     "          <div class=\"initializer-action-group\" align=\"right\">\n" +
     "            <button id=\"loadRamlFromUrl\" class=\"initializer-action initializer-action-btn\" ng-click=\"loadFromUrl()\">Load from URL</button>\n" +
+    "          </div>\n" +
+    "          <div class=\"parser-error\" ng-if=\"isLoadedFromUrl\">\n" +
+    "            <span>{{errorMessage}}</span>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
@@ -3051,7 +3070,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "              lineNumbers: true,\n" +
     "              lineWrapping : true,\n" +
     "              tabSize: 2,\n" +
-    "              mode: 'yaml'\n" +
+    "              mode: 'yaml',\n" +
+    "              gutters: ['CodeMirror-lint-markers'],\n" +
+    "              lint: true\n" +
     "            }\" ng-model=\"$parent.raml\"></textarea>\n" +
     "          </p>\n" +
     "          <div class=\"initializer-action-group\" align=\"right\">\n" +
@@ -3062,7 +3083,17 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
-    "  <raml-console ng-switch-when=\"true\"></raml-console>\n" +
+    "  <raml-console ng-switch-when=\"loaded\"></raml-console>\n" +
+    "\n" +
+    "  <div ng-switch-when=\"loading\">\n" +
+    "    <div class=\"spinner\">\n" +
+    "      <div class=\"rect1\"></div>\n" +
+    "      <div class=\"rect2\"></div>\n" +
+    "      <div class=\"rect3\"></div>\n" +
+    "      <div class=\"rect4\"></div>\n" +
+    "      <div class=\"rect5\"></div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
@@ -3184,7 +3215,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "              <div class=\"sidebar-action-group\">\n" +
     "                <button ng-hide=\"showSpinner\" type=\"submit\" class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\" ng-class=\"{'sidebar-action-force':context.forceRequest}\"><span ng-if=\"context.forceRequest\">Force</span> {{methodInfo.method.toUpperCase()}}\n" +
     "                </button>\n" +
-    "                <button ng-if=\"showSpinner\" type=\"submit\" class=\"sidebar-action sidebar-action-{{methodInfo.method}}\" ng-class=\"{'sidebar-action-force':context.forceRequest}\" disabled=\"disabled\">Loading</button>\n" +
+    "                <button ng-if=\"showSpinner\" type=\"submit\" class=\"sidebar-action sidebar-action-{{methodInfo.method}} sidebar-action-cancel-request\" ng-click=\"cancelRequest()\">Cancel</button>\n" +
     "                <button class=\"sidebar-action sidebar-action-clear\" ng-click=\"clearFields()\">Clear</button>\n" +
     "                <button class=\"sidebar-action sidebar-action-reset\" ng-click=\"resetFields()\">Reset</button>\n" +
     "\n" +
@@ -3284,59 +3315,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('resources/resources.tpl.html',
     "<main class=\"error-container error-primary\">\n" +
     "\n" +
-    "  <div ng-if=\"!parseError\">\n" +
-    "    <div ng-if=\"!loaded\">\n" +
-    "      <div class=\"spinner\">\n" +
-    "        <div class=\"rect1\"></div>\n" +
-    "        <div class=\"rect2\"></div>\n" +
-    "        <div class=\"rect3\"></div>\n" +
-    "        <div class=\"rect4\"></div>\n" +
-    "        <div class=\"rect5\"></div>\n" +
-    "      </div>\n" +
+    "  <div ng-if=\"!loaded\">\n" +
+    "    <div class=\"spinner\">\n" +
+    "      <div class=\"rect1\"></div>\n" +
+    "      <div class=\"rect2\"></div>\n" +
+    "      <div class=\"rect3\"></div>\n" +
+    "      <div class=\"rect4\"></div>\n" +
+    "      <div class=\"rect5\"></div>\n" +
     "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"error-content\" ng-if=\"parseError\">\n" +
-    "    <h3 class=\"heading\">Error while loading <b>{{parseError.fileName}}</b></h3>\n" +
-    "\n" +
-    "    <section>\n" +
-    "      <header class=\"error-row error-header\">\n" +
-    "        <h3 class=\"error-head error-head-expand\">\n" +
-    "          <div class=\"error-expand-btn\">\n" +
-    "            Message\n" +
-    "          </div>\n" +
-    "        </h3>\n" +
-    "      </header>\n" +
-    "      <pre class=\"error-pre\"><code class=\"error-message\">{{parseError.message}}</code></pre>\n" +
-    "\n" +
-    "      <div ng-if=\"parseError.snippet\">\n" +
-    "        <header class=\"error-row error-header\">\n" +
-    "          <h3 class=\"error-head error-head-expand\">\n" +
-    "            <div class=\"error-expand-btn\">\n" +
-    "              Snippet <span class=\"error-subhead\">(Line {{parseError.line}}, Column {{parseError.column}})</span>\n" +
-    "            </div>\n" +
-    "          </h3>\n" +
-    "        </header>\n" +
-    "        <pre class=\"error-pre\"><code class=\"error-snippet\">{{parseError.snippet}}</code></pre>\n" +
-    "      </div>\n" +
-    "\n" +
-    "      <div ng-if=\"parseError.raml\">\n" +
-    "        <header class=\"error-row error-header\">\n" +
-    "          <h3 class=\"error-head error-head-expand\">\n" +
-    "            <div class=\"error-expand-btn\">\n" +
-    "              RAML\n" +
-    "            </div>\n" +
-    "          </h3>\n" +
-    "        </header>\n" +
-    "        <pre class=\"error-pre error-codemirror-container\"><code ui-codemirror=\"{\n" +
-    "            lineNumbers: true,\n" +
-    "            readOnly: 'nocursor',\n" +
-    "            lineWrapping : true,\n" +
-    "            tabSize: 2,\n" +
-    "            mode: 'yaml'\n" +
-    "          }\" ng-model=\"parseError.raml\"></code></pre>\n" +
-    "      </div>\n" +
-    "    </section>\n" +
     "  </div>\n" +
     "\n" +
     "  <div ng-if=\"loaded\">\n" +
