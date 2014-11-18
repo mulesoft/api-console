@@ -16,8 +16,16 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   margin-top: 0;
 }
 
-
 .line-error {
   background: #FBC2C4 !important;
   color: #8a1f11 !important;
+}
+
+.parser-error {
+  font-size: 13px;
+  color: red;
+  padding-left: 1px;
+  word-wrap: break-word;
+  background: #FBC2C4;
+  margin-top: 15px;
 }

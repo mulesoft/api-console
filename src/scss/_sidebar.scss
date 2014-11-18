@@ -561,6 +561,16 @@
   }
 }
 
+.sidebar-action-cancel-request {
+  width: 47%;
+  background-color: #8f6953;
+  letter-spacing: 2px;
+
+  &:hover {
+    background-color: #a9826c;
+  }
+}
+
 .sidebar-action-clear {
   width: 25%;
   margin-left: 1.5%;

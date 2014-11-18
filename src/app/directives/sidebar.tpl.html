@@ -89,7 +89,7 @@
               <div class="sidebar-action-group">
                 <button ng-hide="showSpinner" type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
                 </button>
-                <button ng-if="showSpinner" type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-class="{'sidebar-action-force':context.forceRequest}" disabled="disabled">Loading</button>
+                <button ng-if="showSpinner" type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}} sidebar-action-cancel-request" ng-click="cancelRequest()">Cancel</button>
                 <button class="sidebar-action sidebar-action-clear" ng-click="clearFields()">Clear</button>
                 <button class="sidebar-action sidebar-action-reset" ng-click="resetFields()">Reset</button>
 

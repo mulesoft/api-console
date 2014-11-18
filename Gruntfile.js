@@ -112,6 +112,7 @@ module.exports = function (grunt) {
           { dest: '<%= distdir %>/scripts/vendor/codemirror/addon', src : 'dialog.js', expand: true, cwd: 'vendor/bower_components/codemirror/addon/dialog/' },
           { dest: '<%= distdir %>/scripts/vendor/codemirror/addon', src : 'search.js', expand: true, cwd: 'vendor/bower_components/codemirror/addon/search/' },
           { dest: '<%= distdir %>/scripts/vendor/codemirror/addon', src : 'searchcursor.js', expand: true, cwd: 'vendor/bower_components/codemirror/addon/search/' },
+          { dest: '<%= distdir %>/scripts/vendor/codemirror/addon', src : 'lint.js', expand: true, cwd: 'vendor/bower_components/codemirror/addon/lint/' },
           { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular.js', expand: true, cwd: 'vendor/bower_components/angular/' },
           { dest: '<%= distdir %>/scripts/vendor/angular', src : 'ui-codemirror.js', expand: true, cwd: 'vendor/bower_components/angular-ui-codemirror/' },
           { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular-marked.js', expand: true, cwd: 'vendor/bower_components/angular-marked/' }
