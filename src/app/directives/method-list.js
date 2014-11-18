@@ -16,7 +16,11 @@
             var definitions = $scope.context.bodyContent.definitions;
 
             Object.keys(definitions).map(function (key) {
-              definitions[key].reset($scope.methodInfo.body[key].formParameters);
+              if (typeof definitions[key].reset !== 'undefined') {
+                definitions[key].reset($scope.methodInfo.body[key].formParameters);
+              } else {
+                definitions[key].value = definitions[key].contentType.example;
+              }
             });
           }
         }
