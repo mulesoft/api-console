@@ -29,6 +29,7 @@
   text-rendering: optimizeLegibility;
   text-transform: uppercase;
   transition: 0.2s ease background;
+  cursor: pointer;
 
   &:hover {
     background: rgba(0,0,0,0.6);

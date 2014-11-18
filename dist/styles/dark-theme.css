@@ -462,6 +462,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   text-rendering: optimizeLegibility;
   text-transform: uppercase;
   transition: 0.2s ease background;
+  cursor: pointer;
 }
 .theme-toggle:hover {
   background: rgba(0, 0, 0, 0.6);
@@ -998,6 +999,12 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   color: #5685aa;
   font-size: 13px;
   margin-bottom: 5px;
+}
+.resource-proxy a {
+  color: #5685aa;
+}
+.resource-proxy a:visited {
+  color: #5685aa;
 }
 
 .resource-body-heading > span {

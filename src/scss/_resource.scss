@@ -294,4 +294,12 @@
   color: $color-sidebar-subheader-text;
   font-size: 13px;
   margin-bottom: 5px;
+
+  a {
+    color: $color-sidebar-subheader-text;
+  }
+
+  a:visited {
+    color: $color-sidebar-subheader-text;
+  }
 }
