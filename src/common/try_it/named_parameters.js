@@ -43,7 +43,7 @@
   NamedParameters.prototype.clear = function (info) {
     var that = this;
     Object.keys(this.values).map(function (key) {
-      if (typeof info[key][0].enum === 'undefined') {
+      if (typeof info[key][0].enum === 'undefined' || info[key][0].overwritten === true) {
         that.values[key] = [''];
       }
     });

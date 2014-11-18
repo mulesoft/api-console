@@ -132,6 +132,16 @@
           return params;
         }
 
+        function clearCustomFields (types) {
+          types.map(function (type) {
+            var custom = $scope.context.customParameters[type];
+
+            for (var i = 0; i < custom.length; i++) {
+              custom[i].value = '';
+            }
+          });
+        }
+
         $scope.clearFields = function () {
           $scope.context.uriParameters.clear($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.clear($scope.methodInfo.queryParameters);
@@ -140,6 +150,22 @@
             $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value = '';
           }
           $scope.context.forceRequest = false;
+
+          if ($scope.credentials) {
+            Object.keys($scope.credentials).map(function (key) {
+              $scope.credentials[key] = '';
+            });
+          }
+
+          clearCustomFields(['headers', 'queryParameters']);
+
+          if ($scope.context.bodyContent) {
+            var definitions = $scope.context.bodyContent.definitions;
+
+            Object.keys(definitions).map(function (key) {
+              definitions[key].clear($scope.methodInfo.body[key].formParameters);
+            });
+          }
         };
 
         $scope.resetFields = function () {

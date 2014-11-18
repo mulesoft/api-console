@@ -55,8 +55,10 @@
           $this.text('Override');
 
           if($el.hasClass('sidebar-override-show')) {
+            definition.overwritten = true;
             $this.text('Cancel override');
           } else {
+            definition.overwritten = false;
             $scope.context[$scope.type].values[definition.id][0] = definition.enum[0];
           }
         };

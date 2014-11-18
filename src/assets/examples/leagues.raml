@@ -2,10 +2,32 @@
 title: "La Liga"
 version: "1.0"
 baseUri: "http://localhost:3000/api"
+
+securitySchemes:
+  - basic:
+      type: Basic Authentication
+
+securedBy: [ basic ]
+
 /teams:
   displayName: Teams
   post:
     description: Delete an item by Code.
+    headers:
+      header:
+        displayName: header
+        example: header
+    queryParameters:
+      param:
+        displayName: param
+        example: param
+      filter:
+        enum:
+          - assigned
+          - created
+          - mentioned
+          - subscribed
+          - all
     body:
       application/x-www-form-urlencoded:
         formParameters:
