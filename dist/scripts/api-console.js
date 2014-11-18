@@ -1227,6 +1227,11 @@
       replace: true,
       scope: {
         credentials: '='
+      },
+      controller: function ($scope) {
+        $scope.onChange = function () {
+          $scope.$parent.context.forceRequest = false;
+        };
       }
     };
   };
@@ -1245,6 +1250,11 @@
       replace: true,
       scope: {
         credentials: '='
+      },
+      controller: function ($scope) {
+        $scope.onChange = function () {
+          $scope.$parent.context.forceRequest = false;
+        };
       }
     };
   };
@@ -1262,6 +1272,10 @@
       templateUrl: 'security/oauth2.tpl.html',
       replace: true,
       controller: function ($scope) {
+        $scope.onChange = function () {
+          $scope.$parent.context.forceRequest = false;
+        };
+
         $scope.ownerOptionsEnabled = function () {
           return $scope.credentials.grant === 'owner';
         };
@@ -3386,13 +3400,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div class=\"sidebar-row\">\n" +
     "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"username\" class=\"sidebar-label\">Username <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\"/>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"password\" class=\"sidebar-label\">Password <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\"/>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
@@ -3403,13 +3417,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div class=\"sidebar-row\">\n" +
     "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"consumerKey\" class=\"sidebar-label\">Consumer Key <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"consumerKey\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerKey\"/>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"consumerKey\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerKey\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"consumerSecret\" class=\"sidebar-label\">Consumer Secret <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"consumerSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerSecret\"/>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"consumerSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerSecret\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
@@ -3427,25 +3441,25 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"clientId\" class=\"sidebar-label\">Client ID <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"clientId\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientId\"/>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"clientId\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientId\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\">\n" +
     "    <label for=\"clientSecret\" class=\"sidebar-label\">Client Secret <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"clientSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientSecret\"/>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"clientSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientSecret\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
     "    <label for=\"username\" class=\"sidebar-label\">Username <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\"/>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
     "  <p class=\"sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
     "    <label for=\"password\" class=\"sidebar-label\">Password <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\"/>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
