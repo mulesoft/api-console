@@ -142,6 +142,11 @@
           });
         }
 
+        $scope.prefillBody = function (current) {
+          var definition   = $scope.context.bodyContent.definitions[current];
+          definition.value = definition.contentType.example;
+        };
+
         $scope.clearFields = function () {
           $scope.context.uriParameters.clear($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.clear($scope.methodInfo.queryParameters);
@@ -160,12 +165,22 @@
           clearCustomFields(['headers', 'queryParameters']);
 
           if ($scope.context.bodyContent) {
-            var definitions = $scope.context.bodyContent.definitions;
+            var current    = $scope.context.bodyContent.selected;
+            var definition = $scope.context.bodyContent.definitions[current];
 
-            Object.keys(definitions).map(function (key) {
-              definitions[key].clear($scope.methodInfo.body[key].formParameters);
-            });
+            if (typeof definition.clear !== 'undefined') {
+              definition.clear($scope.methodInfo.body[current].formParameters);
+            } else {
+              definition.value = '';
+            }
           }
+        };
+
+        $scope.resetFormParameter = function (param) {
+          var current    = $scope.context.bodyContent.selected;
+          var definition = $scope.context.bodyContent.definitions[current];
+
+          definition.reset($scope.methodInfo.body[current].formParameters, param.id);
         };
 
         $scope.resetFields = function () {
@@ -174,10 +189,14 @@
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
 
           if ($scope.context.bodyContent) {
-            var current      = $scope.context.bodyContent.selected;
-            var definition   = $scope.context.bodyContent.definitions[current];
+            var current    = $scope.context.bodyContent.selected;
+            var definition = $scope.context.bodyContent.definitions[current];
 
-            definition.reset($scope.methodInfo.body[current].formParameters);
+            if (typeof definition.reset !== 'undefined') {
+              definition.reset($scope.methodInfo.body[current].formParameters);
+            } else {
+              definition.value = definition.contentType.example;
+            }
           }
 
           $scope.context.forceRequest = false;

@@ -664,6 +664,11 @@
           });
         }
 
+        $scope.prefillBody = function (current) {
+          var definition   = $scope.context.bodyContent.definitions[current];
+          definition.value = definition.contentType.example;
+        };
+
         $scope.clearFields = function () {
           $scope.context.uriParameters.clear($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.clear($scope.methodInfo.queryParameters);
@@ -682,12 +687,22 @@
           clearCustomFields(['headers', 'queryParameters']);
 
           if ($scope.context.bodyContent) {
-            var definitions = $scope.context.bodyContent.definitions;
+            var current    = $scope.context.bodyContent.selected;
+            var definition = $scope.context.bodyContent.definitions[current];
 
-            Object.keys(definitions).map(function (key) {
-              definitions[key].clear($scope.methodInfo.body[key].formParameters);
-            });
+            if (typeof definition.clear !== 'undefined') {
+              definition.clear($scope.methodInfo.body[current].formParameters);
+            } else {
+              definition.value = '';
+            }
           }
+        };
+
+        $scope.resetFormParameter = function (param) {
+          var current    = $scope.context.bodyContent.selected;
+          var definition = $scope.context.bodyContent.definitions[current];
+
+          definition.reset($scope.methodInfo.body[current].formParameters, param.id);
         };
 
         $scope.resetFields = function () {
@@ -696,10 +711,14 @@
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
 
           if ($scope.context.bodyContent) {
-            var current      = $scope.context.bodyContent.selected;
-            var definition   = $scope.context.bodyContent.definitions[current];
+            var current    = $scope.context.bodyContent.selected;
+            var definition = $scope.context.bodyContent.definitions[current];
 
-            definition.reset($scope.methodInfo.body[current].formParameters);
+            if (typeof definition.reset !== 'undefined') {
+              definition.reset($scope.methodInfo.body[current].formParameters);
+            } else {
+              definition.value = definition.contentType.example;
+            }
           }
 
           $scope.context.forceRequest = false;
@@ -3105,14 +3124,20 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "              <h4 class=\"sidebar-subhead\">Body</h4>\n" +
     "            </header>\n" +
     "\n" +
-    "            <div class=\"sidebar-row\">\n" +
-    "              <div class=\"toggle-group sidebar-toggle-group sidebar-toggle-type\">\n" +
-    "                <button class=\"toggle toggle-mini\" ng-click=\"toggleBodyType($event, key)\" ng-class=\"{'is-active': $first}\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</button>\n" +
-    "              </div>\n" +
+    "            <div class=\"sidebar-row\" style=\"padding-bottom: 0;\">\n" +
+    "              <select class=\"sidebar-input\" ng-model=\"context.bodyContent.selected\" style=\"margin-bottom: 0;\">\n" +
+    "               <option ng-repeat=\"(key, scheme) in methodInfo.body\" value=\"{{key}}\">{{key}}</option>\n" +
+    "              </select>\n" +
     "            </div>\n" +
     "\n" +
     "            <div class=\"sidebar-row\" ng-switch=\"context.bodyContent.isForm(context.bodyContent.selected)\">\n" +
-    "              <div ng-switch-when=\"false\" class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2 }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
+    "              <div ng-switch-when=\"false\">\n" +
+    "                <div class=\"codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2 }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
+    "                <div class=\"sidebar-prefill sidebar-row\" align=\"right\" ng-if=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
+    "                  <button class=\"sidebar-action-prefill\" ng-click=\"prefillBody(context.bodyContent.selected)\">Prefill with example</button>\n" +
+    "                </div>\n" +
+    "              </div>\n" +
+    "\n" +
     "\n" +
     "              <div ng-switch-when=\"true\">\n" +
     "                <p class=\"sidebar-input-container\" ng-repeat=\"param in context.bodyContent.definitions[context.bodyContent.selected].plain\">\n" +
@@ -3125,7 +3150,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                  <label for=\"{{param.definitions[0].id}}\" class=\"sidebar-label\">{{param.definitions[0].displayName}} <span class=\"side-bar-required-field\" ng-if=\"param.definitions[0].required\">*</span></label>\n" +
     "\n" +
     "                  <span class=\"sidebar-input-tooltip-container sidebar-input-left\" ng-if=\"hasExampleValue(param.definitions[0].example)\">\n" +
-    "                    <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"reset(param.definitions)\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
+    "                    <button tabindex=\"-1\" class=\"sidebar-input-reset\" ng-click=\"resetFormParameter(param.definitions[0])\"><span class=\"visuallyhidden\">Reset field</span></button>\n" +
     "                    <span class=\"sidebar-tooltip-flyout-left\">\n" +
     "                      <span>Use example value</span>\n" +
     "                    </span>\n" +

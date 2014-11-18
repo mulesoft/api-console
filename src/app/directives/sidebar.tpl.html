@@ -45,14 +45,20 @@
               <h4 class="sidebar-subhead">Body</h4>
             </header>
 
-            <div class="sidebar-row">
-              <div class="toggle-group sidebar-toggle-group sidebar-toggle-type">
-                <button class="toggle toggle-mini" ng-click="toggleBodyType($event, key)" ng-class="{'is-active': $first}" ng-repeat="(key, value) in methodInfo.body">{{key}}</button>
-              </div>
+            <div class="sidebar-row" style="padding-bottom: 0;">
+              <select class="sidebar-input" ng-model="context.bodyContent.selected" style="margin-bottom: 0;">
+               <option ng-repeat="(key, scheme) in methodInfo.body" value="{{key}}">{{key}}</option>
+              </select>
             </div>
 
             <div class="sidebar-row" ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
-              <div ng-switch-when="false" class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+              <div ng-switch-when="false">
+                <div class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+                <div class="sidebar-prefill sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
+                  <button class="sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
+                </div>
+              </div>
+
 
               <div ng-switch-when="true">
                 <p class="sidebar-input-container" ng-repeat="param in context.bodyContent.definitions[context.bodyContent.selected].plain">
@@ -65,7 +71,7 @@
                   <label for="{{param.definitions[0].id}}" class="sidebar-label">{{param.definitions[0].displayName}} <span class="side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
 
                   <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(param.definitions[0].example)">
-                    <button tabindex="-1" class="sidebar-input-reset" ng-click="reset(param.definitions)"><span class="visuallyhidden">Reset field</span></button>
+                    <button tabindex="-1" class="sidebar-input-reset" ng-click="resetFormParameter(param.definitions[0])"><span class="visuallyhidden">Reset field</span></button>
                     <span class="sidebar-tooltip-flyout-left">
                       <span>Use example value</span>
                     </span>
