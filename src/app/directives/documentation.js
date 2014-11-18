@@ -58,12 +58,14 @@
 
         $scope.toggleTab = function ($event) {
           var $this        = jQuery($event.currentTarget);
-          var $eachTab     = $this.children('.toggle-tab');
+          var $eachTab     = $this.parent().children('.toggle-tab');
           var $panel       = $this.closest('.resource-panel');
           var $eachContent = $panel.find('.resource-panel-content');
 
-          $eachTab.toggleClass('is-active');
-          $eachContent.toggleClass('is-active');
+          if (!$this.hasClass('is-active')) {
+            $eachTab.toggleClass('is-active');
+            $eachContent.toggleClass('is-active');
+          }
         };
 
         $scope.changeType = function ($event, type, code) {
