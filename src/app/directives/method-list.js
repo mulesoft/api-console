@@ -7,6 +7,20 @@
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
       controller: function($scope, $location, $anchorScroll, $rootScope) {
+        function loadExamples () {
+          $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
+          $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
+          $scope.context.headers.reset($scope.methodInfo.headers.plain);
+
+          if ($scope.context.bodyContent) {
+            var definitions = $scope.context.bodyContent.definitions;
+
+            Object.keys(definitions).map(function (key) {
+              definitions[key].reset($scope.methodInfo.body[key].formParameters);
+            });
+          }
+        }
+
         function getResponseInfo() {
           var responseInfo = {};
           var responses    = $scope.methodInfo.responses;
@@ -93,6 +107,8 @@
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
           };
+
+          loadExamples();
 
           var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
           $scope.currentScheme = {

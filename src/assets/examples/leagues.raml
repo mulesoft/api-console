@@ -4,6 +4,37 @@ version: "1.0"
 baseUri: "http://localhost:3000/api"
 /teams:
   displayName: Teams
+  post:
+    description: Delete an item by Code.
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+          code:
+            displayName: Code
+            description: Code of the item to delete.
+            example: "ASX-140"
+            type: string
+            required: true
+            minLength: 3
+            maxLength: 12
+      multipart/form-data:
+        formParameters:
+          code:
+            displayName: Code
+            description: Code of the item to delete.
+            example: "ASX-140"
+            type: string
+            required: true
+            minLength: 3
+            maxLength: 12
+          code2:
+            displayName: Code 2
+            description: Code of the item to delete.
+            example: "ASX-140"
+            type: string
+            required: true
+            minLength: 3
+            maxLength: 12
   get:
     description: |
       *Obtain* information from a collection of teams simultaneously
@@ -177,60 +208,7 @@ baseUri: "http://localhost:3000/api"
                 "homeCity": "Zaragoza",
                 "stadium": "La Romareda"
               }]
-  post:
-    description: Add a new team to the league
-    body:
-      application/json:
-        example: |
-          {
-            "name": "Barcelona",
-            "id": "BAR",
-            "homeCity": "Barcelona",
-            "stadium": "Camp Nou"
-          }
-        schema: |
-          {
-            "$schema": "http://json-schema.org/draft-03/schema",
-            "properties": {
-              "homeCity": {
-                "description": "Name of the city to which this team belongs",
-                "type": "string"
-              },
-              "id": {
-                "description": "A three-letter code that identifies the team id",
-                "maxLength": 3,
-                "minLength": 3,
-                "type": "string"
-              },
-              "name": {
-                "description": "Name of the team",
-                "type": "string"
-              },
-              "stadium": {
-                "description": "Name of the stadium",
-                "type": "string"
-              }
-            },
-            "type": "object",
-            "name": "Team"
-          }
-    responses:
-      201:
-        description: |
-          The team has been succesfully created
-        headers:
-          Location:
-            type: string
-            description: Location of the newly created team
-        body:
-          application/json:
-            example: |
-              {
-                "name": test"
-              }
-      409:
-        description: |
-          The team already exists
+
   /{teamId}:
     displayName: Team
     #description: |
