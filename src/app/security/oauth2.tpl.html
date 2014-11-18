@@ -8,25 +8,25 @@
 
   <p class="sidebar-input-container">
     <label for="clientId" class="sidebar-label">Client ID <span class="side-bar-required-field">*</span></label>
-    <input required="true" type="text" name="clientId" class="sidebar-input sidebar-security-field" ng-model="credentials.clientId"/>
+    <input required="true" type="text" name="clientId" class="sidebar-input sidebar-security-field" ng-model="credentials.clientId" ng-change="onChange()"/>
     <span class="field-validation-error"></span>
   </p>
 
   <p class="sidebar-input-container">
     <label for="clientSecret" class="sidebar-label">Client Secret <span class="side-bar-required-field">*</span></label>
-    <input required="true" type="password" name="clientSecret" class="sidebar-input sidebar-security-field" ng-model="credentials.clientSecret"/>
+    <input required="true" type="password" name="clientSecret" class="sidebar-input sidebar-security-field" ng-model="credentials.clientSecret" ng-change="onChange()"/>
     <span class="field-validation-error"></span>
   </p>
 
   <p class="sidebar-input-container" ng-if="ownerOptionsEnabled()">
     <label for="username" class="sidebar-label">Username <span class="side-bar-required-field">*</span></label>
-    <input required="true" type="text" name="username" class="sidebar-input sidebar-security-field" ng-model="credentials.username"/>
+    <input required="true" type="text" name="username" class="sidebar-input sidebar-security-field" ng-model="credentials.username" ng-change="onChange()"/>
     <span class="field-validation-error"></span>
   </p>
 
   <p class="sidebar-input-container" ng-if="ownerOptionsEnabled()">
     <label for="password" class="sidebar-label">Password <span class="side-bar-required-field">*</span></label>
-    <input required="true" type="password" name="password" class="sidebar-input sidebar-security-field" ng-model="credentials.password"/>
+    <input required="true" type="password" name="password" class="sidebar-input sidebar-security-field" ng-model="credentials.password" ng-change="onChange()"/>
     <span class="field-validation-error"></span>
   </p>
 </div>

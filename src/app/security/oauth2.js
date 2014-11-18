@@ -7,6 +7,10 @@
       templateUrl: 'security/oauth2.tpl.html',
       replace: true,
       controller: function ($scope) {
+        $scope.onChange = function () {
+          $scope.$parent.context.forceRequest = false;
+        };
+
         $scope.ownerOptionsEnabled = function () {
           return $scope.credentials.grant === 'owner';
         };

@@ -8,6 +8,11 @@
       replace: true,
       scope: {
         credentials: '='
+      },
+      controller: function ($scope) {
+        $scope.onChange = function () {
+          $scope.$parent.context.forceRequest = false;
+        };
       }
     };
   };
