@@ -9,14 +9,14 @@
         </header>
 
         <div class="initializer-row">
-          <p class="initializer-input-container">
-            <input id="ramlPath" autofocus class="initializer-input initializer-raml-field" ng-model="$parent.ramlUrl" ng-keypress="onKeyPressRamlUrl($event)">
+          <p class="initializer-input-container" ng-class="{ 'initializer-input-container-error': errorMessage }">
+            <input id="ramlPath" autofocus class="initializer-input initializer-raml-field" ng-model="$parent.ramlUrl" ng-keypress="onKeyPressRamlUrl($event)" ng-change="onChange()">
           </p>
-          <div class="initializer-action-group" align="right">
-            <button id="loadRamlFromUrl" class="initializer-action initializer-action-btn" ng-click="loadFromUrl()">Load from URL</button>
-          </div>
           <div class="parser-error" ng-if="isLoadedFromUrl">
             <span>{{errorMessage}}</span>
+          </div>
+          <div class="initializer-action-group" align="right">
+            <button id="loadRamlFromUrl" class="initializer-action initializer-action-btn" ng-click="loadFromUrl()">Load from URL</button>
           </div>
         </div>
       </section>
