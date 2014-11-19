@@ -504,6 +504,10 @@
           $scope.ramlStatus = 'loaded';
         });
 
+        $scope.onChange = function () {
+          $scope.errorMessage = null;
+        };
+
         $scope.onKeyPressRamlUrl = function ($event) {
           if ($event.keyCode === 13) {
             $scope.loadFromUrl();
@@ -3047,14 +3051,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </header>\n" +
     "\n" +
     "        <div class=\"initializer-row\">\n" +
-    "          <p class=\"initializer-input-container\">\n" +
-    "            <input id=\"ramlPath\" autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"$parent.ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\">\n" +
+    "          <p class=\"initializer-input-container\" ng-class=\"{ 'initializer-input-container-error': errorMessage }\">\n" +
+    "            <input id=\"ramlPath\" autofocus class=\"initializer-input initializer-raml-field\" ng-model=\"$parent.ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\" ng-change=\"onChange()\">\n" +
     "          </p>\n" +
-    "          <div class=\"initializer-action-group\" align=\"right\">\n" +
-    "            <button id=\"loadRamlFromUrl\" class=\"initializer-action initializer-action-btn\" ng-click=\"loadFromUrl()\">Load from URL</button>\n" +
-    "          </div>\n" +
     "          <div class=\"parser-error\" ng-if=\"isLoadedFromUrl\">\n" +
     "            <span>{{errorMessage}}</span>\n" +
+    "          </div>\n" +
+    "          <div class=\"initializer-action-group\" align=\"right\">\n" +
+    "            <button id=\"loadRamlFromUrl\" class=\"initializer-action initializer-action-btn\" ng-click=\"loadFromUrl()\">Load from URL</button>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +

@@ -39,6 +39,10 @@
           $scope.ramlStatus = 'loaded';
         });
 
+        $scope.onChange = function () {
+          $scope.errorMessage = null;
+        };
+
         $scope.onKeyPressRamlUrl = function ($event) {
           if ($event.keyCode === 13) {
             $scope.loadFromUrl();

@@ -435,11 +435,21 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .parser-error {
   font-size: 13px;
-  color: red;
+  color: white;
   padding-left: 1px;
   word-wrap: break-word;
-  background: #FBC2C4;
-  margin-top: 15px;
+  background: red;
+  margin-top: -1px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.initializer-input-container-error {
+  margin-bottom: 0 !important;
+}
+.initializer-input-container-error input {
+  border: 1px solid red !important;
+  margin-bottom: 0 !important;
 }
 
 .title {
