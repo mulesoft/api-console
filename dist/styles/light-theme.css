@@ -879,7 +879,7 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .resource-root-toggle {
   position: absolute;
-  top: 7px;
+  top: 2px;
   left: -2px;
   display: block;
   width: 24px;

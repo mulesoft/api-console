@@ -85,7 +85,14 @@
           }
 
           if (parameter.enum) {
-            result += 'one of (' + $scope.unique(parameter.enum).join(', ') + ')';
+            var enumValues = $scope.unique(parameter.enum);
+
+            if (enumValues.length > 1) {
+              result += 'one of ';
+            }
+
+            result += '(' + enumValues.join(', ') + ')';
+
           } else {
             result += parameter.type;
           }
