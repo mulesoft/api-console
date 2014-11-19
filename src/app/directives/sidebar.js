@@ -90,20 +90,21 @@
 
         function validateForm(form) {
           var errors    = form.$error;
-          var uriParams = $scope.context.uriParameters.plain;
+          // var uriParams = $scope.context.uriParameters.plain;
           var flag      = false;
 
           Object.keys(form.$error).map(function (key) {
             for (var i = 0; i < errors[key].length; i++) {
               var fieldName = errors[key][i].$name;
-              var fieldValue = form[fieldName].$viewValue;
+              // var fieldValue = form[fieldName].$viewValue;
 
               form[fieldName].$setViewValue(form[fieldName].$viewValue);
 
-              if (typeof uriParams[fieldName] !== 'undefined' && (typeof fieldValue === 'undefined' || fieldValue === '')) {
-                flag = true;
-                break;
-              }
+              // Enforce request without URI parameters
+              // if (typeof uriParams[fieldName] !== 'undefined' && (typeof fieldValue === 'undefined' || fieldValue === '')) {
+              //   flag = true;
+              //   break;
+              // }
             }
           });
 

@@ -11,19 +11,16 @@
     });
   }
 
-  function rendererFor(template, uriParameters) {
-    var requiredParameters = Object.keys(uriParameters || {}).filter(function(name) {
-      return uriParameters[name].required;
-    });
-
+  function rendererFor(template) {
     return function renderer(context) {
       context = context || {};
 
-      requiredParameters.forEach(function(name) {
-        if (!context[name]) {
-          throw new Error('Missing required uri parameter: ' + name);
-        }
-      });
+      // Enforce request without URI parameters
+      // requiredParameters.forEach(function(name) {
+      //   if (!context[name]) {
+      //     throw new Error('Missing required uri parameter: ' + name);
+      //   }
+      // });
 
       var templated = template.replace(templateMatcher, function(match, parameterName) {
         return context[parameterName] || '';
