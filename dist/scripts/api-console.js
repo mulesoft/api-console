@@ -77,6 +77,16 @@
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
 
+        $scope.showRequestDocumentation = true;
+        $scope.toggleRequestDocumentation = function () {
+          $scope.showRequestDocumentation = !$scope.showRequestDocumentation;
+        };
+
+        $scope.showResponseDocumentation = true;
+        $scope.toggleResponseDocumentation = function () {
+          $scope.showResponseDocumentation = !$scope.showResponseDocumentation;
+        };
+
         $scope.parameterDocumentation = function (parameter) {
           var result = '';
 
@@ -2877,15 +2887,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </ul>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div class=\"resource-panel-tabs clearfix\">\n" +
-    "\n" +
-    "    <div class=\"toggle-tabs resource-panel-toggle-tabs\">\n" +
-    "      <a class=\"toggle-tab is-active\" ng-click=\"toggleTab($event)\">Request</a><a class=\"toggle-tab\" ng-click=\"toggleTab($event)\">Response</a>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
     "  <!-- Request -->\n" +
-    "  <div class=\"resource-panel-primary-row resource-panel-content is-active\">\n" +
+    "  <header class=\"resource-header\">\n" +
+    "    <h3 class=\"resource-head\">\n" +
+    "      <button class=\"sidebar-expand-btn is-open\" ng-click=\"toggleRequestDocumentation($event)\" ng-class=\"{'is-open':showRequestDocumentation, 'is-collapsed':!showRequestDocumentation}\">\n" +
+    "        Request\n" +
+    "      </button>\n" +
+    "    </h3>\n" +
+    "  </header>\n" +
+    "  <div id=\"request-documentation\" class=\"resource-panel-primary-row resource-panel-content is-active\" ng-class=\"{'is-active':showRequestDocumentation}\">\n" +
     "    <h3 class=\"resource-heading-a\">Description</h3>\n" +
     "\n" +
     "    <p marked=\"methodInfo.description\"></p>\n" +
@@ -2953,7 +2963,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <!-- Response -->\n" +
-    "  <div class=\"resource-panel-primary-row resource-panel-content\">\n" +
+    "  <header class=\"resource-header\">\n" +
+    "    <h3 class=\"resource-head\">\n" +
+    "      <button class=\"sidebar-expand-btn is-open\" ng-click=\"toggleResponseDocumentation($event)\" ng-class=\"{'is-open':showResponseDocumentation, 'is-collapsed':!showResponseDocumentation}\">\n" +
+    "        Response\n" +
+    "      </button>\n" +
+    "    </h3>\n" +
+    "  </header>\n" +
+    "  <div class=\"resource-panel-primary-row resource-panel-content is-active\" ng-class=\"{'is-active':showResponseDocumentation}\">\n" +
     "    <div class=\"resource-response-jump\">\n" +
     "      <p>\n" +
     "        Jump to status\n" +

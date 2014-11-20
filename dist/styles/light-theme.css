@@ -1028,6 +1028,29 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
   color: #585961;
 }
 
+.resource-header {
+  position: relative;
+  padding-top: 8px;
+  padding-right: 0;
+  padding-bottom: 8px;
+  border-top: 1px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
+  background: #fafafa;
+  color: #585961;
+}
+
+.resource-head {
+  margin: 0;
+  vertical-align: top;
+  font-size: 18px;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+  margin-left: 32px;
+}
+.resource-head button:focus {
+  outline: none;
+}
+
 .resource-body-heading > span {
   margin-left: 5px;
   cursor: pointer;
@@ -1159,7 +1182,6 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .resource-panel-subheader {
   padding: 14px 32px 18px 100px;
-  border-bottom: solid #e1e1e1;
   border-width: 1px 0;
 }
 @media only screen and (min-width: 600px) {

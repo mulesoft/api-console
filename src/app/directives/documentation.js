@@ -11,6 +11,16 @@
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
 
+        $scope.showRequestDocumentation = true;
+        $scope.toggleRequestDocumentation = function () {
+          $scope.showRequestDocumentation = !$scope.showRequestDocumentation;
+        };
+
+        $scope.showResponseDocumentation = true;
+        $scope.toggleResponseDocumentation = function () {
+          $scope.showResponseDocumentation = !$scope.showResponseDocumentation;
+        };
+
         $scope.parameterDocumentation = function (parameter) {
           var result = '';
 
