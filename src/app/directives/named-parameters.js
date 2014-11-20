@@ -29,6 +29,32 @@
           }
         });
 
+        $scope.segments = [];
+
+        var baseUri = $scope.$parent.raml.baseUri;
+
+        if (baseUri.templated) {
+          var tokens = baseUri.tokens;
+
+          for (var i = 0; i < tokens.length; i++) {
+            $scope.segments.push({
+              name: tokens[i],
+              templated: typeof baseUri.parameters[tokens[i]] !== 'undefined' ? true : false
+            });
+          }
+        }
+
+        $scope.$parent.resource.pathSegments.map(function (element) {
+          var tokens = element.tokens.sort();
+
+          for (var i = 0; i < tokens.length; i++) {
+            $scope.segments.push({
+              name: tokens[i],
+              templated: element.templated && typeof element.parameters[tokens[i]] !== 'undefined' ? true : false
+            });
+          }
+        });
+
         $scope.onChange = function () {
           $scope.context.forceRequest = false;
         };
