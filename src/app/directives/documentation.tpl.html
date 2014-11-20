@@ -6,15 +6,15 @@
     </ul>
   </div>
 
-  <div class="resource-panel-tabs clearfix">
-
-    <div class="toggle-tabs resource-panel-toggle-tabs">
-      <a class="toggle-tab is-active" ng-click="toggleTab($event)">Request</a><a class="toggle-tab" ng-click="toggleTab($event)">Response</a>
-    </div>
-  </div>
-
   <!-- Request -->
-  <div class="resource-panel-primary-row resource-panel-content is-active">
+  <header class="resource-header">
+    <h3 class="resource-head">
+      <button class="sidebar-expand-btn is-open" ng-click="toggleRequestDocumentation($event)" ng-class="{'is-open':showRequestDocumentation, 'is-collapsed':!showRequestDocumentation}">
+        Request
+      </button>
+    </h3>
+  </header>
+  <div id="request-documentation" class="resource-panel-primary-row resource-panel-content is-active" ng-class="{'is-active':showRequestDocumentation}">
     <h3 class="resource-heading-a">Description</h3>
 
     <p marked="methodInfo.description"></p>
@@ -82,7 +82,14 @@
   </div>
 
   <!-- Response -->
-  <div class="resource-panel-primary-row resource-panel-content">
+  <header class="resource-header">
+    <h3 class="resource-head">
+      <button class="sidebar-expand-btn is-open" ng-click="toggleResponseDocumentation($event)" ng-class="{'is-open':showResponseDocumentation, 'is-collapsed':!showResponseDocumentation}">
+        Response
+      </button>
+    </h3>
+  </header>
+  <div class="resource-panel-primary-row resource-panel-content is-active" ng-class="{'is-active':showResponseDocumentation}">
     <div class="resource-response-jump">
       <p>
         Jump to status
