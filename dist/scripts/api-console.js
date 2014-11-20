@@ -399,6 +399,32 @@
           }
         });
 
+        $scope.segments = [];
+
+        var baseUri = $scope.$parent.raml.baseUri;
+
+        if (baseUri.templated) {
+          var tokens = baseUri.tokens;
+
+          for (var i = 0; i < tokens.length; i++) {
+            $scope.segments.push({
+              name: tokens[i],
+              templated: typeof baseUri.parameters[tokens[i]] !== 'undefined' ? true : false
+            });
+          }
+        }
+
+        $scope.$parent.resource.pathSegments.map(function (element) {
+          var tokens = element.tokens.sort();
+
+          for (var i = 0; i < tokens.length; i++) {
+            $scope.segments.push({
+              name: tokens[i],
+              templated: element.templated && typeof element.parameters[tokens[i]] !== 'undefined' ? true : false
+            });
+          }
+        });
+
         $scope.onChange = function () {
           $scope.context.forceRequest = false;
         };
@@ -3009,7 +3035,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <p ng-show=\"showBaseUrl\" class=\"sidebar-method\">{{$parent.methodInfo.method.toUpperCase()}}</p>\n" +
     "    <div ng-show=\"showBaseUrl\" class=\"sidebar-method-content\">\n" +
-    "      <p class=\"sidebar-url\">{{$parent.raml.baseUri.toString()}}</p>\n" +
+    "      <div class=\"sidebar-url\" ng-repeat=\"segment in segments\">\n" +
+    "        <div ng-hide=\"segment.templated\">{{segment.name}}</div>\n" +
+    "        <div ng-show=\"segment.templated\" ng-if=\"context[type].values[segment.name][0]\">{{context[type].values[segment.name][0]}}</div>\n" +
+    "        <div ng-show=\"segment.templated\" ng-if=\"!context[type].values[segment.name][0]\"><span ng-non-bindable>&#123;</span>{{segment.name}}<span ng-non-bindable>&#125;</span></div>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <p class=\"sidebar-input-container\" ng-repeat=\"param in context[type].plain\">\n" +

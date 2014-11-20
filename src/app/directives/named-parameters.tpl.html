@@ -15,7 +15,11 @@
 
     <p ng-show="showBaseUrl" class="sidebar-method">{{$parent.methodInfo.method.toUpperCase()}}</p>
     <div ng-show="showBaseUrl" class="sidebar-method-content">
-      <p class="sidebar-url">{{$parent.raml.baseUri.toString()}}</p>
+      <div class="sidebar-url" ng-repeat="segment in segments">
+        <div ng-hide="segment.templated">{{segment.name}}</div>
+        <div ng-show="segment.templated" ng-if="context[type].values[segment.name][0]">{{context[type].values[segment.name][0]}}</div>
+        <div ng-show="segment.templated" ng-if="!context[type].values[segment.name][0]"><span ng-non-bindable>&#123;</span>{{segment.name}}<span ng-non-bindable>&#125;</span></div>
+      </div>
     </div>
 
     <p class="sidebar-input-container" ng-repeat="param in context[type].plain">
