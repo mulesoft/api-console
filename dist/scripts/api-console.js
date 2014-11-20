@@ -13,7 +13,7 @@
   angular.module('RAML.Directives', []);
   angular.module('RAML.Services', ['raml']);
   angular.module('RAML.Security', []);
-  angular.module('ramlConsoleApp', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror']);
+  angular.module('ramlConsoleApp', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror', 'hljs']);
 
   var renderer = new window.marked.Renderer();
   var loc      = window.location;
@@ -2952,12 +2952,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <div ng-if=\"methodInfo.body[currentBodySelected].example\">\n" +
     "        <span>Example:</span>\n" +
-    "        <pre class=\"resource-pre\"><code >{{methodInfo.body[currentBodySelected].example}}</code></pre>\n" +
+    "        <pre class=\"resource-pre\"><code hljs source=\"methodInfo.body[currentBodySelected].example\"></code></pre>\n" +
     "      </div>\n" +
     "\n" +
     "      <div ng-if=\"methodInfo.body[currentBodySelected].schema\">\n" +
     "        <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +
-    "        <pre class=\"resource-pre resource-pre-toggle\"><code>{{methodInfo.body[currentBodySelected].schema}}</code></pre>\n" +
+    "        <pre class=\"resource-pre resource-pre-toggle\"><code hljs source=\"methodInfo.body[currentBodySelected].schema\"></code></pre>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
@@ -3006,12 +3006,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div ng-if=\"responseInfo[code][responseInfo[code].currentType].example\">\n" +
     "          <span>Example:</span>\n" +
-    "          <pre class=\"resource-pre\"><code >{{responseInfo[code][responseInfo[code].currentType].example}}</code></pre>\n" +
+    "          <pre class=\"resource-pre\"><code hljs source=\"responseInfo[code][responseInfo[code].currentType].example\"></code></pre>\n" +
     "        </div>\n" +
     "\n" +
     "        <div ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
     "          <p><button ng-click=\"showSchema($event)\" class=\"resource-btn js-schema-toggle\">Show Schema</button></p>\n" +
-    "          <pre class=\"resource-pre resource-pre-toggle\"><code>{{responseInfo[code][responseInfo[code].currentType].schema}}</code></pre>\n" +
+    "          <pre class=\"resource-pre resource-pre-toggle\"><code hljs source=\"responseInfo[code][responseInfo[code].currentType].schema\"></code></pre>\n" +
     "        </div>\n" +
     "      </div>\n" +
     "    </section>\n" +

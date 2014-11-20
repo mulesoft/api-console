@@ -71,12 +71,12 @@
 
       <div ng-if="methodInfo.body[currentBodySelected].example">
         <span>Example:</span>
-        <pre class="resource-pre"><code >{{methodInfo.body[currentBodySelected].example}}</code></pre>
+        <pre class="resource-pre"><code hljs source="methodInfo.body[currentBodySelected].example"></code></pre>
       </div>
 
       <div ng-if="methodInfo.body[currentBodySelected].schema">
         <p><button ng-click="showSchema($event)" class="resource-btn js-schema-toggle">Show Schema</button></p>
-        <pre class="resource-pre resource-pre-toggle"><code>{{methodInfo.body[currentBodySelected].schema}}</code></pre>
+        <pre class="resource-pre resource-pre-toggle"><code hljs source="methodInfo.body[currentBodySelected].schema"></code></pre>
       </div>
     </section>
   </div>
@@ -125,12 +125,12 @@
 
         <div ng-if="responseInfo[code][responseInfo[code].currentType].example">
           <span>Example:</span>
-          <pre class="resource-pre"><code >{{responseInfo[code][responseInfo[code].currentType].example}}</code></pre>
+          <pre class="resource-pre"><code hljs source="responseInfo[code][responseInfo[code].currentType].example"></code></pre>
         </div>
 
         <div ng-if="responseInfo[code][responseInfo[code].currentType].schema">
           <p><button ng-click="showSchema($event)" class="resource-btn js-schema-toggle">Show Schema</button></p>
-          <pre class="resource-pre resource-pre-toggle"><code>{{responseInfo[code][responseInfo[code].currentType].schema}}</code></pre>
+          <pre class="resource-pre resource-pre-toggle"><code hljs source="responseInfo[code][responseInfo[code].currentType].schema"></code></pre>
         </div>
       </div>
     </section>

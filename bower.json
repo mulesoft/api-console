@@ -8,13 +8,16 @@
   "dependencies": {
     "angular": "~1.2.16",
     "angular-ui-codemirror": "~0.1.6",
-    "angular-marked" :"~0.0.12",
+    "angular-marked": "~0.0.12",
     "jquery": "~2.1.1",
     "velocity": "~1.1.0",
     "marked": "~0.3.1",
     "codemirror": "~3.15.0",
     "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
-    "raml-js-parser": "raml-org/raml-js-parser#3d7f702b618a99afcc56f85deb4693921af8bbe5"
+    "raml-js-parser": "raml-org/raml-js-parser#3d7f702b618a99afcc56f85deb4693921af8bbe5",
+    "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29",
+    "highlight-js": "~7.0.1",
+    "angular-highlightjs": "~0.3.2"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.9"

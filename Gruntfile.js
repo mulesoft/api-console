@@ -98,6 +98,7 @@ module.exports = function (grunt) {
         files: [
           { dest: '<%= distdir %>/scripts/vendor', src : 'marked.js', expand: true, cwd: 'vendor/bower_components/marked/lib/' },
           { dest: '<%= distdir %>/scripts/vendor', src : 'client-oauth2.js', expand: true, cwd: 'vendor/client-oauth2/' },
+          { dest: '<%= distdir %>/scripts/vendor/highlightjs', src : 'highlight.pack.js', expand: true, cwd: 'vendor/bower_components/highlightjs/' },
           { dest: '<%= distdir %>/scripts/vendor/raml', src : 'raml-parser.js', expand: true, cwd: 'vendor/bower_components/raml-js-parser/dist/' },
           { dest: '<%= distdir %>/scripts/vendor/raml', src : 'raml-sanitize.js', expand: true, cwd: 'vendor/raml-sanitize/' },
           { dest: '<%= distdir %>/scripts/vendor/raml', src : 'raml-validate.js', expand: true, cwd: 'vendor/raml-validate/' },
@@ -115,7 +116,8 @@ module.exports = function (grunt) {
           { dest: '<%= distdir %>/scripts/vendor/codemirror/addon', src : 'lint.js', expand: true, cwd: 'vendor/bower_components/codemirror/addon/lint/' },
           { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular.js', expand: true, cwd: 'vendor/bower_components/angular/' },
           { dest: '<%= distdir %>/scripts/vendor/angular', src : 'ui-codemirror.js', expand: true, cwd: 'vendor/bower_components/angular-ui-codemirror/' },
-          { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular-marked.js', expand: true, cwd: 'vendor/bower_components/angular-marked/' }
+          { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular-marked.js', expand: true, cwd: 'vendor/bower_components/angular-marked/' },
+          { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular-highlightjs.js', expand: true, cwd: 'vendor/bower_components/angular-highlightjs/' }
         ]
       }
     },
@@ -163,6 +165,7 @@ module.exports = function (grunt) {
         src: [
           'vendor/bower_components/marked/lib/marked.js',
           'vendor/client-oauth2/client-oauth2.js',
+          'vendor/bower_components/highlightjs/highlight.pack.js',
           'vendor/bower_components/raml-js-parser/dist/raml-parser.js',
           'vendor/raml-validate/raml-validate.js',
           'vendor/raml-sanitize/raml-sanitize.js',
@@ -173,7 +176,8 @@ module.exports = function (grunt) {
           'vendor/codemirror/codemirror.min.js',
           'vendor/bower_components/angular/angular.min.js',
           'vendor/bower_components/angular-ui-codemirror/ui-codemirror.min.js',
-          'vendor/bower_components/angular-marked/angular-marked.min.js'
+          'vendor/bower_components/angular-marked/angular-marked.min.js',
+          'vendor/bower_components/angular-highlightjs/angular-highlightjs.min.js'
         ],
         dest:'<%= distdir %>/scripts/vendor.js'
       }
@@ -237,7 +241,7 @@ module.exports = function (grunt) {
     cssmin: {
       vendor: {
         files: {
-          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/codemirror.css', 'src/assets/styles/fonts.css']
+          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/codemirror.css', 'src/assets/styles/fonts.css', 'src/assets/styles/highlight.github.css']
         }
       }
     },
