@@ -1326,12 +1326,14 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
 
 .resource-pre {
   margin: 0 0 18px 0;
-  padding: 8px 12px;
   border: 1px solid #141519;
   border-radius: 3px;
   background: #141519;
   font-family: Source Code Pro;
   font-size: 14px;
+}
+.resource-pre code pre {
+  margin: 0;
 }
 
 .resource-pre-toggle {

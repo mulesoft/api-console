@@ -323,13 +323,19 @@
 
 .resource-pre {
   margin: 0 0 18px 0;
-  padding: 8px 12px;
+  // padding: 8px 12px;
   border: 1px solid $color-sidebar-pre-border;
   border-radius: 3px;
 
   background: $color-sidebar-pre-bg;
   font-family: Source Code Pro;
   font-size: 14px;
+
+  code {
+    pre {
+      margin: 0;
+    }
+  }
 }
 
 .resource-pre-toggle {
