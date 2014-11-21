@@ -1,53 +1,53 @@
 <section>
-  <header class="sidebar-row sidebar-subheader">
-    <h4 class="sidebar-subhead">{{title}}</h4>
-    <button class="sidebar-add-btn" ng-click="addCustomParameter()" ng-if="enableCustomParameters"></button>
+  <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
+    <h4 class="raml-console-sidebar-subhead">{{title}}</h4>
+    <button class="raml-console-sidebar-add-btn" ng-click="addCustomParameter()" ng-if="enableCustomParameters"></button>
   </header>
 
-  <div class="sidebar-row">
-    <p class="sidebar-input-container sidebar-input-container-custom" ng-repeat="customParam in context.customParameters[type]">
-      <button class="sidebar-input-delete" ng-click="removeCutomParam(customParam)"></button>
-      <label for="custom-header" class="sidebar-label sidebar-label-custom">
-        <input class="sidebar-custom-input-for-label" ng-model="customParam.name" placeholder="custom key">
+  <div class="raml-console-sidebar-row">
+    <p class="raml-console-sidebar-input-container raml-console-sidebar-input-container-custom" ng-repeat="customParam in context.customParameters[type]">
+      <button class="raml-console-sidebar-input-delete" ng-click="removeCutomParam(customParam)"></button>
+      <label for="custom-header" class="raml-console-sidebar-label raml-console-sidebar-label-custom">
+        <input class="raml-console-sidebar-custom-input-for-label" ng-model="customParam.name" placeholder="custom key">
       </label>
-      <input name="custom-header" class="sidebar-input sidebar-input-custom" placeholder="custom value" ng-model="customParam.value">
+      <input name="custom-header" class="raml-console-sidebar-input raml-console-sidebar-input-custom" placeholder="custom value" ng-model="customParam.value">
     </p>
 
-    <p ng-show="showBaseUrl" class="sidebar-method">{{$parent.methodInfo.method.toUpperCase()}}</p>
-    <div ng-show="showBaseUrl" class="sidebar-method-content">
-      <div class="sidebar-url" ng-repeat="segment in segments">
+    <p ng-show="showBaseUrl" class="raml-console-sidebar-method">{{$parent.methodInfo.method.toUpperCase()}}</p>
+    <div ng-show="showBaseUrl" class="raml-console-sidebar-method-content">
+      <div class="raml-console-sidebar-url" ng-repeat="segment in segments">
         <div ng-hide="segment.templated">{{segment.name}}</div>
         <div ng-show="segment.templated" ng-if="context[type].values[segment.name][0]">{{context[type].values[segment.name][0]}}</div>
         <div ng-show="segment.templated" ng-if="!context[type].values[segment.name][0]"><span ng-non-bindable>&#123;</span>{{segment.name}}<span ng-non-bindable>&#125;</span></div>
       </div>
     </div>
 
-    <p class="sidebar-input-container" ng-repeat="param in context[type].plain">
-      <span class="sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
-        <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
-        <span class="sidebar-tooltip-flyout">
+    <p class="raml-console-sidebar-input-container" ng-repeat="param in context[type].plain">
+      <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
+        <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
+        <span class="raml-console-sidebar-tooltip-flyout">
           <span marked="param.definitions[0].description"></span>
         </span>
       </span>
-      <label for="{{param.definitions[0].id}}" class="sidebar-label">{{param.definitions[0].displayName}} <a class="sidebar-override" ng-if="canOverride(param.definitions[0])" ng-click="overrideField($event, param.definitions[0])">Override</a> <span class="side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
+      <label for="{{param.definitions[0].id}}" class="raml-console-sidebar-label">{{param.definitions[0].displayName}} <a class="raml-console-sidebar-override" ng-if="canOverride(param.definitions[0])" ng-click="overrideField($event, param.definitions[0])">Override</a> <span class="raml-console-side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
 
-      <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(param.definitions[0])">
-        <button tabindex="-1" class="sidebar-input-reset" ng-click="reset(param.definitions)"><span class="visuallyhidden">Reset field</span></button>
-        <span class="sidebar-tooltip-flyout-left">
+      <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param.definitions[0])">
+        <button tabindex="-1" class="raml-console-sidebar-input-reset" ng-click="reset(param.definitions)"><span class="raml-console-visuallyhidden">Reset field</span></button>
+        <span class="raml-console-sidebar-tooltip-flyout-left">
           <span>Use example value</span>
         </span>
       </span>
 
-      <select id="select_{{param.definitions[0].id}}" ng-if="isEnum(param.definitions[0])" name="param.definitions[0].id" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" style="margin-bottom: 0;" ng-change="onChange()">
+      <select id="select_{{param.definitions[0].id}}" ng-if="isEnum(param.definitions[0])" name="param.definitions[0].id" class="raml-console-sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" style="margin-bottom: 0;" ng-change="onChange()">
        {{$index}}
        <option ng-repeat="enum in unique(param.definitions[0].enum)" value="{{enum}}">{{enum}}</option>
       </select>
 
-      <input id="{{param.definitions[0].id}}" ng-hide="!isDefault(param.definitions[0])" class="sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param.definitions[0])}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" ng-change="onChange()"/>
+      <input id="{{param.definitions[0].id}}" ng-hide="!isDefault(param.definitions[0])" class="raml-console-sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" ng-class="{'raml-console-sidebar-field-no-default': !hasExampleValue(param.definitions[0])}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" ng-change="onChange()"/>
 
-      <input id="checkbox_{{param.definitions[0].id}}" ng-if="isBoolean(param.definitions[0])" class="sidebar-input" type="checkbox" ng-model="context[type].values[param.definitions[0].id][0]" dynamic-name="param.definitions[0].id" ng-change="onChange()" />
+      <input id="checkbox_{{param.definitions[0].id}}" ng-if="isBoolean(param.definitions[0])" class="raml-console-sidebar-input" type="checkbox" ng-model="context[type].values[param.definitions[0].id][0]" dynamic-name="param.definitions[0].id" ng-change="onChange()" />
 
-      <span class="field-validation-error"></span>
+      <span class="raml-console-field-validation-error"></span>
     </p>
   </div>
 </section>

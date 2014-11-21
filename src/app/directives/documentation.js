@@ -75,54 +75,54 @@
 
         $scope.toggleTab = function ($event) {
           var $this        = jQuery($event.currentTarget);
-          var $eachTab     = $this.parent().children('.toggle-tab');
-          var $panel       = $this.closest('.resource-panel');
-          var $eachContent = $panel.find('.resource-panel-content');
+          var $eachTab     = $this.parent().children('.raml-console-toggle-tab');
+          var $panel       = $this.closest('.raml-console-resource-panel');
+          var $eachContent = $panel.find('.raml-console-resource-panel-content');
 
-          if (!$this.hasClass('is-active')) {
-            $eachTab.toggleClass('is-active');
-            $eachContent.toggleClass('is-active');
+          if (!$this.hasClass('raml-console-is-active')) {
+            $eachTab.toggleClass('raml-console-is-active');
+            $eachContent.toggleClass('raml-console-is-active');
           }
         };
 
         $scope.changeType = function ($event, type, code) {
           var $this        = jQuery($event.currentTarget);
-          var $panel       = $this.closest('.resource-body-heading');
+          var $panel       = $this.closest('.raml-console-resource-body-heading');
           var $eachContent = $panel.find('span');
 
-          $eachContent.removeClass('isActive');
-          $this.addClass('isActive');
+          $eachContent.removeClass('raml-console-is-active');
+          $this.addClass('raml-console-is-active');
 
           $scope.responseInfo[code].currentType = type;
         };
 
         $scope.changeResourceBodyType = function ($event, type) {
           var $this        = jQuery($event.currentTarget);
-          var $panel       = $this.closest('.request-body-heading');
+          var $panel       = $this.closest('.raml-console-request-body-heading');
           var $eachContent = $panel.find('span');
 
-          $eachContent.removeClass('isActive');
-          $this.addClass('isActive');
+          $eachContent.removeClass('raml-console-is-active');
+          $this.addClass('raml-console-is-active');
 
           $scope.currentBodySelected = type;
         };
 
         $scope.showSchema = function ($event) {
           var $this   = jQuery($event.currentTarget);
-          var $panel  = $this.closest('.resource-panel');
-          var $schema = $panel.find('.resource-pre-toggle');
+          var $panel  = $this.closest('.raml-console-resource-panel');
+          var $schema = $panel.find('.raml-console-resource-pre-toggle');
 
-          $this.toggleClass('is-active');
+          $this.toggleClass('raml-console-is-active');
 
-          if (!$schema.hasClass('is-active')) {
+          if (!$schema.hasClass('raml-console-is-active')) {
             $this.text('Hide Schema');
             $schema
-              .addClass('is-active')
+              .addClass('raml-console-is-active')
               .velocity('slideDown');
           } else {
             $this.text('Show Schema');
             $schema
-              .removeClass('is-active')
+              .removeClass('raml-console-is-active')
               .velocity('slideUp');
           }
         };

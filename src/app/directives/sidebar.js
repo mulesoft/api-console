@@ -209,15 +209,15 @@
 
         $scope.toggleBodyType = function ($event, bodyType) {
           var $this  = jQuery($event.currentTarget);
-          var $panel = $this.closest('.sidebar-toggle-type').find('button');
+          var $panel = $this.closest('.raml-console-sidebar-toggle-type').find('button');
 
-          $panel.removeClass('is-active');
-          $this.addClass('is-active');
+          $panel.removeClass('raml-console-is-active');
+          $this.addClass('raml-console-is-active');
           $scope.context.bodyContent.selected = bodyType;
 
-          var editor = $this.closest('.sidebar-row')
+          var editor = $this.closest('.raml-console-sidebar-row')
                             .parent()
-                            .find('.codemirror-body-editor .CodeMirror')[0];
+                            .find('.raml-console-codemirror-body-editor .CodeMirror')[0];
 
           if (editor) {
             editor = editor.CodeMirror;
@@ -258,8 +258,8 @@
             $scope.showSpinner = true;
             // $scope.toggleSidebar($event, true);
             $scope.toggleRequestMetadata($event, true);
-            $scope.editors = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.CodeMirror');
-            $scope.responseDetails = jQuery($event.currentTarget).closest('.sidebar-content-wrapper').find('.side-bar-try-it-description');
+            $scope.editors = jQuery($event.currentTarget).closest('.raml-console-sidebar-content-wrapper').find('.CodeMirror');
+            $scope.responseDetails = jQuery($event.currentTarget).closest('.raml-console-sidebar-content-wrapper').find('.raml-console-side-bar-try-it-description');
 
             try {
               var pathBuilder = context.pathBuilder;
@@ -334,15 +334,15 @@
 
         $scope.toggleSidebar = function ($event) {
           var $this        = jQuery($event.currentTarget);
-          var $panel       = $this.closest('.resource-panel');
-          var $sidebar     = $panel.find('.sidebar');
+          var $panel       = $this.closest('.raml-console-resource-panel');
+          var $sidebar     = $panel.find('.raml-console-sidebar');
           var sidebarWidth = 0;
 
           if (jQuery(window).width() > 960) {
             sidebarWidth = 430;
           }
 
-          if ($sidebar.hasClass('is-fullscreen')) {
+          if ($sidebar.hasClass('raml-console-is-fullscreen')) {
             $sidebar.velocity(
               { width: sidebarWidth },
               {
@@ -350,9 +350,9 @@
                 complete: completeAnimation
               }
             );
-            $sidebar.removeClass('is-responsive');
-            $sidebar.removeClass('is-fullscreen');
-            $panel.removeClass('has-sidebar-fullscreen');
+            $sidebar.removeClass('raml-console-is-responsive');
+            $sidebar.removeClass('raml-console-is-fullscreen');
+            $panel.removeClass('raml-console-has-sidebar-fullscreen');
           } else {
             $sidebar.velocity(
               { width: '100%' },
@@ -361,9 +361,9 @@
                 complete: completeAnimation
               }
             );
-            $sidebar.addClass('is-fullscreen');
-            $sidebar.addClass('is-responsive');
-            $panel.addClass('has-sidebar-fullscreen');
+            $sidebar.addClass('raml-console-is-fullscreen');
+            $sidebar.addClass('raml-console-is-responsive');
+            $panel.addClass('raml-console-has-sidebar-fullscreen');
           }
 
           // $sidebar.removeClass('is-collapsed');
@@ -371,12 +371,12 @@
 
         $scope.collapseSidebar = function ($event) {
           var $this         = jQuery($event.currentTarget);
-          var $panel        = $this.closest('.resource-panel');
-          var $panelContent = $panel.find('.resource-panel-primary');
-          var $sidebar      = $panel.find('.sidebar');
+          var $panel        = $this.closest('.raml-console-resource-panel');
+          var $panelContent = $panel.find('.raml-console-resource-panel-primary');
+          var $sidebar      = $panel.find('.raml-console-sidebar');
           var animation     = 430;
 
-          if ((!$sidebar.hasClass('is-fullscreen') && !$sidebar.hasClass('is-collapsed')) || $sidebar.hasClass('is-responsive')) {
+          if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
             animation = 0;
           }
 
@@ -396,12 +396,12 @@
             }
           );
 
-          $sidebar.toggleClass('is-collapsed');
-          $sidebar.removeClass('is-responsive');
-          $panel.toggleClass('has-sidebar-collapsed');
+          $sidebar.toggleClass('raml-console-is-collapsed');
+          $sidebar.removeClass('raml-console-is-responsive');
+          $panel.toggleClass('raml-console-has-sidebar-collapsed');
 
-          if ($sidebar.hasClass('is-fullscreen')) {
-            $sidebar.toggleClass('is-fullscreen');
+          if ($sidebar.hasClass('raml-console-is-fullscreen')) {
+            $sidebar.toggleClass('raml-console-is-fullscreen');
           }
         };
 

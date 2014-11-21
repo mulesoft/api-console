@@ -1,36 +1,36 @@
-<main class="error-container error-primary">
+<main class="raml-console-error-container raml-console-error-primary">
 
   <div ng-if="!loaded">
-    <div class="spinner">
-      <div class="rect1"></div>
-      <div class="rect2"></div>
-      <div class="rect3"></div>
-      <div class="rect4"></div>
-      <div class="rect5"></div>
+    <div class="raml-console-spinner">
+      <div class="raml-console-rect1"></div>
+      <div class="raml-console-rect2"></div>
+      <div class="raml-console-rect3"></div>
+      <div class="raml-console-rect4"></div>
+      <div class="raml-console-rect5"></div>
     </div>
   </div>
 
   <div ng-if="loaded">
     <theme-switcher ng-if="!disableThemeSwitcher"></theme-switcher>
-    <h1 class="title">{{raml.title}}</h1>
+    <h1 class="raml-console-title">{{raml.title}}</h1>
 
-    <div ng-if="proxy" align="right" class="resource-proxy">
+    <div ng-if="proxy" align="right" class="raml-console-resource-proxy">
       <span>API is behind a firewall <a href="http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall" target="_blank">(?)</a></span>
       <input type="checkbox" ng-model="disableProxy" ng-change="updateProxyConfig(disableProxy)">
     </div>
 
     <div>
-      <a class="toggle-button resources-expanded" href="" ng-click="collapseAll($event)">collapse All</a>
+      <a class="raml-console-toggle-button raml-console-resources-expanded" href="" ng-click="collapseAll($event)">collapse All</a>
     </div>
 
-    <ol class="resource-list resource-list-root">
-      <li id="{{generateId(resource.pathSegments)}}" class="resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
-        <header class="resource resource-root clearfix" ng-class="{ 'is-active':showPanel }" ng-init="resource = resourceGroup[0]">
-          <div class="resource-path-container">
-            <button class="resource-root-toggle" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
+    <ol class="raml-console-resource-list raml-console-resource-list-root">
+      <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
+        <header class="raml-console-resource raml-console-resource-root raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }" ng-init="resource = resourceGroup[0]">
+          <div class="raml-console-resource-path-container">
+            <button class="raml-console-resource-root-toggle" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
 
-            <h2 class="resource-heading resource-heading-large">
-              <span class="resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
+            <h2 class="raml-console-resource-heading raml-console-resource-heading-large">
+              <span class="raml-console-resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
             </h2>
 
             <resource-type></resource-type>
@@ -43,12 +43,12 @@
         <resource-panel></resource-panel>
 
         <!-- Child Resources -->
-        <ol class="resource-list">
-          <li id="{{generateId(resource.pathSegments)}}" class="resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
-            <div class="resource clearfix" ng-class="{ 'is-active':showPanel }">
-              <div class="resource-path-container">
-                <h3 class="resource-heading">
-                  <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="resource-path-active">{{segment.toString()}}</span>
+        <ol class="raml-console-resource-list">
+          <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
+            <div class="raml-console-resource raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }">
+              <div class="raml-console-resource-path-container">
+                <h3 class="raml-console-resource-heading">
+                  <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="raml-console-resource-path-active">{{segment.toString()}}</span>
                 </h3>
 
                 <resource-type></resource-type>

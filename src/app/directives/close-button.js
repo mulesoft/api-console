@@ -8,9 +8,9 @@
       replace: true,
       controller: function($scope) {
         $scope.close = function () {
-          var $inactiveElements = jQuery('.tab').add('.resource').add('li');
+          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
 
-          $inactiveElements.removeClass('is-active');
+          $inactiveElements.removeClass('raml-console-is-active');
           $scope.showPanel = false;
         };
       }

@@ -1,9 +1,9 @@
-<div class="tab-list">
-  <a class="tab" ng-repeat="method in resource.methods" ng-click="showResource($event, $index)">
-    <svg class="tab-image tab-{{method.method}}">
+<div class="raml-console-tab-list">
+  <a class="raml-console-tab" ng-repeat="method in resource.methods" ng-click="showResource($event, $index)">
+    <svg class="raml-console-tab-image raml-console-tab-{{method.method}}">
       <use xlink:href="img/tab.svg#shape" />
     </svg>
 
-    <span class="tab-label">{{method.method.toLocaleUpperCase()}}</span>
+    <span class="raml-console-tab-label">{{method.method.toLocaleUpperCase()}}</span>
   </a>
 </div>

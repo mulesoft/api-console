@@ -73,7 +73,7 @@
           return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
         };
 
-        var $inactiveElements = jQuery('.tab').add('.resource').add('li');
+        var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
 
         $scope.$on('openMethod', function(event, $currentScope) {
           if ($scope.$id !== $currentScope.$id) {
@@ -84,8 +84,8 @@
 
         $scope.showResource = function ($event, $index) {
           var $this             = jQuery($event.currentTarget);
-          var $resource         = $this.closest('.resource');
-          var $inactiveElements = jQuery('.tab').add('.resource').add('li');
+          var $resource         = $this.closest('.raml-console-resource');
+          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
           var methodInfo        = $scope.resource.methods[$index];
 
           $scope.methodInfo               = methodInfo;
@@ -122,7 +122,7 @@
 
           // Hack for codemirror
           setTimeout(function () {
-            var editors = jQuery('.sidebar-content-wrapper #sidebar-body .codemirror-body-editor .CodeMirror');
+            var editors = jQuery('.raml-console-sidebar-content-wrapper #sidebar-body .raml-console-codemirror-body-editor .CodeMirror');
 
             editors.map(function (index) {
               var bodyEditor = editors[index].CodeMirror;
@@ -134,21 +134,21 @@
             });
           }, 10);
 
-          if (!$resource.hasClass('is-active')) {
+          if (!$resource.hasClass('raml-console-is-active')) {
             var hash = $scope.generateId($scope.resource.pathSegments);
 
             $rootScope.$broadcast('openMethod', $scope);
-            jQuery($this).addClass('is-active');
+            jQuery($this).addClass('raml-console-is-active');
             $scope.showPanel = true;
 
             $location.hash(hash);
             $anchorScroll();
-          } else if (jQuery($this).hasClass('is-active')) {
+          } else if (jQuery($this).hasClass('raml-console-is-active')) {
             $scope.showPanel = false;
-            $inactiveElements.removeClass('is-active');
+            $inactiveElements.removeClass('raml-console-is-active');
           } else {
-            jQuery($this).addClass('is-active');
-            jQuery($this).siblings('.tab').removeClass('is-active');
+            jQuery($this).addClass('raml-console-is-active');
+            jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
           }
         };
       }
