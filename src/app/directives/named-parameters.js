@@ -74,13 +74,13 @@
           var $checkbox  = $container.find('#checkbox_' + definition.id);
           var $select    = $container.find('#select_' + definition.id);
 
-          $el.toggleClass('sidebar-override-show');
-          $checkbox.toggleClass('sidebar-override-hide');
-          $select.toggleClass('sidebar-override-hide');
+          $el.toggleClass('raml-console-sidebar-override-show');
+          $checkbox.toggleClass('raml-console-sidebar-override-hide');
+          $select.toggleClass('raml-console-sidebar-override-hide');
 
           $this.text('Override');
 
-          if($el.hasClass('sidebar-override-show')) {
+          if($el.hasClass('raml-console-sidebar-override-show')) {
             definition.overwritten = true;
             $this.text('Cancel override');
           } else {

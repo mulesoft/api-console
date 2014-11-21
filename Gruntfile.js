@@ -22,8 +22,10 @@ module.exports = function (grunt) {
     'copy:vendor',
     'clean:styles',
     'sass:build',
+    'css_prefix:prefix',
     'cssmin',
-    'clean:templates'
+    'clean:templates',
+    'clean:temp'
   ]);
   grunt.registerTask('release', [
     'env:release',
@@ -37,8 +39,10 @@ module.exports = function (grunt) {
     'copy:assets',
     'clean:styles',
     'sass:min',
+    'css_prefix:prefix',
     'cssmin',
-    'clean:templates'
+    'clean:templates',
+    'clean:temp'
   ]);
 
   grunt.initConfig({
@@ -87,7 +91,8 @@ module.exports = function (grunt) {
     clean: {
       build: ['<%= distdir %>/*'],
       styles: ['<%= distdir %>/styles/*'],
-      templates: ['<%= distdir %>/templates']
+      templates: ['<%= distdir %>/templates'],
+      temp: ['<%= distdir %>/temp']
     },
 
     copy: {
@@ -204,17 +209,18 @@ module.exports = function (grunt) {
     sass: {
       build: {
         files: {
-          '<%= distdir %>/styles/light-theme.css': 'src/scss/light-theme.scss',
-          '<%= distdir %>/styles/dark-theme.css': 'src/scss/dark-theme.scss'
+          '<%= distdir %>/temp/styles/light-theme.css': 'src/scss/light-theme.scss',
+          '<%= distdir %>/temp/styles/dark-theme.css': 'src/scss/dark-theme.scss'
         },
         options: {
+          sourcemap: 'none',
           style: 'expanded'
         }
       },
       min: {
         files: {
-          '<%= distdir %>/styles/light-theme.css': 'src/scss/light-theme.scss',
-          '<%= distdir %>/styles/dark-theme.css': 'src/scss/dark-theme.scss'
+          '<%= distdir %>/temp/styles/light-theme.css': 'src/scss/light-theme.scss',
+          '<%= distdir %>/temp/styles/dark-theme.css': 'src/scss/dark-theme.scss'
         },
         options: {
           sourcemap: 'none',
@@ -241,10 +247,24 @@ module.exports = function (grunt) {
     cssmin: {
       vendor: {
         files: {
-          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/codemirror.css', 'src/assets/styles/fonts.css', 'src/assets/styles/highlight.github.css']
+          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/codemirror.css', 'src/assets/styles/fonts.css', 'src/assets/styles/highlight.github.css', 'src/assets/styles/error.css']
         }
       }
     },
+
+    /*jshint camelcase: false */
+    css_prefix: {
+      prefix: {
+        options: {
+          prefix: 'raml-console-'
+        },
+        files: {
+          '<%= distdir %>/styles/light-theme.css': '<%= distdir %>/temp/styles/light-theme.css',
+          '<%= distdir %>/styles/dark-theme.css': '<%= distdir %>/temp/styles/dark-theme.css'
+        }
+      }
+    },
+    /*jshint camelcase: true */
 
     jshint:{
       files:['gruntFile.js', '<%= src.js %>', '<%= src.test %>'],

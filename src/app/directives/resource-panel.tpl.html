@@ -1,16 +1,16 @@
-<div class="resource-panel" ng-if="showPanel" ng-class="{ 'has-sidebar-fullscreen': withTryItOnFullscreen }">
-  <div class="resource-panel-wrapper">
-    <div class="sidebar-controls sidebar-controls-collapse" ng-click="collapseSidebar($event)" style="right: -1px; position: absolute;">
-      <button class="collapse">
+<div class="raml-console-resource-panel" ng-if="showPanel" ng-class="{ 'raml-console-has-sidebar-fullscreen': withTryItOnFullscreen }">
+  <div class="raml-console-resource-panel-wrapper">
+    <div class="raml-console-sidebar-controls raml-console-sidebar-controls-collapse" ng-click="collapseSidebar($event)" style="right: -1px; position: absolute;">
+      <button class="raml-console-collapse">
         <img src="img/icn-expand.svg" alt="" style="transform: rotate(-180deg);">
-        <span class="discoverable">Try it</span>
+        <span class="raml-console-discoverable">Try it</span>
       </button>
     </div>
 
-    <div class="sidebar-controls sidebar-controls-fullscreen" ng-click="toggleSidebar($event)" style="right: -1px; position: absolute;">
-      <button class="collapse">
+    <div class="raml-console-sidebar-controls raml-console-sidebar-controls-fullscreen" ng-click="toggleSidebar($event)" style="right: -1px; position: absolute;">
+      <button class="raml-console-collapse">
         <img src="img/icn-expand.svg" alt="" style="transform: rotate(-180deg);">
-        <span class="discoverable">Try it</span>
+        <span class="raml-console-discoverable">Try it</span>
       </button>
     </div>
 

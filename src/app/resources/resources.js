@@ -31,10 +31,10 @@
         $scope.toggle = function ($event) {
           var $this    = jQuery($event.currentTarget);
           var $section = $this
-            .closest('.resource-list-item')
-            .find('.resource-list');
+            .closest('.raml-console-resource-list-item')
+            .find('.raml-console-resource-list');
 
-          if ($section.hasClass('is-collapsed')) {
+          if ($section.hasClass('raml-console-is-collapsed')) {
             $section.velocity('slideDown', {
               duration: 200
             });
@@ -44,29 +44,29 @@
             });
           }
 
-          $section.toggleClass('is-collapsed');
-          $this.toggleClass('is-active');
+          $section.toggleClass('raml-console-is-collapsed');
+          $this.toggleClass('raml-console-is-active');
         };
 
         $scope.collapseAll = function ($event) {
           var $this = jQuery($event.currentTarget);
 
-          if ($this.hasClass('resources-expanded')) {
+          if ($this.hasClass('raml-console-resources-expanded')) {
             $this.text('expand all');
-            $this.removeClass('resources-expanded');
-            jQuery('body').find('.resource-list-root ol.resource-list').velocity('slideUp', {
+            $this.removeClass('raml-console-resources-expanded');
+            jQuery('body').find('.raml-console-resource-list-root ol.raml-console-resource-list').velocity('slideUp', {
               duration: 200
             });
           } else {
             $this.text('collapse all');
-            $this.addClass('resources-expanded');
-            jQuery('body').find('.resource-list-root ol.resource-list').velocity('slideDown', {
+            $this.addClass('raml-console-resources-expanded');
+            jQuery('body').find('.raml-console-resource-list-root ol.raml-console-resource-list').velocity('slideDown', {
               duration: 200
             });
           }
 
-          jQuery('body').find('.resource-list-root ol.resource-list').toggleClass('is-collapsed');
-          jQuery('body').find('.resource-list-root li.resource-list-item header button.resource-root-toggle').toggleClass('is-active');
+          jQuery('body').find('.raml-console-resource-list-root ol.raml-console-resource-list').toggleClass('raml-console-is-collapsed');
+          jQuery('body').find('.raml-console-resource-list-root li.raml-console-resource-list-item header button.raml-console-resource-root-toggle').toggleClass('raml-console-is-active');
         };
       },
       link: function($scope) {

@@ -1,27 +1,27 @@
-  <form name="form" class="sidebar" novalidate ng-class="{ 'is-fullscreen': withTryItOnFullscreen }">
-    <div class="sidebar-flex-wrapper">
-      <div class="sidebar-content">
-        <header class="sidebar-row sidebar-header">
-          <h3 class="sidebar-head">
+  <form name="form" class="raml-console-sidebar" novalidate ng-class="{ 'raml-console-is-fullscreen': withTryItOnFullscreen }">
+    <div class="raml-console-sidebar-flex-wrapper">
+      <div class="raml-console-sidebar-content">
+        <header class="raml-console-sidebar-row raml-console-sidebar-header">
+          <h3 class="raml-console-sidebar-head">
             Try it
-            <a class="sidebar-fullscreen-toggle" ng-click="collapseSidebar($event)"><div class="close-sidebar">&times;</div></a>
-            <a class="sidebar-fullscreen-toggle sidebar-resize" ng-click="toggleSidebar($event)">
-              <img class="full-resize" src="img/resize-full-1.svg" alt="">
-              <img class="small-resize" src="img/resize-small-1.svg" alt="">
+            <a class="raml-console-sidebar-fullscreen-toggle" ng-click="collapseSidebar($event)"><div class="raml-console-close-sidebar">&times;</div></a>
+            <a class="raml-console-sidebar-fullscreen-toggle raml-console-sidebar-resize" ng-click="toggleSidebar($event)">
+              <img class="raml-console-full-resize" src="img/resize-full-1.svg" alt="">
+              <img class="raml-console-small-resize" src="img/resize-small-1.svg" alt="">
             </a>
           </h3>
         </header>
 
-        <div class="sidebar-content-wrapper">
+        <div class="raml-console-sidebar-content-wrapper">
           <section>
-            <header class="sidebar-row sidebar-subheader sidebar-subheader-top">
-              <h4 class="sidebar-subhead">Authentication</h4>
+            <header class="raml-console-sidebar-row raml-console-sidebar-subheader raml-console-sidebar-subheader-top">
+              <h4 class="raml-console-sidebar-subhead">Authentication</h4>
             </header>
 
-            <div class="sidebar-row sidebar-securty">
-              <div class="toggle-group sidebar-toggle-group">
-                <label class="sidebar-label">Security Scheme</label>
-                <select class="sidebar-input" ng-model="currentSchemeType" style="margin-bottom: 0;">
+            <div class="raml-console-sidebar-row raml-console-sidebar-securty">
+              <div class="raml-console-toggle-group raml-console-sidebar-toggle-group">
+                <label class="raml-console-sidebar-label">Security Scheme</label>
+                <select class="raml-console-sidebar-input" ng-model="currentSchemeType" style="margin-bottom: 0;">
                  <option ng-repeat="(key, scheme) in securitySchemes" value="{{scheme.type}}" ng-selected="scheme.type=='Anonymous'">{{scheme.type}}</option>
                 </select>
               </div>
@@ -41,97 +41,97 @@
           <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" title="Query Parameters" enable-custom-parameters></named-parameters>
 
           <section id="sidebar-body" ng-if="methodInfo.body">
-            <header class="sidebar-row sidebar-subheader">
-              <h4 class="sidebar-subhead">Body</h4>
+            <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
+              <h4 class="raml-console-sidebar-subhead">Body</h4>
             </header>
 
-            <div class="sidebar-row" style="padding-bottom: 0;">
-              <select class="sidebar-input" ng-model="context.bodyContent.selected" style="margin-bottom: 0;">
+            <div class="raml-console-sidebar-row" style="padding-bottom: 0;">
+              <select class="raml-console-sidebar-input" ng-model="context.bodyContent.selected" style="margin-bottom: 0;">
                <option ng-repeat="(key, scheme) in methodInfo.body" value="{{key}}">{{key}}</option>
               </select>
             </div>
 
-            <div class="sidebar-row" ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
+            <div class="raml-console-sidebar-row" ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
               <div ng-switch-when="false">
-                <div class="codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
-                <div class="sidebar-prefill sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
-                  <button class="sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
+                <div class="raml-console-codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+                <div class="raml-console-sidebar-prefill raml-console-sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
+                  <button class="raml-console-sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
                 </div>
               </div>
 
 
               <div ng-switch-when="true">
-                <p class="sidebar-input-container" ng-repeat="param in context.bodyContent.definitions[context.bodyContent.selected].plain">
-                  <span class="sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
-                    <button tabindex="-1" class="sidebar-input-tooltip"><span class="visuallyhidden">Show documentation</span></button>
-                    <span class="sidebar-tooltip-flyout">
+                <p class="raml-console-sidebar-input-container" ng-repeat="param in context.bodyContent.definitions[context.bodyContent.selected].plain">
+                  <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
+                    <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
+                    <span class="raml-console-sidebar-tooltip-flyout">
                       <span marked="param.definitions[0].description"></span>
                     </span>
                   </span>
-                  <label for="{{param.definitions[0].id}}" class="sidebar-label">{{param.definitions[0].displayName}} <span class="side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
+                  <label for="{{param.definitions[0].id}}" class="raml-console-sidebar-label">{{param.definitions[0].displayName}} <span class="raml-console-side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
 
-                  <span class="sidebar-input-tooltip-container sidebar-input-left" ng-if="hasExampleValue(param.definitions[0].example)">
-                    <button tabindex="-1" class="sidebar-input-reset" ng-click="resetFormParameter(param.definitions[0])"><span class="visuallyhidden">Reset field</span></button>
-                    <span class="sidebar-tooltip-flyout-left">
+                  <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param.definitions[0].example)">
+                    <button tabindex="-1" class="raml-console-sidebar-input-reset" ng-click="resetFormParameter(param.definitions[0])"><span class="raml-console-visuallyhidden">Reset field</span></button>
+                    <span class="raml-console-sidebar-tooltip-flyout-left">
                       <span>Use example value</span>
                     </span>
                   </span>
 
-                  <input class="sidebar-input" ng-model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id][0]" ng-class="{'sidebar-field-no-default': !hasExampleValue(param.definitions[0].example)}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" />
-                  <span class="field-validation-error"></span>
+                  <input class="raml-console-sidebar-input" ng-model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id][0]" ng-class="{'raml-console-sidebar-field-no-default': !hasExampleValue(param.definitions[0].example)}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" />
+                  <span class="raml-console-field-validation-error"></span>
                 </p>
               </div>
             </div>
           </section>
 
           <section>
-            <div class="sidebar-row">
-              <div class="sidebar-action-group">
-                <button ng-hide="showSpinner" type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
+            <div class="raml-console-sidebar-row">
+              <div class="raml-console-sidebar-action-group">
+                <button ng-hide="showSpinner" type="submit" class="raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'raml-console-sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
                 </button>
-                <button ng-if="showSpinner" type="submit" class="sidebar-action sidebar-action-{{methodInfo.method}} sidebar-action-cancel-request" ng-click="cancelRequest()">Cancel</button>
-                <button class="sidebar-action sidebar-action-clear" ng-click="clearFields()">Clear</button>
-                <button class="sidebar-action sidebar-action-reset" ng-click="resetFields()">Reset</button>
+                <button ng-if="showSpinner" type="submit" class="raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}} raml-console-sidebar-action-cancel-request" ng-click="cancelRequest()">Cancel</button>
+                <button class="raml-console-sidebar-action raml-console-sidebar-action-clear" ng-click="clearFields()">Clear</button>
+                <button class="raml-console-sidebar-action raml-console-sidebar-action-reset" ng-click="resetFields()">Reset</button>
 
-                <div class="spinner_request" ng-if="showSpinner">Loading ...</div>
+                <div class="raml-console-spinner-request" ng-if="showSpinner">Loading ...</div>
               </div>
             </div>
           </section>
 
-          <section id="request_{{generateId(resource.pathSegments)}}" class="side-bar-try-it-description">
-            <header class="sidebar-row sidebar-header">
-              <h3 class="sidebar-head sidebar-head-expand">
-                <button ng-class="{'is-open':showRequestMetadata, 'is-collapsed':!showRequestMetadata}" class="sidebar-expand-btn js-toggle-request-metadata" ng-click="toggleRequestMetadata()">
+          <section id="request_{{generateId(resource.pathSegments)}}" class="raml-console-side-bar-try-it-description">
+            <header class="raml-console-sidebar-row raml-console-sidebar-header">
+              <h3 class="raml-console-sidebar-head raml-console-sidebar-head-expand">
+                <button ng-class="{'raml-console-is-open':showRequestMetadata, 'raml-console-is-collapsed':!showRequestMetadata}" class="raml-console-sidebar-expand-btn" ng-click="toggleRequestMetadata()">
                   Request
                 </button>
               </h3>
             </header>
-            <div class="sidebar-request-metadata" ng-class="{'is-active':showRequestMetadata}">
+            <div class="raml-console-sidebar-request-metadata" ng-class="{'raml-console-is-active':showRequestMetadata}">
 
-              <div class="sidebar-row">
+              <div class="raml-console-sidebar-row">
                 <div ng-if="requestOptions.uri">
-                  <h3 class="sidebar-response-head sidebar-response-head-pre">Request URI</h3>
-                  <div class="sidebar-response-item">
-                    <p class="sidebar-response-metadata sidebar-request-url">{{requestOptions.baseUrl}}<span ng-repeat="(key, value) in parameters"><span ng-hide="$first">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>
+                  <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Request URI</h3>
+                  <div class="raml-console-sidebar-response-item">
+                    <p class="raml-console-sidebar-response-metadata raml-console-sidebar-request-url">{{requestOptions.baseUrl}}<span ng-repeat="(key, value) in parameters"><span ng-hide="$first">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>
                     </p>
                   </div>
                 </div>
 
                 <div ng-if="requestOptions.headers">
-                  <h3 class="sidebar-response-head">Headers</h3>
-                  <div class="sidebar-response-item">
-                    <p class="sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
+                  <h3 class="raml-console-sidebar-response-head">Headers</h3>
+                  <div class="raml-console-sidebar-response-item">
+                    <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
                       <b>{{key}}:</b> <br>{{getHeaderValue(value)}}
                     </p>
                   </div>
                 </div>
 
                 <div ng-if="requestOptions.data">
-                  <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
+                  <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
                   <div ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
-                    <pre ng-switch-when="false" class="sidebar-pre sidebar-request-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="requestOptions.data"></code></pre>
-                    <div ng-switch-when="true" class="sidebar-response-item">
-                      <p class="sidebar-response-metadata" ng-repeat="(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values">
+                    <pre ng-switch-when="false" class="raml-console-sidebar-pre raml-console-sidebar-request-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="requestOptions.data"></code></pre>
+                    <div ng-switch-when="true" class="raml-console-sidebar-response-item">
+                      <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values">
                         <b>{{key}}:</b> <br>{{value}}
                       </p>
                     </div>
@@ -141,26 +141,26 @@
             </div>
           </section>
 
-          <section class="side-bar-try-it-description">
-            <header class="sidebar-row sidebar-header">
-              <h3 class="sidebar-head">Response</h3>
+          <section class="raml-console-side-bar-try-it-description">
+            <header class="raml-console-sidebar-row raml-console-sidebar-header">
+              <h3 class="raml-console-sidebar-head">Response</h3>
             </header>
 
-            <div class="sidebar-row sidebar-response" ng-class="{'is-active':requestEnd}">
-              <h3 class="sidebar-response-head">Status</h3>
-              <p class="sidebar-response-item">{{response.status}}</p>
+            <div class="raml-console-sidebar-row sidebar-response" ng-class="{'raml-console-is-active':requestEnd}">
+              <h3 class="raml-console-sidebar-response-head">Status</h3>
+              <p class="raml-console-sidebar-response-item">{{response.status}}</p>
 
-              <h3 class="sidebar-response-head">Headers</h3>
-              <div class="sidebar-response-item">
-                <p class="sidebar-response-metadata" ng-repeat="(key, value) in response.headers">
+              <h3 class="raml-console-sidebar-response-head">Headers</h3>
+              <div class="raml-console-sidebar-response-item">
+                <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in response.headers">
                   <b>{{key}}:</b> <br>{{value}}
                 </p>
               </p>
             </div>
 
             <div ng-if="response.body">
-              <h3 class="sidebar-response-head sidebar-response-head-pre">Body</h3>
-              <pre class="sidebar-pre"><code ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true }" ng-model="response.body"></code></pre>
+              <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
+              <pre class="raml-console-sidebar-pre"><code ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true }" ng-model="response.body"></code></pre>
             </div>
           </div>
         </section>

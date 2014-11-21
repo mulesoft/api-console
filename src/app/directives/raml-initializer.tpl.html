@@ -1,33 +1,33 @@
 <div ng-switch="ramlStatus">
-  <div class="initializer-container initializer-primary" ng-switch-default>
-    <h1 class="title">RAML Console</h1>
+  <div class="raml-console-initializer-container raml-console-initializer-primary" ng-switch-default>
+    <h1 class="raml-console-title">RAML Console</h1>
 
-    <div class="initializer-content-wrapper">
+    <div class="raml-console-initializer-content-wrapper">
       <section>
-        <header class="initializer-row initializer-subheader">
-          <h4 class="initializer-subhead">Initialize from the URL of a RAML file</h4>
+        <header class="raml-console-initializer-row raml-console-initializer-subheader">
+          <h4 class="raml-console-initializer-subhead">Initialize from the URL of a RAML file</h4>
         </header>
 
-        <div class="initializer-row">
-          <p class="initializer-input-container" ng-class="{ 'initializer-input-container-error': errorMessage }">
-            <input id="ramlPath" autofocus class="initializer-input initializer-raml-field" ng-model="$parent.ramlUrl" ng-keypress="onKeyPressRamlUrl($event)" ng-change="onChange()">
+        <div class="raml-console-initializer-row">
+          <p class="raml-console-initializer-input-container" ng-class="{ 'raml-console-initializer-input-container-error': errorMessage }">
+            <input id="ramlPath" autofocus class="raml-console-initializer-input raml-console-initializer-raml-field" ng-model="$parent.ramlUrl" ng-keypress="onKeyPressRamlUrl($event)" ng-change="onChange()">
           </p>
-          <div class="parser-error" ng-if="isLoadedFromUrl">
+          <div class="raml-console-parser-error" ng-if="isLoadedFromUrl">
             <span>{{errorMessage}}</span>
           </div>
-          <div class="initializer-action-group" align="right">
-            <button id="loadRamlFromUrl" class="initializer-action initializer-action-btn" ng-click="loadFromUrl()">Load from URL</button>
+          <div class="raml-console-initializer-action-group" align="right">
+            <button id="loadRamlFromUrl" class="raml-console-initializer-action raml-console-initializer-action-btn" ng-click="loadFromUrl()">Load from URL</button>
           </div>
         </div>
       </section>
 
       <section>
-        <header class="initializer-row initializer-subheader">
-          <h4 class="initializer-subhead">or parse RAML in here</h4>
+        <header class="raml-console-initializer-row raml-console-initializer-subheader">
+          <h4 class="raml-console-initializer-subhead">or parse RAML in here</h4>
         </header>
 
-        <div class="initializer-row">
-          <p class="initializer-input-container">
+        <div class="raml-console-initializer-row">
+          <p class="raml-console-initializer-input-container">
             <textarea id="raml" ui-codemirror="{
               lineNumbers: true,
               lineWrapping : true,
@@ -37,8 +37,8 @@
               lint: true
             }" ng-model="$parent.raml"></textarea>
           </p>
-          <div class="initializer-action-group" align="right">
-            <button id="loadRaml" class="initializer-action initializer-action-btn" ng-click="loadRaml()">Load RAML</button>
+          <div class="raml-console-initializer-action-group" align="right">
+            <button id="loadRaml" class="raml-console-initializer-action raml-console-initializer-action-btn" ng-click="loadRaml()">Load RAML</button>
           </div>
         </div>
       </section>
@@ -48,12 +48,12 @@
   <raml-console ng-switch-when="loaded"></raml-console>
 
   <div ng-switch-when="loading">
-    <div class="spinner">
-      <div class="rect1"></div>
-      <div class="rect2"></div>
-      <div class="rect3"></div>
-      <div class="rect4"></div>
-      <div class="rect5"></div>
+    <div class="raml-console-spinner">
+      <div class="raml-console-rect1"></div>
+      <div class="raml-console-rect2"></div>
+      <div class="raml-console-rect3"></div>
+      <div class="raml-console-rect4"></div>
+      <div class="raml-console-rect5"></div>
     </div>
   </div>
 </div>

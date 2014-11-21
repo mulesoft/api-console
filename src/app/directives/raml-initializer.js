@@ -24,7 +24,7 @@
 
             // Hack to update codemirror
             setTimeout(function () {
-              var editor = jQuery('.initializer-input-container .CodeMirror')[0].CodeMirror;
+              var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
               editor.addLineClass(context.line, 'background', 'line-error');
               editor.doc.setCursor(context.line);
             }, 10);

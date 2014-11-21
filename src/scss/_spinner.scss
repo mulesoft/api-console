@@ -12,8 +12,8 @@
   width: 9px;
   display: inline-block;
 
-  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-  animation: stretchdelay 1.2s infinite ease-in-out;
+  -webkit-animation: raml-console-stretchdelay 1.2s infinite ease-in-out;
+  animation: raml-console-stretchdelay 1.2s infinite ease-in-out;
 }
 
 .spinner .rect2 {
@@ -112,7 +112,7 @@
   }
 }
 
-@keyframes spinner_request {
+@keyframes spinner-request {
   0% {
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
@@ -131,12 +131,12 @@
 }
 
 /* :not(:required) hides this rule from IE9 and below */
-.spinner_request:not(:required) {
-  -webkit-animation: spinner_request 1500ms infinite linear;
-  -moz-animation: spinner_request 1500ms infinite linear;
-  -ms-animation: spinner_request 1500ms infinite linear;
-  -o-animation: spinner_request 1500ms infinite linear;
-  animation: spinner_request 1500ms infinite linear;
+.spinner-request:not(:required) {
+  -webkit-animation: raml-console-spinner-request 1500ms infinite linear;
+  -moz-animation: raml-console-spinner-request 1500ms infinite linear;
+  -ms-animation: raml-console-spinner-request 1500ms infinite linear;
+  -o-animation: raml-console-spinner-request 1500ms infinite linear;
+  animation: raml-console-spinner-request 1500ms infinite linear;
   -webkit-border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   -ms-border-radius: 0.5em;
