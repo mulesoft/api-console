@@ -11,6 +11,7 @@
     ];
 
     var controller = function($scope) {
+      var scopes              = $scope.scheme.settings.scopes || [];
       var authorizationGrants = $scope.scheme.settings.authorizationGrants;
 
       $scope.grantTypes = GRANT_TYPES.filter(function (grant) {
@@ -22,8 +23,21 @@
         clientSecret: '',
         username: '',
         password: '',
+        scopes: scopes.slice(),
         grantType: $scope.grantTypes[0]
       };
+
+      $scope.toggleScope = function (scope) {
+        var index = $scope.credentials.scopes.indexOf(scope);
+
+        if (index === -1) {
+          $scope.credentials.scopes.push(scope);
+        } else {
+          $scope.credentials.scopes.splice(index, 1);
+        }
+      };
+
+      $scope.scopes = scopes;
 
       $scope.$watch('credentials.grantType.type', function (type) {
         $scope.hasClientSecret      = type !== 'token';

@@ -33,4 +33,16 @@
 
     <input type="password" name="password" ng-model="credentials.password" required>
   </div>
+
+  <div ng-if="!!scopes.length">
+    <div>Scopes</div>
+
+    <label ng-repeat="scope in scopes">
+      <input
+        type="checkbox"
+        ng-checked="credentials.scopes.indexOf(scope) > -1"
+        ng-click="toggleScope(scope)">
+      {{scope}}
+    </label>
+  </div>
 </fieldset>
