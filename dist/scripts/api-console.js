@@ -413,7 +413,7 @@
 
         var baseUri = $scope.$parent.raml.baseUri;
 
-        if (baseUri.templated) {
+        if (typeof baseUri !== 'undefined' && baseUri.templated) {
           var tokens = baseUri.tokens;
 
           for (var i = 0; i < tokens.length; i++) {
@@ -3024,10 +3024,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/method-list.tpl.html',
     "<div class=\"raml-console-tab-list\">\n" +
     "  <a class=\"raml-console-tab\" ng-repeat=\"method in resource.methods\" ng-click=\"showResource($event, $index)\">\n" +
-    "    <svg class=\"raml-console-tab-image raml-console-tab-{{method.method}}\">\n" +
-    "      <use xlink:href=\"img/tab.svg#shape\" />\n" +
+    "    <svg viewBox=\"0 0 122 26\" class=\"raml-console-tab-image raml-console-tab-{{method.method}}\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n" +
+    "      <path class=\"tab-shape\" clip-rule=\"evenodd\" d=\"M96 0h-70l-26 26h122l-26-26z\"/>\n" +
     "    </svg>\n" +
-    "\n" +
     "    <span class=\"raml-console-tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
     "  </a>\n" +
     "</div>\n"
@@ -3159,14 +3158,22 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div class=\"raml-console-resource-panel-wrapper\">\n" +
     "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\">\n" +
     "      <button class=\"raml-console-collapse\">\n" +
-    "        <img src=\"img/icn-expand.svg\" alt=\"\" style=\"transform: rotate(-180deg);\">\n" +
+    "        <svg style=\"transform: rotate(-180deg);\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 612 792\" enable-background=\"new 0 0 612 792\" xml:space=\"preserve\">\n" +
+    "          <g id=\"Layer_3\">\n" +
+    "            <polygon fill=\"#585961\" points=\"480.9,396 142.1,46.2 142.1,745.8  \"/>\n" +
+    "          </g>\n" +
+    "        </svg>\n" +
     "        <span class=\"raml-console-discoverable\">Try it</span>\n" +
     "      </button>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-fullscreen\" ng-click=\"toggleSidebar($event)\" style=\"right: -1px; position: absolute;\">\n" +
     "      <button class=\"raml-console-collapse\">\n" +
-    "        <img src=\"img/icn-expand.svg\" alt=\"\" style=\"transform: rotate(-180deg);\">\n" +
+    "        <svg style=\"transform: rotate(-180deg);\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 612 792\" enable-background=\"new 0 0 612 792\" xml:space=\"preserve\">\n" +
+    "          <g id=\"Layer_3\">\n" +
+    "            <polygon fill=\"#585961\" points=\"480.9,396 142.1,46.2 142.1,745.8  \"/>\n" +
+    "          </g>\n" +
+    "        </svg>\n" +
     "        <span class=\"raml-console-discoverable\">Try it</span>\n" +
     "      </button>\n" +
     "    </div>\n" +
@@ -3188,8 +3195,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            Try it\n" +
     "            <a class=\"raml-console-sidebar-fullscreen-toggle\" ng-click=\"collapseSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
     "            <a class=\"raml-console-sidebar-fullscreen-toggle raml-console-sidebar-resize\" ng-click=\"toggleSidebar($event)\">\n" +
-    "              <img class=\"raml-console-full-resize\" src=\"img/resize-full-1.svg\" alt=\"\">\n" +
-    "              <img class=\"raml-console-small-resize\" src=\"img/resize-small-1.svg\" alt=\"\">\n" +
+    "              <svg x=\"0px\" y=\"0px\" viewBox=\"0 0 850 1000\" class=\"raml-console-full-resize\" fill=\"#808080\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"><path d=\"M421.29 589.312q0 7.254 -5.58 12.834l-185.256 185.256 80.352 80.352q10.602 10.602 10.602 25.11t-10.602 25.11 -25.11 10.602h-249.984q-14.508 0 -25.11 -10.602t-10.602 -25.11v-249.984q0 -14.508 10.602 -25.11t25.11 -10.602 25.11 10.602l80.352 80.352 185.256 -185.256q5.58 -5.58 12.834 -5.58t12.834 5.58l63.612 63.612q5.58 5.58 5.58 12.834zm435.798 -482.112v249.984q0 14.508 -10.602 25.11t-25.11 10.602 -25.11 -10.602l-80.352 -80.352 -185.256 185.256q-5.58 5.58 -12.834 5.58t-12.834 -5.58l-63.612 -63.612q-5.58 -5.58 -5.58 -12.834t5.58 -12.834l185.256 -185.256 -80.352 -80.352q-10.602 -10.602 -10.602 -25.11t10.602 -25.11 25.11 -10.602h249.984q14.508 0 25.11 10.602t10.602 25.11z\"/></svg>\n" +
+    "\n" +
+    "              <svg x=\"0px\" y=\"0px\" viewBox=\"0 0 850 1000\" class=\"raml-console-small-resize\" fill=\"#808080\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"><path d=\"M428.544 535.744v249.984q0 14.508 -10.602 25.11t-25.11 10.602 -25.11 -10.602l-80.352 -80.352 -185.256 185.256q-5.58 5.58 -12.834 5.58t-12.834 -5.58l-63.612 -63.612q-5.58 -5.58 -5.58 -12.834t5.58 -12.834l185.256 -185.256 -80.352 -80.352q-10.602 -10.602 -10.602 -25.11t10.602 -25.11 25.11 -10.602h249.984q14.508 0 25.11 10.602t10.602 25.11zm421.29 -374.976q0 7.254 -5.58 12.834l-185.256 185.256 80.352 80.352q10.602 10.602 10.602 25.11t-10.602 25.11 -25.11 10.602h-249.984q-14.508 0 -25.11 -10.602t-10.602 -25.11v-249.984q0 -14.508 10.602 -25.11t25.11 -10.602 25.11 10.602l80.352 80.352 185.256 -185.256q5.58 -5.58 12.834 -5.58t12.834 5.58l63.612 63.612q5.58 5.58 5.58 12.834z\"/></svg>\n" +
     "            </a>\n" +
     "          </h3>\n" +
     "        </header>\n" +

@@ -40,3 +40,13 @@ h1, h2, h3, h4, h5, h6, p, ul, ol {
     margin-bottom: 0 !important;
   }
 }
+
+.embedded {
+  background: $color-console-bg !important;
+  color: $color-console-text;
+  font-family: $lato;
+  font-size: 18px;
+  line-height: 1.4;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}

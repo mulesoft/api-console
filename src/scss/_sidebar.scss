@@ -81,7 +81,7 @@
     background: $color-sidebar-controls-bg;
     outline: none;
 
-    img {
+    svg {
       width: 15px;
       margin: 0 auto;
       vertical-align: text-bottom;
@@ -144,8 +144,9 @@
     opacity: 0.7;
   }
 
-  img {
+  svg {
     width: 10px;
+    height: 12px;
     margin-bottom: 4px;
     margin-left: 1px !important;
   }
@@ -224,22 +225,22 @@
 }
 
 .sidebar-fullscreen-toggle {
-  img.small-resize {
+  svg.small-resize {
     display: none;
   }
 
-  img {
+  svg {
     margin-left: 8px;
   }
 }
 
 // Control to close full-screen/full-width sidebar
 .sidebar.is-fullscreen .sidebar-fullscreen-toggle {
-  img.full-resize {
+  svg.full-resize {
     display: none;
   }
 
-  img.small-resize {
+  svg.small-resize {
     display: inline-block;
   }
 }
@@ -937,6 +938,14 @@
   background: $color-sidebar-pre-bg;
   font-family: Source Code Pro;
   font-size: 14px;
+}
+
+.sidebar-pre code > div {
+  line-height: 1;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  color: #000;
 }
 
 .sidebar-response-head-pre {
