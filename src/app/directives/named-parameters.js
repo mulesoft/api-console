@@ -33,7 +33,7 @@
 
         var baseUri = $scope.$parent.raml.baseUri;
 
-        if (baseUri.templated) {
+        if (typeof baseUri !== 'undefined' && baseUri.templated) {
           var tokens = baseUri.tokens;
 
           for (var i = 0; i < tokens.length; i++) {

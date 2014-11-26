@@ -512,6 +512,16 @@ ol {
   margin-bottom: 0 !important;
 }
 
+.raml-console-embedded {
+  background: #eee !important;
+  color: #888;
+  font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
 .raml-console-title {
   font-size: 24px;
   text-align: center;
@@ -1570,7 +1580,7 @@ ol {
   outline: none;
 }
 
-.raml-console-sidebar-controls .raml-console-collapse img {
+.raml-console-sidebar-controls .raml-console-collapse svg {
   width: 15px;
   margin: 0 auto;
   vertical-align: text-bottom;
@@ -1629,8 +1639,9 @@ ol {
   opacity: 0.7;
 }
 
-.raml-console-sidebar-fullscreen-toggle img {
+.raml-console-sidebar-fullscreen-toggle svg {
   width: 10px;
+  height: 12px;
   margin-bottom: 4px;
   margin-left: 1px !important;
 }
@@ -1696,19 +1707,19 @@ ol {
   border: 0;
 }
 
-.raml-console-sidebar-fullscreen-toggle img.raml-console-small-resize {
+.raml-console-sidebar-fullscreen-toggle svg.raml-console-small-resize {
   display: none;
 }
 
-.raml-console-sidebar-fullscreen-toggle img {
+.raml-console-sidebar-fullscreen-toggle svg {
   margin-left: 8px;
 }
 
-.raml-console-sidebar.raml-console-is-fullscreen .raml-console-sidebar-fullscreen-toggle img.raml-console-full-resize {
+.raml-console-sidebar.raml-console-is-fullscreen .raml-console-sidebar-fullscreen-toggle svg.raml-console-full-resize {
   display: none;
 }
 
-.raml-console-sidebar.raml-console-is-fullscreen .raml-console-sidebar-fullscreen-toggle img.raml-console-small-resize {
+.raml-console-sidebar.raml-console-is-fullscreen .raml-console-sidebar-fullscreen-toggle svg.raml-console-small-resize {
   display: inline-block;
 }
 
@@ -2350,6 +2361,14 @@ ol {
   background: rgba(255, 255, 255, 0.75);
   font-family: Source Code Pro;
   font-size: 14px;
+}
+
+.raml-console-sidebar-pre code > div {
+  line-height: 1;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  color: #000;
 }
 
 .raml-console-sidebar-response-head-pre {
