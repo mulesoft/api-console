@@ -1,5 +1,63 @@
 /* Resource List */
 
+.resource-response-jump {
+  margin-top: 5px;
+  position: absolute;
+}
+
+.resource-menu {
+  list-style: none;
+  padding-left: 0px;
+  margin-top: -5px;
+}
+
+.resource-menu-item {
+  padding-left: 0 !important;
+  height: 48px;
+
+  button.button-is-active {
+    border-radius: 0 !important;
+    background: $color-flag-bg !important;
+    border-right: 0;
+    height: 48px;
+    border: 0 !important;
+    // box-shadow: none !important;
+    // -webkit-box-shadow: none !important;
+  }
+
+  button:focus {
+    outline: none;
+  }
+}
+
+.resource-menu-button {
+  border-radius: 0 !important;
+  border: 0 !important;
+  height: 48px !important;
+  border-bottom: 1px #ccc solid !important;
+  border-right: 1px #ccc solid !important;
+  border-top: 1px #ccc solid !important;
+  // -webkit-box-shadow: inset -2px -3px 5px 1px #d6d7d9;
+  // box-shadow: inset -2px -3px 5px 1px #d6d7d9;
+  background: $color-toggle-bg !important;
+}
+
+.resource-menu-btn-2xx {
+  color: green !important;
+}
+
+.resource-menu-btn-3xx {
+  color: yellow !important;
+}
+
+.resource-menu-btn-4xx {
+  color: coral !important;
+}
+
+.resource-menu-btn-5xx {
+  color: red !important;
+}
+
 .resource-list {
   margin: 0;
   padding: 0;

@@ -11,6 +11,20 @@
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
 
+        $scope.currentStatusCode = '200';
+
+        $scope.getColorCode = function (code) {
+          return code[0] + 'xx';
+        };
+
+        $scope.showCodeDetails = function (code) {
+          $scope.currentStatusCode = code;
+        };
+
+        $scope.isActiveCode = function (code) {
+          return $scope.currentStatusCode === code;
+        };
+
         $scope.showRequestDocumentation = true;
         $scope.toggleRequestDocumentation = function () {
           $scope.showRequestDocumentation = !$scope.showRequestDocumentation;
