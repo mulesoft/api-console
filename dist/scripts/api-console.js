@@ -77,6 +77,20 @@
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
 
+        $scope.currentStatusCode = '200';
+
+        $scope.getColorCode = function (code) {
+          return code[0] + 'xx';
+        };
+
+        $scope.showCodeDetails = function (code) {
+          $scope.currentStatusCode = code;
+        };
+
+        $scope.isActiveCode = function (code) {
+          return $scope.currentStatusCode === code;
+        };
+
         $scope.showRequestDocumentation = true;
         $scope.toggleRequestDocumentation = function () {
           $scope.showRequestDocumentation = !$scope.showRequestDocumentation;
@@ -2970,17 +2984,17 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </button>\n" +
     "    </h3>\n" +
     "  </header>\n" +
-    "  <div class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active\" ng-class=\"{'raml-console-is-active':showResponseDocumentation}\">\n" +
-    "    <div class=\"raml-console-resource-response-jump\">\n" +
-    "      <p>\n" +
-    "        Jump to status\n" +
-    "        <span class=\"raml-console-resource-btns\">\n" +
-    "          <a class=\"raml-console-resource-btn\" href=\"#code{{code}}\" ng-repeat=\"code in methodInfo.responseCodes\">{{code}}</a>\n" +
-    "        </span>\n" +
-    "      </p>\n" +
-    "    </div>\n" +
     "\n" +
-    "    <section class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
+    "  <div class=\"raml-console-resource-response-jump\">\n" +
+    "    <ul class=\"raml-console-resource-menu\">\n" +
+    "      <li class=\"raml-console-resource-btns raml-console-resource-menu-item\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
+    "        <button ng-click=\"showCodeDetails(code)\" class=\"raml-console-resource-btn raml-console-resource-menu-button raml-console-resource-menu-btn-{{getColorCode(code)}}\" ng-class=\"{ 'raml-console-button-is-active': isActiveCode(code) }\" href=\"#code{{code}}\">{{code}}</button>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container\" ng-class=\"{'raml-console-is-active':showResponseDocumentation}\">\n" +
+    "    <section ng-if=\"isActiveCode(code)\" class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
     "      <a name=\"code{{code}}\"></a>\n" +
     "      <h3 class=\"raml-console-resource-heading-a\">Status {{code}}</h3>\n" +
     "\n" +

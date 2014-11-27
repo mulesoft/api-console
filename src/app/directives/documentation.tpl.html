@@ -89,17 +89,17 @@
       </button>
     </h3>
   </header>
-  <div class="raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active" ng-class="{'raml-console-is-active':showResponseDocumentation}">
-    <div class="raml-console-resource-response-jump">
-      <p>
-        Jump to status
-        <span class="raml-console-resource-btns">
-          <a class="raml-console-resource-btn" href="#code{{code}}" ng-repeat="code in methodInfo.responseCodes">{{code}}</a>
-        </span>
-      </p>
-    </div>
 
-    <section class="raml-console-resource-section raml-console-resource-response-section" ng-repeat="code in methodInfo.responseCodes">
+  <div class="raml-console-resource-response-jump">
+    <ul class="raml-console-resource-menu">
+      <li class="raml-console-resource-btns raml-console-resource-menu-item" ng-repeat="code in methodInfo.responseCodes">
+        <button ng-click="showCodeDetails(code)" class="raml-console-resource-btn raml-console-resource-menu-button raml-console-resource-menu-btn-{{getColorCode(code)}}" ng-class="{ 'raml-console-button-is-active': isActiveCode(code) }" href="#code{{code}}">{{code}}</button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container" ng-class="{'raml-console-is-active':showResponseDocumentation}">
+    <section ng-if="isActiveCode(code)" class="raml-console-resource-section raml-console-resource-response-section" ng-repeat="code in methodInfo.responseCodes">
       <a name="code{{code}}"></a>
       <h3 class="raml-console-resource-heading-a">Status {{code}}</h3>
 

@@ -839,6 +839,60 @@ ol {
 
 /* Resource List */
 
+.raml-console-resource-response-jump {
+  margin-top: 5px;
+  position: absolute;
+}
+
+.raml-console-resource-menu {
+  list-style: none;
+  padding-left: 0px;
+  margin-top: -5px;
+}
+
+.raml-console-resource-menu-item {
+  padding-left: 0 !important;
+  height: 48px;
+}
+
+.raml-console-resource-menu-item button.raml-console-button-is-active {
+  border-radius: 0 !important;
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-right: 0;
+  height: 48px;
+  border: 0 !important;
+}
+
+.raml-console-resource-menu-item button:focus {
+  outline: none;
+}
+
+.raml-console-resource-menu-button {
+  border-radius: 0 !important;
+  border: 0 !important;
+  height: 48px !important;
+  border-bottom: 1px #ccc solid !important;
+  border-right: 1px #ccc solid !important;
+  border-top: 1px #ccc solid !important;
+  background: #0f1217 !important;
+}
+
+.raml-console-resource-menu-btn-2xx {
+  color: green !important;
+}
+
+.raml-console-resource-menu-btn-3xx {
+  color: yellow !important;
+}
+
+.raml-console-resource-menu-btn-4xx {
+  color: coral !important;
+}
+
+.raml-console-resource-menu-btn-5xx {
+  color: red !important;
+}
+
 .raml-console-resource-list {
   margin: 0;
   padding: 0;
@@ -1268,6 +1322,12 @@ ol {
 
 .raml-console-resource-panel.raml-console-has-sidebar-collapsed .raml-console-sidebar-controls .raml-console-collapse:before {
   content: "";
+}
+
+.raml-console-response-container {
+  background: rgba(0, 0, 0, 0.1);
+  margin-left: 47px;
+  min-height: 500px;
 }
 
 .raml-console-resource-panel-primary-row {
