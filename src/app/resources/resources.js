@@ -12,8 +12,8 @@
       controller: function($scope, $window, $attrs) {
         $scope.proxy = $window.RAML.Settings.proxy;
 
-        if ($attrs.hasOwnProperty('withTryItOnFullscreen')) {
-          $scope.withTryItOnFullscreen = true;
+        if ($attrs.hasOwnProperty('singleView')) {
+          $scope.singleView = true;
         }
 
         if ($attrs.hasOwnProperty('disableThemeSwitcher')) {
