@@ -840,8 +840,9 @@ ol {
 /* Resource List */
 
 .raml-console-resource-response-jump {
-  margin-top: 5px;
+  margin-top: 50px;
   position: absolute;
+  margin-left: 10px;
 }
 
 .raml-console-resource-menu {
@@ -853,14 +854,41 @@ ol {
 .raml-console-resource-menu-item {
   padding-left: 0 !important;
   height: 48px;
+  margin-top: 5px;
 }
 
 .raml-console-resource-menu-item button.raml-console-button-is-active {
   border-radius: 0 !important;
-  background: #fafafa !important;
+  background: white !important;
   border-right: 0;
   height: 48px;
-  border: 0 !important;
+  border-top: 1px #ccc solid !important;
+  border-right: 0 !important;
+  width: 51px;
+}
+
+.raml-console-resource-menu-item button.raml-console-button-is-active.raml-console-resource-menu-btn-2xx {
+  border-left: 3px green solid !important;
+  border-top: 1px green solid !important;
+  border-bottom: 1px green solid !important;
+}
+
+.raml-console-resource-menu-item button.raml-console-button-is-active.raml-console-resource-menu-btn-3xx {
+  border-left: 3px yellow solid !important;
+  border-top: 1px yellow solid !important;
+  border-bottom: 1px yellow solid !important;
+}
+
+.raml-console-resource-menu-item button.raml-console-button-is-active.raml-console-resource-menu-btn-4xx {
+  border-left: 3px coral solid !important;
+  border-top: 1px coral solid !important;
+  border-bottom: 1px coral solid !important;
+}
+
+.raml-console-resource-menu-item button.raml-console-button-is-active.raml-console-resource-menu-btn-5xx {
+  border-left: 3px red solid !important;
+  border-top: 1px red solid !important;
+  border-bottom: 1px red solid !important;
 }
 
 .raml-console-resource-menu-item button:focus {
@@ -871,10 +899,10 @@ ol {
   border-radius: 0 !important;
   border: 0 !important;
   height: 48px !important;
-  border-bottom: 1px #ccc solid !important;
-  border-right: 1px #ccc solid !important;
-  border-top: 1px #ccc solid !important;
-  background: #f3f4f5 !important;
+  background: #fafafa !important;
+  border-top: 1px #e7e7e7 solid !important;
+  border-left: 3px #e7e7e7 solid !important;
+  border-bottom: 1px #e7e7e7 solid !important;
 }
 
 .raml-console-resource-menu-btn-2xx {
@@ -1325,9 +1353,13 @@ ol {
 }
 
 .raml-console-response-container {
-  background: #fafafa;
-  margin-left: 47px;
+  margin-left: 60px;
   min-height: 500px;
+  padding-top: 24px !important;
+  border: 1px solid #e7e7e7;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .raml-console-resource-panel-primary-row {

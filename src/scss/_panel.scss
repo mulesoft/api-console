@@ -125,9 +125,18 @@
 }
 
 .response-container {
-  background: $color-flag-bg;
-  margin-left: 47px;
+  // background: $color-flag-bg;
+  // margin-left: 47px;
+  // min-height: 500px;
+  // padding-top: 24px !important;
+
+  margin-left: 60px;
   min-height: 500px;
+  padding-top: 24px !important;
+  border: 1px solid #e7e7e7;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .resource-panel-primary-row {
