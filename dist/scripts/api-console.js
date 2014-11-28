@@ -2904,9 +2904,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <!-- Request -->\n" +
     "  <header class=\"raml-console-resource-header\">\n" +
     "    <h3 class=\"raml-console-resource-head\">\n" +
-    "      <button class=\"raml-console-sidebar-expand-btn raml-console-is-open\" ng-click=\"toggleRequestDocumentation($event)\" ng-class=\"{'raml-console-is-open':showRequestDocumentation, 'raml-console-is-collapsed':!showRequestDocumentation}\">\n" +
-    "        Request\n" +
-    "      </button>\n" +
+    "      Request\n" +
     "    </h3>\n" +
     "  </header>\n" +
     "  <div id=\"request-documentation\" class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active\" ng-class=\"{'raml-console-is-active':showRequestDocumentation}\">\n" +
@@ -2977,59 +2975,59 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <!-- Response -->\n" +
-    "  <header class=\"raml-console-resource-header\">\n" +
-    "    <h3 class=\"raml-console-resource-head\">\n" +
-    "      <button class=\"raml-console-sidebar-expand-btn is-open\" ng-click=\"toggleResponseDocumentation($event)\" ng-class=\"{'raml-console-is-open':showResponseDocumentation, 'raml-console-is-collapsed':!showResponseDocumentation}\">\n" +
+    "  <div ng-if=\"methodInfo.responseCodes\">\n" +
+    "    <header class=\"raml-console-resource-header\">\n" +
+    "      <h3 class=\"raml-console-resource-head\">\n" +
     "        Response\n" +
-    "      </button>\n" +
-    "    </h3>\n" +
-    "  </header>\n" +
+    "      </h3>\n" +
+    "    </header>\n" +
     "\n" +
-    "  <div class=\"raml-console-resource-response-jump\">\n" +
-    "    <ul class=\"raml-console-resource-menu\">\n" +
-    "      <li class=\"raml-console-resource-btns raml-console-resource-menu-item\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
-    "        <button ng-click=\"showCodeDetails(code)\" class=\"raml-console-resource-btn raml-console-resource-menu-button raml-console-resource-menu-btn-{{getColorCode(code)}}\" ng-class=\"{ 'raml-console-button-is-active': isActiveCode(code) }\" href=\"#code{{code}}\">{{code}}</button>\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
-    "  </div>\n" +
+    "    <div class=\"raml-console-resource-response-jump\">\n" +
+    "      <ul class=\"raml-console-resource-menu\">\n" +
+    "        <li class=\"raml-console-resource-btns raml-console-resource-menu-item\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
+    "          <button ng-click=\"showCodeDetails(code)\" class=\"raml-console-resource-btn raml-console-resource-menu-button raml-console-resource-menu-btn-{{getColorCode(code)}}\" ng-class=\"{ 'raml-console-button-is-active': isActiveCode(code) }\" href=\"#code{{code}}\">{{code}}</button>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </div>\n" +
     "\n" +
-    "  <div class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container\" ng-class=\"{'raml-console-is-active':showResponseDocumentation}\">\n" +
-    "    <section ng-if=\"isActiveCode(code)\" class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
-    "      <a name=\"code{{code}}\"></a>\n" +
-    "      <h3 class=\"raml-console-resource-heading-a\">Status {{code}}</h3>\n" +
+    "    <div class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container\" ng-class=\"{'raml-console-is-active':showResponseDocumentation}\">\n" +
+    "      <section ng-if=\"isActiveCode(code)\" class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
+    "        <a name=\"code{{code}}\"></a>\n" +
+    "        <h3 class=\"raml-console-resource-heading-a\">Status {{code}}</h3>\n" +
     "\n" +
-    "      <div class=\"raml-console-resource-response\">\n" +
-    "        <p marked=\"methodInfo.responses[code].description\"></p>\n" +
-    "      </div>\n" +
-    "\n" +
-    "      <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].headers\">\n" +
-    "        <h4 class=\"raml-console-resource-body-heading\">Headers</h4>\n" +
-    "\n" +
-    "        <div class=\"raml-console-resource-param\" ng-repeat=\"header in methodInfo.responses[code].headers\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{header[0].displayName}} <span class=\"raml-console-resource-param-instructional\">{{header[0].type}}</span></h4>\n" +
-    "\n" +
-    "          <p marked=\"header[0].description\"></p>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "\n" +
-    "      <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
-    "        <h4 class=\"raml-console-resource-body-heading\">\n" +
-    "          Body\n" +
-    "          <span ng-click=\"changeType($event, key, code)\" ng-class=\"{ 'raml-console-is-active': $first}\" class=\"raml-console-flag\" ng-repeat=\"(key, value) in methodInfo.responses[code].body\">{{key}}</span>\n" +
-    "        </h4>\n" +
-    "\n" +
-    "        <div ng-if=\"responseInfo[code][responseInfo[code].currentType].example\">\n" +
-    "          <span>Example:</span>\n" +
-    "          <pre class=\"raml-console-resource-pre\"><code hljs source=\"responseInfo[code][responseInfo[code].currentType].example\"></code></pre>\n" +
+    "        <div class=\"raml-console-resource-response\">\n" +
+    "          <p marked=\"methodInfo.responses[code].description\"></p>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
-    "          <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
-    "          <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code hljs source=\"responseInfo[code][responseInfo[code].currentType].schema\"></code></pre>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    </section>\n" +
+    "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].headers\">\n" +
+    "          <h4 class=\"raml-console-resource-body-heading\">Headers</h4>\n" +
     "\n" +
+    "          <div class=\"raml-console-resource-param\" ng-repeat=\"header in methodInfo.responses[code].headers\">\n" +
+    "            <h4 class=\"raml-console-resource-param-heading\">{{header[0].displayName}} <span class=\"raml-console-resource-param-instructional\">{{header[0].type}}</span></h4>\n" +
+    "\n" +
+    "            <p marked=\"header[0].description\"></p>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
+    "          <h4 class=\"raml-console-resource-body-heading\">\n" +
+    "            Body\n" +
+    "            <span ng-click=\"changeType($event, key, code)\" ng-class=\"{ 'raml-console-is-active': $first}\" class=\"raml-console-flag\" ng-repeat=\"(key, value) in methodInfo.responses[code].body\">{{key}}</span>\n" +
+    "          </h4>\n" +
+    "\n" +
+    "          <div ng-if=\"responseInfo[code][responseInfo[code].currentType].example\">\n" +
+    "            <span>Example:</span>\n" +
+    "            <pre class=\"raml-console-resource-pre\"><code hljs source=\"responseInfo[code][responseInfo[code].currentType].example\"></code></pre>\n" +
+    "          </div>\n" +
+    "\n" +
+    "          <div ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
+    "            <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
+    "            <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code hljs source=\"responseInfo[code][responseInfo[code].currentType].schema\"></code></pre>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "\n" +
+    "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
   );
