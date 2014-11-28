@@ -400,7 +400,7 @@
           $sidebar.removeClass('raml-console-is-responsive');
           $panel.toggleClass('raml-console-has-sidebar-collapsed');
 
-          if ($sidebar.hasClass('raml-console-is-fullscreen')) {
+          if ($sidebar.hasClass('raml-console-is-fullscreen') || $scope.singleView) {
             $sidebar.toggleClass('raml-console-is-fullscreen');
           }
         };

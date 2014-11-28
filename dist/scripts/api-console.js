@@ -1016,7 +1016,7 @@
           $sidebar.removeClass('raml-console-is-responsive');
           $panel.toggleClass('raml-console-has-sidebar-collapsed');
 
-          if ($sidebar.hasClass('raml-console-is-fullscreen')) {
+          if ($sidebar.hasClass('raml-console-is-fullscreen') || $scope.singleView) {
             $sidebar.toggleClass('raml-console-is-fullscreen');
           }
         };
@@ -1209,8 +1209,8 @@
       controller: function($scope, $window, $attrs) {
         $scope.proxy = $window.RAML.Settings.proxy;
 
-        if ($attrs.hasOwnProperty('withTryItOnFullscreen')) {
-          $scope.withTryItOnFullscreen = true;
+        if ($attrs.hasOwnProperty('singleView')) {
+          $scope.singleView = true;
         }
 
         if ($attrs.hasOwnProperty('disableThemeSwitcher')) {
@@ -3166,7 +3166,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/resource-panel.tpl.html',
-    "<div class=\"raml-console-resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'raml-console-has-sidebar-fullscreen': withTryItOnFullscreen }\">\n" +
+    "<div class=\"raml-console-resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'raml-console-has-sidebar-fullscreen': singleView }\">\n" +
     "  <div class=\"raml-console-resource-panel-wrapper\">\n" +
     "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\">\n" +
     "      <button class=\"raml-console-collapse\">\n" +
@@ -3199,14 +3199,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/sidebar.tpl.html',
-    "  <form name=\"form\" class=\"raml-console-sidebar\" novalidate ng-class=\"{ 'raml-console-is-fullscreen': withTryItOnFullscreen }\">\n" +
+    "  <form name=\"form\" class=\"raml-console-sidebar\" novalidate ng-class=\"{ 'raml-console-is-fullscreen': singleView }\">\n" +
     "    <div class=\"raml-console-sidebar-flex-wrapper\">\n" +
     "      <div class=\"raml-console-sidebar-content\">\n" +
     "        <header class=\"raml-console-sidebar-row raml-console-sidebar-header\">\n" +
     "          <h3 class=\"raml-console-sidebar-head\">\n" +
     "            Try it\n" +
     "            <a class=\"raml-console-sidebar-fullscreen-toggle\" ng-click=\"collapseSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
-    "            <a class=\"raml-console-sidebar-fullscreen-toggle raml-console-sidebar-resize\" ng-click=\"toggleSidebar($event)\">\n" +
+    "            <a ng-if=\"!singleView\" class=\"raml-console-sidebar-fullscreen-toggle raml-console-sidebar-resize\" ng-click=\"toggleSidebar($event)\">\n" +
     "              <svg x=\"0px\" y=\"0px\" viewBox=\"0 0 850 1000\" class=\"raml-console-full-resize\" fill=\"#808080\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"><path d=\"M421.29 589.312q0 7.254 -5.58 12.834l-185.256 185.256 80.352 80.352q10.602 10.602 10.602 25.11t-10.602 25.11 -25.11 10.602h-249.984q-14.508 0 -25.11 -10.602t-10.602 -25.11v-249.984q0 -14.508 10.602 -25.11t25.11 -10.602 25.11 10.602l80.352 80.352 185.256 -185.256q5.58 -5.58 12.834 -5.58t12.834 5.58l63.612 63.612q5.58 5.58 5.58 12.834zm435.798 -482.112v249.984q0 14.508 -10.602 25.11t-25.11 10.602 -25.11 -10.602l-80.352 -80.352 -185.256 185.256q-5.58 5.58 -12.834 5.58t-12.834 -5.58l-63.612 -63.612q-5.58 -5.58 -5.58 -12.834t5.58 -12.834l185.256 -185.256 -80.352 -80.352q-10.602 -10.602 -10.602 -25.11t10.602 -25.11 25.11 -10.602h249.984q14.508 0 25.11 10.602t10.602 25.11z\"/></svg>\n" +
     "\n" +
     "              <svg x=\"0px\" y=\"0px\" viewBox=\"0 0 850 1000\" class=\"raml-console-small-resize\" fill=\"#808080\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"><path d=\"M428.544 535.744v249.984q0 14.508 -10.602 25.11t-25.11 10.602 -25.11 -10.602l-80.352 -80.352 -185.256 185.256q-5.58 5.58 -12.834 5.58t-12.834 -5.58l-63.612 -63.612q-5.58 -5.58 -5.58 -12.834t5.58 -12.834l185.256 -185.256 -80.352 -80.352q-10.602 -10.602 -10.602 -25.11t10.602 -25.11 25.11 -10.602h249.984q14.508 0 25.11 10.602t10.602 25.11zm421.29 -374.976q0 7.254 -5.58 12.834l-185.256 185.256 80.352 80.352q10.602 10.602 10.602 25.11t-10.602 25.11 -25.11 10.602h-249.984q-14.508 0 -25.11 -10.602t-10.602 -25.11v-249.984q0 -14.508 10.602 -25.11t25.11 -10.602 25.11 10.602l80.352 80.352 185.256 -185.256q5.58 -5.58 12.834 -5.58t12.834 5.58l63.612 63.612q5.58 5.58 5.58 12.834z\"/></svg>\n" +

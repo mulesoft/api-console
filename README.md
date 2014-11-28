@@ -78,11 +78,11 @@ A redirect URI for OAuth 2 can be provided in a similar manner:
 
 Given the above, OAuth 2 requests would redirect back to that URL.
 
-### Fullscreen Try-It
+### Single View Mode
 
-*Try It* can be started on fullscreen by default using the following setting:
+In *Single View* mode you will be able to see only documentation or try-it. 
 
-    <raml-console with-try-it-on-fullscreen></raml-console>
+    <raml-console single-view></raml-console>
 
 ### Theme Switcher
 

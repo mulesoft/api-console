@@ -183,6 +183,7 @@
   padding: 14px 32px 18px 100px;
   // border-bottom: solid $color-resource-subheader-border;
   border-width: 1px 0;
+  min-height: 45px;
 
   @media only screen and (min-width: $medium-screen) {
     padding-right: 24px;
