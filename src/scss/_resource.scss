@@ -1,8 +1,12 @@
 /* Resource List */
 
 .resource-response-jump {
-  margin-top: 5px;
+  // margin-top: 5px;
+  // position: absolute;
+
+  margin-top: 50px;
   position: absolute;
+  margin-left: 10px;
 }
 
 .resource-menu {
@@ -14,15 +18,40 @@
 .resource-menu-item {
   padding-left: 0 !important;
   height: 48px;
+  margin-top: 5px;
 
   button.button-is-active {
     border-radius: 0 !important;
-    background: $color-flag-bg !important;
+    background: white !important;
     border-right: 0;
     height: 48px;
-    border: 0 !important;
-    // box-shadow: none !important;
-    // -webkit-box-shadow: none !important;
+    border-top: 1px #ccc solid !important;
+    border-right: 0 !important;
+    width: 51px;
+  }
+
+  button.button-is-active.resource-menu-btn-2xx {
+    border-left: 3px green solid !important;
+    border-top: 1px green solid !important;
+    border-bottom: 1px green solid !important;
+  }
+
+  button.button-is-active.resource-menu-btn-3xx {
+    border-left: 3px yellow solid !important;
+    border-top: 1px yellow solid !important;
+    border-bottom: 1px yellow solid !important;
+  }
+
+  button.button-is-active.resource-menu-btn-4xx {
+    border-left: 3px coral solid !important;
+    border-top: 1px coral solid !important;
+    border-bottom: 1px coral solid !important;
+  }
+
+  button.button-is-active.resource-menu-btn-5xx {
+    border-left: 3px red solid !important;
+    border-top: 1px red solid !important;
+    border-bottom: 1px red solid !important;
   }
 
   button:focus {
@@ -34,12 +63,10 @@
   border-radius: 0 !important;
   border: 0 !important;
   height: 48px !important;
-  border-bottom: 1px #ccc solid !important;
-  border-right: 1px #ccc solid !important;
-  border-top: 1px #ccc solid !important;
-  // -webkit-box-shadow: inset -2px -3px 5px 1px #d6d7d9;
-  // box-shadow: inset -2px -3px 5px 1px #d6d7d9;
-  background: $color-toggle-bg !important;
+  background: $color-flag-bg !important;
+  border-top: 1px #e7e7e7 solid !important;
+  border-left: 3px #e7e7e7 solid !important;
+  border-bottom: 1px #e7e7e7 solid !important;
 }
 
 .resource-menu-btn-2xx {
