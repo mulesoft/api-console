@@ -20,6 +20,7 @@ files = [
     'app/vendor/bower_components/codemirror/mode/xml/xml.js',
     'app/vendor/bower_components/codemirror/mode/javascript/javascript.js',
     'app/vendor/bower_components/vkbeautify/vkbeautify.js',
+    'app/vendor/bower_components/json-template-generator/dist/json-template-generator.js',
     'app/scripts/client.js',
     'app/scripts/client/**/*.js',
     'app/scripts/controllers.js',
