@@ -23,6 +23,29 @@
       <a class="raml-console-toggle-button raml-console-resources-expanded" href="" ng-click="collapseAll($event)">collapse All</a>
     </div>
 
+    <div style="display: inline-block; border-radius:4px; display: none;">
+      <div class="raml-console-resource raml-console-clearfix raml-console-is-active">
+        <div class="raml-console-resource-path-container">
+          <h3 class="raml-console-resource-heading">
+            Documentation
+          </h3>
+        </div>
+        <button class="raml-console-resource-close-btn" ng-click="close($event)">Close</button>
+      </div>
+      <div style="float: left; vertical-align: top; width: 20%; background: #f3f4f5; border-radius: 0 0 0 4px; height: 500px;">
+        <ol style="list-style: none; height: 500px; padding: 0;">
+          <li ng-repeat="doc in raml.documentation" style="padding: 8px; background: #ddd; text-align: right;">
+            {{doc.title}}
+          </li>
+        </ol>
+      </div>
+
+      <div ng-repeat="doc in raml.documentation" style="float: right; width: 80%; background-color: #fff; border-radius: 0 0 4px 0; font-size: 14px; padding: 16px 32px; overflow: scroll; height: 500px;">
+        <h1>{{doc.title}}</h1>
+        <span marked="doc.content"></span>
+      </div>
+    </div>
+
     <ol class="raml-console-resource-list raml-console-resource-list-root">
       <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
         <header class="raml-console-resource raml-console-resource-root raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }" ng-init="resource = resourceGroup[0]">

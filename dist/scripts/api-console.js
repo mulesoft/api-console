@@ -3419,6 +3419,29 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <a class=\"raml-console-toggle-button raml-console-resources-expanded\" href=\"\" ng-click=\"collapseAll($event)\">collapse All</a>\n" +
     "    </div>\n" +
     "\n" +
+    "    <div style=\"display: inline-block; border-radius:4px; display: none;\">\n" +
+    "      <div class=\"raml-console-resource raml-console-clearfix raml-console-is-active\">\n" +
+    "        <div class=\"raml-console-resource-path-container\">\n" +
+    "          <h3 class=\"raml-console-resource-heading\">\n" +
+    "            Documentation\n" +
+    "          </h3>\n" +
+    "        </div>\n" +
+    "        <button class=\"raml-console-resource-close-btn\" ng-click=\"close($event)\">Close</button>\n" +
+    "      </div>\n" +
+    "      <div style=\"float: left; vertical-align: top; width: 20%; background: #f3f4f5; border-radius: 0 0 0 4px; height: 500px;\">\n" +
+    "        <ol style=\"list-style: none; height: 500px; padding: 0;\">\n" +
+    "          <li ng-repeat=\"doc in raml.documentation\" style=\"padding: 8px; background: #ddd; text-align: right;\">\n" +
+    "            {{doc.title}}\n" +
+    "          </li>\n" +
+    "        </ol>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div ng-repeat=\"doc in raml.documentation\" style=\"float: right; width: 80%; background-color: #fff; border-radius: 0 0 4px 0; font-size: 14px; padding: 16px 32px; overflow: scroll; height: 500px;\">\n" +
+    "        <h1>{{doc.title}}</h1>\n" +
+    "        <span marked=\"doc.content\"></span>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
     "    <ol class=\"raml-console-resource-list raml-console-resource-list-root\">\n" +
     "      <li id=\"{{generateId(resource.pathSegments)}}\" class=\"raml-console-resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "        <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\" ng-class=\"{ 'raml-console-is-active':showPanel }\" ng-init=\"resource = resourceGroup[0]\">\n" +
