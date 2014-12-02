@@ -1059,9 +1059,12 @@ ol {
   color: #fff;
 }
 
-.raml-console-resource.raml-console-is-active .raml-console-resource-root-toggle,
-.raml-console-resource.raml-console-is-active .raml-console-resource-heading-flag {
-  display: none;
+.raml-console-resource-trait {
+  display: none !important;
+}
+
+.raml-console-resource.raml-console-is-active .raml-console-resource-trait {
+  display: inline-block !important;
 }
 
 .raml-console-resource.raml-console-is-active .raml-console-resource-close-btn {

@@ -34,6 +34,8 @@
             </h2>
 
             <resource-type></resource-type>
+            <span ng-if="methodInfo.is" class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"><b>Trait:</b> {{traits}}</span>
+
           </div>
 
           <method-list></method-list>
@@ -52,6 +54,7 @@
                 </h3>
 
                 <resource-type></resource-type>
+                <span ng-if="methodInfo.is" class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"><b>Trait:</b> {{traits}}</span>
               </div>
 
               <method-list></method-list>
