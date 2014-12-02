@@ -657,15 +657,27 @@
           $scope.$apply.apply($scope, arguments);
         }
 
+        function beautify(body, contentType) {
+          if(contentType.indexOf('json')) {
+            body = vkbeautify.json(body);
+          }
+
+          if(contentType.indexOf('xml')) {
+            body = vkbeautify.xml(body);
+          }
+
+          return body;
+        }
+
         function handleResponse(jqXhr) {
-          $scope.response.body    = jqXhr.responseText,
-          $scope.response.status  = jqXhr.status,
+          $scope.response.status  = jqXhr.status;
           $scope.response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
 
           if ($scope.response.headers['content-type']) {
             $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
           }
 
+          $scope.response.body  = beautify(jqXhr.responseText, $scope.response.contentType);
           $scope.requestEnd     = true;
           $scope.showMoreEnable = true;
           $scope.showSpinner    = false;
