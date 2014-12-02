@@ -1128,7 +1128,6 @@ ol {
 }
 
 .raml-console-resource-heading {
-  font-family: 'Source Code Pro';
   display: inline-block;
   margin: 0;
   margin-right: 4px;
@@ -1157,7 +1156,6 @@ ol {
 }
 
 .raml-console-resource-heading-large {
-  font-family: 'Source Code Pro';
   font-size: 10px;
 }
 
