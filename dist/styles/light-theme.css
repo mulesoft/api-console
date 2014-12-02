@@ -1620,6 +1620,10 @@ ol {
   }
 }
 
+.raml-console-sidebar-url-segment {
+  font-weight: bold;
+}
+
 .raml-console-sidebar-prefill {
   padding: 16px 0 0 0 !important;
 }
@@ -2391,15 +2395,15 @@ ol {
 
 .raml-console-sidebar-method {
   float: left;
-  width: 50px;
   padding-top: 2px;
-  margin: 0 10px 0 0;
+  margin: 0 5px 0 0;
   font-size: 14px;
   font-weight: 700;
 }
 
 .raml-console-sidebar-method-content {
   margin-bottom: 16px;
+  font-size: 14px;
 }
 
 .raml-console-sidebar-request-metadata {

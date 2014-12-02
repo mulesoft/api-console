@@ -439,7 +439,7 @@
         }
 
         $scope.$parent.resource.pathSegments.map(function (element) {
-          var tokens = element.tokens.sort();
+          var tokens = element.tokens;
 
           for (var i = 0; i < tokens.length; i++) {
             $scope.segments.push({
@@ -3070,8 +3070,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <div ng-show=\"showBaseUrl\" class=\"raml-console-sidebar-method-content\">\n" +
     "      <div class=\"raml-console-sidebar-url\" ng-repeat=\"segment in segments\">\n" +
     "        <div ng-hide=\"segment.templated\">{{segment.name}}</div>\n" +
-    "        <div ng-show=\"segment.templated\" ng-if=\"context[type].values[segment.name][0]\">{{context[type].values[segment.name][0]}}</div>\n" +
-    "        <div ng-show=\"segment.templated\" ng-if=\"!context[type].values[segment.name][0]\"><span ng-non-bindable>&#123;</span>{{segment.name}}<span ng-non-bindable>&#125;</span></div>\n" +
+    "        <div ng-show=\"segment.templated\" ng-if=\"context[type].values[segment.name][0]\" class=\"raml-console-sidebar-url-segment\">{{context[type].values[segment.name][0]}}</div>\n" +
+    "        <div ng-show=\"segment.templated\" ng-if=\"!context[type].values[segment.name][0]\" class=\"raml-console-sidebar-url-segment\"><span ng-non-bindable>&#123;</span>{{segment.name}}<span ng-non-bindable>&#125;</span></div>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "\n" +

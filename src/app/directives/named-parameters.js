@@ -45,7 +45,7 @@
         }
 
         $scope.$parent.resource.pathSegments.map(function (element) {
-          var tokens = element.tokens.sort();
+          var tokens = element.tokens;
 
           for (var i = 0; i < tokens.length; i++) {
             $scope.segments.push({

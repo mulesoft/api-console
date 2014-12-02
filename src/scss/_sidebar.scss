@@ -21,6 +21,10 @@
   }
 }
 
+.sidebar-url-segment {
+  font-weight: bold;
+}
+
 .sidebar-prefill {
   padding: 16px 0 0 0 !important;
 }
@@ -870,9 +874,9 @@
 
 .sidebar-method {
   float: left;
-  width: 50px;
+  // width: 50px;
   padding-top: 2px;
-  margin: 0 10px 0 0;
+  margin: 0 5px 0 0;
 
   font-size: 14px;
   font-weight: 700;
@@ -880,6 +884,7 @@
 
 .sidebar-method-content {
   margin-bottom: 16px;
+  font-size: 14px;
 }
 
 .sidebar-request-metadata {
