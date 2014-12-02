@@ -2906,13 +2906,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/documentation.tpl.html',
     "<div class=\"raml-console-resource-panel-primary\">\n" +
-    "  <div class=\"raml-console-resource-panel-subheader raml-console-resource-panel-primary-row raml-console-clearfix\">\n" +
-    "    <ul class=\"raml-console-flag-list raml-console-resource-panel-flag-list\">\n" +
-    "      <li class=\"raml-console-flag\" ng-if=\"resource.resourceType\"><b>Type:</b> {{resource.resourceType}}</li>\n" +
-    "      <li class=\"raml-console-flag\" ng-if=\"methodInfo.is\"><b>Trait:</b> {{traits}}</li>\n" +
-    "    </ul>\n" +
-    "  </div>\n" +
-    "\n" +
     "  <!-- Request -->\n" +
     "  <header class=\"raml-console-resource-header\">\n" +
     "    <h3 class=\"raml-console-resource-head\">\n" +
@@ -3437,6 +3430,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </h2>\n" +
     "\n" +
     "            <resource-type></resource-type>\n" +
+    "            <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Trait:</b> {{traits}}</span>\n" +
+    "\n" +
     "          </div>\n" +
     "\n" +
     "          <method-list></method-list>\n" +
@@ -3455,6 +3450,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                </h3>\n" +
     "\n" +
     "                <resource-type></resource-type>\n" +
+    "                <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Trait:</b> {{traits}}</span>\n" +
     "              </div>\n" +
     "\n" +
     "              <method-list></method-list>\n" +

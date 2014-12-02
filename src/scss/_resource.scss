@@ -216,9 +216,12 @@
   // transition: 0.3s ease all;
 }
 
-.resource.is-active .resource-root-toggle,
-.resource.is-active .resource-heading-flag {
-  display: none;
+.resource-trait {
+  display: none !important;
+}
+
+.resource.is-active .resource-trait {
+  display: inline-block !important;
 }
 
 .resource.is-active .resource-close-btn {
