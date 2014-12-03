@@ -1,4 +1,5 @@
 # RAML Console
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/mulesoft/api-console?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://travis-ci.org/mulesoft/api-console.png)](https://travis-ci.org/mulesoft/api-console)
 
