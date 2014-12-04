@@ -1,0 +1,153 @@
+.toggle-all {
+  text-transform: capitalize;
+  font-size: 10px;
+  background-color: #dfdfdf;
+  border: 0;
+  color: #878787;
+  font-weight: bold;
+  border-radius: 0;
+  position: absolute;
+  float: right;
+  margin-top: 33px;
+  right: 32px;
+  cursor: pointer;
+}
+
+.documentation-content {
+  display: none;
+}
+
+.document-section-selector {
+  display: none;
+}
+
+.documentation-active {
+  .document-section-selector {
+    display: inline-block;
+  }
+
+  .documentation-content {
+    display: block;
+  }
+
+  .documentation-contents {
+    display: none !important;
+  }
+
+  .resource-path-active {
+    color: $color-resource-path-active;
+  }
+
+  .resource-close-btn {
+    display: block;
+  }
+
+  .document-header {
+    min-height: 50px;
+    margin: 10px 0 0;
+    border-color: $color-resource-path-active-border;
+
+    background: $color-resource-path-active-bg;
+
+    @media only screen and (min-width: $medium-screen) {
+      border-radius: 5px 5px 0 0;
+    }
+  }
+}
+
+.root-documentation {
+  margin-bottom: 25px;
+
+  .documentation-header {
+    background: #fff;
+  }
+
+  .documentation-section-content {
+    padding: 16px 32px;
+    font-size: 14px;
+  }
+
+  .documentation-contents {
+    padding-top: 11px;
+    padding-bottom: 17px;
+    background: #f5f5f5;
+
+    .documentation-clearfix {
+      height: 23px;
+      min-height: 0;
+      border: 0;
+
+      .documentation-path-container {
+        padding: 0;
+
+        .documentation-title {
+          float: left;
+        }
+      }
+    }
+  }
+}
+
+.md-heading-1 {
+  font-size: 16px;
+  margin-left: 0;
+  min-width: 50px;
+}
+
+.md-heading-2 {
+  font-size: 14px;
+  margin-left: 0;
+  min-width: 50px;
+}
+
+.md-heading-3 {
+  font-size: 12px;
+  margin-left: 20px;
+  font-style: italic;
+  min-width: 50px;
+}
+
+.md-heading-4 {
+  font-size: 10px;
+  margin-left: 30px;
+  font-style: italic;
+  min-width: 50px;
+}
+
+.md-heading-5 {
+  font-size: 8px;
+  margin-left: 40px;
+  font-style: italic;
+  min-width: 50px;
+}
+
+.md-line {
+  margin-right: 32px;
+  font-size: 13px;
+  border-bottom: 1px;
+  border-bottom-style: dotted;
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: right;
+}
+
+.md-line-1 {
+  margin-left: 32px;
+}
+
+.md-line-2 {
+  margin-left: 32px;
+}
+
+.md-line-3 {
+  margin-left: 52px;
+}
+
+.md-line-4 {
+  margin-left: 62px;
+}
+
+.md-line-5 {
+  margin-left: 72px;
+}
