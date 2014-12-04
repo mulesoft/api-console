@@ -54,13 +54,13 @@
           if ($this.hasClass('raml-console-resources-expanded')) {
             $this.text('expand all');
             $this.removeClass('raml-console-resources-expanded');
-            jQuery('body').find('.raml-console-resource-list-root ol.raml-console-resource-list').velocity('slideUp', {
+            jQuery('#raml-console-resources-container').find('ol.raml-console-resource-list').velocity('slideUp', {
               duration: 200
             });
           } else {
             $this.text('collapse all');
             $this.addClass('raml-console-resources-expanded');
-            jQuery('body').find('.raml-console-resource-list-root ol.raml-console-resource-list').velocity('slideDown', {
+            jQuery('#raml-console-resources-container').find('ol.raml-console-resource-list').velocity('slideDown', {
               duration: 200
             });
           }

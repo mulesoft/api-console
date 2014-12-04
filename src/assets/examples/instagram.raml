@@ -183,7 +183,7 @@ documentation:
 
       Note that we do not include an expiry time. Our access_tokens have no explicit expiry, though your app should handle the case that either the user revokes access or we expire the token after some period of time. In this case, your response’s meta will contain an “error_type=OAuthAccessTokenError”. In other words: do do not assume your access_token is valid forever.
 
-      ##Client-Side (Implicit) Authentication
+      ## Client-Side (Implicit) Authentication
 
       If you’re building an app that does not have a server component (a purely javascript app, for instance), you’ll notice that it’s impossible to complete step three above to receive your access_token without also having to ship your client secret. You should never ship your client secret onto devices you don’t control. Then how do you get an access_token? Well the smart folks in charge of the OAuth 2.0 spec anticipated this problem and created the Implicit Authentication Flow.
 

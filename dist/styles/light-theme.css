@@ -1592,10 +1592,8 @@ ol {
   color: #585961;
   text-decoration: none;
   text-transform: capitalize;
-  font-size: 13px;
-  margin-bottom: 5px;
+  font-size: 12px;
   font-weight: bold;
-  margin-left: 7px;
 }
 
 .raml-console-sidebar {
@@ -3027,4 +3025,157 @@ span.raml-console-side-bar-required-field {
 
 .raml-console-initializer-action-btn:hover {
   background-color: #a3a5b1;
+}
+
+.raml-console-toggle-all {
+  text-transform: capitalize;
+  font-size: 10px;
+  background-color: #dfdfdf;
+  border: 0;
+  color: #878787;
+  font-weight: bold;
+  border-radius: 0;
+  position: absolute;
+  float: right;
+  margin-top: 33px;
+  right: 32px;
+  cursor: pointer;
+}
+
+.raml-console-documentation-content {
+  display: none;
+}
+
+.raml-console-document-section-selector {
+  display: none;
+}
+
+.raml-console-documentation-active .raml-console-document-section-selector {
+  display: inline-block;
+}
+
+.raml-console-documentation-active .raml-console-documentation-content {
+  display: block;
+}
+
+.raml-console-documentation-active .raml-console-documentation-contents {
+  display: none !important;
+}
+
+.raml-console-documentation-active .raml-console-resource-path-active {
+  color: #fff;
+}
+
+.raml-console-documentation-active .raml-console-resource-close-btn {
+  display: block;
+}
+
+.raml-console-documentation-active .raml-console-document-header {
+  min-height: 50px;
+  margin: 10px 0 0;
+  border-color: #2d2d30;
+  background: #2d2d30;
+}
+
+@media only screen and (min-width: 600px) {
+  .raml-console-documentation-active .raml-console-document-header {
+    border-radius: 5px 5px 0 0;
+  }
+}
+
+.raml-console-root-documentation {
+  margin-bottom: 25px;
+}
+
+.raml-console-root-documentation .raml-console-documentation-header {
+  background: #fff;
+}
+
+.raml-console-root-documentation .raml-console-documentation-section-content {
+  padding: 16px 32px;
+  font-size: 14px;
+}
+
+.raml-console-root-documentation .raml-console-documentation-contents {
+  padding-top: 11px;
+  padding-bottom: 17px;
+  background: #f5f5f5;
+}
+
+.raml-console-root-documentation .raml-console-documentation-contents .raml-console-documentation-clearfix {
+  height: 23px;
+  min-height: 0;
+  border: 0;
+}
+
+.raml-console-root-documentation .raml-console-documentation-contents .raml-console-documentation-clearfix .raml-console-documentation-path-container {
+  padding: 0;
+}
+
+.raml-console-root-documentation .raml-console-documentation-contents .raml-console-documentation-clearfix .raml-console-documentation-path-container .raml-console-documentation-title {
+  float: left;
+}
+
+.raml-console-md-heading-1 {
+  font-size: 16px;
+  margin-left: 0;
+  min-width: 50px;
+}
+
+.raml-console-md-heading-2 {
+  font-size: 14px;
+  margin-left: 0;
+  min-width: 50px;
+}
+
+.raml-console-md-heading-3 {
+  font-size: 12px;
+  margin-left: 20px;
+  font-style: italic;
+  min-width: 50px;
+}
+
+.raml-console-md-heading-4 {
+  font-size: 10px;
+  margin-left: 30px;
+  font-style: italic;
+  min-width: 50px;
+}
+
+.raml-console-md-heading-5 {
+  font-size: 8px;
+  margin-left: 40px;
+  font-style: italic;
+  min-width: 50px;
+}
+
+.raml-console-md-line {
+  margin-right: 32px;
+  font-size: 13px;
+  border-bottom: 1px;
+  border-bottom-style: dotted;
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: right;
+}
+
+.raml-console-md-line-1 {
+  margin-left: 32px;
+}
+
+.raml-console-md-line-2 {
+  margin-left: 32px;
+}
+
+.raml-console-md-line-3 {
+  margin-left: 52px;
+}
+
+.raml-console-md-line-4 {
+  margin-left: 62px;
+}
+
+.raml-console-md-line-5 {
+  margin-left: 72px;
 }
