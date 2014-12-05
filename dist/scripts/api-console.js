@@ -187,6 +187,22 @@
           $scope.currentBodySelected = type;
         };
 
+        $scope.getBodyId = function (bodyType) {
+          return jQuery.trim(bodyType.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
+        };
+
+        $scope.bodySelected = function (value) {
+          return value === $scope.currentBodySelected;
+        };
+
+        $scope.$watch('currentBodySelected', function (value) {
+          var $container = jQuery('.raml-console-request-body-heading');
+          var $elements  = $container.find('span');
+
+          $elements.removeClass('raml-console-is-active');
+          $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
+        });
+
         $scope.showSchema = function ($event) {
           var $this   = jQuery($event.currentTarget);
           var $panel  = $this.closest('.raml-console-resource-panel');
@@ -951,12 +967,17 @@
           $scope.context.forceRequest = false;
         };
 
+        $scope.requestBodySelectionChange = function (bodyType) {
+          $scope.currentBodySelected = bodyType;
+        };
+
         $scope.toggleBodyType = function ($event, bodyType) {
           var $this  = jQuery($event.currentTarget);
           var $panel = $this.closest('.raml-console-sidebar-toggle-type').find('button');
 
           $panel.removeClass('raml-console-is-active');
           $this.addClass('raml-console-is-active');
+
           $scope.context.bodyContent.selected = bodyType;
 
           var editor = $this.closest('.raml-console-sidebar-row')
@@ -3080,8 +3101,20 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </h3>\n" +
     "\n" +
     "      <h4 class=\"raml-console-request-body-heading\">\n" +
-    "        <span ng-click=\"changeResourceBodyType($event, key)\" ng-class=\"{ 'raml-console-is-active' : $first}\" class=\"raml-console-flag\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</span>\n" +
+    "        <span ng-click=\"changeResourceBodyType($event, key)\" ng-class=\"{ 'raml-console-is-active' : bodySelected(key)}\" class=\"raml-console-flag raml-console-body-{{getBodyId(key)}}\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</span>\n" +
     "      </h4>\n" +
+    "\n" +
+    "      <section ng-if=\"methodInfo.body[currentBodySelected].formParameters\">\n" +
+    "         <div class=\"raml-console-resource-param\" ng-repeat=\"formParam in methodInfo.body[currentBodySelected].formParameters\">\n" +
+    "          <h4 class=\"raml-console-resource-param-heading\">{{formParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(formParam[0])}}</span></h4>\n" +
+    "\n" +
+    "          <p marked=\"formParam[0].description\"></p>\n" +
+    "\n" +
+    "          <p ng-if=\"formParam[0].example\">\n" +
+    "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
+    "          </p>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
     "\n" +
     "      <div ng-if=\"methodInfo.body[currentBodySelected].example\">\n" +
     "        <span>Example:</span>\n" +
@@ -3425,7 +3458,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </header>\n" +
     "\n" +
     "            <div class=\"raml-console-sidebar-row\" style=\"padding-bottom: 0;\">\n" +
-    "              <select class=\"raml-console-sidebar-input\" ng-model=\"context.bodyContent.selected\" style=\"margin-bottom: 0;\">\n" +
+    "              <select ng-change=\"requestBodySelectionChange(context.bodyContent.selected)\" class=\"raml-console-sidebar-input\" ng-model=\"context.bodyContent.selected\" style=\"margin-bottom: 0;\">\n" +
     "               <option ng-repeat=\"(key, scheme) in methodInfo.body\" value=\"{{key}}\">{{key}}</option>\n" +
     "              </select>\n" +
     "            </div>\n" +

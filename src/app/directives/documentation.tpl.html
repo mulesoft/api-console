@@ -57,8 +57,20 @@
       </h3>
 
       <h4 class="raml-console-request-body-heading">
-        <span ng-click="changeResourceBodyType($event, key)" ng-class="{ 'raml-console-is-active' : $first}" class="raml-console-flag" ng-repeat="(key, value) in methodInfo.body">{{key}}</span>
+        <span ng-click="changeResourceBodyType($event, key)" ng-class="{ 'raml-console-is-active' : bodySelected(key)}" class="raml-console-flag raml-console-body-{{getBodyId(key)}}" ng-repeat="(key, value) in methodInfo.body">{{key}}</span>
       </h4>
+
+      <section ng-if="methodInfo.body[currentBodySelected].formParameters">
+         <div class="raml-console-resource-param" ng-repeat="formParam in methodInfo.body[currentBodySelected].formParameters">
+          <h4 class="raml-console-resource-param-heading">{{formParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(formParam[0])}}</span></h4>
+
+          <p marked="formParam[0].description"></p>
+
+          <p ng-if="formParam[0].example">
+            <span class="raml-console-resource-param-example"><b>Example:</b> {{formParam[0].example}}</span>
+          </p>
+        </div>
+      </section>
 
       <div ng-if="methodInfo.body[currentBodySelected].example">
         <span>Example:</span>
