@@ -872,7 +872,7 @@ ol {
 
 .raml-console-resource-menu-item button.raml-console-button-is-active {
   border-radius: 0 !important;
-  background: white !important;
+  background: #fff !important;
   border-right: 0;
   height: 48px;
   border-top: 1px #ccc solid !important;
@@ -913,9 +913,9 @@ ol {
   border: 0 !important;
   height: 48px !important;
   background: #fafafa !important;
-  border-top: 1px #e7e7e7 solid !important;
-  border-left: 3px #e7e7e7 solid !important;
-  border-bottom: 1px #e7e7e7 solid !important;
+  border-top: 1px #ccc solid !important;
+  border-left: 3px #ccc solid !important;
+  border-bottom: 1px #ccc solid !important;
 }
 
 .raml-console-resource-menu-btn-2xx {
@@ -1370,7 +1370,7 @@ ol {
   margin-left: 60px;
   min-height: 500px;
   padding-top: 24px !important;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #ccc;
   margin-top: 10px;
   margin-right: 10px;
   margin-bottom: 10px;
@@ -1394,6 +1394,7 @@ ol {
 
 .raml-console-resource-panel-content {
   display: none;
+  background: #fff;
 }
 
 .raml-console-resource-panel-content.raml-console-is-active {
@@ -3096,12 +3097,12 @@ span.raml-console-side-bar-required-field {
   }
 }
 
-.raml-console-root-documentation {
-  margin-bottom: 25px;
+.raml-console-documentation-header {
+  background: #fff;
 }
 
-.raml-console-root-documentation .raml-console-documentation-header {
-  background: #fff;
+.raml-console-root-documentation {
+  margin-bottom: 25px;
 }
 
 .raml-console-root-documentation .raml-console-documentation-section-content {
@@ -3191,4 +3192,132 @@ span.raml-console-side-bar-required-field {
 
 .raml-console-md-line-5 {
   margin-left: 72px;
+}
+
+/*
+
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+
+*/
+
+.raml-console-hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: #333;
+  background: #f8f8f8;
+  -webkit-text-size-adjust: none;
+}
+
+.raml-console-hljs-comment,
+.raml-console-hljs-template-comment,
+.raml-console-diff .raml-console-hljs-header,
+.raml-console-hljs-javadoc {
+  color: #998;
+  font-style: italic;
+}
+
+.raml-console-hljs-keyword,
+.raml-console-css .raml-console-rule .raml-console-hljs-keyword,
+.raml-console-hljs-winutils,
+.raml-console-javascript .raml-console-hljs-title,
+.raml-console-nginx .raml-console-hljs-title,
+.raml-console-hljs-subst,
+.raml-console-hljs-request,
+.raml-console-hljs-status {
+  color: #333;
+  font-weight: bold;
+}
+
+.raml-console-hljs-number,
+.raml-console-hljs-hexcolor,
+.raml-console-ruby .raml-console-hljs-constant {
+  color: #008080;
+}
+
+.raml-console-hljs-string,
+.raml-console-hljs-tag .raml-console-hljs-value,
+.raml-console-hljs-phpdoc,
+.raml-console-hljs-dartdoc,
+.raml-console-tex .raml-console-hljs-formula {
+  color: #d14;
+}
+
+.raml-console-hljs-title,
+.raml-console-hljs-id,
+.raml-console-scss .raml-console-hljs-preprocessor {
+  color: #900;
+  font-weight: bold;
+}
+
+.raml-console-javascript .raml-console-hljs-title,
+.raml-console-hljs-list .raml-console-hljs-keyword,
+.raml-console-hljs-subst {
+  font-weight: normal;
+}
+
+.raml-console-hljs-class .raml-console-hljs-title,
+.raml-console-hljs-type,
+.raml-console-vhdl .raml-console-hljs-literal,
+.raml-console-tex .raml-console-hljs-command {
+  color: #458;
+  font-weight: bold;
+}
+
+.raml-console-hljs-tag,
+.raml-console-hljs-tag .raml-console-hljs-title,
+.raml-console-hljs-rules .raml-console-hljs-property,
+.raml-console-django .raml-console-hljs-tag .raml-console-hljs-keyword {
+  color: #000080;
+  font-weight: normal;
+}
+
+.raml-console-hljs-attribute,
+.raml-console-hljs-variable,
+.raml-console-lisp .raml-console-hljs-body {
+  color: #008080;
+}
+
+.raml-console-hljs-regexp {
+  color: #009926;
+}
+
+.raml-console-hljs-symbol,
+.raml-console-ruby .raml-console-hljs-symbol .raml-console-hljs-string,
+.raml-console-lisp .raml-console-hljs-keyword,
+.raml-console-clojure .raml-console-hljs-keyword,
+.raml-console-scheme .raml-console-hljs-keyword,
+.raml-console-tex .raml-console-hljs-special,
+.raml-console-hljs-prompt {
+  color: #990073;
+}
+
+.raml-console-hljs-built-in {
+  color: #0086b3;
+}
+
+.raml-console-hljs-preprocessor,
+.raml-console-hljs-pragma,
+.raml-console-hljs-pi,
+.raml-console-hljs-doctype,
+.raml-console-hljs-shebang,
+.raml-console-hljs-cdata {
+  color: #999;
+  font-weight: bold;
+}
+
+.raml-console-hljs-deletion {
+  background: #fdd;
+}
+
+.raml-console-hljs-addition {
+  background: #dfd;
+}
+
+.raml-console-diff .raml-console-hljs-change {
+  background: #0086b3;
+}
+
+.raml-console-hljs-chunk {
+  color: #aaa;
 }

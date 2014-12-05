@@ -43,11 +43,11 @@
 
         function beautify(body, contentType) {
           if(contentType.indexOf('json')) {
-            body = vkbeautify.json(body);
+            body = vkbeautify.json(body, 2);
           }
 
           if(contentType.indexOf('xml')) {
-            body = vkbeautify.xml(body);
+            body = vkbeautify.xml(body, 2);
           }
 
           return body;
