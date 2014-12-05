@@ -661,7 +661,19 @@ ol {
   box-shadow: none;
 }
 
+.raml-console-tab-box {
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  text-align: center;
+  padding-top: 5px;
+}
+
 .raml-console-tab-list {
+  right: 12px;
   position: relative;
   bottom: -1px;
   display: flex;
@@ -678,11 +690,15 @@ ol {
 }
 
 .raml-console-tab {
+  width: 126px;
+  overflow: hidden;
+  float: left;
+  margin: 0 -15px 0 0;
   position: relative;
   cursor: pointer;
   align-self: flex-end;
   height: 18px;
-  margin-left: -20px;
+  margin-left: -6px;
   color: #fff;
   font-size: 14px;
   font-weight: 700;
@@ -693,7 +709,7 @@ ol {
 @media only screen and (min-width: 600px) {
   .raml-console-tab {
     height: 24px;
-    margin-left: -28px;
+    margin-left: -6px;
   }
 }
 
@@ -705,9 +721,10 @@ ol {
 
 .raml-console-tab-label {
   position: absolute;
-  right: 16px;
-  bottom: 2px;
-  left: 16px;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+  padding-top: 6px;
   font-size: 11px;
   font-weight: 900;
   text-align: center;
@@ -715,9 +732,6 @@ ol {
 
 @media only screen and (min-width: 600px) {
   .raml-console-tab-label {
-    right: 24px;
-    bottom: 4px;
-    left: 24px;
     font-size: 12px;
     font-weight: 700;
   }
@@ -725,7 +739,6 @@ ol {
 
 @media only screen and (min-width: 960px) {
   .raml-console-tab-label {
-    bottom: 5px;
     font-size: 14px;
   }
 }
@@ -748,84 +761,84 @@ ol {
 }
 
 .raml-console-tab-get {
-  fill: #0B88B9;
+  background: #0B88B9;
 }
 
 .raml-console-tab-put {
-  fill: #87538f;
+  background: #87538f;
 }
 
 .raml-console-tab-delete {
-  fill: #d14956;
+  background: #d14956;
 }
 
 .raml-console-tab-post {
-  fill: #1EA18D;
+  background: #1EA18D;
 }
 
 .raml-console-tab-patch {
-  fill: #02B0E2;
+  background: #02B0E2;
 }
 
 .raml-console-tab-connect {
-  fill: #E48F0A;
+  background: #E48F0A;
 }
 
 .raml-console-tab-head {
-  fill: #8A45A2;
+  background: #8A45A2;
 }
 
 .raml-console-tab-options {
-  fill: #1EBD77;
+  background: #1EBD77;
 }
 
 .raml-console-tab-trace {
-  fill: #98B805;
+  background: #98B805;
 }
 
 .raml-console-tab:hover .raml-console-tab-get,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-get {
-  fill: #5F9ACA;
+  background: #5F9ACA;
 }
 
 .raml-console-tab:hover .raml-console-tab-put,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-put {
-  fill: #B16DBB;
+  background: #B16DBB;
 }
 
 .raml-console-tab:hover .raml-console-tab-delete,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-delete {
-  fill: #EC5D5E;
+  background: #EC5D5E;
 }
 
 .raml-console-tab:hover .raml-console-tab-post,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-post {
-  fill: #77C5A2;
+  background: #77C5A2;
 }
 
 .raml-console-tab:hover .raml-console-tab-patch,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-patch {
-  fill: #96e7fe;
+  background: #96e7fe;
 }
 
 .raml-console-tab:hover .raml-console-tab-connect,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-connect {
-  fill: #f8ba58;
+  background: #f8ba58;
 }
 
 .raml-console-tab:hover .raml-console-tab-head,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-head {
-  fill: #b680c9;
+  background: #b680c9;
 }
 
 .raml-console-tab:hover .raml-console-tab-options,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-options {
-  fill: #59e5a7;
+  background: #59e5a7;
 }
 
 .raml-console-tab:hover .raml-console-tab-trace,
 .raml-console-resource:not(.raml-console-is-active) .raml-console-tab.raml-console-is-hovered .raml-console-tab-trace {
-  fill: #c7f107;
+  background: #c7f107;
 }
 
 .raml-console-tab.raml-console-is-active {
@@ -833,8 +846,8 @@ ol {
   color: #333;
 }
 
-.raml-console-tab.raml-console-is-active .raml-console-tab-image {
-  fill: #fff;
+.raml-console-tab.raml-console-is-active .raml-console-tab-box {
+  background: #fff;
 }
 
 /* Resource List */

@@ -1,8 +1,6 @@
 <div class="raml-console-tab-list">
-  <a class="raml-console-tab" ng-repeat="method in resource.methods" ng-click="showResource($event, $index)">
-    <svg viewBox="0 0 122 26" class="raml-console-tab-image raml-console-tab-{{method.method}}" xmlns="http://www.w3.org/2000/svg" version="1.1">
-      <path class="tab-shape" clip-rule="evenodd" d="M96 0h-70l-26 26h122l-26-26z"/>
-    </svg>
+  <div class="raml-console-tab" ng-repeat="method in resource.methods" ng-click="showResource($event, $index)">
     <span class="raml-console-tab-label">{{method.method.toLocaleUpperCase()}}</span>
-  </a>
+    <div class="raml-console-tab-box raml-console-tab-{{method.method}}"></div>
+  </div>
 </div>
