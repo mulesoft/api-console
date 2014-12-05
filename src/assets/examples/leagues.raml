@@ -29,6 +29,28 @@ securedBy: [ basic ]
           - subscribed
           - all
     body:
+      application/json:
+        schema: Items
+        example: |
+              {
+                "items":
+                  [
+                    {
+                      "id":123,
+                      "code":"AD-12",
+                      "color":"blue",
+                      "size":"medium",
+                      "description":"Borders in light blue"
+                    },
+                    {
+                      "id":321,
+                      "code":"AD-13",
+                      "color":"pink",
+                      "size":"small",
+                      "description":"Borders in red"
+                    }
+                  ]
+                }
       application/x-www-form-urlencoded:
         formParameters:
           code:
@@ -57,28 +79,6 @@ securedBy: [ basic ]
             required: true
             minLength: 3
             maxLength: 12
-      application/json:
-        schema: Items
-        example: |
-              {
-                "items":
-                  [
-                    {
-                      "id":123,
-                      "code":"AD-12",
-                      "color":"blue",
-                      "size":"medium",
-                      "description":"Borders in light blue"
-                    },
-                    {
-                      "id":321,
-                      "code":"AD-13",
-                      "color":"pink",
-                      "size":"small",
-                      "description":"Borders in red"
-                    }
-                  ]
-                }
       application/xml:
         example: |
           <items>

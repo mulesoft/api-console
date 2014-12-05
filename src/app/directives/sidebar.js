@@ -219,12 +219,17 @@
           $scope.context.forceRequest = false;
         };
 
+        $scope.requestBodySelectionChange = function (bodyType) {
+          $scope.currentBodySelected = bodyType;
+        };
+
         $scope.toggleBodyType = function ($event, bodyType) {
           var $this  = jQuery($event.currentTarget);
           var $panel = $this.closest('.raml-console-sidebar-toggle-type').find('button');
 
           $panel.removeClass('raml-console-is-active');
           $this.addClass('raml-console-is-active');
+
           $scope.context.bodyContent.selected = bodyType;
 
           var editor = $this.closest('.raml-console-sidebar-row')

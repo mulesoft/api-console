@@ -47,7 +47,7 @@
             </header>
 
             <div class="raml-console-sidebar-row" style="padding-bottom: 0;">
-              <select class="raml-console-sidebar-input" ng-model="context.bodyContent.selected" style="margin-bottom: 0;">
+              <select ng-change="requestBodySelectionChange(context.bodyContent.selected)" class="raml-console-sidebar-input" ng-model="context.bodyContent.selected" style="margin-bottom: 0;">
                <option ng-repeat="(key, scheme) in methodInfo.body" value="{{key}}">{{key}}</option>
               </select>
             </div>

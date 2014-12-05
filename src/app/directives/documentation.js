@@ -121,6 +121,22 @@
           $scope.currentBodySelected = type;
         };
 
+        $scope.getBodyId = function (bodyType) {
+          return jQuery.trim(bodyType.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
+        };
+
+        $scope.bodySelected = function (value) {
+          return value === $scope.currentBodySelected;
+        };
+
+        $scope.$watch('currentBodySelected', function (value) {
+          var $container = jQuery('.raml-console-request-body-heading');
+          var $elements  = $container.find('span');
+
+          $elements.removeClass('raml-console-is-active');
+          $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
+        });
+
         $scope.showSchema = function ($event) {
           var $this   = jQuery($event.currentTarget);
           var $panel  = $this.closest('.raml-console-resource-panel');
