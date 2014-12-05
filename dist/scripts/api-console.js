@@ -805,11 +805,19 @@
           $scope.response.status  = jqXhr.status;
           $scope.response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
 
+          $scope.currentStatusCode = jqXhr.status.toString();
+
           if ($scope.response.headers['content-type']) {
             $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
           }
 
-          $scope.response.body  = beautify(jqXhr.responseText, $scope.response.contentType);
+          try {
+            $scope.response.body = beautify(jqXhr.responseText, $scope.response.contentType);
+          }
+          catch (e) {
+            $scope.response.body = jqXhr.responseText;
+          }
+
           $scope.requestEnd     = true;
           $scope.showMoreEnable = true;
           $scope.showSpinner    = false;
@@ -3189,12 +3197,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/method-list.tpl.html',
     "<div class=\"raml-console-tab-list\">\n" +
-    "  <a class=\"raml-console-tab\" ng-repeat=\"method in resource.methods\" ng-click=\"showResource($event, $index)\">\n" +
-    "    <svg viewBox=\"0 0 122 26\" class=\"raml-console-tab-image raml-console-tab-{{method.method}}\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n" +
-    "      <path class=\"tab-shape\" clip-rule=\"evenodd\" d=\"M96 0h-70l-26 26h122l-26-26z\"/>\n" +
-    "    </svg>\n" +
+    "  <div class=\"raml-console-tab\" ng-repeat=\"method in resource.methods\" ng-click=\"showResource($event, $index)\">\n" +
     "    <span class=\"raml-console-tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
-    "  </a>\n" +
+    "    <div class=\"raml-console-tab-box raml-console-tab-{{method.method}}\"></div>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 

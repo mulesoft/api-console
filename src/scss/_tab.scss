@@ -1,4 +1,18 @@
+.tab-box {
+  height:31px;
+  border-radius: 4px;
+  margin:0 10px 0;
+
+ -webkit-transform: perspective(45px) rotateX(30deg);
+ -moz-transform: perspective(45px) rotateX(30deg);
+ -ms-transform: perspective(45px) rotateX(30deg);
+
+  text-align: center;
+  padding-top: 5px;
+}
+
 .tab-list {
+  right: 12px;
   position: relative;
   bottom: -1px;
 
@@ -14,11 +28,16 @@
 }
 
 .tab {
+  width: 126px;
+  overflow:hidden;
+  float:left;
+  margin:0 -15px 0 0;
+
   position: relative;
   cursor: pointer;
   align-self: flex-end;
   height: 18px;
-  margin-left: -20px;
+  margin-left: -6px;
 
   color: $color-console-tab-text;
   font-size: 14px;
@@ -28,7 +47,7 @@
 
   @media only screen and (min-width: $medium-screen) {
     height: 24px;
-    margin-left: -28px;
+    margin-left: -6px;
   }
 
   @media only screen and (min-width: $large-screen) {
@@ -38,26 +57,21 @@
 
 .tab-label {
   position: absolute;
-  right: 16px;
-  bottom: 2px;
-  left: 16px;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+  padding-top: 6px;
 
   font-size: 11px;
   font-weight: 900;
   text-align: center;
 
   @media only screen and (min-width: $medium-screen) {
-    right: 24px;
-    bottom: 4px;
-    left: 24px;
-
     font-size: 12px;
     font-weight: 700;
   }
 
   @media only screen and (min-width: $large-screen) {
-    bottom: 5px;
-
     font-size: 14px;
   }
 }
@@ -76,77 +90,77 @@
 }
 
 .tab-get {
-  fill: $color-console-tab-get;
+  background: $color-console-tab-get;
 }
 
 .tab-put {
-  fill: $color-console-tab-put;
+  background: $color-console-tab-put;
 }
 
 .tab-delete {
-  fill: $color-console-tab-delete;
+  background: $color-console-tab-delete;
 }
 
 .tab-post {
-  fill: $color-console-tab-post;
+  background: $color-console-tab-post;
 }
 
 .tab-patch {
-  fill: $color-console-tab-patch;
+  background: $color-console-tab-patch;
 }
 
 .tab-connect {
-  fill: $color-console-tab-connect;
+  background: $color-console-tab-connect;
 }
 
 .tab-head {
-  fill: $color-console-tab-head;
+  background: $color-console-tab-head;
 }
 
 .tab-options {
-  fill: $color-console-tab-options;
+  background: $color-console-tab-options;
 }
 
 .tab-trace {
-  fill: $color-console-tab-trace;
+  background: $color-console-tab-trace;
 }
 
 .tab:hover,
 .resource:not(.is-active) .tab.is-hovered {
   .tab-get {
-    fill: $color-console-tab-get-hover;
+    background: $color-console-tab-get-hover;
   }
 
   .tab-put {
-    fill: $color-console-tab-put-hover;
+    background: $color-console-tab-put-hover;
   }
 
   .tab-delete {
-    fill: $color-console-tab-delete-hover;
+    background: $color-console-tab-delete-hover;
   }
 
   .tab-post {
-    fill: $color-console-tab-post-hover;
+    background: $color-console-tab-post-hover;
   }
 
   .tab-patch {
-    fill: $color-console-tab-patch-hover;
+    background: $color-console-tab-patch-hover;
   }
 
   .tab-connect {
-    fill: $color-console-tab-connect-hover;
+    background: $color-console-tab-connect-hover;
   }
 
   .tab-head {
-    fill: $color-console-tab-head-hover;
+    background: $color-console-tab-head-hover;
   }
 
   .tab-options {
-    fill: $color-console-tab-options-hover;
+    background: $color-console-tab-options-hover;
   }
 
   .tab-trace {
-    fill: $color-console-tab-trace-hover;
+    background: $color-console-tab-trace-hover;
   }
 }
 
@@ -156,6 +170,6 @@
   color: $color-console-tab-active;
 }
 
-.tab.is-active .tab-image {
-  fill: $color-console-tab-active-bg;
+.tab.is-active .tab-box {
+  background: $color-console-tab-active-bg;
 }

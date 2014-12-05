@@ -57,11 +57,19 @@
           $scope.response.status  = jqXhr.status;
           $scope.response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
 
+          $scope.currentStatusCode = jqXhr.status.toString();
+
           if ($scope.response.headers['content-type']) {
             $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
           }
 
-          $scope.response.body  = beautify(jqXhr.responseText, $scope.response.contentType);
+          try {
+            $scope.response.body = beautify(jqXhr.responseText, $scope.response.contentType);
+          }
+          catch (e) {
+            $scope.response.body = jqXhr.responseText;
+          }
+
           $scope.requestEnd     = true;
           $scope.showMoreEnable = true;
           $scope.showSpinner    = false;
