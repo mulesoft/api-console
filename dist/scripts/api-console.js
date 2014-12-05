@@ -13,7 +13,18 @@
   angular.module('RAML.Directives', []);
   angular.module('RAML.Services', ['raml']);
   angular.module('RAML.Security', []);
-  angular.module('ramlConsoleApp', ['RAML.Directives', 'RAML.Services', 'RAML.Security', 'hc.marked', 'ui.codemirror', 'hljs']);
+  angular.module('ramlConsoleApp', [
+    'RAML.Directives',
+    'RAML.Services',
+    'RAML.Security',
+    'hc.marked',
+    'ui.codemirror',
+    'hljs'
+  ]).config(function (hljsServiceProvider) {
+    hljsServiceProvider.setOptions({
+      classPrefix: 'raml-console-hljs-'
+    });
+  });
 
   var renderer = new window.marked.Renderer();
   var loc      = window.location;
@@ -78,6 +89,22 @@
         };
 
         $scope.currentStatusCode = '200';
+
+        function beautify(body, contentType) {
+          if(contentType.indexOf('json')) {
+            body = vkbeautify.json(body, 2);
+          }
+
+          if(contentType.indexOf('xml')) {
+            body = vkbeautify.xml(body, 2);
+          }
+
+          return body;
+        }
+
+        $scope.getBeatifiedExample = function (value) {
+          return beautify(value, $scope.currentBodySelected);
+        };
 
         $scope.getColorCode = function (code) {
           return code[0] + 'xx';
@@ -724,10 +751,6 @@
                 key = el;
               }
 
-              // console.log(el.match(regex));
-              // console.log(regex.test(el));
-              console.log(key + ' : ' + el);
-
               result.push({
                 value: key,
                 heading: el.match(/#/g).length,
@@ -791,11 +814,11 @@
 
         function beautify(body, contentType) {
           if(contentType.indexOf('json')) {
-            body = vkbeautify.json(body);
+            body = vkbeautify.json(body, 2);
           }
 
           if(contentType.indexOf('xml')) {
-            body = vkbeautify.xml(body);
+            body = vkbeautify.xml(body, 2);
           }
 
           return body;
@@ -3126,12 +3149,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <div ng-if=\"methodInfo.body[currentBodySelected].example\">\n" +
     "        <span>Example:</span>\n" +
-    "        <pre class=\"raml-console-resource-pre\"><code hljs source=\"methodInfo.body[currentBodySelected].example\"></code></pre>\n" +
+    "        <pre class=\"raml-console-resource-pre\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(methodInfo.body[currentBodySelected].example)\"></code></pre>\n" +
     "      </div>\n" +
     "\n" +
     "      <div ng-if=\"methodInfo.body[currentBodySelected].schema\">\n" +
     "        <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
-    "        <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code hljs source=\"methodInfo.body[currentBodySelected].schema\"></code></pre>\n" +
+    "        <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(methodInfo.body[currentBodySelected].schema)\"></code></pre>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
@@ -3179,12 +3202,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "          <div ng-if=\"responseInfo[code][responseInfo[code].currentType].example\">\n" +
     "            <span>Example:</span>\n" +
-    "            <pre class=\"raml-console-resource-pre\"><code hljs source=\"responseInfo[code][responseInfo[code].currentType].example\"></code></pre>\n" +
+    "            <pre class=\"raml-console-resource-pre\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)\"></code></pre>\n" +
     "          </div>\n" +
     "\n" +
     "          <div ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
     "            <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
-    "            <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code hljs source=\"responseInfo[code][responseInfo[code].currentType].schema\"></code></pre>\n" +
+    "            <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)\"></code></pre>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
@@ -3629,7 +3652,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <root-documentation></root-documentation>\n" +
     "\n" +
     "    <ol id=\"raml-console-resources-container\" class=\"raml-console-resource-list raml-console-resource-list-root\">\n" +
-    "      <li id=\"raml_documentation\" class=\"raml-console-resource-list-item\" style=\"background: #fff;\">\n" +
+    "      <li id=\"raml_documentation\" class=\"raml-console-resource-list-item raml-console-documentation-header\">\n" +
     "        <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\">\n" +
     "          <span ng-click=\"collapseAll($event)\" class=\"raml-console-resources-expanded raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all\">collapse all</span>\n" +
     "          <div class=\"raml-console-resource-path-container\">\n" +

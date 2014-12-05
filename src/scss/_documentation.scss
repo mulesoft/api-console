@@ -55,12 +55,12 @@
   }
 }
 
+.documentation-header {
+  background: $color-console-documentation-header;
+}
+
 .root-documentation {
   margin-bottom: 25px;
-
-  .documentation-header {
-    background: #fff;
-  }
 
   .documentation-section-content {
     padding: 16px 32px;
@@ -70,7 +70,7 @@
   .documentation-contents {
     padding-top: 11px;
     padding-bottom: 17px;
-    background: #f5f5f5;
+    background: $color-console-documentation-contents;
 
     .documentation-clearfix {
       height: 23px;

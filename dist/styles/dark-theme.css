@@ -872,10 +872,10 @@ ol {
 
 .raml-console-resource-menu-item button.raml-console-button-is-active {
   border-radius: 0 !important;
-  background: white !important;
+  background: #1c1e22 !important;
   border-right: 0;
   height: 48px;
-  border-top: 1px #ccc solid !important;
+  border-top: 1px #404040 solid !important;
   border-right: 0 !important;
   width: 51px;
 }
@@ -913,9 +913,9 @@ ol {
   border: 0 !important;
   height: 48px !important;
   background: rgba(0, 0, 0, 0.1) !important;
-  border-top: 1px #e7e7e7 solid !important;
-  border-left: 3px #e7e7e7 solid !important;
-  border-bottom: 1px #e7e7e7 solid !important;
+  border-top: 1px #404040 solid !important;
+  border-left: 3px #404040 solid !important;
+  border-bottom: 1px #404040 solid !important;
 }
 
 .raml-console-resource-menu-btn-2xx {
@@ -1370,7 +1370,7 @@ ol {
   margin-left: 60px;
   min-height: 500px;
   padding-top: 24px !important;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #404040;
   margin-top: 10px;
   margin-right: 10px;
   margin-bottom: 10px;
@@ -1394,6 +1394,7 @@ ol {
 
 .raml-console-resource-panel-content {
   display: none;
+  background: #1c1e22;
 }
 
 .raml-console-resource-panel-content.raml-console-is-active {
@@ -3096,12 +3097,12 @@ span.raml-console-side-bar-required-field {
   }
 }
 
-.raml-console-root-documentation {
-  margin-bottom: 25px;
+.raml-console-documentation-header {
+  background: #282c30;
 }
 
-.raml-console-root-documentation .raml-console-documentation-header {
-  background: #fff;
+.raml-console-root-documentation {
+  margin-bottom: 25px;
 }
 
 .raml-console-root-documentation .raml-console-documentation-section-content {
@@ -3112,7 +3113,7 @@ span.raml-console-side-bar-required-field {
 .raml-console-root-documentation .raml-console-documentation-contents {
   padding-top: 11px;
   padding-bottom: 17px;
-  background: #f5f5f5;
+  background: #4b4f5a;
 }
 
 .raml-console-root-documentation .raml-console-documentation-contents .raml-console-documentation-clearfix {
@@ -3191,4 +3192,121 @@ span.raml-console-side-bar-required-field {
 
 .raml-console-md-line-5 {
   margin-left: 72px;
+}
+
+/*
+
+Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmail.com>
+
+*/
+
+.raml-console-hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #002b36;
+  color: #839496;
+  -webkit-text-size-adjust: none;
+}
+
+.raml-console-hljs-comment,
+.raml-console-hljs-template-comment,
+.raml-console-diff .raml-console-hljs-header,
+.raml-console-hljs-doctype,
+.raml-console-hljs-pi,
+.raml-console-lisp .raml-console-hljs-string,
+.raml-console-hljs-javadoc {
+  color: #586e75;
+}
+
+/* Solarized Green */
+
+.raml-console-hljs-keyword,
+.raml-console-hljs-winutils,
+.raml-console-method,
+.raml-console-hljs-addition,
+.raml-console-css .raml-console-hljs-tag,
+.raml-console-hljs-request,
+.raml-console-hljs-status,
+.raml-console-nginx .raml-console-hljs-title {
+  color: #859900;
+}
+
+/* Solarized Cyan */
+
+.raml-console-hljs-number,
+.raml-console-hljs-command,
+.raml-console-hljs-string,
+.raml-console-hljs-tag .raml-console-hljs-value,
+.raml-console-hljs-rules .raml-console-hljs-value,
+.raml-console-hljs-phpdoc,
+.raml-console-hljs-dartdoc,
+.raml-console-tex .raml-console-hljs-formula,
+.raml-console-hljs-regexp,
+.raml-console-hljs-hexcolor,
+.raml-console-hljs-link-url {
+  color: #2aa198;
+}
+
+/* Solarized Blue */
+
+.raml-console-hljs-title,
+.raml-console-hljs-localvars,
+.raml-console-hljs-chunk,
+.raml-console-hljs-decorator,
+.raml-console-hljs-built-in,
+.raml-console-hljs-identifier,
+.raml-console-vhdl .raml-console-hljs-literal,
+.raml-console-hljs-id,
+.raml-console-css .raml-console-hljs-function {
+  color: #268bd2;
+}
+
+/* Solarized Yellow */
+
+.raml-console-hljs-attribute,
+.raml-console-hljs-variable,
+.raml-console-lisp .raml-console-hljs-body,
+.raml-console-smalltalk .raml-console-hljs-number,
+.raml-console-hljs-constant,
+.raml-console-hljs-class .raml-console-hljs-title,
+.raml-console-hljs-parent,
+.raml-console-hljs-type,
+.raml-console-hljs-link-reference {
+  color: #b58900;
+}
+
+/* Solarized Orange */
+
+.raml-console-hljs-preprocessor,
+.raml-console-hljs-preprocessor .raml-console-hljs-keyword,
+.raml-console-hljs-pragma,
+.raml-console-hljs-shebang,
+.raml-console-hljs-symbol,
+.raml-console-hljs-symbol .raml-console-hljs-string,
+.raml-console-diff .raml-console-hljs-change,
+.raml-console-hljs-special,
+.raml-console-hljs-attr-selector,
+.raml-console-hljs-subst,
+.raml-console-hljs-cdata,
+.raml-console-css .raml-console-hljs-pseudo,
+.raml-console-hljs-header {
+  color: #cb4b16;
+}
+
+/* Solarized Red */
+
+.raml-console-hljs-deletion,
+.raml-console-hljs-important {
+  color: #dc322f;
+}
+
+/* Solarized Violet */
+
+.raml-console-hljs-link-label {
+  color: #6c71c4;
+}
+
+.raml-console-tex .raml-console-hljs-formula {
+  background: #073642;
 }

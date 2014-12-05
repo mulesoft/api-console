@@ -249,7 +249,7 @@ module.exports = function (grunt) {
     cssmin: {
       vendor: {
         files: {
-          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/codemirror.css', 'src/assets/styles/fonts.css', 'src/assets/styles/highlight.github.css', 'src/assets/styles/error.css']
+          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/codemirror.css', 'src/assets/styles/fonts.css', 'src/assets/styles/error.css']
         }
       }
     },

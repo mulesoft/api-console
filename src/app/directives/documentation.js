@@ -13,6 +13,22 @@
 
         $scope.currentStatusCode = '200';
 
+        function beautify(body, contentType) {
+          if(contentType.indexOf('json')) {
+            body = vkbeautify.json(body, 2);
+          }
+
+          if(contentType.indexOf('xml')) {
+            body = vkbeautify.xml(body, 2);
+          }
+
+          return body;
+        }
+
+        $scope.getBeatifiedExample = function (value) {
+          return beautify(value, $scope.currentBodySelected);
+        };
+
         $scope.getColorCode = function (code) {
           return code[0] + 'xx';
         };

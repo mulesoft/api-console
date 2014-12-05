@@ -92,10 +92,6 @@
                 key = el;
               }
 
-              // console.log(el.match(regex));
-              // console.log(regex.test(el));
-              console.log(key + ' : ' + el);
-
               result.push({
                 value: key,
                 heading: el.match(/#/g).length,

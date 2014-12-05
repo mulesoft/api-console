@@ -74,12 +74,12 @@
 
       <div ng-if="methodInfo.body[currentBodySelected].example">
         <span>Example:</span>
-        <pre class="raml-console-resource-pre"><code hljs source="methodInfo.body[currentBodySelected].example"></code></pre>
+        <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].example)"></code></pre>
       </div>
 
       <div ng-if="methodInfo.body[currentBodySelected].schema">
         <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-        <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code hljs source="methodInfo.body[currentBodySelected].schema"></code></pre>
+        <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].schema)"></code></pre>
       </div>
     </section>
   </div>
@@ -127,12 +127,12 @@
 
           <div ng-if="responseInfo[code][responseInfo[code].currentType].example">
             <span>Example:</span>
-            <pre class="raml-console-resource-pre"><code hljs source="responseInfo[code][responseInfo[code].currentType].example"></code></pre>
+            <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)"></code></pre>
           </div>
 
           <div ng-if="responseInfo[code][responseInfo[code].currentType].schema">
             <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-            <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code hljs source="responseInfo[code][responseInfo[code].currentType].schema"></code></pre>
+            <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)"></code></pre>
           </div>
         </div>
       </section>
