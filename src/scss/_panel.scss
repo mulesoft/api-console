@@ -106,6 +106,26 @@
   }
 }
 
+.sidebar-controls-collapse {
+  display: none;
+}
+
+.has-sidebar-fullscreen .sidebar-fullscreen-toggle {
+  display: none;
+}
+
+.has-sidebar-fullscreen .sidebar-collapse-toggle {
+  display: block;
+}
+
+.has-sidebar-fullscreen .sidebar-controls-fullscreen {
+  display: none;
+}
+
+.has-sidebar-collapsed .sidebar-controls-collapse {
+  display: block
+}
+
 .resource-panel.has-sidebar-collapsed .sidebar-controls {
   right: -80px;
   width: 80px;
