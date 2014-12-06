@@ -54,7 +54,7 @@
 
             <div class="raml-console-sidebar-row" ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
               <div ng-switch-when="false">
-                <div class="raml-console-codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2 }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+                <div class="raml-console-codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
                 <div class="raml-console-sidebar-prefill raml-console-sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
                   <button class="raml-console-sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
                 </div>
@@ -130,7 +130,9 @@
                 <div ng-if="requestOptions.data">
                   <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
                   <div ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
-                    <pre ng-switch-when="false" class="raml-console-sidebar-pre raml-console-sidebar-request-body"><code ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }" ng-model="requestOptions.data"></code></pre>
+                    <div ng-switch-when="false" class="raml-console-sidebar-pre raml-console-sidebar-request-body">
+                      <div ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, theme : 'raml-console', mode: context.bodyContent.selected }" ng-model="requestOptions.data"></div>
+                    </div>
                     <div ng-switch-when="true" class="raml-console-sidebar-response-item">
                       <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values">
                         <b>{{key}}:</b> <br>{{value}}
@@ -161,7 +163,10 @@
 
             <div ng-if="response.body">
               <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
-              <pre class="raml-console-sidebar-pre"><code ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true }" ng-model="response.body"></code></pre>
+              <div class="raml-console-sidebar-pre">
+                <div ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true, theme : 'raml-console', mode: response.contentType }" ng-model="response.body">
+                </div>
+              </div>
             </div>
           </div>
         </section>

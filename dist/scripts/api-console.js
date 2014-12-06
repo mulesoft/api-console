@@ -103,7 +103,14 @@
         }
 
         $scope.getBeatifiedExample = function (value) {
-          return beautify(value, $scope.currentBodySelected);
+          var result = value;
+
+          try {
+            beautify(value, $scope.currentBodySelected);
+          }
+          catch (e) { }
+
+          return result;
         };
 
         $scope.getColorCode = function (code) {
@@ -846,14 +853,6 @@
           $scope.showSpinner    = false;
           $scope.responseDetails.show();
 
-          $scope.editors.map(function (index) {
-            var codeMirror = $scope.editors[index].CodeMirror;
-            codeMirror.setOption('mode', $scope.response.contentType);
-            setTimeout(function () {
-              codeMirror.refresh();
-            }, 1);
-          });
-
           var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
           $location.hash(hash);
           $anchorScroll();
@@ -1010,18 +1009,6 @@
           $this.addClass('raml-console-is-active');
 
           $scope.context.bodyContent.selected = bodyType;
-
-          var editor = $this.closest('.raml-console-sidebar-row')
-                            .parent()
-                            .find('.raml-console-codemirror-body-editor .CodeMirror')[0];
-
-          if (editor) {
-            editor = editor.CodeMirror;
-            editor.setOption('mode', bodyType);
-            setTimeout(function () {
-              editor.refresh();
-            }, 1);
-          }
         };
 
         $scope.getHeaderValue = function (header) {
@@ -1054,7 +1041,6 @@
             $scope.showSpinner = true;
             // $scope.toggleSidebar($event, true);
             $scope.toggleRequestMetadata($event, true);
-            $scope.editors = jQuery($event.currentTarget).closest('.raml-console-sidebar-content-wrapper').find('.CodeMirror');
             $scope.responseDetails = jQuery($event.currentTarget).closest('.raml-console-sidebar-content-wrapper').find('.raml-console-side-bar-try-it-description');
 
             try {
@@ -3322,7 +3308,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "              tabSize: 2,\n" +
     "              mode: 'yaml',\n" +
     "              gutters: ['CodeMirror-lint-markers'],\n" +
-    "              lint: true\n" +
+    "              lint: true,\n" +
+    "              theme : 'raml-console'\n" +
     "            }\" ng-model=\"$parent.raml\"></textarea>\n" +
     "          </p>\n" +
     "          <div class=\"raml-console-initializer-action-group\" align=\"right\">\n" +
@@ -3494,7 +3481,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "            <div class=\"raml-console-sidebar-row\" ng-switch=\"context.bodyContent.isForm(context.bodyContent.selected)\">\n" +
     "              <div ng-switch-when=\"false\">\n" +
-    "                <div class=\"raml-console-codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2 }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
+    "                <div class=\"raml-console-codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
     "                <div class=\"raml-console-sidebar-prefill raml-console-sidebar-row\" align=\"right\" ng-if=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
     "                  <button class=\"raml-console-sidebar-action-prefill\" ng-click=\"prefillBody(context.bodyContent.selected)\">Prefill with example</button>\n" +
     "                </div>\n" +
@@ -3570,7 +3557,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                <div ng-if=\"requestOptions.data\">\n" +
     "                  <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Body</h3>\n" +
     "                  <div ng-switch=\"context.bodyContent.isForm(context.bodyContent.selected)\">\n" +
-    "                    <pre ng-switch-when=\"false\" class=\"raml-console-sidebar-pre raml-console-sidebar-request-body\"><code ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true }\" ng-model=\"requestOptions.data\"></code></pre>\n" +
+    "                    <div ng-switch-when=\"false\" class=\"raml-console-sidebar-pre raml-console-sidebar-request-body\">\n" +
+    "                      <div ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, theme : 'raml-console', mode: context.bodyContent.selected }\" ng-model=\"requestOptions.data\"></div>\n" +
+    "                    </div>\n" +
     "                    <div ng-switch-when=\"true\" class=\"raml-console-sidebar-response-item\">\n" +
     "                      <p class=\"raml-console-sidebar-response-metadata\" ng-repeat=\"(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values\">\n" +
     "                        <b>{{key}}:</b> <br>{{value}}\n" +
@@ -3601,7 +3590,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "            <div ng-if=\"response.body\">\n" +
     "              <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Body</h3>\n" +
-    "              <pre class=\"raml-console-sidebar-pre\"><code ui-codemirror=\"{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true }\" ng-model=\"response.body\"></code></pre>\n" +
+    "              <div class=\"raml-console-sidebar-pre\">\n" +
+    "                <div ui-codemirror=\"{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true, theme : 'raml-console', mode: response.contentType }\" ng-model=\"response.body\">\n" +
+    "                </div>\n" +
+    "              </div>\n" +
     "            </div>\n" +
     "          </div>\n" +
     "        </section>\n" +

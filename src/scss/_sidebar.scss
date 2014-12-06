@@ -288,7 +288,7 @@
   resize: none;
   font-family: Source Code Pro;
   font-size: 14px;
-  border: 1px solid #c6cada;
+  border: 1px solid $color-editor-border;
 }
 
 .sidebar-header {
@@ -936,7 +936,7 @@
 
 .sidebar-pre {
   margin: 0;
-  padding: 8px 12px;
+  // padding: 8px 12px;
   border: 1px solid $color-sidebar-pre-border;
   border-radius: 3px;
 
@@ -950,7 +950,7 @@
   position: relative;
   overflow: hidden;
   background: #fff;
-  color: #000;
+  // color: #000;
 }
 
 .sidebar-response-head-pre {

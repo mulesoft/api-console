@@ -23,6 +23,8 @@ module.exports = function (grunt) {
     'clean:styles',
     'sass:build',
     'css_prefix:prefix',
+    'concat:darkTheme',
+    'concat:lightTheme',
     'cssmin',
     'clean:templates',
     'clean:temp'
@@ -40,6 +42,8 @@ module.exports = function (grunt) {
     'clean:styles',
     'sass:min',
     'css_prefix:prefix',
+    'concat:darkTheme',
+    'concat:lightTheme',
     'cssmin',
     'clean:templates',
     'clean:temp'
@@ -166,6 +170,14 @@ module.exports = function (grunt) {
         options: {
           process: true
         }
+      },
+      darkTheme: {
+        src: ['<%= distdir %>/styles/dark-theme.css', 'src/assets/styles/codemirror-dark.css'],
+        dest: '<%= distdir %>/styles/dark-theme.css'
+      },
+      lightTheme: {
+        src: ['<%= distdir %>/styles/light-theme.css', 'src/assets/styles/codemirror-light.css'],
+        dest: '<%= distdir %>/styles/light-theme.css'
       },
       vendor: {
         src: [
