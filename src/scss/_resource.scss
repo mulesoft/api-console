@@ -161,11 +161,11 @@
 
 .resource-root.is-active .resource-path-container {
   @media only screen and (min-width: $medium-screen) {
-    padding-top: 8px;
+    padding-top: 11px;
   }
 
   @media only screen and (min-width: $large-screen) {
-    padding-top: 6px;
+    padding-top: 11px;
   }
 }
 
@@ -226,6 +226,10 @@
 
 .resource.is-active .resource-close-btn {
   display: block;
+}
+
+.resource.is-active .resource-root-toggle {
+  display: none;
 }
 
 .resource-root-toggle {

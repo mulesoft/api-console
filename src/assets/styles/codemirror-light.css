@@ -35,7 +35,7 @@ http://ethanschoonover.com/raml-console/img/raml-console-palette.png
 .cm-s-raml-console {
   background-color: #fff;
   color: #657b83;
-  text-shadow: #eee8d5 0 1px;
+  /*text-shadow: #eee8d5 0 1px;*/
 }
 
 .cm-s-raml-console .CodeMirror-widget {
