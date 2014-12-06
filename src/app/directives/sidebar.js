@@ -75,14 +75,6 @@
           $scope.showSpinner    = false;
           $scope.responseDetails.show();
 
-          $scope.editors.map(function (index) {
-            var codeMirror = $scope.editors[index].CodeMirror;
-            codeMirror.setOption('mode', $scope.response.contentType);
-            setTimeout(function () {
-              codeMirror.refresh();
-            }, 1);
-          });
-
           var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
           $location.hash(hash);
           $anchorScroll();
@@ -239,18 +231,6 @@
           $this.addClass('raml-console-is-active');
 
           $scope.context.bodyContent.selected = bodyType;
-
-          var editor = $this.closest('.raml-console-sidebar-row')
-                            .parent()
-                            .find('.raml-console-codemirror-body-editor .CodeMirror')[0];
-
-          if (editor) {
-            editor = editor.CodeMirror;
-            editor.setOption('mode', bodyType);
-            setTimeout(function () {
-              editor.refresh();
-            }, 1);
-          }
         };
 
         $scope.getHeaderValue = function (header) {
@@ -283,7 +263,6 @@
             $scope.showSpinner = true;
             // $scope.toggleSidebar($event, true);
             $scope.toggleRequestMetadata($event, true);
-            $scope.editors = jQuery($event.currentTarget).closest('.raml-console-sidebar-content-wrapper').find('.CodeMirror');
             $scope.responseDetails = jQuery($event.currentTarget).closest('.raml-console-sidebar-content-wrapper').find('.raml-console-side-bar-try-it-description');
 
             try {

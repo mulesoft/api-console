@@ -26,7 +26,14 @@
         }
 
         $scope.getBeatifiedExample = function (value) {
-          return beautify(value, $scope.currentBodySelected);
+          var result = value;
+
+          try {
+            beautify(value, $scope.currentBodySelected);
+          }
+          catch (e) { }
+
+          return result;
         };
 
         $scope.getColorCode = function (code) {

@@ -2465,7 +2465,6 @@ ol {
 
 .raml-console-sidebar-pre {
   margin: 0;
-  padding: 8px 12px;
   border: 1px solid #c6cada;
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.75);
@@ -2478,7 +2477,6 @@ ol {
   position: relative;
   overflow: hidden;
   background: #fff;
-  color: #000;
 }
 
 .raml-console-sidebar-response-head-pre {
@@ -3196,7 +3194,7 @@ span.raml-console-side-bar-required-field {
 
 /*
 
-github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmail.com>
 
 */
 
@@ -3204,120 +3202,258 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  color: #333;
-  background: #f8f8f8;
+  background: #fff;
+  color: #657b83;
   -webkit-text-size-adjust: none;
+  text-shadow: #eee8d5 0 1px;
+}
+
+.raml-console-hljs-string {
+  color: #657b83 !important;
 }
 
 .raml-console-hljs-comment,
 .raml-console-hljs-template-comment,
 .raml-console-diff .raml-console-hljs-header,
+.raml-console-hljs-doctype,
+.raml-console-hljs-pi,
+.raml-console-lisp .raml-console-hljs-string,
 .raml-console-hljs-javadoc {
-  color: #998;
-  font-style: italic;
+  color: #93a1a1;
 }
+
+/* Solarized Green */
 
 .raml-console-hljs-keyword,
-.raml-console-css .raml-console-rule .raml-console-hljs-keyword,
 .raml-console-hljs-winutils,
-.raml-console-javascript .raml-console-hljs-title,
-.raml-console-nginx .raml-console-hljs-title,
-.raml-console-hljs-subst,
+.raml-console-method,
+.raml-console-hljs-addition,
+.raml-console-css .raml-console-hljs-tag,
 .raml-console-hljs-request,
-.raml-console-hljs-status {
-  color: #333;
-  font-weight: bold;
+.raml-console-hljs-status,
+.raml-console-nginx .raml-console-hljs-title {
+  color: #859900;
 }
+
+/* Solarized Cyan */
 
 .raml-console-hljs-number,
-.raml-console-hljs-hexcolor,
-.raml-console-ruby .raml-console-hljs-constant {
-  color: #008080;
-}
-
+.raml-console-hljs-command,
 .raml-console-hljs-string,
 .raml-console-hljs-tag .raml-console-hljs-value,
+.raml-console-hljs-rules .raml-console-hljs-value,
 .raml-console-hljs-phpdoc,
 .raml-console-hljs-dartdoc,
-.raml-console-tex .raml-console-hljs-formula {
-  color: #d14;
+.raml-console-tex .raml-console-hljs-formula,
+.raml-console-hljs-regexp,
+.raml-console-hljs-hexcolor,
+.raml-console-hljs-link-url {
+  color: #2aa198;
 }
+
+/* Solarized Blue */
 
 .raml-console-hljs-title,
-.raml-console-hljs-id,
-.raml-console-scss .raml-console-hljs-preprocessor {
-  color: #900;
-  font-weight: bold;
-}
-
-.raml-console-javascript .raml-console-hljs-title,
-.raml-console-hljs-list .raml-console-hljs-keyword,
-.raml-console-hljs-subst {
-  font-weight: normal;
-}
-
-.raml-console-hljs-class .raml-console-hljs-title,
-.raml-console-hljs-type,
+.raml-console-hljs-localvars,
+.raml-console-hljs-chunk,
+.raml-console-hljs-decorator,
+.raml-console-hljs-built-in,
+.raml-console-hljs-identifier,
 .raml-console-vhdl .raml-console-hljs-literal,
-.raml-console-tex .raml-console-hljs-command {
-  color: #458;
-  font-weight: bold;
+.raml-console-hljs-id,
+.raml-console-css .raml-console-hljs-function {
+  color: #268bd2;
 }
 
-.raml-console-hljs-tag,
-.raml-console-hljs-tag .raml-console-hljs-title,
-.raml-console-hljs-rules .raml-console-hljs-property,
-.raml-console-django .raml-console-hljs-tag .raml-console-hljs-keyword {
-  color: #000080;
-  font-weight: normal;
-}
+/* Solarized Yellow */
 
 .raml-console-hljs-attribute,
 .raml-console-hljs-variable,
-.raml-console-lisp .raml-console-hljs-body {
-  color: #008080;
+.raml-console-lisp .raml-console-hljs-body,
+.raml-console-smalltalk .raml-console-hljs-number,
+.raml-console-hljs-constant,
+.raml-console-hljs-class .raml-console-hljs-title,
+.raml-console-hljs-parent,
+.raml-console-hljs-type,
+.raml-console-hljs-link-reference {
+  color: #b58900;
 }
 
-.raml-console-hljs-regexp {
-  color: #009926;
-}
-
-.raml-console-hljs-symbol,
-.raml-console-ruby .raml-console-hljs-symbol .raml-console-hljs-string,
-.raml-console-lisp .raml-console-hljs-keyword,
-.raml-console-clojure .raml-console-hljs-keyword,
-.raml-console-scheme .raml-console-hljs-keyword,
-.raml-console-tex .raml-console-hljs-special,
-.raml-console-hljs-prompt {
-  color: #990073;
-}
-
-.raml-console-hljs-built-in {
-  color: #0086b3;
-}
+/* Solarized Orange */
 
 .raml-console-hljs-preprocessor,
+.raml-console-hljs-preprocessor .raml-console-hljs-keyword,
 .raml-console-hljs-pragma,
-.raml-console-hljs-pi,
-.raml-console-hljs-doctype,
 .raml-console-hljs-shebang,
-.raml-console-hljs-cdata {
+.raml-console-hljs-symbol,
+.raml-console-hljs-symbol .raml-console-hljs-string,
+.raml-console-diff .raml-console-hljs-change,
+.raml-console-hljs-special,
+.raml-console-hljs-attr-selector,
+.raml-console-hljs-subst,
+.raml-console-hljs-cdata,
+.raml-console-css .raml-console-hljs-pseudo,
+.raml-console-hljs-header {
+  color: #cb4b16;
+}
+
+/* Solarized Red */
+
+.raml-console-hljs-deletion,
+.raml-console-hljs-important {
+  color: #dc322f;
+}
+
+/* Solarized Violet */
+
+.raml-console-hljs-link-label {
+  color: #6c71c4;
+}
+
+.raml-console-tex .raml-console-hljs-formula {
+  background: #eee8d5;
+}
+/*
+raml-console theme for code-mirror
+http://ethanschoonover.com/raml-console
+*/
+
+/*
+raml-console color pallet
+http://ethanschoonover.com/raml-console/img/raml-console-palette.png
+*/
+
+.raml-console.base03 { color: #002b36; }
+.raml-console.base02 { color: #073642; }
+.raml-console.base01 { color: #586e75; }
+.raml-console.base00 { color: #657b83; }
+.raml-console.base0 { color: #839496; }
+.raml-console.base1 { color: #93a1a1; }
+.raml-console.base2 { color: #eee8d5; }
+.raml-console.base3  { color: #fdf6e3; }
+.raml-console.solar-yellow  { color: #b58900; }
+.raml-console.solar-orange  { color: #cb4b16; }
+.raml-console.solar-red { color: #dc322f; }
+.raml-console.solar-magenta { color: #d33682; }
+.raml-console.solar-violet  { color: #6c71c4; }
+.raml-console.solar-blue { color: #268bd2; }
+.raml-console.solar-cyan { color: #2aa198; }
+.raml-console.solar-green { color: #859900; }
+
+/* Color scheme for code-mirror */
+
+.cm-s-raml-console {
+  line-height: 1.45em;
+  color-profile: sRGB;
+  rendering-intent: auto;
+}
+.cm-s-raml-console {
+  background-color: #fff;
+  color: #657b83;
+  text-shadow: #eee8d5 0 1px;
+}
+
+.cm-s-raml-console .CodeMirror-widget {
+  text-shadow: none;
+}
+
+
+.cm-s-raml-console .cm-keyword { color: #cb4b16 }
+.cm-s-raml-console .cm-atom { color: #2aa198; }
+.cm-s-raml-console .cm-number { color: #2aa198; }
+.cm-s-raml-console .cm-def { color: #b58900; }
+
+.cm-s-raml-console .cm-variable { color: #268bd2; }
+.cm-s-raml-console .cm-variable-2 { color: #b58900; }
+.cm-s-raml-console .cm-variable-3 { color: #6c71c4; }
+
+.cm-s-raml-console .cm-property { color: #b58900; }
+.cm-s-raml-console .cm-operator {color: #6c71c4;}
+
+.cm-s-raml-console .cm-comment { color: #586e75; font-style:italic; }
+
+/*.cm-s-raml-console .cm-string { color: #859900; }*/
+/*.cm-s-raml-console .cm-string-2 { color: #b58900; }*/
+
+.cm-s-raml-console .cm-meta { color: #859900; }
+.cm-s-raml-console .cm-qualifier { color: #b58900; }
+.cm-s-raml-console .cm-builtin { color: #2aa198; }
+.cm-s-raml-console .cm-bracket { color: #cb4b16; }
+.cm-s-raml-console .CodeMirror-matchingbracket { color: #859900; }
+.cm-s-raml-console .CodeMirror-nonmatchingbracket { color: #dc322f; }
+.cm-s-raml-console .cm-tag { color: #268bd2 }
+.cm-s-raml-console .cm-attribute {  color: #b58900; }
+.cm-s-raml-console .cm-header { color: #586e75; }
+.cm-s-raml-console .cm-quote { color: #268bd2; }
+.cm-s-raml-console .cm-hr {
+  color: transparent;
+  border-top: 1px solid #586e75;
+  display: block;
+}
+.cm-s-raml-console .cm-link { color: #268bd2; cursor: pointer; }
+.cm-s-raml-console .cm-special { color: #6c71c4; }
+.cm-s-raml-console .cm-em {
   color: #999;
-  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+.cm-s-raml-console .cm-strong { color: #eee; }
+.cm-s-raml-console .cm-error,
+.cm-s-raml-console .cm-invalidchar {
+  color: #586e75;
+  border-bottom: 1px dotted #dc322f;
 }
 
-.raml-console-hljs-deletion {
-  background: #fdd;
+.cm-s-raml-console .CodeMirror-selected {
+  background: #eee8d5;
 }
 
-.raml-console-hljs-addition {
-  background: #dfd;
+/* Editor styling */
+
+
+
+/* Little shadow on the view-port of the buffer view */
+.cm-s-raml-console.CodeMirror {
+  /*-moz-box-shadow: inset 7px 0 12px -6px #000;
+  -webkit-box-shadow: inset 7px 0 12px -6px #000;
+  box-shadow: inset 7px 0 12px -6px #000;*/
+  /*height: 100%;*/
+  /*margin-top: -18px;*/
 }
 
-.raml-console-diff .raml-console-hljs-change {
-  background: #0086b3;
+/* Gutter border and some shadow from it  */
+.cm-s-raml-console .CodeMirror-gutters {
+  border-right: 1px solid;
 }
 
-.raml-console-hljs-chunk {
-  color: #aaa;
+/* Gutter colors and line number styling based of color scheme (dark / light) */
+
+/* Light */
+.cm-s-raml-console .CodeMirror-gutters {
+  background-color: #fff;
+  border-color: #eee8d5;
+}
+
+/* Common */
+.cm-s-raml-console .CodeMirror-linenumber {
+  color: #586e75;
+  padding: 0 5px;
+}
+.cm-s-raml-console .CodeMirror-guttermarker-subtle { color: #586e75; }
+.cm-s-raml-console .CodeMirror-guttermarker { color: #cb4b16; }
+
+.cm-s-raml-console .CodeMirror-gutter .CodeMirror-gutter-text {
+  color: #586e75;
+}
+
+.cm-s-raml-console .CodeMirror-lines .CodeMirror-cursor {
+  border-left: 1px solid #819090;
+}
+
+/*
+Active line. Negative margin compensates left padding of the text in the
+view-port
+*/
+.cm-s-raml-console .CodeMirror-activeline-background {
+  background: rgba(0, 0, 0, 0.10);
 }
