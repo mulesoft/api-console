@@ -348,14 +348,16 @@
 
           if ($sidebar.hasClass('raml-console-is-fullscreen')) {
             $sidebar.velocity(
-              { width: sidebarWidth },
+              { width: $scope.singleView ? 0 : sidebarWidth },
               {
                 duration: 200,
-                complete: completeAnimation
+                complete: function (element) {
+                  jQuery(element).removeAttr('style');
+                  $sidebar.removeClass('raml-console-is-fullscreen');
+                }
               }
             );
             $sidebar.removeClass('raml-console-is-responsive');
-            $sidebar.removeClass('raml-console-is-fullscreen');
             $panel.removeClass('raml-console-has-sidebar-fullscreen');
           } else {
             $sidebar.velocity(
@@ -367,10 +369,13 @@
             );
             $sidebar.addClass('raml-console-is-fullscreen');
             $sidebar.addClass('raml-console-is-responsive');
-            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
+            $panel.addClass('raml-console-has-sidebar-fullscreen');
           }
 
-          // $sidebar.removeClass('is-collapsed');
+          if ($scope.singleView) {
+            $sidebar.toggleClass('raml-console-is-collapsed');
+            $panel.toggleClass('raml-console-has-sidebar-collapsed');
+          }
         };
 
         $scope.collapseSidebar = function ($event) {
@@ -382,6 +387,10 @@
 
           if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
             animation = 0;
+          }
+
+          if ($scope.singleView) {
+            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
           }
 
           $sidebar.velocity(

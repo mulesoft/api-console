@@ -1126,14 +1126,16 @@
 
           if ($sidebar.hasClass('raml-console-is-fullscreen')) {
             $sidebar.velocity(
-              { width: sidebarWidth },
+              { width: $scope.singleView ? 0 : sidebarWidth },
               {
                 duration: 200,
-                complete: completeAnimation
+                complete: function (element) {
+                  jQuery(element).removeAttr('style');
+                  $sidebar.removeClass('raml-console-is-fullscreen');
+                }
               }
             );
             $sidebar.removeClass('raml-console-is-responsive');
-            $sidebar.removeClass('raml-console-is-fullscreen');
             $panel.removeClass('raml-console-has-sidebar-fullscreen');
           } else {
             $sidebar.velocity(
@@ -1145,10 +1147,13 @@
             );
             $sidebar.addClass('raml-console-is-fullscreen');
             $sidebar.addClass('raml-console-is-responsive');
-            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
+            $panel.addClass('raml-console-has-sidebar-fullscreen');
           }
 
-          // $sidebar.removeClass('is-collapsed');
+          if ($scope.singleView) {
+            $sidebar.toggleClass('raml-console-is-collapsed');
+            $panel.toggleClass('raml-console-has-sidebar-collapsed');
+          }
         };
 
         $scope.collapseSidebar = function ($event) {
@@ -1160,6 +1165,10 @@
 
           if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
             animation = 0;
+          }
+
+          if ($scope.singleView) {
+            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
           }
 
           $sidebar.velocity(
@@ -3431,8 +3440,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <header class=\"raml-console-sidebar-row raml-console-sidebar-header\">\n" +
     "          <h3 class=\"raml-console-sidebar-head\">\n" +
     "            Try it\n" +
-    "            <a class=\"raml-console-sidebar-fullscreen-toggle\" ng-click=\"collapseSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
-    "            <a class=\"raml-console-sidebar-collapse-toggle\" ng-click=\"toggleSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
+    "            <a ng-if=\"!singleView\" class=\"raml-console-sidebar-fullscreen-toggle\" ng-click=\"collapseSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
+    "            <a ng-if=\"!singleView\" class=\"raml-console-sidebar-collapse-toggle\" ng-click=\"toggleSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
+    "\n" +
+    "            <a ng-if=\"singleView\" class=\"raml-console-sidebar-collapse-toggle\" ng-click=\"toggleSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
     "\n" +
     "            <a ng-if=\"!singleView\" class=\"raml-console-sidebar-resize-toggle raml-console-sidebar-resize\" ng-click=\"toggleSidebar($event)\">\n" +
     "              <svg x=\"0px\" y=\"0px\" viewBox=\"0 0 850 1000\" class=\"raml-console-full-resize\" fill=\"#808080\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"><path d=\"M421.29 589.312q0 7.254 -5.58 12.834l-185.256 185.256 80.352 80.352q10.602 10.602 10.602 25.11t-10.602 25.11 -25.11 10.602h-249.984q-14.508 0 -25.11 -10.602t-10.602 -25.11v-249.984q0 -14.508 10.602 -25.11t25.11 -10.602 25.11 10.602l80.352 80.352 185.256 -185.256q5.58 -5.58 12.834 -5.58t12.834 5.58l63.612 63.612q5.58 5.58 5.58 12.834zm435.798 -482.112v249.984q0 14.508 -10.602 25.11t-25.11 10.602 -25.11 -10.602l-80.352 -80.352 -185.256 185.256q-5.58 5.58 -12.834 5.58t-12.834 -5.58l-63.612 -63.612q-5.58 -5.58 -5.58 -12.834t5.58 -12.834l185.256 -185.256 -80.352 -80.352q-10.602 -10.602 -10.602 -25.11t10.602 -25.11 25.11 -10.602h249.984q14.508 0 25.11 10.602t10.602 25.11z\"/></svg>\n" +
