@@ -77,7 +77,7 @@
         <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].example)"></code></pre>
       </div>
 
-      <div ng-if="methodInfo.body[currentBodySelected].schema">
+      <div class="raml-console-schema-container" ng-if="methodInfo.body[currentBodySelected].schema">
         <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
         <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].schema)"></code></pre>
       </div>
@@ -130,7 +130,7 @@
             <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)"></code></pre>
           </div>
 
-          <div ng-if="responseInfo[code][responseInfo[code].currentType].schema">
+          <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].schema">
             <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
             <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)"></code></pre>
           </div>
