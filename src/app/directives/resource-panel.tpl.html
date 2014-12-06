@@ -1,5 +1,9 @@
 <div class="raml-console-resource-panel" ng-if="showPanel" ng-class="{ 'raml-console-has-sidebar-fullscreen': singleView }">
   <div class="raml-console-resource-panel-wrapper">
+    <documentation></documentation>
+
+    <sidebar></sidebar>
+
     <div class="raml-console-sidebar-controls raml-console-sidebar-controls-collapse" ng-click="collapseSidebar($event)" style="right: -1px; position: absolute;">
       <button class="raml-console-collapse">
         <svg style="transform: rotate(-180deg);" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 612 792" enable-background="new 0 0 612 792" xml:space="preserve">
@@ -21,9 +25,5 @@
         <span class="raml-console-discoverable">Try it</span>
       </button>
     </div>
-
-    <documentation></documentation>
-
-    <sidebar></sidebar>
   </div>
 </div>

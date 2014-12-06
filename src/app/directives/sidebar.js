@@ -367,7 +367,7 @@
             );
             $sidebar.addClass('raml-console-is-fullscreen');
             $sidebar.addClass('raml-console-is-responsive');
-            $panel.addClass('raml-console-has-sidebar-fullscreen');
+            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
           }
 
           // $sidebar.removeClass('is-collapsed');
