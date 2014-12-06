@@ -1240,11 +1240,11 @@
           var theme = $link.attr('href');
 
           $link.attr('href', 'styles/light-theme.css');
-          $element.removeClass('theme-toggle-dark');
+          $element.removeClass('raml-console-theme-toggle-dark');
 
           if (theme === 'styles/light-theme.css') {
             $link.attr('href', 'styles/dark-theme.css');
-            $element.addClass('theme-toggle-dark');
+            $element.addClass('raml-console-theme-toggle-dark');
           }
         });
       }

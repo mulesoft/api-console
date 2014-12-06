@@ -33,7 +33,7 @@ http://ethanschoonover.com/raml-console/img/solarized-palette.png
   rendering-intent: auto;
   color: #839496;
   background-color:  #002b36;
-  text-shadow: #002b36 0 1px;
+  /*text-shadow: #002b36 0 1px;*/
 }
 
 .cm-s-raml-console .CodeMirror-widget {

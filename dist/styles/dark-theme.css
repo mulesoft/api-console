@@ -1020,13 +1020,13 @@ ol {
 
 @media only screen and (min-width: 600px) {
   .raml-console-resource-root.raml-console-is-active .raml-console-resource-path-container {
-    padding-top: 8px;
+    padding-top: 11px;
   }
 }
 
 @media only screen and (min-width: 960px) {
   .raml-console-resource-root.raml-console-is-active .raml-console-resource-path-container {
-    padding-top: 6px;
+    padding-top: 11px;
   }
 }
 
@@ -1082,6 +1082,10 @@ ol {
 
 .raml-console-resource.raml-console-is-active .raml-console-resource-close-btn {
   display: block;
+}
+
+.raml-console-resource.raml-console-is-active .raml-console-resource-root-toggle {
+  display: none;
 }
 
 .raml-console-resource-root-toggle {
@@ -1279,7 +1283,8 @@ ol {
 }
 
 .raml-console-resource-body-heading > span.raml-console-is-active {
-  background: #bbbbbb;
+  background: #959595;
+  color: #fff;
 }
 
 .raml-console-request-body-heading > span {
@@ -1288,7 +1293,8 @@ ol {
 }
 
 .raml-console-request-body-heading > span.raml-console-is-active {
-  background: #bbbbbb;
+  background: #959595;
+  color: #fff;
 }
 
 .raml-console-request-body-heading span:first-child {
@@ -3125,14 +3131,14 @@ span.raml-console-side-bar-required-field {
 .raml-console-toggle-all {
   text-transform: capitalize;
   font-size: 10px;
-  background-color: #dfdfdf;
+  background-color: #19202b;
   border: 0;
   color: #878787;
   font-weight: bold;
   border-radius: 0;
   position: absolute;
   float: right;
-  margin-top: 33px;
+  margin-top: 34px;
   right: 32px;
   cursor: pointer;
 }
@@ -3179,7 +3185,7 @@ span.raml-console-side-bar-required-field {
 }
 
 .raml-console-documentation-header {
-  background: #282c30;
+  background: #252f3f;
 }
 
 .raml-console-root-documentation {
@@ -3288,7 +3294,6 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
   background: #002b36;
   color: #839496;
   -webkit-text-size-adjust: none;
-  text-shadow: #002b36 0 1px;
 }
 
 .raml-console-hljs-number {
@@ -3431,7 +3436,7 @@ http://ethanschoonover.com/raml-console/img/solarized-palette.png
   rendering-intent: auto;
   color: #839496;
   background-color:  #002b36;
-  text-shadow: #002b36 0 1px;
+  /*text-shadow: #002b36 0 1px;*/
 }
 
 .cm-s-raml-console .CodeMirror-widget {

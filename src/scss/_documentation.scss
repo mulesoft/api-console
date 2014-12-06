@@ -1,14 +1,14 @@
 .toggle-all {
   text-transform: capitalize;
   font-size: 10px;
-  background-color: #dfdfdf;
+  background-color: $color-toggle-all;
   border: 0;
   color: #878787;
   font-weight: bold;
   border-radius: 0;
   position: absolute;
   float: right;
-  margin-top: 33px;
+  margin-top: 34px;
   right: 32px;
   cursor: pointer;
 }
