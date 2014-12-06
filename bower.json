@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "angular": "~1.2.9",
+    "angular-animate": "~1.2.9",
     "angular-sanitize": "~1.2.9",
     "codemirror": "~3.23.0",
     "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
