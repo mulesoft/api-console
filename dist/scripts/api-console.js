@@ -239,7 +239,7 @@
 
         $scope.showSchema = function ($event) {
           var $this   = jQuery($event.currentTarget);
-          var $panel  = $this.closest('.raml-console-resource-panel');
+          var $panel  = $this.closest('.raml-console-schema-container');
           var $schema = $panel.find('.raml-console-resource-pre-toggle');
 
           $this.toggleClass('raml-console-is-active');
@@ -3138,7 +3138,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <pre class=\"raml-console-resource-pre\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(methodInfo.body[currentBodySelected].example)\"></code></pre>\n" +
     "      </div>\n" +
     "\n" +
-    "      <div ng-if=\"methodInfo.body[currentBodySelected].schema\">\n" +
+    "      <div class=\"raml-console-schema-container\" ng-if=\"methodInfo.body[currentBodySelected].schema\">\n" +
     "        <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
     "        <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(methodInfo.body[currentBodySelected].schema)\"></code></pre>\n" +
     "      </div>\n" +
@@ -3191,7 +3191,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <pre class=\"raml-console-resource-pre\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)\"></code></pre>\n" +
     "          </div>\n" +
     "\n" +
-    "          <div ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
+    "          <div class=\"raml-console-schema-container\" ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
     "            <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
     "            <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)\"></code></pre>\n" +
     "          </div>\n" +

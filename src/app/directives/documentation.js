@@ -162,7 +162,7 @@
 
         $scope.showSchema = function ($event) {
           var $this   = jQuery($event.currentTarget);
-          var $panel  = $this.closest('.raml-console-resource-panel');
+          var $panel  = $this.closest('.raml-console-schema-container');
           var $schema = $panel.find('.raml-console-resource-pre-toggle');
 
           $this.toggleClass('raml-console-is-active');
