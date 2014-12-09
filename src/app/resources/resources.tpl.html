@@ -23,7 +23,7 @@
           <input type="checkbox" ng-model="disableProxy" ng-change="updateProxyConfig(disableProxy)">
         </div>
         <header class="raml-console-resource raml-console-resource-root raml-console-clearfix">
-          <span ng-click="collapseAll($event)" class="raml-console-resources-expanded raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all">collapse all</span>
+          <span class="raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all" ng-click="collapseAll($event)" ng-class="{'raml-console-resources-expanded':!collapsed}"><span ng-if="!collapsed">collapse</span><span ng-if="collapsed">expand</span> all</span>
           <div class="raml-console-resource-path-container">
             <h2 class="raml-console-resource-heading raml-console-resource-heading-large">
               <span class="raml-console-resource-path-active">Resources</span>
@@ -36,7 +36,7 @@
       <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
         <header class="raml-console-resource raml-console-resource-root raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }" ng-init="resource = resourceGroup[0]">
           <div class="raml-console-resource-path-container">
-            <button class="raml-console-resource-root-toggle" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
+            <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': collapsed}" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
 
             <h2 class="raml-console-resource-heading raml-console-resource-heading-large">
               <span class="raml-console-resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
@@ -54,7 +54,7 @@
         <resource-panel></resource-panel>
 
         <!-- Child Resources -->
-        <ol class="raml-console-resource-list">
+        <ol class="raml-console-resource-list" ng-class="{'raml-console-is-collapsed': collapsed}">
           <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
             <div class="raml-console-resource raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }">
               <div class="raml-console-resource-path-container">

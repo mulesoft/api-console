@@ -1,7 +1,7 @@
 <ol id="raml-console-documentation-container" ng-if="raml.documentation" class="raml-console-resource-list raml-console-resource-list-root raml-console-root-documentation">
   <li class="raml-console-resource-list-item raml-console-documentation-header" ng-if="raml.documentation.length > 0">
     <header class="raml-console-resource raml-console-resource-root raml-console-clearfix">
-      <span class="raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all raml-console-resources-expanded" ng-click="collapseDocumentation($event)">collapse all</span>
+      <span class="raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all" ng-click="collapseDocumentation($event)" ng-class="{'raml-console-resources-expanded':!collapsed}"><span ng-if="!collapsed">collapse</span><span ng-if="collapsed">expand</span> all</span>
       <div class="raml-console-resource-path-container">
         <h2 class="raml-console-resource-heading raml-console-resource-heading-large">
           <span class="raml-console-resource-path-active">Documentation</span>
@@ -15,7 +15,7 @@
       <div class="raml-console-resource raml-console-clearfix raml-console-document-header">
         <div class="raml-console-resource-path-container" style="padding-top: 11px;">
           <h3 class="raml-console-resource-heading">
-            <button class="raml-console-resource-root-toggle" ng-if="content" ng-click="toggle($event)"></button>
+            <button class="raml-console-resource-root-toggle" ng-if="content" ng-click="toggle($event)" ng-class="{'raml-console-is-active': collapsed}"></button>
             <span class="raml-console-resource-path-active" ng-click="showSection($event, 'all', doc.title)">{{doc.title}}</span>
           </h3>
           <select ng-if="content.length > 0" ng-model="selectedSection" ng-if="documentationEnabled" class="raml-console-document-section-selector" ng-change="sectionChange(selectedSection)">
@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <ol class="raml-console-resource-list raml-console-documentation-contents" ng-if="content">
+      <ol class="raml-console-resource-list raml-console-documentation-contents" ng-if="content" ng-class="{'raml-console-is-collapsed': collapsed}">
         <li ng-repeat="header in content" class="raml-console-resource-list-item">
            <div class="raml-console-resource raml-console-clearfix raml-console-documentation-clearfix">
             <div class="raml-console-resource-path-container raml-console-documentation-path-container">

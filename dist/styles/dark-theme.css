@@ -1864,6 +1864,10 @@ ol {
   font-weight: 500;
 }
 
+.raml-console-resource-list.raml-console-is-collapsed {
+  display: none;
+}
+
 .raml-console-sidebar.raml-console-is-collapsed {
   width: 0;
   border-left: 0;

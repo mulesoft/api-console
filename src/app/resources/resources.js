@@ -12,6 +12,7 @@
       controller: function($scope, $window, $attrs) {
         $scope.proxy = $window.RAML.Settings.proxy;
         $scope.disableTitle = false;
+        $scope.collapsed = false;
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
@@ -23,6 +24,10 @@
 
         if ($attrs.hasOwnProperty('disableTitle')) {
           $scope.disableTitle = true;
+        }
+
+        if ($attrs.hasOwnProperty('collapsed')) {
+          $scope.collapsed = true;
         }
 
         if ($scope.src) {
@@ -70,8 +75,8 @@
             });
           }
 
-          jQuery('body').find('.raml-console-resource-list-root ol.raml-console-resource-list').toggleClass('raml-console-is-collapsed');
-          jQuery('body').find('.raml-console-resource-list-root li.raml-console-resource-list-item header button.raml-console-resource-root-toggle').toggleClass('raml-console-is-active');
+          jQuery('#raml-console-resources-container').find('.raml-console-resource-list-root ol.raml-console-resource-list').toggleClass('raml-console-is-collapsed');
+          jQuery('#raml-console-resources-container').find('button.raml-console-resource-root-toggle').toggleClass('raml-console-is-active');
         };
       },
       link: function($scope) {
