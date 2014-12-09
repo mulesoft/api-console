@@ -1240,6 +1240,8 @@ ol {
 }
 
 .raml-console-resource-proxy {
+  position: absolute;
+  right: 5px;
   color: #585961;
   font-size: 13px;
   margin-bottom: 5px;
@@ -3430,14 +3432,12 @@ http://ethanschoonover.com/raml-console/img/raml-console-palette.png
 /* Color scheme for code-mirror */
 
 .cm-s-raml-console {
-  line-height: 1.45em;
-  color-profile: sRGB;
-  rendering-intent: auto;
-}
-.cm-s-raml-console {
-  background-color: #fff;
-  color: #657b83;
-  /*text-shadow: #eee8d5 0 1px;*/
+  line-height: 1.45em !important;
+  color-profile: sRGB !important;
+  rendering-intent: auto !important;
+  position: relative !important;
+  background-color: #fff !important;
+  color: #657b83 !important;
 }
 
 .cm-s-raml-console .CodeMirror-widget {

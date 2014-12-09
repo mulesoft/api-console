@@ -1240,6 +1240,8 @@ ol {
 }
 
 .raml-console-resource-proxy {
+  position: absolute;
+  right: 5px;
   color: #5685aa;
   font-size: 13px;
   margin-bottom: 5px;
@@ -3430,12 +3432,12 @@ http://ethanschoonover.com/raml-console/img/solarized-palette.png
 /* Color scheme for code-mirror */
 
 .cm-s-raml-console {
-  line-height: 1.45em;
-  color-profile: sRGB;
-  rendering-intent: auto;
-  color: #839496;
-  background-color:  #002b36;
-  /*text-shadow: #002b36 0 1px;*/
+  line-height: 1.45em !important;
+  color-profile: sRGB !important;
+  rendering-intent: auto !important;
+  color: #839496 !important;
+  background-color: #002b36 !important;
+  position: relative !important;
 }
 
 .cm-s-raml-console .CodeMirror-widget {

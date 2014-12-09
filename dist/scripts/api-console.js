@@ -1383,6 +1383,7 @@
       },
       controller: function($scope, $window, $attrs) {
         $scope.proxy = $window.RAML.Settings.proxy;
+        $scope.disableTitle = false;
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
@@ -1390,6 +1391,10 @@
 
         if ($attrs.hasOwnProperty('disableThemeSwitcher')) {
           $scope.disableThemeSwitcher = true;
+        }
+
+        if ($attrs.hasOwnProperty('disableTitle')) {
+          $scope.disableTitle = true;
         }
 
         if ($scope.src) {
@@ -3647,17 +3652,16 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "  <div ng-if=\"loaded\">\n" +
     "    <theme-switcher ng-if=\"!disableThemeSwitcher\"></theme-switcher>\n" +
-    "    <h1 class=\"raml-console-title\">{{raml.title}}</h1>\n" +
-    "\n" +
-    "    <div ng-if=\"proxy\" align=\"right\" class=\"raml-console-resource-proxy\">\n" +
-    "      <span>API is behind a firewall <a href=\"http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall\" target=\"_blank\">(?)</a></span>\n" +
-    "      <input type=\"checkbox\" ng-model=\"disableProxy\" ng-change=\"updateProxyConfig(disableProxy)\">\n" +
-    "    </div>\n" +
+    "    <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{raml.title}}</h1>\n" +
     "\n" +
     "    <root-documentation></root-documentation>\n" +
     "\n" +
     "    <ol id=\"raml-console-resources-container\" class=\"raml-console-resource-list raml-console-resource-list-root\">\n" +
     "      <li id=\"raml_documentation\" class=\"raml-console-resource-list-item raml-console-documentation-header\">\n" +
+    "        <div ng-if=\"proxy\" align=\"right\" class=\"raml-console-resource-proxy\">\n" +
+    "          <span>API is behind a firewall <a href=\"http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall\" target=\"_blank\">(?)</a></span>\n" +
+    "          <input type=\"checkbox\" ng-model=\"disableProxy\" ng-change=\"updateProxyConfig(disableProxy)\">\n" +
+    "        </div>\n" +
     "        <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\">\n" +
     "          <span ng-click=\"collapseAll($event)\" class=\"raml-console-resources-expanded raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all\">collapse all</span>\n" +
     "          <div class=\"raml-console-resource-path-container\">\n" +

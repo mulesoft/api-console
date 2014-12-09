@@ -11,6 +11,7 @@
       },
       controller: function($scope, $window, $attrs) {
         $scope.proxy = $window.RAML.Settings.proxy;
+        $scope.disableTitle = false;
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
@@ -18,6 +19,10 @@
 
         if ($attrs.hasOwnProperty('disableThemeSwitcher')) {
           $scope.disableThemeSwitcher = true;
+        }
+
+        if ($attrs.hasOwnProperty('disableTitle')) {
+          $scope.disableTitle = true;
         }
 
         if ($scope.src) {
