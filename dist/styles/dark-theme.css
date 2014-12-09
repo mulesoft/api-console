@@ -465,7 +465,7 @@ th {
   box-sizing: border-box;
 }
 
-body {
+.raml-console-body {
   background: #141519;
   color: #ccc;
   font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -475,15 +475,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-ul,
-ol {
+.raml-console-body h1,
+.raml-console-body h2,
+.raml-console-body h3,
+.raml-console-body h4,
+.raml-console-body h5,
+.raml-console-body h6,
+.raml-console-body p,
+.raml-console-body ul,
+.raml-console-body ol {
   margin-top: 0;
 }
 

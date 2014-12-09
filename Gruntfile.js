@@ -20,7 +20,7 @@ module.exports = function (grunt) {
     'preprocess:index',
     'copy:assets',
     'copy:vendor',
-    'clean:styles',
+    // 'clean:styles',
     'sass:build',
     'css_prefix:prefix',
     'concat:darkTheme',
@@ -172,11 +172,11 @@ module.exports = function (grunt) {
         }
       },
       darkTheme: {
-        src: ['<%= distdir %>/styles/dark-theme.css', 'src/assets/styles/codemirror-dark.css'],
+        src: ['<%= distdir %>/styles/dark-theme.css', 'src/assets/styles/vendor/codemirror-dark.css'],
         dest: '<%= distdir %>/styles/dark-theme.css'
       },
       lightTheme: {
-        src: ['<%= distdir %>/styles/light-theme.css', 'src/assets/styles/codemirror-light.css'],
+        src: ['<%= distdir %>/styles/light-theme.css', 'src/assets/styles/vendor/codemirror-light.css'],
         dest: '<%= distdir %>/styles/light-theme.css'
       },
       vendor: {
@@ -261,7 +261,7 @@ module.exports = function (grunt) {
     cssmin: {
       vendor: {
         files: {
-          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/codemirror.css', 'src/assets/styles/fonts.css', 'src/assets/styles/error.css']
+          '<%= distdir %>/styles/vendor.css': ['src/assets/styles/vendor/codemirror.css', 'src/assets/styles/fonts.css', 'src/assets/styles/error.css']
         }
       }
     },
