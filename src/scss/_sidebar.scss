@@ -249,6 +249,10 @@
 //
 // Begin Collapsed Sidebar/Narrow View
 //
+.resource-list.is-collapsed {
+  display: none;
+}
+
 .sidebar.is-collapsed {
   width: 0;
   border-left: 0;
