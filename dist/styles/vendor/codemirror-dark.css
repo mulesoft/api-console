@@ -8,11 +8,6 @@ raml-console color pallet
 http://ethanschoonover.com/raml-console/img/solarized-palette.png
 */
 
-.cm-s-raml-console.CodeMirror {
-  height: 100%;
-}
-
-
 .raml-console.base03 { color: #002b36; }
 .raml-console.base02 { color: #073642; }
 .raml-console.base01 { color: #586e75; }
