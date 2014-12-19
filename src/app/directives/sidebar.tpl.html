@@ -103,77 +103,77 @@
             </div>
           </section>
 
-          <section id="request_{{generateId(resource.pathSegments)}}" class="raml-console-side-bar-try-it-description">
-            <header class="raml-console-sidebar-row raml-console-sidebar-header">
-              <h3 class="raml-console-sidebar-head raml-console-sidebar-head-expand">
-                <button ng-class="{'raml-console-is-open':showRequestMetadata, 'raml-console-is-collapsed':!showRequestMetadata}" class="raml-console-sidebar-expand-btn" ng-click="toggleRequestMetadata()">
-                  Request
-                </button>
-              </h3>
-            </header>
-            <div class="raml-console-sidebar-request-metadata" ng-class="{'raml-console-is-active':showRequestMetadata}">
+          <div ng-if="responseDetails">
+            <section id="request_{{generateId(resource.pathSegments)}}" class="raml-console-side-bar-try-it-description">
+              <header class="raml-console-sidebar-row raml-console-sidebar-header">
+                <h3 class="raml-console-sidebar-head raml-console-sidebar-head-expand">
+                  <button ng-class="{'raml-console-is-open':showRequestMetadata, 'raml-console-is-collapsed':!showRequestMetadata}" class="raml-console-sidebar-expand-btn" ng-click="toggleRequestMetadata()">
+                    Request
+                  </button>
+                </h3>
+              </header>
+              <div class="raml-console-sidebar-request-metadata" ng-class="{'raml-console-is-active':showRequestMetadata}">
 
-              <div class="raml-console-sidebar-row">
-                <div ng-if="requestOptions.uri">
-                  <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Request URI</h3>
-                  <div class="raml-console-sidebar-response-item">
-                    <p class="raml-console-sidebar-response-metadata raml-console-sidebar-request-url">{{requestOptions.baseUrl}}<span ng-repeat="(key, value) in parameters"><span ng-hide="$first">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>
-                    </p>
-                  </div>
-                </div>
-
-                <div ng-if="requestOptions.headers">
-                  <h3 class="raml-console-sidebar-response-head">Headers</h3>
-                  <div class="raml-console-sidebar-response-item">
-                    <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
-                      <b>{{key}}:</b> <br>{{getHeaderValue(value)}}
-                    </p>
-                  </div>
-                </div>
-
-                <div ng-if="requestOptions.data">
-                  <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
-                  <div ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
-                    <div ng-switch-when="false" class="raml-console-sidebar-pre raml-console-sidebar-request-body">
-                      <div ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, theme : 'raml-console', mode: context.bodyContent.selected }" ng-model="requestOptions.data"></div>
-                    </div>
-                    <div ng-switch-when="true" class="raml-console-sidebar-response-item">
-                      <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values">
-                        <b>{{key}}:</b> <br>{{value}}
+                <div class="raml-console-sidebar-row">
+                  <div ng-if="requestOptions.uri">
+                    <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Request URI</h3>
+                    <div class="raml-console-sidebar-response-item">
+                      <p class="raml-console-sidebar-response-metadata raml-console-sidebar-request-url">{{requestOptions.baseUrl}}<span ng-repeat="(key, value) in parameters"><span ng-hide="$first">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>
                       </p>
                     </div>
                   </div>
+
+                  <div ng-if="requestOptions.headers">
+                    <h3 class="raml-console-sidebar-response-head">Headers</h3>
+                    <div class="raml-console-sidebar-response-item">
+                      <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in requestOptions.headers">
+                        <b>{{key}}:</b> <br>{{getHeaderValue(value)}}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div ng-if="requestOptions.data">
+                    <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
+                    <div ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
+                      <div ng-switch-when="false" class="raml-console-sidebar-pre raml-console-sidebar-request-body">
+                        <div ui-codemirror="{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, theme : 'raml-console', mode: context.bodyContent.selected }" ng-model="requestOptions.data"></div>
+                      </div>
+                      <div ng-switch-when="true" class="raml-console-sidebar-response-item">
+                        <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values">
+                          <b>{{key}}:</b> <br>{{value}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section class="raml-console-side-bar-try-it-description">
-            <header class="raml-console-sidebar-row raml-console-sidebar-header">
-              <h3 class="raml-console-sidebar-head">Response</h3>
-            </header>
+            <section class="raml-console-side-bar-try-it-description">
+              <header class="raml-console-sidebar-row raml-console-sidebar-header">
+                <h3 class="raml-console-sidebar-head">Response</h3>
+              </header>
 
-            <div class="raml-console-sidebar-row sidebar-response" ng-class="{'raml-console-is-active':requestEnd}">
-              <h3 class="raml-console-sidebar-response-head">Status</h3>
-              <p class="raml-console-sidebar-response-item">{{response.status}}</p>
+              <div class="raml-console-sidebar-row sidebar-response" ng-class="{'raml-console-is-active':requestEnd}">
+                <h3 class="raml-console-sidebar-response-head">Status</h3>
+                <p class="raml-console-sidebar-response-item">{{response.status}}</p>
 
-              <h3 class="raml-console-sidebar-response-head">Headers</h3>
-              <div class="raml-console-sidebar-response-item">
-                <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in response.headers">
-                  <b>{{key}}:</b> <br>{{value}}
-                </p>
-              </p>
-            </div>
-
-            <div ng-if="response.body">
-              <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
-              <div class="raml-console-sidebar-pre">
-                <div ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true, theme : 'raml-console', mode: response.contentType }" ng-model="response.body">
+                <h3 class="raml-console-sidebar-response-head">Headers</h3>
+                <div class="raml-console-sidebar-response-item">
+                  <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in response.headers">
+                    <b>{{key}}:</b> <br>{{value}}
+                  </p>
+                </div>
+                <div ng-if="response.body">
+                  <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
+                  <div class="raml-console-sidebar-pre">
+                    <div ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true, theme : 'raml-console', mode: response.contentType }" ng-model="response.body">
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
-        </section>
       </div>
     </div>
   </div>
