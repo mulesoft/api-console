@@ -1147,6 +1147,38 @@ th {
   }
 }
 
+.raml-console-resource-section-title {
+  display: inline-block;
+  margin: 0;
+  margin-right: 4px;
+  color: #b9b9b9;
+  font-size: 10px;
+}
+
+@media only screen and (min-width: 600px) {
+  .raml-console-resource-section-title {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .raml-console-resource-section-title {
+    font-size: 18px;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .raml-console-resource-section-title {
+    margin-right: 15px;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .raml-console-resource-section-title {
+    font-size: 18px;
+  }
+}
+
 .raml-console-resource-heading {
   display: inline-block;
   margin: 0;

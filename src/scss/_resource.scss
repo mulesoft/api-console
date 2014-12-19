@@ -291,6 +291,31 @@
   }
 }
 
+.resource-section-title {
+  display: inline-block;
+  margin: 0;
+  margin-right: 4px;
+
+  color: #b9b9b9;
+  font-size: 10px;
+
+  @media only screen and (min-width: $medium-screen) {
+    font-size: 15px;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    font-size: 18px;
+  }
+
+  @media only screen and (min-width: $medium-screen) {
+    margin-right: 15px;
+  }
+
+  @media only screen and (min-width: $medium-screen) {
+    font-size: 18px;
+  }
+}
+
 .resource-heading {
   // font-family: 'Source Code Pro';
   display: inline-block;
