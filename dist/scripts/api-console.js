@@ -3393,7 +3393,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\">\n" +
     "      <span class=\"raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all\" ng-click=\"collapseDocumentation($event)\" ng-class=\"{'raml-console-resources-expanded':!collapsed}\"><span ng-if=\"!collapsed\">collapse</span><span ng-if=\"collapsed\">expand</span> all</span>\n" +
     "      <div class=\"raml-console-resource-path-container\">\n" +
-    "        <h2 class=\"raml-console-resource-heading raml-console-resource-heading-large\">\n" +
+    "        <h2 class=\"raml-console-resource-section-title\">\n" +
     "          <span class=\"raml-console-resource-path-active\">Documentation</span>\n" +
     "        </h2>\n" +
     "      </div>\n" +
@@ -3670,7 +3670,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\">\n" +
     "          <span class=\"raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all\" ng-click=\"collapseAll($event)\" ng-class=\"{'raml-console-resources-expanded':!collapsed}\"><span ng-if=\"!collapsed\">collapse</span><span ng-if=\"collapsed\">expand</span> all</span>\n" +
     "          <div class=\"raml-console-resource-path-container\">\n" +
-    "            <h2 class=\"raml-console-resource-heading raml-console-resource-heading-large\">\n" +
+    "            <h2 class=\"raml-console-resource-section-title\">\n" +
     "              <span class=\"raml-console-resource-path-active\">Resources</span>\n" +
     "            </h2>\n" +
     "          </div>\n" +
