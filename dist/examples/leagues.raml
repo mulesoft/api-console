@@ -6,8 +6,48 @@ baseUri: http://localhost:3000/api
 securitySchemes:
   - basic:
       type: Basic Authentication
+  - digest_auth:
+      type: Digest Authentication
+  - oauth_2_0:
+      description: |
+        OAuth2 is a protocol that lets external apps request authorization to private
+        details in a user's GitHub account without getting their password. This is
+        preferred over Basic Authentication because tokens can be limited to specific
+        types of data, and can be revoked by users at any time.
+      type: OAuth 2.0
+      describedBy:
+        headers:
+          Authorization:
+            description: |
+              Used to send a valid OAuth 2 access token. Do not use together with
+              the "access_token" query string parameter.
+            type: string
+        queryParameters:
+          access_token:
+            description: |
+              Used to send a valid OAuth 2 access token. Do not use together with
+              the "Authorization" header
+            type: string
+        responses:
+          404:
+            description: Unauthorized
+      settings:
+        authorizationUri: https://github.com/login/oauth/authorize
+        accessTokenUri: https://github.com/login/oauth/access_token
+        authorizationGrants: [ code ]
+        scopes:
+          - "user"
+          - "user:email"
+          - "user:follow"
+          - "public_repo"
+          - "repo"
+          - "repo:status"
+          - "delete_repo"
+          - "notifications"
+          - "gist"
 
-securedBy: [ basic ]
+securedBy: [ basic, digest_auth, oauth_2_0 ]
+
 
 /teams:
   displayName: Teams
