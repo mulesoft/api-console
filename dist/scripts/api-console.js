@@ -1247,14 +1247,19 @@
       link: function($scope, $element) {
         $element.on('click', function() {
           var $link = jQuery('head link.theme');
-          var theme = $link.attr('href');
+          var $theme = jQuery('head').find('#raml-console-theme-dark');
 
           $link.attr('href', 'styles/light-theme.css');
           $element.removeClass('raml-console-theme-toggle-dark');
 
-          if (theme === 'styles/light-theme.css') {
-            $link.attr('href', 'styles/dark-theme.css');
-            $element.addClass('raml-console-theme-toggle-dark');
+          if ($theme.length === 0) {
+            jQuery.ajax({
+              url: 'styles/dark-theme.css'
+            }).done(function (data) {
+              jQuery('head').append('<style id="raml-console-theme-dark">' + data + '</style>');
+            });
+          } else {
+            jQuery('head').find('#raml-console-theme-dark').remove();
           }
         });
       }
