@@ -112,6 +112,11 @@
             type: 'Anonymous'
           };
 
+          /*jshint camelcase: false */
+          // Digest Authentication is not supported
+          delete $scope.securitySchemes.digest_auth;
+          /*jshint camelcase: true */
+
           loadExamples();
 
           var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];

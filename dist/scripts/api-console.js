@@ -395,6 +395,11 @@
             type: 'Anonymous'
           };
 
+          /*jshint camelcase: false */
+          // Digest Authentication is not supported
+          delete $scope.securitySchemes.digest_auth;
+          /*jshint camelcase: true */
+
           loadExamples();
 
           var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
@@ -3733,70 +3738,70 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('security/basic_auth.tpl.html',
-    "<div class=\"sidebar-row\">\n" +
-    "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"username\" class=\"sidebar-label\">Username <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\" ng-change=\"onChange()\"/>\n" +
-    "    <span class=\"field-validation-error\"></span>\n" +
+    "<div class=\"raml-console-sidebar-row\">\n" +
+    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "    <label for=\"username\" class=\"raml-console-sidebar-label\">Username <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.username\" ng-change=\"onChange()\"/>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
-    "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"password\" class=\"sidebar-label\">Password <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
-    "    <span class=\"field-validation-error\"></span>\n" +
+    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "    <label for=\"password\" class=\"raml-console-sidebar-label\">Password <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('security/oauth1.tpl.html',
-    "<div class=\"sidebar-row\">\n" +
-    "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"consumerKey\" class=\"sidebar-label\">Consumer Key <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"consumerKey\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerKey\" ng-change=\"onChange()\"/>\n" +
-    "    <span class=\"field-validation-error\"></span>\n" +
+    "<div class=\"raml-console-sidebar-row\">\n" +
+    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "    <label for=\"consumerKey\" class=\"raml-console-sidebar-label\">Consumer Key <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"consumerKey\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.consumerKey\" ng-change=\"onChange()\"/>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
-    "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"consumerSecret\" class=\"sidebar-label\">Consumer Secret <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"consumerSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.consumerSecret\" ng-change=\"onChange()\"/>\n" +
-    "    <span class=\"field-validation-error\"></span>\n" +
+    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "    <label for=\"consumerSecret\" class=\"raml-console-sidebar-label\">Consumer Secret <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"consumerSecret\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.consumerSecret\" ng-change=\"onChange()\"/>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('security/oauth2.tpl.html',
-    "<div class=\"sidebar-row\">\n" +
-    "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"clientId\" class=\"sidebar-label\">Authorization Grant</label>\n" +
-    "    <select class=\"sidebar-input\" ng-model=\"credentials.grant\">\n" +
+    "<div class=\"raml-console-sidebar-row\">\n" +
+    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "    <label for=\"clientId\" class=\"raml-console-sidebar-label\">Authorization Grant</label>\n" +
+    "    <select class=\"raml-console-sidebar-input\" ng-model=\"credentials.grant\">\n" +
     "     <option ng-repeat=\"grant in grants\" value=\"{{grant.value}}\" ng-selected=\"grant.value=='token'\">{{grant.label}}</option>\n" +
     "    </select>\n" +
     "  </p>\n" +
     "\n" +
-    "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"clientId\" class=\"sidebar-label\">Client ID <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"clientId\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientId\" ng-change=\"onChange()\"/>\n" +
-    "    <span class=\"field-validation-error\"></span>\n" +
+    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "    <label for=\"clientId\" class=\"raml-console-sidebar-label\">Client ID <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"clientId\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.clientId\" ng-change=\"onChange()\"/>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
-    "  <p class=\"sidebar-input-container\">\n" +
-    "    <label for=\"clientSecret\" class=\"sidebar-label\">Client Secret <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"clientSecret\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.clientSecret\" ng-change=\"onChange()\"/>\n" +
-    "    <span class=\"field-validation-error\"></span>\n" +
+    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "    <label for=\"clientSecret\" class=\"raml-console-sidebar-label\">Client Secret <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"clientSecret\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.clientSecret\" ng-change=\"onChange()\"/>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
-    "  <p class=\"sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
-    "    <label for=\"username\" class=\"sidebar-label\">Username <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.username\" ng-change=\"onChange()\"/>\n" +
-    "    <span class=\"field-validation-error\"></span>\n" +
+    "  <p class=\"raml-console-sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
+    "    <label for=\"username\" class=\"raml-console-sidebar-label\">Username <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"raml-console-sidebar-input sidebar-security-field\" ng-model=\"credentials.username\" ng-change=\"onChange()\"/>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
-    "  <p class=\"sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
-    "    <label for=\"password\" class=\"sidebar-label\">Password <span class=\"side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"sidebar-input sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
-    "    <span class=\"field-validation-error\"></span>\n" +
+    "  <p class=\"raml-console-sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
+    "    <label for=\"password\" class=\"raml-console-sidebar-label\">Password <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
+    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
   );
