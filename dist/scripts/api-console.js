@@ -786,6 +786,7 @@
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
         $scope.currentSchemeType = 'Anonymous';
+        $scope.responseDetails = false;
 
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
@@ -848,10 +849,10 @@
             $scope.response.body = jqXhr.responseText;
           }
 
-          $scope.requestEnd     = true;
-          $scope.showMoreEnable = true;
-          $scope.showSpinner    = false;
-          $scope.responseDetails.show();
+          $scope.requestEnd      = true;
+          $scope.showMoreEnable  = true;
+          $scope.showSpinner     = false;
+          $scope.responseDetails = true;
 
           var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
           $location.hash(hash);
@@ -1026,7 +1027,8 @@
         $scope.context.forceRequest = false;
 
         $scope.tryIt = function ($event) {
-          $scope.requestOptions = null;
+          $scope.requestOptions  = null;
+          $scope.responseDetails = false;
           validateForm($scope.form);
 
           if (!$scope.context.forceRequest) {
@@ -1041,7 +1043,6 @@
             $scope.showSpinner = true;
             // $scope.toggleSidebar($event, true);
             $scope.toggleRequestMetadata($event, true);
-            $scope.responseDetails = jQuery($event.currentTarget).closest('.raml-console-sidebar-content-wrapper').find('.raml-console-side-bar-try-it-description');
 
             try {
               var pathBuilder = context.pathBuilder;
@@ -3549,77 +3550,77 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <section id=\"request_{{generateId(resource.pathSegments)}}\" class=\"raml-console-side-bar-try-it-description\">\n" +
-    "            <header class=\"raml-console-sidebar-row raml-console-sidebar-header\">\n" +
-    "              <h3 class=\"raml-console-sidebar-head raml-console-sidebar-head-expand\">\n" +
-    "                <button ng-class=\"{'raml-console-is-open':showRequestMetadata, 'raml-console-is-collapsed':!showRequestMetadata}\" class=\"raml-console-sidebar-expand-btn\" ng-click=\"toggleRequestMetadata()\">\n" +
-    "                  Request\n" +
-    "                </button>\n" +
-    "              </h3>\n" +
-    "            </header>\n" +
-    "            <div class=\"raml-console-sidebar-request-metadata\" ng-class=\"{'raml-console-is-active':showRequestMetadata}\">\n" +
+    "          <div ng-if=\"responseDetails\">\n" +
+    "            <section id=\"request_{{generateId(resource.pathSegments)}}\" class=\"raml-console-side-bar-try-it-description\">\n" +
+    "              <header class=\"raml-console-sidebar-row raml-console-sidebar-header\">\n" +
+    "                <h3 class=\"raml-console-sidebar-head raml-console-sidebar-head-expand\">\n" +
+    "                  <button ng-class=\"{'raml-console-is-open':showRequestMetadata, 'raml-console-is-collapsed':!showRequestMetadata}\" class=\"raml-console-sidebar-expand-btn\" ng-click=\"toggleRequestMetadata()\">\n" +
+    "                    Request\n" +
+    "                  </button>\n" +
+    "                </h3>\n" +
+    "              </header>\n" +
+    "              <div class=\"raml-console-sidebar-request-metadata\" ng-class=\"{'raml-console-is-active':showRequestMetadata}\">\n" +
     "\n" +
-    "              <div class=\"raml-console-sidebar-row\">\n" +
-    "                <div ng-if=\"requestOptions.uri\">\n" +
-    "                  <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Request URI</h3>\n" +
-    "                  <div class=\"raml-console-sidebar-response-item\">\n" +
-    "                    <p class=\"raml-console-sidebar-response-metadata raml-console-sidebar-request-url\">{{requestOptions.baseUrl}}<span ng-repeat=\"(key, value) in parameters\"><span ng-hide=\"$first\">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>\n" +
-    "                    </p>\n" +
-    "                  </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div ng-if=\"requestOptions.headers\">\n" +
-    "                  <h3 class=\"raml-console-sidebar-response-head\">Headers</h3>\n" +
-    "                  <div class=\"raml-console-sidebar-response-item\">\n" +
-    "                    <p class=\"raml-console-sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
-    "                      <b>{{key}}:</b> <br>{{getHeaderValue(value)}}\n" +
-    "                    </p>\n" +
-    "                  </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div ng-if=\"requestOptions.data\">\n" +
-    "                  <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Body</h3>\n" +
-    "                  <div ng-switch=\"context.bodyContent.isForm(context.bodyContent.selected)\">\n" +
-    "                    <div ng-switch-when=\"false\" class=\"raml-console-sidebar-pre raml-console-sidebar-request-body\">\n" +
-    "                      <div ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, theme : 'raml-console', mode: context.bodyContent.selected }\" ng-model=\"requestOptions.data\"></div>\n" +
-    "                    </div>\n" +
-    "                    <div ng-switch-when=\"true\" class=\"raml-console-sidebar-response-item\">\n" +
-    "                      <p class=\"raml-console-sidebar-response-metadata\" ng-repeat=\"(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values\">\n" +
-    "                        <b>{{key}}:</b> <br>{{value}}\n" +
+    "                <div class=\"raml-console-sidebar-row\">\n" +
+    "                  <div ng-if=\"requestOptions.uri\">\n" +
+    "                    <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Request URI</h3>\n" +
+    "                    <div class=\"raml-console-sidebar-response-item\">\n" +
+    "                      <p class=\"raml-console-sidebar-response-metadata raml-console-sidebar-request-url\">{{requestOptions.baseUrl}}<span ng-repeat=\"(key, value) in parameters\"><span ng-hide=\"$first\">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>\n" +
     "                      </p>\n" +
     "                    </div>\n" +
     "                  </div>\n" +
+    "\n" +
+    "                  <div ng-if=\"requestOptions.headers\">\n" +
+    "                    <h3 class=\"raml-console-sidebar-response-head\">Headers</h3>\n" +
+    "                    <div class=\"raml-console-sidebar-response-item\">\n" +
+    "                      <p class=\"raml-console-sidebar-response-metadata\" ng-repeat=\"(key, value) in requestOptions.headers\">\n" +
+    "                        <b>{{key}}:</b> <br>{{getHeaderValue(value)}}\n" +
+    "                      </p>\n" +
+    "                    </div>\n" +
+    "                  </div>\n" +
+    "\n" +
+    "                  <div ng-if=\"requestOptions.data\">\n" +
+    "                    <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Body</h3>\n" +
+    "                    <div ng-switch=\"context.bodyContent.isForm(context.bodyContent.selected)\">\n" +
+    "                      <div ng-switch-when=\"false\" class=\"raml-console-sidebar-pre raml-console-sidebar-request-body\">\n" +
+    "                        <div ui-codemirror=\"{ readOnly: 'nocursor', tabSize: 2, lineNumbers: true, theme : 'raml-console', mode: context.bodyContent.selected }\" ng-model=\"requestOptions.data\"></div>\n" +
+    "                      </div>\n" +
+    "                      <div ng-switch-when=\"true\" class=\"raml-console-sidebar-response-item\">\n" +
+    "                        <p class=\"raml-console-sidebar-response-metadata\" ng-repeat=\"(key, value) in context.bodyContent.definitions[context.bodyContent.selected].values\">\n" +
+    "                          <b>{{key}}:</b> <br>{{value}}\n" +
+    "                        </p>\n" +
+    "                      </div>\n" +
+    "                    </div>\n" +
+    "                  </div>\n" +
     "                </div>\n" +
     "              </div>\n" +
-    "            </div>\n" +
-    "          </section>\n" +
+    "            </section>\n" +
     "\n" +
-    "          <section class=\"raml-console-side-bar-try-it-description\">\n" +
-    "            <header class=\"raml-console-sidebar-row raml-console-sidebar-header\">\n" +
-    "              <h3 class=\"raml-console-sidebar-head\">Response</h3>\n" +
-    "            </header>\n" +
+    "            <section class=\"raml-console-side-bar-try-it-description\">\n" +
+    "              <header class=\"raml-console-sidebar-row raml-console-sidebar-header\">\n" +
+    "                <h3 class=\"raml-console-sidebar-head\">Response</h3>\n" +
+    "              </header>\n" +
     "\n" +
-    "            <div class=\"raml-console-sidebar-row sidebar-response\" ng-class=\"{'raml-console-is-active':requestEnd}\">\n" +
-    "              <h3 class=\"raml-console-sidebar-response-head\">Status</h3>\n" +
-    "              <p class=\"raml-console-sidebar-response-item\">{{response.status}}</p>\n" +
+    "              <div class=\"raml-console-sidebar-row sidebar-response\" ng-class=\"{'raml-console-is-active':requestEnd}\">\n" +
+    "                <h3 class=\"raml-console-sidebar-response-head\">Status</h3>\n" +
+    "                <p class=\"raml-console-sidebar-response-item\">{{response.status}}</p>\n" +
     "\n" +
-    "              <h3 class=\"raml-console-sidebar-response-head\">Headers</h3>\n" +
-    "              <div class=\"raml-console-sidebar-response-item\">\n" +
-    "                <p class=\"raml-console-sidebar-response-metadata\" ng-repeat=\"(key, value) in response.headers\">\n" +
-    "                  <b>{{key}}:</b> <br>{{value}}\n" +
-    "                </p>\n" +
-    "              </p>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <div ng-if=\"response.body\">\n" +
-    "              <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Body</h3>\n" +
-    "              <div class=\"raml-console-sidebar-pre\">\n" +
-    "                <div ui-codemirror=\"{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true, theme : 'raml-console', mode: response.contentType }\" ng-model=\"response.body\">\n" +
+    "                <h3 class=\"raml-console-sidebar-response-head\">Headers</h3>\n" +
+    "                <div class=\"raml-console-sidebar-response-item\">\n" +
+    "                  <p class=\"raml-console-sidebar-response-metadata\" ng-repeat=\"(key, value) in response.headers\">\n" +
+    "                    <b>{{key}}:</b> <br>{{value}}\n" +
+    "                  </p>\n" +
+    "                </div>\n" +
+    "                <div ng-if=\"response.body\">\n" +
+    "                  <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Body</h3>\n" +
+    "                  <div class=\"raml-console-sidebar-pre\">\n" +
+    "                    <div ui-codemirror=\"{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true, theme : 'raml-console', mode: response.contentType }\" ng-model=\"response.body\">\n" +
+    "                    </div>\n" +
+    "                  </div>\n" +
     "                </div>\n" +
     "              </div>\n" +
-    "            </div>\n" +
+    "            </section>\n" +
     "          </div>\n" +
-    "        </section>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +

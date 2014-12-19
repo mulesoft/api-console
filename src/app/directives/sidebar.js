@@ -8,6 +8,7 @@
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
         $scope.currentSchemeType = 'Anonymous';
+        $scope.responseDetails = false;
 
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
@@ -70,10 +71,10 @@
             $scope.response.body = jqXhr.responseText;
           }
 
-          $scope.requestEnd     = true;
-          $scope.showMoreEnable = true;
-          $scope.showSpinner    = false;
-          $scope.responseDetails.show();
+          $scope.requestEnd      = true;
+          $scope.showMoreEnable  = true;
+          $scope.showSpinner     = false;
+          $scope.responseDetails = true;
 
           var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
           $location.hash(hash);
@@ -248,7 +249,8 @@
         $scope.context.forceRequest = false;
 
         $scope.tryIt = function ($event) {
-          $scope.requestOptions = null;
+          $scope.requestOptions  = null;
+          $scope.responseDetails = false;
           validateForm($scope.form);
 
           if (!$scope.context.forceRequest) {
@@ -263,7 +265,6 @@
             $scope.showSpinner = true;
             // $scope.toggleSidebar($event, true);
             $scope.toggleRequestMetadata($event, true);
-            $scope.responseDetails = jQuery($event.currentTarget).closest('.raml-console-sidebar-content-wrapper').find('.raml-console-side-bar-try-it-description');
 
             try {
               var pathBuilder = context.pathBuilder;
