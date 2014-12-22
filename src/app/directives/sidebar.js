@@ -80,6 +80,13 @@
           $location.hash(hash);
           $anchorScroll();
 
+          var lines = jqXhr.responseText.split('\n').length;
+          var editorHeight = lines > 100 ? 2000 : 25*lines;
+
+          $scope.editorStyle = {
+            height: editorHeight + 'px'
+          };
+
           apply();
         }
 

@@ -167,7 +167,7 @@
                 <div ng-if="response.body">
                   <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Body</h3>
                   <div class="raml-console-sidebar-pre">
-                    <div ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true, theme : 'raml-console', mode: response.contentType }" ng-model="response.body">
+                    <div ui-codemirror="{ readOnly: true, tabSize: 2, lineNumbers: true, theme : 'raml-console', mode: response.contentType }" ng-model="response.body" ng-style="editorStyle">
                     </div>
                   </div>
                 </div>

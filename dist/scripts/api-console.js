@@ -863,6 +863,13 @@
           $location.hash(hash);
           $anchorScroll();
 
+          var lines = jqXhr.responseText.split('\n').length;
+          var editorHeight = lines > 100 ? 2000 : 25*lines;
+
+          $scope.editorStyle = {
+            height: editorHeight + 'px'
+          };
+
           apply();
         }
 
@@ -3624,7 +3631,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                <div ng-if=\"response.body\">\n" +
     "                  <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Body</h3>\n" +
     "                  <div class=\"raml-console-sidebar-pre\">\n" +
-    "                    <div ui-codemirror=\"{ readOnly: true, tabSize: 2, lineNumbers: true, lineWrapping : true, theme : 'raml-console', mode: response.contentType }\" ng-model=\"response.body\">\n" +
+    "                    <div ui-codemirror=\"{ readOnly: true, tabSize: 2, lineNumbers: true, theme : 'raml-console', mode: response.contentType }\" ng-model=\"response.body\" ng-style=\"editorStyle\">\n" +
     "                    </div>\n" +
     "                  </div>\n" +
     "                </div>\n" +
