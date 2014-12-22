@@ -2147,18 +2147,19 @@ th {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom-color: rgba(0, 0, 0, 0.5);
   border-radius: 3px;
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
   color: #fff;
   cursor: pointer;
   font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 18px;
   font-weight: 900;
   transition: 0.2s ease background-color;
   -webkit-font-smoothing: antialiased;
+  height: 30px;
+  padding-top: 4px;
+  font-size: 15px;
 }
 
 .raml-console-sidebar-action-get {
-  width: 47%;
+  width: 130px;
   background-color: #0B88B9;
   letter-spacing: 2px;
 }
@@ -2168,7 +2169,7 @@ th {
 }
 
 .raml-console-sidebar-action-put {
-  width: 47%;
+  width: 130px;
   background-color: #87538f;
   letter-spacing: 2px;
 }
@@ -2178,7 +2179,7 @@ th {
 }
 
 .raml-console-sidebar-action-post {
-  width: 47%;
+  width: 130px;
   background-color: #1EA18D;
   letter-spacing: 2px;
 }
@@ -2188,7 +2189,7 @@ th {
 }
 
 .raml-console-sidebar-action-delete {
-  width: 47%;
+  width: 130px;
   background-color: #d14956;
   letter-spacing: 2px;
 }
@@ -2198,7 +2199,7 @@ th {
 }
 
 .raml-console-sidebar-action-patch {
-  width: 47%;
+  width: 130px;
   background-color: #02B0E2;
   letter-spacing: 2px;
 }
@@ -2208,7 +2209,7 @@ th {
 }
 
 .raml-console-sidebar-action-connect {
-  width: 47%;
+  width: 130px;
   background-color: #E48F0A;
   letter-spacing: 2px;
 }
@@ -2218,7 +2219,7 @@ th {
 }
 
 .raml-console-sidebar-action-head {
-  width: 47%;
+  width: 130px;
   background-color: #8A45A2;
   letter-spacing: 2px;
 }
@@ -2228,7 +2229,7 @@ th {
 }
 
 .raml-console-sidebar-action-options {
-  width: 47%;
+  width: 130px;
   background-color: #1EBD77;
   letter-spacing: 2px;
 }
@@ -2238,7 +2239,7 @@ th {
 }
 
 .raml-console-sidebar-action-trace {
-  width: 47%;
+  width: 130px;
   background-color: #98B805;
   letter-spacing: 2px;
 }
@@ -2248,7 +2249,7 @@ th {
 }
 
 .raml-console-sidebar-action-force {
-  width: 47%;
+  width: 130px;
   background-color: red;
   letter-spacing: 2px;
 }
@@ -2258,7 +2259,7 @@ th {
 }
 
 .raml-console-sidebar-action-cancel-request {
-  width: 47%;
+  width: 130px;
   background-color: #8f6953;
   letter-spacing: 2px;
 }
@@ -2268,8 +2269,8 @@ th {
 }
 
 .raml-console-sidebar-action-clear {
-  width: 25%;
-  margin-left: 1.5%;
+  width: 80px;
+  margin-left: 7px;
   background-color: #0f1217;
 }
 
@@ -2298,8 +2299,8 @@ th {
 }
 
 .raml-console-sidebar-action-reset {
-  width: 25%;
-  margin-left: 1.5%;
+  width: 80px;
+  margin-left: 7px;
   background-color: #404040;
 }
 
