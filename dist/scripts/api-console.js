@@ -1266,20 +1266,26 @@
       replace: true,
       link: function($scope, $element) {
         $element.on('click', function() {
-          var $link = jQuery('head link.theme');
+          // var $link = jQuery('head link.theme');
           var $theme = jQuery('head').find('#raml-console-theme-dark');
 
-          $link.attr('href', 'styles/light-theme.css');
-          $element.removeClass('raml-console-theme-toggle-dark');
+          // $link.attr('href', 'styles/light-theme.css');
+          // $element.removeClass('raml-console-theme-toggle-dark');
 
           if ($theme.length === 0) {
             jQuery.ajax({
               url: 'styles/dark-theme.css'
             }).done(function (data) {
               jQuery('head').append('<style id="raml-console-theme-dark">' + data + '</style>');
+              jQuery('head').find('#raml-console-theme-light').remove();
             });
           } else {
-            jQuery('head').find('#raml-console-theme-dark').remove();
+            jQuery.ajax({
+              url: 'styles/light-theme.css'
+            }).done(function (data) {
+              jQuery('head').append('<style id="raml-console-theme-light">' + data + '</style>');
+              jQuery('head').find('#raml-console-theme-dark').remove();
+            });
           }
         });
       }
