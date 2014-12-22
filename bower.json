@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "angular": "~1.2.16",
-    "angular-ui-codemirror": "~0.1.6",
+    "angular-ui-codemirror": "0.1.6",
     "angular-marked": "~0.0.12",
     "jquery": "~2.1.1",
     "velocity": "~1.1.0",
