@@ -9,6 +9,14 @@
       controller: function($scope, $location) {
         $scope.selectedSection = 'all';
 
+        $scope.hasDocumentationWithIndex = function () {
+          var regex = /(^#|^##)+\s(.*)$/gim;
+
+          return $scope.raml.documentation.filter(function (el) {
+            return regex.test(el.content);
+          }).length > 0;
+        };
+
         $scope.collapseDocumentation = function ($event) {
           var $this = jQuery($event.currentTarget);
 
