@@ -530,18 +530,23 @@
   border-bottom-color: rgba(0,0,0,0.5);
   border-radius: 3px;
 
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(0,0,0,0.1));
+  // background-image: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(0,0,0,0.1));
   color: $color-console-tab-text;
   cursor: pointer;
   font-family: $lato;
-  font-size: 18px;
+  // font-size: 18px;
   font-weight: 900;
   transition: 0.2s ease background-color;
   -webkit-font-smoothing: antialiased;
+
+  height: 30px;
+  padding-top: 4px;
+  font-size: 15px;
 }
 
 .sidebar-action-get {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-get;
   letter-spacing: 2px;
 
@@ -551,7 +556,8 @@
 }
 
 .sidebar-action-put {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-put;
   letter-spacing: 2px;
 
@@ -561,7 +567,8 @@
 }
 
 .sidebar-action-post {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-post;
   letter-spacing: 2px;
 
@@ -571,7 +578,8 @@
 }
 
 .sidebar-action-delete {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-delete;
   letter-spacing: 2px;
 
@@ -581,7 +589,8 @@
 }
 
 .sidebar-action-patch {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-patch;
   letter-spacing: 2px;
 
@@ -591,7 +600,8 @@
 }
 
 .sidebar-action-connect {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-connect;
   letter-spacing: 2px;
 
@@ -601,7 +611,8 @@
 }
 
 .sidebar-action-head {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-head;
   letter-spacing: 2px;
 
@@ -611,7 +622,8 @@
 }
 
 .sidebar-action-options {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-options;
   letter-spacing: 2px;
 
@@ -621,7 +633,8 @@
 }
 
 .sidebar-action-trace {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: $color-console-tab-trace;
   letter-spacing: 2px;
 
@@ -631,7 +644,8 @@
 }
 
 .sidebar-action-force {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: red;
   letter-spacing: 2px;
 
@@ -641,7 +655,8 @@
 }
 
 .sidebar-action-cancel-request {
-  width: 47%;
+  // width: 47%;
+  width: 130px;
   background-color: #8f6953;
   letter-spacing: 2px;
 
@@ -651,8 +666,10 @@
 }
 
 .sidebar-action-clear {
-  width: 25%;
-  margin-left: 1.5%;
+  // width: 25%;
+  width: 80px;
+  // margin-left: 1.5%;
+  margin-left: 7px;
 
   background-color: $color-sidebar-action-clear-bg;
 
@@ -683,8 +700,10 @@
 }
 
 .sidebar-action-reset {
-  width: 25%;
-  margin-left: 1.5%;
+  // width: 25%;
+  width: 80px;
+  // margin-left: 1.5%;
+  margin-left: 7px;
 
   background-color: $color-sidebar-action-reset-bg;
 
