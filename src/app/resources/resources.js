@@ -78,6 +78,12 @@
           jQuery('#raml-console-resources-container').find('.raml-console-resource-list-root ol.raml-console-resource-list').toggleClass('raml-console-is-collapsed');
           jQuery('#raml-console-resources-container').find('button.raml-console-resource-root-toggle').toggleClass('raml-console-is-active');
         };
+
+        $scope.hasResourcesWithChilds = function () {
+          return $scope.raml.resourceGroups.filter(function (el) {
+            return el.length > 1;
+          }).length > 0;
+        };
       },
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {

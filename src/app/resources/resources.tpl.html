@@ -23,7 +23,7 @@
           <input type="checkbox" ng-model="disableProxy" ng-change="updateProxyConfig(disableProxy)">
         </div>
         <header class="raml-console-resource raml-console-resource-root raml-console-clearfix">
-          <span class="raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all" ng-click="collapseAll($event)" ng-class="{'raml-console-resources-expanded':!collapsed}"><span ng-if="!collapsed">collapse</span><span ng-if="collapsed">expand</span> all</span>
+          <span ng-if="hasResourcesWithChilds()" class="raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all" ng-click="collapseAll($event)" ng-class="{'raml-console-resources-expanded':!collapsed}"><span ng-if="!collapsed">collapse</span><span ng-if="collapsed">expand</span> all</span>
           <div class="raml-console-resource-path-container">
             <h2 class="raml-console-resource-section-title">
               <span class="raml-console-resource-path-active">Resources</span>
