@@ -89,6 +89,8 @@ RAML.Inspector = (function() {
   };
 
   exports.create = function(api) {
+    api = angular.extend({}, api);
+
     if (api.baseUri) {
       api.baseUri = RAML.Client.createBaseUri(api);
     }

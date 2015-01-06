@@ -55,6 +55,34 @@
 (function () {
   'use strict';
 
+  RAML.Directives.clickOutside = function ($document) {
+    return {
+      restrict: 'A',
+      link: function ($scope, $element, $attrs) {
+        function onClick (e) {
+          if ($element[0] === e.target || $element.has(e.target).length) {
+            return;
+          }
+
+          $scope.$apply($attrs.clickOutside);
+        }
+
+        $document.on('click', onClick);
+
+        $scope.$on('$destroy', function () {
+          $document.off('click', onClick);
+        });
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('clickOutside', RAML.Directives.clickOutside);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.closeButton = function() {
     return {
       restrict: 'E',
@@ -573,6 +601,43 @@
 
   angular.module('RAML.Directives')
     .directive('namedParameters', RAML.Directives.namedParameters);
+})();
+
+(function () {
+  'use strict';
+
+  var generator = window.ramlClientGenerator;
+
+  function downloadClient (language, ast) {
+    var zip    = new window.JSZip();
+    var output = generator[language](ast);
+    var title  = window.slug(output.context.title);
+
+    Object.keys(output.files).forEach(function (key) {
+      zip.file(key, output.files[key]);
+    });
+
+    var content  = zip.generate({ type: 'blob' });
+    var filename = title + '-' + language + '.zip';
+
+    // Download as a zip file with an appropriate language name.
+    window.saveAs(content, filename);
+  }
+
+  RAML.Directives.ramlClientGenerator = function () {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/raml-client-generator.tpl.html',
+      controller: function ($scope) {
+        $scope.downloadJavaScriptClient = function () {
+          return downloadClient('javascript', $scope.rawRaml);
+        };
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('ramlClientGenerator', RAML.Directives.ramlClientGenerator);
 })();
 
 (function () {
@@ -1491,8 +1556,9 @@
       },
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {
-          $scope.raml = RAML.Inspector.create(raml);
-          $scope.loaded = true;
+          $scope.raml    = RAML.Inspector.create(raml);
+          $scope.rawRaml = raml;
+          $scope.loaded  = true;
         });
       }
     };
@@ -2596,6 +2662,8 @@ RAML.Inspector = (function() {
   };
 
   exports.create = function(api) {
+    api = angular.extend({}, api);
+
     if (api.baseUri) {
       api.baseUri = RAML.Client.createBaseUri(api);
     }
@@ -3328,6 +3396,24 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('directives/raml-client-generator.tpl.html',
+    "<div class=\"raml-console-meta-button-container\">\n" +
+    "  <a\n" +
+    "    class=\"raml-console-meta-button raml-console-meta-button-first\"\n" +
+    "    ng-click=\"open = !open\"\n" +
+    "    click-outside=\"open = false\">\n" +
+    "    Download API Client\n" +
+    "  </a>\n" +
+    "\n" +
+    "  <div class=\"raml-console-meta-button-dropdown\" ng-show=\"open\">\n" +
+    "    <a class=\"raml-console-meta-button-dropdown-item\" ng-click=\"downloadJavaScriptClient()\">\n" +
+    "      JavaScript\n" +
+    "    </a>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('directives/raml-initializer.tpl.html',
     "<div ng-switch=\"ramlStatus\">\n" +
     "  <div class=\"raml-console-initializer-container raml-console-initializer-primary\" ng-switch-default>\n" +
@@ -3671,7 +3757,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/theme-switcher.tpl.html',
-    "<a class=\"raml-console-theme-toggle\">Switch Theme</a>\n"
+    "<div class=\"raml-console-meta-button-container\">\n" +
+    "  <a class=\"raml-console-meta-button\">Switch Theme</a>\n" +
+    "</div>\n"
   );
 
 
@@ -3694,7 +3782,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <div ng-if=\"loaded\">\n" +
-    "    <theme-switcher ng-if=\"!disableThemeSwitcher\"></theme-switcher>\n" +
+    "    <div class=\"raml-console-meta-button-group\">\n" +
+    "      <theme-switcher ng-if=\"!disableThemeSwitcher\"></theme-switcher>\n" +
+    "      <raml-client-generator></raml-client-generator>\n" +
+    "    </div>\n" +
+    "\n" +
     "    <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{raml.title}}</h1>\n" +
     "\n" +
     "    <root-documentation></root-documentation>\n" +
