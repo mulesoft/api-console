@@ -2144,7 +2144,7 @@ th {
 
 .raml-console-sidebar-action {
   margin-top: 12px;
-  padding: 10px 0 12px;
+  padding: 5px 0px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom-color: rgba(0, 0, 0, 0.5);
   border-radius: 3px;
@@ -2154,8 +2154,6 @@ th {
   font-weight: 900;
   transition: 0.2s ease background-color;
   -webkit-font-smoothing: antialiased;
-  height: 30px;
-  padding-top: 4px;
   font-size: 15px;
 }
 
@@ -2281,7 +2279,7 @@ th {
 
 .raml-console-sidebar-action-prefill {
   text-decoration: none;
-  padding: 5px 10px 6px 10px;
+  padding: 5px 10px;
   border: 1px solid #000;
   border-radius: 4px;
   background-color: #0f1217;
