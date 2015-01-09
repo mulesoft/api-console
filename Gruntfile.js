@@ -127,7 +127,11 @@ module.exports = function (grunt) {
           { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular.js', expand: true, cwd: 'vendor/bower_components/angular/' },
           { dest: '<%= distdir %>/scripts/vendor/angular', src : 'ui-codemirror.js', expand: true, cwd: 'vendor/bower_components/angular-ui-codemirror/' },
           { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular-marked.js', expand: true, cwd: 'vendor/bower_components/angular-marked/' },
-          { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular-highlightjs.js', expand: true, cwd: 'vendor/bower_components/angular-highlightjs/' }
+          { dest: '<%= distdir %>/scripts/vendor/angular', src : 'angular-highlightjs.js', expand: true, cwd: 'vendor/bower_components/angular-highlightjs/' },
+          { dest: '<%= distdir %>/scripts/vendor/jszip', src : 'jszip.js', expand: true, cwd: 'vendor/bower_components/jszip/' },
+          { dest: '<%= distdir %>/scripts/vendor/slug', src : 'slug.js', expand: true, cwd: 'vendor/bower_components/slug/' },
+          { dest: '<%= distdir %>/scripts/vendor/FileSaver', src : 'FileSaver.js', expand: true, cwd: 'vendor/bower_components/FileSaver/' },
+          { dest: '<%= distdir %>/scripts/vendor/raml-client-generator', src : 'raml-client-generator.js', expand: true, cwd: 'vendor/bower_components/raml-client-generator/dist/' }
         ]
       }
     },
@@ -196,7 +200,11 @@ module.exports = function (grunt) {
           'vendor/bower_components/angular/angular.min.js',
           'vendor/bower_components/angular-ui-codemirror/ui-codemirror.min.js',
           'vendor/bower_components/angular-marked/angular-marked.min.js',
-          'vendor/bower_components/angular-highlightjs/angular-highlightjs.min.js'
+          'vendor/bower_components/angular-highlightjs/angular-highlightjs.min.js',
+          'vendor/bower_components/jszip/jszip.js',
+          'vendor/bower_components/slug/slug.js',
+          'vendor/bower_components/FileSaver/FileSaver.js',
+          'vendor/bower_components/raml-client-generator/raml-client-generator.js'
         ],
         dest:'<%= distdir %>/scripts/vendor.js'
       }
