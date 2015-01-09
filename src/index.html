@@ -4,48 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>API Console</title>
-  <!-- @if NODE_ENV == 'DEVELOPMENT' -->
-  <link href="styles/vendor/codemirror.css" rel="stylesheet" type="text/css">
-  <link href="styles/fonts.css" rel="stylesheet" type="text/css">
-  <link href="styles/error.css" rel="stylesheet" type="text/css">
-  <!-- @endif -->
-  <!-- @if NODE_ENV == 'PRODUCTION' -->
-  <link href="styles/vendor.css" rel="stylesheet" type="text/css">
-  <!-- @endif -->
-  <link href="styles/light-theme.css" rel="stylesheet" type="text/css" class="theme">
+  <link href="styles/<%= grunt.config.get('pkg.name') %>-light-theme.css" rel="stylesheet" class="theme">
 </head>
 <body ng-app="ramlConsoleApp" ng-cloak class="raml-console-body">
   <raml-initializer></raml-initializer>
-  <!-- @if NODE_ENV == 'DEVELOPMENT' -->
-  <script type="text/javascript" src="scripts/vendor/marked.js"></script>
-  <script type="text/javascript" src="scripts/vendor/client-oauth2.js"></script>
-  <script type="text/javascript" src="scripts/vendor/highlightjs/highlight.pack.js"></script>
-  <script type="text/javascript" src="scripts/vendor/vkbeautify/vkbeautify.js"></script>
-  <script type="text/javascript" src="scripts/vendor/jquery/jquery.js"></script>
-  <script type="text/javascript" src="scripts/vendor/jquery/velocity.js"></script>
-  <script type="text/javascript" src="scripts/vendor/raml/raml-parser.js"></script>
-  <script type="text/javascript" src="scripts/vendor/raml/raml-sanitize.js"></script>
-  <script type="text/javascript" src="scripts/vendor/raml/raml-validate.js"></script>
-  <script type="text/javascript" src="scripts/vendor/crypto-js/hmac-sha1.js"></script>
-  <script type="text/javascript" src="scripts/vendor/crypto-js/enc-base64.js"></script>
-  <script type="text/javascript" src="scripts/vendor/codemirror/codemirror.js"></script>
-  <script type="text/javascript" src="scripts/vendor/codemirror/mode/javascript.js"></script>
-  <script type="text/javascript" src="scripts/vendor/codemirror/mode/xml.js"></script>
-  <script type="text/javascript" src="scripts/vendor/codemirror/mode/yaml.js"></script>
-  <script type="text/javascript" src="scripts/vendor/codemirror/addon/dialog.js"></script>
-  <script type="text/javascript" src="scripts/vendor/codemirror/addon/search.js"></script>
-  <script type="text/javascript" src="scripts/vendor/codemirror/addon/searchcursor.js"></script>
-  <script type="text/javascript" src="scripts/vendor/codemirror/addon/lint.js"></script>
-  <script type="text/javascript" src="scripts/vendor/angular/angular.js"></script>
-  <script type="text/javascript" src="scripts/vendor/angular/ui-codemirror.js"></script>
-  <script type="text/javascript" src="scripts/vendor/angular/angular-marked.js"></script>
-  <script type="text/javascript" src="scripts/vendor/angular/angular-highlightjs.js"></script>
-  <!-- @endif -->
-  <!-- @if NODE_ENV == 'PRODUCTION' -->
-  <script type="text/javascript" src="scripts/vendor.js"></script>
-  <!-- @endif -->
-  <script type="text/javascript" src="scripts/<%= grunt.config.get('pkg.name') %>.js"></script>
-  <script type="text/javascript">
+  <script src="scripts/<%= grunt.config.get('pkg.name') %>-vendor.js"></script>
+  <script src="scripts/<%= grunt.config.get('pkg.name') %>.js"></script>
+  <script>
     $.noConflict();
   </script>
 </body>

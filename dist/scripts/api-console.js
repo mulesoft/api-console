@@ -1274,14 +1274,14 @@
 
           if ($theme.length === 0) {
             jQuery.ajax({
-              url: 'styles/dark-theme.css'
+              url: 'styles/api-console-dark-theme.css'
             }).done(function (data) {
               jQuery('head').append('<style id="raml-console-theme-dark">' + data + '</style>');
               jQuery('head').find('#raml-console-theme-light').remove();
             });
           } else {
             jQuery.ajax({
-              url: 'styles/light-theme.css'
+              url: 'styles/api-console-light-theme.css'
             }).done(function (data) {
               jQuery('head').append('<style id="raml-console-theme-light">' + data + '</style>');
               jQuery('head').find('#raml-console-theme-dark').remove();
@@ -3104,6 +3104,1539 @@ RAML.Inspector = (function() {
     }
   };
 })();
+
+(function (root) {
+  var _hasOwnProperty = Object.prototype.hasOwnProperty;
+  var btoa            = typeof Buffer === 'function' ? bufferBtoa : root.btoa;
+
+  /**
+   * Format error response types to regular strings for displaying to clients.
+   *
+   * Reference: http://tools.ietf.org/html/rfc6749#section-4.1.2.1
+   *
+   * @type {Object}
+   */
+  var ERROR_RESPONSES = {
+    'invalid_request': [
+      'The request is missing a required parameter, includes an',
+      'invalid parameter value, includes a parameter more than',
+      'once, or is otherwise malformed.'
+    ].join(' '),
+    'invalid_client': [
+      'Client authentication failed (e.g., unknown client, no',
+      'client authentication included, or unsupported',
+      'authentication method).'
+    ].join(' '),
+    'invalid_grant': [
+      'The provided authorization grant (e.g., authorization',
+      'code, resource owner credentials) or refresh token is',
+      'invalid, expired, revoked, does not match the redirection',
+      'URI used in the authorization request, or was issued to',
+      'another client.'
+    ].join(' '),
+    'unauthorized_client': [
+      'The client is not authorized to request an authorization',
+      'code using this method.'
+    ].join(' '),
+    'unsupported_grant_type': [
+      'The authorization grant type is not supported by the',
+      'authorization server.'
+    ].join(' '),
+    'access_denied': [
+      'The resource owner or authorization server denied the request.'
+    ].join(' '),
+    'unsupported_response_type': [
+      'The authorization server does not support obtaining',
+      'an authorization code using this method.'
+    ].join(' '),
+    'invalid_scope': [
+      'The requested scope is invalid, unknown, or malformed.'
+    ].join(' '),
+    'server_error': [
+      'The authorization server encountered an unexpected',
+      'condition that prevented it from fulfilling the request.',
+      '(This error code is needed because a 500 Internal Server',
+      'Error HTTP status code cannot be returned to the client',
+      'via an HTTP redirect.)'
+    ].join(' '),
+    'temporarily_unavailable': [
+      'The authorization server is currently unable to handle',
+      'the request due to a temporary overloading or maintenance',
+      'of the server.'
+    ].join(' ')
+  };
+
+  /**
+   * Iterate over a source object and copy properties to the destination object.
+   *
+   * @param  {Object} dest
+   * @param  {Object} source
+   * @return {Object}
+   */
+  function assign (dest /*, ...source */) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (_hasOwnProperty.call(source, key)) {
+          dest[key] = source[key];
+        }
+      }
+    }
+
+    return dest;
+  }
+
+  /**
+   * Support base64 in node like how it works in the browser.
+   *
+   * @param  {String} string
+   * @return {String}
+   */
+  function bufferBtoa (string) {
+    return new Buffer(string).toString('base64');
+  }
+
+  /**
+   * Check if properties exist on an object and throw when they aren't.
+   *
+   * @throws {TypeError} If an expected property is missing.
+   *
+   * @param {Object} obj
+   * @param {Array}  props
+   */
+  function expects (obj, props) {
+    for (var i = 0; i < props.length; i++) {
+      var prop = props[i];
+
+      // Check whether the property is empty.
+      if (obj[prop] == null) {
+        throw new TypeError('Expected "' + prop + '" to exist');
+      }
+    }
+  }
+
+  /**
+   * Create a new object based on a source object with keys omitted.
+   *
+   * @param  {Object} source
+   * @param  {Array}  keys
+   * @return {Object}
+   */
+  function omit (source, keys) {
+    var obj = {};
+
+    // Iterate over the source object and set properties on a new object.
+    Object.keys(source || {}).forEach(function (key) {
+      if (keys.indexOf(key) === -1) {
+        obj[key] = source[key];
+      }
+    });
+
+    return obj;
+  }
+
+  /**
+   * Attempt (and fix) URI component encoding.
+   *
+   * @param  {String} str
+   * @return {String}
+   */
+  function encodeComponent (str) {
+    return encodeURIComponent(str)
+      .replace(/[!'()]/g, root.escape)
+      .replace(/\*/g, '%2A');
+  }
+
+  /**
+   * Attempt URI component decoding.
+   *
+   * @param  {String} str
+   * @return {String}
+   */
+  function decodeComponent (str) {
+    return decodeURIComponent(str);
+  }
+
+  /**
+   * Convert an object into a query string.
+   *
+   * @param  {Object} obj
+   * @param  {String} sep
+   * @param  {String} eq
+   * @return {String}
+   */
+  function uriEncode (obj, sep, eq) {
+    var params = [];
+
+    eq  = eq  || '=';
+    sep = sep || '&';
+
+    Object.keys(obj).forEach(function (key) {
+      var value  = obj[key];
+      var keyStr = encodeComponent(key) + eq;
+
+      if (Array.isArray(value)) {
+        for (var i = 0; i < value.length; i++) {
+          params.push(keyStr + encodeComponent(value[i]));
+        }
+      } else if (value != null) {
+        params.push(keyStr + encodeComponent(value));
+      }
+    });
+
+    return params.join(sep);
+  }
+
+  /**
+   * Convert a query string into an object.
+   *
+   * @param  {String} qs
+   * @param  {String} sep
+   * @param  {String} eq
+   * @return {Object}
+   */
+  function uriDecode (qs, sep, eq) {
+    eq  = eq  || '=';
+    sep = sep || '&';
+    qs  = qs.split(sep);
+
+    var obj     = {};
+    var maxKeys = 1000;
+    var len     = qs.length > maxKeys ? maxKeys : qs.length;
+
+    for (var i = 0; i < len; i++) {
+      var key   = qs[i].replace(/\+/g, '%20');
+      var value = '';
+      var index = key.indexOf(eq);
+
+      if (index !== -1) {
+        value = key.substr(index + 1);
+        key   = key.substr(0, index);
+      }
+
+      key   = decodeComponent(key);
+      value = decodeComponent(value);
+
+      if (!_hasOwnProperty.call(obj, key)) {
+        obj[key] = value;
+      } else if (Array.isArray(obj[key])) {
+        obj[key].push(value);
+      } else {
+        obj[key] = [obj[key], value];
+      }
+    }
+
+    return obj;
+  }
+
+  /**
+   * Pull an authentication error from the response data.
+   *
+   * @param  {Object} data
+   * @return {String}
+   */
+  function getAuthError (data) {
+    var message = ERROR_RESPONSES[data.error] ||
+      data.error ||
+      data.error_message;
+
+    // Return an error instance with the message if it exists.
+    return message && new Error(message);
+  }
+
+  /**
+   * Retrieve all the HTTP response headers for an XMLHttpRequest instance.
+   *
+   * @param  {XMLHttpRequest} xhr
+   * @return {Object}
+   */
+  function getAllReponseHeaders (xhr) {
+    var headers = {};
+
+    // Split all header lines and iterate.
+    xhr.getAllResponseHeaders().split('\n').forEach(function (header) {
+      var index = header.indexOf(':');
+
+      if (index === -1) {
+        return;
+      }
+
+      var name  = header.substr(0, index).toLowerCase();
+      var value = header.substr(index + 1).trim();
+
+      headers[name] = value;
+    });
+
+    return headers;
+  }
+
+  /**
+   * Sanitize the scopes option to be a string.
+   *
+   * @param  {Array}  scopes
+   * @return {String}
+   */
+  function sanitizeScope (scopes) {
+    if (!Array.isArray(scopes)) {
+      return scopes == null ? null : String(scopes);
+    }
+
+    return scopes.join(' ');
+  }
+
+  /**
+   * Construct an object that can handle the multiple OAuth 2.0 flows.
+   *
+   * @param {Object} options
+   */
+  function ClientOAuth2 (options) {
+    this.options = options;
+
+    this.code        = new CodeFlow(this);
+    this.token       = new TokenFlow(this);
+    this.owner       = new OwnerFlow(this);
+    this.credentials = new CredentialsFlow(this);
+  }
+
+  /**
+   * Alias the token constructor.
+   *
+   * @type {Function}
+   */
+  ClientOAuth2.Token = ClientOAuth2Token;
+
+  /**
+   * Create a new token from existing data.
+   *
+   * @param  {String} access
+   * @param  {String} [refresh]
+   * @param  {String} [type]
+   * @param  {Object} [data]
+   * @return {Object}
+   */
+  ClientOAuth2.prototype.createToken = function (access, refresh, type, data) {
+    return new ClientOAuth2Token(this, assign({}, data, {
+      access_token:  access,
+      refresh_token: refresh,
+      token_type:    type
+    }));
+  };
+
+  /**
+   * Using the built-in request method, we'll automatically attempt to parse
+   * the response.
+   *
+   * @param {Object}   options
+   * @param {Function} done
+   */
+  ClientOAuth2.prototype._request = function (options, done) {
+    return this.request(options, function (err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      // Check the response status and fail.
+      if (res.status && Math.floor(res.status / 100) !== 2) {
+        err = new Error('HTTP Status ' + res.status);
+        err.status = res.status;
+
+        return done(err);
+      }
+
+      // Support already parsed responses in case of custom body parsing.
+      if (typeof res.body !== 'string') {
+        return done(null, res.body);
+      }
+
+      // Attempt to parse as JSON, falling back to parsing as a query string.
+      try {
+        done(null, JSON.parse(res.body), res.raw);
+      } catch (e) {
+        done(null, uriDecode(res.body), res.raw);
+      }
+    });
+  };
+
+  if (typeof window !== 'undefined') {
+    /**
+     * Make a HTTP request using XMLHttpRequest.
+     *
+     * @param {Object}   options
+     * @param {Function} done
+     */
+    ClientOAuth2.prototype.request = function (options, done) {
+      var xhr     = new root.XMLHttpRequest();
+      var headers = options.headers || {};
+
+      // Open the request to the uri and method.
+      xhr.open(options.method, options.uri);
+
+      // When the request has loaded, attempt to automatically parse the body.
+      xhr.onload = function () {
+        return done(null, {
+          raw:     xhr,
+          status:  xhr.status,
+          headers: getAllReponseHeaders(xhr),
+          body:    xhr.responseText
+        });
+      };
+
+      // Catch request errors.
+      xhr.onerror = xhr.onabort = function () {
+        return done(new Error(xhr.statusText || 'XHR aborted'));
+      };
+
+      // Set all request headers.
+      Object.keys(headers).forEach(function (header) {
+        xhr.setRequestHeader(header, headers[header]);
+      });
+
+      // Make the request with the body.
+      xhr.send(options.body);
+    };
+  } else {
+    var url   = require('url');
+    var http  = require('http');
+    var https = require('https');
+
+    /**
+     * Make a request using the built-in node http library.
+     *
+     * @param {Object}   options
+     * @param {Function} done
+     */
+    ClientOAuth2.prototype.request = function (options, done) {
+      var lib     = http;
+      var reqOpts = url.parse(options.uri);
+
+      // If the protocol is over https, switch request library.
+      if (reqOpts.protocol === 'https:') {
+        lib = https;
+      }
+
+      // Alias request options.
+      reqOpts.method  = options.method;
+      reqOpts.headers = options.headers;
+
+      // Send the http request and listen for the response to finish.
+      var req = lib.request(reqOpts, function (res) {
+        var data = '';
+
+        // Callback to `done` if a response error occurs.
+        res.on('error', done);
+
+        // Concat all the data chunks into a string.
+        res.on('data', function (chunk) {
+          data += chunk;
+        });
+
+        // When the response is finished, attempt to parse the data string.
+        res.on('end', function () {
+          return done(null, {
+            raw:     res,
+            status:  res.statusCode,
+            headers: res.headers,
+            body:    data
+          });
+        });
+      });
+
+      // Callback to `done` if a request error occurs.
+      req.on('error', done);
+
+      // Send the body and make the request.
+      req.write(options.body);
+      req.end();
+    };
+  }
+
+  /**
+   * General purpose client token generator.
+   *
+   * @param {Object} client
+   * @param {Object} data
+   */
+  function ClientOAuth2Token (client, data) {
+    this.client = client;
+
+    this.data = omit(data, [
+      'access_token', 'refresh_token', 'token_type', 'expires_in', 'scope',
+      'state', 'error', 'error_description', 'error_uri'
+    ]);
+
+    this.tokenType    = (data.token_type || 'bearer').toLowerCase();
+    this.accessToken  = data.access_token;
+    this.refreshToken = data.refresh_token;
+
+    // Set the expiration date.
+    if (data.expires_in) {
+      this.expires = new Date();
+
+      this.expires.setSeconds(this.expires.getSeconds() + data.expires_in);
+    }
+  }
+
+  /**
+   * Sign a standardised request object with user authentication information.
+   *
+   * @param  {Object} opts
+   * @return {Object}
+   */
+  ClientOAuth2Token.prototype.sign = function (opts) {
+    if (!this.accessToken) {
+      throw new Error('Unable to sign without access token');
+    }
+
+    opts.headers = opts.headers || {};
+
+    if (this.tokenType === 'bearer') {
+      opts.headers.Authorization = 'Bearer ' + this.accessToken;
+    } else {
+      var parts    = opts.uri.split('#');
+      var token    = 'access_token=' + this.accessToken;
+      var uri      = parts[0].replace(/[?&]access_token=[^&#]/, '');
+      var fragment = parts[1] ? '#' + parts[1] : '';
+
+      // Prepend the correct query string parameter to the uri.
+      opts.uri = uri + (uri.indexOf('?') > -1 ? '&' : '?') + token + fragment;
+
+      // Attempt to avoid storing the uri in proxies, since the access token
+      // is exposed in the query parameters.
+      opts.headers.Pragma           = 'no-store';
+      opts.headers['Cache-Control'] = 'no-store';
+    }
+
+    return opts;
+  };
+
+  /**
+   * Make a HTTP request as the user.
+   *
+   * @param {Object}   opts
+   * @param {Function} done
+   */
+  ClientOAuth2Token.prototype.request = function (opts, done) {
+    return this.client.client.request(this.sign(opts), done);
+  };
+
+  /**
+   * Refresh a user access token with the supplied token.
+   *
+   * @param {Function} done
+   */
+  ClientOAuth2Token.prototype.refresh = function (done) {
+    var self    = this;
+    var options = this.client.options;
+
+    if (!this.refreshToken) {
+      return done(new Error('No refresh token set'));
+    }
+
+    var authorization = btoa(options.clientId + ':' + options.clientSecret);
+
+    return this.client._request({
+      uri: options.accessTokenUri,
+      method: 'POST',
+      headers: {
+        'Accept':        'application/json, application/x-www-form-urlencoded',
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + authorization
+      },
+      body: uriEncode({
+        refresh_token: this.refreshToken,
+        grant_type:    'refresh_token'
+      })
+    }, function (err, data) {
+      // If an error exists or the data contains an error, return `done`.
+      if (err || (err = getAuthError(data))) {
+        return done(err);
+      }
+
+      // Update stored tokens on the current instance.
+      self.accessToken  = data.access_token;
+      self.refreshToken = data.refresh_token;
+
+      return done(null, self);
+    });
+  };
+
+  /**
+   * Check whether the token has expired.
+   *
+   * @return {Boolean}
+   */
+  ClientOAuth2Token.prototype.expired = function () {
+    if (this.expires) {
+      return Date.now() < this.expires.getTime();
+    }
+
+    return false;
+  };
+
+  /**
+   * Support resource owner password credentials OAuth 2.0 grant.
+   *
+   * Reference: http://tools.ietf.org/html/rfc6749#section-4.3
+   *
+   * @param {ClientOAuth2} client
+   */
+  function OwnerFlow (client) {
+    this.client = client;
+  }
+
+  /**
+   * Make a request on behalf of the user credentials to get an acces token.
+   *
+   * @param {String}   username
+   * @param {String}   password
+   * @param {Function} done
+   */
+  OwnerFlow.prototype.getToken = function (username, password, done) {
+    var self          = this;
+    var options       = this.client.options;
+    var authorization = btoa(options.clientId + ':' + options.clientSecret);
+
+    return this.client._request({
+      uri: options.accessTokenUri,
+      method: 'POST',
+      headers: {
+        'Accept':        'application/json, application/x-www-form-urlencoded',
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + authorization
+      },
+      body: uriEncode({
+        scope:      sanitizeScope(options.scopes),
+        username:   username,
+        password:   password,
+        grant_type: 'password'
+      })
+    }, function (err, data) {
+      // If an error exists or the data contains an error, return `done`.
+      if (err || (err = getAuthError(data))) {
+        return done(err);
+      }
+
+      return done(null, new ClientOAuth2Token(self, data));
+    });
+  };
+
+  /**
+   * Support implicit OAuth 2.0 grant.
+   *
+   * Reference: http://tools.ietf.org/html/rfc6749#section-4.2
+   *
+   * @param {ClientOAuth2} client
+   */
+  function TokenFlow (client) {
+    this.client = client;
+  }
+
+  /**
+   * Get the uri to redirect the user to for implicit authentication.
+   *
+   * @param  {Object} options
+   * @return {String}
+   */
+  TokenFlow.prototype.getUri = function (options) {
+    options = assign({}, this.client.options, options);
+
+    // Check the parameters have been set.
+    expects(options, [
+      'clientId',
+      'redirectUri',
+      'authorizationUri'
+    ]);
+
+    return options.authorizationUri + '?' + uriEncode({
+      state:         options.state,
+      scope:         sanitizeScope(options.scopes),
+      client_id:     options.clientId,
+      redirect_uri:  options.redirectUri,
+      response_type: 'token'
+    });
+  };
+
+  /**
+   * Get the user access token from the uri.
+   *
+   * @param {String}   uri
+   * @param {String}   [state]
+   * @param {Function} done
+   */
+  TokenFlow.prototype.getToken = function (uri, state, done) {
+    var options = this.client.options;
+    var err;
+
+    // State is an optional pass in.
+    if (typeof state === 'function') {
+      done  = state;
+      state = null;
+    }
+
+    // Make sure the uri matches our expected redirect uri.
+    if (uri.substr(0, options.redirectUri.length) !== options.redirectUri) {
+      return done(new Error('Invalid uri (should to match redirect): ' + uri));
+    }
+
+    var queryString    = uri.replace(/^[^\?]*|\#.*$/g, '').substr(1);
+    var fragmentString = uri.replace(/^[^\#]*/, '').substr(1);
+
+    // Check whether a query string is present in the uri.
+    if (!queryString && !fragmentString) {
+      return done(new Error('Unable to process uri: ' + uri));
+    }
+
+    // Merge the fragment with the the query string. This is because, at least,
+    // Instagram has a bug where the OAuth 2.0 state is being passed back as
+    // part of the query string instead of the fragment. For example:
+    // "?state=123#access_token=abc"
+    var data = assign(
+      queryString ? uriDecode(queryString) : {},
+      fragmentString ? uriDecode(fragmentString) : {}
+    );
+
+    // Check if the query string was populated with a known error.
+    if (err = getAuthError(data)) {
+      return done(err);
+    }
+
+    // Check whether the state is correct.
+    if (state && data.state !== state) {
+      return done(new Error('Invalid state:' + data.state));
+    }
+
+    // Initalize a new token and return.
+    return done(null, new ClientOAuth2Token(this, data));
+  };
+
+  /**
+   * Support client credentials OAuth 2.0 grant.
+   *
+   * Reference: http://tools.ietf.org/html/rfc6749#section-4.4
+   *
+   * @param {ClientOAuth2} client
+   */
+  function CredentialsFlow (client) {
+    this.client = client;
+  }
+
+  /**
+   * Request an access token using the client credentials.
+   *
+   * @param {Object}   [options]
+   * @param {Function} done
+   */
+  CredentialsFlow.prototype.getToken = function (options, done) {
+    var self = this;
+
+    // Allow the options argument to be omitted.
+    if (typeof options === 'function') {
+      done = options;
+      options = null;
+    }
+
+    options = assign({}, this.client.options, options);
+
+    expects(options, [
+      'clientId',
+      'clientSecret',
+      'accessTokenUri'
+    ]);
+
+    // Base64 encode the client id and secret for the Authorization header.
+    var authorization = btoa(options.clientId + ':' + options.clientSecret);
+
+    return this.client._request({
+      uri: options.accessTokenUri,
+      method: 'POST',
+      headers: {
+        'Accept':        'application/json, application/x-www-form-urlencoded',
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + authorization
+      },
+      body: uriEncode({
+        scope:      sanitizeScope(options.scopes),
+        grant_type: 'client_credentials'
+      })
+    }, function (err, data) {
+      // If an error exists or the data contains an error, return `done`.
+      if (err || (err = getAuthError(data))) {
+        return done(err);
+      }
+
+      return done(null, new ClientOAuth2Token(self, data));
+    });
+  };
+
+  /**
+   * Support authorization code OAuth 2.0 grant.
+   *
+   * Reference: http://tools.ietf.org/html/rfc6749#section-4.1
+   *
+   * @param {ClientOAuth2} client
+   */
+  function CodeFlow (client) {
+    this.client = client;
+  }
+
+  /**
+   * Generate the uri for doing the first redirect.
+   *
+   * @return {String}
+   */
+  CodeFlow.prototype.getUri = function (options) {
+    options = assign({}, this.client.options, options);
+
+    // Check the parameters have been set.
+    expects(options, [
+      'clientId',
+      'redirectUri',
+      'authorizationUri'
+    ]);
+
+    return options.authorizationUri + '?' + uriEncode({
+      state:         options.state,
+      scope:         sanitizeScope(options.scopes),
+      client_id:     options.clientId,
+      redirect_uri:  options.redirectUri,
+      response_type: 'code'
+    });
+  };
+
+  /**
+   * Get the code token from the redirected uri and make another request for
+   * the user access token.
+   *
+   * @param {String}   uri
+   * @param {String}   [state]
+   * @param {Function} done
+   */
+  CodeFlow.prototype.getToken = function (uri, state, done) {
+    var self    = this;
+    var options = this.client.options;
+    var err;
+
+    // State is an optional pass in.
+    if (typeof state === 'function') {
+      done  = state;
+      state = null;
+    }
+
+    expects(options, [
+      'clientId',
+      'clientSecret',
+      'redirectUri',
+      'accessTokenUri'
+    ]);
+
+    // Make sure the uri matches our expected redirect uri.
+    if (uri.substr(0, options.redirectUri.length) !== options.redirectUri) {
+      return done(new Error('Invalid uri (should to match redirect): ' + uri));
+    }
+
+    // Extract the query string from the url.
+    var queryString = uri.replace(/^[^\?]*|\#.*$/g, '').substr(1);
+
+    // Check whether a query string is present in the uri.
+    if (!queryString) {
+      return done(new Error('Unable to process uri: ' + uri));
+    }
+
+    var query = uriDecode(queryString);
+
+    // Check if the query string was populated with a known error.
+    if (err = getAuthError(query)) {
+      return done(err);
+    }
+
+    // Check whether the state is correct.
+    if (state && query.state !== state) {
+      return done(new Error('Invalid state:' + query.state));
+    }
+
+    // Check whether the response code is set.
+    if (!query.code) {
+      return done(new Error('Missing code, unable to request token'));
+    }
+
+    return this.client._request({
+      uri: options.accessTokenUri,
+      method: 'POST',
+      headers: {
+        'Accept':       'application/json, application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: uriEncode({
+        code:          query.code,
+        grant_type:    'authorization_code',
+        redirect_uri:  options.redirectUri,
+        client_id:     options.clientId,
+        client_secret: options.clientSecret
+      })
+    }, function (err, data, raw) {
+      // If an error exists or the data contains an error, return `done`.
+      if (err || (err = getAuthError(data))) {
+        return done(err, null, raw);
+      }
+
+      return done(null, new ClientOAuth2Token(self, data), raw);
+    });
+  };
+
+  /**
+   * Export the OAuth2 client for multiple environments.
+   */
+  if (typeof define === 'function' && define.amd) {
+    define([], function () {
+      return ClientOAuth2;
+    });
+  } else if (typeof exports === 'object') {
+    module.exports = ClientOAuth2;
+  } else {
+    root.ClientOAuth2 = ClientOAuth2;
+  }
+})(this);
+
+(function (root) {
+  /**
+   * Check if a value is empty.
+   *
+   * @param  {*}       value
+   * @return {Boolean}
+   */
+  var isEmpty = function (value) {
+    return value == null;
+  };
+
+  /**
+   * Convert a value into a boolean.
+   *
+   * @param  {String}  value
+   * @return {Boolean}
+   */
+  var toBoolean = function (value) {
+    return [0, false, '', '0', 'false'].indexOf(value) === -1;
+  };
+
+  /**
+   * Convert a value into a number. Non-number strings and infinite values will
+   * sanitize into `NaN`.
+   *
+   * @param  {String} value
+   * @return {Number}
+   */
+  var toNumber = function (value) {
+    return isFinite(value) ? Number(value) : null;
+  };
+
+  /**
+   * Convert a value into an integer. Use strict sanitization - if something is
+   * not an integer, return `NaN`.
+   *
+   * @param  {String} value
+   * @return {Number}
+   */
+  var toInteger = function (value) {
+    return value % 1 === 0 ? Number(value) : null;
+  };
+
+  /**
+   * Convert a value into a date.
+   *
+   * @param  {String} value
+   * @return {Date}
+   */
+  var toDate = function (value) {
+    return !isNaN(Date.parse(value)) ? new Date(value) : null;
+  };
+
+  /**
+   * Convert the schema config into a single sanitization function.
+   *
+   * @param  {Object}   configs
+   * @param  {Object}   rules
+   * @param  {Object}   types
+   * @return {Function}
+   */
+  var toSanitization = function (configs, rules, types) {
+    configs = Array.isArray(configs) ? configs : [configs];
+
+    // Map configurations into function sanitization chains.
+    var sanitizations = configs.map(function (config) {
+      var fns = [];
+
+      // Push type sanitization first.
+      if (typeof types[config.type] === 'function') {
+        fns.push(types[config.type]);
+      }
+
+      // Iterate over the schema configuration and push sanitization functions
+      // into the sanitization array.
+      Object.keys(config).filter(function (rule) {
+        return rule !== 'type' && rule !== 'repeat' && rule !== 'default';
+      }).forEach(function (rule) {
+        if (typeof rules[rule] === 'function') {
+          fns.push(rules[rule](config[rule], rule, config));
+        }
+      });
+
+      /**
+       * Sanitize a single value using the function chain. Breaks when any value
+       * returns an empty value (`null` or `undefined`).
+       *
+       * @param  {*}      value
+       * @param  {String} key
+       * @param  {Object} object
+       * @return {*}
+       */
+      var sanitize = function (value, key, object) {
+        // Iterate over each sanitization function and return a single value.
+        fns.every(function (fn) {
+          value = fn(value, key, object);
+
+          // Break when the value returns `null`.
+          return value != null;
+        });
+
+        return value;
+      };
+
+      /**
+       * Do the entire sanitization flow using the current config.
+       *
+       * @param  {*}      value
+       * @param  {String} key
+       * @param  {Object} object
+       * @return {*}
+       */
+      return function sanitization (value, key, object) {
+        // Immediately return empty values with attempting to sanitize.
+        if (isEmpty(value)) {
+          // Fallback to providing the default value instead.
+          if (config.default != null) {
+            return sanitization(config.default, key, object);
+          }
+
+          // Return an empty array for repeatable values.
+          return config.repeat && !config.required ? [] : value;
+        }
+
+        // Support repeated parameters as arrays.
+        if (config.repeat) {
+          // Turn the result into an array
+          if (!Array.isArray(value)) {
+            value = [value];
+          }
+
+          // Map every value to be sanitized into a new array.
+          value = value.map(function (value) {
+            return sanitize(value, key, object);
+          });
+
+          // If any of the values are empty, refuse the sanitization.
+          return value.some(isEmpty) ? null : value;
+        }
+
+        return sanitize(value, key, object);
+      };
+    });
+
+    /**
+     * Pass in a value to be sanitized.
+     *
+     * @param  {*}      value
+     * @param  {String} key
+     * @param  {Object} object
+     * @return {*}
+     */
+    return function (value, key, object) {
+      var result = value;
+
+      // Iterate over each sanitization until one is not empty.
+      sanitizations.some(function (sanitization) {
+        var sanitized = sanitization(value, key, object);
+
+        // If the value was accepted and sanitized, return it.
+        if (sanitized != null) {
+          // Assign the sanitized value to the result.
+          result = sanitized;
+
+          return true;
+        }
+
+        return false;
+      });
+
+      return result;
+    };
+  };
+
+  /**
+   * Every time the module is exported and executed, we return a new instance.
+   *
+   * @return {Function}
+   */
+  RAMLSanitize = function () {
+    /**
+     * Return a sanitization function based on the passed in schema.
+     *
+     * @param  {Object}   schema
+     * @return {Function}
+     */
+    var sanitize = function (schema) {
+      var sanitizations = {};
+
+      // Map each parameter in the schema to a validation function.
+      Object.keys(schema).forEach(function (param) {
+        var config = schema[param];
+        var types  = sanitize.TYPES;
+        var rules  = sanitize.RULES;
+
+        sanitizations[param] = toSanitization(config, rules, types);
+      });
+
+      /**
+       * Execute the returned function with a model to return a sanitized object.
+       *
+       * @param  {Object} model
+       * @return {Object}
+       */
+      return function (model) {
+        model = model || {};
+
+        // Create a new model instance to be sanitized without any additional
+        // properties or overrides occuring.
+        var sanitized = {};
+
+        // Iterate only the sanitized parameters to get a clean model.
+        Object.keys(sanitizations).forEach(function (param) {
+          var value    = model[param];
+          var sanitize = sanitizations[param];
+
+          // Ensure the value is a direct property on the model object before
+          // sanitizing. The keeps model handling in sync with expectations.
+          if (Object.prototype.hasOwnProperty.call(model, param)) {
+            sanitized[param] = sanitize(value, param, model);
+          }
+        });
+
+        return sanitized;
+      };
+    };
+
+    /**
+     * Provide sanitization based on types.
+     *
+     * @type {Object}
+     */
+    sanitize.TYPES = {
+      string:  String,
+      number:  toNumber,
+      integer: toInteger,
+      boolean: toBoolean,
+      date:    toDate
+    };
+
+    /**
+     * Provide sanitization based on rules.
+     *
+     * @type {Object}
+     */
+    sanitize.RULES = {};
+
+    return sanitize;
+  };
+
+  /**
+   * Export the raml-sanitize for multiple environments.
+   */
+  if (typeof define === 'function' && define.amd) {
+    define([], function () {
+      return RAMLSanitize;
+    });
+  } else if (typeof exports === 'object') {
+    module.exports = RAMLSanitize;
+  } else {
+    root.RAMLSanitize = RAMLSanitize;
+  }
+})(this);
+
+(function (root) {
+  /**
+   * `Object.prototype.toString` as a function.
+   *
+   * @type {Function}
+   */
+  var toString = Function.prototype.call.bind(Object.prototype.toString);
+
+  /**
+   * Check the value is a valid date.
+   *
+   * @param  {Date}    check
+   * @return {Boolean}
+   */
+  var isDate = function (check) {
+    return toString(check) === '[object Date]' && !isNaN(check.getTime());
+  };
+
+  /**
+   * Check if the value is a boolean.
+   *
+   * @param  {Boolean}  check
+   * @return {Boolean}
+   */
+  var isBoolean = function (check) {
+    return typeof check === 'boolean';
+  };
+
+  /**
+   * Check the value is a string.
+   *
+   * @param  {String}  check
+   * @return {Boolean}
+   */
+  var isString = function (check) {
+    return typeof check === 'string';
+  };
+
+  /**
+   * Check if the value is an integer.
+   *
+   * @param  {Number}  check
+   * @return {Boolean}
+   */
+  var isInteger = function (check) {
+    return typeof check === 'number' && check % 1 === 0;
+  };
+
+  /**
+   * Check if the value is a number.
+   *
+   * @param  {Number}  check
+   * @return {Boolean}
+   */
+  var isNumber = function (check) {
+    return typeof check === 'number' && isFinite(check);
+  };
+
+  /**
+   * Check a number is not smaller than the minimum.
+   *
+   * @param  {Number}   min
+   * @return {Function}
+   */
+  var isMinimum = function (min) {
+    return function (check) {
+      return check >= min;
+    };
+  };
+
+  /**
+   * Check a number doesn't exceed the maximum.
+   *
+   * @param  {Number}  max
+   * @return {Boolean}
+   */
+  var isMaximum = function (max) {
+    return function (check) {
+      return check <= max;
+    };
+  };
+
+  /**
+   * Check a string is not smaller than a minimum length.
+   *
+   * @param  {Number}  min
+   * @return {Boolean}
+   */
+  var isMinimumLength = function (min) {
+    return function (check) {
+      return check.length >= min;
+    };
+  };
+
+  /**
+   * Check a string does not exceed a maximum length.
+   *
+   * @param  {Number}  max
+   * @return {Boolean}
+   */
+  var isMaximumLength = function (max) {
+    return function (check) {
+      return check.length <= max;
+    };
+  };
+
+  /**
+   * Check a value is equal to anything in an array.
+   *
+   * @param  {Array}    values
+   * @return {Function}
+   */
+  var isEnum = function (values) {
+    return function (check) {
+      return values.indexOf(check) > -1;
+    };
+  };
+
+  /**
+   * Check if a pattern matches the value.
+   *
+   * @param  {(String|RegExp)} pattern
+   * @return {Function}
+   */
+  var isPattern = function (pattern) {
+    if (toString(pattern) !== '[object RegExp]') {
+      pattern = new RegExp(pattern);
+    }
+
+    return pattern.test.bind(pattern);
+  };
+
+  /**
+   * Convert arguments into an object.
+   *
+   * @param  {Boolean} valid
+   * @param  {String}  rule
+   * @param  {*}       value
+   * @param  {String}  key
+   * @return {Object}
+   */
+  var toValidationObject = function (valid, rule, value, key) {
+    return { valid: valid, rule: rule, value: value, key: key };
+  };
+
+  /**
+   * Convert a single config into a function.
+   *
+   * @param  {Object}   config
+   * @param  {Object}   rules
+   * @return {Function}
+   */
+  var toValidationFunction = function (config, rules) {
+    var fns = [];
+
+    // Iterate over all of the keys and dynamically push validation rules.
+    Object.keys(config).forEach(function (rule) {
+      if (rules.hasOwnProperty(rule)) {
+        fns.push([rule, rules[rule](config[rule], rule)]);
+      }
+    });
+
+    /**
+     * Run every validation that has been attached.
+     *
+     * @param  {String} value
+     * @param  {String} value
+     * @param  {Object} object
+     * @return {Object}
+     */
+    return function (value, key, object) {
+      // Run each of the validations returning early when something fails.
+      for (var i = 0; i < fns.length; i++) {
+        var valid = fns[i][1](value, key, object);
+
+        if (!valid) {
+          return toValidationObject(false, fns[i][0], value, key);
+        }
+      }
+
+      return toValidationObject(true, null, value, key);
+    };
+  };
+
+  /**
+   * Convert a rules object into a simple validation function.
+   *
+   * @param  {Object}   configs
+   * @param  {Object}   rules
+   * @param  {Object}   types
+   * @return {Function}
+   */
+  var toValidation = function (configs, rules, types) {
+    // Initialize the configs to an array if they aren't already.
+    configs = Array.isArray(configs) ? configs : [configs];
+
+    var isOptional        = !configs.length;
+    var simpleValidations = [];
+    var repeatValidations = [];
+
+    // Support multiple type validations.
+    configs.forEach(function (config) {
+      var validation = [config.type, toValidationFunction(config, rules)];
+
+      // Allow short-circuiting of non-required values.
+      if (!config.required) {
+        isOptional = true;
+      }
+
+      // Push validations into each stack depending on the "repeat".
+      if (config.repeat) {
+        repeatValidations.push(validation);
+      } else {
+        simpleValidations.push(validation);
+      }
+    });
+
+    /**
+     * Validate a value based on "type" and "repeat".
+     *
+     * @param  {*}      value
+     * @param  {String} key
+     * @param  {Object} object
+     * @return {Object}
+     */
+    return function (value, key, object) {
+      // Short-circuit validation if the value is `null`.
+      if (value == null) {
+        return toValidationObject(isOptional, 'required', value, key);
+      }
+
+      // Switch validation type depending on if the value is an array or not.
+      var isArray = Array.isArray(value);
+
+      // Select the validation stack to use based on the (repeated) value.
+      var values      = isArray ? value : [value];
+      var validations = isArray ? repeatValidations : simpleValidations;
+
+      // Set the initial response to be an error.
+      var response = toValidationObject(
+        false, validations.length ? 'type' : 'repeat', value, key
+      );
+
+      // Iterate over each value and test using type validation.
+      validations.some(function (validation) {
+        // Non-existant types should always be invalid.
+        if (!types.hasOwnProperty(validation[0])) {
+          return false;
+        }
+
+        // Check all the types match. If they don't, attempt another validation.
+        var isType = values.every(function (value) {
+          return types[validation[0]](value, key, object);
+        });
+
+        // Skip to the next check if not all types match.
+        if (!isType) {
+          return false;
+        }
+
+        // When every value is the correct type, run the validation on each value
+        // and break the loop if we get a failure.
+        values.every(function (value) {
+          return (response = validation[1](value, key, object)).valid;
+        });
+
+        // Always break the loop when the type was successful. If anything has
+        // failed, `response` will have been set to the invalid object.
+        return true;
+      });
+
+      return response;
+    };
+  };
+
+  /**
+   * Every time you require the module you're expected to call it as a function
+   * to create a new instance. This is to ensure two modules can't make competing
+   * changes with their own validation rules.
+   *
+   * @return {Function}
+   */
+  RAMLValidate = function () {
+    /**
+     * Return a validation function that validates a model based on the schema.
+     *
+     * @param  {Object}   schema
+     * @return {Function}
+     */
+    var validate = function (schema) {
+      var validations = {};
+
+      // Convert all parameters into validation functions.
+      Object.keys(schema).forEach(function (param) {
+        var config = schema[param];
+        var rules  = validate.RULES;
+        var types  = validate.TYPES;
+
+        validations[param] = toValidation(config, rules, types);
+      });
+
+      /**
+       * The function accepts an object to be validated. All rules are already
+       * precompiled.
+       *
+       * @param  {Object}  model
+       * @return {Boolean}
+       */
+      return function (model) {
+        model = model || {};
+
+        // Map all validations to their object and filter for failures.
+        var errors = Object.keys(validations).map(function (param) {
+          var value      = model[param];
+          var validation = validations[param];
+
+          // Return the validation result.
+          return validation(value, param, model);
+        }).filter(function (validation) {
+          return !validation.valid;
+        });
+
+        return {
+          valid:  errors.length === 0,
+          errors: errors
+        };
+      };
+    };
+
+    /**
+     * Provide validation of types.
+     *
+     * @type {Object}
+     */
+    validate.TYPES = {
+      date:    isDate,
+      number:  isNumber,
+      integer: isInteger,
+      boolean: isBoolean,
+      string:  isString
+    };
+
+    /**
+     * Provide overridable validation of parameters.
+     *
+     * @type {Object}
+     */
+    validate.RULES = {
+      minimum:   isMinimum,
+      maximum:   isMaximum,
+      minLength: isMinimumLength,
+      maxLength: isMaximumLength,
+      enum:      isEnum,
+      pattern:   isPattern
+    };
+
+    /**
+     * Return the validate function.
+     */
+    return validate;
+  };
+
+  /**
+   * Export the raml-validate for multiple environments.
+   */
+  if (typeof define === 'function' && define.amd) {
+    define([], function () {
+      return RAMLValidate;
+    });
+  } else if (typeof exports === 'object') {
+    module.exports = RAMLValidate;
+  } else {
+    root.RAMLValidate = RAMLValidate;
+  }
+})(this);
 
 angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
   'use strict';
