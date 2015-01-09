@@ -2097,6 +2097,7 @@ th {
 
 .raml-console-sidebar-subhead {
   margin: 0;
+  font-size: 13px;
 }
 
 .raml-console-sidebar-header + .raml-console-sidebar-subheader {
