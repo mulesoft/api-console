@@ -525,7 +525,7 @@
 
 .sidebar-action {
   margin-top: 12px;
-  padding: 10px 0 12px;
+  padding: 5px 0px;
   border: 1px solid rgba(0,0,0,0.1);
   border-bottom-color: rgba(0,0,0,0.5);
   border-radius: 3px;
@@ -539,8 +539,6 @@
   transition: 0.2s ease background-color;
   -webkit-font-smoothing: antialiased;
 
-  height: 30px;
-  padding-top: 4px;
   font-size: 15px;
 }
 
@@ -680,7 +678,7 @@
 
 .sidebar-action-prefill {
   text-decoration: none;
-  padding: 5px 10px 6px 10px;
+  padding: 5px 10px;
   border: 1px solid $color-toggle-border;
   border-radius: 4px;
   background-color: $color-toggle-bg;
