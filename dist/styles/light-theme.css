@@ -1277,6 +1277,7 @@ th {
   color: #585961;
   font-size: 13px;
   margin-bottom: 5px;
+  z-index: 1;
 }
 
 .raml-console-resource-proxy a {
@@ -2652,7 +2653,7 @@ th {
   padding: 0 !important;
 }
 
-.raml-console-sidebar-response-body .raml-console--code-mirror {
+.raml-console-sidebar-response-body .CodeMirror {
   height: 100% !important;
 }
 
@@ -2660,7 +2661,7 @@ th {
   padding: 0 !important;
 }
 
-.raml-console-sidebar-request-body .raml-console--code-mirror {
+.raml-console-sidebar-request-body .CodeMirror {
   height: 100% !important;
 }
 
@@ -2948,7 +2949,7 @@ span.raml-console-side-bar-required-field {
 
 /*spinner request*/
 
-@-webkit-keyframes raml-console-spinner-request {
+@-webkit-keyframes raml-console-spinner_request {
   0% {
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
@@ -2966,7 +2967,7 @@ span.raml-console-side-bar-required-field {
   }
 }
 
-@-moz-keyframes raml-console-spinner-request {
+@-moz-keyframes raml-console-spinner_request {
   0% {
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
@@ -2984,7 +2985,7 @@ span.raml-console-side-bar-required-field {
   }
 }
 
-@-o-keyframes raml-console-spinner-request {
+@-o-keyframes raml-console-spinner_request {
   0% {
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
@@ -3224,6 +3225,7 @@ span.raml-console-side-bar-required-field {
 
 .raml-console-documentation-header {
   background: #e0e0e0;
+  position: relative;
 }
 
 .raml-console-root-documentation {
@@ -3339,7 +3341,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 }
 
 .raml-console-hljs-comment,
-.raml-console-hljs-template-comment,
+.raml-console-hljs-template_comment,
 .raml-console-diff .raml-console-hljs-header,
 .raml-console-hljs-doctype,
 .raml-console-hljs-pi,
@@ -3373,7 +3375,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .raml-console-tex .raml-console-hljs-formula,
 .raml-console-hljs-regexp,
 .raml-console-hljs-hexcolor,
-.raml-console-hljs-link-url {
+.raml-console-hljs-link_url {
   color: #2aa198;
 }
 
@@ -3383,7 +3385,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .raml-console-hljs-localvars,
 .raml-console-hljs-chunk,
 .raml-console-hljs-decorator,
-.raml-console-hljs-built-in,
+.raml-console-hljs-built_in,
 .raml-console-hljs-identifier,
 .raml-console-vhdl .raml-console-hljs-literal,
 .raml-console-hljs-id,
@@ -3401,7 +3403,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .raml-console-hljs-class .raml-console-hljs-title,
 .raml-console-hljs-parent,
 .raml-console-hljs-type,
-.raml-console-hljs-link-reference {
+.raml-console-hljs-link_reference {
   color: #b58900;
 }
 
@@ -3415,7 +3417,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .raml-console-hljs-symbol .raml-console-hljs-string,
 .raml-console-diff .raml-console-hljs-change,
 .raml-console-hljs-special,
-.raml-console-hljs-attr-selector,
+.raml-console-hljs-attr_selector,
 .raml-console-hljs-subst,
 .raml-console-hljs-cdata,
 .raml-console-css .raml-console-hljs-pseudo,
@@ -3432,7 +3434,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 
 /* Solarized Violet */
 
-.raml-console-hljs-link-label {
+.raml-console-hljs-link_label {
   color: #6c71c4;
 }
 
