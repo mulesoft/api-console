@@ -3,22 +3,6 @@
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
-  grunt.registerTask('default', ['build', 'connect:livereload', 'open:server', 'watch']);
-  grunt.registerTask('regression', ['build', 'protractor:local']);
-  grunt.registerTask('build', [
-    'jshint',
-    'clean',
-    'ngtemplates',
-    'concat:app',
-    'concat:vendor',
-    'concat:index',
-    'copy:assets',
-    'sass:build',
-    'css_prefix:prefix',
-    'concat:darkTheme',
-    'concat:lightTheme'
-  ]);
-
   grunt.initConfig({
     tempdir: '.tmp',
     distdir: 'dist',
@@ -61,19 +45,14 @@ module.exports = function (grunt) {
 
       livereload: {
         options: {
+        livereload:   true,
+        open:         true,
           middleware: function (connect) {
             return [
-              require('connect-livereload')(),
               connect.static('dist')
             ];
           }
         }
-      }
-    },
-
-    open: {
-      server: {
-        url: 'http://localhost:<%= connect.options.port %>'
       }
     },
 
@@ -129,6 +108,12 @@ module.exports = function (grunt) {
       },
 
       darkTheme: {
+        options: {
+          process: function process(value) {
+            return value.replace(/\.raml-console-CodeMirror/g, '.CodeMirror');
+          }
+        },
+
         dest: '<%= distdir %>/styles/<%= pkg.name %>-dark-theme.css',
         src:  [
           'src/assets/styles/vendor/codemirror.css',
@@ -140,6 +125,12 @@ module.exports = function (grunt) {
       },
 
       lightTheme: {
+        options: {
+          process: function process(value) {
+            return value.replace(/\.raml-console-CodeMirror/g, '.CodeMirror');
+          }
+        },
+
         dest: '<%= distdir %>/styles/<%= pkg.name %>-light-theme.css',
         src:  [
           'src/assets/styles/vendor/codemirror.css',
@@ -156,6 +147,21 @@ module.exports = function (grunt) {
       }
     },
 
+    concurrent: {
+      build: [
+        'build:scripts',
+        'concat:vendor',
+        'concat:index',
+        'copy:assets',
+        'build:styles'
+      ],
+
+      themes: [
+        'concat:darkTheme',
+        'concat:lightTheme'
+      ]
+    },
+
     sass: {
       build: {
         options: {
@@ -168,6 +174,7 @@ module.exports = function (grunt) {
           '<%= distdir %>/styles/<%= pkg.name %>-dark-theme.css':  'src/scss/dark-theme.scss'
         }
       },
+
       min: {
         options: {
           sourcemap: 'none',
@@ -182,16 +189,43 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      build: {
+      dist: {
         options: {
           livereload: true
         },
-        tasks: ['build'],
+
+        tasks: [],
         files: [
-          '<%= src.js %>',
-          '<%= src.scssWatch %>',
-          'src/app/**/*.tpl.html',
-          '<%= src.html %>'
+          '<%= distdir %>/**/*'
+        ]
+      },
+
+      scripts: {
+        tasks: ['build:scripts'],
+        files: [
+          '<%= ngtemplates.ramlConsole.src %>',
+          '<%= src.js %>'
+        ]
+      },
+
+      vendor: {
+        tasks: ['concat:scripts'],
+        files: [
+          '<%= concat.vendor.src %>'
+        ]
+      },
+
+      index: {
+        tasks: ['concat:index'],
+        files: [
+          '<%= concat.index.src %>'
+        ]
+      },
+
+      styles: {
+        tasks: ['build:styles'],
+        files: [
+          'src/scss/**/*.scss'
         ]
       }
     },
@@ -200,7 +234,8 @@ module.exports = function (grunt) {
     css_prefix: {
       prefix: {
         options: {
-          prefix: 'raml-console-'
+          prefix:      'raml-console-',
+          processName: 'trim'
         },
 
         files: {
@@ -213,7 +248,7 @@ module.exports = function (grunt) {
 
     jshint: {
       options: {
-        jshintrc: '.jshintrc'
+        jshintrc: true
       },
 
       files: [
@@ -243,4 +278,32 @@ module.exports = function (grunt) {
       }
     }
   });
+
+  grunt.registerTask('default', [
+    'build',
+    'connect:livereload',
+    'watch'
+  ]);
+
+  grunt.registerTask('build', [
+    'jshint',
+    'clean',
+    'concurrent:build'
+  ]);
+
+  grunt.registerTask('build:scripts', [
+    'ngtemplates',
+    'concat:app'
+  ]);
+
+  grunt.registerTask('build:styles', [
+    'sass:build',
+    'css_prefix:prefix',
+    'concurrent:themes'
+  ]);
+
+  grunt.registerTask('regression', [
+    'build',
+    'protractor:local'
+  ]);
 };
