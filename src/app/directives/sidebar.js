@@ -323,7 +323,6 @@
                 return;
               }
 
-              /* jshint es5: true */
               authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
               authStrategy.authenticate().then(function(token) {
                 token.sign(request);
@@ -335,7 +334,6 @@
               });
 
               $scope.requestOptions = request.toOptions();
-              /* jshint es5: false */
             } catch (e) {
               // custom strategies aren't supported yet.
             }
