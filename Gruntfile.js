@@ -29,7 +29,11 @@ module.exports = function (grunt) {
         'bower_components/angular/angular.js',
         'bower_components/angular-ui-codemirror/ui-codemirror.js',
         'bower_components/angular-marked/angular-marked.js',
-        'bower_components/angular-highlightjs/angular-highlightjs.js'
+        'bower_components/angular-highlightjs/angular-highlightjs.js',
+        'bower_components/jszip/jszip.js',
+        'bower_components/slug/slug.js',
+        'bower_components/FileSaver/FileSaver.js',
+        'bower_components/raml-client-generator/dist/raml-client-generator.js'
       ],
       html: ['src/index.html'],
       scss: ['src/scss/light-theme.scss', 'src/scss/dark-theme.scss'],
