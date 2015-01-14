@@ -89,6 +89,10 @@ RAML.Inspector = (function() {
   };
 
   exports.create = function(api) {
+    // Perform deep copy to avoid mutating object.
+    // TODO: Audit code and only use parts of object that are required.
+    api = jQuery.extend(true, {}, api);
+
     if (api.baseUri) {
       api.baseUri = RAML.Client.createBaseUri(api);
     }

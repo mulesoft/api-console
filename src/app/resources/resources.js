@@ -87,8 +87,9 @@
       },
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {
-          $scope.raml = RAML.Inspector.create(raml);
-          $scope.loaded = true;
+          $scope.raml    = RAML.Inspector.create(raml);
+          $scope.rawRaml = raml;
+          $scope.loaded  = true;
         });
       }
     };
