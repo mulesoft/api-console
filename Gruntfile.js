@@ -231,6 +231,14 @@ module.exports = function (grunt) {
         files: [
           'src/scss/**/*.scss'
         ]
+      },
+
+      assets: {
+        tasks: ['copy:assets'],
+        files: [
+          'src/assets/**/*',
+          '!src/assets/styles/**/*'
+        ]
       }
     },
 
