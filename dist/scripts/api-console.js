@@ -2317,6 +2317,7 @@
       if (name.toLowerCase() === CONTENT_TYPE) {
         if (value === FORM_DATA) {
           isMultipartRequest = true;
+          options.contentType = false;
           return;
         } else {
           isMultipartRequest = false;
@@ -2330,7 +2331,6 @@
     this.headers = function(headers) {
       options.headers = {};
       isMultipartRequest = false;
-      options.contentType = false;
 
       for (var name in headers) {
         this.header(name, headers[name]);
@@ -2387,8 +2387,8 @@
   };
 
   RAML.Client.Request = {
-    create: function(uri, method) {
-      return new RequestDsl({ url: uri, uri: uri, method: method.toUpperCase(), contentType: false });
+    create: function(url, method) {
+      return new RequestDsl({ url: url, type: method });
     }
   };
 })();
@@ -2401,19 +2401,27 @@
   var RFC1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} GMT$/;
 
   function isEmpty(value) {
-    return value === null || value === undefined || value === '';
+    return value == null || value === '';
   }
 
   var VALIDATIONS = {
-    required: function(value) { return !isEmpty(value); },
-    boolean: function(value) { return isEmpty(value) || value === 'true' || value === 'false'; },
+    required: function(value) {
+      return !isEmpty(value);
+    },
+    boolean: function(value) {
+      return isEmpty(value) || value === 'true' || value === 'false';
+    },
     enum: function(enumeration) {
       return function(value) {
-        return isEmpty(value) || enumeration.some(function(item) { return item === value; });
+        return isEmpty(value) || enumeration.indexOf(value) > -1;
       };
     },
-    integer: function(value) { return isEmpty(value) || !!/^-?(0|[1-9][0-9]*)$/.exec(value); },
-    number: function(value) { return isEmpty(value) || !!/^-?(0|[1-9][0-9]*)(\.[0-9]*)?([eE][-+]?[0-9]+)?$/.exec(value); },
+    integer: function(value) {
+      return isEmpty(value) || /^-?(0|[1-9][0-9]*)$/.test(value);
+    },
+    number: function(value) {
+      return isEmpty(value) || /^-?(0|[1-9][0-9]*)(\.[0-9]*)?([eE][-+]?[0-9]+)?$/.test(value);
+    },
     minimum: function(minimum) {
       return function(value) {
         return isEmpty(value) || value >= minimum;
@@ -2438,10 +2446,12 @@
       var regex = new RegExp(pattern);
 
       return function(value) {
-        return isEmpty(value) || !!regex.exec(value);
+        return isEmpty(value) || regex.test(value);
       };
     },
-    date: function(value) { return isEmpty(value) || !!RFC1123.exec(value); }
+    date: function(value) {
+      return isEmpty(value) || RFC1123.test(value);
+    }
   };
 
   function baseValidations(definition) {
@@ -2455,11 +2465,11 @@
   }
 
   function numberValidations(validations, definition) {
-    if (definition.minimum) {
+    if (definition.minimum != null) {
       validations.minimum = VALIDATIONS.minimum(definition.minimum);
     }
 
-    if (definition.maximum) {
+    if (definition.maximum != null) {
       validations.maximum = VALIDATIONS.maximum(definition.maximum);
     }
   }
@@ -2473,18 +2483,23 @@
   var VALIDATIONS_FOR_TYPE = {
     string: function(definition) {
       var validations = baseValidations(definition);
-      if (definition.enum) {
+
+      if (Array.isArray(definition.enum)) {
         validations.enum = VALIDATIONS.enum(definition.enum);
       }
-      if (definition.minLength) {
+
+      if (definition.minLength != null) {
         validations.minLength = VALIDATIONS.minLength(definition.minLength);
       }
-      if (definition.maxLength) {
+
+      if (definition.maxLength != null) {
         validations.maxLength = VALIDATIONS.maxLength(definition.maxLength);
       }
+
       if (definition.pattern) {
         validations.pattern = VALIDATIONS.pattern(definition.pattern);
       }
+
       return validations;
     },
 
