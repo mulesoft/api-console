@@ -1699,7 +1699,39 @@ th {
   color: #fff;
 }
 
-.raml-console-tab.raml-console-is-active .raml-console-tab-box {
+.raml-console-tab.raml-console-is-active .raml-console-tab-get::before {
+  background: #18191d;
+}
+
+.raml-console-tab.raml-console-is-active .raml-console-tab-post::before {
+  background: #18191d;
+}
+
+.raml-console-tab.raml-console-is-active .raml-console-tab-put::before {
+  background: #18191d;
+}
+
+.raml-console-tab.raml-console-is-active .raml-console-tab-patch::before {
+  background: #18191d;
+}
+
+.raml-console-tab.raml-console-is-active .raml-console-tab-delete::before {
+  background: #18191d;
+}
+
+.raml-console-tab.raml-console-is-active .raml-console-tab-trace::before {
+  background: #18191d;
+}
+
+.raml-console-tab.raml-console-is-active .raml-console-tab-options::before {
+  background: #18191d;
+}
+
+.raml-console-tab.raml-console-is-active .raml-console-tab-head::before {
+  background: #18191d;
+}
+
+.raml-console-tab.raml-console-is-active .raml-console-tab-connect::before {
   background: #18191d;
 }
 

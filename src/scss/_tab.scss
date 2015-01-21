@@ -278,6 +278,38 @@
   color: $color-console-tab-active;
 }
 
-.tab.is-active .tab-box {
+.tab.is-active .tab-get::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-post::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-put::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-patch::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-delete::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-trace::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-options::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-head::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-connect::before {
   background: $color-console-tab-active-bg;
 }
