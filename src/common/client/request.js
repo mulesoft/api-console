@@ -86,18 +86,16 @@
         }
       }
 
-      o.baseUrl = options.uri;
+      o.baseUrl = options.url;
 
       if (!RAML.Utils.isEmpty(queryParams)) {
-        var separator = (options.uri.match('\\?') ? '&' : '?');
+        var separator = (options.url.match('\\?') ? '&' : '?');
 
-        o.baseUrl = options.uri + separator;
-        o.uri = options.uri + separator + jQuery.param(queryParams, true);
+        o.baseUrl = options.url + separator;
         o.url = options.url + separator + jQuery.param(queryParams, true);
       }
 
       if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
-        o.uri = RAML.Settings.proxy + o.uri;
         o.url = RAML.Settings.proxy + o.url;
       }
 
