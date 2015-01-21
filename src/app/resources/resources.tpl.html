@@ -43,7 +43,9 @@
             <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': collapsed}" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
 
             <h2 class="raml-console-resource-heading raml-console-resource-heading-large">
-              <span class="raml-console-resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>
+              <a class="raml-console-resource-path-active" ng-repeat='segment in resource.pathSegments' ng-if="resourceGroup.length > 1" ng-click="toggleInverted($event)">{{segment.toString()}}</a>
+
+              <span class="raml-console-resource-path-active" ng-repeat='segment in resource.pathSegments' ng-if="resourceGroup.length <= 1">{{segment.toString()}}</span>
             </h2>
 
             <resource-type></resource-type>

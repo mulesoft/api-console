@@ -58,6 +58,29 @@
           $this.toggleClass('raml-console-is-active');
         };
 
+        $scope.toggleInverted = function ($event) {
+          var $section    = jQuery($event.currentTarget)
+            .closest('.raml-console-resource-list-item')
+            .find('.raml-console-resource-list');
+
+          var $this = $section
+            .closest('.raml-console-resource-list-item')
+            .find('.raml-console-resource-root-toggle');
+
+          if ($section.hasClass('raml-console-is-collapsed')) {
+            $section.velocity('slideDown', {
+              duration: 200
+            });
+          } else {
+            $section.velocity('slideUp', {
+              duration: 200
+            });
+          }
+
+          $section.toggleClass('raml-console-is-collapsed');
+          $this.toggleClass('raml-console-is-active');
+        };
+
         $scope.collapseAll = function ($event) {
           var $this = jQuery($event.currentTarget);
 
