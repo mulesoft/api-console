@@ -115,8 +115,8 @@
               <div class="raml-console-sidebar-request-metadata" ng-class="{'raml-console-is-active':showRequestMetadata}">
 
                 <div class="raml-console-sidebar-row">
-                  <div ng-if="requestOptions.uri">
-                    <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Request URI</h3>
+                  <div ng-if="requestOptions.url">
+                    <h3 class="raml-console-sidebar-response-head raml-console-sidebar-response-head-pre">Request URL</h3>
                     <div class="raml-console-sidebar-response-item">
                       <p class="raml-console-sidebar-response-metadata raml-console-sidebar-request-url">{{requestOptions.baseUrl}}<span ng-repeat="(key, value) in parameters"><span ng-hide="$first">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>
                       </p>
