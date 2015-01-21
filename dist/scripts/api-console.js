@@ -936,8 +936,12 @@
           $location.hash(hash);
           $anchorScroll();
 
-          var lines = jqXhr.responseText.split('\n').length;
-          var editorHeight = lines > 100 ? 2000 : 25*lines;
+          // If the response fails because of CORS, responseText is null
+          var editorHeight = 50;
+          if (jqXhr.responseText) {
+            var lines = jqXhr.responseText.split('\n').length;
+            var editorHeight = lines > 100 ? 2000 : 25*lines;
+          }
 
           $scope.editorStyle = {
             height: editorHeight + 'px'
@@ -1246,6 +1250,7 @@
           var $panelContent = $panel.find('.raml-console-resource-panel-primary');
           var $sidebar      = $panel.find('.raml-console-sidebar');
           var animation     = 430;
+          var speed         = 200;
 
           if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
             animation = 0;
@@ -1253,12 +1258,13 @@
 
           if ($scope.singleView) {
             $panel.toggleClass('raml-console-has-sidebar-fullscreen');
+            speed = 0;
           }
 
           $sidebar.velocity(
             { width: animation },
             {
-              duration: 200,
+              duration: speed,
               complete: completeAnimation
             }
           );
@@ -1266,7 +1272,7 @@
           $panelContent.velocity(
             { 'padding-right': animation },
             {
-              duration: 200,
+              duration: speed,
               complete: completeAnimation
             }
           );
@@ -1510,6 +1516,29 @@
           var $section = $this
             .closest('.raml-console-resource-list-item')
             .find('.raml-console-resource-list');
+
+          if ($section.hasClass('raml-console-is-collapsed')) {
+            $section.velocity('slideDown', {
+              duration: 200
+            });
+          } else {
+            $section.velocity('slideUp', {
+              duration: 200
+            });
+          }
+
+          $section.toggleClass('raml-console-is-collapsed');
+          $this.toggleClass('raml-console-is-active');
+        };
+
+        $scope.toggleInverted = function ($event) {
+          var $section    = jQuery($event.currentTarget)
+            .closest('.raml-console-resource-list-item')
+            .find('.raml-console-resource-list');
+
+          var $this = $section
+            .closest('.raml-console-resource-list-item')
+            .find('.raml-console-resource-root-toggle');
 
           if ($section.hasClass('raml-console-is-collapsed')) {
             $section.velocity('slideDown', {
@@ -5025,7 +5054,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/resource-panel.tpl.html',
-    "<div class=\"raml-console-resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'raml-console-has-sidebar-fullscreen': singleView }\">\n" +
+    "<div class=\"raml-console-resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'raml-console-has-sidebar-collapsed': singleView }\">\n" +
     "  <div class=\"raml-console-resource-panel-wrapper\">\n" +
     "    <documentation></documentation>\n" +
     "\n" +
@@ -5114,7 +5143,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/sidebar.tpl.html',
-    "  <form name=\"form\" class=\"raml-console-sidebar\" novalidate ng-class=\"{ 'raml-console-is-fullscreen': singleView }\">\n" +
+    "  <form name=\"form\" class=\"raml-console-sidebar\" novalidate ng-class=\"{ 'raml-console-is-collapsed': singleView }\">\n" +
     "    <div class=\"raml-console-sidebar-flex-wrapper\">\n" +
     "      <div class=\"raml-console-sidebar-content\">\n" +
     "        <header class=\"raml-console-sidebar-row raml-console-sidebar-header\">\n" +
@@ -5360,7 +5389,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': collapsed}\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
     "\n" +
     "            <h2 class=\"raml-console-resource-heading raml-console-resource-heading-large\">\n" +
-    "              <span class=\"raml-console-resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</span>\n" +
+    "              <a class=\"raml-console-resource-path-active\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length > 1\" ng-click=\"toggleInverted($event)\">{{segment.toString()}}</a>\n" +
+    "\n" +
+    "              <span class=\"raml-console-resource-path-active\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length <= 1\">{{segment.toString()}}</span>\n" +
     "            </h2>\n" +
     "\n" +
     "            <resource-type></resource-type>\n" +

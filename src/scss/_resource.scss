@@ -316,6 +316,14 @@
   }
 }
 
+span.resource-path-active {
+  cursor: default;
+}
+
+a.resource-path-active {
+  cursor: pointer;
+}
+
 .resource-heading {
   // font-family: 'Source Code Pro';
   display: inline-block;
@@ -327,10 +335,6 @@
 
   .resource:not(.is-active) &:hover {
     background-image: linear-gradient(to top, rgba(255,255,255,0) 1px, #999 2px, rgba(255,255,255,0) 1px);
-  }
-
-  .resource &:hover {
-    cursor: pointer;
   }
 
   @media only screen and (min-width: $medium-screen) {

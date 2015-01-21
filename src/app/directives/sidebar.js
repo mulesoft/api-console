@@ -80,8 +80,12 @@
           $location.hash(hash);
           $anchorScroll();
 
-          var lines = jqXhr.responseText.split('\n').length;
-          var editorHeight = lines > 100 ? 2000 : 25*lines;
+          // If the response fails because of CORS, responseText is null
+          var editorHeight = 50;
+          if (jqXhr.responseText) {
+            var lines = jqXhr.responseText.split('\n').length;
+            var editorHeight = lines > 100 ? 2000 : 25*lines;
+          }
 
           $scope.editorStyle = {
             height: editorHeight + 'px'
@@ -390,6 +394,7 @@
           var $panelContent = $panel.find('.raml-console-resource-panel-primary');
           var $sidebar      = $panel.find('.raml-console-sidebar');
           var animation     = 430;
+          var speed         = 200;
 
           if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
             animation = 0;
@@ -397,12 +402,13 @@
 
           if ($scope.singleView) {
             $panel.toggleClass('raml-console-has-sidebar-fullscreen');
+            speed = 0;
           }
 
           $sidebar.velocity(
             { width: animation },
             {
-              duration: 200,
+              duration: speed,
               complete: completeAnimation
             }
           );
@@ -410,7 +416,7 @@
           $panelContent.velocity(
             { 'padding-right': animation },
             {
-              duration: 200,
+              duration: speed,
               complete: completeAnimation
             }
           );
