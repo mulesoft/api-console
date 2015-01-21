@@ -938,9 +938,10 @@
 
           // If the response fails because of CORS, responseText is null
           var editorHeight = 50;
+
           if (jqXhr.responseText) {
             var lines = jqXhr.responseText.split('\n').length;
-            var editorHeight = lines > 100 ? 2000 : 25*lines;
+            editorHeight = lines > 100 ? 2000 : 25*lines;
           }
 
           $scope.editorStyle = {
@@ -4907,8 +4908,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/method-list.tpl.html',
     "<div class=\"raml-console-tab-list\">\n" +
     "  <div class=\"raml-console-tab\" ng-repeat=\"method in resource.methods\" ng-click=\"showResource($event, $index)\">\n" +
-    "    <span class=\"raml-console-tab-label\">{{method.method.toLocaleUpperCase()}}</span>\n" +
-    "    <div class=\"raml-console-tab-box raml-console-tab-{{method.method}}\"></div>\n" +
+    "    <span class=\"raml-console-tab-label raml-console-tab-{{method.method}}\">{{method.method.toLocaleUpperCase()}}</span>\n" +
     "  </div>\n" +
     "</div>\n"
   );

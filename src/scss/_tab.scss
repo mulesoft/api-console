@@ -89,77 +89,185 @@
   }
 }
 
-.tab-get {
+.tab-get::before {
   background: $color-console-tab-get;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -40px;
+  z-index: -1;
+  top: 0px;
 }
 
-.tab-put {
+.tab-put::before {
   background: $color-console-tab-put;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -40px;
+  z-index: -1;
+  top: 0px;
 }
 
-.tab-delete {
+.tab-delete::before {
   background: $color-console-tab-delete;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -28px;
+  z-index: -1;
+  top: 0px;
 }
 
-.tab-post {
+.tab-post::before {
   background: $color-console-tab-post;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -36px;
+  z-index: -1;
+  top: 0px;
 }
 
-.tab-patch {
+.tab-patch::before {
   background: $color-console-tab-patch;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -32px;
+  z-index: -1;
+  top: 0px;
 }
 
-.tab-connect {
+.tab-connect::before {
   background: $color-console-tab-connect;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -19px;
+  z-index: -1;
+  top: 0px;
 }
 
-.tab-head {
+.tab-head::before {
   background: $color-console-tab-head;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -34px;
+  z-index: -1;
+  top: 0px;
 }
 
-.tab-options {
+.tab-options::before {
   background: $color-console-tab-options;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -21px;
+  z-index: -1;
+  top: 0px;
 }
 
-.tab-trace {
+.tab-trace::before {
   background: $color-console-tab-trace;
+  content: '';
+  height: 31px;
+  border-radius: 4px;
+  margin: 0 10px 0;
+  -webkit-transform: perspective(45px) rotateX(30deg);
+  -moz-transform: perspective(45px) rotateX(30deg);
+  -ms-transform: perspective(45px) rotateX(30deg);
+  width: 108px;
+  position: absolute;
+  margin-left: -31px;
+  z-index: -1;
+  top: 0px;
 }
 
 .tab:hover,
 .resource:not(.is-active) .tab.is-hovered {
-  .tab-get {
+  .tab-get::before {
     background: $color-console-tab-get-hover;
   }
 
-  .tab-put {
+  .tab-put::before {
     background: $color-console-tab-put-hover;
   }
 
-  .tab-delete {
+  .tab-delete::before {
     background: $color-console-tab-delete-hover;
   }
 
-  .tab-post {
+  .tab-post::before {
     background: $color-console-tab-post-hover;
   }
 
-  .tab-patch {
+  .tab-patch::before {
     background: $color-console-tab-patch-hover;
   }
 
-  .tab-connect {
+  .tab-connect::before {
     background: $color-console-tab-connect-hover;
   }
 
-  .tab-head {
+  .tab-head::before {
     background: $color-console-tab-head-hover;
   }
 
-  .tab-options {
+  .tab-options::before {
     background: $color-console-tab-options-hover;
   }
 
-  .tab-trace {
+  .tab-trace::before {
     background: $color-console-tab-trace-hover;
   }
 }
@@ -170,6 +278,38 @@
   color: $color-console-tab-active;
 }
 
-.tab.is-active .tab-box {
+.tab.is-active .tab-get::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-post::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-put::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-patch::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-delete::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-trace::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-options::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-head::before {
+  background: $color-console-tab-active-bg;
+}
+
+.tab.is-active .tab-connect::before {
   background: $color-console-tab-active-bg;
 }
