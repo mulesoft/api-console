@@ -1,5 +1,13 @@
 /* Resource List */
 
+ol.resources-container-no-title {
+  margin-top: 35px;
+}
+
+ol.resources-container {
+  margin-top: 0px;
+}
+
 .resource-response-jump {
   margin-top: 50px;
   position: absolute;
@@ -83,7 +91,9 @@
 }
 
 .resource-list {
-  margin: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
   padding: 0;
 
   list-style: none;
