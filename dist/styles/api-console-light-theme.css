@@ -1236,6 +1236,7 @@ th {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 10px;
 }
 
 .raml-console-meta-button-container {
