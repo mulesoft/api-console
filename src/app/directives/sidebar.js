@@ -438,6 +438,12 @@
             $scope.showRequestMetadata = true;
           }
         };
+
+        $scope.showResponseMetadata = true;
+
+        $scope.toggleResponseMetadata = function () {
+          $scope.showResponseMetadata = !$scope.showResponseMetadata;
+        };
       }
     };
   };
