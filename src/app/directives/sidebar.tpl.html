@@ -151,10 +151,14 @@
 
             <section class="raml-console-side-bar-try-it-description">
               <header class="raml-console-sidebar-row raml-console-sidebar-header">
-                <h3 class="raml-console-sidebar-head">Response</h3>
+                <h3 class="raml-console-sidebar-head">
+                  <button ng-class="{'raml-console-is-open':showResponseMetadata, 'raml-console-is-collapsed':!showResponseMetadata}" class="raml-console-sidebar-expand-btn" ng-click="toggleResponseMetadata()">
+                    Response
+                  </button>
+                </h3>
               </header>
 
-              <div class="raml-console-sidebar-row sidebar-response" ng-class="{'raml-console-is-active':requestEnd}">
+              <div class="raml-console-sidebar-row raml-console-sidebar-response" ng-class="{'raml-console-is-active':showResponseMetadata}">
                 <h3 class="raml-console-sidebar-response-head">Status</h3>
                 <p class="raml-console-sidebar-response-item">{{response.status}}</p>
 

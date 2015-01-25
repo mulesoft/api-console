@@ -13,6 +13,10 @@
 
         $scope.currentStatusCode = '200';
 
+        if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
+          $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
+        }
+
         function beautify(body, contentType) {
           if(contentType.indexOf('json')) {
             body = vkbeautify.json(body, 2);

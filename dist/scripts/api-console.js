@@ -118,6 +118,10 @@
 
         $scope.currentStatusCode = '200';
 
+        if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
+          $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
+        }
+
         function beautify(body, contentType) {
           if(contentType.indexOf('json')) {
             body = vkbeautify.json(body, 2);
@@ -342,7 +346,7 @@
 
           if (responses) {
             Object.keys(responses).map(function (key) {
-              if(typeof responses[key].body !== 'undefined') {
+              if(responses[key] && typeof responses[key].body !== 'undefined') {
                 responseInfo[key] = {};
 
                 Object.keys(responses[key].body).sort().reverse().map(function (type) {
@@ -1293,6 +1297,12 @@
           } else {
             $scope.showRequestMetadata = true;
           }
+        };
+
+        $scope.showResponseMetadata = true;
+
+        $scope.toggleResponseMetadata = function () {
+          $scope.showResponseMetadata = !$scope.showResponseMetadata;
         };
       }
     };
@@ -5294,10 +5304,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "            <section class=\"raml-console-side-bar-try-it-description\">\n" +
     "              <header class=\"raml-console-sidebar-row raml-console-sidebar-header\">\n" +
-    "                <h3 class=\"raml-console-sidebar-head\">Response</h3>\n" +
+    "                <h3 class=\"raml-console-sidebar-head\">\n" +
+    "                  <button ng-class=\"{'raml-console-is-open':showResponseMetadata, 'raml-console-is-collapsed':!showResponseMetadata}\" class=\"raml-console-sidebar-expand-btn\" ng-click=\"toggleResponseMetadata()\">\n" +
+    "                    Response\n" +
+    "                  </button>\n" +
+    "                </h3>\n" +
     "              </header>\n" +
     "\n" +
-    "              <div class=\"raml-console-sidebar-row sidebar-response\" ng-class=\"{'raml-console-is-active':requestEnd}\">\n" +
+    "              <div class=\"raml-console-sidebar-row raml-console-sidebar-response\" ng-class=\"{'raml-console-is-active':showResponseMetadata}\">\n" +
     "                <h3 class=\"raml-console-sidebar-response-head\">Status</h3>\n" +
     "                <p class=\"raml-console-sidebar-response-item\">{{response.status}}</p>\n" +
     "\n" +
@@ -5364,7 +5378,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <root-documentation></root-documentation>\n" +
     "\n" +
-    "    <ol id=\"raml-console-resources-container\" class=\"raml-console-resource-list raml-console-resource-list-root\">\n" +
+    "    <ol <ol ng-class=\"{'raml-console-resources-container-no-title': disableTitle, 'raml-console-resources-container': !disableTitle}\" id=\"raml-console-resources-container\" class=\"raml-console-resource-list raml-console-resource-list-root\">\n" +
     "      <li id=\"raml_documentation\" class=\"raml-console-resource-list-item raml-console-documentation-header\">\n" +
     "        <div ng-if=\"proxy\" align=\"right\" class=\"raml-console-resource-proxy\">\n" +
     "          <label for=\"raml-console-api-behind-firewall\">API is behind a firewall <a href=\"http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall\" target=\"_blank\">(?)</a></label>\n" +

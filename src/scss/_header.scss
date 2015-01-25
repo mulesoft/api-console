@@ -13,6 +13,7 @@
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 10;
 }
 
 .meta-button-container {
@@ -28,7 +29,7 @@
 
   background: rgba(0,0,0,0.4);
   color: #fff;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-decoration: none;
