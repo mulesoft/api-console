@@ -944,7 +944,7 @@
           var editorHeight = 50;
 
           if (jqXhr.responseText) {
-            var lines = jqXhr.responseText.split('\n').length;
+            var lines = $scope.response.body.split('\n').length;
             editorHeight = lines > 100 ? 2000 : 25*lines;
           }
 
@@ -5502,7 +5502,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "  <p class=\"raml-console-sidebar-input-container\" ng-if=\"ownerOptionsEnabled()\">\n" +
     "    <label for=\"username\" class=\"raml-console-sidebar-label\">Username <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"raml-console-sidebar-input sidebar-security-field\" ng-model=\"credentials.username\" ng-change=\"onChange()\"/>\n" +
+    "    <input required=\"true\" type=\"text\" name=\"username\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.username\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
