@@ -1518,6 +1518,10 @@
           $scope.disableThemeSwitcher = true;
         }
 
+        if ($attrs.hasOwnProperty('disableRamlClientGenerator')) {
+          $scope.disableRamlClientGenerator = true;
+        }
+
         if ($attrs.hasOwnProperty('disableTitle')) {
           $scope.disableTitle = true;
         }
@@ -5385,7 +5389,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div ng-if=\"loaded\">\n" +
     "    <div class=\"raml-console-meta-button-group\">\n" +
     "      <theme-switcher ng-if=\"!disableThemeSwitcher\"></theme-switcher>\n" +
-    "      <raml-client-generator></raml-client-generator>\n" +
+    "      <raml-client-generator ng-if=\"!disableRamlClientGenerator\"></raml-client-generator>\n" +
     "    </div>\n" +
     "\n" +
     "    <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{raml.title}}</h1>\n" +
