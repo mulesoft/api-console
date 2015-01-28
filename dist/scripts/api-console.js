@@ -3769,7 +3769,7 @@ RAML.Inspector = (function() {
     var authorization = btoa(options.clientId + ':' + options.clientSecret);
 
     return this.client._request({
-      uri: options.accessTokenUri,
+      url: options.accessTokenUri,
       method: 'POST',
       headers: {
         'Accept':        'application/json, application/x-www-form-urlencoded',
@@ -3831,7 +3831,7 @@ RAML.Inspector = (function() {
     var authorization = btoa(options.clientId + ':' + options.clientSecret);
 
     return this.client._request({
-      uri: options.accessTokenUri,
+      url: options.accessTokenUri,
       method: 'POST',
       headers: {
         'Accept':        'application/json, application/x-www-form-urlencoded',
@@ -3891,13 +3891,13 @@ RAML.Inspector = (function() {
   };
 
   /**
-   * Get the user access token from the uri.
+   * Get the user access token from the url.
    *
-   * @param {String}   uri
+   * @param {String}   url
    * @param {String}   [state]
    * @param {Function} done
    */
-  TokenFlow.prototype.getToken = function (uri, state, done) {
+  TokenFlow.prototype.getToken = function (url, state, done) {
     var options = this.client.options;
     var err;
 
@@ -3907,17 +3907,17 @@ RAML.Inspector = (function() {
       state = null;
     }
 
-    // Make sure the uri matches our expected redirect uri.
-    if (uri.substr(0, options.redirectUri.length) !== options.redirectUri) {
-      return done(new Error('Invalid uri (should to match redirect): ' + uri));
+    // Make sure the url matches our expected redirect url.
+    if (url.substr(0, options.redirectUri.length) !== options.redirectUri) {
+      return done(new Error('Invalid url (should to match redirect): ' + url));
     }
 
-    var queryString    = uri.replace(/^[^\?]*|\#.*$/g, '').substr(1);
-    var fragmentString = uri.replace(/^[^\#]*/, '').substr(1);
+    var queryString    = url.replace(/^[^\?]*|\#.*$/g, '').substr(1);
+    var fragmentString = url.replace(/^[^\#]*/, '').substr(1);
 
-    // Check whether a query string is present in the uri.
+    // Check whether a query string is present in the url.
     if (!queryString && !fragmentString) {
-      return done(new Error('Unable to process uri: ' + uri));
+      return done(new Error('Unable to process url: ' + url));
     }
 
     // Merge the fragment with the the query string. This is because, at least,
@@ -3981,7 +3981,7 @@ RAML.Inspector = (function() {
     var authorization = btoa(options.clientId + ':' + options.clientSecret);
 
     return this.client._request({
-      uri: options.accessTokenUri,
+      url: options.accessTokenUri,
       method: 'POST',
       headers: {
         'Accept':        'application/json, application/x-www-form-urlencoded',
@@ -4041,11 +4041,11 @@ RAML.Inspector = (function() {
    * Get the code token from the redirected uri and make another request for
    * the user access token.
    *
-   * @param {String}   uri
+   * @param {String}   url
    * @param {String}   [state]
    * @param {Function} done
    */
-  CodeFlow.prototype.getToken = function (uri, state, done) {
+  CodeFlow.prototype.getToken = function (url, state, done) {
     var self    = this;
     var options = this.client.options;
     var err;
@@ -4063,17 +4063,17 @@ RAML.Inspector = (function() {
       'accessTokenUri'
     ]);
 
-    // Make sure the uri matches our expected redirect uri.
-    if (uri.substr(0, options.redirectUri.length) !== options.redirectUri) {
-      return done(new Error('Invalid uri (should to match redirect): ' + uri));
+    // Make sure the url matches our expected redirect url.
+    if (url.substr(0, options.redirectUri.length) !== options.redirectUri) {
+      return done(new Error('Invalid url (should to match redirect): ' + url));
     }
 
     // Extract the query string from the url.
-    var queryString = uri.replace(/^[^\?]*|\#.*$/g, '').substr(1);
+    var queryString = url.replace(/^[^\?]*|\#.*$/g, '').substr(1);
 
-    // Check whether a query string is present in the uri.
+    // Check whether a query string is present in the url.
     if (!queryString) {
-      return done(new Error('Unable to process uri: ' + uri));
+      return done(new Error('Unable to process url: ' + url));
     }
 
     var query = uriDecode(queryString);
@@ -4094,7 +4094,7 @@ RAML.Inspector = (function() {
     }
 
     return this.client._request({
-      uri: options.accessTokenUri,
+      url: options.accessTokenUri,
       method: 'POST',
       headers: {
         'Accept':       'application/json, application/x-www-form-urlencoded',
