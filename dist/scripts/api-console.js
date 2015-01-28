@@ -1207,6 +1207,8 @@
           }
         };
 
+        $scope.documentationEnabled = true;
+
         $scope.toggleSidebar = function ($event) {
           var $this        = jQuery($event.currentTarget);
           var $panel       = $this.closest('.raml-console-resource-panel');
@@ -1218,6 +1220,7 @@
           }
 
           if ($sidebar.hasClass('raml-console-is-fullscreen')) {
+            $scope.documentationEnabled = true;
             $sidebar.velocity(
               { width: $scope.singleView ? 0 : sidebarWidth },
               {
@@ -1235,9 +1238,14 @@
               { width: '100%' },
               {
                 duration: 200,
-                complete: completeAnimation
+                complete: function (element) {
+                  jQuery(element).removeAttr('style');
+                  $scope.documentationEnabled = false;
+                  apply();
+                }
               }
             );
+
             $sidebar.addClass('raml-console-is-fullscreen');
             $sidebar.addClass('raml-console-is-responsive');
             $panel.addClass('raml-console-has-sidebar-fullscreen');
@@ -1270,7 +1278,11 @@
             { width: animation },
             {
               duration: speed,
-              complete: completeAnimation
+              complete: function (element) {
+                jQuery(element).removeAttr('style');
+                $scope.documentationEnabled = false;
+                apply();
+              }
             }
           );
 
@@ -4768,7 +4780,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/documentation.tpl.html',
-    "<div class=\"raml-console-resource-panel-primary\">\n" +
+    "<div class=\"raml-console-resource-panel-primary\" ng-if=\"documentationEnabled\">\n" +
     "  <!-- Request -->\n" +
     "  <header class=\"raml-console-resource-header\">\n" +
     "    <h3 class=\"raml-console-resource-head\">\n" +
