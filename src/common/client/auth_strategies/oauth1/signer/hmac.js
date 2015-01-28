@@ -22,7 +22,7 @@
       var options = request.toOptions();
 
       return [
-        options.type.toUpperCase(),
+        options.method.toUpperCase(),
         this.encodeURI(options.url),
         rfc3986Encode(this.encodeParameters(request, oauthParams))
       ].join('&');
