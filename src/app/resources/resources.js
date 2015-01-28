@@ -22,6 +22,10 @@
           $scope.disableThemeSwitcher = true;
         }
 
+        if ($attrs.hasOwnProperty('disableRamlClientGenerator')) {
+          $scope.disableRamlClientGenerator = true;
+        }
+
         if ($attrs.hasOwnProperty('disableTitle')) {
           $scope.disableTitle = true;
         }

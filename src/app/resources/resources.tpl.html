@@ -13,7 +13,7 @@
   <div ng-if="loaded">
     <div class="raml-console-meta-button-group">
       <theme-switcher ng-if="!disableThemeSwitcher"></theme-switcher>
-      <raml-client-generator></raml-client-generator>
+      <raml-client-generator ng-if="!disableRamlClientGenerator"></raml-client-generator>
     </div>
 
     <h1 ng-if="!disableTitle" class="raml-console-title">{{raml.title}}</h1>
