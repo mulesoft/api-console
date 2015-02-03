@@ -45,14 +45,8 @@
     smartypants: false,
     highlight: function (code, lang) {
       var result = [
-        '<pre class="raml-console-resource-pre">',
-        ' <code class="raml-console-hljs"',
-        '  <pre>',
-        '   <code class="hljs">',
+        '<pre class="raml-console-resource-pre raml-console-hljs hljs">',
         lang ? window.hljs.highlightAuto(code).value : code,
-        '   </code>',
-        '  </pre>',
-        ' </code>',
         '</pre>'
       ];
 
