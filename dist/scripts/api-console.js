@@ -30,20 +30,30 @@
   var loc      = window.location;
   var uri      = loc.protocol + '//' + loc.host + loc.pathname.replace(/\/$/, '');
 
-  // Marked Settings
-  renderer.paragraph = function (text) {
-    return text;
-  };
-
   window.marked.setOptions({
     renderer: renderer,
     gfm: true,
     tables: true,
-    breaks: false,
+    breaks: true,
     pedantic: false,
-    sanitize: true,
+    sanitize: false,
     smartLists: true,
-    smartypants: false
+    smartypants: false,
+    highlight: function (code, lang) {
+      var result = [
+        '<pre class="raml-console-resource-pre">',
+        '<code class="raml-console-hljs"',
+        '<pre>',
+        '<code class="hljs">',
+        lang ? window.hljs.highlightAuto(code).value.replace(/hljs/g, 'raml-console-hljs') : code,
+        '</code>',
+        '</pre>',
+        '</code>',
+        '</pre>'
+      ];
+
+      return result.join('');
+    }
   });
 
   // Settings
