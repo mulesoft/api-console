@@ -30,6 +30,10 @@
   var loc      = window.location;
   var uri      = loc.protocol + '//' + loc.host + loc.pathname.replace(/\/$/, '');
 
+  window.hljs.configure({
+    classPrefix: 'raml-console-hljs-'
+  });
+
   window.marked.setOptions({
     renderer: renderer,
     gfm: true,
@@ -42,13 +46,13 @@
     highlight: function (code, lang) {
       var result = [
         '<pre class="raml-console-resource-pre">',
-        '<code class="raml-console-hljs"',
-        '<pre>',
-        '<code class="hljs">',
-        lang ? window.hljs.highlightAuto(code).value.replace(/hljs/g, 'raml-console-hljs') : code,
-        '</code>',
-        '</pre>',
-        '</code>',
+        ' <code class="raml-console-hljs"',
+        '  <pre>',
+        '   <code class="hljs">',
+        lang ? window.hljs.highlightAuto(code).value : code,
+        '   </code>',
+        '  </pre>',
+        ' </code>',
         '</pre>'
       ];
 
