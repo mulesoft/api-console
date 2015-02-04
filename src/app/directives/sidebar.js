@@ -423,7 +423,9 @@
               duration: speed,
               complete: function (element) {
                 jQuery(element).removeAttr('style');
-                $scope.documentationEnabled = false;
+                if ($scope.singleView) {
+                  $scope.documentationEnabled = false;
+                }
                 apply();
               }
             }
