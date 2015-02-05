@@ -15,6 +15,10 @@
           return $scope.credentials.grant === 'owner';
         };
 
+        $scope.isImplicitEnabled = function () {
+          return $scope.credentials.grant === 'token';
+        };
+
         $scope.grants = [
           {
             label: 'Implicit',

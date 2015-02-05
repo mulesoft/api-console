@@ -1700,6 +1700,10 @@
           return $scope.credentials.grant === 'owner';
         };
 
+        $scope.isImplicitEnabled = function () {
+          return $scope.credentials.grant === 'token';
+        };
+
         $scope.grants = [
           {
             label: 'Implicit',
@@ -2225,7 +2229,7 @@
   };
 
   Oauth2.prototype.authenticate = function(options, done) {
-    var githubAuth = new ClientOAuth2({
+    var auth = new ClientOAuth2({
       clientId:         this.credentials.clientId,
       clientSecret:     this.credentials.clientSecret,
       accessTokenUri:   this.scheme.settings.accessTokenUri,
@@ -2237,7 +2241,7 @@
 
     if (grantType === 'token' || grantType === 'code') {
       window.oauth2Callback = function (uri) {
-        githubAuth[grantType].getToken(uri, function (err, user, raw) {
+        auth[grantType].getToken(uri, function (err, user, raw) {
           if (err) {
             done(raw);
           }
@@ -2250,11 +2254,11 @@
         });
       };
       //// TODO: Find a way to handle 404
-      window.open(githubAuth[grantType].getUri());
+      window.open(auth[grantType].getUri());
     }
 
     if (grantType === 'owner') {
-      githubAuth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
+      auth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
         if (err) {
           done(raw);
         }
@@ -2268,7 +2272,7 @@
     }
 
     if (grantType === 'credentials') {
-      githubAuth.credentials.getToken(function (err, user, raw) {
+      auth.credentials.getToken(function (err, user, raw) {
         if (err) {
           done(raw);
         }
@@ -5525,7 +5529,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "\n" +
-    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "  <p class=\"raml-console-sidebar-input-container\" ng-if=\"!isImplicitEnabled()\">\n" +
     "    <label for=\"clientSecret\" class=\"raml-console-sidebar-label\">Client Secret <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
     "    <input required=\"true\" type=\"password\" name=\"clientSecret\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.clientSecret\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
