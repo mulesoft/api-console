@@ -94,11 +94,9 @@
               <div class="raml-console-sidebar-action-group">
                 <button ng-hide="showSpinner" type="submit" class="raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'raml-console-sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
                 </button>
-                <button ng-if="showSpinner" type="submit" class="raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}} raml-console-sidebar-action-cancel-request" ng-click="cancelRequest()">Cancel</button>
+                <button ng-if="showSpinner" type="submit" class="raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}} raml-console-sidebar-action-cancel-request" ng-click="cancelRequest()">Cancel <div class="raml-console-spinner-request" ng-if="showSpinner">Loading ...</div></button>
                 <button class="raml-console-sidebar-action raml-console-sidebar-action-clear" ng-click="clearFields()">Clear</button>
                 <button class="raml-console-sidebar-action raml-console-sidebar-action-reset" ng-click="resetFields()">Reset</button>
-
-                <div class="raml-console-spinner-request" ng-if="showSpinner">Loading ...</div>
               </div>
             </div>
           </section>

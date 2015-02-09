@@ -275,7 +275,6 @@
             var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
 
             $scope.showSpinner = true;
-            // $scope.toggleSidebar($event, true);
             $scope.toggleRequestMetadata($event, true);
 
             try {
