@@ -58,7 +58,7 @@
 
 
 /*spinner request*/
-@-webkit-keyframes spinner_request {
+@-webkit-keyframes spinner-request {
   0% {
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
@@ -76,7 +76,7 @@
   }
 }
 
-@-moz-keyframes spinner_request {
+@-moz-keyframes spinner-request {
   0% {
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
@@ -94,7 +94,7 @@
   }
 }
 
-@-o-keyframes spinner_request {
+@-o-keyframes spinner-request {
   0% {
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
@@ -151,8 +151,8 @@
   height: 1em;
   overflow: hidden;
   text-indent: 100%;
-  position: relative;
-  left: 153px;
-  top: -27px;
+  position: absolute;
+  left: 125px;
+  margin-top: 7px;
 }
 
