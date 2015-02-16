@@ -34,7 +34,7 @@ securitySchemes:
       settings:
         authorizationUri: https://github.com/login/oauth/authorize
         accessTokenUri: https://github.com/login/oauth/access_token
-        authorizationGrants: [ code ]
+        authorizationGrants: [ code, credentials, owner ]
         scopes:
           - "user"
           - "user:email"

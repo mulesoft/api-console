@@ -160,7 +160,7 @@
                 <h3 class="raml-console-sidebar-response-head">Status</h3>
                 <p class="raml-console-sidebar-response-item">{{response.status}}</p>
 
-                <h3 class="raml-console-sidebar-response-head">Headers</h3>
+                <h3 class="raml-console-sidebar-response-head" ng-if="response.headers">Headers</h3>
                 <div class="raml-console-sidebar-response-item">
                   <p class="raml-console-sidebar-response-metadata" ng-repeat="(key, value) in response.headers">
                     <b>{{key}}:</b> <br>{{value}}

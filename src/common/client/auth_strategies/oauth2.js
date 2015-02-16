@@ -21,12 +21,12 @@
       window.oauth2Callback = function (uri) {
         auth[grantType].getToken(uri, function (err, user, raw) {
           if (err) {
-            done(raw);
+            done(raw, err);
           }
 
           if (user && user.accessToken) {
             user.request(options, function (err, res) {
-              done(res.raw);
+              done(res.raw, err);
             });
           }
         });
@@ -38,12 +38,12 @@
     if (grantType === 'owner') {
       auth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
         if (err) {
-          done(raw);
+          done(raw, err);
         }
 
         if (user && user.accessToken) {
           user.request(options, function (err, res) {
-            done(res.raw);
+            done(res.raw, err);
           });
         }
       });
@@ -52,12 +52,12 @@
     if (grantType === 'credentials') {
       auth.credentials.getToken(function (err, user, raw) {
         if (err) {
-          done(raw);
+          done(raw, err);
         }
 
         if (user && user.accessToken) {
           user.request(options, function (err, res) {
-            done(res.raw);
+            done(res.raw, err);
           });
         }
       });

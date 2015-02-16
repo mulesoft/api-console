@@ -54,21 +54,24 @@
           return body;
         }
 
-        function handleResponse(jqXhr) {
-          $scope.response.status  = jqXhr.status;
-          $scope.response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
+        function handleResponse(jqXhr, err) {
+          $scope.response.status = jqXhr ? jqXhr.status : err ? err.status : 0;
 
-          $scope.currentStatusCode = jqXhr.status.toString();
+          if (jqXhr) {
+            $scope.response.headers = parseHeaders(jqXhr.getAllResponseHeaders());
 
-          if ($scope.response.headers['content-type']) {
-            $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
-          }
+            if ($scope.response.headers['content-type']) {
+              $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
+            }
 
-          try {
-            $scope.response.body = beautify(jqXhr.responseText, $scope.response.contentType);
-          }
-          catch (e) {
-            $scope.response.body = jqXhr.responseText;
+            $scope.currentStatusCode = jqXhr.status.toString();
+
+            try {
+              $scope.response.body = beautify(jqXhr.responseText, $scope.response.contentType);
+            }
+            catch (e) {
+              $scope.response.body = jqXhr.responseText;
+            }
           }
 
           $scope.requestEnd      = true;
@@ -83,7 +86,7 @@
           // If the response fails because of CORS, responseText is null
           var editorHeight = 50;
 
-          if (jqXhr.responseText) {
+          if (jqXhr && jqXhr.responseText) {
             var lines = $scope.response.body.split('\n').length;
             editorHeight = lines > 100 ? 2000 : 25*lines;
           }
@@ -323,9 +326,9 @@
               //// TODO: Make a uniform interface
               if (scheme && scheme.type === 'OAuth 2.0') {
                 authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
-                authStrategy.authenticate(request.toOptions(), function (jqXhr) {
+                authStrategy.authenticate(request.toOptions(), function (jqXhr, err) {
                   $scope.requestOptions = request.toOptions();
-                  handleResponse(jqXhr);
+                  handleResponse(jqXhr, err);
                 });
                 return;
               }
