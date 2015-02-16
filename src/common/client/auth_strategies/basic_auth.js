@@ -14,7 +14,7 @@
   };
 
   Basic.Token = function(credentials) {
-    var words = CryptoJS.enc.Utf8.parse(credentials.username + ':' + credentials.password);
+    var words = CryptoJS.enc.Utf8.parse((credentials.username || '') + ':' + (credentials.password || ''));
     this.encoded = CryptoJS.enc.Base64.stringify(words);
   };
 
