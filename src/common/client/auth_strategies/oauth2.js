@@ -13,7 +13,7 @@
       accessTokenUri:   this.scheme.settings.accessTokenUri,
       authorizationUri: this.scheme.settings.authorizationUri,
       redirectUri:      RAML.Settings.oauth2RedirectUri,
-      scopes:           this.scheme.settings.scopes
+      scopes:           this.credentials.scopes ? Object.keys(this.credentials.scopes) : []
     });
     var grantType = this.credentials.grant;
 

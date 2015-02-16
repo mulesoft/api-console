@@ -41,6 +41,9 @@
         /* jshint camelcase: false */
         var authorizationGrants = $scope.$parent.securitySchemes.oauth_2_0.settings.authorizationGrants;
 
+        $scope.scopes = $scope.$parent.securitySchemes.oauth_2_0.settings.scopes;
+        $scope.credentials.scopes = {};
+
         if (authorizationGrants) {
           $scope.grants = $scope.grants.filter(function (el) {
             return authorizationGrants.indexOf(el.value) > -1;

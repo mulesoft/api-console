@@ -1725,6 +1725,9 @@
         /* jshint camelcase: false */
         var authorizationGrants = $scope.$parent.securitySchemes.oauth_2_0.settings.authorizationGrants;
 
+        $scope.scopes = $scope.$parent.securitySchemes.oauth_2_0.settings.scopes;
+        $scope.credentials.scopes = {};
+
         if (authorizationGrants) {
           $scope.grants = $scope.grants.filter(function (el) {
             return authorizationGrants.indexOf(el.value) > -1;
@@ -2234,7 +2237,7 @@
       accessTokenUri:   this.scheme.settings.accessTokenUri,
       authorizationUri: this.scheme.settings.authorizationUri,
       redirectUri:      RAML.Settings.oauth2RedirectUri,
-      scopes:           this.scheme.settings.scopes
+      scopes:           this.credentials.scopes ? Object.keys(this.credentials.scopes) : []
     });
     var grantType = this.credentials.grant;
 
@@ -5542,6 +5545,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <label for=\"password\" class=\"raml-console-sidebar-label\">Password <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
     "    <input required=\"true\" type=\"password\" name=\"password\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
+    "  </p>\n" +
+    "\n" +
+    "  <p class=\"raml-console-sidebar-input-container\">\n" +
+    "    <label for=\"password\" class=\"raml-console-sidebar-label\">Scopes</label>\n" +
+    "    <ol class=\"raml-console-sidebar-oauth-scopes\">\n" +
+    "      <li ng-repeat=\"scope in scopes\">\n" +
+    "        <input type=\"checkbox\" ng-model=\"credentials.scopes[scope]\"> {{scope}}\n" +
+    "      </li>\n" +
+    "    </ol>\n" +
     "  </p>\n" +
     "</div>\n"
   );
