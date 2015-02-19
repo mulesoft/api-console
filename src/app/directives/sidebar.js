@@ -8,6 +8,7 @@
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
         $scope.currentSchemeType = 'Anonymous';
+        $scope.currentScheme = 'Anonymous|anonymous';
         $scope.responseDetails = false;
 
         function completeAnimation (element) {
@@ -262,6 +263,57 @@
         };
 
         $scope.context.forceRequest = false;
+
+        function pirula (type, scheme, collection, context) {
+          var details         = $scope.securitySchemes[scheme].describedBy || {};
+          var securityHeaders = details[type] || {};
+
+          Object.keys(collection).map(function (key) {
+            if (collection[key][0].isFromSecurityScheme) {
+              delete collection[key];
+            }
+
+            if (context.plain[key].definitions[0].isFromSecurityScheme) {
+              delete context.plain[key];
+            }
+          });
+
+          if (securityHeaders) {
+            Object.keys(securityHeaders).map(function (key) {
+              if (!securityHeaders[key]) {
+                securityHeaders[key] = {
+                  id: key,
+                  type: 'string'
+                };
+              }
+
+              securityHeaders[key].displayName             = key;
+              securityHeaders[key].isFromSecurityScheme    = true;
+              collection[key] = [securityHeaders[key]];
+
+              context.plain[key] = {
+                definitions: [securityHeaders[key]],
+                selected: securityHeaders[key].type
+              };
+              context.values[key] = [undefined];
+            });
+          }
+        }
+
+        $scope.securitySchemeChanged = function (scheme) {
+          var info            = scheme.split('|');
+          var type            = info[0];
+          var name            = info[1];
+
+          $scope.currentSchemeType = type;
+
+          if (!$scope.methodInfo.headers.plain) {
+            $scope.methodInfo.headers.plain = {};
+          }
+
+          pirula('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
+          pirula('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+        };
 
         $scope.tryIt = function ($event) {
           $scope.requestOptions  = null;

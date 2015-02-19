@@ -376,6 +376,10 @@
           }
         }
 
+        function beautifyCustomSecuritySchemeName (name) {
+          return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
+        }
+
         $scope.readTraits = function (traits) {
           var list = [];
 
@@ -435,18 +439,24 @@
             type: 'Anonymous'
           };
 
+          Object.keys($scope.securitySchemes).map(function (key) {
+            var type = $scope.securitySchemes[key].type;
+
+            $scope.securitySchemes[key].name = type;
+            $scope.securitySchemes[key].id = type + '|' + key;
+
+            if (type === 'x-custom') {
+              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(key);
+              $scope.securitySchemes[key].id = type + '|' + key;
+            }
+          });
+
           /*jshint camelcase: false */
           // Digest Authentication is not supported
           delete $scope.securitySchemes.digest_auth;
           /*jshint camelcase: true */
 
           loadExamples();
-
-          var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
-          $scope.currentScheme = {
-            type: $scope.securitySchemes[defaultScheme].type,
-            name: defaultScheme
-          };
 
           // Hack for codemirror
           setTimeout(function () {
@@ -876,6 +886,7 @@
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
         $scope.currentSchemeType = 'Anonymous';
+        $scope.currentScheme = 'Anonymous|anonymous';
         $scope.responseDetails = false;
 
         function completeAnimation (element) {
@@ -1130,6 +1141,57 @@
         };
 
         $scope.context.forceRequest = false;
+
+        function pirula (type, scheme, collection, context) {
+          var details         = $scope.securitySchemes[scheme].describedBy || {};
+          var securityHeaders = details[type] || {};
+
+          Object.keys(collection).map(function (key) {
+            if (collection[key][0].isFromSecurityScheme) {
+              delete collection[key];
+            }
+
+            if (context.plain[key].definitions[0].isFromSecurityScheme) {
+              delete context.plain[key];
+            }
+          });
+
+          if (securityHeaders) {
+            Object.keys(securityHeaders).map(function (key) {
+              if (!securityHeaders[key]) {
+                securityHeaders[key] = {
+                  id: key,
+                  type: 'string'
+                };
+              }
+
+              securityHeaders[key].displayName             = key;
+              securityHeaders[key].isFromSecurityScheme    = true;
+              collection[key] = [securityHeaders[key]];
+
+              context.plain[key] = {
+                definitions: [securityHeaders[key]],
+                selected: securityHeaders[key].type
+              };
+              context.values[key] = [undefined];
+            });
+          }
+        }
+
+        $scope.securitySchemeChanged = function (scheme) {
+          var info            = scheme.split('|');
+          var type            = info[0];
+          var name            = info[1];
+
+          $scope.currentSchemeType = type;
+
+          if (!$scope.methodInfo.headers.plain) {
+            $scope.methodInfo.headers.plain = {};
+          }
+
+          pirula('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
+          pirula('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+        };
 
         $scope.tryIt = function ($event) {
           $scope.requestOptions  = null;
@@ -1879,6 +1941,8 @@
         return new RAML.Client.AuthStrategies.Oauth2(scheme, credentials);
       case 'OAuth 1.0':
         return new RAML.Client.AuthStrategies.Oauth1(scheme, credentials);
+      case 'x-custom':
+        return RAML.Client.AuthStrategies.anonymous();
       default:
         throw new Error('Unknown authentication strategy: ' + scheme.type);
       }
@@ -4994,7 +5058,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <span marked=\"param.definitions[0].description\"></span>\n" +
     "        </span>\n" +
     "      </span>\n" +
-    "      <label for=\"{{param.definitions[0].id}}\" class=\"raml-console-sidebar-label\">{{param.definitions[0].displayName}} <a class=\"raml-console-sidebar-override\" ng-if=\"canOverride(param.definitions[0])\" ng-click=\"overrideField($event, param.definitions[0])\">Override</a> <span class=\"raml-console-side-bar-required-field\" ng-if=\"param.definitions[0].required\">*</span></label>\n" +
+    "      <label for=\"{{param.definitions[0].id}}\" class=\"raml-console-sidebar-label\">{{param.definitions[0].displayName}} <a class=\"raml-console-sidebar-override\" ng-if=\"canOverride(param.definitions[0])\" ng-click=\"overrideField($event, param.definitions[0])\">Override</a> <span class=\"raml-console-side-bar-required-field\" ng-if=\"param.definitions[0].required\">*</span><label ng-if=\"param.definitions[0].isFromSecurityScheme\" class=\"raml-console-sidebar-security-label\">from security scheme</label></label>\n" +
     "\n" +
     "      <span class=\"raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left\" ng-if=\"hasExampleValue(param.definitions[0])\">\n" +
     "        <button tabindex=\"-1\" class=\"raml-console-sidebar-input-reset\" ng-click=\"reset(param.definitions)\"><span class=\"raml-console-visuallyhidden\">Reset field</span></button>\n" +
@@ -5219,8 +5283,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <div class=\"raml-console-sidebar-row raml-console-sidebar-securty\">\n" +
     "              <div class=\"raml-console-toggle-group raml-console-sidebar-toggle-group\">\n" +
     "                <label class=\"raml-console-sidebar-label\">Security Scheme</label>\n" +
-    "                <select class=\"raml-console-sidebar-input\" ng-model=\"currentSchemeType\" style=\"margin-bottom: 0;\">\n" +
-    "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{scheme.type}}\" ng-selected=\"scheme.type=='Anonymous'\">{{scheme.type}}</option>\n" +
+    "                <select ng-change=\"securitySchemeChanged(currentScheme)\" class=\"raml-console-sidebar-input\" ng-model=\"currentScheme\" style=\"margin-bottom: 0;\">\n" +
+    "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{scheme.id}}\" ng-selected=\"scheme.type=='Anonymous'\">{{scheme.name}}</option>\n" +
     "                </select>\n" +
     "              </div>\n" +
     "            </div>\n" +

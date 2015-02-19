@@ -53,6 +53,10 @@
           }
         }
 
+        function beautifyCustomSecuritySchemeName (name) {
+          return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
+        }
+
         $scope.readTraits = function (traits) {
           var list = [];
 
@@ -112,18 +116,24 @@
             type: 'Anonymous'
           };
 
+          Object.keys($scope.securitySchemes).map(function (key) {
+            var type = $scope.securitySchemes[key].type;
+
+            $scope.securitySchemes[key].name = type;
+            $scope.securitySchemes[key].id = type + '|' + key;
+
+            if (type === 'x-custom') {
+              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(key);
+              $scope.securitySchemes[key].id = type + '|' + key;
+            }
+          });
+
           /*jshint camelcase: false */
           // Digest Authentication is not supported
           delete $scope.securitySchemes.digest_auth;
           /*jshint camelcase: true */
 
           loadExamples();
-
-          var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
-          $scope.currentScheme = {
-            type: $scope.securitySchemes[defaultScheme].type,
-            name: defaultScheme
-          };
 
           // Hack for codemirror
           setTimeout(function () {

@@ -29,7 +29,7 @@
           <span marked="param.definitions[0].description"></span>
         </span>
       </span>
-      <label for="{{param.definitions[0].id}}" class="raml-console-sidebar-label">{{param.definitions[0].displayName}} <a class="raml-console-sidebar-override" ng-if="canOverride(param.definitions[0])" ng-click="overrideField($event, param.definitions[0])">Override</a> <span class="raml-console-side-bar-required-field" ng-if="param.definitions[0].required">*</span></label>
+      <label for="{{param.definitions[0].id}}" class="raml-console-sidebar-label">{{param.definitions[0].displayName}} <a class="raml-console-sidebar-override" ng-if="canOverride(param.definitions[0])" ng-click="overrideField($event, param.definitions[0])">Override</a> <span class="raml-console-side-bar-required-field" ng-if="param.definitions[0].required">*</span><label ng-if="param.definitions[0].isFromSecurityScheme" class="raml-console-sidebar-security-label">from security scheme</label></label>
 
       <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param.definitions[0])">
         <button tabindex="-1" class="raml-console-sidebar-input-reset" ng-click="reset(param.definitions)"><span class="raml-console-visuallyhidden">Reset field</span></button>
