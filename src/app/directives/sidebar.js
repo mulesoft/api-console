@@ -266,6 +266,8 @@
         $scope.tryIt = function ($event) {
           $scope.requestOptions  = null;
           $scope.responseDetails = false;
+          $scope.response        = {};
+
           validateForm($scope.form);
 
           if (!$scope.context.forceRequest) {
