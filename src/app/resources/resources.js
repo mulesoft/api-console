@@ -62,6 +62,13 @@
           $this.toggleClass('raml-console-is-active');
         };
 
+        $scope.showResourceDescription = function ($event) {
+          var $this      = jQuery($event.currentTarget);
+          var $container = $this.closest('.raml-console-resource-list-item');
+
+          $container.find('.raml-console-resource-description').toggleClass('ng-hide');
+        };
+
         $scope.toggleInverted = function ($event) {
           var $section    = jQuery($event.currentTarget)
             .closest('.raml-console-resource-list-item')

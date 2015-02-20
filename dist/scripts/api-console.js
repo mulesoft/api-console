@@ -1621,6 +1621,13 @@
           $this.toggleClass('raml-console-is-active');
         };
 
+        $scope.showResourceDescription = function ($event) {
+          var $this      = jQuery($event.currentTarget);
+          var $container = $this.closest('.raml-console-resource-list-item');
+
+          $container.find('.raml-console-resource-description').toggleClass('ng-hide');
+        };
+
         $scope.toggleInverted = function ($event) {
           var $section    = jQuery($event.currentTarget)
             .closest('.raml-console-resource-list-item')
@@ -5519,16 +5526,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': collapsed}\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event)\"></button>\n" +
     "\n" +
     "            <h2 class=\"raml-console-resource-heading raml-console-resource-heading-large\">\n" +
-    "              <a class=\"raml-console-resource-path-active\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length > 1\" ng-click=\"toggleInverted($event)\">{{segment.toString()}}</a>\n" +
+    "              <a class=\"raml-console-resource-path-active\" ng-class=\"{'raml-console-resource-heading-hover':resourceGroup.length > 1}\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length > 1\" ng-click=\"toggleInverted($event)\">{{segment.toString()}}</a>\n" +
     "\n" +
-    "              <span class=\"raml-console-resource-path-active\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length <= 1\">{{segment.toString()}}</span>\n" +
+    "              <span class=\"raml-console-resource-path-active\" ng-class=\"{'raml-console-resource-heading-hover':resource.description}\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length <= 1\" ng-click=\"showResourceDescription($event)\">{{segment.toString()}}</span>\n" +
     "            </h2>\n" +
     "\n" +
     "            <resource-type></resource-type>\n" +
     "            <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Trait:</b> {{traits}}</span>\n" +
     "\n" +
     "          </div>\n" +
-    "\n" +
     "          <method-list></method-list>\n" +
     "          <close-button></close-button>\n" +
     "        </header>\n" +
@@ -5537,6 +5543,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <!-- Child Resources -->\n" +
     "        <ol class=\"raml-console-resource-list\" ng-class=\"{'raml-console-is-collapsed': collapsed}\">\n" +
+    "\n" +
+    "          <li class=\"raml-console-resource-list-item raml-console-resource-description\" ng-show=\"resourceGroup.length > 1\" ng-if=\"resource.description\">\n" +
+    "            <div class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active\">\n" +
+    "              <h3 class=\"raml-console-resource-heading-a\">Description</h3>\n" +
+    "              <p marked=\"resource.description\" opts=\"markedOptions\"></p>\n" +
+    "            </div>\n" +
+    "          </li>\n" +
+    "\n" +
     "          <li id=\"{{generateId(resource.pathSegments)}}\" class=\"raml-console-resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
     "            <div class=\"raml-console-resource raml-console-clearfix\" ng-class=\"{ 'raml-console-is-active':showPanel }\">\n" +
     "              <div class=\"raml-console-resource-path-container\">\n" +
