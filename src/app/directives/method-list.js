@@ -92,8 +92,6 @@
           var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
           var methodInfo        = $scope.resource.methods[$index];
 
-          console.log($scope.resource.methods);
-
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
           $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, $scope.resource, $scope.methodInfo);
@@ -114,6 +112,8 @@
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
 
+          $rootScope.$broadcast('resetData');
+
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
           };
@@ -124,12 +124,6 @@
           /*jshint camelcase: true */
 
           loadExamples();
-
-          var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
-          $scope.currentScheme = {
-            type: $scope.securitySchemes[defaultScheme].type,
-            name: defaultScheme
-          };
 
           // Hack for codemirror
           setTimeout(function () {

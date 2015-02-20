@@ -419,8 +419,6 @@
           var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
           var methodInfo        = $scope.resource.methods[$index];
 
-          console.log($scope.resource.methods);
-
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();
           $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, $scope.resource, $scope.methodInfo);
@@ -441,6 +439,8 @@
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
 
+          $rootScope.$broadcast('resetData');
+
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
           };
@@ -451,12 +451,6 @@
           /*jshint camelcase: true */
 
           loadExamples();
-
-          var defaultScheme = Object.keys($scope.securitySchemes).sort()[0];
-          $scope.currentScheme = {
-            type: $scope.securitySchemes[defaultScheme].type,
-            name: defaultScheme
-          };
 
           // Hack for codemirror
           setTimeout(function () {
@@ -1083,6 +1077,14 @@
               custom[i].value = '';
             }
           });
+        }
+
+        $scope.$on('resetData', function(event) {
+          $scope.currentSchemeType = 'Anonymous';
+        });
+
+        $scope.securitySchemeChanged = function (value) {
+          $scope.currentSchemeType = value;
         }
 
         $scope.cancelRequest = function () {
@@ -5315,7 +5317,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <div class=\"raml-console-sidebar-row raml-console-sidebar-securty\">\n" +
     "              <div class=\"raml-console-toggle-group raml-console-sidebar-toggle-group\">\n" +
     "                <label class=\"raml-console-sidebar-label\">Security Scheme</label>\n" +
-    "                <select class=\"raml-console-sidebar-input\" ng-model=\"currentSchemeType\" style=\"margin-bottom: 0;\">\n" +
+    "                <select class=\"raml-console-sidebar-input\" ng-model=\"currentSchemeType\" style=\"margin-bottom: 0;\" ng-change=\"securitySchemeChanged(currentSchemeType)\">\n" +
     "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{scheme.type}}\" ng-selected=\"scheme.type=='Anonymous'\">{{scheme.type}}</option>\n" +
     "                </select>\n" +
     "              </div>\n" +

@@ -172,6 +172,14 @@
           });
         }
 
+        $scope.$on('resetData', function(event) {
+          $scope.currentSchemeType = 'Anonymous';
+        });
+
+        $scope.securitySchemeChanged = function (value) {
+          $scope.currentSchemeType = value;
+        }
+
         $scope.cancelRequest = function () {
           $scope.showSpinner = false;
         };
