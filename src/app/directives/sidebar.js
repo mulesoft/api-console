@@ -7,6 +7,7 @@
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
+        $scope.markedOptions = RAML.Settings.marked;
         $scope.currentSchemeType = 'Anonymous';
         $scope.responseDetails = false;
 

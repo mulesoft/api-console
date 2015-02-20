@@ -13,6 +13,8 @@
         title: '@'
       },
       controller: function ($scope, $attrs) {
+        $scope.markedOptions = RAML.Settings.marked;
+
         if ($attrs.hasOwnProperty('enableCustomParameters')) {
           $scope.enableCustomParameters = true;
         }

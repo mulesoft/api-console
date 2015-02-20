@@ -26,23 +26,30 @@
     });
   });
 
-  var renderer = new window.marked.Renderer();
-  var loc      = window.location;
-  var uri      = loc.protocol + '//' + loc.host + loc.pathname.replace(/\/$/, '');
+  var loc = window.location;
+  var uri = loc.protocol + '//' + loc.host + loc.pathname.replace(/\/$/, '');
 
   window.hljs.configure({
     classPrefix: 'raml-console-hljs-'
   });
 
-  window.marked.setOptions({
-    renderer: renderer,
+  // Settings
+  RAML.Settings.proxy             = RAML.Settings.proxy || false;
+  RAML.Settings.oauth2RedirectUri = RAML.Settings.oauth2RedirectUri || uri + '/authentication/oauth2.html';
+  RAML.Settings.oauth1RedirectUri = RAML.Settings.oauth1RedirectUri || uri + '/authentication/oauth1.html';
+  RAML.Settings.marked            = {
     gfm: true,
     tables: true,
     breaks: true,
     pedantic: false,
     sanitize: false,
     smartLists: true,
+    silent: false,
+    langPrefix: 'lang-',
     smartypants: false,
+    headerPrefix: '',
+    renderer: new window.marked.Renderer(),
+    xhtml: false,
     highlight: function (code, lang) {
       var result = [
         '<pre class="raml-console-resource-pre raml-console-hljs hljs">',
@@ -52,10 +59,5 @@
 
       return result.join('');
     }
-  });
-
-  // Settings
-  RAML.Settings.proxy             = RAML.Settings.proxy || false;
-  RAML.Settings.oauth2RedirectUri = RAML.Settings.oauth2RedirectUri || uri + '/authentication/oauth2.html';
-  RAML.Settings.oauth1RedirectUri = RAML.Settings.oauth1RedirectUri || uri + '/authentication/oauth1.html';
+  };
 })(window);
