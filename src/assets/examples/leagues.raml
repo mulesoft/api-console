@@ -56,6 +56,9 @@ securedBy: [ basic, digest_auth, oauth_2_0 ]
       header:
         displayName: header
         example: header
+      type:
+        type: string
+        enum: [ Remote, Office ]
     queryParameters:
       param:
         displayName: param
@@ -100,6 +103,11 @@ securedBy: [ basic, digest_auth, oauth_2_0 ]
             required: true
             minLength: 3
             maxLength: 12
+          department:
+            displayName: Department
+            type: string
+            enum: [Sales, Administration]
+            example: Sales
       multipart/form-data:
         formParameters:
           code:
@@ -118,6 +126,11 @@ securedBy: [ basic, digest_auth, oauth_2_0 ]
             required: true
             minLength: 3
             maxLength: 12
+          department:
+            displayName: Department
+            type: string
+            enum: [Sales, Administration]
+            example: Sales
       application/xml:
         example: |
           <items>
