@@ -12,7 +12,7 @@
 }
 
 .tab-list {
-  right: 12px;
+  right: 9px;
   position: relative;
   bottom: -1px;
 
@@ -92,9 +92,9 @@
 .tab-get::before {
   background: $color-console-tab-get;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);
@@ -108,9 +108,9 @@
 .tab-put::before {
   background: $color-console-tab-put;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);
@@ -124,9 +124,9 @@
 .tab-delete::before {
   background: $color-console-tab-delete;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);
@@ -140,9 +140,9 @@
 .tab-post::before {
   background: $color-console-tab-post;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);
@@ -156,9 +156,9 @@
 .tab-patch::before {
   background: $color-console-tab-patch;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);
@@ -172,9 +172,9 @@
 .tab-connect::before {
   background: $color-console-tab-connect;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);
@@ -188,9 +188,9 @@
 .tab-head::before {
   background: $color-console-tab-head;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);
@@ -204,9 +204,9 @@
 .tab-options::before {
   background: $color-console-tab-options;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);
@@ -220,9 +220,9 @@
 .tab-trace::before {
   background: $color-console-tab-trace;
   content: '';
-  height: 31px;
+  height: 45px;
   border-radius: 4px;
-  margin: 0 10px 0;
+  margin: -1px 10px 0;
   -webkit-transform: perspective(45px) rotateX(30deg);
   -moz-transform: perspective(45px) rotateX(30deg);
   -ms-transform: perspective(45px) rotateX(30deg);

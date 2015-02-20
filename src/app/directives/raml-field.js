@@ -11,9 +11,12 @@
         param: '='
       },
       controller: function($scope) {
-        var selectedBody = $scope.$parent.context.bodyContent.selected;
-        var bodyContent  = $scope.$parent.context.bodyContent.definitions[selectedBody];
-        var context      = $scope.$parent.context[$scope.$parent.type] || bodyContent;
+        var bodyContent = $scope.$parent.context.bodyContent;
+        var context     = $scope.$parent.context[$scope.$parent.type];
+
+        if (bodyContent) {
+          context = context || bodyContent.definitions[bodyContent.selected];
+        }
 
         Object.keys(context.plain).map(function (key) {
           var definition = context.plain[key].definitions[0];
