@@ -1079,13 +1079,9 @@
           });
         }
 
-        $scope.$on('resetData', function(event) {
+        $scope.$on('resetData', function() {
           $scope.currentSchemeType = 'Anonymous';
         });
-
-        $scope.securitySchemeChanged = function (value) {
-          $scope.currentSchemeType = value;
-        }
 
         $scope.cancelRequest = function () {
           $scope.showSpinner = false;
@@ -5317,7 +5313,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <div class=\"raml-console-sidebar-row raml-console-sidebar-securty\">\n" +
     "              <div class=\"raml-console-toggle-group raml-console-sidebar-toggle-group\">\n" +
     "                <label class=\"raml-console-sidebar-label\">Security Scheme</label>\n" +
-    "                <select class=\"raml-console-sidebar-input\" ng-model=\"currentSchemeType\" style=\"margin-bottom: 0;\" ng-change=\"securitySchemeChanged(currentSchemeType)\">\n" +
+    "                <select class=\"raml-console-sidebar-input\" ng-model=\"currentSchemeType\" style=\"margin-bottom: 0;\">\n" +
     "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{scheme.type}}\" ng-selected=\"scheme.type=='Anonymous'\">{{scheme.type}}</option>\n" +
     "                </select>\n" +
     "              </div>\n" +

@@ -172,13 +172,9 @@
           });
         }
 
-        $scope.$on('resetData', function(event) {
+        $scope.$on('resetData', function() {
           $scope.currentSchemeType = 'Anonymous';
         });
-
-        $scope.securitySchemeChanged = function (value) {
-          $scope.currentSchemeType = value;
-        }
 
         $scope.cancelRequest = function () {
           $scope.showSpinner = false;
