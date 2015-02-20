@@ -82,11 +82,17 @@
           }
         });
 
+        $scope.sortMethods = function (method) {
+          return method.method;
+        };
+
         $scope.showResource = function ($event, $index) {
           var $this             = jQuery($event.currentTarget);
           var $resource         = $this.closest('.raml-console-resource');
           var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
           var methodInfo        = $scope.resource.methods[$index];
+
+          console.log($scope.resource.methods);
 
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();

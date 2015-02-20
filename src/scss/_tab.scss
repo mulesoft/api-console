@@ -14,13 +14,16 @@
 .tab-list {
   right: 9px;
   position: relative;
+  position: absolute;
   bottom: -1px;
 
   display: flex;
+  display: -webkit-flex;
   flex-grow: 1;
   flex-flow: row-reverse;
   align-self: flex-end;
   padding-left: 16px;
+  float:right;
 
   @media only screen and (min-width: $medium-screen) {
     padding-left: 24px;

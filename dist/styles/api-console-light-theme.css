@@ -1421,12 +1421,15 @@ th {
 .raml-console-tab-list {
   right: 9px;
   position: relative;
+  position: absolute;
   bottom: -1px;
   display: flex;
+  display: -webkit-flex;
   flex-grow: 1;
   flex-flow: row-reverse;
   align-self: flex-end;
   padding-left: 16px;
+  float: right;
 }
 
 @media only screen and (min-width: 600px) {
@@ -2574,6 +2577,7 @@ a.raml-console-resource-path-active {
 .raml-console-sidebar {
   width: 0;
   flex-shrink: 0;
+  -webkit-flex-shrink: 0;
   overflow: hidden;
   border-bottom-right-radius: 4px;
   border-left: 3px solid #d6d7d9;
