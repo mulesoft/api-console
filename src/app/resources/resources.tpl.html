@@ -71,7 +71,7 @@
           <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
             <div class="raml-console-resource raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }">
               <div class="raml-console-resource-path-container">
-                <h3 class="raml-console-resource-heading">
+                <h3 class="raml-console-resource-heading" ng-click="showResourceDescription($event)" ng-class="{'raml-console-resource-heading-hover':resource.description}">
                   <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="raml-console-resource-path-active">{{segment.toString()}}</span>
                 </h3>
 
@@ -82,6 +82,13 @@
               <method-list></method-list>
               <close-button></close-button>
             </div>
+
+            <span class="raml-console-resource-list-item raml-console-resource-description" ng-show="resourceGroup.length > 1" ng-if="resource.description">
+              <div class="raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active">
+                <h3 class="raml-console-resource-heading-a">Description</h3>
+                <p marked="resource.description" opts="markedOptions"></p>
+              </div>
+            </span>
 
             <resource-panel></resource-panel>
           </li>

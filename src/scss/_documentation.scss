@@ -55,6 +55,10 @@
   }
 }
 
+.documentation-heading:hover {
+  cursor: pointer;
+}
+
 .documentation-header {
   background: $color-console-documentation-header;
   position: relative;
