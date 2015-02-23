@@ -264,10 +264,7 @@
 
         $scope.context.forceRequest = false;
 
-        function pirula (type, scheme, collection, context) {
-          var details         = $scope.securitySchemes[scheme].describedBy || {};
-          var securityHeaders = details[type] || {};
-
+        function cleanSchemeMetadata(collection, context) {
           Object.keys(collection).map(function (key) {
             if (collection[key][0].isFromSecurityScheme) {
               delete collection[key];
@@ -277,6 +274,11 @@
               delete context.plain[key];
             }
           });
+        }
+
+        function updateContextData (type, scheme, collection, context) {
+          var details         = $scope.securitySchemes[scheme].describedBy || {};
+          var securityHeaders = details[type] || {};
 
           if (securityHeaders) {
             Object.keys(securityHeaders).map(function (key) {
@@ -307,12 +309,17 @@
 
           $scope.currentSchemeType = type;
 
-          if (!$scope.methodInfo.headers.plain) {
-            $scope.methodInfo.headers.plain = {};
-          }
+          cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
+          cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
 
-          pirula('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
-          pirula('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+          if (type === 'x-custom') {
+            if (!$scope.methodInfo.headers.plain) {
+              $scope.methodInfo.headers.plain = {};
+            }
+
+            updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
+            updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+          }
         };
 
         $scope.tryIt = function ($event) {
