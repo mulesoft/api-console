@@ -10,6 +10,7 @@
         $scope.close = function () {
           var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
 
+
           $inactiveElements.removeClass('raml-console-is-active');
           $scope.showPanel = false;
         };

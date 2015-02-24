@@ -6,6 +6,18 @@
     this.credentials = credentials;
   };
 
+  function getScopes(credentials) {
+    var scopes = [];
+
+    if (credentials.scopes) {
+      scopes = Object.keys(credentials.scopes).filter(function (scope) {
+        return credentials.scopes[scope] === true;
+      });
+    }
+
+    return scopes;
+  }
+
   function popup(location) {
     var w    = 640;
     var h    = 480;
@@ -21,7 +33,7 @@
       accessTokenUri:   this.scheme.settings.accessTokenUri,
       authorizationUri: this.scheme.settings.authorizationUri,
       redirectUri:      RAML.Settings.oauth2RedirectUri,
-      scopes:           this.credentials.scopes ? Object.keys(this.credentials.scopes) : []
+      scopes:           getScopes(this.credentials)
     });
     var grantType = this.credentials.grant;
 
@@ -51,9 +63,6 @@
 
         if (user && user.accessToken) {
           user.request(options, function (err, res) {
-            res.raw.oauth = {
-              accessToken: user.accessToken
-            };
             done(res.raw, err);
           });
         }

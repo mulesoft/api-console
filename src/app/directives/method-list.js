@@ -112,6 +112,8 @@
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
 
+          $rootScope.$broadcast('resetData');
+
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
           };

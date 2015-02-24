@@ -8,14 +8,14 @@
   <div id="request-documentation" class="raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active" ng-class="{'raml-console-is-active':showRequestDocumentation}">
     <h3 class="raml-console-resource-heading-a">Description</h3>
 
-    <p marked="methodInfo.description"></p>
+    <p marked="methodInfo.description" opts="markedOptions"></p>
 
     <section class="raml-console-resource-section" id="docs-uri-parameters" ng-if="resource.uriParametersForDocumentation">
       <h3 class="raml-console-resource-heading-a">URI Parameters</h3>
 
       <div class="raml-console-resource-param" id="docs-uri-parameters-{{uriParam[0].displayName}}" ng-repeat="uriParam in resource.uriParametersForDocumentation">
         <h4 class="raml-console-resource-param-heading">{{uriParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(uriParam[0])}}</span></h4>
-        <p marked="uriParam[0].description"></p>
+        <p marked="uriParam[0].description" opts="markedOptions"></p>
 
         <p ng-if="uriParam[0].example">
           <span class="raml-console-resource-param-example"><b>Example:</b> {{uriParam[0].example}}</span>
@@ -29,7 +29,7 @@
       <div class="raml-console-resource-param" ng-repeat="header in methodInfo.headers.plain">
         <h4 class="raml-console-resource-param-heading">{{header[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(header[0])}}</span></h4>
 
-        <p marked="header[0].description"></p>
+        <p marked="header[0].description" opts="markedOptions"></p>
 
         <p ng-if="header[0].example">
           <span class="raml-console-resource-param-example"><b>Example:</b> {{header[0].example}}</span>
@@ -43,7 +43,7 @@
       <div class="raml-console-resource-param" ng-repeat="queryParam in methodInfo.queryParameters">
         <h4 class="raml-console-resource-param-heading">{{queryParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(queryParam[0])}}</span></h4>
 
-        <p marked="queryParam[0].description"></p>
+        <p marked="queryParam[0].description" opts="markedOptions"></p>
 
         <p ng-if="queryParam[0].example">
           <span class="raml-console-resource-param-example"><b>Example:</b> {{queryParam[0].example}}</span>
@@ -64,7 +64,7 @@
          <div class="raml-console-resource-param" ng-repeat="formParam in methodInfo.body[currentBodySelected].formParameters">
           <h4 class="raml-console-resource-param-heading">{{formParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(formParam[0])}}</span></h4>
 
-          <p marked="formParam[0].description"></p>
+          <p marked="formParam[0].description" opts="markedOptions"></p>
 
           <p ng-if="formParam[0].example">
             <span class="raml-console-resource-param-example"><b>Example:</b> {{formParam[0].example}}</span>
@@ -106,7 +106,7 @@
         <h3 class="raml-console-resource-heading-a">Status {{code}}</h3>
 
         <div class="raml-console-resource-response">
-          <p marked="methodInfo.responses[code].description"></p>
+          <p marked="methodInfo.responses[code].description" opts="markedOptions"></p>
         </div>
 
         <div class="raml-console-resource-response" ng-if="methodInfo.responses[code].headers">
@@ -115,7 +115,7 @@
           <div class="raml-console-resource-param" ng-repeat="header in methodInfo.responses[code].headers">
             <h4 class="raml-console-resource-param-heading">{{header[0].displayName}} <span class="raml-console-resource-param-instructional">{{header[0].type}}</span></h4>
 
-            <p marked="header[0].description"></p>
+            <p marked="header[0].description" opts="markedOptions"></p>
           </div>
         </div>
 

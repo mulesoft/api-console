@@ -26,28 +26,11 @@
       <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
         <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
         <span class="raml-console-sidebar-tooltip-flyout">
-          <span marked="param.definitions[0].description"></span>
-        </span>
-      </span>
-      <label for="{{param.definitions[0].id}}" class="raml-console-sidebar-label">{{param.definitions[0].displayName}} <a class="raml-console-sidebar-override" ng-if="canOverride(param.definitions[0])" ng-click="overrideField($event, param.definitions[0])">Override</a> <span class="raml-console-side-bar-required-field" ng-if="param.definitions[0].required">*</span><label ng-if="param.definitions[0].isFromSecurityScheme" class="raml-console-sidebar-security-label">from security scheme</label></label>
-
-      <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param.definitions[0])">
-        <button tabindex="-1" class="raml-console-sidebar-input-reset" ng-click="reset(param.definitions)"><span class="raml-console-visuallyhidden">Reset field</span></button>
-        <span class="raml-console-sidebar-tooltip-flyout-left">
-          <span>Use example value</span>
+          <span marked="param.definitions[0].description" opts="markedOptions"></span>
         </span>
       </span>
 
-      <select id="select_{{param.definitions[0].id}}" ng-if="isEnum(param.definitions[0])" name="param.definitions[0].id" class="raml-console-sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" style="margin-bottom: 0;" ng-change="onChange()">
-       {{$index}}
-       <option ng-repeat="enum in unique(param.definitions[0].enum)" value="{{enum}}">{{enum}}</option>
-      </select>
-
-      <input id="{{param.definitions[0].id}}" ng-hide="!isDefault(param.definitions[0])" class="raml-console-sidebar-input" ng-model="context[type].values[param.definitions[0].id][0]" ng-class="{'raml-console-sidebar-field-no-default': !hasExampleValue(param.definitions[0])}" validate="param.definitions[0]" dynamic-name="param.definitions[0].id" ng-change="onChange()"/>
-
-      <input id="checkbox_{{param.definitions[0].id}}" ng-if="isBoolean(param.definitions[0])" class="raml-console-sidebar-input" type="checkbox" ng-model="context[type].values[param.definitions[0].id][0]" dynamic-name="param.definitions[0].id" ng-change="onChange()" />
-
-      <span class="raml-console-field-validation-error"></span>
+      <raml-field param="param.definitions[0]" model="context[type].values[param.definitions[0].id]"></raml-field>
     </p>
   </div>
 </section>

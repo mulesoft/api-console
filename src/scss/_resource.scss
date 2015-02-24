@@ -20,6 +20,24 @@ ol.resources-container {
   margin-top: -5px;
 }
 
+.resource-description {
+  border-bottom: 1px solid $color-console-border;
+
+  div {
+    padding: 17px;
+    background: #FAFAFA;
+
+    h3 {
+      font-size: 12px;
+      margin: 0 0 11px;
+    }
+
+    p {
+      font-size: 12px;
+    }
+  }
+}
+
 .resource-menu-item {
   padding-left: 0 !important;
   height: 48px;
@@ -326,12 +344,13 @@ ol.resources-container {
   }
 }
 
-span.resource-path-active {
-  cursor: default;
-}
-
 a.resource-path-active {
   cursor: pointer;
+}
+
+.resource-heading-hover:hover {
+  cursor: pointer;
+  background-image: linear-gradient(to top, rgba(255,255,255,0) 1px, #999 2px, rgba(255,255,255,0) 1px);
 }
 
 .resource-heading {
@@ -343,9 +362,9 @@ a.resource-path-active {
   color: #b9b9b9;
   font-size: 10px;
 
-  .resource:not(.is-active) &:hover {
-    background-image: linear-gradient(to top, rgba(255,255,255,0) 1px, #999 2px, rgba(255,255,255,0) 1px);
-  }
+  // .resource:not(.is-active) &:hover {
+  //   background-image: linear-gradient(to top, rgba(255,255,255,0) 1px, #999 2px, rgba(255,255,255,0) 1px);
+  // }
 
   @media only screen and (min-width: $medium-screen) {
     margin-right: 15px;

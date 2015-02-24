@@ -7,6 +7,7 @@
       templateUrl: 'directives/root-documentation.tpl.html',
       replace: true,
       controller: function($scope, $location) {
+        $scope.markedOptions = RAML.Settings.marked;
         $scope.selectedSection = 'all';
 
         $scope.hasDocumentationWithIndex = function () {

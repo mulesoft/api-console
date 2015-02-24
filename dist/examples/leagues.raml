@@ -55,12 +55,17 @@ securedBy: [ basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
 
 /teams:
   displayName: Teams
+  description: |
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis ipsum felis, sed aliquam massa egestas vel. Sed scelerisque leo lorem, a gravida enim congue eget. Sed rutrum quis odio vitae sollicitudin. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc pulvinar arcu at diam pharetra finibus. Curabitur malesuada hendrerit odio id consectetur. Etiam felis augue, malesuada ut turpis vel, tincidunt sodales justo. Donec quam eros, accumsan ut elementum et, euismod placerat ligula. Phasellus consequat velit lacus. Aenean vel massa et sapien molestie imperdiet et id ex. Nulla quis suscipit libero.
   post:
     description: Delete an item by Code.
     headers:
       header:
         displayName: header
         example: header
+      type:
+        type: string
+        enum: [ Remote, Office ]
     queryParameters:
       param:
         displayName: param
@@ -105,6 +110,11 @@ securedBy: [ basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
             required: true
             minLength: 3
             maxLength: 12
+          department:
+            displayName: Department
+            type: string
+            enum: [Sales, Administration]
+            example: Sales
       multipart/form-data:
         formParameters:
           code:
@@ -123,6 +133,11 @@ securedBy: [ basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
             required: true
             minLength: 3
             maxLength: 12
+          department:
+            displayName: Department
+            type: string
+            enum: [Sales, Administration]
+            example: Sales
       application/xml:
         example: |
           <items>
@@ -310,8 +325,8 @@ securedBy: [ basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
 
   /{teamId}:
     displayName: Team
-    #description: |
-    #  The team is the basic unit for keeping track of a roster of players that are participating together in La Liga. With the Team APIs, you can obtain team-related information, like the team name, stats, points, and more.
+    description: |
+     The team is the basic unit for keeping track of a roster of players that are participating together in La Liga. With the Team APIs, you can obtain team-related information, like the team name, stats, points, and more.
     uriParameters:
       teamId:
         description: |
@@ -420,6 +435,8 @@ securedBy: [ basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
             Unable to find a team with that identifier
 /positions:
   displayName: Position Table
+  description: |
+    Nam lacinia suscipit sapien id consectetur. Sed cursus luctus elit id dictum. Praesent vulputate dui ac nulla vehicula dignissim. Vestibulum iaculis lorem ut arcu ultrices, et dictum velit tincidunt. Sed iaculis turpis vel feugiat interdum. Fusce neque augue, lobortis vel purus mattis, condimentum mollis tortor. Donec ligula est, rutrum ut maximus in, commodo non orci. Nunc dapibus lectus sit amet risus vulputate porta. Aliquam ut ultrices neque. Phasellus ultrices ac nisl eu dignissim. Quisque non magna rhoncus, luctus urna quis, mollis dolor. Integer sit amet elit massa. Morbi molestie sapien ut lorem porta pellentesque.
   get:
     description: Retrieve the current standing for the current season
     responses:
@@ -504,8 +521,8 @@ securedBy: [ basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
 
 /fixture:
   displayName: Fixture
-  #description: |
-  #  A collection of teams that are participating in La Liga. Teams API allow you add, remove and retrieve individual team information from La Liga.
+  description: |
+    Sed nec enim mollis, tristique arcu at, ornare eros. Vivamus posuere tortor sit amet ipsum tempus, id vestibulum odio vulputate. Nunc fermentum sed metus sed viverra. Cras at maximus arcu. Donec lobortis faucibus blandit. Nunc et dolor accumsan mauris imperdiet pellentesque. Sed suscipit sem in interdum suscipit. Duis dapibus neque eget libero egestas, ut rutrum nisi congue. Maecenas auctor nec erat sit amet mattis. Morbi vestibulum ante lacus, a tempor risus tristique eu. Mauris euismod metus eget ligula pharetra, vehicula interdum nibh rutrum. Aenean semper turpis sed ligula congue egestas. Donec nec orci in arcu auctor accumsan. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur viverra est urna, vel convallis est hendrerit quis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
   get:
     description: Retrieve a list of matches for the current season
     responses:

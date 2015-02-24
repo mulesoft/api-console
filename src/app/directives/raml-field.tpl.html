@@ -1,0 +1,20 @@
+<div>
+  <label for="{{param.id}}" class="raml-console-sidebar-label">{{param.displayName}} <a class="raml-console-sidebar-override" ng-if="canOverride(param)" ng-click="overrideField($event, param)">Override</a> <span class="raml-console-side-bar-required-field" ng-if="param.required">*</span><label ng-if="param.isFromSecurityScheme" class="raml-console-sidebar-security-label">from security scheme</label></label>
+
+  <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param)">
+    <button tabindex="-1" class="raml-console-sidebar-input-reset" ng-click="reset(param)"><span class="raml-console-visuallyhidden">Reset field</span></button>
+    <span class="raml-console-sidebar-tooltip-flyout-left">
+      <span>Use example value</span>
+    </span>
+  </span>
+
+  <select id="select_{{param.id}}" ng-if="isEnum(param)" name="param.id" class="raml-console-sidebar-input" ng-model="model[0]" style="margin-bottom: 0;" ng-change="onChange()">
+   <option ng-repeat="enum in unique(param.enum)" value="{{enum}}">{{enum}}</option>
+  </select>
+
+  <input id="{{param.id}}" ng-hide="!isDefault(param)" class="raml-console-sidebar-input" ng-model="model[0]" ng-class="{'raml-console-sidebar-field-no-default': !hasExampleValue(param)}" validate="param" dynamic-name="param.id" ng-change="onChange()"/>
+
+  <input id="checkbox_{{param.id}}" ng-if="isBoolean(param)" class="raml-console-sidebar-input" type="checkbox" ng-model="model[0]" dynamic-name="param.id" ng-change="onChange()" />
+
+  <span class="raml-console-field-validation-error"></span>
+</div>

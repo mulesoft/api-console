@@ -30,7 +30,7 @@
 
       <div class="raml-console-resource-panel raml-console-documentation-content" ng-if="documentationEnabled">
         <div class="raml-console-resource-panel-wrapper">
-          <div class="raml-console-documentation-section-content" marked="getDocumentationContent(doc.content, selectedDocumentSection)"></div>
+          <div class="raml-console-documentation-section-content" marked="getDocumentationContent(doc.content, selectedDocumentSection)" opts="markedOptions"></div>
         </div>
       </div>
 
@@ -38,7 +38,7 @@
         <li ng-repeat="header in content" class="raml-console-resource-list-item">
            <div class="raml-console-resource raml-console-clearfix raml-console-documentation-clearfix">
             <div class="raml-console-resource-path-container raml-console-documentation-path-container">
-              <h3 class="raml-console-resource-heading raml-console-md-heading-{{header.heading}}">
+              <h3 class="raml-console-resource-heading raml-console-documentation-heading raml-console-md-heading-{{header.heading}}">
                 <div class="raml-console-resource-path-active">
                   <div class="raml-consoledocumentation-title" ng-click="showSection($event, header.value, doc.title)">{{header.label}}</div>
                 </div>

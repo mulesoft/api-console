@@ -7,6 +7,7 @@
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
+        $scope.markedOptions = RAML.Settings.marked;
         $scope.currentSchemeType = 'Anonymous';
         $scope.currentScheme = 'Anonymous|anonymous';
         $scope.responseDetails = false;
@@ -172,6 +173,10 @@
           });
         }
 
+        $scope.$on('resetData', function() {
+          $scope.currentSchemeType = 'Anonymous';
+        });
+
         $scope.cancelRequest = function () {
           $scope.showSpinner = false;
         };
@@ -325,6 +330,8 @@
         $scope.tryIt = function ($event) {
           $scope.requestOptions  = null;
           $scope.responseDetails = false;
+          $scope.response        = {};
+
           validateForm($scope.form);
 
           if (!$scope.context.forceRequest) {

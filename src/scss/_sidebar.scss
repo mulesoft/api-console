@@ -1,6 +1,7 @@
 .sidebar {
   width: 0;
   flex-shrink: 0;
+  -webkit-flex-shrink: 0;
 
   overflow: hidden;
   border-bottom-right-radius: 4px;
