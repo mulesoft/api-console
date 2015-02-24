@@ -53,6 +53,10 @@
           }
         }
 
+        function beautifyCustomSecuritySchemeName (name) {
+          return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
+        }
+
         $scope.readTraits = function (traits) {
           var list = [];
 
@@ -113,6 +117,18 @@
           $scope.securitySchemes.anonymous = {
             type: 'Anonymous'
           };
+
+          Object.keys($scope.securitySchemes).map(function (key) {
+            var type = $scope.securitySchemes[key].type;
+
+            $scope.securitySchemes[key].name = type;
+            $scope.securitySchemes[key].id = type + '|' + key;
+
+            if (type === 'x-custom') {
+              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(key);
+              $scope.securitySchemes[key].id = type + '|' + key;
+            }
+          });
 
           /*jshint camelcase: false */
           // Digest Authentication is not supported

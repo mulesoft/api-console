@@ -26,8 +26,8 @@
             <div class="raml-console-sidebar-row raml-console-sidebar-securty">
               <div class="raml-console-toggle-group raml-console-sidebar-toggle-group">
                 <label class="raml-console-sidebar-label">Security Scheme</label>
-                <select class="raml-console-sidebar-input" ng-model="currentSchemeType" style="margin-bottom: 0;">
-                 <option ng-repeat="(key, scheme) in securitySchemes" value="{{scheme.type}}" ng-selected="scheme.type=='Anonymous'">{{scheme.type}}</option>
+                <select ng-change="securitySchemeChanged(currentScheme)" class="raml-console-sidebar-input" ng-model="currentScheme" style="margin-bottom: 0;">
+                 <option ng-repeat="(key, scheme) in securitySchemes" value="{{scheme.id}}" ng-selected="scheme.type=='Anonymous'">{{scheme.name}}</option>
                 </select>
               </div>
             </div>

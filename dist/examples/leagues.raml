@@ -37,16 +37,21 @@ securitySchemes:
         authorizationGrants: [ code, credentials, owner ]
         scopes:
           - "user"
-          - "user:email"
-          - "user:follow"
-          - "public_repo"
-          - "repo"
-          - "repo:status"
-          - "delete_repo"
-          - "notifications"
-          - "gist"
+          - "league"
+  - custom_scheme_1:
+      type: x-custom
+      describedBy:
+        headers:
+          auth:
+        queryParameters:
+          access_token:
+  - custom_scheme_2:
+      type: x-custom
+      describedBy:
+        headers:
+          auth:
 
-securedBy: [ basic, digest_auth, oauth_2_0 ]
+securedBy: [ basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
 
 /teams:
   displayName: Teams
@@ -145,6 +150,8 @@ securedBy: [ basic, digest_auth, oauth_2_0 ]
   get:
     description: |
       *Obtain* information from a collection of teams simultaneously
+    headers:
+      header:
     queryParameters:
       city:
         description:
@@ -152,7 +159,7 @@ securedBy: [ basic, digest_auth, oauth_2_0 ]
         type: string
         required: false
         default: BAR
-        example: Barcelona
+        example: BAR
     responses:
       200:
         body:
