@@ -82,10 +82,6 @@
           }
         });
 
-        $scope.sortMethods = function (method) {
-          return method.method;
-        };
-
         $scope.showResource = function ($event, $index) {
           var $this             = jQuery($event.currentTarget);
           var $resource         = $this.closest('.raml-console-resource');
