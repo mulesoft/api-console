@@ -1095,6 +1095,7 @@
 
         $scope.$on('resetData', function() {
           $scope.currentSchemeType = 'Anonymous';
+          $scope.currentScheme = 'Anonymous|anonymous';
         });
 
         $scope.cancelRequest = function () {
@@ -2989,6 +2990,17 @@ RAML.Inspector = (function() {
       var securedBy = this.securedBy || [],
           selectedSchemes = {};
 
+      var overwrittenSchemes = {};
+
+      securedBy.map(function(el) {
+        if (typeof el === 'object') {
+          var key = Object.keys(el)[0];
+
+          overwrittenSchemes[key] = el[key];
+          securedBy.push(key);
+        }
+      });
+
       securedBy = securedBy.filter(function(name) {
         return name !== null && typeof name !== 'object';
       });
@@ -2996,7 +3008,15 @@ RAML.Inspector = (function() {
       securitySchemes.forEach(function(scheme) {
         securedBy.forEach(function(name) {
           if (scheme[name]) {
-            selectedSchemes[name] = scheme[name];
+            selectedSchemes[name] = jQuery.extend(true, {}, scheme[name]);
+          }
+        });
+      });
+
+      Object.keys(overwrittenSchemes).map(function (key) {
+        Object.keys(overwrittenSchemes[key]).map(function (prop) {
+          if (selectedSchemes[key].settings) {
+            selectedSchemes[key].settings[prop] = overwrittenSchemes[key][prop];
           }
         });
       });

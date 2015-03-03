@@ -58,6 +58,7 @@ securedBy: [ basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
   description: |
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis ipsum felis, sed aliquam massa egestas vel. Sed scelerisque leo lorem, a gravida enim congue eget. Sed rutrum quis odio vitae sollicitudin. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc pulvinar arcu at diam pharetra finibus. Curabitur malesuada hendrerit odio id consectetur. Etiam felis augue, malesuada ut turpis vel, tincidunt sodales justo. Donec quam eros, accumsan ut elementum et, euismod placerat ligula. Phasellus consequat velit lacus. Aenean vel massa et sapien molestie imperdiet et id ex. Nulla quis suscipit libero.
   post:
+    securedBy: [ oauth_2_0: { scopes: [ read ] } ]
     description: Delete an item by Code.
     headers:
       header:

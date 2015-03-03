@@ -175,6 +175,7 @@
 
         $scope.$on('resetData', function() {
           $scope.currentSchemeType = 'Anonymous';
+          $scope.currentScheme = 'Anonymous|anonymous';
         });
 
         $scope.cancelRequest = function () {
