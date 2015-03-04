@@ -84,10 +84,12 @@
 }
 
 .resource-panel-primary {
-  flex: 2;
+  // width: 100%;
+  -ms-flex: 1 auto;
+  flex: 1 auto;
+  -webkit-flex: 1 auto;
 
   overflow: hidden;
-  width: 100%;
 
   font-size: 16px;
 

@@ -1521,6 +1521,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -40px;
+  margin-left: 10px\9;
   z-index: -1;
   top: 0px;
 }
@@ -1537,6 +1538,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -40px;
+  margin-left: 10px\9;
   z-index: -1;
   top: 0px;
 }
@@ -1553,6 +1555,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -28px;
+  margin-left: 8px\9;
   z-index: -1;
   top: 0px;
 }
@@ -1569,6 +1572,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -36px;
+  margin-left: 8px\9;
   z-index: -1;
   top: 0px;
 }
@@ -1585,6 +1589,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -32px;
+  margin-left: 9px\9;
   z-index: -1;
   top: 0px;
 }
@@ -1601,6 +1606,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -19px;
+  margin-left: 11px\9;
   z-index: -1;
   top: 0px;
 }
@@ -1617,6 +1623,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -34px;
+  margin-left: 9px\9;
   z-index: -1;
   top: 0px;
 }
@@ -1633,6 +1640,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -21px;
+  margin-left: 9px\9;
   z-index: -1;
   top: 0px;
 }
@@ -1649,6 +1657,7 @@ th {
   width: 108px;
   position: absolute;
   margin-left: -31px;
+  margin-left: 9px\9;
   z-index: -1;
   top: 0px;
 }
@@ -2284,9 +2293,10 @@ a.raml-console-resource-path-active {
 }
 
 .raml-console-resource-panel-primary {
-  flex: 2;
+  -ms-flex: 1 auto;
+  flex: 1 auto;
+  -webkit-flex: 1 auto;
   overflow: hidden;
-  width: 100%;
   font-size: 16px;
 }
 
