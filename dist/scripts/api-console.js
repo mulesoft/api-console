@@ -1235,17 +1235,17 @@
 
           $scope.currentSchemeType = type;
 
-          cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
-          cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
+          // cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
+          // cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
 
-          if (type === 'x-custom') {
-            if (!$scope.methodInfo.headers.plain) {
-              $scope.methodInfo.headers.plain = {};
-            }
+          // if (type === 'x-custom') {
+          //   if (!$scope.methodInfo.headers.plain) {
+          //     $scope.methodInfo.headers.plain = {};
+          //   }
 
-            updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
-            updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
-          }
+          //   updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
+          //   updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+          // }
         };
 
         $scope.tryIt = function ($event) {
