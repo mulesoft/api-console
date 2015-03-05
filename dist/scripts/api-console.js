@@ -1190,48 +1190,48 @@
 
         $scope.context.forceRequest = false;
 
-        function cleanSchemeMetadata(collection, context) {
-          Object.keys(collection).map(function (key) {
-            if (collection[key][0].isFromSecurityScheme) {
-              delete collection[key];
-            }
+        // function cleanSchemeMetadata(collection, context) {
+        //   Object.keys(collection).map(function (key) {
+        //     if (collection[key][0].isFromSecurityScheme) {
+        //       delete collection[key];
+        //     }
 
-            if (context.plain[key].definitions[0].isFromSecurityScheme) {
-              delete context.plain[key];
-            }
-          });
-        }
+        //     if (context.plain[key].definitions[0].isFromSecurityScheme) {
+        //       delete context.plain[key];
+        //     }
+        //   });
+        // }
 
-        function updateContextData (type, scheme, collection, context) {
-          var details         = $scope.securitySchemes[scheme].describedBy || {};
-          var securityHeaders = details[type] || {};
+        // function updateContextData (type, scheme, collection, context) {
+        //   var details         = $scope.securitySchemes[scheme].describedBy || {};
+        //   var securityHeaders = details[type] || {};
 
-          if (securityHeaders) {
-            Object.keys(securityHeaders).map(function (key) {
-              if (!securityHeaders[key]) {
-                securityHeaders[key] = {
-                  id: key,
-                  type: 'string'
-                };
-              }
+        //   if (securityHeaders) {
+        //     Object.keys(securityHeaders).map(function (key) {
+        //       if (!securityHeaders[key]) {
+        //         securityHeaders[key] = {
+        //           id: key,
+        //           type: 'string'
+        //         };
+        //       }
 
-              securityHeaders[key].displayName             = key;
-              securityHeaders[key].isFromSecurityScheme    = true;
-              collection[key] = [securityHeaders[key]];
+        //       securityHeaders[key].displayName             = key;
+        //       securityHeaders[key].isFromSecurityScheme    = true;
+        //       collection[key] = [securityHeaders[key]];
 
-              context.plain[key] = {
-                definitions: [securityHeaders[key]],
-                selected: securityHeaders[key].type
-              };
-              context.values[key] = [undefined];
-            });
-          }
-        }
+        //       context.plain[key] = {
+        //         definitions: [securityHeaders[key]],
+        //         selected: securityHeaders[key].type
+        //       };
+        //       context.values[key] = [undefined];
+        //     });
+        //   }
+        // }
 
         $scope.securitySchemeChanged = function (scheme) {
           var info            = scheme.split('|');
           var type            = info[0];
-          var name            = info[1];
+          // var name            = info[1];
 
           $scope.currentSchemeType = type;
 
