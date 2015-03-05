@@ -3355,6 +3355,10 @@ RAML.Inspector = (function() {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
           if (typeof info[key][0].enum === 'undefined') {
+            if (info[key][0].type === 'date') {
+              info[key][0].example = info[key][0].example.toUTCString();
+            }
+
             that.values[key][0] = info[key][0].example;
           }
         }
