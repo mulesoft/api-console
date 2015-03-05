@@ -1690,17 +1690,38 @@
 
           $scope.items[index] = !$scope.items[index];
 
-          var itemsStatus = $scope.items.filter(function (el) { return el === false}).length === $scope.items.length;
-
-          $scope.collapsed = checkItemStatus(false) ? true : $scope.collapsed;
-          $scope.collapsed = checkItemStatus(true) ? false : $scope.collapsed;
+          $scope.collapsed = checkItemStatus(false) ? false : $scope.collapsed;
+          $scope.collapsed = checkItemStatus(true) ? true : $scope.collapsed;
 
           $section.toggleClass('raml-console-is-collapsed');
-          $this.toggleClass('raml-console-is-active');
         };
 
+        $scope.collapseAll = function ($event) {
+          var $this = jQuery($event.currentTarget);
+
+          if ($this.hasClass('raml-console-resources-expanded')) {
+            $scope.collapsed = true;
+            jQuery('#raml-console-resources-container').find('ol.raml-console-resource-list').velocity('slideUp', {
+              duration: 200
+            });
+          } else {
+            $scope.collapsed = false;
+            jQuery('#raml-console-resources-container').find('ol.raml-console-resource-list').velocity('slideDown', {
+              duration: 200
+            });
+          }
+
+          toggleCollapsed($scope.collapsed);
+        };
+
+        function toggleCollapsed (status) {
+          for (var i = 0; i < $scope.items.length; i++) {
+            $scope.items[i] = $scope.items[i] !== null ? status : $scope.items[i];
+          }
+        }
+
         function checkItemStatus(status) {
-          return $scope.items.filter(function (el) { return el === status || el === null}).length === $scope.items.length
+          return $scope.items.filter(function (el) { return el === status || el === null; }).length === $scope.items.length;
         }
 
         $scope.showResourceDescription = function ($event) {
@@ -1709,57 +1730,6 @@
 
           $container.find('.raml-console-resource-description').toggleClass('ng-hide');
         };
-
-        $scope.toggleInverted = function ($event) {
-          var $section    = jQuery($event.currentTarget)
-            .closest('.raml-console-resource-list-item')
-            .find('.raml-console-resource-list');
-
-          var $this = $section
-            .closest('.raml-console-resource-list-item')
-            .find('.raml-console-resource-root-toggle');
-
-          if ($section.hasClass('raml-console-is-collapsed')) {
-            $section.velocity('slideDown', {
-              duration: 200
-            });
-          } else {
-            $section.velocity('slideUp', {
-              duration: 200
-            });
-          }
-
-          $section.toggleClass('raml-console-is-collapsed');
-          $this.toggleClass('raml-console-is-active');
-        };
-
-        $scope.collapseAll = function ($event) {
-          var $this = jQuery($event.currentTarget);
-
-          if ($this.hasClass('raml-console-resources-expanded')) {
-            $scope.collapsed = true;
-            setCollapsed(true);
-            $this.text('expand all');
-            $this.removeClass('raml-console-resources-expanded');
-            jQuery('#raml-console-resources-container').find('ol.raml-console-resource-list').velocity('slideUp', {
-              duration: 200
-            });
-          } else {
-            $scope.collapsed = false;
-            setCollapsed(false);
-            $this.text('collapse all');
-            $this.addClass('raml-console-resources-expanded');
-            jQuery('#raml-console-resources-container').find('ol.raml-console-resource-list').velocity('slideDown', {
-              duration: 200
-            });
-          }
-        };
-
-        function setCollapsed (status) {
-          for (var i = 0; i < $scope.items.length; i++) {
-            $scope.items[i] = $scope.items[i] !== null ? !status : $scope.items[i];
-          }
-        }
 
         $scope.hasResourcesWithChilds = function () {
           return $scope.raml.resourceGroups.filter(function (el) {
@@ -1775,8 +1745,8 @@
           $scope.items = [];
 
           for (var i = 0 ; i < $scope.raml.resourceGroups.length; i++) {
-            $scope.items.push($scope.raml.resourceGroups[i].length > 1 ? true : null);
-          };
+            $scope.items.push($scope.raml.resourceGroups[i].length > 1 ? false : null);
+          }
         });
       }
     };
@@ -5635,7 +5605,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <input id=\"raml-console-api-behind-firewall\" type=\"checkbox\" ng-model=\"disableProxy\" ng-change=\"updateProxyConfig(disableProxy)\">\n" +
     "        </div>\n" +
     "        <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\">\n" +
-    "          <span ng-if=\"hasResourcesWithChilds()\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all\" ng-click=\"collapseAll($event)\" ng-class=\"{'raml-console-resources-expanded':!collapsed}\"><span ng-if=\"!collapsed\">collapse</span><span ng-if=\"collapsed\">expand</span> all</span>\n" +
+    "          <span ng-if=\"hasResourcesWithChilds()\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all\" ng-click=\"collapseAll($event)\" ng-class=\"{'raml-console-resources-expanded':!collapsed}\">\n" +
+    "            <span ng-if=\"!collapsed\">collapse</span>\n" +
+    "            <span ng-if=\"collapsed\">expand</span> all\n" +
+    "          </span>\n" +
+    "\n" +
     "          <div class=\"raml-console-resource-path-container\">\n" +
     "            <h2 class=\"raml-console-resource-section-title\">\n" +
     "              <span class=\"raml-console-resource-path-active\">Resources</span>\n" +
@@ -5647,11 +5621,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <li id=\"{{generateId(resource.pathSegments)}}\" class=\"raml-console-resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
     "        <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\" ng-class=\"{ 'raml-console-is-active':showPanel }\" ng-init=\"resource = resourceGroup[0]\">\n" +
-    "          <div class=\"raml-console-resource-path-container\">\n" +
-    "            <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': collapsed}\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event, $index)\"></button>\n" +
+    "          <div class=\"raml-console-resource-path-container\" ng-init=\"index=$index\">\n" +
+    "            <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': items[$index]}\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event, index)\"></button>\n" +
     "\n" +
     "            <h2 class=\"raml-console-resource-heading raml-console-resource-heading-large\">\n" +
-    "              <a class=\"raml-console-resource-path-active\" ng-class=\"{'raml-console-resource-heading-hover':resourceGroup.length > 1}\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length > 1\" ng-click=\"toggleInverted($event)\">{{segment.toString()}}</a>\n" +
+    "              <a class=\"raml-console-resource-path-active\" ng-class=\"{'raml-console-resource-heading-hover':resourceGroup.length > 1}\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event, index)\">{{segment.toString()}}</a>\n" +
     "\n" +
     "              <span class=\"raml-console-resource-path-active\" ng-class=\"{'raml-console-resource-heading-hover':resource.description}\" ng-repeat='segment in resource.pathSegments' ng-if=\"resourceGroup.length <= 1\" ng-click=\"showResourceDescription($event)\">{{segment.toString()}}</span>\n" +
     "            </h2>\n" +
