@@ -5349,7 +5349,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <div class=\"raml-console-resource-path-container\" style=\"padding-top: 11px;\">\n" +
     "          <h3 class=\"raml-console-resource-heading\">\n" +
     "            <button class=\"raml-console-resource-root-toggle\" ng-if=\"content\" ng-click=\"toggle($event)\" ng-class=\"{'raml-console-is-active': collapsed}\"></button>\n" +
-    "            <span class=\"raml-console-resource-path-active\" ng-click=\"showSection($event, 'all', doc.title)\">{{doc.title}}</span>\n" +
+    "            <span class=\"raml-console-resource-path-active raml-console-document-heading\" ng-click=\"showSection($event, 'all', doc.title)\">{{doc.title}}</span>\n" +
     "          </h3>\n" +
     "          <select ng-if=\"content.length > 0\" ng-model=\"selectedSection\" ng-if=\"documentationEnabled\" class=\"raml-console-document-section-selector\" ng-change=\"sectionChange(selectedSection)\">\n" +
     "            <option value=\"all\">-- choose a section --</option>\n" +
@@ -5373,7 +5373,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <div class=\"raml-console-resource-path-container raml-console-documentation-path-container\">\n" +
     "              <h3 class=\"raml-console-resource-heading raml-console-documentation-heading raml-console-md-heading-{{header.heading}}\">\n" +
     "                <div class=\"raml-console-resource-path-active\">\n" +
-    "                  <div class=\"raml-consoledocumentation-title\" ng-click=\"showSection($event, header.value, doc.title)\">{{header.label}}</div>\n" +
+    "                  <div class=\"raml-consoledocumentation-title raml-console-document-heading\" ng-click=\"showSection($event, header.value, doc.title)\">{{header.label}}</div>\n" +
     "                </div>\n" +
     "              </h3>\n" +
     "            </div>\n" +

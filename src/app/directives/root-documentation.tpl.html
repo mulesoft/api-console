@@ -16,7 +16,7 @@
         <div class="raml-console-resource-path-container" style="padding-top: 11px;">
           <h3 class="raml-console-resource-heading">
             <button class="raml-console-resource-root-toggle" ng-if="content" ng-click="toggle($event)" ng-class="{'raml-console-is-active': collapsed}"></button>
-            <span class="raml-console-resource-path-active" ng-click="showSection($event, 'all', doc.title)">{{doc.title}}</span>
+            <span class="raml-console-resource-path-active raml-console-document-heading" ng-click="showSection($event, 'all', doc.title)">{{doc.title}}</span>
           </h3>
           <select ng-if="content.length > 0" ng-model="selectedSection" ng-if="documentationEnabled" class="raml-console-document-section-selector" ng-change="sectionChange(selectedSection)">
             <option value="all">-- choose a section --</option>
@@ -40,7 +40,7 @@
             <div class="raml-console-resource-path-container raml-console-documentation-path-container">
               <h3 class="raml-console-resource-heading raml-console-documentation-heading raml-console-md-heading-{{header.heading}}">
                 <div class="raml-console-resource-path-active">
-                  <div class="raml-consoledocumentation-title" ng-click="showSection($event, header.value, doc.title)">{{header.label}}</div>
+                  <div class="raml-consoledocumentation-title raml-console-document-heading" ng-click="showSection($event, header.value, doc.title)">{{header.label}}</div>
                 </div>
               </h3>
             </div>

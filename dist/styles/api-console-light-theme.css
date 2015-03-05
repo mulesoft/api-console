@@ -4126,6 +4126,10 @@ span.raml-console-side-bar-required-field {
   cursor: pointer;
 }
 
+.raml-console-document-heading {
+  cursor: pointer;
+}
+
 .raml-console-documentation-content {
   display: none;
 }
