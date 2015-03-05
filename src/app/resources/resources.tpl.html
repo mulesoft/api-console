@@ -40,7 +40,7 @@
       <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
         <header class="raml-console-resource raml-console-resource-root raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }" ng-init="resource = resourceGroup[0]">
           <div class="raml-console-resource-path-container">
-            <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': collapsed}" ng-if="resourceGroup.length > 1" ng-click="toggle($event)"></button>
+            <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': collapsed}" ng-if="resourceGroup.length > 1" ng-click="toggle($event, $index)"></button>
 
             <h2 class="raml-console-resource-heading raml-console-resource-heading-large">
               <a class="raml-console-resource-path-active" ng-class="{'raml-console-resource-heading-hover':resourceGroup.length > 1}" ng-repeat='segment in resource.pathSegments' ng-if="resourceGroup.length > 1" ng-click="toggleInverted($event)">{{segment.toString()}}</a>
