@@ -112,12 +112,6 @@
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
 
-          $rootScope.$broadcast('resetData');
-
-          $scope.securitySchemes.anonymous = {
-            type: 'Anonymous'
-          };
-
           Object.keys($scope.securitySchemes).map(function (key) {
             var type = $scope.securitySchemes[key].type;
 
@@ -129,6 +123,8 @@
               $scope.securitySchemes[key].id = type + '|' + key;
             }
           });
+
+          $rootScope.$broadcast('resetData');
 
           /*jshint camelcase: false */
           // Digest Authentication is not supported

@@ -55,7 +55,7 @@
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
           if (typeof info[key][0].enum === 'undefined') {
-            if (info[key][0].type === 'date') {
+            if (info[key][0].type === 'date' && typeof info[key][0].example === 'object') {
               info[key][0].example = info[key][0].example.toUTCString();
             }
 

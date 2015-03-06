@@ -440,12 +440,6 @@
           toUIModel($scope.methodInfo.headers.plain);
           toUIModel($scope.resource.uriParametersForDocumentation);
 
-          $rootScope.$broadcast('resetData');
-
-          $scope.securitySchemes.anonymous = {
-            type: 'Anonymous'
-          };
-
           Object.keys($scope.securitySchemes).map(function (key) {
             var type = $scope.securitySchemes[key].type;
 
@@ -457,6 +451,8 @@
               $scope.securitySchemes[key].id = type + '|' + key;
             }
           });
+
+          $rootScope.$broadcast('resetData');
 
           /*jshint camelcase: false */
           // Digest Authentication is not supported
@@ -927,10 +923,13 @@
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
-        $scope.markedOptions = RAML.Settings.marked;
-        $scope.currentSchemeType = 'Anonymous';
-        $scope.currentScheme = 'Anonymous|anonymous';
-        $scope.responseDetails = false;
+        var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
+        var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+
+        $scope.markedOptions     = RAML.Settings.marked;
+        $scope.currentSchemeType = defaultSchema.type;
+        $scope.currentScheme     = defaultSchema.id;
+        $scope.responseDetails   = false;
 
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
@@ -1094,8 +1093,11 @@
         }
 
         $scope.$on('resetData', function() {
-          $scope.currentSchemeType = 'Anonymous';
-          $scope.currentScheme = 'Anonymous|anonymous';
+          var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
+          var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+
+          $scope.currentSchemeType = defaultSchema.type;
+          $scope.currentScheme     = defaultSchema.id;
         });
 
         $scope.cancelRequest = function () {
@@ -2984,7 +2986,16 @@ RAML.Inspector = (function() {
       var overwrittenSchemes = {};
 
       securedBy.map(function(el) {
-        if (typeof el === 'object') {
+        if (el === null) {
+          securitySchemes.push({
+            anonymous: {
+              type: 'Anonymous'
+            }
+          });
+          securedBy.push('anonymous');
+        }
+
+        if (typeof el === 'object' && el) {
           var key = Object.keys(el)[0];
 
           overwrittenSchemes[key] = el[key];
@@ -3011,6 +3022,12 @@ RAML.Inspector = (function() {
           }
         });
       });
+
+      if(Object.keys(selectedSchemes).length === 0) {
+        selectedSchemes.anonymous = {
+          type: 'Anonymous'
+        };
+      }
 
       return selectedSchemes;
     };
@@ -3346,7 +3363,7 @@ RAML.Inspector = (function() {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
           if (typeof info[key][0].enum === 'undefined') {
-            if (info[key][0].type === 'date') {
+            if (info[key][0].type === 'date' && typeof info[key][0].example === 'object') {
               info[key][0].example = info[key][0].example.toUTCString();
             }
 
@@ -5411,7 +5428,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "              <div class=\"raml-console-toggle-group raml-console-sidebar-toggle-group\">\n" +
     "                <label class=\"raml-console-sidebar-label\">Security Scheme</label>\n" +
     "                <select ng-change=\"securitySchemeChanged(currentScheme)\" class=\"raml-console-sidebar-input\" ng-model=\"currentScheme\" style=\"margin-bottom: 0;\">\n" +
-    "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{scheme.id}}\" ng-selected=\"scheme.type=='Anonymous'\">{{scheme.name}}</option>\n" +
+    "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{scheme.id}}\">{{scheme.name}}</option>\n" +
     "                </select>\n" +
     "              </div>\n" +
     "            </div>\n" +

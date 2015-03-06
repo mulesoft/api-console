@@ -75,7 +75,16 @@
       var overwrittenSchemes = {};
 
       securedBy.map(function(el) {
-        if (typeof el === 'object') {
+        if (el === null) {
+          securitySchemes.push({
+            anonymous: {
+              type: 'Anonymous'
+            }
+          });
+          securedBy.push('anonymous');
+        }
+
+        if (typeof el === 'object' && el) {
           var key = Object.keys(el)[0];
 
           overwrittenSchemes[key] = el[key];
@@ -102,6 +111,12 @@
           }
         });
       });
+
+      if(Object.keys(selectedSchemes).length === 0) {
+        selectedSchemes.anonymous = {
+          type: 'Anonymous'
+        };
+      }
 
       return selectedSchemes;
     };

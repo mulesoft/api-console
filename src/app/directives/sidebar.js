@@ -7,10 +7,13 @@
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
       controller: function ($scope, $location, $anchorScroll) {
-        $scope.markedOptions = RAML.Settings.marked;
-        $scope.currentSchemeType = 'Anonymous';
-        $scope.currentScheme = 'Anonymous|anonymous';
-        $scope.responseDetails = false;
+        var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
+        var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+
+        $scope.markedOptions     = RAML.Settings.marked;
+        $scope.currentSchemeType = defaultSchema.type;
+        $scope.currentScheme     = defaultSchema.id;
+        $scope.responseDetails   = false;
 
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
@@ -174,8 +177,11 @@
         }
 
         $scope.$on('resetData', function() {
-          $scope.currentSchemeType = 'Anonymous';
-          $scope.currentScheme = 'Anonymous|anonymous';
+          var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
+          var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+
+          $scope.currentSchemeType = defaultSchema.type;
+          $scope.currentScheme     = defaultSchema.id;
         });
 
         $scope.cancelRequest = function () {
