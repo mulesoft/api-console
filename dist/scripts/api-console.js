@@ -1619,9 +1619,10 @@
         src: '@'
       },
       controller: function($scope, $window, $attrs) {
-        $scope.proxy = $window.RAML.Settings.proxy;
-        $scope.disableTitle = false;
-        $scope.resourcesCollapsed = false;
+        $scope.proxy                  = $window.RAML.Settings.proxy;
+        $scope.disableTitle           = false;
+        $scope.resourcesCollapsed     = false;
+        $scope.documentationCollapsed = false;
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
@@ -1733,12 +1734,13 @@
 
           for (var i = 0; i < $scope.raml.resourceGroups.length; i++) {
             var resources = $scope.raml.resourceGroups[i];
-            $scope.resourceList.push(resources.length > 1 ? false : resources[0].description ? false : null);
+            var status = resources.length > 1 ? false : resources[0].description ? false : null;
+            $scope.resourceList.push($scope.resourcesCollapsed ? true : status);
           }
 
           if ($scope.raml.documentation) {
             for (var j = 0; j < $scope.raml.documentation.length; j++) {
-              $scope.documentList.push(false);
+              $scope.documentList.push($scope.documentationCollapsed ? true : false);
             }
           }
         });
