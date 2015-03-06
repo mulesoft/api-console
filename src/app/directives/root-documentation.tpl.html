@@ -1,7 +1,7 @@
-<ol id="raml-console-documentation-container" ng-if="raml.documentation" class="raml-console-resource-list raml-console-resource-list-root raml-console-root-documentation">
+<ol id="raml-console-documentation-container" ng-if="raml.documentation" class="raml-console-resource-list raml-console-resource-list-root raml-console-root-documentation raml-console-resources-documentationCollapsed">
   <li class="raml-console-resource-list-item raml-console-documentation-header" ng-if="raml.documentation.length > 0">
     <header class="raml-console-resource raml-console-resource-root raml-console-clearfix">
-      <span ng-if="hasDocumentationWithIndex()" class="raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all" ng-click="collapseDocumentation($event)" ng-class="{'raml-console-resources-expanded':!collapsed}"><span ng-if="!collapsed">collapse</span><span ng-if="collapsed">expand</span> all</span>
+      <span ng-if="hasDocumentationWithIndex()" class="raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all" ng-click="collapseAll($event, documentList, 'documentationCollapsed')" ng-class="{'raml-console-resources-expanded':!documentationCollapsed}"><span ng-if="!documentationCollapsed">collapse</span><span ng-if="documentationCollapsed">expand</span> all</span>
       <div class="raml-console-resource-path-container">
         <h2 class="raml-console-resource-section-title">
           <span class="raml-console-resource-path-active">Documentation</span>
@@ -10,13 +10,13 @@
     </header>
   </li>
 
-  <li id="{{generateDocId(doc.title)}}" class="raml-console-resource-list-item raml-console-documentation" ng-repeat="doc in raml.documentation">
+  <li id="{{generateDocId(doc.title)}}" class="raml-console-resource-list-item raml-console-documentation" ng-repeat="doc in raml.documentation" ng-class="{'raml-console-documentation-active':documentationEnabled}">
     <div ng-init="content = getMarkdownHeaders(doc.content)">
       <div class="raml-console-resource raml-console-clearfix raml-console-document-header">
-        <div class="raml-console-resource-path-container" style="padding-top: 11px;">
+        <div class="raml-console-resource-path-container" style="padding-top: 11px;" ng-init="index=$index">
           <h3 class="raml-console-resource-heading">
-            <button class="raml-console-resource-root-toggle" ng-if="content" ng-click="toggle($event)" ng-class="{'raml-console-is-active': collapsed}"></button>
-            <span class="raml-console-resource-path-active raml-console-document-heading" ng-click="showSection($event, 'all', doc.title)">{{doc.title}}</span>
+            <button class="raml-console-resource-root-toggle" ng-if="content" ng-click="toggle($event, index, documentList, 'documentationCollapsed')" ng-class="{'raml-console-is-active': documentList[index]}"></button>
+            <span class="raml-console-resource-path-active raml-console-document-heading" ng-click="toggleSection($event, 'all', doc.title)">{{doc.title}}</span>
           </h3>
           <select ng-if="content.length > 0" ng-model="selectedSection" ng-if="documentationEnabled" class="raml-console-document-section-selector" ng-change="sectionChange(selectedSection)">
             <option value="all">-- choose a section --</option>
@@ -34,13 +34,13 @@
         </div>
       </div>
 
-      <ol class="raml-console-resource-list raml-console-documentation-contents" ng-if="content" ng-class="{'raml-console-is-collapsed': collapsed}">
+      <ol class="raml-console-resource-list raml-console-documentation-contents" ng-if="content" ng-class="{'raml-console-is-collapsed': documentationCollapsed}">
         <li ng-repeat="header in content" class="raml-console-resource-list-item">
            <div class="raml-console-resource raml-console-clearfix raml-console-documentation-clearfix">
             <div class="raml-console-resource-path-container raml-console-documentation-path-container">
               <h3 class="raml-console-resource-heading raml-console-documentation-heading raml-console-md-heading-{{header.heading}}">
                 <div class="raml-console-resource-path-active">
-                  <div class="raml-consoledocumentation-title raml-console-document-heading" ng-click="showSection($event, header.value, doc.title)">{{header.label}}</div>
+                  <div class="raml-consoledocumentation-title raml-console-document-heading" ng-click="toggleSection($event, header.value, doc.title)">{{header.label}}</div>
                 </div>
               </h3>
             </div>

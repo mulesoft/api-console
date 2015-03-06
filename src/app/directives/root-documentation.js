@@ -18,36 +18,13 @@
           }).length > 0;
         };
 
-        $scope.collapseDocumentation = function ($event) {
-          var $this = jQuery($event.currentTarget);
-
-          if ($this.hasClass('raml-console-resources-expanded')) {
-            $this.text('expand all');
-            $this.removeClass('raml-console-resources-expanded');
-            jQuery('#raml-console-documentation-container').find('ol.raml-console-resource-list').velocity('slideUp', {
-              duration: 200
-            });
-          } else {
-            $this.text('collapse all');
-            $this.addClass('raml-console-resources-expanded');
-            jQuery('#raml-console-documentation-container').find('ol.raml-console-resource-list').velocity('slideDown', {
-              duration: 200
-            });
-          }
-
-          jQuery('#raml-console-documentation-container').find('button.raml-console-resource-root-toggle').toggleClass('raml-console-is-active');
-        };
-
         $scope.generateDocId = function (path) {
           return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_').toLowerCase();
         };
 
-        $scope.showSection = function ($event, key, section) {
-          var $container = jQuery($event.currentTarget).closest('.raml-console-documentation');
-          jQuery('.raml-console-documentation').removeClass('raml-console-documentation-active');
+        $scope.toggleSection = function ($event, key, section) {
           $scope.selectedDocumentSection = key;
-          $container.toggleClass('raml-console-documentation-active');
-          $scope.documentationEnabled = true;
+          $scope.documentationEnabled = !$scope.documentationEnabled;
           $location.hash($scope.generateDocId(section));
         };
 

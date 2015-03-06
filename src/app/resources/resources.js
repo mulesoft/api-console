@@ -12,7 +12,7 @@
       controller: function($scope, $window, $attrs) {
         $scope.proxy = $window.RAML.Settings.proxy;
         $scope.disableTitle = false;
-        $scope.collapsed = false;
+        $scope.resourcesCollapsed = false;
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
@@ -30,8 +30,12 @@
           $scope.disableTitle = true;
         }
 
-        if ($attrs.hasOwnProperty('collapsed')) {
-          $scope.collapsed = true;
+        if ($attrs.hasOwnProperty('resourcesCollapsed')) {
+          $scope.resourcesCollapsed = true;
+        }
+
+        if ($attrs.hasOwnProperty('documentationCollapsed')) {
+          $scope.documentationCollapsed = true;
         }
 
         if ($scope.src) {
@@ -42,7 +46,7 @@
           $window.RAML.Settings.disableProxy = status;
         };
 
-        $scope.toggle = function ($event, index) {
+        $scope.toggle = function ($event, index, collection, flagKey) {
           var $this    = jQuery($event.currentTarget);
           var $section = $this
             .closest('.raml-console-resource-list-item')
@@ -58,40 +62,43 @@
             });
           }
 
-          $scope.items[index] = !$scope.items[index];
+          collection[index] = !collection[index];
 
-          $scope.collapsed = checkItemStatus(false) ? false : $scope.collapsed;
-          $scope.collapsed = checkItemStatus(true) ? true : $scope.collapsed;
+          $scope[flagKey] = checkItemStatus(false, collection) ? false : $scope[flagKey];
+          $scope[flagKey] = checkItemStatus(true, collection) ? true : $scope[flagKey];
 
           $section.toggleClass('raml-console-is-collapsed');
         };
 
-        $scope.collapseAll = function ($event) {
+        $scope.collapseAll = function ($event, collection, flagKey) {
           var $this = jQuery($event.currentTarget);
 
           if ($this.hasClass('raml-console-resources-expanded')) {
-            $scope.collapsed = true;
-            jQuery('#raml-console-resources-container').find('ol.raml-console-resource-list').velocity('slideUp', {
+            $scope[flagKey] = true;
+            jQuery('.raml-console-resources-' + flagKey).find('ol.raml-console-resource-list').velocity('slideUp', {
               duration: 200
             });
           } else {
-            $scope.collapsed = false;
-            jQuery('#raml-console-resources-container').find('ol.raml-console-resource-list').velocity('slideDown', {
+            if (flagKey === 'resourcesCollapsed') {
+              jQuery('.raml-console-resource-description').removeClass('ng-hide');
+            }
+            $scope[flagKey] = false;
+            jQuery('.raml-console-resources-' + flagKey).find('ol.raml-console-resource-list').velocity('slideDown', {
               duration: 200
             });
           }
 
-          toggleCollapsed($scope.collapsed);
+          toggleCollapsed($scope[flagKey], collection);
         };
 
-        function toggleCollapsed (status) {
-          for (var i = 0; i < $scope.items.length; i++) {
-            $scope.items[i] = $scope.items[i] !== null ? status : $scope.items[i];
+        function toggleCollapsed (status, collection) {
+          for (var i = 0; i < collection.length; i++) {
+            collection[i] = collection[i] !== null ? status : collection[i];
           }
         }
 
-        function checkItemStatus(status) {
-          return $scope.items.filter(function (el) { return el === status || el === null; }).length === $scope.items.length;
+        function checkItemStatus(status, collection) {
+          return collection.filter(function (el) { return el === status || el === null; }).length === collection.length;
         }
 
         $scope.showResourceDescription = function ($event) {
@@ -109,13 +116,21 @@
       },
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {
-          $scope.raml    = RAML.Inspector.create(raml);
-          $scope.rawRaml = raml;
-          $scope.loaded  = true;
-          $scope.items = [];
+          $scope.raml         = RAML.Inspector.create(raml);
+          $scope.rawRaml      = raml;
+          $scope.loaded       = true;
+          $scope.resourceList = [];
+          $scope.documentList = [];
 
-          for (var i = 0 ; i < $scope.raml.resourceGroups.length; i++) {
-            $scope.items.push($scope.raml.resourceGroups[i].length > 1 ? false : null);
+          for (var i = 0; i < $scope.raml.resourceGroups.length; i++) {
+            var resources = $scope.raml.resourceGroups[i];
+            $scope.resourceList.push(resources.length > 1 ? false : resources[0].description ? false : null);
+          }
+
+          if ($scope.raml.documentation) {
+            for (var j = 0; j < $scope.raml.documentation.length; j++) {
+              $scope.documentList.push(false);
+            }
           }
         });
       }
