@@ -46,7 +46,7 @@ function Resource (poName) {
 
     securitySchemesCount.then(function (count) {
       for (var i = 0; i < count; i++) {
-        expect(schemes.get(i).getText()).toBe(expectedSchemes[i]);
+        expect(schemes.get(i).getInnerHtml()).toBe(expectedSchemes[i]);
       }
     });
   };

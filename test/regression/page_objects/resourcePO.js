@@ -3,19 +3,19 @@
 var basePO = require('./basePO');
 
 function ResourcesPO () {
-  this.title           = element(by.css('.title'));
-  this.resources       = element.all(by.css('.resource-list-item'));
+  this.title           = element(by.css('.raml-console-title'));
+  this.resources       = element.all(by.css('.raml-console-resource-list-item'));
 
   this.getTitle = function () {
     return this.title.getText();
   };
 
   this.getResourceElementAt = function (index) {
-    return this.resources.get(index).element(by.css('.resource-heading-large'));
+    return this.resources.get(index+1).element(by.tagName('h2'));
   };
 
   this.getNestedResourceElementAt = function (index) {
-    return this.resources.get(index).element(by.css('.resource-heading'));
+    return this.resources.get(index+1).element(by.css('.raml-console-resource-heading'));
   };
 
   this.getResourceTitleAt = function (index) {
@@ -27,19 +27,19 @@ function ResourcesPO () {
   };
 
   this.getMethodsForResourceAt = function (index) {
-    return this.resources.get(index).all(by.css('.tab'));
+    return this.resources.get(index+1).all(by.css('.raml-console-tab'));
   };
 
   this.getMethodTitleAt = function (resource, method) {
-    return this.getMethodsForResourceAt(resource).get(method).element(by.css('.tab-label')).getText();
+    return this.getMethodsForResourceAt(resource).get(method).element(by.css('.raml-console-tab-label')).getInnerHtml();
   };
 
   this.getMethodBtn = function (resource, method) {
-    return this.getMethodsForResourceAt(resource).get(method).element(by.css('.tab-label'));
+    return this.getMethodsForResourceAt(resource).get(method).element(by.css('.raml-console-tab-label'));
   };
 
-  this.getSecuritySchemes = function (resource) {
-    return this.resources.get(resource).all(by.css('.sidebar-toggle-group .toggle'));
+  this.getSecuritySchemes = function (index) {
+    return this.resources.get(index+1).all(by.tagName('option'));
   };
 }
 
