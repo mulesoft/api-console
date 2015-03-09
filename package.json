@@ -4,7 +4,7 @@
   "description": "Api-Console for RAML based app",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt regression"
   },
   "repository": {
     "type": "git",

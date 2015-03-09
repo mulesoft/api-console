@@ -3,9 +3,9 @@
 var basePO = require('./basePO');
 
 function ErrorPO () {
-  this.title        = element(by.css('.heading'));
-  this.errorMessage = element(by.css('.error-message'));
-  this.errorSnippet = element(by.css('.error-snippet'));
+  this.title        = element(by.css('.raml-console-heading'));
+  this.errorMessage = element(by.css('.raml-console-error-message'));
+  this.errorSnippet = element(by.css('.raml-console-error-snippet'));
 
   this.getTitle = function () {
     return this.title.getText();
