@@ -49,11 +49,24 @@ module.exports = function (grunt) {
 
       livereload: {
         options: {
-        livereload:   true,
-        open:         true,
+          livereload: true,
+          open:       true,
           middleware: function (connect) {
             return [
               connect.static('dist')
+            ];
+          }
+        }
+      },
+
+      regression: {
+        options: {
+          livereload: true,
+          open:       false,
+          middleware: function (connect) {
+            return [
+              connect.static('dist'),
+              connect.static('test/regression/assets'),
             ];
           }
         }
@@ -273,14 +286,7 @@ module.exports = function (grunt) {
 
     protractor: {
       options: {
-        configFile: 'test/regression/protractor.conf.js',
-        keepAlive:  false,
-        args:       {
-          browser: process.env.TRAVIS ? 'firefox' : 'chrome'
-        }
-      },
-
-      regression: {
+        keepAlive:  false
       },
 
       local: {
@@ -315,7 +321,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('regression', [
-    'build',
+    'connect:regression',
     'protractor:local'
   ]);
 };

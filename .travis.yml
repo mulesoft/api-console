@@ -5,7 +5,10 @@ node_js:
 before_script:
   - npm install -g grunt-cli
   - npm install -g bower
+  - npm install -g protractor
+  - npm update
   - bower update
+  - node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
@@ -19,7 +22,7 @@ after_success:
   - ssh  ${ACCEPTANCE_USER}@${ACCEPTANCE_HOST} mkdir -p ${DIST_DIR}
   - scp -r dist/* ${ACCEPTANCE_USER}@${ACCEPTANCE_HOST}:${DIST_DIR}/
 addons:
-  firefox: "27.0"
+  firefox: "36.0"
 env:
   global:
   - secure: M7tZ5uMFAPBNkzNuD0HF9PxeoH3Q9gMsvOCheQd5WCxxcSQwGsw8naErJshXYdAvFLsuTYT0MfHYt/TfcoEHfrykK5GiGaaSQB0MQtDWokQPHUl3S8Cjjh8+Aj3V/J+yyEFZ7AY9PvoSnHdeEuZfAYO/tuj9IBmC9tsbV5K5hX4=
