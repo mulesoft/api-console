@@ -3565,11 +3565,6 @@ RAML.Inspector = (function() {
   function expects (obj, props) {
     for (var i = 0; i < props.length; i++) {
       var prop = props[i];
-
-      // Check whether the property is empty.
-      if (obj[prop] == null) {
-        throw new TypeError('Expected "' + prop + '" to exist');
-      }
     }
   }
 
