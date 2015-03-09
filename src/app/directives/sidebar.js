@@ -320,6 +320,7 @@
           var name            = info[1];
 
           $scope.currentSchemeType = type;
+          $scope.context.forceRequest = false;
 
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);

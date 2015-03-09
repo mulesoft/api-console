@@ -1213,6 +1213,7 @@
           var name            = info[1];
 
           $scope.currentSchemeType = type;
+          $scope.context.forceRequest = false;
 
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
@@ -1993,6 +1994,8 @@
       case 'OAuth 1.0':
         return new RAML.Client.AuthStrategies.Oauth1(scheme, credentials);
       case 'x-custom':
+        return RAML.Client.AuthStrategies.anonymous();
+      case 'Anonymous':
         return RAML.Client.AuthStrategies.anonymous();
       default:
         throw new Error('Unknown authentication strategy: ' + scheme.type);
