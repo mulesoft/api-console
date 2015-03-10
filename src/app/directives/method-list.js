@@ -77,11 +77,13 @@
           return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
         };
 
-        var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
+        var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource')
+                                                           .add('li')
+                                                           .add('.raml-console-tab');
 
         $scope.$on('openMethod', function(event, $currentScope) {
           if ($scope.$id !== $currentScope.$id) {
-            $inactiveElements.removeClass('is-active');
+            $inactiveElements.removeClass('raml-console-is-active');
             $scope.showPanel = false;
           }
         });
@@ -89,8 +91,10 @@
         $scope.showResource = function ($event, $index) {
           var $this             = jQuery($event.currentTarget);
           var $resource         = $this.closest('.raml-console-resource');
-          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
           var methodInfo        = $scope.resource.methods[$index];
+          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource')
+                                                             .add('li')
+                                                             .add('.raml-console-tab');
 
           $scope.methodInfo               = methodInfo;
           $scope.responseInfo             = getResponseInfo();

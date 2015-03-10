@@ -50,4 +50,70 @@ module.exports = function() {
     assert.ifResourceNameIsPresentAt('/resources', 0);
     assert.ifShowingDefinedMethodsForResourceAt(0, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT']);
   });
+
+  it('should be able to disable switch theme button', function () {
+    // Arrange
+    var assert = assertions.create('displaySettings');
+
+    // Act
+    browser.get('http://localhost:9000/directive-without-theme-switcher.html');
+
+    //Assert
+    assert.ifThemeSwitcherIsDisabled();
+  });
+
+  it('should be able to disable download api client button', function () {
+    // Arrange
+    var assert = assertions.create('displaySettings');
+
+    // Act
+    browser.get('http://localhost:9000/directive-without-download-api-client.html');
+
+    //Assert
+    assert.ifDownloadApiClientIsDisabled();
+  });
+
+  it('should be able to disable switch theme and download api client button', function () {
+    // Arrange
+    var assert = assertions.create('displaySettings');
+
+    // Act
+    browser.get('http://localhost:9000/directive-without-meta-button-group.html');
+
+    //Assert
+    assert.ifMetaButtonGroupIsDisabled();
+  });
+
+  it('should be able to disable title', function () {
+    // Arrange
+    var assert = assertions.create('displaySettings');
+
+    // Act
+    browser.get('http://localhost:9000/directive-without-title.html');
+
+    //Assert
+    assert.ifTitleIsDisabled();
+  });
+
+  it('should be able to display using single view mode', function () {
+    // Arrange
+    var assert = assertions.create('displaySettings');
+
+    // Act
+    browser.get('http://localhost:9000/directive-single-view.html');
+
+    //Assert
+    assert.ifDisplayingInSingleViewMode();
+  });
+
+  it('should be able to load resouces collapsed by default', function () {
+    // Arrange
+    var assert = assertions.create('displaySettings');
+
+    // Act
+    browser.get('http://localhost:9000/directive-with-resource-collapsed.html');
+
+    //Assert
+    assert.ifResourcesAreCollapsed();
+  });
 };
