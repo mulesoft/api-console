@@ -43,6 +43,22 @@
           ramlParserWrapper.load($scope.src);
         }
 
+        $scope.readTraits = function getTraits(traits) {
+          var list = [];
+
+          if (traits) {
+            traits.map(function (trait) {
+              if (typeof trait === 'object') {
+                list.push(Object.keys(trait).join(', '));
+              } else {
+                list.push(trait);
+              }
+            });
+          }
+
+          return list.join(', ');
+        };
+
         $scope.updateProxyConfig = function (status) {
           $window.RAML.Settings.disableProxy = status;
         };

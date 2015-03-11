@@ -51,7 +51,9 @@
             </h2>
 
             <resource-type></resource-type>
-            <span ng-if="methodInfo.is" class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"><b>Trait:</b> {{traits}}</span>
+            <span ng-if="traits" class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"><b>Traits:</b> {{traits}}</span>
+
+            <span ng-hide="traits" ng-if="resource.traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{readTraits(resource.traits)}}</span>
 
           </div>
           <method-list></method-list>
@@ -78,7 +80,7 @@
                 </h3>
 
                 <resource-type></resource-type>
-                <span ng-if="methodInfo.is" class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"><b>Trait:</b> {{traits}}</span>
+                <span ng-if="traits" class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"><b>Traits:</b> {{traits}}</span>
               </div>
 
               <method-list></method-list>

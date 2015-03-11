@@ -105,6 +105,7 @@
 
           $inactiveElements.removeClass('raml-console-is-active');
           $scope.showPanel = false;
+          $scope.traits = null;
         };
       }
     };
@@ -387,16 +388,19 @@
 
         $scope.readTraits = function (traits) {
           var list = [];
+          var traitList = traits || [];
 
-          if (traits) {
-            traits.map(function (trait) {
-              if (typeof trait === 'string') {
-                list.push(trait);
-              } else if (typeof trait === 'object') {
-                list.push(Object.keys(trait).join(', '));
-              }
-            });
-          }
+          traitList = traitList.concat($scope.resource.traits);
+
+          traitList.map(function (trait) {
+            if (typeof trait === 'object') {
+              trait = Object.keys(trait).join(', ');
+            }
+
+            if (list.indexOf(trait) === -1) {
+              list.push(trait);
+            }
+          });
 
           return list.join(', ');
         };
@@ -491,9 +495,11 @@
           } else if (jQuery($this).hasClass('raml-console-is-active')) {
             $scope.showPanel = false;
             $inactiveElements.removeClass('raml-console-is-active');
+            $scope.traits = null;
           } else {
             jQuery($this).addClass('raml-console-is-active');
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
+            $scope.traits = null;
           }
         };
       }
@@ -1656,6 +1662,22 @@
         if ($scope.src) {
           ramlParserWrapper.load($scope.src);
         }
+
+        $scope.readTraits = function getTraits(traits) {
+          var list = [];
+
+          if (traits) {
+            traits.map(function (trait) {
+              if (typeof trait === 'object') {
+                list.push(Object.keys(trait).join(', '));
+              } else {
+                list.push(trait);
+              }
+            });
+          }
+
+          return list.join(', ');
+        };
 
         $scope.updateProxyConfig = function (status) {
           $window.RAML.Settings.disableProxy = status;
@@ -5642,7 +5664,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </h2>\n" +
     "\n" +
     "            <resource-type></resource-type>\n" +
-    "            <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Trait:</b> {{traits}}</span>\n" +
+    "            <span ng-if=\"traits\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Traits:</b> {{traits}}</span>\n" +
+    "\n" +
+    "            <span ng-hide=\"traits\" ng-if=\"resource.traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readTraits(resource.traits)}}</span>\n" +
     "\n" +
     "          </div>\n" +
     "          <method-list></method-list>\n" +
@@ -5669,7 +5693,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                </h3>\n" +
     "\n" +
     "                <resource-type></resource-type>\n" +
-    "                <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Trait:</b> {{traits}}</span>\n" +
+    "                <span ng-if=\"traits\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Traits:</b> {{traits}}</span>\n" +
     "              </div>\n" +
     "\n" +
     "              <method-list></method-list>\n" +

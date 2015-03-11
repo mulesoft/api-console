@@ -59,16 +59,19 @@
 
         $scope.readTraits = function (traits) {
           var list = [];
+          var traitList = traits || [];
 
-          if (traits) {
-            traits.map(function (trait) {
-              if (typeof trait === 'string') {
-                list.push(trait);
-              } else if (typeof trait === 'object') {
-                list.push(Object.keys(trait).join(', '));
-              }
-            });
-          }
+          traitList = traitList.concat($scope.resource.traits);
+
+          traitList.map(function (trait) {
+            if (typeof trait === 'object') {
+              trait = Object.keys(trait).join(', ');
+            }
+
+            if (list.indexOf(trait) === -1) {
+              list.push(trait);
+            }
+          });
 
           return list.join(', ');
         };
@@ -163,9 +166,11 @@
           } else if (jQuery($this).hasClass('raml-console-is-active')) {
             $scope.showPanel = false;
             $inactiveElements.removeClass('raml-console-is-active');
+            $scope.traits = null;
           } else {
             jQuery($this).addClass('raml-console-is-active');
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
+            $scope.traits = null;
           }
         };
       }
