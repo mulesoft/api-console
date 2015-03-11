@@ -173,8 +173,6 @@
           } else {
             jQuery($this).addClass('raml-console-is-active');
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
-            $scope.traits = null;
-            $scope.methodInfo = {};
           }
         };
       }
