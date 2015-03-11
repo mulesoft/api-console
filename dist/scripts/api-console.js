@@ -106,6 +106,7 @@
           $inactiveElements.removeClass('raml-console-is-active');
           $scope.showPanel = false;
           $scope.traits = null;
+          $scope.methodInfo = {};
         };
       }
     };
@@ -393,12 +394,14 @@
           traitList = traitList.concat($scope.resource.traits);
 
           traitList.map(function (trait) {
-            if (typeof trait === 'object') {
+            if (trait) {
+              if (typeof trait === 'object') {
               trait = Object.keys(trait).join(', ');
-            }
+              }
 
-            if (list.indexOf(trait) === -1) {
-              list.push(trait);
+              if (list.indexOf(trait) === -1) {
+                list.push(trait);
+              }
             }
           });
 
@@ -496,10 +499,12 @@
             $scope.showPanel = false;
             $inactiveElements.removeClass('raml-console-is-active');
             $scope.traits = null;
+            $scope.methodInfo = {};
           } else {
             jQuery($this).addClass('raml-console-is-active');
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
             $scope.traits = null;
+            $scope.methodInfo = {};
           }
         };
       }
@@ -1668,10 +1673,12 @@
 
           if (traits) {
             traits.map(function (trait) {
-              if (typeof trait === 'object') {
-                list.push(Object.keys(trait).join(', '));
-              } else {
-                list.push(trait);
+              if (trait) {
+                if (typeof trait === 'object') {
+                  list.push(Object.keys(trait).join(', '));
+                } else {
+                  list.push(trait);
+                }
               }
             });
           }
@@ -5694,7 +5701,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                </h3>\n" +
     "\n" +
     "                <resource-type></resource-type>\n" +
-    "                <span ng-if=\"traits\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Traits:</b> {{traits}}</span>\n" +
+    "                <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Traits:</b> {{readTraits(methodInfo.is)}}</span>\n" +
+    "\n" +
+    "                <span ng-hide=\"methodInfo.is\" ng-if=\"resource.traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>\n" +
     "              </div>\n" +
     "\n" +
     "              <method-list></method-list>\n" +

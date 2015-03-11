@@ -64,12 +64,14 @@
           traitList = traitList.concat($scope.resource.traits);
 
           traitList.map(function (trait) {
-            if (typeof trait === 'object') {
+            if (trait) {
+              if (typeof trait === 'object') {
               trait = Object.keys(trait).join(', ');
-            }
+              }
 
-            if (list.indexOf(trait) === -1) {
-              list.push(trait);
+              if (list.indexOf(trait) === -1) {
+                list.push(trait);
+              }
             }
           });
 
@@ -167,10 +169,12 @@
             $scope.showPanel = false;
             $inactiveElements.removeClass('raml-console-is-active');
             $scope.traits = null;
+            $scope.methodInfo = {};
           } else {
             jQuery($this).addClass('raml-console-is-active');
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
             $scope.traits = null;
+            $scope.methodInfo = {};
           }
         };
       }

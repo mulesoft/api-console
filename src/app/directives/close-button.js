@@ -14,6 +14,7 @@
           $inactiveElements.removeClass('raml-console-is-active');
           $scope.showPanel = false;
           $scope.traits = null;
+          $scope.methodInfo = {};
         };
       }
     };

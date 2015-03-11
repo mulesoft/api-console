@@ -48,10 +48,12 @@
 
           if (traits) {
             traits.map(function (trait) {
-              if (typeof trait === 'object') {
-                list.push(Object.keys(trait).join(', '));
-              } else {
-                list.push(trait);
+              if (trait) {
+                if (typeof trait === 'object') {
+                  list.push(Object.keys(trait).join(', '));
+                } else {
+                  list.push(trait);
+                }
               }
             });
           }
