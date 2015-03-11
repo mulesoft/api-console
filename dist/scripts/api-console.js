@@ -920,6 +920,7 @@
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
+        $scope.currentProtocol   = $scope.raml.protocols[0];
 
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
@@ -1088,6 +1089,7 @@
 
           $scope.currentSchemeType = defaultSchema.type;
           $scope.currentScheme     = defaultSchema.id;
+          $scope.currentProtocol   = $scope.raml.protocols[0];
         });
 
         $scope.cancelRequest = function () {
@@ -1220,7 +1222,11 @@
           }
         }
 
-        $scope.securitySchemeChanged = function (scheme) {
+        $scope.protocolChanged = function protocolChanged(protocol) {
+          $scope.currentProtocol = protocol;
+        };
+
+        $scope.securitySchemeChanged = function securitySchemeChanged(scheme) {
           var info            = scheme.split('|');
           var type            = info[0];
           var name            = info[1];
@@ -1272,6 +1278,8 @@
                 }
                 client.baseUriParameters(pathBuilder.baseUriContext);
               });
+
+              client.baseUri = client.baseUri.replace(/(https)|(http)/, $scope.currentProtocol.toLocaleLowerCase());
               url = client.baseUri + pathBuilder(segmentContexts);
             } catch (e) {
               $scope.response = {};
@@ -5435,8 +5443,19 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </header>\n" +
     "\n" +
     "        <div class=\"raml-console-sidebar-content-wrapper\">\n" +
-    "          <section>\n" +
+    "          <section ng-if=\"raml.protocols.length > 1\">\n" +
     "            <header class=\"raml-console-sidebar-row raml-console-sidebar-subheader raml-console-sidebar-subheader-top\">\n" +
+    "              <h4 class=\"raml-console-sidebar-subhead\">Protocols</h4>\n" +
+    "            </header>\n" +
+    "            <div class=\"raml-console-sidebar-row raml-console-sidebar-securty\">\n" +
+    "              <select ng-change=\"protocolChanged(currentProtocol)\" class=\"raml-console-sidebar-input\" ng-model=\"currentProtocol\" style=\"margin-bottom: 0;\">\n" +
+    "               <option ng-repeat=\"protocol in raml.protocols\" value=\"{{protocol}}\">{{protocol}}</option>\n" +
+    "              </select>\n" +
+    "            </div>\n" +
+    "          </section>\n" +
+    "\n" +
+    "          <section>\n" +
+    "            <header class=\"raml-console-sidebar-row raml-console-sidebar-subheader\" ng-class=\"{'raml-console-sidebar-subheader-top':raml.protocols.length == 1}\">\n" +
     "              <h4 class=\"raml-console-sidebar-subhead\">Authentication</h4>\n" +
     "            </header>\n" +
     "\n" +

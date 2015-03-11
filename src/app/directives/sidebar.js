@@ -14,6 +14,7 @@
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
+        $scope.currentProtocol   = $scope.raml.protocols[0];
 
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
@@ -182,6 +183,7 @@
 
           $scope.currentSchemeType = defaultSchema.type;
           $scope.currentScheme     = defaultSchema.id;
+          $scope.currentProtocol   = $scope.raml.protocols[0];
         });
 
         $scope.cancelRequest = function () {
@@ -314,7 +316,11 @@
           }
         }
 
-        $scope.securitySchemeChanged = function (scheme) {
+        $scope.protocolChanged = function protocolChanged(protocol) {
+          $scope.currentProtocol = protocol;
+        };
+
+        $scope.securitySchemeChanged = function securitySchemeChanged(scheme) {
           var info            = scheme.split('|');
           var type            = info[0];
           var name            = info[1];
@@ -366,6 +372,8 @@
                 }
                 client.baseUriParameters(pathBuilder.baseUriContext);
               });
+
+              client.baseUri = client.baseUri.replace(/(https)|(http)/, $scope.currentProtocol.toLocaleLowerCase());
               url = client.baseUri + pathBuilder(segmentContexts);
             } catch (e) {
               $scope.response = {};

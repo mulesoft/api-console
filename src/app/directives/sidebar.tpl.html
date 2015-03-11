@@ -18,8 +18,19 @@
         </header>
 
         <div class="raml-console-sidebar-content-wrapper">
-          <section>
+          <section ng-if="raml.protocols.length > 1">
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader raml-console-sidebar-subheader-top">
+              <h4 class="raml-console-sidebar-subhead">Protocols</h4>
+            </header>
+            <div class="raml-console-sidebar-row raml-console-sidebar-securty">
+              <select ng-change="protocolChanged(currentProtocol)" class="raml-console-sidebar-input" ng-model="currentProtocol" style="margin-bottom: 0;">
+               <option ng-repeat="protocol in raml.protocols" value="{{protocol}}">{{protocol}}</option>
+              </select>
+            </div>
+          </section>
+
+          <section>
+            <header class="raml-console-sidebar-row raml-console-sidebar-subheader" ng-class="{'raml-console-sidebar-subheader-top':raml.protocols.length == 1}">
               <h4 class="raml-console-sidebar-subhead">Authentication</h4>
             </header>
 
