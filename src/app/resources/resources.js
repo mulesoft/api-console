@@ -120,13 +120,6 @@
           return collection.filter(function (el) { return el === status || el === null; }).length === collection.length;
         }
 
-        $scope.showResourceDescription = function ($event) {
-          var $this      = jQuery($event.currentTarget);
-          var $container = $this.closest('.raml-console-resource-list-item');
-
-          $container.find('.raml-console-resource-description').toggleClass('ng-hide');
-        };
-
         $scope.hasResourcesWithChilds = function () {
           return $scope.raml.resourceGroups.filter(function (el) {
             return el.length > 1;
@@ -143,7 +136,7 @@
 
           for (var i = 0; i < $scope.raml.resourceGroups.length; i++) {
             var resources = $scope.raml.resourceGroups[i];
-            var status = resources.length > 1 ? false : resources[0].description ? false : null;
+            var status = resources.length > 1 ? false : null;
             $scope.resourceList.push($scope.resourcesCollapsed ? true : status);
           }
 
