@@ -43,7 +43,7 @@
           ramlParserWrapper.load($scope.src);
         }
 
-        $scope.readTraits = function getTraits(traits) {
+        $scope.readResourceTraits = function readResourceTraits(traits) {
           var list = [];
 
           if (traits) {

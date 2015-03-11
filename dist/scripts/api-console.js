@@ -1663,7 +1663,7 @@
           ramlParserWrapper.load($scope.src);
         }
 
-        $scope.readTraits = function getTraits(traits) {
+        $scope.readResourceTraits = function readResourceTraits(traits) {
           var list = [];
 
           if (traits) {
@@ -5664,9 +5664,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </h2>\n" +
     "\n" +
     "            <resource-type></resource-type>\n" +
-    "            <span ng-if=\"traits\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Traits:</b> {{traits}}</span>\n" +
     "\n" +
-    "            <span ng-hide=\"traits\" ng-if=\"resource.traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readTraits(resource.traits)}}</span>\n" +
+    "            <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Traits:</b> {{readTraits(methodInfo.is)}}</span>\n" +
+    "\n" +
+    "            <span ng-hide=\"methodInfo.is\" ng-if=\"resource.traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>\n" +
     "\n" +
     "          </div>\n" +
     "          <method-list></method-list>\n" +
