@@ -125,7 +125,29 @@
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
       controller: function($scope) {
+        var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
+        var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+
         $scope.markedOptions = RAML.Settings.marked;
+        $scope.documentationSchemeSelected = defaultSchema;
+
+        $scope.isSchemeSelected = function isSchemeSelected(scheme) {
+          return scheme.id === $scope.documentationSchemeSelected.id;
+        };
+
+        $scope.selectDocumentationScheme = function selectDocumentationScheme(scheme) {
+          $scope.documentationSchemeSelected = scheme;
+        };
+
+        $scope.schemaSettingsDocumentation = function schemaSettingsDocumentation(settings) {
+          var doc = settings;
+
+          if (typeof settings === 'object') {
+            doc = settings.join(', ');
+          }
+
+          return doc;
+        }
 
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
@@ -185,50 +207,52 @@
         $scope.parameterDocumentation = function (parameter) {
           var result = '';
 
-          if (parameter.required) {
-            result += 'required, ';
-          }
-
-          if (parameter.enum) {
-            var enumValues = $scope.unique(parameter.enum);
-
-            if (enumValues.length > 1) {
-              result += 'one of ';
+          if (parameter) {
+            if (parameter.required) {
+              result += 'required, ';
             }
 
-            result += '(' + enumValues.join(', ') + ')';
+            if (parameter.enum) {
+              var enumValues = $scope.unique(parameter.enum);
 
-          } else {
-            result += parameter.type;
-          }
+              if (enumValues.length > 1) {
+                result += 'one of ';
+              }
 
-          if (parameter.pattern) {
-            result += ' matching ' + parameter.pattern;
-          }
+              result += '(' + enumValues.join(', ') + ')';
 
-          if (parameter.minLength && parameter.maxLength) {
-            result += ', ' + parameter.minLength + '-' + parameter.maxLength + ' characters';
-          } else if (parameter.minLength && !parameter.maxLength) {
-            result += ', at least ' + parameter.minLength + ' characters';
-          } else if (parameter.maxLength && !parameter.minLength) {
-            result += ', at most ' + parameter.maxLength + ' characters';
-          }
+            } else {
+              result += parameter.type || '';
+            }
+
+            if (parameter.pattern) {
+              result += ' matching ' + parameter.pattern;
+            }
+
+            if (parameter.minLength && parameter.maxLength) {
+              result += ', ' + parameter.minLength + '-' + parameter.maxLength + ' characters';
+            } else if (parameter.minLength && !parameter.maxLength) {
+              result += ', at least ' + parameter.minLength + ' characters';
+            } else if (parameter.maxLength && !parameter.minLength) {
+              result += ', at most ' + parameter.maxLength + ' characters';
+            }
 
 
-          if (parameter.minimum && parameter.maximum) {
-            result += ' between ' + parameter.minimum + '-' + parameter.maximum;
-          } else if (parameter.minimum && !parameter.maximum) {
-            result += ' ≥ ' + parameter.minimum;
-          } else if (parameter.maximum && !parameter.minimum) {
-            result += ' ≤ ' + parameter.maximum;
-          }
+            if (parameter.minimum && parameter.maximum) {
+              result += ' between ' + parameter.minimum + '-' + parameter.maximum;
+            } else if (parameter.minimum && !parameter.maximum) {
+              result += ' ≥ ' + parameter.minimum;
+            } else if (parameter.maximum && !parameter.minimum) {
+              result += ' ≤ ' + parameter.maximum;
+            }
 
-          if (parameter.repeat) {
-            result += ', repeatable';
-          }
+            if (parameter.repeat) {
+              result += ', repeatable';
+            }
 
-          if (parameter['default']) {
-            result += ', default: ' + parameter['default'];
+            if (parameter['default']) {
+              result += ', default: ' + parameter['default'];
+            }
           }
 
           return result;
@@ -1090,6 +1114,7 @@
           $scope.currentSchemeType = defaultSchema.type;
           $scope.currentScheme     = defaultSchema.id;
           $scope.currentProtocol   = $scope.raml.protocols[0];
+          $scope.documentationSchemeSelected = defaultSchema;
         });
 
         $scope.cancelRequest = function () {
@@ -1236,6 +1261,8 @@
 
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
+
+          $scope.documentationSchemeSelected = $scope.securitySchemes[name];
 
           if (type === 'x-custom') {
             if (!$scope.methodInfo.headers.plain) {
@@ -5061,7 +5088,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <section class=\"raml-console-resource-section\" id=\"docs-headers\" ng-if=\"methodInfo.headers.plain\">\n" +
     "      <h3 class=\"raml-console-resource-heading-a\">Headers</h3>\n" +
     "\n" +
-    "      <div class=\"raml-console-resource-param\" ng-repeat=\"header in methodInfo.headers.plain\">\n" +
+    "      <div class=\"raml-console-resource-param\" ng-repeat=\"header in methodInfo.headers.plain\" ng-if=\"!header[0].isFromSecurityScheme\">\n" +
     "        <h4 class=\"raml-console-resource-param-heading\">{{header[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(header[0])}}</span></h4>\n" +
     "\n" +
     "        <p marked=\"header[0].description\" opts=\"markedOptions\"></p>\n" +
@@ -5075,7 +5102,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <section class=\"raml-console-resource-section\" id=\"docs-query-parameters\" ng-if=\"methodInfo.queryParameters\">\n" +
     "      <h3 class=\"raml-console-resource-heading-a\">Query Parameters</h3>\n" +
     "\n" +
-    "      <div class=\"raml-console-resource-param\" ng-repeat=\"queryParam in methodInfo.queryParameters\">\n" +
+    "      <div class=\"raml-console-resource-param\" ng-repeat=\"queryParam in methodInfo.queryParameters\" ng-if=\"!queryParam[0].isFromSecurityScheme\">\n" +
     "        <h4 class=\"raml-console-resource-param-heading\">{{queryParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(queryParam[0])}}</span></h4>\n" +
     "\n" +
     "        <p marked=\"queryParam[0].description\" opts=\"markedOptions\"></p>\n" +
@@ -5085,6 +5112,62 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </p>\n" +
     "      </div>\n" +
     "    </section>\n" +
+    "\n" +
+    "    <section class=\"raml-console-resource-section raml-console-documentation-schemes\">\n" +
+    "      <h3 class=\"raml-console-resource-heading-a\">Security Schemes</h3>\n" +
+    "      <ol class=\"raml-console-documentation-security-scheme\">\n" +
+    "        <li class=\"raml-console-documentation-scheme\" ng-class=\"{'raml-console-is-active':isSchemeSelected(value)}\" ng-click=\"selectDocumentationScheme(value)\" ng-repeat=\"(key, value) in securitySchemes\">{{value.name}}</li>\n" +
+    "      </ol>\n" +
+    "\n" +
+    "      <p ng-if\"documentationSchemeSelected.description\" marked=\"documentationSchemeSelected.description\" opts=\"markedOptions\"></p>\n" +
+    "\n" +
+    "      <section class=\"raml-console-resource-section raml-console-scheme-headers\" ng-if=\"documentationSchemeSelected.describedBy.headers\">\n" +
+    "        <h4 class=\"raml-console-resource-heading-a\">Headers</h4>\n" +
+    "\n" +
+    "        <div class=\"raml-console-resource-param\" ng-repeat=\"(key, header) in documentationSchemeSelected.describedBy.headers\">\n" +
+    "          <h4 class=\"raml-console-resource-param-heading\">{{key}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(header)}}</span></h4>\n" +
+    "\n" +
+    "          <p marked=\"header.description\" opts=\"markedOptions\"></p>\n" +
+    "\n" +
+    "          <p ng-if=\"header.example\">\n" +
+    "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{header.example}}</span>\n" +
+    "          </p>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "\n" +
+    "      <section class=\"raml-console-resource-section raml-console-scheme-query-parameters\" ng-if=\"documentationSchemeSelected.describedBy.queryParameters\">\n" +
+    "        <h4 class=\"raml-console-resource-heading-a\">Query Parameters</h4>\n" +
+    "\n" +
+    "        <div class=\"raml-console-resource-param\" ng-repeat=\"(key, queryParameter) in documentationSchemeSelected.describedBy.queryParameters\">\n" +
+    "          <h4 class=\"raml-console-resource-param-heading\">{{key}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(queryParameter)}}</span></h4>\n" +
+    "\n" +
+    "          <p marked=\"queryParameter.description\" opts=\"markedOptions\"></p>\n" +
+    "\n" +
+    "          <p ng-if=\"queryParameter.example\">\n" +
+    "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{queryParameter.example}}</span>\n" +
+    "          </p>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "\n" +
+    "      <section class=\"raml-console-resource-section raml-console-scheme-responses\" ng-if=\"documentationSchemeSelected.describedBy.responses\">\n" +
+    "        <h4 class=\"raml-console-resource-heading-a\">Responses</h4>\n" +
+    "\n" +
+    "        <div class=\"raml-console-resource-param\" ng-repeat=\"(code, info) in documentationSchemeSelected.describedBy.responses\">\n" +
+    "          <h4 class=\"raml-console-resource-param-heading\">{{code}}</h4>\n" +
+    "          <p marked=\"info.description\" opts=\"markedOptions\"></p>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "\n" +
+    "      <section class=\"raml-console-resource-section raml-console-scheme-settings\" ng-if=\"documentationSchemeSelected.settings\">\n" +
+    "        <h4 class=\"raml-console-resource-heading-a\">Settings</h4>\n" +
+    "\n" +
+    "        <div class=\"raml-console-resource-param\" ng-repeat=\"(key, config) in documentationSchemeSelected.settings\">\n" +
+    "          <h4 class=\"raml-console-resource-param-heading\">{{key}}</h4>\n" +
+    "          <p>{{schemaSettingsDocumentation(config)}}</p>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "    </section>\n" +
+    "\n" +
     "\n" +
     "    <section class=\"raml-console-resource-section\" ng-if=\"methodInfo.body\">\n" +
     "      <h3 class=\"raml-console-resource-heading-a\">\n" +

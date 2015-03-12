@@ -184,6 +184,7 @@
           $scope.currentSchemeType = defaultSchema.type;
           $scope.currentScheme     = defaultSchema.id;
           $scope.currentProtocol   = $scope.raml.protocols[0];
+          $scope.documentationSchemeSelected = defaultSchema;
         });
 
         $scope.cancelRequest = function () {
@@ -330,6 +331,8 @@
 
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
+
+          $scope.documentationSchemeSelected = $scope.securitySchemes[name];
 
           if (type === 'x-custom') {
             if (!$scope.methodInfo.headers.plain) {

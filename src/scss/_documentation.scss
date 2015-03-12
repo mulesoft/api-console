@@ -13,6 +13,48 @@
   cursor: pointer;
 }
 
+.documentation-schemes {
+  p {
+    font-size: 13px;
+  }
+
+  .scheme-headers, .scheme-query-parameters, .scheme-settings, .scheme-responses {
+    margin-top: 0;
+
+    h4 {
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+  }
+}
+
+.documentation-security-scheme {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 18px;
+
+  .documentation-scheme {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid #d5d7d9;
+    border-radius: 5px;
+    background: #e3e4e6;
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  .documentation-scheme:hover {
+    background: #d6d7da;
+  }
+
+  .is-active {
+    background: #bbbbbb;
+    color: #333;
+  }
+}
+
 .document-heading {
   cursor: pointer;
 }

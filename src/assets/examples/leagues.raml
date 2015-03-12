@@ -12,10 +12,7 @@ securitySchemes:
       type: Digest Authentication
   - oauth_2_0:
       description: |
-        OAuth2 is a protocol that lets external apps request authorization to private
-        details in a user's GitHub account without getting their password. This is
-        preferred over Basic Authentication because tokens can be limited to specific
-        types of data, and can be revoked by users at any time.
+        OAuth2 is a protocol that lets external apps request authorization to private details in a user's GitHub account without getting their password. This is preferred over Basic Authentication because tokens can be limited to specific types of data, and can be revoked by users at any time.
       type: OAuth 2.0
       describedBy:
         headers:
@@ -34,8 +31,8 @@ securitySchemes:
           404:
             description: Unauthorized
       settings:
-        authorizationUri: https://github.com/login/oauth/authorize
-        accessTokenUri: https://github.com/login/oauth/access_token
+        authorizationUri: https://leagues.com/login/oauth/authorize
+        accessTokenUri: https://leagues.com/login/oauth/access_token
         authorizationGrants: [ code, credentials, owner ]
         scopes:
           - "user"
@@ -45,8 +42,10 @@ securitySchemes:
       describedBy:
         headers:
           auth:
+            type: string
         queryParameters:
           access_token:
+            type: string
   - custom_scheme_2:
       type: x-custom
       describedBy:

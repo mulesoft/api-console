@@ -4130,6 +4130,52 @@ span.raml-console-side-bar-required-field {
   cursor: pointer;
 }
 
+.raml-console-documentation-schemes p {
+  font-size: 13px;
+}
+
+.raml-console-documentation-schemes .raml-console-scheme-headers,
+.raml-console-documentation-schemes .raml-console-scheme-query-parameters,
+.raml-console-documentation-schemes .raml-console-scheme-settings,
+.raml-console-documentation-schemes .raml-console-scheme-responses {
+  margin-top: 0;
+}
+
+.raml-console-documentation-schemes .raml-console-scheme-headers h4,
+.raml-console-documentation-schemes .raml-console-scheme-query-parameters h4,
+.raml-console-documentation-schemes .raml-console-scheme-settings h4,
+.raml-console-documentation-schemes .raml-console-scheme-responses h4 {
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.raml-console-documentation-security-scheme {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 18px;
+}
+
+.raml-console-documentation-security-scheme .raml-console-documentation-scheme {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid #d5d7d9;
+  border-radius: 5px;
+  background: #e3e4e6;
+  color: #333;
+  font-size: 12px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.raml-console-documentation-security-scheme .raml-console-documentation-scheme:hover {
+  background: #d6d7da;
+}
+
+.raml-console-documentation-security-scheme .raml-console-is-active {
+  background: #bbbbbb;
+  color: #333;
+}
+
 .raml-console-document-heading {
   cursor: pointer;
 }

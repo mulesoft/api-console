@@ -7,7 +7,29 @@
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
       controller: function($scope) {
+        var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
+        var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+
         $scope.markedOptions = RAML.Settings.marked;
+        $scope.documentationSchemeSelected = defaultSchema;
+
+        $scope.isSchemeSelected = function isSchemeSelected(scheme) {
+          return scheme.id === $scope.documentationSchemeSelected.id;
+        };
+
+        $scope.selectDocumentationScheme = function selectDocumentationScheme(scheme) {
+          $scope.documentationSchemeSelected = scheme;
+        };
+
+        $scope.schemaSettingsDocumentation = function schemaSettingsDocumentation(settings) {
+          var doc = settings;
+
+          if (typeof settings === 'object') {
+            doc = settings.join(', ');
+          }
+
+          return doc;
+        }
 
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
@@ -67,50 +89,52 @@
         $scope.parameterDocumentation = function (parameter) {
           var result = '';
 
-          if (parameter.required) {
-            result += 'required, ';
-          }
-
-          if (parameter.enum) {
-            var enumValues = $scope.unique(parameter.enum);
-
-            if (enumValues.length > 1) {
-              result += 'one of ';
+          if (parameter) {
+            if (parameter.required) {
+              result += 'required, ';
             }
 
-            result += '(' + enumValues.join(', ') + ')';
+            if (parameter.enum) {
+              var enumValues = $scope.unique(parameter.enum);
 
-          } else {
-            result += parameter.type;
-          }
+              if (enumValues.length > 1) {
+                result += 'one of ';
+              }
 
-          if (parameter.pattern) {
-            result += ' matching ' + parameter.pattern;
-          }
+              result += '(' + enumValues.join(', ') + ')';
 
-          if (parameter.minLength && parameter.maxLength) {
-            result += ', ' + parameter.minLength + '-' + parameter.maxLength + ' characters';
-          } else if (parameter.minLength && !parameter.maxLength) {
-            result += ', at least ' + parameter.minLength + ' characters';
-          } else if (parameter.maxLength && !parameter.minLength) {
-            result += ', at most ' + parameter.maxLength + ' characters';
-          }
+            } else {
+              result += parameter.type || '';
+            }
+
+            if (parameter.pattern) {
+              result += ' matching ' + parameter.pattern;
+            }
+
+            if (parameter.minLength && parameter.maxLength) {
+              result += ', ' + parameter.minLength + '-' + parameter.maxLength + ' characters';
+            } else if (parameter.minLength && !parameter.maxLength) {
+              result += ', at least ' + parameter.minLength + ' characters';
+            } else if (parameter.maxLength && !parameter.minLength) {
+              result += ', at most ' + parameter.maxLength + ' characters';
+            }
 
 
-          if (parameter.minimum && parameter.maximum) {
-            result += ' between ' + parameter.minimum + '-' + parameter.maximum;
-          } else if (parameter.minimum && !parameter.maximum) {
-            result += ' ≥ ' + parameter.minimum;
-          } else if (parameter.maximum && !parameter.minimum) {
-            result += ' ≤ ' + parameter.maximum;
-          }
+            if (parameter.minimum && parameter.maximum) {
+              result += ' between ' + parameter.minimum + '-' + parameter.maximum;
+            } else if (parameter.minimum && !parameter.maximum) {
+              result += ' ≥ ' + parameter.minimum;
+            } else if (parameter.maximum && !parameter.minimum) {
+              result += ' ≤ ' + parameter.maximum;
+            }
 
-          if (parameter.repeat) {
-            result += ', repeatable';
-          }
+            if (parameter.repeat) {
+              result += ', repeatable';
+            }
 
-          if (parameter['default']) {
-            result += ', default: ' + parameter['default'];
+            if (parameter['default']) {
+              result += ', default: ' + parameter['default'];
+            }
           }
 
           return result;

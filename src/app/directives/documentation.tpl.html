@@ -26,7 +26,7 @@
     <section class="raml-console-resource-section" id="docs-headers" ng-if="methodInfo.headers.plain">
       <h3 class="raml-console-resource-heading-a">Headers</h3>
 
-      <div class="raml-console-resource-param" ng-repeat="header in methodInfo.headers.plain">
+      <div class="raml-console-resource-param" ng-repeat="header in methodInfo.headers.plain" ng-if="!header[0].isFromSecurityScheme">
         <h4 class="raml-console-resource-param-heading">{{header[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(header[0])}}</span></h4>
 
         <p marked="header[0].description" opts="markedOptions"></p>
@@ -40,7 +40,7 @@
     <section class="raml-console-resource-section" id="docs-query-parameters" ng-if="methodInfo.queryParameters">
       <h3 class="raml-console-resource-heading-a">Query Parameters</h3>
 
-      <div class="raml-console-resource-param" ng-repeat="queryParam in methodInfo.queryParameters">
+      <div class="raml-console-resource-param" ng-repeat="queryParam in methodInfo.queryParameters" ng-if="!queryParam[0].isFromSecurityScheme">
         <h4 class="raml-console-resource-param-heading">{{queryParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(queryParam[0])}}</span></h4>
 
         <p marked="queryParam[0].description" opts="markedOptions"></p>
@@ -50,6 +50,62 @@
         </p>
       </div>
     </section>
+
+    <section class="raml-console-resource-section raml-console-documentation-schemes">
+      <h3 class="raml-console-resource-heading-a">Security Schemes</h3>
+      <ol class="raml-console-documentation-security-scheme">
+        <li class="raml-console-documentation-scheme" ng-class="{'raml-console-is-active':isSchemeSelected(value)}" ng-click="selectDocumentationScheme(value)" ng-repeat="(key, value) in securitySchemes">{{value.name}}</li>
+      </ol>
+
+      <p ng-if"documentationSchemeSelected.description" marked="documentationSchemeSelected.description" opts="markedOptions"></p>
+
+      <section class="raml-console-resource-section raml-console-scheme-headers" ng-if="documentationSchemeSelected.describedBy.headers">
+        <h4 class="raml-console-resource-heading-a">Headers</h4>
+
+        <div class="raml-console-resource-param" ng-repeat="(key, header) in documentationSchemeSelected.describedBy.headers">
+          <h4 class="raml-console-resource-param-heading">{{key}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(header)}}</span></h4>
+
+          <p marked="header.description" opts="markedOptions"></p>
+
+          <p ng-if="header.example">
+            <span class="raml-console-resource-param-example"><b>Example:</b> {{header.example}}</span>
+          </p>
+        </div>
+      </section>
+
+      <section class="raml-console-resource-section raml-console-scheme-query-parameters" ng-if="documentationSchemeSelected.describedBy.queryParameters">
+        <h4 class="raml-console-resource-heading-a">Query Parameters</h4>
+
+        <div class="raml-console-resource-param" ng-repeat="(key, queryParameter) in documentationSchemeSelected.describedBy.queryParameters">
+          <h4 class="raml-console-resource-param-heading">{{key}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(queryParameter)}}</span></h4>
+
+          <p marked="queryParameter.description" opts="markedOptions"></p>
+
+          <p ng-if="queryParameter.example">
+            <span class="raml-console-resource-param-example"><b>Example:</b> {{queryParameter.example}}</span>
+          </p>
+        </div>
+      </section>
+
+      <section class="raml-console-resource-section raml-console-scheme-responses" ng-if="documentationSchemeSelected.describedBy.responses">
+        <h4 class="raml-console-resource-heading-a">Responses</h4>
+
+        <div class="raml-console-resource-param" ng-repeat="(code, info) in documentationSchemeSelected.describedBy.responses">
+          <h4 class="raml-console-resource-param-heading">{{code}}</h4>
+          <p marked="info.description" opts="markedOptions"></p>
+        </div>
+      </section>
+
+      <section class="raml-console-resource-section raml-console-scheme-settings" ng-if="documentationSchemeSelected.settings">
+        <h4 class="raml-console-resource-heading-a">Settings</h4>
+
+        <div class="raml-console-resource-param" ng-repeat="(key, config) in documentationSchemeSelected.settings">
+          <h4 class="raml-console-resource-param-heading">{{key}}</h4>
+          <p>{{schemaSettingsDocumentation(config)}}</p>
+        </div>
+      </section>
+    </section>
+
 
     <section class="raml-console-resource-section" ng-if="methodInfo.body">
       <h3 class="raml-console-resource-heading-a">
