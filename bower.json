@@ -20,7 +20,7 @@
     "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29",
     "FileSaver": "*",
     "jszip": "~2.0.0",
-    "raml-client-generator": "~0.0.5",
+    "raml-client-generator": "~0.0.7",
     "slug": "~0.8.0"
   },
   "devDependencies": {
