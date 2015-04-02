@@ -16,6 +16,19 @@
         $scope.responseDetails   = false;
         $scope.currentProtocol   = $scope.raml.protocols[0];
 
+        function readCustomSchemeInfo (name) {
+          if (!$scope.methodInfo.headers.plain) {
+            $scope.methodInfo.headers.plain = {};
+          }
+
+          updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
+          updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+        }
+
+        if (defaultSchema.type === 'x-custom') {
+          readCustomSchemeInfo(defaultSchema.id.split('|')[1]);
+        }
+
         function completeAnimation (element) {
           jQuery(element).removeAttr('style');
         }
@@ -280,15 +293,17 @@
         $scope.context.forceRequest = false;
 
         function cleanSchemeMetadata(collection, context) {
-          Object.keys(collection).map(function (key) {
-            if (collection[key][0].isFromSecurityScheme) {
-              delete collection[key];
-            }
+          if (collection) {
+            Object.keys(collection).map(function (key) {
+              if (collection[key][0].isFromSecurityScheme) {
+                delete collection[key];
+              }
 
-            if (context.plain[key].definitions[0].isFromSecurityScheme) {
-              delete context.plain[key];
-            }
-          });
+              if (context.plain[key].definitions[0].isFromSecurityScheme) {
+                delete context.plain[key];
+              }
+            });
+          }
         }
 
         function updateContextData (type, scheme, collection, context) {
@@ -335,12 +350,7 @@
           $scope.documentationSchemeSelected = $scope.securitySchemes[name];
 
           if (type === 'x-custom') {
-            if (!$scope.methodInfo.headers.plain) {
-              $scope.methodInfo.headers.plain = {};
-            }
-
-            updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
-            updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+            readCustomSchemeInfo(name);
           }
         };
 
