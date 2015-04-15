@@ -82,13 +82,31 @@ Given the above, OAuth 2 requests would redirect back to that URL.
 
 In *Single View* mode you will be able to see only documentation or try-it. 
 
-    <raml-console single-view></raml-console>
+    <raml-console src="path-to-raml" single-view></raml-console>
 
 ### Theme Switcher
 
 *Theme Switcher* can be disable if needed by adding the following setting:
 
-    <raml-console disable-theme-switcher></raml-console>
+    <raml-console src="path-to-raml" disable-theme-switcher></raml-console>
+
+### Disabling Client Generator
+
+*Raml client generator* can be disable if needed by adding the following setting:
+
+    <raml-console src="path-to-raml" disable-raml-client-generator></raml-console>
+
+### Resources collapsed
+
+*Resources* can be collapsed if needed by adding the following setting:
+
+    <raml-console src="path-to-raml" resources-collapsed></raml-console>
+
+### Documentation collapsed
+
+*Documentation* can be collapsed if needed by adding the following setting:
+
+    <raml-console src="path-to-raml" documentation-collapsed></raml-console>
 
 ## Development
 
