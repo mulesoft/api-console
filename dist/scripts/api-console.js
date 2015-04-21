@@ -1384,7 +1384,6 @@
           var $this         = jQuery($event.currentTarget);
           var $panel        = $this.closest('.raml-console-resource-panel');
           var $sidebar      = $panel.find('.raml-console-sidebar');
-          var $panelContent = $panel.find('.raml-console-resource-panel-primary');
           var sidebarWidth  = 0;
 
           if (jQuery(window).width() > 960) {
