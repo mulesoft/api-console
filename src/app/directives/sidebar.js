@@ -194,10 +194,11 @@
           var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
           var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
-          $scope.currentSchemeType = defaultSchema.type;
-          $scope.currentScheme     = defaultSchema.id;
-          $scope.currentProtocol   = $scope.raml.protocols[0];
+          $scope.currentSchemeType           = defaultSchema.type;
+          $scope.currentScheme               = defaultSchema.id;
+          $scope.currentProtocol             = $scope.raml.protocols[0];
           $scope.documentationSchemeSelected = defaultSchema;
+          $scope.responseDetails             = null;
         });
 
         $scope.cancelRequest = function () {
