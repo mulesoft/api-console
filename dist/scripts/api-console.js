@@ -1380,6 +1380,33 @@
 
         $scope.documentationEnabled = true;
 
+        $scope.closeSidebar = function ($event) {
+          var $this         = jQuery($event.currentTarget);
+          var $panel        = $this.closest('.raml-console-resource-panel');
+          var $sidebar      = $panel.find('.raml-console-sidebar');
+          var $panelContent = $panel.find('.raml-console-resource-panel-primary');
+          var sidebarWidth  = 0;
+
+          if (jQuery(window).width() > 960) {
+            sidebarWidth = 430;
+          }
+
+          $scope.documentationEnabled = true;
+          $sidebar.velocity(
+            { width: 0 },
+            {
+              duration: 200,
+              complete: function (element) {
+                jQuery(element).removeAttr('style');
+                $sidebar.removeClass('raml-console-is-fullscreen');
+              }
+            }
+          );
+          $sidebar.toggleClass('raml-console-is-collapsed');
+          $sidebar.removeClass('raml-console-is-responsive');
+          $panel.toggleClass('raml-console-has-sidebar-collapsed');
+        };
+
         $scope.toggleSidebar = function ($event) {
           var $this        = jQuery($event.currentTarget);
           var $panel       = $this.closest('.raml-console-resource-panel');
@@ -5524,7 +5551,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <h3 class=\"raml-console-sidebar-head\">\n" +
     "            Try it\n" +
     "            <a ng-if=\"!singleView\" class=\"raml-console-sidebar-fullscreen-toggle\" ng-click=\"collapseSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
-    "            <a ng-if=\"!singleView\" class=\"raml-console-sidebar-collapse-toggle\" ng-click=\"toggleSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
+    "            <a ng-if=\"!singleView\" class=\"raml-console-sidebar-collapse-toggle\" ng-click=\"closeSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
     "\n" +
     "            <a ng-if=\"singleView\" class=\"raml-console-sidebar-collapse-toggle\" ng-click=\"toggleSidebar($event)\"><div class=\"raml-console-close-sidebar\">&times;</div></a>\n" +
     "\n" +
