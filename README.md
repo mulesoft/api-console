@@ -128,7 +128,7 @@ To run the console, you'll need the following:
 
 ### Running the server
 
-    $ grunt server
+    $ grunt
     $ open http://localhost:9000
 
 ## Testing
