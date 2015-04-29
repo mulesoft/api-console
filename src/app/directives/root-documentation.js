@@ -23,8 +23,14 @@
         };
 
         $scope.toggleSection = function ($event, key, section) {
+          var $el = jQuery($event.currentTarget).closest('.raml-console-documentation');
           $scope.selectedDocumentSection = key;
-          $scope.documentationEnabled = !$scope.documentationEnabled;
+          $scope.documentationEnabled = $el.hasClass('raml-console-documentation-active') ? false : true;
+
+          jQuery('.raml-console-resource-list-item').removeClass('raml-console-documentation-active');
+
+          $el[!$scope.documentationEnabled ? 'removeClass' : 'addClass']('raml-console-documentation-active');
+
           $location.hash($scope.generateDocId(section));
         };
 
@@ -32,6 +38,7 @@
           var $container = jQuery($event.currentTarget).closest('.raml-console-documentation');
           $container.toggleClass('raml-console-documentation-active');
           $scope.documentationEnabled = false;
+          jQuery('.raml-console-resource-list-item').removeClass('raml-console-documentation-active');
         };
 
         $scope.sectionChange = function (value) {

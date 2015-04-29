@@ -855,8 +855,14 @@
         };
 
         $scope.toggleSection = function ($event, key, section) {
+          var $el = jQuery($event.currentTarget).closest('.raml-console-documentation');
           $scope.selectedDocumentSection = key;
-          $scope.documentationEnabled = !$scope.documentationEnabled;
+          $scope.documentationEnabled = $el.hasClass('raml-console-documentation-active') ? false : true;
+
+          jQuery('.raml-console-resource-list-item').removeClass('raml-console-documentation-active');
+
+          $el[!$scope.documentationEnabled ? 'removeClass' : 'addClass']('raml-console-documentation-active');
+
           $location.hash($scope.generateDocId(section));
         };
 
@@ -864,6 +870,7 @@
           var $container = jQuery($event.currentTarget).closest('.raml-console-documentation');
           $container.toggleClass('raml-console-documentation-active');
           $scope.documentationEnabled = false;
+          jQuery('.raml-console-resource-list-item').removeClass('raml-console-documentation-active');
         };
 
         $scope.sectionChange = function (value) {
@@ -5514,7 +5521,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </header>\n" +
     "  </li>\n" +
     "\n" +
-    "  <li id=\"{{generateDocId(doc.title)}}\" class=\"raml-console-resource-list-item raml-console-documentation\" ng-repeat=\"doc in raml.documentation\" ng-class=\"{'raml-console-documentation-active':documentationEnabled}\">\n" +
+    "  <li id=\"{{generateDocId(doc.title)}}\" class=\"raml-console-resource-list-item raml-console-documentation\" ng-repeat=\"doc in raml.documentation\">\n" +
     "    <div ng-init=\"content = getMarkdownHeaders(doc.content)\">\n" +
     "      <div class=\"raml-console-resource raml-console-clearfix raml-console-document-header\">\n" +
     "        <div class=\"raml-console-resource-path-container\" style=\"padding-top: 11px;\" ng-init=\"index=$index\">\n" +

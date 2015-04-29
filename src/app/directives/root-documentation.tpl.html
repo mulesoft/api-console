@@ -10,7 +10,7 @@
     </header>
   </li>
 
-  <li id="{{generateDocId(doc.title)}}" class="raml-console-resource-list-item raml-console-documentation" ng-repeat="doc in raml.documentation" ng-class="{'raml-console-documentation-active':documentationEnabled}">
+  <li id="{{generateDocId(doc.title)}}" class="raml-console-resource-list-item raml-console-documentation" ng-repeat="doc in raml.documentation">
     <div ng-init="content = getMarkdownHeaders(doc.content)">
       <div class="raml-console-resource raml-console-clearfix raml-console-document-header">
         <div class="raml-console-resource-path-container" style="padding-top: 11px;" ng-init="index=$index">
