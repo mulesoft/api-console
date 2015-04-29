@@ -332,8 +332,9 @@
                 };
               }
 
-              securityHeaders[key].displayName             = key;
-              securityHeaders[key].isFromSecurityScheme    = true;
+              securityHeaders[key].id                   = key;
+              securityHeaders[key].displayName          = key;
+              securityHeaders[key].isFromSecurityScheme = true;
               collection[key] = [securityHeaders[key]];
 
               context.plain[key] = {
