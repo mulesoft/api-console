@@ -199,8 +199,10 @@
           $scope.currentProtocol             = $scope.raml.protocols[0];
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
-          removeCustomSchemeData($scope.context.headers);
-          removeCustomSchemeData($scope.context.queryParameters);
+          // removeCustomSchemeData($scope.context.headers);
+          // removeCustomSchemeData($scope.context.queryParameters);
+          cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
+          cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
         });
 
         $scope.cancelRequest = function () {
@@ -309,18 +311,8 @@
           }
         }
 
-        function removeCustomSchemeData(context) {
-          Object.keys(context.plain).map(function (key) {
-            var isFromSecurityScheme = context.plain[key].definitions[0].isFromSecurityScheme;
-
-            if (isFromSecurityScheme) {
-              delete context.plain[key];
-            }
-          });
-        }
-
         function updateContextData (type, scheme, collection, context) {
-          var details         = $scope.securitySchemes[scheme].describedBy || {};
+          var details         = jQuery.extend({}, $scope.securitySchemes[scheme].describedBy || {});
           var securityHeaders = details[type] || {};
 
           if (securityHeaders) {
@@ -357,8 +349,6 @@
 
           $scope.currentSchemeType = type;
           $scope.context.forceRequest = false;
-
-          readCustomSchemeInfo(name);
 
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);

@@ -6,11 +6,11 @@
       restrict: 'E',
       templateUrl: 'directives/close-button.tpl.html',
       replace: true,
-      controller: function($scope) {
+      controller: function($scope, $rootScope) {
         $scope.close = function () {
           var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
 
-
+          $rootScope.$broadcast('resetData');
           $inactiveElements.removeClass('raml-console-is-active');
           $scope.showPanel = false;
           $scope.traits = null;
