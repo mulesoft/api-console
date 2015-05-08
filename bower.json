@@ -15,7 +15,7 @@
     "highlight-js": "~7.0.1",
     "jquery": "~2.1.1",
     "marked": "~0.3.1",
-    "raml-js-parser": "raml-org/raml-js-parser#3d7f702b618a99afcc56f85deb4693921af8bbe5",
+    "raml-js-parser": "raml-org/raml-js-parser#e1513e34388d6bb6558f5cb5b221c19f90e225e5",
     "velocity": "~1.1.0",
     "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29",
     "FileSaver": "*",
