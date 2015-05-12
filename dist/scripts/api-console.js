@@ -24,6 +24,8 @@
     hljsServiceProvider.setOptions({
       classPrefix: 'raml-console-hljs-'
     });
+  }).run(function($window) {
+      $window.RAML.Settings.proxy = '/proxy/';
   });
 
   var loc = window.location;
