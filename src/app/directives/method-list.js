@@ -31,7 +31,7 @@
 
           if (responses) {
             Object.keys(responses).map(function (key) {
-              if(responses[key] && typeof responses[key].body !== 'undefined') {
+              if(responses[key] && typeof responses[key].body !== 'undefined' && responses[key].body) {
                 responseInfo[key] = {};
 
                 Object.keys(responses[key].body).sort().reverse().map(function (type) {
