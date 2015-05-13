@@ -385,7 +385,7 @@
 
           if (responses) {
             Object.keys(responses).map(function (key) {
-              if(responses[key] && typeof responses[key].body !== 'undefined') {
+              if(responses[key] && typeof responses[key].body !== 'undefined' && responses[key].body) {
                 responseInfo[key] = {};
 
                 Object.keys(responses[key].body).sort().reverse().map(function (type) {
@@ -951,7 +951,7 @@
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
-        $scope.currentProtocol   = $scope.raml.protocols[0];
+        $scope.currentProtocol   = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
 
         function readCustomSchemeInfo (name) {
           if (!$scope.methodInfo.headers.plain) {
