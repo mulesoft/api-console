@@ -153,3 +153,8 @@ To run tests, you'll need the following:
 ### Running Tests
 
     $ grunt regression
+    
+## Contributor's Agreement
+
+To contribute source code to this repository, please read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following the instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43 
+
