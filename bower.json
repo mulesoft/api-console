@@ -8,7 +8,7 @@
   "dependencies": {
     "angular": "~1.2.16",
     "angular-highlightjs": "~0.3.2",
-    "angular-marked": "~0.0.12",
+    "angular-marked": "0.0.18",
     "angular-ui-codemirror": "0.1.6",
     "codemirror": "~3.15.0",
     "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
