@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/root-documentation.tpl.html',
       replace: true,
-      controller: function($scope, $location) {
+      controller: function($scope, $timeout) {
         $scope.markedOptions = RAML.Settings.marked;
         $scope.selectedSection = 'all';
 
@@ -31,7 +31,11 @@
 
           $el[!$scope.documentationEnabled ? 'removeClass' : 'addClass']('raml-console-documentation-active');
 
-          $location.hash($scope.generateDocId(section));
+          $timeout(function () {
+            jQuery('html, body').animate({
+              scrollTop: jQuery('#'+$scope.generateDocId(section)).offset().top + 'px'
+            }, 'fast');
+          }, 10);
         };
 
         $scope.closeDocumentation = function ($event) {

@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: function ($scope, $location, $anchorScroll) {
+      controller: function ($scope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -102,10 +102,6 @@
           $scope.showSpinner     = false;
           $scope.responseDetails = true;
 
-          var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
-          $location.hash(hash);
-          $anchorScroll();
-
           // If the response fails because of CORS, responseText is null
           var editorHeight = 50;
 
@@ -119,6 +115,14 @@
           };
 
           apply();
+
+          var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
+
+          $timeout(function () {
+            jQuery('html, body').animate({
+              scrollTop: jQuery('#'+hash).offset().top + 'px'
+            }, 'fast');
+          }, 10);
         }
 
         function resolveSegementContexts(pathSegments, uriParameters) {
