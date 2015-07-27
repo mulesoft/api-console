@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
-      controller: function($scope, $location, $anchorScroll, $rootScope) {
+      controller: function($scope, $timeout, $rootScope) {
         function loadExamples () {
           $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
@@ -163,8 +163,12 @@
             jQuery($this).addClass('raml-console-is-active');
             $scope.showPanel = true;
 
-            $location.hash(hash);
-            $anchorScroll();
+            $timeout(function () {
+              jQuery('html, body').animate({
+                scrollTop: jQuery('#'+hash).offset().top + 'px'
+              }, 'fast');
+            }, 10);
+
           } else if (jQuery($this).hasClass('raml-console-is-active')) {
             $scope.showPanel = false;
             $inactiveElements.removeClass('raml-console-is-active');
