@@ -159,6 +159,12 @@
           $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
         }
 
+        $scope.$on('resetData', function() {
+          if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
+            $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
+          }
+        });
+
         function beautify(body, contentType) {
           if(contentType.indexOf('json')) {
             body = vkbeautify.json(body, 2);
@@ -1152,8 +1158,7 @@
           $scope.currentProtocol             = $scope.raml.protocols[0];
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
-          // removeCustomSchemeData($scope.context.headers);
-          // removeCustomSchemeData($scope.context.queryParameters);
+
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
         });

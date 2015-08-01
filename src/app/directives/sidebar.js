@@ -207,8 +207,7 @@
           $scope.currentProtocol             = $scope.raml.protocols[0];
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
-          // removeCustomSchemeData($scope.context.headers);
-          // removeCustomSchemeData($scope.context.queryParameters);
+
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
         });
