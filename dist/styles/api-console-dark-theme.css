@@ -2219,6 +2219,17 @@ a.raml-console-resource-path-active {
   color: #5685aa;
 }
 
+.raml-console-resource-no-baseuri {
+  background-color: red;
+  margin-top: -1px;
+  font-family: Lato;
+  font-size: 13px;
+  padding: 3px;
+  color: white;
+  text-align: center;
+  text-rendering: optimizeLegibility;
+}
+
 .raml-console-resource-header {
   position: relative;
   padding-top: 8px;
