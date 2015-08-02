@@ -5488,10 +5488,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/resource-panel.tpl.html',
     "<div class=\"raml-console-resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'raml-console-has-sidebar-collapsed': singleView }\">\n" +
+    "  <div class=\"raml-console-resource-no-baseuri\" ng-hide=\"raml.baseUri\">\n" +
+    "    <strong>Try-it</strong> is disabled because <strong>baseUri</strong> is not present\n" +
+    "  </div>\n" +
     "  <div class=\"raml-console-resource-panel-wrapper\">\n" +
     "    <documentation></documentation>\n" +
     "\n" +
-    "    <sidebar></sidebar>\n" +
+    "    <sidebar ng-show=\"raml.baseUri\"></sidebar>\n" +
     "\n" +
     "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\">\n" +
     "      <button class=\"raml-console-collapse\">\n" +
