@@ -5140,14 +5140,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div id=\"request-documentation\" class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active\" ng-class=\"{'raml-console-is-active':showRequestDocumentation}\">\n" +
     "    <h3 class=\"raml-console-resource-heading-a\">Description</h3>\n" +
     "\n" +
-    "    <p marked=\"methodInfo.description\" opts=\"markedOptions\"></p>\n" +
+    "    <p marked=\"methodInfo.description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "    <section class=\"raml-console-resource-section\" id=\"docs-uri-parameters\" ng-if=\"resource.uriParametersForDocumentation\">\n" +
     "      <h3 class=\"raml-console-resource-heading-a\">URI Parameters</h3>\n" +
     "\n" +
     "      <div class=\"raml-console-resource-param\" id=\"docs-uri-parameters-{{uriParam[0].displayName}}\" ng-repeat=\"uriParam in resource.uriParametersForDocumentation\">\n" +
     "        <h4 class=\"raml-console-resource-param-heading\">{{uriParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(uriParam[0])}}</span></h4>\n" +
-    "        <p marked=\"uriParam[0].description\" opts=\"markedOptions\"></p>\n" +
+    "        <p marked=\"uriParam[0].description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "        <p ng-if=\"uriParam[0].example\">\n" +
     "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{uriParam[0].example}}</span>\n" +
@@ -5161,7 +5161,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <div class=\"raml-console-resource-param\" ng-repeat=\"header in methodInfo.headers.plain\" ng-if=\"!header[0].isFromSecurityScheme\">\n" +
     "        <h4 class=\"raml-console-resource-param-heading\">{{header[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(header[0])}}</span></h4>\n" +
     "\n" +
-    "        <p marked=\"header[0].description\" opts=\"markedOptions\"></p>\n" +
+    "        <p marked=\"header[0].description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "        <p ng-if=\"header[0].example\">\n" +
     "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{header[0].example}}</span>\n" +
@@ -5175,7 +5175,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <div class=\"raml-console-resource-param\" ng-repeat=\"queryParam in methodInfo.queryParameters\" ng-if=\"!queryParam[0].isFromSecurityScheme\">\n" +
     "        <h4 class=\"raml-console-resource-param-heading\">{{queryParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(queryParam[0])}}</span></h4>\n" +
     "\n" +
-    "        <p marked=\"queryParam[0].description\" opts=\"markedOptions\"></p>\n" +
+    "        <p marked=\"queryParam[0].description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "        <p ng-if=\"queryParam[0].example\">\n" +
     "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{queryParam[0].example}}</span>\n" +
@@ -5189,7 +5189,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <li class=\"raml-console-documentation-scheme\" ng-class=\"{'raml-console-is-active':isSchemeSelected(value)}\" ng-click=\"selectDocumentationScheme(value)\" ng-repeat=\"(key, value) in securitySchemes\">{{value.name}}</li>\n" +
     "      </ol>\n" +
     "\n" +
-    "      <p ng-if\"documentationSchemeSelected.description\" marked=\"documentationSchemeSelected.description\" opts=\"markedOptions\"></p>\n" +
+    "      <p ng-if\"documentationSchemeSelected.description\" marked=\"documentationSchemeSelected.description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "      <section class=\"raml-console-resource-section raml-console-scheme-headers\" ng-if=\"documentationSchemeSelected.describedBy.headers\">\n" +
     "        <h4 class=\"raml-console-resource-heading-a\">Headers</h4>\n" +
@@ -5197,7 +5197,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <div class=\"raml-console-resource-param\" ng-repeat=\"(key, header) in documentationSchemeSelected.describedBy.headers\">\n" +
     "          <h4 class=\"raml-console-resource-param-heading\">{{key}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(header)}}</span></h4>\n" +
     "\n" +
-    "          <p marked=\"header.description\" opts=\"markedOptions\"></p>\n" +
+    "          <p marked=\"header.description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "          <p ng-if=\"header.example\">\n" +
     "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{header.example}}</span>\n" +
@@ -5211,7 +5211,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <div class=\"raml-console-resource-param\" ng-repeat=\"(key, queryParameter) in documentationSchemeSelected.describedBy.queryParameters\">\n" +
     "          <h4 class=\"raml-console-resource-param-heading\">{{key}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(queryParameter)}}</span></h4>\n" +
     "\n" +
-    "          <p marked=\"queryParameter.description\" opts=\"markedOptions\"></p>\n" +
+    "          <p marked=\"queryParameter.description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "          <p ng-if=\"queryParameter.example\">\n" +
     "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{queryParameter.example}}</span>\n" +
@@ -5224,7 +5224,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"raml-console-resource-param\" ng-repeat=\"(code, info) in documentationSchemeSelected.describedBy.responses\">\n" +
     "          <h4 class=\"raml-console-resource-param-heading\">{{code}}</h4>\n" +
-    "          <p marked=\"info.description\" opts=\"markedOptions\"></p>\n" +
+    "          <p marked=\"info.description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "        </div>\n" +
     "      </section>\n" +
     "\n" +
@@ -5252,7 +5252,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "         <div class=\"raml-console-resource-param\" ng-repeat=\"formParam in methodInfo.body[currentBodySelected].formParameters\">\n" +
     "          <h4 class=\"raml-console-resource-param-heading\">{{formParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(formParam[0])}}</span></h4>\n" +
     "\n" +
-    "          <p marked=\"formParam[0].description\" opts=\"markedOptions\"></p>\n" +
+    "          <p marked=\"formParam[0].description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "          <p ng-if=\"formParam[0].example\">\n" +
     "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
@@ -5294,7 +5294,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <h3 class=\"raml-console-resource-heading-a\">Status {{code}}</h3>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-response\">\n" +
-    "          <p marked=\"methodInfo.responses[code].description\" opts=\"markedOptions\"></p>\n" +
+    "          <p marked=\"methodInfo.responses[code].description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].headers\">\n" +
@@ -5303,7 +5303,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <div class=\"raml-console-resource-param\" ng-repeat=\"header in methodInfo.responses[code].headers\">\n" +
     "            <h4 class=\"raml-console-resource-param-heading\">{{header[0].displayName}} <span class=\"raml-console-resource-param-instructional\">{{header[0].type}}</span></h4>\n" +
     "\n" +
-    "            <p marked=\"header[0].description\" opts=\"markedOptions\"></p>\n" +
+    "            <p marked=\"header[0].description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></p>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "\n" +
@@ -5369,7 +5369,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <span class=\"raml-console-sidebar-input-tooltip-container\" ng-if=\"param.definitions[0].description\">\n" +
     "        <button tabindex=\"-1\" class=\"raml-console-sidebar-input-tooltip\"><span class=\"raml-console-visuallyhidden\">Show documentation</span></button>\n" +
     "        <span class=\"raml-console-sidebar-tooltip-flyout\">\n" +
-    "          <span marked=\"param.definitions[0].description\" opts=\"markedOptions\"></span>\n" +
+    "          <span marked=\"param.definitions[0].description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></span>\n" +
     "        </span>\n" +
     "      </span>\n" +
     "\n" +
@@ -5555,7 +5555,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <div class=\"raml-console-resource-panel raml-console-documentation-content\" ng-if=\"documentationEnabled\">\n" +
     "        <div class=\"raml-console-resource-panel-wrapper\">\n" +
-    "          <div class=\"raml-console-documentation-section-content\" marked=\"getDocumentationContent(doc.content, selectedDocumentSection)\" opts=\"markedOptions\"></div>\n" +
+    "          <div class=\"raml-console-documentation-section-content raml-console-marked-content\" marked=\"getDocumentationContent(doc.content, selectedDocumentSection)\" opts=\"markedOptions\"></div>\n" +
     "        </div>\n" +
     "      </div>\n" +
     "\n" +
@@ -5662,7 +5662,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                  <span class=\"raml-console-sidebar-input-tooltip-container\" ng-if=\"param.definitions[0].description\">\n" +
     "                    <button tabindex=\"-1\" class=\"raml-console-sidebar-input-tooltip\"><span class=\"raml-console-visuallyhidden\">Show documentation</span></button>\n" +
     "                    <span class=\"raml-console-sidebar-tooltip-flyout\">\n" +
-    "                      <span marked=\"param.definitions[0].description\" opts=\"markedOptions\"></span>\n" +
+    "                      <span marked=\"param.definitions[0].description\" opts=\"markedOptions\" class=\"raml-console-marked-content\"></span>\n" +
     "                    </span>\n" +
     "                  </span>\n" +
     "\n" +
@@ -5844,7 +5844,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "            <span ng-hide=\"methodInfo.is\" ng-if=\"resource.traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>\n" +
     "\n" +
-    "            <span class=\"raml-console-resource-level-description\" marked=\"resource.description\" opts=\"markedOptions\"></span>\n" +
+    "            <span class=\"raml-console-resource-level-description raml-console-marked-content\" marked=\"resource.description\" opts=\"markedOptions\"></span>\n" +
     "\n" +
     "          </div>\n" +
     "          <method-list></method-list>\n" +
@@ -5868,7 +5868,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "                <span ng-hide=\"methodInfo.is\" ng-if=\"resource.traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>\n" +
     "\n" +
-    "                <span class=\"raml-console-resource-level-description\" marked=\"resource.description\" opts=\"markedOptions\"></span>\n" +
+    "                <span class=\"raml-console-resource-level-description raml-console-marked-content\" marked=\"resource.description\" opts=\"markedOptions\"></span>\n" +
     "              </div>\n" +
     "\n" +
     "              <method-list></method-list>\n" +
