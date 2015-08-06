@@ -58,7 +58,7 @@
 
             <span ng-hide="methodInfo.is" ng-if="resource.traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>
 
-            <span class="raml-console-resource-level-description" marked="resource.description" opts="markedOptions"></span>
+            <span class="raml-console-resource-level-description raml-console-marked-content" marked="resource.description" opts="markedOptions"></span>
 
           </div>
           <method-list></method-list>
@@ -82,7 +82,7 @@
 
                 <span ng-hide="methodInfo.is" ng-if="resource.traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>
 
-                <span class="raml-console-resource-level-description" marked="resource.description" opts="markedOptions"></span>
+                <span class="raml-console-resource-level-description raml-console-marked-content" marked="resource.description" opts="markedOptions"></span>
               </div>
 
               <method-list></method-list>
