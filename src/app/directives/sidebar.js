@@ -434,10 +434,12 @@
               //// TODO: Make a uniform interface
               if (scheme && scheme.type === 'OAuth 2.0') {
                 authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
-                authStrategy.authenticate(request.toOptions(), function (jqXhr, err) {
-                  $scope.requestOptions = request.toOptions();
-                  handleResponse(jqXhr, err);
-                });
+                $scope.requestOptions = request.toOptions();
+
+                authStrategy.authenticate(request.toOptions()).then(
+                  function(res) { handleResponse(res.raw); },
+                  function(res) { handleResponse(res.raw); }
+                );
                 return;
               }
 

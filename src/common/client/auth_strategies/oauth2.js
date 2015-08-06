@@ -26,7 +26,17 @@
     return window.open(location, 'Authentication', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
   }
 
-  Oauth2.prototype.authenticate = function(options, done) {
+  Oauth2.prototype.popsicleParametrize = function(options) {
+    return {
+      url: options.url,
+      method: options.method,
+      body: options.body || options.data,
+      headers: options.headers
+    };
+  };
+
+  Oauth2.prototype.authenticate = function(options) {
+    var reqOptions = this.popsicleParametrize(options);
     var auth = new ClientOAuth2({
       clientId:         this.credentials.clientId,
       clientSecret:     this.credentials.clientSecret,
@@ -37,51 +47,36 @@
     });
     var grantType = this.credentials.grant;
 
-    if (grantType === 'token' || grantType === 'code') {
-      window.oauth2Callback = function (uri) {
-        auth[grantType].getToken(uri, function (err, user, raw) {
-          if (err) {
-            done(raw, err);
-          }
+    return new Promise(function(resolve, reject) {
 
+      if (grantType === 'token' || grantType === 'code') {
+        window.oauth2Callback = function (uri) {
+          auth[grantType].getToken(uri).then(function(user) {
+            if (user && user.accessToken) {
+              user.request(reqOptions).then(resolve).catch(reject);
+            }
+          });
+        };
+        //// TODO: Find a way to handle 404
+        popup(auth[grantType].getUri());
+      }
+
+      if (grantType === 'owner') {
+        auth.owner.getToken(this.credentials.username, this.credentials.password).then(function (user) {
           if (user && user.accessToken) {
-            user.request(options, function (err, res) {
-              done(res.raw, err);
-            });
+            user.request(reqOptions).then(resolve).catch(reject);
           }
         });
-      };
-      //// TODO: Find a way to handle 404
-      popup(auth[grantType].getUri());
-    }
+      }
 
-    if (grantType === 'owner') {
-      auth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
-        if (err) {
-          done(raw, err);
-        }
-
-        if (user && user.accessToken) {
-          user.request(options, function (err, res) {
-            done(res.raw, err);
-          });
-        }
-      });
-    }
-
-    if (grantType === 'credentials') {
-      auth.credentials.getToken(function (err, user, raw) {
-        if (err) {
-          done(raw, err);
-        }
-
-        if (user && user.accessToken) {
-          user.request(options, function (err, res) {
-            done(res.raw, err);
-          });
-        }
-      });
-    }
+      if (grantType === 'credentials') {
+        auth.credentials.getToken().then(function (user) {
+          if (user && user.accessToken) {
+            user.request(reqOptions).then(resolve).catch(reject);
+          }
+        });
+      }
+    });
   };
 
   RAML.Client.AuthStrategies.Oauth2 = Oauth2;
