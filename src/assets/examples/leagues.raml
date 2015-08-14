@@ -61,6 +61,35 @@ traits:
 
 securedBy: [ null, basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme_2 ]
 
+/async:
+  post:
+    queryParameters:
+      queryParam:
+        type: string
+        enum:
+        - UPGRADE
+        - PORT_NUMBER
+        - UPDATE_FEATURES
+        required: true
+    headers:
+      header:
+        type: string
+        enum:
+        - UPGRADE
+        - PORT_NUMBER
+        - UPDATE_FEATURES
+        required: false
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+          formParam:
+            type: string
+            enum:
+            - UPGRADE
+            - PORT_NUMBER
+            - UPDATE_FEATURES
+            required: false
+
 /teams:
   type: base
   is: [filterable]

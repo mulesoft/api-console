@@ -68003,7 +68003,7 @@ function registerDefaultHelpers(instance) {
           if(context.hasOwnProperty(key)) {
             // We're running the iterations one step out of sync so we can detect
             // the last iteration without have to scan the object twice and create
-            // an itermediate keys array. 
+            // an itermediate keys array.
             if (priorKey) {
               execIteration(priorKey, i-1);
             }

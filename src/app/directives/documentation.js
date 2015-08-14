@@ -107,7 +107,7 @@
                 result += 'one of ';
               }
 
-              result += '(' + enumValues.join(', ') + ')';
+              result += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
 
             } else {
               result += parameter.type || '';

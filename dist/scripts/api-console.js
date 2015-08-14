@@ -225,7 +225,7 @@
                 result += 'one of ';
               }
 
-              result += '(' + enumValues.join(', ') + ')';
+              result += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
 
             } else {
               result += parameter.type || '';
@@ -3463,6 +3463,19 @@ RAML.Inspector = (function() {
   var NamedParameters = function(plain, parameterized) {
     this.plain = copy(plain);
     this.parameterized = parameterized;
+
+    var that = this;
+
+    Object.keys(this.plain).map(function (key) {
+      var data = that.plain[key].definitions[0];
+
+      if (typeof data.enum !== 'undefined') {
+        if (!data.required) {
+          var temp = [''];
+          data.enum = temp.concat(data.enum);
+        }
+      }
+    });
 
     Object.keys(parameterized || {}).forEach(function(key) {
       parameterized[key].created = [];
