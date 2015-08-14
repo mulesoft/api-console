@@ -67,17 +67,17 @@ securedBy: [ null, basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme
       queryParam:
         type: string
         enum:
-        - UPGRADE
-        - PORT_NUMBER
-        - UPDATE_FEATURES
+        - value
         required: true
+      $foo:
+        maxLength: 35
+        required: true
+        example: hola
     headers:
       header:
         type: string
         enum:
-        - UPGRADE
-        - PORT_NUMBER
-        - UPDATE_FEATURES
+        - value
         required: false
     body:
       application/x-www-form-urlencoded:
@@ -85,9 +85,7 @@ securedBy: [ null, basic, digest_auth, oauth_2_0, custom_scheme_1, custom_scheme
           formParam:
             type: string
             enum:
-            - UPGRADE
-            - PORT_NUMBER
-            - UPDATE_FEATURES
+            - value
             required: false
 
 /teams:

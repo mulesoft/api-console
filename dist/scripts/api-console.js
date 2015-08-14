@@ -3463,11 +3463,8 @@ RAML.Inspector = (function() {
   var NamedParameters = function(plain, parameterized) {
     this.plain = copy(plain);
     this.parameterized = parameterized;
-
-    var that = this;
-
     Object.keys(this.plain).map(function (key) {
-      var data = that.plain[key].definitions[0];
+      var data = this.plain[key].definitions[0];
 
       if (typeof data.enum !== 'undefined') {
         if (!data.required) {
@@ -3475,7 +3472,12 @@ RAML.Inspector = (function() {
           data.enum = temp.concat(data.enum);
         }
       }
-    });
+
+      if (key.charAt(0) === '$') {
+        var tempKey = '&#36;' + key.substring(1);
+        this.plain[tempKey] = this.plain[key];
+      }
+    }.bind(this));
 
     Object.keys(parameterized || {}).forEach(function(key) {
       parameterized[key].created = [];
@@ -5509,7 +5511,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <sidebar ng-show=\"raml.baseUri\"></sidebar>\n" +
     "\n" +
-    "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\">\n" +
+    "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\"ng-hide=\"!raml.baseUri\">\n" +
     "      <button class=\"raml-console-collapse\">\n" +
     "        <svg style=\"transform: rotate(-180deg);\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 612 792\" enable-background=\"new 0 0 612 792\" xml:space=\"preserve\">\n" +
     "          <g id=\"Layer_3\">\n" +
@@ -5712,8 +5714,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                  <div ng-if=\"requestOptions.url\">\n" +
     "                    <h3 class=\"raml-console-sidebar-response-head raml-console-sidebar-response-head-pre\">Request URL</h3>\n" +
     "                    <div class=\"raml-console-sidebar-response-item\">\n" +
-    "                      <p class=\"raml-console-sidebar-response-metadata raml-console-sidebar-request-url\">{{requestOptions.baseUrl}}<span ng-repeat=\"(key, value) in parameters\"><span ng-hide=\"$first\">&amp;</span><b>{{key}}</b>=<i>{{value[0]}}</i></span>\n" +
-    "                      </p>\n" +
+    "                      <p class=\"raml-console-sidebar-response-metadata raml-console-sidebar-request-url\">{{requestOptions.url}}</p>\n" +
     "                    </div>\n" +
     "                  </div>\n" +
     "\n" +

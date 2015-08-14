@@ -29,11 +29,8 @@
   var NamedParameters = function(plain, parameterized) {
     this.plain = copy(plain);
     this.parameterized = parameterized;
-
-    var that = this;
-
     Object.keys(this.plain).map(function (key) {
-      var data = that.plain[key].definitions[0];
+      var data = this.plain[key].definitions[0];
 
       if (typeof data.enum !== 'undefined') {
         if (!data.required) {
@@ -41,7 +38,12 @@
           data.enum = temp.concat(data.enum);
         }
       }
-    });
+
+      if (key.charAt(0) === '$') {
+        var tempKey = '&#36;' + key.substring(1);
+        this.plain[tempKey] = this.plain[key];
+      }
+    }.bind(this));
 
     Object.keys(parameterized || {}).forEach(function(key) {
       parameterized[key].created = [];
