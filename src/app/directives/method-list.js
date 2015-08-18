@@ -54,7 +54,8 @@
         }
 
         function beautifyCustomSecuritySchemeName (name) {
-          return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
+          // Remove "x-" prefix and beautify
+          return (name.charAt(2).toUpperCase() + name.slice(3)).replace(/_/g, ' ');
         }
 
         $scope.readTraits = function (traits) {
@@ -127,8 +128,8 @@
             $scope.securitySchemes[key].name = type;
             $scope.securitySchemes[key].id = type + '|' + key;
 
-            if (type === 'x-custom') {
-              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(key);
+            if (type.startsWith('x-')) {
+              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(type);
               $scope.securitySchemes[key].id = type + '|' + key;
             }
           });

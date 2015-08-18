@@ -29,7 +29,7 @@
           updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
         }
 
-        if (defaultSchema.type === 'x-custom') {
+        if (defaultSchema.type.startsWith('x-')) {
           readCustomSchemeInfo(defaultSchema.id.split('|')[1]);
         }
 
@@ -362,7 +362,7 @@
 
           $scope.documentationSchemeSelected = $scope.securitySchemes[name];
 
-          if (type === 'x-custom') {
+          if (type.startsWith('x-')) {
             readCustomSchemeInfo(name);
           }
         };
