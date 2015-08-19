@@ -5923,8 +5923,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </p>\n" +
     "\n" +
     "  <p class=\"raml-console-sidebar-input-container\">\n" +
-    "    <label for=\"password\" class=\"raml-console-sidebar-label\">Password <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
+    "    <label for=\"password\" class=\"raml-console-sidebar-label\">Password</label>\n" +
+    "    <input type=\"password\" name=\"password\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
