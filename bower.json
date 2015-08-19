@@ -6,7 +6,7 @@
     "url": "https://github.com/mulesoft/api-console.git"
   },
   "dependencies": {
-    "angular": ">=1.2.0 <1.4.0",
+    "angular": "~1.2.16",
     "angular-highlightjs": "~0.3.2",
     "angular-marked": "0.0.18",
     "angular-ui-codemirror": "0.1.6",
@@ -24,6 +24,6 @@
     "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29"
   },
   "devDependencies": {
-    "angular-mocks": ">=1.2.0 <1.4.0"
+    "angular-mocks": "~1.2.9" 
   }
 }
