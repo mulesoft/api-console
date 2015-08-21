@@ -1070,6 +1070,12 @@
           var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
 
           $timeout(function () {
+            if (jqXhr) {
+              var editor = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror')[0].CodeMirror;
+              editor.setOption('mode', $scope.response.contentType);
+              editor.refresh();
+            }
+
             jQuery('html, body').animate({
               scrollTop: jQuery('#'+hash).offset().top + 'px'
             }, 'fast');
