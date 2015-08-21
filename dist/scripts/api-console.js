@@ -414,7 +414,8 @@
         }
 
         function beautifyCustomSecuritySchemeName (name) {
-          return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
+          // Remove "x-" prefix and beautify
+          return (name.charAt(2).toUpperCase() + name.slice(3)).replace(/_/g, ' ');
         }
 
         $scope.readTraits = function (traits) {
@@ -487,8 +488,8 @@
             $scope.securitySchemes[key].name = type;
             $scope.securitySchemes[key].id = type + '|' + key;
 
-            if (type === 'x-custom') {
-              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(key);
+            if (type.startsWith('x-')) {
+              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(type);
               $scope.securitySchemes[key].id = type + '|' + key;
             }
           });
@@ -980,7 +981,7 @@
           updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
         }
 
-        if (defaultSchema.type === 'x-custom') {
+        if (defaultSchema.type.startsWith('x-')) {
           readCustomSchemeInfo(defaultSchema.id.split('|')[1]);
         }
 
@@ -1319,7 +1320,7 @@
 
           $scope.documentationSchemeSelected = $scope.securitySchemes[name];
 
-          if (type === 'x-custom') {
+          if (type.startsWith('x-')) {
             readCustomSchemeInfo(name);
           }
         };
@@ -1604,14 +1605,14 @@
 
           if ($theme.length === 0) {
             jQuery.ajax({
-              url: 'styles/api-console-dark-theme.css'
+              url: '/raml-console/styles/api-console-dark-theme.css'
             }).done(function (data) {
               jQuery('head').append('<style id="raml-console-theme-dark">' + data + '</style>');
               jQuery('head').find('#raml-console-theme-light').remove();
             });
           } else {
             jQuery.ajax({
-              url: 'styles/api-console-light-theme.css'
+              url: '/raml-console/styles/api-console-light-theme.css'
             }).done(function (data) {
               jQuery('head').append('<style id="raml-console-theme-light">' + data + '</style>');
               jQuery('head').find('#raml-console-theme-dark').remove();
@@ -2128,12 +2129,14 @@
         return new RAML.Client.AuthStrategies.Oauth2(scheme, credentials);
       case 'OAuth 1.0':
         return new RAML.Client.AuthStrategies.Oauth1(scheme, credentials);
-      case 'x-custom':
-        return RAML.Client.AuthStrategies.anonymous();
       case 'Anonymous':
         return RAML.Client.AuthStrategies.anonymous();
       default:
-        throw new Error('Unknown authentication strategy: ' + scheme.type);
+        if (scheme.type.startsWith('x-')) {
+          return RAML.Client.AuthStrategies.anonymous();
+        } else {
+          throw new Error('Unknown authentication strategy: ' + scheme.type);
+        }
       }
     }
   };
@@ -3250,6 +3253,17 @@ RAML.Inspector = (function() {
 
     return found;
   });
+})();
+
+(function() {
+  'use strict';
+
+  if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function(searchString, position) {
+      position = position || 0;
+      return this.indexOf(searchString, position) === position;
+    };
+  }
 })();
 
 (function() {
@@ -5915,8 +5929,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </p>\n" +
     "\n" +
     "  <p class=\"raml-console-sidebar-input-container\">\n" +
-    "    <label for=\"password\" class=\"raml-console-sidebar-label\">Password <span class=\"raml-console-side-bar-required-field\">*</span></label>\n" +
-    "    <input required=\"true\" type=\"password\" name=\"password\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
+    "    <label for=\"password\" class=\"raml-console-sidebar-label\">Password</label>\n" +
+    "    <input type=\"password\" name=\"password\" class=\"raml-console-sidebar-input raml-console-sidebar-security-field\" ng-model=\"credentials.password\" ng-change=\"onChange()\"/>\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </p>\n" +
     "</div>\n"
