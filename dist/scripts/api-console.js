@@ -1071,9 +1071,13 @@
 
           $timeout(function () {
             if (jqXhr) {
-              var editor = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror')[0].CodeMirror;
-              editor.setOption('mode', $scope.response.contentType);
-              editor.refresh();
+              var $editor = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror')[0];
+
+              if ($editor) {
+                var cm = $editor.CodeMirror;
+                cm.setOption('mode', $scope.response.contentType);
+                cm.refresh();
+              }
             }
 
             jQuery('html, body').animate({
