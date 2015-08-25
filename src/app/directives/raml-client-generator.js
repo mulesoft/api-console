@@ -23,11 +23,11 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/raml-client-generator.tpl.html',
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.downloadJavaScriptClient = function () {
           return downloadClient('javascript', $scope.rawRaml);
         };
-      }
+      }]
     };
   };
 

@@ -10,7 +10,7 @@
         model: '=',
         param: '='
       },
-      controller: function($scope) {
+      controller: ['$scope', function($scope) {
         var bodyContent = $scope.$parent.context.bodyContent;
         var context     = $scope.$parent.context[$scope.$parent.type];
 
@@ -84,7 +84,7 @@
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
-      }
+      }]
     };
   };
 

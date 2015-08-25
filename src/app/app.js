@@ -20,11 +20,11 @@
     'hc.marked',
     'ui.codemirror',
     'hljs'
-  ]).config(function (hljsServiceProvider) {
+  ]).config(['hljsServiceProvider', function (hljsServiceProvider) {
     hljsServiceProvider.setOptions({
       classPrefix: 'raml-console-hljs-'
     });
-  });
+  }]);
 
   var loc = window.location;
   var uri = loc.protocol + '//' + loc.host + loc.pathname.replace(/\/$/, '');

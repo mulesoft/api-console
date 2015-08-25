@@ -9,7 +9,7 @@
       scope: {
         src: '@'
       },
-      controller: function($scope, $window, $attrs) {
+      controller: ['$scope', '$window', '$attrs', function($scope, $window, $attrs) {
         $scope.proxy                  = $window.RAML.Settings.proxy;
         $scope.disableTitle           = false;
         $scope.resourcesCollapsed     = false;
@@ -125,7 +125,7 @@
             return el.length > 1;
           }).length > 0;
         };
-      },
+      }],
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {
           $scope.raml         = RAML.Inspector.create(raml);
@@ -151,5 +151,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlConsole', RAML.Directives.resources);
+    .directive('ramlConsole', ['ramlParserWrapper', RAML.Directives.resources]);
 })();
