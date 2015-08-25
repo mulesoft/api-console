@@ -100,8 +100,8 @@
               result += 'required, ';
             }
 
-            if (parameter.enum) {
-              var enumValues = $scope.unique(parameter.enum);
+            if (parameter['enum']) {
+              var enumValues = $scope.unique(parameter['enum']);
 
               if (enumValues.length > 1) {
                 result += 'one of ';

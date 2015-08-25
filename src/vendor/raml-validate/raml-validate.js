@@ -336,7 +336,7 @@
       date:    isDate,
       number:  isNumber,
       integer: isInteger,
-      boolean: isBoolean,
+      "boolean": isBoolean,
       string:  isString
     };
 
@@ -350,7 +350,7 @@
       maximum:   isMaximum,
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
-      enum:      isEnum,
+      "enum":      isEnum,
       pattern:   isPattern
     };
 

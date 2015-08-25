@@ -32,10 +32,10 @@
     Object.keys(this.plain).map(function (key) {
       var data = this.plain[key].definitions[0];
 
-      if (typeof data.enum !== 'undefined') {
+      if (typeof data['enum'] !== 'undefined') {
         if (!data.required) {
           var temp = [''];
-          data.enum = temp.concat(data.enum);
+          data['enum'] = temp.concat(data['enum']);
         }
       }
 
@@ -58,7 +58,7 @@
   NamedParameters.prototype.clear = function (info) {
     var that = this;
     Object.keys(this.values).map(function (key) {
-      if (typeof info[key][0].enum === 'undefined' || info[key][0].overwritten === true) {
+      if (typeof info[key][0]['enum'] === 'undefined' || info[key][0].overwritten === true) {
         that.values[key] = [''];
       }
     });
@@ -69,7 +69,7 @@
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          if (typeof info[key][0].enum === 'undefined') {
+          if (typeof info[key][0]['enum'] === 'undefined') {
             if (info[key][0].type === 'date' && typeof info[key][0].example === 'object') {
               info[key][0].example = info[key][0].example.toUTCString();
             }

@@ -62,5 +62,5 @@
   };
 
   angular.module('RAML.Services')
-    .service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
+    .service('ramlParserWrapper', ['$rootScope', 'ramlParser', '$q', RAML.Services.RAMLParserWrapper]);
 })();

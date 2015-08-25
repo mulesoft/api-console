@@ -74,5 +74,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlInitializer', RAML.Directives.ramlInitializer);
+    .directive('ramlInitializer', ['ramlParserWrapper', RAML.Directives.ramlInitializer]);
 })();
