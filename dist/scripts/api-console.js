@@ -20,11 +20,11 @@
     'hc.marked',
     'ui.codemirror',
     'hljs'
-  ]).config(function (hljsServiceProvider) {
+  ]).config(['hljsServiceProvider', function (hljsServiceProvider) {
     hljsServiceProvider.setOptions({
       classPrefix: 'raml-console-hljs-'
     });
-  });
+  }]);
 
   var loc = window.location;
   var uri = loc.protocol + '//' + loc.host + loc.pathname.replace(/\/$/, '');
@@ -87,7 +87,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('clickOutside', RAML.Directives.clickOutside);
+    .directive('clickOutside', ['$document', RAML.Directives.clickOutside]);
 })();
 
 (function () {
@@ -98,7 +98,7 @@
       restrict: 'E',
       templateUrl: 'directives/close-button.tpl.html',
       replace: true,
-      controller: function($scope, $rootScope) {
+      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
         $scope.close = function () {
           var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
 
@@ -108,7 +108,7 @@
           $scope.traits = null;
           $scope.methodInfo = {};
         };
-      }
+      }]
     };
   };
 
@@ -124,7 +124,7 @@
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
-      controller: function($scope) {
+      controller: ['$scope', function($scope) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -333,7 +333,7 @@
               .velocity('slideUp');
           }
         };
-      }
+      }]
     };
   };
 
@@ -346,14 +346,14 @@
   angular.module('RAML.Directives').directive('dynamicName', ['$parse', function($parse) {
     return {
       restrict: 'A',
-      controller: function($scope, $element, $attrs){
+      controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs){
         var name = $parse($attrs.dynamicName)($scope);
 
         delete($attrs.dynamicName);
         $element.removeAttr('data-dynamic-name');
         $element.removeAttr('dynamic-name');
         $attrs.$set('name', name);
-      }
+      }]
     };
   }]);
 })();
@@ -366,7 +366,7 @@
       restrict: 'E',
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
-      controller: function($scope, $timeout, $rootScope) {
+      controller: ['$scope', '$timeout', '$rootScope', function($scope, $timeout, $rootScope) {
         function loadExamples () {
           $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
@@ -539,7 +539,7 @@
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
           }
         };
-      }
+      }]
     };
   };
 
@@ -561,7 +561,7 @@
         type: '@',
         title: '@'
       },
-      controller: function ($scope, $attrs) {
+      controller: ['$scope', '$attrs', function ($scope, $attrs) {
         $scope.markedOptions = RAML.Settings.marked;
 
         if ($attrs.hasOwnProperty('enableCustomParameters')) {
@@ -607,7 +607,7 @@
             return el.name !== param.name;
           });
         };
-      }
+      }]
     };
   };
 
@@ -640,11 +640,11 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/raml-client-generator.tpl.html',
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.downloadJavaScriptClient = function () {
           return downloadClient('javascript', $scope.rawRaml);
         };
-      }
+      }]
     };
   };
 
@@ -664,7 +664,7 @@
         model: '=',
         param: '='
       },
-      controller: function($scope) {
+      controller: ['$scope', function($scope) {
         var bodyContent = $scope.$parent.context.bodyContent;
         var context     = $scope.$parent.context[$scope.$parent.type];
 
@@ -738,7 +738,7 @@
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
-      }
+      }]
     };
   };
 
@@ -754,7 +754,7 @@
       restrict: 'E',
       templateUrl: 'directives/raml-initializer.tpl.html',
       replace: true,
-      controller: function($scope, $window) {
+      controller: ['$scope', '$window', function($scope, $window) {
         $scope.ramlUrl    = '';
 
         ramlParserWrapper.onParseError(function(error) {
@@ -817,7 +817,7 @@
           $scope.ramlUrl = document.location.search.replace('?raml=', '');
           $scope.loadFromUrl();
         }
-      }
+      }]
     };
   };
 
@@ -848,7 +848,7 @@
       restrict: 'E',
       templateUrl: 'directives/root-documentation.tpl.html',
       replace: true,
-      controller: function($scope, $timeout) {
+      controller: ['$scope', '$timeout', function($scope, $timeout) {
         $scope.markedOptions = RAML.Settings.marked;
         $scope.selectedSection = 'all';
 
@@ -941,7 +941,7 @@
 
           return result;
         };
-      }
+      }]
     };
   };
 
@@ -957,7 +957,7 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: function ($scope, $timeout) {
+      controller: ['$scope', '$timeout', function ($scope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -1558,7 +1558,7 @@
         $scope.toggleResponseMetadata = function () {
           $scope.showResponseMetadata = !$scope.showResponseMetadata;
         };
-      }
+      }]
     };
   };
 
@@ -1702,7 +1702,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('validate', RAML.Directives.validate);
+    .directive('validate', ['$parse', RAML.Directives.validate]);
 })();
 
 (function () {
@@ -1722,13 +1722,13 @@
       restrict: 'E',
       templateUrl: 'resources/resource-type.tpl.html',
       replace: true,
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         var resourceType = $scope.resource.resourceType;
 
         if (typeof resourceType === 'object') {
           $scope.resource.resourceType = Object.keys(resourceType).join();
         }
-      }
+      }]
     };
   };
 
@@ -1747,7 +1747,7 @@
       scope: {
         src: '@'
       },
-      controller: function($scope, $window, $attrs) {
+      controller: ['$scope', '$window', '$attrs', function($scope, $window, $attrs) {
         $scope.proxy                  = $window.RAML.Settings.proxy;
         $scope.disableTitle           = false;
         $scope.resourcesCollapsed     = false;
@@ -1888,7 +1888,7 @@
             }, 10);
           }
         });
-      },
+      }],
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {
           $scope.raml         = RAML.Inspector.create(raml);
@@ -1914,7 +1914,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlConsole', RAML.Directives.resources);
+    .directive('ramlConsole', ['ramlParserWrapper', RAML.Directives.resources]);
 })();
 
 (function () {
@@ -1928,11 +1928,11 @@
       scope: {
         credentials: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.onChange = function () {
           $scope.$parent.context.forceRequest = false;
         };
-      }
+      }]
     };
   };
 
@@ -1951,11 +1951,11 @@
       scope: {
         credentials: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.onChange = function () {
           $scope.$parent.context.forceRequest = false;
         };
-      }
+      }]
     };
   };
 
@@ -1971,7 +1971,7 @@
       restrict: 'E',
       templateUrl: 'security/oauth2.tpl.html',
       replace: true,
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.onChange = function () {
           $scope.$parent.context.forceRequest = false;
         };
@@ -2017,7 +2017,7 @@
         /* jshint camelcase: true */
 
         $scope.credentials.grant = $scope.grants[0].value;
-      }
+      }]
     };
   };
 

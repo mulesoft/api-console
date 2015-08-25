@@ -9,11 +9,11 @@
       scope: {
         credentials: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.onChange = function () {
           $scope.$parent.context.forceRequest = false;
         };
-      }
+      }]
     };
   };
 

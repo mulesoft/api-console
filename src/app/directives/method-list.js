@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
-      controller: function($scope, $timeout, $rootScope) {
+      controller: ['$scope', '$timeout', '$rootScope', function($scope, $timeout, $rootScope) {
         function loadExamples () {
           $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
@@ -179,7 +179,7 @@
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
           }
         };
-      }
+      }]
     };
   };
 

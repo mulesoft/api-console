@@ -12,7 +12,7 @@
         type: '@',
         title: '@'
       },
-      controller: function ($scope, $attrs) {
+      controller: ['$scope', '$attrs', function ($scope, $attrs) {
         $scope.markedOptions = RAML.Settings.marked;
 
         if ($attrs.hasOwnProperty('enableCustomParameters')) {
@@ -58,7 +58,7 @@
             return el.name !== param.name;
           });
         };
-      }
+      }]
     };
   };
 

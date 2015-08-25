@@ -23,5 +23,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('clickOutside', RAML.Directives.clickOutside);
+    .directive('clickOutside', ['$document', RAML.Directives.clickOutside]);
 })();

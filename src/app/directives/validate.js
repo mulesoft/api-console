@@ -70,5 +70,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('validate', RAML.Directives.validate);
+    .directive('validate', ['$parse', RAML.Directives.validate]);
 })();
