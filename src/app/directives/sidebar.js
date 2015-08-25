@@ -451,7 +451,7 @@
                 return;
               }
 
-              authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+              authStrategy = RAML.Client.AuthStrategies.forScheme(scheme, $scope.credentials);
               authStrategy.authenticate().then(function(token) {
                 token.sign(request);
                 $scope.requestOptions = request.toOptions();

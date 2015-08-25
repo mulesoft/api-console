@@ -218,8 +218,8 @@
               result += 'required, ';
             }
 
-            if (parameter.enum) {
-              var enumValues = $scope.unique(parameter.enum);
+            if (parameter['enum']) {
+              var enumValues = $scope.unique(parameter['enum']);
 
               if (enumValues.length > 1) {
                 result += 'one of ';
@@ -675,13 +675,13 @@
         Object.keys(context.plain).map(function (key) {
           var definition = context.plain[key].definitions[0];
 
-          if (typeof definition.enum !== 'undefined') {
-            context.values[definition.id][0] = definition.enum[0];
+          if (typeof definition['enum'] !== 'undefined') {
+            context.values[definition.id][0] = definition['enum'][0];
           }
         });
 
         $scope.canOverride = function (definition) {
-          return definition.type === 'boolean' ||  typeof definition.enum !== 'undefined';
+          return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
         };
 
         $scope.overrideField = function ($event, definition) {
@@ -702,7 +702,7 @@
             $this.text('Cancel override');
           } else {
             definition.overwritten = false;
-            $scope.$parent.context[$scope.$parent.type].values[definition.id][0] = definition.enum[0];
+            $scope.$parent.context[$scope.$parent.type].values[definition.id][0] = definition['enum'][0];
           }
         };
 
@@ -711,11 +711,11 @@
         };
 
         $scope.isDefault = function (definition) {
-          return typeof definition.enum === 'undefined' && definition.type !== 'boolean';
+          return typeof definition['enum'] === 'undefined' && definition.type !== 'boolean';
         };
 
         $scope.isEnum = function (definition) {
-          return typeof definition.enum !== 'undefined';
+          return typeof definition['enum'] !== 'undefined';
         };
 
         $scope.isBoolean = function (definition) {
@@ -723,7 +723,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value.enum !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
+          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
         };
 
         $scope.reset = function (param) {
@@ -822,7 +822,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlInitializer', RAML.Directives.ramlInitializer);
+    .directive('ramlInitializer', ['ramlParserWrapper', RAML.Directives.ramlInitializer]);
 })();
 
 (function () {
@@ -1402,7 +1402,7 @@
                 return;
               }
 
-              authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+              authStrategy = RAML.Client.AuthStrategies.forScheme(scheme, $scope.credentials);
               authStrategy.authenticate().then(function(token) {
                 token.sign(request);
                 $scope.requestOptions = request.toOptions();
@@ -1681,7 +1681,7 @@
           minLength: validation.minLength || null,
           maxLength: validation.maxLength || null,
           required: validation.required || null,
-          enum: validation.enum || null,
+          'enum': validation['enum'] || null,
           pattern: validation.pattern || null,
           minimum: validation.minimum || null,
           maximum: validation.maximum || null,
@@ -2064,7 +2064,7 @@
   };
 
   angular.module('RAML.Services')
-    .service('ramlParserWrapper', RAML.Services.RAMLParserWrapper);
+    .service('ramlParserWrapper', ['$rootScope', 'ramlParser', '$q', RAML.Services.RAMLParserWrapper]);
 })();
 
 'use strict';
@@ -2120,7 +2120,7 @@
   'use strict';
 
   RAML.Client.AuthStrategies = {
-    for: function(scheme, credentials) {
+    forScheme: function(scheme, credentials) {
       if (!scheme) {
         return RAML.Client.AuthStrategies.anonymous();
       }
@@ -2763,10 +2763,10 @@
     required: function(value) {
       return !isEmpty(value);
     },
-    boolean: function(value) {
+    'boolean': function(value) {
       return isEmpty(value) || value === 'true' || value === 'false';
     },
-    enum: function(enumeration) {
+    'enum': function(enumeration) {
       return function(value) {
         return isEmpty(value) || enumeration.indexOf(value) > -1;
       };
@@ -2839,8 +2839,8 @@
     string: function(definition) {
       var validations = baseValidations(definition);
 
-      if (Array.isArray(definition.enum)) {
-        validations.enum = VALIDATIONS.enum(definition.enum);
+      if (Array.isArray(definition['enum'])) {
+        validations['enum'] = VALIDATIONS['enum'](definition['enum']);
       }
 
       if (definition.minLength != null) {
@@ -2872,9 +2872,12 @@
       return validations;
     },
 
-    boolean: function(definition) {
+    'boolean': function(definition) {
       var validations = baseValidations(definition);
-      validations.boolean = VALIDATIONS.boolean;
+      // Ignore better written in dot notation rule
+      /*jshint -W069 */
+      validations['boolean'] = VALIDATIONS['boolean'];
+      /*jshint +W069 */
       return validations;
     },
 
@@ -3327,7 +3330,7 @@ RAML.Inspector = (function() {
   BodyContent.prototype.clear = function (info) {
     var that = this.definitions[this.selected];
     Object.keys(this.values).map(function (key) {
-      if (typeof info[key][0].enum === 'undefined' || info[key][0].overwritten === true) {
+      if (typeof info[key][0]['enum'] === 'undefined' || info[key][0].overwritten === true) {
         that.values[key] = [''];
       }
     });
@@ -3338,7 +3341,7 @@ RAML.Inspector = (function() {
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          if (typeof info[key][0].enum === 'undefined') {
+          if (typeof info[key][0]['enum'] === 'undefined') {
             that.values[key][0] = info[key][0].example;
           }
         }
@@ -3476,10 +3479,10 @@ RAML.Inspector = (function() {
     Object.keys(this.plain).map(function (key) {
       var data = this.plain[key].definitions[0];
 
-      if (typeof data.enum !== 'undefined') {
+      if (typeof data['enum'] !== 'undefined') {
         if (!data.required) {
           var temp = [''];
-          data.enum = temp.concat(data.enum);
+          data['enum'] = temp.concat(data['enum']);
         }
       }
 
@@ -3502,7 +3505,7 @@ RAML.Inspector = (function() {
   NamedParameters.prototype.clear = function (info) {
     var that = this;
     Object.keys(this.values).map(function (key) {
-      if (typeof info[key][0].enum === 'undefined' || info[key][0].overwritten === true) {
+      if (typeof info[key][0]['enum'] === 'undefined' || info[key][0].overwritten === true) {
         that.values[key] = [''];
       }
     });
@@ -3513,7 +3516,7 @@ RAML.Inspector = (function() {
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          if (typeof info[key][0].enum === 'undefined') {
+          if (typeof info[key][0]['enum'] === 'undefined') {
             if (info[key][0].type === 'date' && typeof info[key][0].example === 'object') {
               info[key][0].example = info[key][0].example.toUTCString();
             }
@@ -4620,8 +4623,8 @@ RAML.Inspector = (function() {
         // Immediately return empty values with attempting to sanitize.
         if (isEmpty(value)) {
           // Fallback to providing the default value instead.
-          if (config.default != null) {
-            return sanitization(config.default, key, object);
+          if (config["default"] != null) {
+            return sanitization(config["default"], key, object);
           }
 
           // Return an empty array for repeatable values.
@@ -4740,7 +4743,7 @@ RAML.Inspector = (function() {
       string:  String,
       number:  toNumber,
       integer: toInteger,
-      boolean: toBoolean,
+      "boolean": toBoolean,
       date:    toDate
     };
 
@@ -5106,7 +5109,7 @@ RAML.Inspector = (function() {
       date:    isDate,
       number:  isNumber,
       integer: isInteger,
-      boolean: isBoolean,
+      "boolean": isBoolean,
       string:  isString
     };
 
@@ -5120,7 +5123,7 @@ RAML.Inspector = (function() {
       maximum:   isMaximum,
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
-      enum:      isEnum,
+      "enum":      isEnum,
       pattern:   isPattern
     };
 

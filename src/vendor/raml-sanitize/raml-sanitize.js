@@ -114,8 +114,8 @@
         // Immediately return empty values with attempting to sanitize.
         if (isEmpty(value)) {
           // Fallback to providing the default value instead.
-          if (config.default != null) {
-            return sanitization(config.default, key, object);
+          if (config["default"] != null) {
+            return sanitization(config["default"], key, object);
           }
 
           // Return an empty array for repeatable values.
@@ -234,7 +234,7 @@
       string:  String,
       number:  toNumber,
       integer: toInteger,
-      boolean: toBoolean,
+      "boolean": toBoolean,
       date:    toDate
     };
 

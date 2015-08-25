@@ -13,10 +13,10 @@
     required: function(value) {
       return !isEmpty(value);
     },
-    boolean: function(value) {
+    'boolean': function(value) {
       return isEmpty(value) || value === 'true' || value === 'false';
     },
-    enum: function(enumeration) {
+    'enum': function(enumeration) {
       return function(value) {
         return isEmpty(value) || enumeration.indexOf(value) > -1;
       };
@@ -89,8 +89,8 @@
     string: function(definition) {
       var validations = baseValidations(definition);
 
-      if (Array.isArray(definition.enum)) {
-        validations.enum = VALIDATIONS.enum(definition.enum);
+      if (Array.isArray(definition['enum'])) {
+        validations['enum'] = VALIDATIONS['enum'](definition['enum']);
       }
 
       if (definition.minLength != null) {
@@ -122,9 +122,12 @@
       return validations;
     },
 
-    boolean: function(definition) {
+    'boolean': function(definition) {
       var validations = baseValidations(definition);
-      validations.boolean = VALIDATIONS.boolean;
+      // Ignore better written in dot notation rule
+      /*jshint -W069 */
+      validations['boolean'] = VALIDATIONS['boolean'];
+      /*jshint +W069 */
       return validations;
     },
 
