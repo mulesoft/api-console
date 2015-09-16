@@ -1,6 +1,5 @@
 <main class="raml-console-error-container raml-console-error-primary">
-
-  <div ng-if="!loaded">
+  <div ng-if="!loaded && !error">
     <div class="raml-console-spinner">
       <div class="raml-console-rect1"></div>
       <div class="raml-console-rect2"></div>
@@ -10,7 +9,7 @@
     </div>
   </div>
 
-  <div ng-if="loaded">
+  <div ng-if="loaded && !error">
     <div class="raml-console-meta-button-group">
       <theme-switcher ng-if="!disableThemeSwitcher"></theme-switcher>
       <raml-client-generator ng-if="!disableRamlClientGenerator"></raml-client-generator>
@@ -95,5 +94,33 @@
 
       </li>
     </ol>
+  </div>
+
+  <div ng-if="loaded && error">
+    <div class="raml-console-initializer-container raml-console-initializer-primary">
+      <h1 class="raml-console-title">RAML Console</h1>
+
+      <section>
+        <header class="raml-console-initializer-row raml-console-initializer-subheader">
+          <h4 class="raml-console-initializer-subhead">Error while parsing</h4>
+        </header>
+
+        <div class="raml-console-initializer-row">
+          <p class="raml-console-initializer-input-container" style="height: 550px;">
+            <textarea id="raml" ui-codemirror="{
+              lineNumbers: true,
+              lineWrapping : false,
+              tabSize: 2,
+              mode: 'yaml',
+              gutters: ['CodeMirror-lint-markers'],
+              lint: true,
+              theme : 'raml-console'
+            }" ng-model="raml"></textarea>
+          </p>
+        </div>
+      </section>
+    </div>
+
+    {{raml}}
   </div>
 </main>

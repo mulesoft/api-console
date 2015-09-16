@@ -125,6 +125,31 @@
             return el.length > 1;
           }).length > 0;
         };
+
+        ramlParserWrapper.onParseError(function(error) {
+          $scope.error  = error;
+          $scope.loaded = true;
+
+          /*jshint camelcase: false */
+          var context = error.context_mark || error.problem_mark;
+          /*jshint camelcase: true */
+
+          $scope.errorMessage = error.message;
+
+          if (context) {
+            $scope.raml = context.buffer;
+
+            $window.ramlErrors.line    = context.line;
+            $window.ramlErrors.message = error.message;
+
+            // Hack to update codemirror
+            setTimeout(function () {
+              var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
+              editor.addLineClass(context.line, 'background', 'line-error');
+              editor.doc.setCursor(context.line);
+            }, 10);
+          }
+        });
       },
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {

@@ -1863,6 +1863,31 @@
             return el.length > 1;
           }).length > 0;
         };
+
+        ramlParserWrapper.onParseError(function(error) {
+          $scope.error  = error;
+          $scope.loaded = true;
+
+          /*jshint camelcase: false */
+          var context = error.context_mark || error.problem_mark;
+          /*jshint camelcase: true */
+
+          $scope.errorMessage = error.message;
+
+          if (context) {
+            $scope.raml = context.buffer;
+
+            $window.ramlErrors.line    = context.line;
+            $window.ramlErrors.message = error.message;
+
+            // Hack to update codemirror
+            setTimeout(function () {
+              var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
+              editor.addLineClass(context.line, 'background', 'line-error');
+              editor.doc.setCursor(context.line);
+            }, 10);
+          }
+        });
       },
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {
@@ -5809,8 +5834,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('resources/resources.tpl.html',
     "<main class=\"raml-console-error-container raml-console-error-primary\">\n" +
-    "\n" +
-    "  <div ng-if=\"!loaded\">\n" +
+    "  <div ng-if=\"!loaded && !error\">\n" +
     "    <div class=\"raml-console-spinner\">\n" +
     "      <div class=\"raml-console-rect1\"></div>\n" +
     "      <div class=\"raml-console-rect2\"></div>\n" +
@@ -5820,7 +5844,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div ng-if=\"loaded\">\n" +
+    "  <div ng-if=\"loaded && !error\">\n" +
     "    <div class=\"raml-console-meta-button-group\">\n" +
     "      <theme-switcher ng-if=\"!disableThemeSwitcher\"></theme-switcher>\n" +
     "      <raml-client-generator ng-if=\"!disableRamlClientGenerator\"></raml-client-generator>\n" +
@@ -5905,6 +5929,34 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      </li>\n" +
     "    </ol>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div ng-if=\"loaded && error\">\n" +
+    "    <div class=\"raml-console-initializer-container raml-console-initializer-primary\">\n" +
+    "      <h1 class=\"raml-console-title\">RAML Console</h1>\n" +
+    "\n" +
+    "      <section>\n" +
+    "        <header class=\"raml-console-initializer-row raml-console-initializer-subheader\">\n" +
+    "          <h4 class=\"raml-console-initializer-subhead\">Error while parsing</h4>\n" +
+    "        </header>\n" +
+    "\n" +
+    "        <div class=\"raml-console-initializer-row\">\n" +
+    "          <p class=\"raml-console-initializer-input-container\" style=\"height: 550px;\">\n" +
+    "            <textarea id=\"raml\" ui-codemirror=\"{\n" +
+    "              lineNumbers: true,\n" +
+    "              lineWrapping : false,\n" +
+    "              tabSize: 2,\n" +
+    "              mode: 'yaml',\n" +
+    "              gutters: ['CodeMirror-lint-markers'],\n" +
+    "              lint: true,\n" +
+    "              theme : 'raml-console'\n" +
+    "            }\" ng-model=\"raml\"></textarea>\n" +
+    "          </p>\n" +
+    "        </div>\n" +
+    "      </section>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    {{raml}}\n" +
     "  </div>\n" +
     "</main>\n"
   );
