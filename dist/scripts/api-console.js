@@ -3903,6 +3903,20 @@ RAML.Inspector = (function() {
   }
 
   /**
+   * Retrieve body request with valid format depending content type
+   *
+   * @param {Mixed} data
+   * @param {String} contentType
+   * @return {Mixed}
+   */
+  function getBodyRequest(data, contentType) {
+    if (contentType === 'application/x-www-form-urlencoded' && typeof data === 'object') {
+      return uriEncode(data);
+    }
+    return data;
+  }
+
+  /**
    * Sanitize the scopes option to be a string.
    *
    * @param  {Array}  scopes
@@ -3999,6 +4013,7 @@ RAML.Inspector = (function() {
     ClientOAuth2.prototype.request = function (options, done) {
       var xhr     = new root.XMLHttpRequest();
       var headers = options.headers || {};
+      var body = getBodyRequest(options.data, options.contentType);
 
       // Open the request to the url and method.
       xhr.open(options.method, options.url);
@@ -4024,7 +4039,7 @@ RAML.Inspector = (function() {
       });
 
       // Make the request with the body.
-      xhr.send(options.body);
+      xhr.send(body);
     };
   } else {
     var url   = require('url');
@@ -4174,7 +4189,7 @@ RAML.Inspector = (function() {
         'Content-Type':  'application/x-www-form-urlencoded',
         'Authorization': 'Basic ' + authorization
       },
-      body: uriEncode({
+      data: uriEncode({
         refresh_token: this.refreshToken,
         grant_type:    'refresh_token'
       })
@@ -4236,7 +4251,7 @@ RAML.Inspector = (function() {
         'Content-Type':  'application/x-www-form-urlencoded',
         'Authorization': 'Basic ' + authorization
       },
-      body: uriEncode({
+      data: uriEncode({
         scope:      sanitizeScope(options.scopes),
         username:   username,
         password:   password,
@@ -4386,7 +4401,7 @@ RAML.Inspector = (function() {
         'Content-Type':  'application/x-www-form-urlencoded',
         'Authorization': 'Basic ' + authorization
       },
-      body: uriEncode({
+      data: uriEncode({
         scope:      sanitizeScope(options.scopes),
         grant_type: 'client_credentials'
       })
@@ -4498,7 +4513,7 @@ RAML.Inspector = (function() {
         'Accept':       'application/json, application/x-www-form-urlencoded',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: uriEncode({
+      data: uriEncode({
         code:          query.code,
         grant_type:    'authorization_code',
         redirect_uri:  options.redirectUri,
