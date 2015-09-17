@@ -1,8 +1,12 @@
 {
   "name": "api-console",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Api-Console for RAML based app",
-  "main": "index.js",
+  "files": [
+    "dist",
+    "dist/**",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "grunt regression"
   },
