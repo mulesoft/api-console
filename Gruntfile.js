@@ -1,5 +1,39 @@
 'use strict';
 
+function proxy() {
+  var request = require('request');
+
+  return function proxyMiddleware(req, res, next) {
+    if (req.method.toUpperCase() === 'OPTIONS') {
+      res.setHeader('Access-Control-Allow-Origin',  '*');
+      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+      return next();
+    }
+
+    var proxy = request({
+      uri: req.url.substr(1),
+      rejectUnauthorized: false
+    });
+
+    // Proxy the error message back to the client.
+    proxy.on('error', function (error) {
+      res.writeHead(500);
+      return res.end(error.message);
+    });
+
+    // Workaround for some remote services that do not handle
+    // multi-valued Accept header properly by omitting precedence
+    if (req.headers.accept) {
+      req.headers.accept = req.headers.accept.split(',')[0].trim();
+    }
+
+    // Pipe the request data directly into the proxy request and back to the
+    // response object. This avoids having to buffer the request body in cases
+    // where they could be unexepectedly large and/or slow.
+    return req.pipe(proxy).pipe(res);
+  };
+}
+
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
@@ -53,7 +87,8 @@ module.exports = function (grunt) {
           open:       true,
           middleware: function (connect) {
             return [
-              connect.static('dist')
+              connect.static('dist'),
+                connect().use('/proxy/',           proxy())
             ];
           }
         }

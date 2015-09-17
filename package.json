@@ -42,6 +42,7 @@
     "grunt-protractor-runner": "~1.1.4",
     "jasmine-spec-reporter": "~1.1.0",
     "load-grunt-tasks": "~2.0.0",
-    "serve-static": "~1.8.0"
+    "serve-static": "~1.8.0",
+    "request": "~2.33.0"
   }
 }
