@@ -284,6 +284,19 @@ module.exports = function (grunt) {
       ]
     },
 
+    uglify: {
+      options: {
+        mangle:   false,
+        compress: true
+      },
+      min: {
+        files: {
+          '<%= distdir %>/scripts/<%= pkg.name %>.min.js': ['<%= distdir %>/scripts/<%= pkg.name %>.js'],
+          '<%= distdir %>/scripts/<%= pkg.name %>-vendor.min.js': ['<%= distdir %>/scripts/<%= pkg.name %>-vendor.js']
+        }
+      }
+    },
+
     protractor: {
       options: {
         keepAlive:  false
@@ -311,7 +324,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build:scripts', [
     'ngtemplates',
-    'concat:app'
+    'concat:app',
+    'uglify:min'
   ]);
 
   grunt.registerTask('build:styles', [
