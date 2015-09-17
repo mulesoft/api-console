@@ -1071,13 +1071,13 @@
 
           $timeout(function () {
             if (jqXhr) {
-              var $editor = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror')[0];
+              var $editors = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror').toArray();
 
-              if ($editor) {
-                var cm = $editor.CodeMirror;
+              $editors.forEach(function (editor) {
+                var cm = editor.CodeMirror;
                 cm.setOption('mode', $scope.response.contentType);
                 cm.refresh();
-              }
+              });
             }
 
             jQuery('html, body').animate({
