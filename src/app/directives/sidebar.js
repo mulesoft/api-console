@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: function ($scope, $timeout) {
+      controller: ['$scope', '$timeout', function ($scope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -451,7 +451,7 @@
                 return;
               }
 
-              authStrategy = RAML.Client.AuthStrategies.for(scheme, $scope.credentials);
+              authStrategy = RAML.Client.AuthStrategies.forScheme(scheme, $scope.credentials);
               authStrategy.authenticate().then(function(token) {
                 token.sign(request);
                 $scope.requestOptions = request.toOptions();
@@ -607,7 +607,7 @@
         $scope.toggleResponseMetadata = function () {
           $scope.showResponseMetadata = !$scope.showResponseMetadata;
         };
-      }
+      }]
     };
   };
 

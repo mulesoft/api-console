@@ -2,7 +2,7 @@
   'use strict';
 
   RAML.Client.AuthStrategies = {
-    for: function(scheme, credentials) {
+    forScheme: function(scheme, credentials) {
       if (!scheme) {
         return RAML.Client.AuthStrategies.anonymous();
       }

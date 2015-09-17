@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/raml-initializer.tpl.html',
       replace: true,
-      controller: function($scope, $window) {
+      controller: ['$scope', '$window', function($scope, $window) {
         $scope.ramlUrl    = '';
 
         ramlParserWrapper.onParseError(function(error) {
@@ -69,10 +69,10 @@
           $scope.ramlUrl = document.location.search.replace('?raml=', '');
           $scope.loadFromUrl();
         }
-      }
+      }]
     };
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlInitializer', RAML.Directives.ramlInitializer);
+    .directive('ramlInitializer', ['ramlParserWrapper', RAML.Directives.ramlInitializer]);
 })();

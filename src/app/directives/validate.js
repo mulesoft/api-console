@@ -49,7 +49,7 @@
           minLength: validation.minLength || null,
           maxLength: validation.maxLength || null,
           required: validation.required || null,
-          enum: validation.enum || null,
+          'enum': validation['enum'] || null,
           pattern: validation.pattern || null,
           minimum: validation.minimum || null,
           maximum: validation.maximum || null,
@@ -70,5 +70,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('validate', RAML.Directives.validate);
+    .directive('validate', ['$parse', RAML.Directives.validate]);
 })();

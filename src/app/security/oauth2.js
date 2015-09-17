@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'security/oauth2.tpl.html',
       replace: true,
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.onChange = function () {
           $scope.$parent.context.forceRequest = false;
         };
@@ -52,7 +52,7 @@
         /* jshint camelcase: true */
 
         $scope.credentials.grant = $scope.grants[0].value;
-      }
+      }]
     };
   };
 

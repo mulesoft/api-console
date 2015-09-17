@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
-      controller: function($scope) {
+      controller: ['$scope', function($scope) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -100,8 +100,8 @@
               result += 'required, ';
             }
 
-            if (parameter.enum) {
-              var enumValues = $scope.unique(parameter.enum);
+            if (parameter['enum']) {
+              var enumValues = $scope.unique(parameter['enum']);
 
               if (enumValues.length > 1) {
                 result += 'one of ';
@@ -215,7 +215,7 @@
               .velocity('slideUp');
           }
         };
-      }
+      }]
     };
   };
 

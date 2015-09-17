@@ -10,7 +10,7 @@
         model: '=',
         param: '='
       },
-      controller: function($scope) {
+      controller: ['$scope', function($scope) {
         var bodyContent = $scope.$parent.context.bodyContent;
         var context     = $scope.$parent.context[$scope.$parent.type];
 
@@ -21,13 +21,13 @@
         Object.keys(context.plain).map(function (key) {
           var definition = context.plain[key].definitions[0];
 
-          if (typeof definition.enum !== 'undefined') {
-            context.values[definition.id][0] = definition.enum[0];
+          if (typeof definition['enum'] !== 'undefined') {
+            context.values[definition.id][0] = definition['enum'][0];
           }
         });
 
         $scope.canOverride = function (definition) {
-          return definition.type === 'boolean' ||  typeof definition.enum !== 'undefined';
+          return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
         };
 
         $scope.overrideField = function ($event, definition) {
@@ -48,7 +48,7 @@
             $this.text('Cancel override');
           } else {
             definition.overwritten = false;
-            $scope.$parent.context[$scope.$parent.type].values[definition.id][0] = definition.enum[0];
+            $scope.$parent.context[$scope.$parent.type].values[definition.id][0] = definition['enum'][0];
           }
         };
 
@@ -57,11 +57,11 @@
         };
 
         $scope.isDefault = function (definition) {
-          return typeof definition.enum === 'undefined' && definition.type !== 'boolean';
+          return typeof definition['enum'] === 'undefined' && definition.type !== 'boolean';
         };
 
         $scope.isEnum = function (definition) {
-          return typeof definition.enum !== 'undefined';
+          return typeof definition['enum'] !== 'undefined';
         };
 
         $scope.isBoolean = function (definition) {
@@ -69,7 +69,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value.enum !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
+          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
         };
 
         $scope.reset = function (param) {
@@ -84,7 +84,7 @@
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
-      }
+      }]
     };
   };
 
