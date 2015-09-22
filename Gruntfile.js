@@ -183,7 +183,8 @@ module.exports = function (grunt) {
       build: {
         options: {
           sourcemap: 'none',
-          style:     'expanded'
+          style:     'expanded',
+          defaultEncoding: 'UTF-8'
         },
 
         files: {
@@ -195,7 +196,8 @@ module.exports = function (grunt) {
       min: {
         options: {
           sourcemap: 'none',
-          style:     'compressed'
+          style:     'compressed',
+          defaultEncoding: 'UTF-8'
         },
 
         files: {
