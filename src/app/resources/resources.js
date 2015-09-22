@@ -71,16 +71,6 @@
             .closest('.raml-console-resource-list-item')
             .find('.raml-console-resource-list');
 
-          if ($section.hasClass('raml-console-is-collapsed')) {
-            $section.velocity('slideDown', {
-              duration: 200
-            });
-          } else {
-            $section.velocity('slideUp', {
-              duration: 200
-            });
-          }
-
           collection[index] = !collection[index];
 
           $scope[flagKey] = checkItemStatus(false, collection) ? false : $scope[flagKey];
