@@ -23,7 +23,7 @@
     </div>
 
     <p class="raml-console-sidebar-input-container" ng-repeat="param in context[type].plain">
-      <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
+      <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description" ng-class="{'raml-console-sidebar-input-tooltip-container-enum': param.definitions[0].enum}">
         <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
         <span class="raml-console-sidebar-tooltip-flyout">
           <span marked="param.definitions[0].description" opts="markedOptions" class="raml-console-marked-content"></span>
