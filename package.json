@@ -8,8 +8,10 @@
     "LICENSE"
   ],
   "scripts": {
-    "grunt": "grunt",
-    "test": "grunt regression"
+    "start": "npm install && bower install && grunt",
+    "build": "npm install && bower install && grunt build",
+    "webdriver-manager-update": "node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update",
+    "test": "npm run webdriver-manager-update && grunt regression"
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,7 @@
   "homepage": "https://github.com/mulesoft/api-console",
   "dependencies": {},
   "devDependencies": {
+    "bower": "^1.5.3",
     "grunt": "~0.4.0",
     "grunt-angular-templates": "~0.5.7",
     "grunt-cli": "~0.1.13",
@@ -44,7 +47,9 @@
     "grunt-karma": "~0.10.1",
     "grunt-protractor-runner": "~1.1.4",
     "jasmine-spec-reporter": "~1.1.0",
+    "karma": "~0.12.0",
     "load-grunt-tasks": "~2.0.0",
+    "protractor": "^2.4.0",
     "serve-static": "~1.8.0"
   }
 }

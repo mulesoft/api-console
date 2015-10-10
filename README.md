@@ -142,14 +142,10 @@ To run the console, you'll need the following:
 ### First Time Setup
 
 1. Install Sass - `gem install sass`
-1. Install grunt-cli globally - `npm install -g grunt-cli`
-1. Install bower globally - `npm install -g bower`
-1. Install the console's NPM packages - `npm install`
-1. Install the console's Bower packages - `bower install`
 
 ### Running the server
 
-    $ grunt
+    $ npm start
     $ open http://localhost:9000
 
 ## Testing
@@ -160,21 +156,17 @@ To run tests, you'll need the following:
 
 * [Node JS](http://nodejs.org/)
 * [NPM](https://npmjs.org/)
-* [Protractor](http://angular.github.io/protractor)
 * [Ruby](https://www.ruby-lang.org)
 
 ### First Time Setup
 
 1. Install Sass - `gem install sass`
-1. Install grunt-cli globally - `npm install -g grunt-cli`
-1. Install protractor globally - `npm install -g protractor`
-1. Install the console's NPM packages - `npm install`
-1. Run  `node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update`
+1. Build the app - `npm run build`
 
 ### Running Tests
 
-    $ grunt regression
-
+    $ npm test
+    
 ## Contributor's Agreement
 
 To contribute source code to this repository, please read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following the instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43
