@@ -304,7 +304,11 @@ module.exports = function (grunt) {
       },
       min: {
         files: {
-          '<%= distdir %>/scripts/<%= pkg.name %>.min.js': ['<%= distdir %>/scripts/<%= pkg.name %>.js'],
+          '<%= distdir %>/scripts/<%= pkg.name %>.min.js': ['<%= distdir %>/scripts/<%= pkg.name %>.js']
+        }
+      },
+      vendormin: {
+        files: {
           '<%= distdir %>/scripts/<%= pkg.name %>-vendor.min.js': ['<%= distdir %>/scripts/<%= pkg.name %>-vendor.js']
         }
       }
@@ -332,7 +336,8 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'jshint',
     'clean',
-    'concurrent:build'
+    'concurrent:build',
+    'uglify:vendormin'
   ]);
 
   grunt.registerTask('dist', [
