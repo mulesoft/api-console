@@ -472,7 +472,6 @@
           $scope.showMoreEnable           = true;
           $scope.showSpinner              = false;
           $scope.securitySchemes          = $scope.methodInfo.securitySchemes();
-          $scope.credentials              = {};
           $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
           $scope.context.customParameters = { headers: [], queryParameters: [] };
           $scope.currentBodySelected      = methodInfo.body ? Object.keys(methodInfo.body)[0] : 'application/json';
@@ -1752,6 +1751,7 @@
         $scope.disableTitle           = false;
         $scope.resourcesCollapsed     = false;
         $scope.documentationCollapsed = false;
+        $scope.credentials = {};
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;

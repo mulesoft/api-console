@@ -39,6 +39,16 @@ module.exports = function() {
     assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
   });
 
+  it('should be able to cache credentials between resources', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-security-schemes-basic.html');
+    assert.ifCredentialsUpdateBetweenResources();
+  });
+
+
   it('should be able to diplay all HTTP methods', function () {
     // Arrange
     var assert = assertions.create('resource');

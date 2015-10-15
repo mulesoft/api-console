@@ -41,6 +41,17 @@ function ResourcesPO () {
   this.getSecuritySchemes = function (index) {
     return this.resources.get(index+1).all(by.tagName('option'));
   };
+  this.getUsernameField = function () {
+    return element(by.name('username'));
+  };
+  this.getPasswordField = function () {
+    return element(by.name('password'));
+  };
+  this.getCloseBtn = function (index) {
+    return this.resources.get(index+1).all(by.css('.raml-console-resource-close-btn'));
+  };
+
+
 }
 
 ResourcesPO.prototype = basePO;

@@ -50,6 +50,37 @@ function Resource (poName) {
       }
     });
   };
+
+  this.ifCredentialsUpdateBetweenResources = function () {
+    var resourcesGetButton= this.po.getMethodBtn(0, 0);
+    var pageObject = this.po;
+
+    var userText = 'test';
+    var passwordText = 'pass';
+
+    //click Get on /resources and set the user/pass
+    resourcesGetButton.click();
+
+    var username = pageObject.getUsernameField();
+    username.sendKeys(userText);
+    var password = pageObject.getPasswordField();
+    password.sendKeys(passwordText);
+
+    //close button to ensure 'resource2' is on screen.
+    var closeButton = pageObject.getCloseBtn(0);
+    closeButton.click();
+
+    var resources2GetButton = pageObject.getMethodBtn(1, 0);
+
+    //click Get on /resources2 and ensure user/pass match
+    resources2GetButton.click();
+
+    var username2 = pageObject.getUsernameField();
+    expect(username2.getAttribute('value')).toBe(userText);
+    var password2 = pageObject.getPasswordField();
+    expect(password2.getAttribute('value')).toBe(passwordText);
+
+  };
 }
 
 
