@@ -15,6 +15,11 @@
         $scope.resourcesCollapsed     = false;
         $scope.documentationCollapsed = false;
         $scope.credentials = {};
+        $scope.allowUnsafeMarkdown    = false;
+
+        if ($attrs.hasOwnProperty('allowUnsafeMarkdown')) {
+          $scope.allowUnsafeMarkdown = true;
+        }
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
