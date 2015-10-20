@@ -19,7 +19,8 @@
     'RAML.Security',
     'hc.marked',
     'ui.codemirror',
-    'hljs'
+    'hljs',
+    'ngSanitize'
   ]).config(['hljsServiceProvider', function (hljsServiceProvider) {
     hljsServiceProvider.setOptions({
       classPrefix: 'raml-console-hljs-'

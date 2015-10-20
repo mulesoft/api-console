@@ -108,6 +108,12 @@ In *Single View* mode you will be able to see only documentation or try-it.
 
     <raml-console src="path-to-raml" documentation-collapsed></raml-console>
 
+### Allowing Unsafe Markdown
+
+*Unsafe Markdown* will be disable by default, if you want to allow unsafe contet check the following example:
+
+    <raml-console src="path-to-raml" allow-unsafe-markdown></raml-console>    
+
 ## Development
 
 ### Prerequisites
