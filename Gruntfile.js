@@ -174,6 +174,14 @@ module.exports = function (grunt) {
         'build:styles'
       ],
 
+      dist: [
+        'build:scripts:dist',
+        'concat:vendor',
+        'concat:index',
+        'copy:assets',
+        'build:styles'
+      ],
+
       themes: [
         'concat:darkTheme',
         'concat:lightTheme'
@@ -325,7 +333,18 @@ module.exports = function (grunt) {
     'concurrent:build'
   ]);
 
+  grunt.registerTask('dist', [
+    'jshint',
+    'clean',
+    'concurrent:dist'
+  ]);
+
   grunt.registerTask('build:scripts', [
+    'ngtemplates',
+    'concat:app'
+  ]);
+
+  grunt.registerTask('build:scripts:dist', [
     'ngtemplates',
     'concat:app',
     'uglify:min'
