@@ -1,6 +1,9 @@
 # RAML Console
 
-[![Build Status](https://travis-ci.org/mulesoft/api-console.png)](https://travis-ci.org/mulesoft/api-console) [![npm version](https://badge.fury.io/js/api-console.svg)](https://badge.fury.io/js/api-console)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/mulesoft/api-console?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Build Status](https://travis-ci.org/mulesoft/api-console.png)](https://travis-ci.org/mulesoft/api-console) [![Dependency Status](https://david-dm.org/mulesoft/api-console.png)](https://david-dm.org/mulesoft/api-console#info=dependencies) 
+[![DevDependency Status](https://david-dm.org/mulesoft/api-console/dev-status.png)](https://david-dm.org/mulesoft/api-console#info=devDependencies) [![npm version](https://badge.fury.io/js/api-console.svg)](https://badge.fury.io/js/api-console)
 
 An API console for [RAML](http://raml.org) (Restful Api Modeling Language) documents. The RAML Console allows browsing of API documentation and in-browser testing of API methods.
 
