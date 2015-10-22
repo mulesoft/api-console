@@ -1,6 +1,6 @@
 # RAML Console
 
-[![Build Status](https://travis-ci.org/mulesoft/api-console.png)](https://travis-ci.org/mulesoft/api-console)
+[![Build Status](https://travis-ci.org/mulesoft/api-console.png)](https://travis-ci.org/mulesoft/api-console) [![npm version](https://badge.fury.io/js/api-console.svg)](https://badge.fury.io/js/api-console)
 
 An API console for [RAML](http://raml.org) (Restful Api Modeling Language) documents. The RAML Console allows browsing of API documentation and in-browser testing of API methods.
 
