@@ -113,9 +113,15 @@ In *Single View* mode you will be able to see only documentation or try-it.
 
 ### Allowing Unsafe Markdown
 
-*Unsafe Markdown* will be disable by default, if you want to allow unsafe contet check the following example:
+*Unsafe Markdown* will be disable by default, if you want to allow unsafe content check the following example:
 
     <raml-console src="path-to-raml" allow-unsafe-markdown></raml-console>    
+
+### Disabling Try-it
+
+*Try-it* will be enable by default, if you want to disable Try-it you can do that by adding the following setting:
+
+    <raml-console src="path-to-raml" disable-try-it></raml-console>    
 
 ## Development
 
