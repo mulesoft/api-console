@@ -8,9 +8,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "grunt regression",
-    "build": "grunt dist",
-    "prepublish": "npm run build"
+    "test": "grunt regression"
   },
   "repository": {
     "type": "git",
