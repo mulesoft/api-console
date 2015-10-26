@@ -6,6 +6,7 @@ before_script:
   - npm install -g grunt-cli
   - npm install -g bower
   - npm install -g protractor
+  - npm install
   - npm update
   - bower update
   - node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update
