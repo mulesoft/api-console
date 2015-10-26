@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - "0.10.38"
+  - "0.10"
 before_script:
   - npm install -g grunt-cli
   - npm install -g bower
@@ -12,7 +12,7 @@ before_script:
 before_install:
   - "export DISPLAY=:99.0"
   #startup Xvfb manually to increase display size.  Prevents selenium issues.
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16" 
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 after_success:
   - echo -n $id_rsa_{00..30} >> ~/.ssh/id_rsa_base64
   - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
