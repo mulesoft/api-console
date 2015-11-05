@@ -1861,18 +1861,14 @@
 
           if ($this.hasClass('raml-console-resources-expanded')) {
             $scope[flagKey] = true;
-            jQuery('.raml-console-resources-' + flagKey).find('ol.raml-console-resource-list').velocity('slideUp', {
-              duration: 200
-            });
           } else {
             if (flagKey === 'resourcesCollapsed') {
               jQuery('.raml-console-resource-description').removeClass('ng-hide');
             }
             $scope[flagKey] = false;
-            jQuery('.raml-console-resources-' + flagKey).find('ol.raml-console-resource-list').velocity('slideDown', {
-              duration: 200
-            });
           }
+
+          jQuery('.raml-console-resources-' + flagKey).find('ol.raml-console-resource-list').toggleClass('raml-console-is-collapsed');
 
           toggleCollapsed($scope[flagKey], collection);
         };
