@@ -1,4 +1,4 @@
-  <form name="form" class="raml-console-sidebar" novalidate ng-class="{ 'raml-console-is-collapsed': singleView }" ng-if="!disableTryIt">
+  <form name="form" class="raml-console-sidebar" novalidate ng-class="{ 'raml-console-is-collapsed': singleView }" ng-if="!disableTryIt" ng-init="setFormScope(this)">
     <div class="raml-console-sidebar-flex-wrapper">
       <div class="raml-console-sidebar-content">
         <header class="raml-console-sidebar-row raml-console-sidebar-header">

@@ -154,16 +154,16 @@
         }
 
         function validateForm(form) {
-          var errors    = form.$error;
+          var errors    = form.form.$error;
           // var uriParams = $scope.context.uriParameters.plain;
           var flag      = false;
 
-          Object.keys(form.$error).map(function (key) {
+          Object.keys(form.form.$error).map(function (key) {
             for (var i = 0; i < errors[key].length; i++) {
               var fieldName = errors[key][i].$name;
               // var fieldValue = form[fieldName].$viewValue;
 
-              form[fieldName].$setViewValue(form[fieldName].$viewValue);
+              form.form[fieldName].$setViewValue(form.form[fieldName].$viewValue);
 
               // Enforce request without URI parameters
               // if (typeof uriParams[fieldName] !== 'undefined' && (typeof fieldValue === 'undefined' || fieldValue === '')) {
@@ -375,6 +375,10 @@
           if (type === 'x-custom') {
             readCustomSchemeInfo(name);
           }
+        };
+
+        $scope.setFormScope = function (form) {
+          $scope.form = form;
         };
 
         $scope.tryIt = function ($event) {
