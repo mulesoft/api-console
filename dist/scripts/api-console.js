@@ -1133,28 +1133,14 @@
         }
 
         function validateForm(form) {
-          var errors    = form.form.$error;
-          // var uriParams = $scope.context.uriParameters.plain;
-          var flag      = false;
+          var keys = Object.keys(form.form).filter(function (key) { return key.indexOf('$') === -1;});
 
-          Object.keys(form.form.$error).map(function (key) {
-            for (var i = 0; i < errors[key].length; i++) {
-              var fieldName = errors[key][i].$name;
-              // var fieldValue = form[fieldName].$viewValue;
-
-              form.form[fieldName].$setViewValue(form.form[fieldName].$viewValue);
-
-              // Enforce request without URI parameters
-              // if (typeof uriParams[fieldName] !== 'undefined' && (typeof fieldValue === 'undefined' || fieldValue === '')) {
-              //   flag = true;
-              //   break;
-              // }
-            }
+          keys.forEach(function (fieldName) {
+            var value = angular.copy(form.form[fieldName].$viewValue);
+            form.form[fieldName].$setViewValue(value);
           });
 
-          if (flag) {
-            $scope.context.forceRequest = false;
-          }
+          return form.form.$valid;
         }
 
         function getParameters (context, type) {
@@ -1365,13 +1351,13 @@
           $scope.responseDetails = false;
           $scope.response        = {};
 
-          validateForm($scope.form);
-
           if (!$scope.context.forceRequest) {
             jQuery($event.currentTarget).closest('form').find('.ng-invalid').first().focus();
           }
 
-          if($scope.context.forceRequest || $scope.form.$valid) {
+          // console.log($scope.form.$valid);
+
+          if($scope.context.forceRequest || validateForm($scope.form)) {
             var url;
             var context         = $scope.context;
             var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
