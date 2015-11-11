@@ -1136,13 +1136,7 @@
           var keys = Object.keys(form.form).filter(function (key) { return key.indexOf('$') === -1;});
 
           keys.forEach(function (fieldName) {
-            var value = angular.copy(form.form[fieldName].$viewValue);
-
-            value = value || '';
-
-            console.log(value);
-
-            form.form[fieldName].$setViewValue(value);
+            form.form[fieldName].$setDirty();
           });
 
           return form.form.$valid;
@@ -1359,8 +1353,6 @@
           if (!$scope.context.forceRequest) {
             jQuery($event.currentTarget).closest('form').find('.ng-invalid').first().focus();
           }
-
-          // console.log($scope.form.$valid);
 
           if($scope.context.forceRequest || validateForm($scope.form)) {
             var url;
