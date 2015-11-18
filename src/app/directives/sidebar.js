@@ -9,6 +9,7 @@
       controller: ['$scope', '$timeout', function ($scope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+        var defaultAccept    = 'application/json';
 
         $scope.markedOptions     = RAML.Settings.marked;
         $scope.currentSchemeType = defaultSchema.type;
@@ -410,12 +411,12 @@
               $scope.response = {};
               return;
             }
-
             var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
 
             $scope.parameters = getParameters(context, 'queryParameters');
 
             request.queryParams($scope.parameters);
+            request.header('Accept', $scope.raml.mediaType || defaultAccept);
             request.headers(getParameters(context, 'headers'));
 
             if (context.bodyContent) {
@@ -445,7 +446,6 @@
                 });
                 return;
               }
-
               authStrategy = RAML.Client.AuthStrategies.forScheme(scheme, $scope.credentials);
               authStrategy.authenticate().then(function(token) {
                 token.sign(request);
