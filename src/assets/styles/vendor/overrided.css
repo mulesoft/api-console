@@ -1,0 +1,6 @@
+/* OVERRIDES generated styles */
+
+/* Special style for multi-value enum field. */
+.raml-console-sidebar-input-multiEnum {
+  height: 100%;
+}
