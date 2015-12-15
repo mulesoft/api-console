@@ -1,5 +1,5 @@
 <main class="raml-console-error-container raml-console-error-primary">
-  <div ng-if="!loaded && !error">
+  <div ng-if="!loaded && !errors">
     <div class="raml-console-spinner">
       <div class="raml-console-rect1"></div>
       <div class="raml-console-rect2"></div>
@@ -9,13 +9,13 @@
     </div>
   </div>
 
-  <div ng-if="loaded && !error">
+  <div ng-if="loaded && !errors">
     <div class="raml-console-meta-button-group">
       <theme-switcher ng-if="!disableThemeSwitcher"></theme-switcher>
       <raml-client-generator ng-if="!disableRamlClientGenerator"></raml-client-generator>
     </div>
 
-    <h1 ng-if="!disableTitle" class="raml-console-title">{{raml.title}}</h1>
+    <h1 ng-if="!disableTitle" class="raml-console-title">{{title}}</h1>
 
     <root-documentation></root-documentation>
 
@@ -40,8 +40,8 @@
         </header>
       </li>
 
-      <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resourceGroup in raml.resourceGroups">
-        <header class="raml-console-resource raml-console-resource-root raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }" ng-init="resource = resourceGroup[0]">
+      <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resourceGroup in resourceGroups">
+        <header class="raml-console-resource raml-console-resource-root raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }" ng-init="resource = transformResource(resourceGroup[0])">
           <div class="raml-console-resource-path-container" ng-init="index=$index" ng-class="{'raml-console-resource-with-description': resource.description}">
             <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': resourceList[$index]}" ng-if="resourceGroup.length > 1" ng-click="toggle($event, index, resourceList, 'resourcesCollapsed')"></button>
 
@@ -51,14 +51,11 @@
               <a ng-if="resourceGroup.length == 1" style="cursor: default;" class="raml-console-resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</a>
             </h2>
 
-            <resource-type></resource-type>
+            <resource-type resource="resource"></resource-type>
 
-            <span ng-if="methodInfo.is" class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"><b>Traits:</b> {{readTraits(methodInfo.is)}}</span>
-
-            <span ng-hide="methodInfo.is" ng-if="resource.traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>
+            <span ng-if="resource.traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>
 
             <span class="raml-console-resource-level-description raml-console-marked-content" markdown="resource.description"></span>
-
           </div>
           <method-list></method-list>
           <close-button></close-button>
@@ -69,17 +66,16 @@
         <!-- Child Resources -->
         <ol class="raml-console-resource-list" ng-class="{'raml-console-is-collapsed': resourcesCollapsed}">
 
-          <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
+          <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first" ng-init="resource = transformResource(resource)">
             <div class="raml-console-resource raml-console-clearfix" ng-class="{ 'raml-console-is-active':showPanel }">
               <div class="raml-console-resource-path-container" ng-class="{'raml-console-resource-with-description': resource.description}">
                 <h3 class="raml-console-resource-heading" style="cursor: default;">
                   <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="raml-console-resource-path-active">{{segment.toString()}}</span>
                 </h3>
 
-                <resource-type></resource-type>
-                <span ng-if="methodInfo.is" class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"><b>Traits:</b> {{readTraits(methodInfo.is)}}</span>
+                <resource-type resource="resource"></resource-type>
 
-                <span ng-hide="methodInfo.is" ng-if="resource.traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>
+                <span ng-if="resource.traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>
 
                 <span class="raml-console-resource-level-description raml-console-marked-content" markdown="resource.description"></span>
               </div>
@@ -96,7 +92,7 @@
     </ol>
   </div>
 
-  <div ng-if="loaded && error">
+  <div ng-if="loaded && errors">
     <div class="raml-console-initializer-container raml-console-initializer-primary">
       <h1 class="raml-console-title">RAML Console</h1>
 

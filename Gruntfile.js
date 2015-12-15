@@ -11,7 +11,6 @@ module.exports = function (grunt) {
       js: ['src/**/*.js'],
       jsVendor: [
         'bower_components/marked/lib/marked.js',
-        'bower_components/raml-js-parser/dist/raml-parser.js',
         'bower_components/highlightjs/highlight.pack.js',
         'bower_components/vkbeautify/vkbeautify.js',
         'bower_components/jquery/dist/jquery.js',
@@ -34,7 +33,8 @@ module.exports = function (grunt) {
         'bower_components/jszip/jszip.js',
         'bower_components/slug/slug.js',
         'bower_components/FileSaver/FileSaver.js',
-        'bower_components/raml-client-generator/dist/raml-client-generator.js'
+        'bower_components/raml-client-generator/dist/raml-client-generator.js',
+        'bower_components/raml-1-parser/build/raml-1-parser.js'
       ],
       html: ['src/index.html'],
       scss: ['src/scss/light-theme.scss', 'src/scss/dark-theme.scss'],

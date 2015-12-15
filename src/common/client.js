@@ -36,13 +36,13 @@
     },
 
     createBaseUri: function(rootRAML) {
-      var baseUri = rootRAML.baseUri.toString().replace(/\/+$/, '');
+      var baseUri = rootRAML.baseUri() ? rootRAML.baseUri().value().toString().replace(/\/+$/, '') : '';
 
-      return new RAML.Client.ParameterizedString(baseUri, rootRAML.baseUriParameters, { parameterValues: {version: rootRAML.version} });
+      return new RAML.Client.ParameterizedString(baseUri, rootRAML.baseUriParameters(), { parameterValues: {version: rootRAML.version()} });
     },
 
     createPathSegment: function(resourceRAML) {
-      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri, resourceRAML.uriParameters);
+      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri().value(), resourceRAML.uriParameters());
     }
   };
 })();

@@ -6,13 +6,9 @@
       restrict: 'E',
       templateUrl: 'resources/resource-type.tpl.html',
       replace: true,
-      controller: ['$scope', function ($scope) {
-        var resourceType = $scope.resource.resourceType;
-
-        if (typeof resourceType === 'object') {
-          $scope.resource.resourceType = Object.keys(resourceType).join();
-        }
-      }]
+      scope: {
+        resource: '='
+      }
     };
   };
 

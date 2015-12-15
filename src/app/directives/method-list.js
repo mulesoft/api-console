@@ -178,7 +178,10 @@
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
           }
         };
-      }]
+      }],
+      link: function ($scope) {
+        $scope.methods = RAML.Transformer.transformMethods($scope.resource.methods());
+      }
     };
   };
 

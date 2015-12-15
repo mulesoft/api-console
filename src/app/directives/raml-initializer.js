@@ -9,30 +9,33 @@
       controller: ['$scope', '$window', function($scope, $window) {
         $scope.ramlUrl    = '';
 
-        ramlParserWrapper.onParseError(function(error) {
-          /*jshint camelcase: false */
-          var context = error.context_mark || error.problem_mark;
-          /*jshint camelcase: true */
+        ramlParserWrapper.onParseError(function(errors) {
+          $scope.errors = errors.parserErrors.map(function (error) {
+            return {
+              errorMessage: error.message,
+              line: error.line,
+              column: error.column
+            };
+          });
 
-          $scope.errorMessage = error.message;
+          if (!$scope.isLoadedFromUrl) {
+            $scope.errors.forEach(function (error) {
+              $window.ramlErrors.push({
+                line: error.line,
+                message: error.errorMessage
+              });
 
-          if (context && !$scope.isLoadedFromUrl) {
-            $scope.raml = context.buffer;
-
-            $window.ramlErrors.line    = context.line;
-            $window.ramlErrors.message = error.message;
-
-            // Hack to update codemirror
-            setTimeout(function () {
-              var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
-              editor.addLineClass(context.line, 'background', 'line-error');
-              editor.doc.setCursor(context.line);
-            }, 10);
+              // Hack to update codemirror
+              setTimeout(function () {
+                // Editor needs to be obtained after the timeout.
+                var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
+                editor.addLineClass(error.line, 'background', 'line-error');
+                editor.doc.setCursor(error.line);
+              }, 10);
+            });
           }
 
           $scope.ramlStatus = null;
-
-          $scope.$apply.apply($scope, null);
         });
 
         ramlParserWrapper.onParseSuccess(function() {

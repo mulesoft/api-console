@@ -18,6 +18,10 @@
         $scope.allowUnsafeMarkdown    = false;
         $scope.disableTryIt           = false;
 
+        $scope.transformResource = function (resource) {
+          return RAML.Transformer.transformResource(resource);
+        };
+
         if ($attrs.hasOwnProperty('disableTryIt')) {
           $scope.disableTryIt = true;
         }
@@ -51,7 +55,11 @@
         }
 
         if ($scope.src) {
-          ramlParserWrapper.load($scope.src);
+          if (/^https?/i.test($scope.src)) {
+            ramlParserWrapper.load($scope.src);
+          } else {
+            ramlParserWrapper.load($window.location.origin + '/' + $scope.src);
+          }
         }
 
         $scope.readResourceTraits = function readResourceTraits(traits) {
@@ -118,52 +126,36 @@
         }
 
         $scope.hasResourcesWithChilds = function () {
-          return $scope.raml.resourceGroups.filter(function (el) {
+          return $scope.resourceGroups.filter(function (el) {
             return el.length > 1;
           }).length > 0;
         };
-
-        ramlParserWrapper.onParseError(function(error) {
-          $scope.error  = error;
-          $scope.loaded = true;
-
-          /*jshint camelcase: false */
-          var context = error.context_mark || error.problem_mark;
-          /*jshint camelcase: true */
-
-          $scope.errorMessage = error.message;
-
-          if (context) {
-            $scope.raml = context.buffer;
-
-            $window.ramlErrors.line    = context.line;
-            $window.ramlErrors.message = error.message;
-
-            // Hack to update codemirror
-            setTimeout(function () {
-              var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
-              editor.addLineClass(context.line, 'background', 'line-error');
-              editor.doc.setCursor(context.line);
-            }, 10);
-          }
-        });
       }],
       link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {
-          $scope.raml         = RAML.Inspector.create(raml);
+          $scope.raml         = raml;
           $scope.rawRaml      = raml;
           $scope.loaded       = true;
           $scope.resourceList = [];
           $scope.documentList = [];
 
-          for (var i = 0; i < $scope.raml.resourceGroups.length; i++) {
-            var resources = $scope.raml.resourceGroups[i];
+          // Obtain the API title from the RAML API.
+          $scope.title = $scope.raml.title();
+
+          $scope.resourceGroups = RAML.Transformer.groupResources(
+            $scope.raml.resources());
+
+          $scope.documentation = RAML.Transformer.transformDocumentation(
+            $scope.raml.documentation());
+
+          for (var i = 0; i < $scope.resourceGroups.length; i++) {
+            var resources = $scope.resourceGroups[i];
             var status = resources.length > 1 ? false : null;
             $scope.resourceList.push($scope.resourcesCollapsed ? true : status);
           }
 
-          if ($scope.raml.documentation) {
-            for (var j = 0; j < $scope.raml.documentation.length; j++) {
+          if ($scope.documentation) {
+            for (var j = 0; j < $scope.documentation.length; j++) {
               $scope.documentList.push($scope.documentationCollapsed ? true : false);
             }
           }
