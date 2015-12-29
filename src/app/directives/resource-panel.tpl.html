@@ -1,13 +1,13 @@
-<div class="raml-console-resource-panel" ng-if="showPanel" ng-class="{ 'raml-console-has-sidebar-collapsed': singleView }">
-  <div class="raml-console-resource-no-baseuri" ng-hide="raml.baseUri">
+<div class="raml-console-resource-panel" ng-class="{ 'raml-console-has-sidebar-collapsed': singleView }">
+  <div class="raml-console-resource-no-baseuri" ng-hide="baseUri">
     <strong>Try-it</strong> is disabled because <strong>baseUri</strong> is not present
   </div>
   <div class="raml-console-resource-panel-wrapper">
-    <documentation></documentation>
+    <documentation class="raml-console-resource-panel-primary" method-info="methodInfo" security-schemes="securitySchemes"></documentation>
 
-    <sidebar ng-show="raml.baseUri"></sidebar>
+    <sidebar ng-show="baseUri"></sidebar>
 
-    <div class="raml-console-sidebar-controls raml-console-sidebar-controls-collapse" ng-click="collapseSidebar($event)" style="right: -1px; position: absolute;"ng-hide="!raml.baseUri" ng-if="!disableTryIt">
+    <div class="raml-console-sidebar-controls raml-console-sidebar-controls-collapse" ng-click="collapseSidebar($event)" style="right: -1px; position: absolute;"ng-hide="!baseUri" ng-if="!disableTryIt">
       <button class="raml-console-collapse" style="height: 21px; margin-top: 9px;">
         <svg style="transform: rotate(-180deg); display: inline;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 612 792" enable-background="new 0 0 612 792" xml:space="preserve">
           <g id="Layer_3">

@@ -1,0 +1,54 @@
+<header
+    ng-if="isFirst"
+    class="raml-console-resource raml-console-resource-root raml-console-clearfix"
+    ng-class="{ 'raml-console-is-active':showPanel }">
+
+  <div class="raml-console-resource-path-container" ng-class="{'raml-console-resource-with-description': description}">
+    <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': resourceList[index]}" ng-if="resourceGroup.length > 1" ng-click="toggle($event, index, resourceList, 'resourcesCollapsed')"></button>
+
+    <h2 class="raml-console-resource-heading raml-console-resource-heading-large">
+      <a ng-if="resourceGroup.length > 1" class="raml-console-resource-path-active" ng-class="{'raml-console-resource-heading-hover':resourceGroup.length > 1}" ng-repeat='segment in resource.pathSegments' ng-click="toggle($event, index, resourceList, 'resourcesCollapsed')">{{segment.toString()}}</a>
+
+      <a ng-if="resourceGroup.length == 1" style="cursor: default;" class="raml-console-resource-path-active" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</a>
+    </h2>
+
+    <resource-type resource="resource"></resource-type>
+
+    <span ng-if="traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{traits}}</span>
+
+    <span class="raml-console-resource-level-description raml-console-marked-content" markdown="description"></span>
+  </div>
+  <method-list resource="resource" handle-method-click="handleMethodClick"></method-list>
+  <close-button handle-close-click="handleCloseClick"></close-button>
+</header>
+
+<div
+    ng-if="!isFirst"
+    class="raml-console-resource raml-console-clearfix"
+    ng-class="{ 'raml-console-is-active':showPanel }">
+  <div class="raml-console-resource-path-container" ng-class="{'raml-console-resource-with-description': description}">
+    <h3 class="raml-console-resource-heading" style="cursor: default;">
+      <span ng-repeat-start='segment in resource.pathSegments' ng-if="!$last">{{segment.toString()}}</span><span ng-repeat-end ng-if="$last" class="raml-console-resource-path-active">{{segment.toString()}}</span>
+    </h3>
+
+    <resource-type resource="resource"></resource-type>
+
+    <span ng-if="traits" class="raml-console-flag raml-console-resource-heading-flag"><b>Traits:</b> {{readResourceTraits(traits)}}</span>
+
+    <span class="raml-console-resource-level-description raml-console-marked-content" markdown="description"></span>
+  </div>
+
+  <method-list resource="resource" handle-method-click="handleMethodClick"></method-list>
+  <close-button handle-close-click="handleCloseClick"></close-button>
+</div>
+
+<resource-panel
+  ng-if="showPanel"
+  base-uri="baseUri"
+  base-uri-parameters="baseUriParameters"
+  element="element"
+  generate-id="generateId"
+  handle-method-click="handleMethodClick"
+  protocols="protocols"
+  resource="resource"
+  selected-method="selectedMethod"></resource-panel>

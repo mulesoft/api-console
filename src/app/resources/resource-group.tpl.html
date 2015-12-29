@@ -1,0 +1,22 @@
+<resource
+  is-first="true"
+  base-uri="baseUri"
+  generate-id="generateId"
+  index="index"
+  protocols="protocols"
+  resource="firstResource"
+  resource-group="resourceGroup"
+  resource-list="resourceList"></resource>
+
+<!-- Child Resources -->
+<ol class="raml-console-resource-list" ng-class="{'raml-console-is-collapsed': resourcesCollapsed}">
+
+  <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resource in resourceGroup" ng-if="!$first">
+    <resource
+      base-uri="baseUri"
+      base-uri-parameters="baseUriParameters"
+      generate-id="generateId"
+      protocols="protocols"
+      resource="resource"></resource>
+  </li>
+</ol>

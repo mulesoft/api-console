@@ -10,6 +10,7 @@
         $scope.ramlUrl    = '';
 
         ramlParserWrapper.onParseError(function(errors) {
+          errors.parserErrors = errors.parserErrors || [];
           $scope.errors = errors.parserErrors.map(function (error) {
             return {
               errorMessage: error.message,

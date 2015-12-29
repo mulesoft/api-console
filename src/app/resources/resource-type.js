@@ -5,10 +5,12 @@
     return {
       restrict: 'E',
       templateUrl: 'resources/resource-type.tpl.html',
-      replace: true,
       scope: {
         resource: '='
-      }
+      },
+      controller: ['$scope', function ($scope) {
+        $scope.resourceType = RAML.Transformer.transformResourceType($scope.resource.type());
+      }]
     };
   };
 

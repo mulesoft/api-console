@@ -18,10 +18,6 @@
         $scope.allowUnsafeMarkdown    = false;
         $scope.disableTryIt           = false;
 
-        $scope.transformResource = function (resource) {
-          return RAML.Transformer.transformResource(resource);
-        };
-
         if ($attrs.hasOwnProperty('disableTryIt')) {
           $scope.disableTryIt = true;
         }
@@ -84,20 +80,6 @@
           $window.RAML.Settings.disableProxy = status;
         };
 
-        $scope.toggle = function ($event, index, collection, flagKey) {
-          var $this    = jQuery($event.currentTarget);
-          var $section = $this
-            .closest('.raml-console-resource-list-item')
-            .find('.raml-console-resource-list');
-
-          collection[index] = !collection[index];
-
-          $scope[flagKey] = checkItemStatus(false, collection) ? false : $scope[flagKey];
-          $scope[flagKey] = checkItemStatus(true, collection) ? true : $scope[flagKey];
-
-          $section.toggleClass('raml-console-is-collapsed');
-        };
-
         $scope.collapseAll = function ($event, collection, flagKey) {
           var $this = jQuery($event.currentTarget);
 
@@ -121,14 +103,14 @@
           }
         }
 
-        function checkItemStatus(status, collection) {
-          return collection.filter(function (el) { return el === status || el === null; }).length === collection.length;
-        }
-
         $scope.hasResourcesWithChilds = function () {
           return $scope.resourceGroups.filter(function (el) {
             return el.length > 1;
           }).length > 0;
+        };
+
+        $scope.generateId = function (path) {
+          return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
         };
       }],
       link: function($scope) {
@@ -139,6 +121,8 @@
           $scope.resourceList = [];
           $scope.documentList = [];
 
+          $scope.baseUri = $scope.raml.baseUri();
+
           // Obtain the API title from the RAML API.
           $scope.title = $scope.raml.title();
 
@@ -147,6 +131,8 @@
 
           $scope.documentation = RAML.Transformer.transformDocumentation(
             $scope.raml.documentation());
+
+          $scope.protocols = $scope.raml.protocols();
 
           for (var i = 0; i < $scope.resourceGroups.length; i++) {
             var resources = $scope.resourceGroups[i];

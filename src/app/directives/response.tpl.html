@@ -1,0 +1,31 @@
+<a name="code{{code}}"></a>
+<h3 class="raml-console-resource-heading-a">Status {{code}}</h3>
+
+<div class="raml-console-resource-response">
+  <p markdown="description" class="raml-console-marked-content"></p>
+</div>
+
+<div class="raml-console-resource-response" ng-if="headers">
+  <h4 class="raml-console-resource-body-heading">Headers</h4>
+
+  <div class="raml-console-resource-param" ng-repeat="header in headers">
+    <raml-header header="header"></raml-header>
+  </div>
+</div>
+
+<div class="raml-console-resource-response" ng-if="body">
+  <h4 class="raml-console-resource-body-heading">
+    Body
+    <span ng-click="changeType($event, key, code)" ng-class="{ 'raml-console-is-active': $first}" class="raml-console-flag" ng-repeat="(key, value) in body">{{key}}</span>
+  </h4>
+
+  <div ng-if="responseInfo[responseInfo.currentType].example">
+    <span>Example:</span>
+    <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[responseInfo.currentType].example)"></code></pre>
+  </div>
+
+  <div class="raml-console-schema-container" ng-if="responseInfo[responseInfo.currentType].schema">
+    <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
+    <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[responseInfo.currentType].schema)"></code></pre>
+  </div>
+</div>
