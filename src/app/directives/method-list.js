@@ -111,7 +111,7 @@
           $scope.showRequestMetadata      = false;
           $scope.showMoreEnable           = true;
           $scope.showSpinner              = false;
-          $scope.securitySchemes          = $scope.methodInfo.securitySchemes();
+          $scope.securitySchemes          = $scope.methodInfo.securitySchemes;
           $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
           $scope.context.customParameters = { headers: [], queryParameters: [] };
           $scope.currentBodySelected      = methodInfo.body ? Object.keys(methodInfo.body)[0] : 'application/json';
@@ -180,7 +180,7 @@
         };
       }],
       link: function ($scope) {
-        $scope.methods = RAML.Transformer.transformMethods($scope.resource.methods());
+        $scope.methods = RAML.Transformer.transformMethods($scope.resource.methods);
       }
     };
   };
