@@ -2118,7 +2118,10 @@
     };
 
     $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
-      setPromise($q.when(raml));
+      // Only act when raml is valid
+      if (raml.title) {
+        setPromise($q.when(raml));
+      }
     });
 
     return {
