@@ -25,7 +25,7 @@
 
         $scope.segments = [];
 
-        var baseUri = $scope.$parent.raml.baseUri;
+        var baseUri = $scope.baseUri;
 
         if (typeof baseUri !== 'undefined' && baseUri.templated) {
           var tokens = baseUri.tokens;

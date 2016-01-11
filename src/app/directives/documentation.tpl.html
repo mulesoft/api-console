@@ -158,39 +158,12 @@
 
     <div class="raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container" ng-class="{'raml-console-is-active':showResponseDocumentation}">
       <section ng-if="isActiveCode(code)" class="raml-console-resource-section raml-console-resource-response-section" ng-repeat="code in methodInfo.responseCodes">
-        <a name="code{{code}}"></a>
-        <h3 class="raml-console-resource-heading-a">Status {{code}}</h3>
-
-        <div class="raml-console-resource-response">
-          <p markdown="methodInfo.responses[code].description" class="raml-console-marked-content"></p>
-        </div>
-
-        <div class="raml-console-resource-response" ng-if="methodInfo.responses[code].headers">
-          <h4 class="raml-console-resource-body-heading">Headers</h4>
-
-          <div class="raml-console-resource-param" ng-repeat="header in methodInfo.responses[code].headers">
-            <h4 class="raml-console-resource-param-heading">{{header[0].displayName}} <span class="raml-console-resource-param-instructional">{{header[0].type}}</span></h4>
-
-            <p markdown="header[0].description" class="raml-console-marked-content"></p>
-          </div>
-        </div>
-
-        <div class="raml-console-resource-response" ng-if="methodInfo.responses[code].body">
-          <h4 class="raml-console-resource-body-heading">
-            Body
-            <span ng-click="changeType($event, key, code)" ng-class="{ 'raml-console-is-active': $first}" class="raml-console-flag" ng-repeat="(key, value) in methodInfo.responses[code].body">{{key}}</span>
-          </h4>
-
-          <div ng-if="responseInfo[code][responseInfo[code].currentType].example">
-            <span>Example:</span>
-            <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)"></code></pre>
-          </div>
-
-          <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].schema">
-            <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-            <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)"></code></pre>
-          </div>
-        </div>
+        <response
+          code="code"
+          current-body-selected="currentBodySelected"
+          response="methodInfo.responses[code]"
+          response-info="responseInfo[code]"
+          show-schema="showSchema"></response>
       </section>
 
     </div>
