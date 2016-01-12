@@ -50,11 +50,30 @@
             </div>
           </section>
 
-          <named-parameters ng-if="resource.uriParametersForDocumentation" src="resource.uriParametersForDocumentation" context="context" type="uriParameters" title="URI Parameters" show-base-url></named-parameters>
+          <named-parameters
+            ng-if="resource.uriParametersForDocumentation"
+            src="resource.uriParametersForDocumentation"
+            context="context"
+            resource="resource"
+            type="uriParameters"
+            title="URI Parameters"
+            show-base-url></named-parameters>
 
-          <named-parameters src="methodInfo.headers.plain" context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
+          <named-parameters
+            src="methodInfo.headers.plain"
+            context="context"
+            resource="resource"
+            type="headers"
+            title="Headers"
+            enable-custom-parameters></named-parameters>
 
-          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" title="Query Parameters" enable-custom-parameters></named-parameters>
+          <named-parameters
+            src="methodInfo.queryParameters"
+            context="context"
+            resource="resource"
+            type="queryParameters"
+            title="Query Parameters"
+            enable-custom-parameters></named-parameters>
 
           <section id="sidebar-body" ng-if="methodInfo.body">
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader">

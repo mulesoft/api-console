@@ -130,12 +130,12 @@
 
       <div ng-if="methodInfo.body[currentBodySelected].example">
         <span>Example:</span>
-        <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].example)"></code></pre>
+        <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeautifiedExample(methodInfo.body[currentBodySelected].example)"></code></pre>
       </div>
 
       <div class="raml-console-schema-container" ng-if="methodInfo.body[currentBodySelected].schema">
         <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-        <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].schema)"></code></pre>
+        <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeautifiedExample(methodInfo.body[currentBodySelected].schema)"></code></pre>
       </div>
     </section>
   </div>
@@ -161,9 +161,11 @@
         <response
           code="code"
           current-body-selected="currentBodySelected"
+          get-beautified-example="getBeautifiedExample"
           response="methodInfo.responses[code]"
           response-info="responseInfo[code]"
-          show-schema="showSchema"></response>
+          show-schema="showSchema">
+        </response>
       </section>
 
     </div>

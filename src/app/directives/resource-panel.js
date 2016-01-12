@@ -7,6 +7,7 @@
       templateUrl: 'directives/resource-panel.tpl.html',
       scope: {
         baseUri: '=',
+        baseUriParameters: '=',
         resource: '=',
         element: '=',
         generateIdRef: '&generateId',
@@ -28,6 +29,10 @@
         $scope.displayPanel = function () {
           var $resource         = $scope.element.closest('.raml-console-resource');
           var methodInfo        = $scope.methods[$scope.selectedMethod];
+          methodInfo.headers = RAML.Transformer.transformHeaders(
+            methodInfo.headers ? methodInfo.headers : []);
+          methodInfo.queryParameters = methodInfo.queryParameters ?
+            RAML.Transformer.transformNamedParameters(methodInfo.queryParameters) : null;
 
           $scope.methodInfo               = methodInfo;
           $scope.context                  = new RAML.Services.TryIt.Context($scope.baseUriParameters, $scope.resource, $scope.methodInfo);
@@ -116,6 +121,62 @@
 
         function beautifyCustomSecuritySchemeName (name) {
           return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
+        }
+
+        $scope.collapseSidebar = function ($event) {
+          var $this         = jQuery($event.currentTarget);
+          var $panel        = $this.closest('.raml-console-resource-panel');
+          var $panelContent = $panel.find('.raml-console-resource-panel-primary');
+          var $sidebar      = $panel.find('.raml-console-sidebar');
+          var animation     = 430;
+          var speed         = 200;
+
+          if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
+            animation = 0;
+          }
+
+          if ($scope.singleView) {
+            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
+            speed = 0;
+          }
+
+          $sidebar.velocity(
+            { width: animation },
+            {
+              duration: speed,
+              complete: function (element) {
+                jQuery(element).removeAttr('style');
+                if ($scope.singleView) {
+                  $scope.documentationEnabled = false;
+                }
+                apply();
+              }
+            }
+          );
+
+          $panelContent.velocity(
+            { 'padding-right': animation },
+            {
+              duration: speed,
+              complete: completeAnimation
+            }
+          );
+
+          $sidebar.toggleClass('raml-console-is-collapsed');
+          $sidebar.removeClass('raml-console-is-responsive');
+          $panel.toggleClass('raml-console-has-sidebar-collapsed');
+
+          if ($sidebar.hasClass('raml-console-is-fullscreen') || $scope.singleView) {
+            $sidebar.toggleClass('raml-console-is-fullscreen');
+          }
+        };
+
+        function completeAnimation (element) {
+          jQuery(element).removeAttr('style');
+        }
+
+        function apply () {
+          $scope.$apply.apply($scope, arguments);
         }
 
         $scope.readTraits = function (traits) {

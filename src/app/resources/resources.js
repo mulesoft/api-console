@@ -9,7 +9,7 @@
       scope: {
         src: '@'
       },
-      controller: ['$scope', '$window', '$attrs', function($scope, $window, $attrs) {
+      controller: ['$scope', '$rootScope', '$window', '$attrs', function($scope, $rootScope, $window, $attrs) {
         $scope.proxy                  = $window.RAML.Settings.proxy;
         $scope.disableTitle           = false;
         $scope.resourcesCollapsed     = false;
@@ -112,9 +112,10 @@
         $scope.generateId = function (path) {
           return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
         };
-      }],
-      link: function($scope) {
+
         ramlParserWrapper.onParseSuccess(function(raml) {
+          // Store RAML in the Root scope
+          $rootScope.raml     = raml;
           $scope.raml         = raml;
           $scope.rawRaml      = raml;
           $scope.loaded       = true;
@@ -132,7 +133,7 @@
           $scope.documentation = RAML.Transformer.transformDocumentation(
             $scope.raml.documentation());
 
-          $scope.protocols = $scope.raml.protocols();
+          $scope.protocols = $scope.raml.allProtocols();
 
           for (var i = 0; i < $scope.resourceGroups.length; i++) {
             var resources = $scope.resourceGroups[i];
@@ -146,7 +147,7 @@
             }
           }
         });
-      }
+      }]
     };
   };
 

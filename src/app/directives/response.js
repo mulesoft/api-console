@@ -8,6 +8,7 @@
       scope: {
         code: '=',
         currentBodySelected: '=',
+        getBeautifiedExampleRef: '&getBeautifiedExample',
         response: '=',
         responseInfo: '=',
         showSchemaRef: '&showSchema'
@@ -19,28 +20,7 @@
 
         $scope.showSchema = $scope.showSchemaRef();
 
-        $scope.getBeatifiedExample = function (value) {
-          var result = value;
-
-          try {
-            result = beautify(value, $scope.currentBodySelected);
-          }
-          catch (e) { }
-
-          return result;
-        };
-
-        function beautify(body, contentType) {
-          if(contentType.indexOf('json')) {
-            body = vkbeautify.json(body, 2);
-          }
-
-          if(contentType.indexOf('xml')) {
-            body = vkbeautify.xml(body, 2);
-          }
-
-          return body;
-        }
+        $scope.getBeautifiedExample = $scope.getBeautifiedExampleRef();
       }]
     };
   };

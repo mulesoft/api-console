@@ -114,29 +114,21 @@ RAML.Transformer = (function() {
     });
   }
 
-  function transformHeader(header) {
-    header.displayName = header.displayName();
-
-    return header;
-  }
-
   function transformHeaders(headers) {
-    var newHeaders = {};
-    headers.forEach(function (header) {
-      newHeaders[header.name()] = transformHeader(header);
-    });
+    var newHeaders = transformNamedParameters(headers);
 
     normalizeNamedParameters(newHeaders);
 
     return filterHeaders(newHeaders);
   }
+  exports.transformHeaders = transformHeaders;
 
   function transformBodyItem(aBodyItem) {
     // TODO: handle all possible types
     var bodyItem = {};
     // This will only be true with RAML 0.8
     if (aBodyItem.constructor.name === 'BodyLikeImpl') {
-      bodyItem.formParameters = aBodyItem.formParameters();
+      bodyItem.formParameters = transformNamedParameters(aBodyItem.formParameters());
       // TODO: handle the situation where schema/example is a reference.
       bodyItem.schema = aBodyItem.schema() ? aBodyItem.schema().attr.value() : aBodyItem.schema();
       bodyItem.example = aBodyItem.example() ? aBodyItem.example().attr.value() : aBodyItem.example();
@@ -174,16 +166,24 @@ RAML.Transformer = (function() {
     var method = {};
     method.body = transformBody(nullIfEmpty(aMethod.body()));
     method.description = exports.getValueIfNotNull(aMethod.description()),
-    method.headers = transformHeaders(aMethod.headers());
+    method.headers = nullIfEmpty(aMethod.headers());
     method.method = aMethod.method();
     method.queryParameters = nullIfEmpty(aMethod.queryParameters());
-    method.responseCodes = aMethod.responses().map(function (response) {
+
+    var methodResponseCodes = aMethod.responses().map(function (response) {
       return response.code().attr.value();
     });
-    method.responses = {};
-    aMethod.responses().forEach(function (response) {
-      method.responses[response.code().attr.value()] = response;
-    });
+
+    method.responseCodes = methodResponseCodes.length > 0 ?
+      methodResponseCodes : null;
+
+    var methodResponses = aMethod.responses().reduce(function (accum, response) {
+      accum[response.code().attr.value()] = response;
+      return accum;
+    }, {});
+
+    method.responses = Object.getOwnPropertyNames(methodResponses).length > 0 ?
+      methodResponses : null;
 
     transformSecuritySchemes(method, aMethod);
 
@@ -191,6 +191,31 @@ RAML.Transformer = (function() {
     return method;
   }
   exports.transformMethod = transformMethod;
+
+  function transformNamedParameters(collection) {
+    return collection.reduce(function (accum, item) {
+      var name = item.name();
+      accum[name] = [{
+        name: name,
+        default: item.default(),
+        description: transformValue(item.description()),
+        displayName: item.displayName(),
+        example: item.example() ? item.example() : undefined,
+        repeat: item.repeat(),
+        required: item.required(),
+        type: item.type(),
+
+        enum: item.enum ? (item.enum().length > 0 ? item.enum() : undefined) : undefined,
+        maximum: item.maximum ? item.maximum() : undefined,
+        maxLength: item.maxLength ? item.maxLength() : undefined,
+        minimum: item.minimum ? item.minimum() : undefined,
+        minLength: item.minLength ? item.minLength() : undefined,
+        pattern: item.pattern ? item.pattern() : undefined
+      }];
+      return accum;
+    }, {});
+  }
+  exports.transformNamedParameters = transformNamedParameters;
 
   function nullIfEmpty(array) {
     return array && array.length > 0 ? array : null;

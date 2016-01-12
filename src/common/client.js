@@ -42,7 +42,7 @@
     },
 
     createPathSegment: function(resourceRAML) {
-      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri().value(), resourceRAML.uriParameters());
+      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri().value(), resourceRAML.allUriParameters());
     }
   };
 })();
