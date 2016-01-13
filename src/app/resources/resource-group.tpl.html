@@ -5,8 +5,11 @@
   index="index"
   protocols="protocols"
   resource="firstResource"
+  resources-collapsed="resourcesCollapsed"
   resource-group="resourceGroup"
-  resource-list="resourceList"></resource>
+  resource-list="resourceList"
+  single-view="singleView">
+</resource>
 
 <!-- Child Resources -->
 <ol class="raml-console-resource-list" ng-class="{'raml-console-is-collapsed': resourcesCollapsed}">
@@ -17,6 +20,9 @@
       base-uri-parameters="baseUriParameters"
       generate-id="generateId"
       protocols="protocols"
-      resource="resource"></resource>
+      resource="resource"
+      resources-collapsed="resourcesCollapsed"
+      single-view="singleView">
+    </resource>
   </li>
 </ol>

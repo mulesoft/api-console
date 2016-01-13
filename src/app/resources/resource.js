@@ -11,10 +11,12 @@
         generateIdRef: '&generateId',
         protocols: '=',
         resource: '=',
+        resourcesCollapsed: '=',
         resourceGroup: '=',
         resourceList: '=',
         index: '=',
-        isFirst: '='
+        isFirst: '=',
+        singleView: '='
       },
       controller: ['$scope', '$rootScope', function($scope, $rootScope) {
         $scope.showPanel = false;

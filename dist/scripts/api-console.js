@@ -782,7 +782,8 @@
         element: '=',
         generateIdRef: '&generateId',
         protocols: '=',
-        selectedMethod: '='
+        selectedMethod: '=',
+        singleView: '='
       },
       replace: true,
       controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
@@ -982,6 +983,27 @@
 (function () {
   'use strict';
 
+  RAML.Directives.responseShort = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/response-short.tpl.html',
+      scope: {
+        code: '=',
+        info: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.description = RAML.Transformer.transformValue($scope.info.description());
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('responseShort', RAML.Directives.responseShort);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.response = function() {
     return {
       restrict: 'E',
@@ -1130,16 +1152,21 @@
         baseUriParameters: '=',
         collapseSidebarRef: '&collapseSidebar',
         context: '=',
+        generateIdRef: '&generateId',
         methodInfo: '=',
         protocols: '=',
         resource: '=',
-        securitySchemes: '='
+        securitySchemes: '=',
+        singleView: '='
       },
       controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
 
+        $scope.generateId = $scope.generateIdRef();
+
+        $scope.credentials       = {};
         $scope.markedOptions     = RAML.Settings.marked;
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
@@ -1535,7 +1562,8 @@
             $scope.parameters = getParameters(context, 'queryParameters');
 
             request.queryParams($scope.parameters);
-            request.header('Accept', $rootScope.raml.mediaType() || defaultAccept);
+            request.header('Accept',
+              RAML.Transformer.transformValue($rootScope.raml.mediaType()) || defaultAccept);
             request.headers(getParameters(context, 'headers'));
 
             if (context.bodyContent) {
@@ -1546,7 +1574,7 @@
             var authStrategy;
 
             try {
-              var securitySchemes = $scope.methodInfo.securitySchemes();
+              var securitySchemes = $scope.methodInfo.securitySchemes;
               var scheme;
 
               Object.keys(securitySchemes).map(function(key) {
@@ -1843,8 +1871,10 @@
         generateIdRef: '&generateId',
         index: '=',
         protocols: '=',
+        resourcesCollapsed: '=',
         resourceGroup: '=',
-        resourceList: '='
+        resourceList: '=',
+        singleView: '='
       },
       controller: ['$scope', function($scope) {
         $scope.generateId = $scope.generateIdRef();
@@ -1937,10 +1967,12 @@
         generateIdRef: '&generateId',
         protocols: '=',
         resource: '=',
+        resourcesCollapsed: '=',
         resourceGroup: '=',
         resourceList: '=',
         index: '=',
-        isFirst: '='
+        isFirst: '=',
+        singleView: '='
       },
       controller: ['$scope', '$rootScope', function($scope, $rootScope) {
         $scope.showPanel = false;
@@ -2038,7 +2070,6 @@
         $scope.disableTitle           = false;
         $scope.resourcesCollapsed     = false;
         $scope.documentationCollapsed = false;
-        $scope.credentials = {};
         $scope.allowUnsafeMarkdown    = false;
         $scope.disableTryIt           = false;
 
@@ -2147,6 +2178,8 @@
           $scope.documentList = [];
 
           $scope.baseUri = $scope.raml.baseUri();
+          $scope.baseUriParameters = RAML.Transformer.nullIfEmpty(
+            $scope.raml.allBaseUriParameters());
 
           // Obtain the API title from the RAML API.
           $scope.title = $scope.raml.title();
@@ -3737,8 +3770,7 @@ RAML.Transformer = (function() {
   exports.transformBody = transformBody;
 
   function transformSecuritySchemes(newMethod, oldMethod) {
-    // TODO: revisit when/if parser implements expand on securedBy
-    newMethod.securedBy = oldMethod.securedBy();
+    newMethod.securedBy = oldMethod.allSecuredBy();
     newMethod.securitySchemes = {};
 
     if (newMethod.securedBy.length === 0) {
@@ -3746,9 +3778,42 @@ RAML.Transformer = (function() {
         type: 'Anonymous'
       };
       newMethod.securedBy.push('anonymous');
+    } else {
+      newMethod.securedBy = newMethod.securedBy.map(function (securedBy) {
+        var securitySchemeKey = securedBy.value().valueName();
+        var securityScheme = securedBy.securityScheme();
+
+        newMethod.securitySchemes[securitySchemeKey] = {
+          id: securitySchemeKey,
+          name: securityScheme.type(),
+          settings: transformSettings(securityScheme.settings()),
+          type: securityScheme.type()
+        };
+
+        var describedBy = securityScheme.describedBy();
+        if (describedBy) {
+          newMethod.securitySchemes[securitySchemeKey].describedBy = {
+            headers: transformNamedParameters(describedBy.headers()),
+            queryParameters: transformNamedParameters(describedBy.queryParameters()),
+            responses: transformResponses(describedBy.responses())
+          };
+        }
+
+        return securitySchemeKey;
+      });
     }
 
     return newMethod;
+  }
+
+  function transformSettings(settings) {
+    if (settings) {
+      return {
+        accessTokenUri: transformValue(settings.accessTokenUri()),
+        authorizationGrants: settings.authorizationGrants(),
+        authorizationUri: transformValue(settings.authorizationUri())
+      };
+    }
   }
 
   function transformMethod(aMethod) {
@@ -3766,13 +3831,7 @@ RAML.Transformer = (function() {
     method.responseCodes = methodResponseCodes.length > 0 ?
       methodResponseCodes : null;
 
-    var methodResponses = aMethod.responses().reduce(function (accum, response) {
-      accum[response.code().attr.value()] = response;
-      return accum;
-    }, {});
-
-    method.responses = Object.getOwnPropertyNames(methodResponses).length > 0 ?
-      methodResponses : null;
+    method.responses = transformResponses(aMethod.responses());
 
     transformSecuritySchemes(method, aMethod);
 
@@ -3781,8 +3840,18 @@ RAML.Transformer = (function() {
   }
   exports.transformMethod = transformMethod;
 
+  function transformResponses(responses) {
+    var methodResponses = responses.reduce(function (accum, response) {
+      accum[response.code().attr.value()] = response;
+      return accum;
+    }, {});
+
+     return Object.getOwnPropertyNames(methodResponses).length > 0 ?
+      methodResponses : null;
+  }
+
   function transformNamedParameters(collection) {
-    return collection.reduce(function (accum, item) {
+    var result = collection.reduce(function (accum, item) {
       var name = item.name();
       accum[name] = [{
         name: name,
@@ -3794,7 +3863,7 @@ RAML.Transformer = (function() {
         required: item.required(),
         type: item.type(),
 
-        enum: item.enum ? (item.enum().length > 0 ? item.enum() : undefined) : undefined,
+        enum: item.enum && item.enum().length > 0 ? item.enum() : undefined,
         maximum: item.maximum ? item.maximum() : undefined,
         maxLength: item.maxLength ? item.maxLength() : undefined,
         minimum: item.minimum ? item.minimum() : undefined,
@@ -3803,6 +3872,8 @@ RAML.Transformer = (function() {
       }];
       return accum;
     }, {});
+
+    return Object.getOwnPropertyNames(result).length > 0 ? result : null;
   }
   exports.transformNamedParameters = transformNamedParameters;
 
@@ -5821,8 +5892,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <h4 class=\"raml-console-resource-heading-a\">Responses</h4>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-param\" ng-repeat=\"(code, info) in documentationSchemeSelected.describedBy.responses\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{code}}</h4>\n" +
-    "          <p markdown=\"info.description\" class=\"raml-console-marked-content\"></p>\n" +
+    "          <response-short code=\"code\" info=\"info\"></response-short>\n" +
     "        </div>\n" +
     "      </section>\n" +
     "\n" +
@@ -6084,10 +6154,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      base-uri-parameters=\"baseUriParameters\"\n" +
     "      collapse-sidebar=\"collapseSidebar\"\n" +
     "      context=\"context\"\n" +
+    "      generate-id=\"generateId\"\n" +
     "      method-info=\"methodInfo\"\n" +
     "      protocols=\"protocols\"\n" +
     "      resource=\"resource\"\n" +
-    "      security-schemes=\"securitySchemes\">\n" +
+    "      security-schemes=\"securitySchemes\"\n" +
+    "      single-view=\"singleView\">\n" +
     "    </sidebar>\n" +
     "\n" +
     "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\"ng-hide=\"!baseUri\" ng-if=\"!disableTryIt\">\n" +
@@ -6114,6 +6186,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('directives/response-short.tpl.html',
+    "<h4 class=\"raml-console-resource-param-heading\">{{code}}</h4>\n" +
+    "<p markdown=\"description\" class=\"raml-console-marked-content\"></p>\n"
   );
 
 
@@ -6434,8 +6512,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  index=\"index\"\n" +
     "  protocols=\"protocols\"\n" +
     "  resource=\"firstResource\"\n" +
+    "  resources-collapsed=\"resourcesCollapsed\"\n" +
     "  resource-group=\"resourceGroup\"\n" +
-    "  resource-list=\"resourceList\"></resource>\n" +
+    "  resource-list=\"resourceList\"\n" +
+    "  single-view=\"singleView\">\n" +
+    "</resource>\n" +
     "\n" +
     "<!-- Child Resources -->\n" +
     "<ol class=\"raml-console-resource-list\" ng-class=\"{'raml-console-is-collapsed': resourcesCollapsed}\">\n" +
@@ -6446,7 +6527,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      base-uri-parameters=\"baseUriParameters\"\n" +
     "      generate-id=\"generateId\"\n" +
     "      protocols=\"protocols\"\n" +
-    "      resource=\"resource\"></resource>\n" +
+    "      resource=\"resource\"\n" +
+    "      resources-collapsed=\"resourcesCollapsed\"\n" +
+    "      single-view=\"singleView\">\n" +
+    "    </resource>\n" +
     "  </li>\n" +
     "</ol>\n"
   );
@@ -6511,7 +6595,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  handle-method-click=\"handleMethodClick\"\n" +
     "  protocols=\"protocols\"\n" +
     "  resource=\"resource\"\n" +
-    "  selected-method=\"selectedMethod\"></resource-panel>\n"
+    "  selected-method=\"selectedMethod\"\n" +
+    "  single-view=\"singleView\">\n" +
+    "</resource-panel>\n"
   );
 
 
@@ -6561,13 +6647,16 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      <li id=\"{{generateId(resource.pathSegments)}}\" class=\"raml-console-resource-list-item\" ng-repeat=\"resourceGroup in resourceGroups\" ng-init=\"resource = resourceGroup[0]\">\n" +
     "        <resource-group\n" +
     "          base-uri=\"baseUri\"\n" +
-    "          base-uri-parameters=\"raml.baseUriParameters\"\n" +
+    "          base-uri-parameters=\"baseUriParameters\"\n" +
     "          first-resource=\"resource\"\n" +
     "          generate-id=\"generateId\"\n" +
     "          index=\"$index\"\n" +
     "          protocols=\"protocols\"\n" +
+    "          resources-collapsed=\"resourcesCollapsed\"\n" +
     "          resource-group=\"resourceGroup\"\n" +
-    "          resource-list=\"resourceList\"></resource-group>\n" +
+    "          resource-list=\"resourceList\"\n" +
+    "          single-view=\"singleView\">\n" +
+    "        </resource-group>\n" +
     "      </li>\n" +
     "    </ol>\n" +
     "  </div>\n" +
@@ -6584,14 +6673,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <div class=\"raml-console-initializer-row\">\n" +
     "          <p class=\"raml-console-initializer-input-container\" style=\"height: 550px;\">\n" +
     "            <textarea id=\"raml\" ui-codemirror=\"{\n" +
-    "              lineNumbers: true,\n" +
-    "              lineWrapping : false,\n" +
-    "              tabSize: 2,\n" +
-    "              mode: 'yaml',\n" +
-    "              gutters: ['CodeMirror-lint-markers'],\n" +
-    "              lint: true,\n" +
-    "              theme : 'raml-console'\n" +
-    "            }\" ng-model=\"raml\"></textarea>\n" +
+    "                lineNumbers: true,\n" +
+    "                lineWrapping : false,\n" +
+    "                tabSize: 2,\n" +
+    "                mode: 'yaml',\n" +
+    "                gutters: ['CodeMirror-lint-markers'],\n" +
+    "                lint: true,\n" +
+    "                theme : 'raml-console'\n" +
+    "              }\" ng-model=\"raml\">\n" +
+    "            </textarea>\n" +
     "          </p>\n" +
     "        </div>\n" +
     "      </section>\n" +

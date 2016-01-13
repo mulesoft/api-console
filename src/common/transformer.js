@@ -148,8 +148,7 @@ RAML.Transformer = (function() {
   exports.transformBody = transformBody;
 
   function transformSecuritySchemes(newMethod, oldMethod) {
-    // TODO: revisit when/if parser implements expand on securedBy
-    newMethod.securedBy = oldMethod.securedBy();
+    newMethod.securedBy = oldMethod.allSecuredBy();
     newMethod.securitySchemes = {};
 
     if (newMethod.securedBy.length === 0) {
@@ -157,9 +156,42 @@ RAML.Transformer = (function() {
         type: 'Anonymous'
       };
       newMethod.securedBy.push('anonymous');
+    } else {
+      newMethod.securedBy = newMethod.securedBy.map(function (securedBy) {
+        var securitySchemeKey = securedBy.value().valueName();
+        var securityScheme = securedBy.securityScheme();
+
+        newMethod.securitySchemes[securitySchemeKey] = {
+          id: securitySchemeKey,
+          name: securityScheme.type(),
+          settings: transformSettings(securityScheme.settings()),
+          type: securityScheme.type()
+        };
+
+        var describedBy = securityScheme.describedBy();
+        if (describedBy) {
+          newMethod.securitySchemes[securitySchemeKey].describedBy = {
+            headers: transformNamedParameters(describedBy.headers()),
+            queryParameters: transformNamedParameters(describedBy.queryParameters()),
+            responses: transformResponses(describedBy.responses())
+          };
+        }
+
+        return securitySchemeKey;
+      });
     }
 
     return newMethod;
+  }
+
+  function transformSettings(settings) {
+    if (settings) {
+      return {
+        accessTokenUri: transformValue(settings.accessTokenUri()),
+        authorizationGrants: settings.authorizationGrants(),
+        authorizationUri: transformValue(settings.authorizationUri())
+      };
+    }
   }
 
   function transformMethod(aMethod) {
@@ -177,13 +209,7 @@ RAML.Transformer = (function() {
     method.responseCodes = methodResponseCodes.length > 0 ?
       methodResponseCodes : null;
 
-    var methodResponses = aMethod.responses().reduce(function (accum, response) {
-      accum[response.code().attr.value()] = response;
-      return accum;
-    }, {});
-
-    method.responses = Object.getOwnPropertyNames(methodResponses).length > 0 ?
-      methodResponses : null;
+    method.responses = transformResponses(aMethod.responses());
 
     transformSecuritySchemes(method, aMethod);
 
@@ -192,8 +218,18 @@ RAML.Transformer = (function() {
   }
   exports.transformMethod = transformMethod;
 
+  function transformResponses(responses) {
+    var methodResponses = responses.reduce(function (accum, response) {
+      accum[response.code().attr.value()] = response;
+      return accum;
+    }, {});
+
+     return Object.getOwnPropertyNames(methodResponses).length > 0 ?
+      methodResponses : null;
+  }
+
   function transformNamedParameters(collection) {
-    return collection.reduce(function (accum, item) {
+    var result = collection.reduce(function (accum, item) {
       var name = item.name();
       accum[name] = [{
         name: name,
@@ -205,7 +241,7 @@ RAML.Transformer = (function() {
         required: item.required(),
         type: item.type(),
 
-        enum: item.enum ? (item.enum().length > 0 ? item.enum() : undefined) : undefined,
+        enum: item.enum && item.enum().length > 0 ? item.enum() : undefined,
         maximum: item.maximum ? item.maximum() : undefined,
         maxLength: item.maxLength ? item.maxLength() : undefined,
         minimum: item.minimum ? item.minimum() : undefined,
@@ -214,6 +250,8 @@ RAML.Transformer = (function() {
       }];
       return accum;
     }, {});
+
+    return Object.getOwnPropertyNames(result).length > 0 ? result : null;
   }
   exports.transformNamedParameters = transformNamedParameters;
 

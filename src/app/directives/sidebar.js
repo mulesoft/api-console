@@ -9,16 +9,21 @@
         baseUriParameters: '=',
         collapseSidebarRef: '&collapseSidebar',
         context: '=',
+        generateIdRef: '&generateId',
         methodInfo: '=',
         protocols: '=',
         resource: '=',
-        securitySchemes: '='
+        securitySchemes: '=',
+        singleView: '='
       },
       controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
 
+        $scope.generateId = $scope.generateIdRef();
+
+        $scope.credentials       = {};
         $scope.markedOptions     = RAML.Settings.marked;
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
@@ -414,7 +419,8 @@
             $scope.parameters = getParameters(context, 'queryParameters');
 
             request.queryParams($scope.parameters);
-            request.header('Accept', $rootScope.raml.mediaType() || defaultAccept);
+            request.header('Accept',
+              RAML.Transformer.transformValue($rootScope.raml.mediaType()) || defaultAccept);
             request.headers(getParameters(context, 'headers'));
 
             if (context.bodyContent) {
@@ -425,7 +431,7 @@
             var authStrategy;
 
             try {
-              var securitySchemes = $scope.methodInfo.securitySchemes();
+              var securitySchemes = $scope.methodInfo.securitySchemes;
               var scheme;
 
               Object.keys(securitySchemes).map(function(key) {

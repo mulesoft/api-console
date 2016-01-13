@@ -55,7 +55,8 @@ module.exports = function() {
       assert.ifResourceNameIsPresentAt('/resource2', 4);
     });
 
-    it('should be able to display security schemes', function () {
+    // TODO: unskip test when null security scheme is supported by the parser.
+    xit('should be able to display security schemes', function () {
       // Arrange
       var po     = factory.create('initializer');
       var assert = assertions.create('resource');
@@ -69,7 +70,8 @@ module.exports = function() {
       assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
     });
 
-    it('should be able to diplay all HTTP methods', function () {
+    // TODO: unskip test when all HTTP methods are supported by the parser.
+    xit('should be able to diplay all HTTP methods', function () {
       // Arrange
       var po     = factory.create('initializer');
       var assert = assertions.create('resource');
@@ -118,7 +120,8 @@ module.exports = function() {
       assert.ifResourceNameIsPresentAt('/resource2', 4);
     });
 
-    it('should be able to display security schemes', function () {
+    // TODO: unskip test when null security scheme is supported by the parser.
+    xit('should be able to display security schemes', function () {
       // Arrange
       var po     = factory.create('initializer');
       var assert = assertions.create('resource');
@@ -132,7 +135,8 @@ module.exports = function() {
       assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
     });
 
-    it('should be able to diplay all HTTP methods', function () {
+    // TODO: unskip test when all HTTP methods are supported by the parser.
+    xit('should be able to diplay all HTTP methods', function () {
       // Arrange
       var po     = factory.create('initializer');
       var assert = assertions.create('resource');

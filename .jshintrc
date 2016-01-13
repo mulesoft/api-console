@@ -35,6 +35,7 @@
     "describe": true,
     "xdescribe": true,
     "it": true,
+    "xit": true,
     "browser": true,
     "expect": true,
     "beforeEach": true,
