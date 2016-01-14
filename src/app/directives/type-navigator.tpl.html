@@ -1,0 +1,29 @@
+<h3>
+  <span class="raml-console-clickable" ng-if="previousTypes.length > 0" ng-click="goBack()">&lt; back</span>
+  {{typeName}}
+  <span ng-if="supertypes.length > 0">:</span>
+  <span
+    class="raml-console-clickable"
+    ng-repeat="supertype in supertypes"
+    ng-click="changeType(supertype.type)">{{supertype.nameId}}</span>
+</h3>
+<div ng-repeat="property in properties">
+  <div>
+    <h4 class="raml-console-resource-param-heading">
+      {{property.nameId}}
+      <span
+        class="raml-console-resource-param-instructional"
+        ng-if="property.isPrimitive">{{property.type.nameId}}</span>
+      <span
+        class="raml-console-resource-param-instructional raml-console-clickable"
+        ng-if="!property.isPrimitive"
+        ng-click="changeType(property.type.runtimeType)">{{property.type.nameId}}</span>
+    </h4>
+  </div>
+  <div>{{property.description}}</div>
+</div>
+
+<div ng-repeat="example in examples">
+  <span>Example:</span>
+  <example example="example" media-type="mediaType"></example>
+</div>

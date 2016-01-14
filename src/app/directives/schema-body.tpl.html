@@ -1,0 +1,21 @@
+<section ng-if="body.formParameters">
+   <div class="raml-console-resource-param" ng-repeat="formParam in body.formParameters">
+    <h4 class="raml-console-resource-param-heading">{{formParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(formParam[0])}}</span></h4>
+
+    <p markdown="formParam[0].description" class="raml-console-marked-content"></p>
+
+    <p ng-if="formParam[0].example">
+      <span class="raml-console-resource-param-example"><b>Example:</b> {{formParam[0].example}}</span>
+    </p>
+  </div>
+</section>
+
+<div ng-if="body.example">
+  <span>Example:</span>
+  <example example="body.example"></example>
+</div>
+
+<div class="raml-console-schema-container" ng-if="body.schema">
+  <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
+  <example example="body.schema" media-type="mediaType"></example>
+</div>

@@ -8,7 +8,8 @@
       scope: {
         methodInfo: '=',
         resource: '=',
-        securitySchemes: '='
+        securitySchemes: '=',
+        selectedMethod: '='
       },
       controller: ['$scope', function($scope) {
         function getResponseInfo() {
@@ -20,15 +21,9 @@
           }
 
           Object.keys(responses).forEach(function (key) {
-            var bodies = responses[key].body();
-            responseInfo[key] = {};
+            var body = responses[key].body();
 
-            bodies.forEach(function (body) {
-              responseInfo[key][body.name()] = {
-                example: RAML.Transformer.transformValue(body.example()),
-                schema: RAML.Transformer.transformValue(body.schema()),
-              };
-            });
+            responseInfo[key] = RAML.Transformer.transformBody(body);
 
             setCurrent(responseInfo[key], 'Type');
           });
@@ -77,7 +72,8 @@
         }
 
         $scope.currentBodySelected = $scope.responseInfo ?
-          $scope.responseInfo[$scope.currentStatusCode].currentType : null;
+          $scope.responseInfo[$scope.currentStatusCode].currentType :
+          ($scope.methodInfo && $scope.methodInfo.body ? Object.keys($scope.methodInfo.body)[0] : null);
 
         $scope.$on('resetData', function() {
           if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
@@ -203,6 +199,12 @@
           return value === $scope.currentBodySelected;
         };
 
+        $scope.$watch('selectedMethod', function (newValue, oldValue) {
+          if (newValue !== oldValue) {
+            $scope.responseInfo = getResponseInfo();
+          }
+        });
+
         $scope.$watch('currentBodySelected', function (value) {
           if (value) {
             var $container = jQuery('.raml-console-request-body-heading');
@@ -212,49 +214,6 @@
             $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
           }
         });
-
-        $scope.showSchema = function ($event) {
-          var $this   = jQuery($event.currentTarget);
-          var $panel  = $this.closest('.raml-console-schema-container');
-          var $schema = $panel.find('.raml-console-resource-pre-toggle');
-
-          $this.toggleClass('raml-console-is-active');
-
-          if (!$schema.hasClass('raml-console-is-active')) {
-            $this.text('Hide Schema');
-            $schema
-              .addClass('raml-console-is-active')
-              .velocity('slideDown');
-          } else {
-            $this.text('Show Schema');
-            $schema
-              .removeClass('raml-console-is-active')
-              .velocity('slideUp');
-          }
-        };
-
-        $scope.getBeautifiedExample = function (value) {
-          var result = value;
-
-          try {
-            result = beautify(value, $scope.currentBodySelected);
-          }
-          catch (e) { }
-
-          return result;
-        };
-
-        function beautify(body, contentType) {
-          if(contentType.indexOf('json')) {
-            body = vkbeautify.json(body, 2);
-          }
-
-          if(contentType.indexOf('xml')) {
-            body = vkbeautify.xml(body, 2);
-          }
-
-          return body;
-        }
       }]
     };
   };

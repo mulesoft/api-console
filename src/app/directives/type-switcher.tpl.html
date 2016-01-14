@@ -1,0 +1,18 @@
+<div ng-if="bodyType === 'schema'">
+  <schema-body schema="body" media-type="mediaType"></schema-body>
+</div>
+
+<div ng-if="bodyType === 'array'">
+  <h4>Array of</h4>
+  <type-switcher body="transformArray(body)" media-type="mediaType"></type-switcher>
+</div>
+
+<div ng-if="bodyType === 'union'">
+  <type-switcher body="getLeftType(body)" media-type="mediaType"></type-switcher>
+  <h4>or</h4>
+  <type-switcher body="getRightType(body)" media-type="mediaType"></type-switcher>
+</div>
+
+<div ng-if="bodyType === 'type'">
+  <type-navigator type="body" media-type="mediaType"></type-navigator>
+</div>
