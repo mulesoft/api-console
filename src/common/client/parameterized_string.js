@@ -39,7 +39,7 @@
       return '{' + parameterName + '}';
     });
 
-    this.parameters = uriParameters;
+    this.parameters = RAML.Transformer.transformNamedParameters(uriParameters);
     this.templated = Object.keys(this.parameters || {}).length > 0;
     this.tokens = tokenize(template);
     this.render = rendererFor(template, uriParameters);

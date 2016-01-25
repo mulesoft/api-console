@@ -8,10 +8,11 @@
       scope: {
         baseUri: '=',
         baseUriParameters: '=',
-        resourceGroup: '=',
         firstResource: '=',
         generateIdRef: '&generateId',
         index: '=',
+        protocols: '=',
+        resourceGroup: '=',
         resourceList: '='
       },
       controller: ['$scope', function($scope) {

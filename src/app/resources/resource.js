@@ -21,6 +21,24 @@
         $scope.description = RAML.Transformer.getValueIfNotNull($scope.resource.description());
         $scope.traits = RAML.Transformer.transformTraits($scope.resource.is());
 
+        $scope.resource.uriParametersForDocumentation = $scope.resource.pathSegments
+          .map(function(segment) { return segment.parameters; })
+          .filter(function(params) { return !!params; })
+          .reduce(function(accum, parameters) {
+            for (var key in parameters) {
+              var parameter = parameters[key];
+              if (parameter) {
+                parameter = (parameter instanceof Array) ? parameter : [ parameter ];
+              }
+              accum[key] = parameter;
+            }
+            return accum;
+          }, {});
+
+        if (Object.keys($scope.resource.uriParametersForDocumentation).length === 0) {
+          $scope.resource.uriParametersForDocumentation = null;
+        }
+
         $scope.generateId = $scope.generateIdRef();
 
         $scope.$on('openMethod', function(event, $currentScope) {

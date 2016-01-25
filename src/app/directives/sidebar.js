@@ -5,8 +5,16 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
-      replace: true,
-      controller: ['$scope', '$timeout', function ($scope, $timeout) {
+      scope: {
+        baseUriParameters: '=',
+        collapseSidebarRef: '&collapseSidebar',
+        context: '=',
+        methodInfo: '=',
+        protocols: '=',
+        resource: '=',
+        securitySchemes: '='
+      },
+      controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
@@ -16,6 +24,8 @@
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
         $scope.currentProtocol   = $scope.protocols && $scope.protocols.length ? $scope.protocols[0] : null;
+
+        $scope.collapseSidebar = $scope.collapseSidebarRef();
 
         function readCustomSchemeInfo (name) {
           if (!$scope.methodInfo.headers.plain) {
@@ -32,10 +42,6 @@
 
         if (defaultSchema.type === 'x-custom') {
           readCustomSchemeInfo(defaultSchema.id.split('|')[1]);
-        }
-
-        function completeAnimation (element) {
-          jQuery(element).removeAttr('style');
         }
 
         function parseHeaders(headers) {
@@ -386,9 +392,9 @@
 
             try {
               var pathBuilder = context.pathBuilder;
-              var client      = RAML.Client.create($scope.raml, function(client) {
-                if ($scope.raml.baseUriParameters) {
-                  Object.keys($scope.raml.baseUriParameters).map(function (key) {
+              var client      = RAML.Client.create($rootScope.raml, function(client) {
+                if ($scope.baseUriParameters) {
+                  Object.keys($scope.baseUriParameters).map(function (key) {
                     var uriParameters = $scope.context.uriParameters.data();
                     pathBuilder.baseUriContext[key] = uriParameters[key][0];
                     delete uriParameters[key];
@@ -408,7 +414,7 @@
             $scope.parameters = getParameters(context, 'queryParameters');
 
             request.queryParams($scope.parameters);
-            request.header('Accept', $scope.raml.mediaType || defaultAccept);
+            request.header('Accept', $rootScope.raml.mediaType() || defaultAccept);
             request.headers(getParameters(context, 'headers'));
 
             if (context.bodyContent) {
@@ -530,54 +536,6 @@
           if ($scope.singleView) {
             $sidebar.toggleClass('raml-console-is-collapsed');
             $panel.toggleClass('raml-console-has-sidebar-collapsed');
-          }
-        };
-
-        $scope.collapseSidebar = function ($event) {
-          var $this         = jQuery($event.currentTarget);
-          var $panel        = $this.closest('.raml-console-resource-panel');
-          var $panelContent = $panel.find('.raml-console-resource-panel-primary');
-          var $sidebar      = $panel.find('.raml-console-sidebar');
-          var animation     = 430;
-          var speed         = 200;
-
-          if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
-            animation = 0;
-          }
-
-          if ($scope.singleView) {
-            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
-            speed = 0;
-          }
-
-          $sidebar.velocity(
-            { width: animation },
-            {
-              duration: speed,
-              complete: function (element) {
-                jQuery(element).removeAttr('style');
-                if ($scope.singleView) {
-                  $scope.documentationEnabled = false;
-                }
-                apply();
-              }
-            }
-          );
-
-          $panelContent.velocity(
-            { 'padding-right': animation },
-            {
-              duration: speed,
-              complete: completeAnimation
-            }
-          );
-
-          $sidebar.toggleClass('raml-console-is-collapsed');
-          $sidebar.removeClass('raml-console-is-responsive');
-          $panel.toggleClass('raml-console-has-sidebar-collapsed');
-
-          if ($sidebar.hasClass('raml-console-is-fullscreen') || $scope.singleView) {
-            $sidebar.toggleClass('raml-console-is-fullscreen');
           }
         };
 

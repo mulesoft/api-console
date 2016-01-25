@@ -7,6 +7,7 @@
       templateUrl: 'directives/documentation.tpl.html',
       scope: {
         methodInfo: '=',
+        resource: '=',
         securitySchemes: '='
       },
       controller: ['$scope', function($scope) {
@@ -14,7 +15,7 @@
           var responseInfo = {};
           var responses    = $scope.methodInfo.responses;
 
-          if (!responses) {
+          if (!responses || responses.length === 0) {
             return;
           }
 
@@ -231,6 +232,29 @@
               .velocity('slideUp');
           }
         };
+
+        $scope.getBeautifiedExample = function (value) {
+          var result = value;
+
+          try {
+            result = beautify(value, $scope.currentBodySelected);
+          }
+          catch (e) { }
+
+          return result;
+        };
+
+        function beautify(body, contentType) {
+          if(contentType.indexOf('json')) {
+            body = vkbeautify.json(body, 2);
+          }
+
+          if(contentType.indexOf('xml')) {
+            body = vkbeautify.xml(body, 2);
+          }
+
+          return body;
+        }
       }]
     };
   };

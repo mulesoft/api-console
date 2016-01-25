@@ -3,9 +3,23 @@
     <strong>Try-it</strong> is disabled because <strong>baseUri</strong> is not present
   </div>
   <div class="raml-console-resource-panel-wrapper">
-    <documentation class="raml-console-resource-panel-primary" method-info="methodInfo" security-schemes="securitySchemes"></documentation>
+    <documentation
+      class="raml-console-resource-panel-primary"
+      method-info="methodInfo"
+      resource="resource"
+      security-schemes="securitySchemes">
+    </documentation>
 
-    <sidebar ng-show="baseUri"></sidebar>
+    <sidebar
+      ng-show="baseUri"
+      base-uri-parameters="baseUriParameters"
+      collapse-sidebar="collapseSidebar"
+      context="context"
+      method-info="methodInfo"
+      protocols="protocols"
+      resource="resource"
+      security-schemes="securitySchemes">
+    </sidebar>
 
     <div class="raml-console-sidebar-controls raml-console-sidebar-controls-collapse" ng-click="collapseSidebar($event)" style="right: -1px; position: absolute;"ng-hide="!baseUri" ng-if="!disableTryIt">
       <button class="raml-console-collapse" style="height: 21px; margin-top: 9px;">

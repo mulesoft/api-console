@@ -9,6 +9,7 @@
       scope: {
         src: '=',
         context: '=',
+        resource: '=',
         type: '@',
         title: '@'
       },
@@ -38,7 +39,7 @@
           }
         }
 
-        $scope.$parent.resource.pathSegments.map(function (element) {
+        $scope.resource.pathSegments.map(function (element) {
           var tokens = element.tokens;
 
           for (var i = 0; i < tokens.length; i++) {
