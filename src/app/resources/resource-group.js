@@ -12,8 +12,10 @@
         generateIdRef: '&generateId',
         index: '=',
         protocols: '=',
+        resourcesCollapsed: '=',
         resourceGroup: '=',
-        resourceList: '='
+        resourceList: '=',
+        singleView: '='
       },
       controller: ['$scope', function($scope) {
         $scope.generateId = $scope.generateIdRef();

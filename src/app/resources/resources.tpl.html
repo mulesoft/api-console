@@ -43,13 +43,16 @@
       <li id="{{generateId(resource.pathSegments)}}" class="raml-console-resource-list-item" ng-repeat="resourceGroup in resourceGroups" ng-init="resource = resourceGroup[0]">
         <resource-group
           base-uri="baseUri"
-          base-uri-parameters="raml.baseUriParameters"
+          base-uri-parameters="baseUriParameters"
           first-resource="resource"
           generate-id="generateId"
           index="$index"
           protocols="protocols"
+          resources-collapsed="resourcesCollapsed"
           resource-group="resourceGroup"
-          resource-list="resourceList"></resource-group>
+          resource-list="resourceList"
+          single-view="singleView">
+        </resource-group>
       </li>
     </ol>
   </div>
@@ -66,14 +69,15 @@
         <div class="raml-console-initializer-row">
           <p class="raml-console-initializer-input-container" style="height: 550px;">
             <textarea id="raml" ui-codemirror="{
-              lineNumbers: true,
-              lineWrapping : false,
-              tabSize: 2,
-              mode: 'yaml',
-              gutters: ['CodeMirror-lint-markers'],
-              lint: true,
-              theme : 'raml-console'
-            }" ng-model="raml"></textarea>
+                lineNumbers: true,
+                lineWrapping : false,
+                tabSize: 2,
+                mode: 'yaml',
+                gutters: ['CodeMirror-lint-markers'],
+                lint: true,
+                theme : 'raml-console'
+              }" ng-model="raml">
+            </textarea>
           </p>
         </div>
       </section>

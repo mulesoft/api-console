@@ -12,7 +12,8 @@
         element: '=',
         generateIdRef: '&generateId',
         protocols: '=',
-        selectedMethod: '='
+        selectedMethod: '=',
+        singleView: '='
       },
       replace: true,
       controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {

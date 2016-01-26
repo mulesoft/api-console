@@ -14,7 +14,6 @@
         $scope.disableTitle           = false;
         $scope.resourcesCollapsed     = false;
         $scope.documentationCollapsed = false;
-        $scope.credentials = {};
         $scope.allowUnsafeMarkdown    = false;
         $scope.disableTryIt           = false;
 
@@ -123,6 +122,8 @@
           $scope.documentList = [];
 
           $scope.baseUri = $scope.raml.baseUri();
+          $scope.baseUriParameters = RAML.Transformer.nullIfEmpty(
+            $scope.raml.allBaseUriParameters());
 
           // Obtain the API title from the RAML API.
           $scope.title = $scope.raml.title();
