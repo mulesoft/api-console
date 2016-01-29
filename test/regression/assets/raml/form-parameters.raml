@@ -1,0 +1,25 @@
+#%RAML 0.8
+title: Amazon simple storage API
+version: 1
+baseUri: https://{destinationBucket}.s3.amazonaws.com
+/:
+  post:
+    description: The POST operation adds an object to a specified bucket using HTML forms.
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+          AWSAccessKeyId:
+            description: The AWS Access Key ID of the owner of the bucket who grants an Anonymous user access for a request that satisfies the set of constraints in the Policy.
+            type: string
+            displayName: AWSAccessKeyId
+          acl:
+            description: Specifies an Amazon S3 access control list. If an invalid access control list is specified, an error is generated.
+            type: string
+            displayName: acl
+          file:
+            - type: string
+              displayName: file
+              description: Text content. The text content must be the last field in the form.
+            - type: file
+              displayName: file
+              description: File to upload. The file must be the last field in the form.

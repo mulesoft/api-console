@@ -4229,8 +4229,9 @@ RAML.Transformer = (function() {
     resource.uriParametersForDocumentation = resource.uriParametersForDocumentation || {};
 
     if (baseUriParameters) {
-      Object.keys(baseUriParameters).map(function (key) {
-        resource.uriParametersForDocumentation[key] = [baseUriParameters[key]];
+      var cloneBaseUriParameters = RAML.Transformer.transformNamedParameters(baseUriParameters);
+      Object.keys(cloneBaseUriParameters).map(function (key) {
+        resource.uriParametersForDocumentation[key] = cloneBaseUriParameters[key];
       });
     }
 
@@ -6780,6 +6781,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<resource\n" +
     "  is-first=\"true\"\n" +
     "  base-uri=\"baseUri\"\n" +
+    "  base-uri-parameters=\"baseUriParameters\"\n" +
     "  generate-id=\"generateId\"\n" +
     "  index=\"index\"\n" +
     "  protocols=\"protocols\"\n" +
