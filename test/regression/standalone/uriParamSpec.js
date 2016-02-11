@@ -38,7 +38,7 @@ module.exports = function() {
     browser.get('http://localhost:9000?raml=http://localhost:9000/raml/security-schemes.raml');
 
     // Assert
-    assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+    assert.ifShowingSecuritySchemes(0, 0, ['OAuth 2.0', 'Anonymous']);
   });
 
   it('should be able to diplay all HTTP methods', function () {

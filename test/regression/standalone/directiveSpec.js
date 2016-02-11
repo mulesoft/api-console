@@ -36,7 +36,7 @@ module.exports = function() {
     browser.get('http://localhost:9000/directive-security-schemes.html');
 
     // Assert
-    assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+    assert.ifShowingSecuritySchemes(0, 0, ['OAuth 2.0', 'Anonymous']);
   });
 
   it('should be able to cache credentials between resources', function () {
