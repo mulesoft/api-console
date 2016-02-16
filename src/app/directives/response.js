@@ -10,17 +10,12 @@
         currentBodySelected: '=',
         getBeautifiedExampleRef: '&getBeautifiedExample',
         response: '=',
-        responseInfo: '=',
-        showSchemaRef: '&showSchema'
+        responseInfo: '='
       },
       controller: ['$scope', function($scope) {
         $scope.description = RAML.Transformer.transformValue($scope.response.description());
         $scope.headers = RAML.Transformer.nullIfEmpty($scope.response.headers());
         $scope.body = RAML.Transformer.transformBody($scope.response.body());
-
-        $scope.showSchema = $scope.showSchemaRef();
-
-        $scope.getBeautifiedExample = $scope.getBeautifiedExampleRef();
       }]
     };
   };

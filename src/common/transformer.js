@@ -115,32 +115,22 @@ RAML.Transformer = (function() {
   }
 
   function transformHeaders(headers) {
-    var newHeaders = transformNamedParameters(headers);
+    if (Array.isArray(headers)) {
+      var newHeaders = transformNamedParameters(headers);
 
-    normalizeNamedParameters(newHeaders);
+      normalizeNamedParameters(newHeaders);
 
-    return filterHeaders(newHeaders);
+      return filterHeaders(newHeaders);
+    }
+    return headers;
   }
   exports.transformHeaders = transformHeaders;
-
-  function transformBodyItem(aBodyItem) {
-    // TODO: handle all possible types
-    var bodyItem = {};
-    // This will only be true with RAML 0.8
-    if (aBodyItem.constructor.name === 'BodyLikeImpl') {
-      bodyItem.formParameters = transformNamedParameters(aBodyItem.formParameters());
-      // TODO: handle the situation where schema/example is a reference.
-      bodyItem.schema = aBodyItem.schema() ? aBodyItem.schema().attr.value() : aBodyItem.schema();
-      bodyItem.example = aBodyItem.example() ? aBodyItem.example().attr.value() : aBodyItem.example();
-    }
-    return bodyItem;
-  }
 
   function transformBody(body) {
     if (body && body.length > 0) {
       var newBody = {};
       body.forEach(function (bodyItem) {
-        newBody[bodyItem.name()] = transformBodyItem(bodyItem);
+        newBody[bodyItem.name()] = bodyItem;
       });
       return newBody;
     }
@@ -254,6 +244,61 @@ RAML.Transformer = (function() {
     return Object.getOwnPropertyNames(result).length > 0 ? result : null;
   }
   exports.transformNamedParameters = transformNamedParameters;
+
+  function getBodyType(body) {
+    // TODO: This method should always receive an AST type. Change this when
+    // conversion from runtime type to AST is available.
+    var runtimeType = body.runtimeType ? body.runtimeType() : body;
+    if (body.constructor.name === 'BodyLikeImpl' || runtimeType.isExternal()) {
+      return 'schema';
+    } else if (runtimeType.isUnion()) {
+      return 'union';
+    } else if (runtimeType.isArray()) {
+      return 'array';
+    } else if (runtimeType.isValueType()) {
+      return 'value';
+    } else {
+      return 'type';
+    }
+  }
+  exports.getBodyType = getBodyType;
+
+  function transformSchemaBody(body) {
+    return {
+      formParameters: transformNamedParameters(body.formParameters()),
+      schema: RAML.Transformer.transformValue(body.schema()),
+      example: RAML.Transformer.transformValue(body.example())
+    };
+  }
+  exports.transformSchemaBody = transformSchemaBody;
+
+  function extractSupertypes(runtimeType) {
+    return runtimeType.superTypes().map(function (superType) {
+      return {
+        nameId: superType.nameId(),
+        type: superType
+      };
+    });
+  }
+  exports.extractSupertypes = extractSupertypes;
+
+  function transformProperties(runtimeType) {
+    return runtimeType.allProperties().map(transformProperty);
+  }
+  exports.transformProperties = transformProperties;
+
+  function transformProperty(property) {
+    return {
+      nameId: property.nameId(),
+      description: property.description(),
+      isPrimitive: property.isPrimitive(),
+      domainNameId: property.domain().nameId(),
+      type: {
+        nameId: property.range().nameId(),
+        runtimeType: property.range()
+      }
+    };
+  }
 
   function nullIfEmpty(array) {
     return array && array.length > 0 ? array : null;

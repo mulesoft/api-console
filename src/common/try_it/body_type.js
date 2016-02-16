@@ -7,11 +7,11 @@
   };
 
   BodyType.prototype.fillWithExample = function() {
-    this.value = this.contentType.example;
+    this.value = this.contentType.example();
   };
 
   BodyType.prototype.hasExample = function() {
-    return !!this.contentType.example;
+    return !!this.contentType.example();
   };
 
   BodyType.prototype.data = function() {

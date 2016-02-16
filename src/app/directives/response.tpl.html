@@ -19,13 +19,5 @@
     <span ng-click="changeType($event, key, code)" ng-class="{ 'raml-console-is-active': $first}" class="raml-console-flag" ng-repeat="(key, value) in body">{{key}}</span>
   </h4>
 
-  <div ng-if="responseInfo[responseInfo.currentType].example">
-    <span>Example:</span>
-    <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeautifiedExample(responseInfo[responseInfo.currentType].example)"></code></pre>
-  </div>
-
-  <div class="raml-console-schema-container" ng-if="responseInfo[responseInfo.currentType].schema">
-    <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-    <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeautifiedExample(responseInfo[responseInfo.currentType].schema)"></code></pre>
-  </div>
+  <type-switcher body="responseInfo[responseInfo.currentType]"></type-switcher>
 </div>

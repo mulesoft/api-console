@@ -127,7 +127,8 @@
       scope: {
         methodInfo: '=',
         resource: '=',
-        securitySchemes: '='
+        securitySchemes: '=',
+        selectedMethod: '='
       },
       controller: ['$scope', function($scope) {
         function getResponseInfo() {
@@ -139,15 +140,9 @@
           }
 
           Object.keys(responses).forEach(function (key) {
-            var bodies = responses[key].body();
-            responseInfo[key] = {};
+            var body = responses[key].body();
 
-            bodies.forEach(function (body) {
-              responseInfo[key][body.name()] = {
-                example: RAML.Transformer.transformValue(body.example()),
-                schema: RAML.Transformer.transformValue(body.schema()),
-              };
-            });
+            responseInfo[key] = RAML.Transformer.transformBody(body);
 
             setCurrent(responseInfo[key], 'Type');
           });
@@ -196,7 +191,8 @@
         }
 
         $scope.currentBodySelected = $scope.responseInfo ?
-          $scope.responseInfo[$scope.currentStatusCode].currentType : null;
+          $scope.responseInfo[$scope.currentStatusCode].currentType :
+          ($scope.methodInfo && $scope.methodInfo.body ? Object.keys($scope.methodInfo.body)[0] : null);
 
         $scope.$on('resetData', function() {
           if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
@@ -322,6 +318,12 @@
           return value === $scope.currentBodySelected;
         };
 
+        $scope.$watch('selectedMethod', function (newValue, oldValue) {
+          if (newValue !== oldValue) {
+            $scope.responseInfo = getResponseInfo();
+          }
+        });
+
         $scope.$watch('currentBodySelected', function (value) {
           if (value) {
             var $container = jQuery('.raml-console-request-body-heading');
@@ -331,49 +333,6 @@
             $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
           }
         });
-
-        $scope.showSchema = function ($event) {
-          var $this   = jQuery($event.currentTarget);
-          var $panel  = $this.closest('.raml-console-schema-container');
-          var $schema = $panel.find('.raml-console-resource-pre-toggle');
-
-          $this.toggleClass('raml-console-is-active');
-
-          if (!$schema.hasClass('raml-console-is-active')) {
-            $this.text('Hide Schema');
-            $schema
-              .addClass('raml-console-is-active')
-              .velocity('slideDown');
-          } else {
-            $this.text('Show Schema');
-            $schema
-              .removeClass('raml-console-is-active')
-              .velocity('slideUp');
-          }
-        };
-
-        $scope.getBeautifiedExample = function (value) {
-          var result = value;
-
-          try {
-            result = beautify(value, $scope.currentBodySelected);
-          }
-          catch (e) { }
-
-          return result;
-        };
-
-        function beautify(body, contentType) {
-          if(contentType.indexOf('json')) {
-            body = vkbeautify.json(body, 2);
-          }
-
-          if(contentType.indexOf('xml')) {
-            body = vkbeautify.xml(body, 2);
-          }
-
-          return body;
-        }
       }]
     };
   };
@@ -397,6 +356,48 @@
       }]
     };
   }]);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.example = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/example.tpl.html',
+      scope: {
+        example: '=',
+        mediaType: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.getBeautifiedExample = function (value) {
+          var result = value;
+
+          try {
+            result = beautify(value, $scope.mediaType);
+          }
+          catch (e) { }
+
+          return result;
+        };
+
+        function beautify(body, contentType) {
+          if(contentType.indexOf('json')) {
+            body = vkbeautify.json(body, 2);
+          }
+
+          if(contentType.indexOf('xml')) {
+            body = vkbeautify.xml(body, 2);
+          }
+
+          return body;
+        }
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('example', RAML.Directives.example);
 })();
 
 (function () {
@@ -808,8 +809,6 @@
           $scope.methodInfo               = methodInfo;
           $scope.context                  = new RAML.Services.TryIt.Context($scope.baseUriParameters, $scope.resource, $scope.methodInfo);
           $scope.requestUrl               = '';
-          $scope.response                 = {};
-          $scope.requestOptions           = {};
           $scope.securitySchemes          = $scope.methodInfo.securitySchemes;
           $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
           $scope.context.customParameters = { headers: [], queryParameters: [] };
@@ -876,7 +875,7 @@
               if (typeof definitions[key].reset !== 'undefined') {
                 definitions[key].reset($scope.methodInfo.body[key].formParameters);
               } else {
-                definitions[key].value = definitions[key].contentType.example;
+                definitions[key].value = definitions[key].contentType.example();
               }
             });
           }
@@ -1013,17 +1012,12 @@
         currentBodySelected: '=',
         getBeautifiedExampleRef: '&getBeautifiedExample',
         response: '=',
-        responseInfo: '=',
-        showSchemaRef: '&showSchema'
+        responseInfo: '='
       },
       controller: ['$scope', function($scope) {
         $scope.description = RAML.Transformer.transformValue($scope.response.description());
         $scope.headers = RAML.Transformer.nullIfEmpty($scope.response.headers());
         $scope.body = RAML.Transformer.transformBody($scope.response.body());
-
-        $scope.showSchema = $scope.showSchemaRef();
-
-        $scope.getBeautifiedExample = $scope.getBeautifiedExampleRef();
       }]
     };
   };
@@ -1139,6 +1133,47 @@
 
   angular.module('RAML.Directives')
     .directive('rootDocumentation', RAML.Directives.rootDocumentation);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.schemaBody = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/schema-body.tpl.html',
+      scope: {
+        schema: '=',
+        mediaType: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.body = RAML.Transformer.transformSchemaBody($scope.schema);
+
+        $scope.showSchema = function ($event) {
+          var $this   = jQuery($event.currentTarget);
+          var $panel  = $this.closest('.raml-console-schema-container');
+          var $schema = $panel.find('.raml-console-resource-pre-toggle');
+
+          $this.toggleClass('raml-console-is-active');
+
+          if (!$schema.hasClass('raml-console-is-active')) {
+            $this.text('Hide Schema');
+            $schema
+              .addClass('raml-console-is-active')
+              .velocity('slideDown');
+          } else {
+            $this.text('Show Schema');
+            $schema
+              .removeClass('raml-console-is-active')
+              .velocity('slideUp');
+          }
+        };
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('schemaBody', RAML.Directives.schemaBody);
 })();
 
 (function () {
@@ -1776,6 +1811,95 @@
 (function () {
   'use strict';
 
+  RAML.Directives.typeNavigator = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/type-navigator.tpl.html',
+      scope: {
+        mediaType: '=',
+        type: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.previousTypes = [];
+
+        $scope.changeType = function (theRuntimeType, ignoreBack) {
+          if (!ignoreBack) {
+            $scope.previousTypes.push($scope.runtimeType);
+          }
+          $scope.runtimeType = theRuntimeType;
+
+          $scope.typeName = $scope.runtimeType.nameId();
+          $scope.supertypes = RAML.Transformer.extractSupertypes($scope.runtimeType);
+          $scope.properties = RAML.Transformer.transformProperties($scope.runtimeType);
+
+          $scope.examples = $scope.runtimeType.examples().map(function (example) {
+            return example.expandAsString();
+          });
+        };
+
+        $scope.goBack = function () {
+          $scope.changeType($scope.previousTypes.pop(), true);
+        };
+
+        // TODO: This component should always receive an AST type. Change this when conversion
+        // from runtime type to AST type is available.
+        $scope.changeType($scope.type.runtimeType ? $scope.type.runtimeType() : $scope.type, true);
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('typeNavigator', RAML.Directives.typeNavigator);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.typeSwitcher = function(RecursionHelper) {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/type-switcher.tpl.html',
+      scope: {
+        body: '=',
+        mediaType: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.bodyType = RAML.Transformer.getBodyType($scope.body);
+
+        $scope.transformArray = function(arrayType) {
+          // TODO: This method should always receive an AST type. Change this when
+          // conversion from runtime type to AST is available.
+          var runtimeType = arrayType.runtimeType ? arrayType.runtimeType() : arrayType;
+          return runtimeType.componentType();
+        };
+
+        $scope.getRightType = function(body) {
+          // TODO: This method should always receive an AST type. Change this when
+          // conversion from runtime type to AST is available.
+          var runtimeType = body.runtimeType ? body.runtimeType() : body;
+          return runtimeType.rightType();
+        };
+
+        $scope.getLeftType = function(body) {
+          // TODO: This method should always receive an AST type. Change this when
+          // conversion from runtime type to AST is available.
+          var runtimeType = body.runtimeType ? body.runtimeType() : body;
+          return runtimeType.leftType();
+        };
+      }],
+      compile: function (element) {
+        return RecursionHelper.compile(element);
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('typeSwitcher', ['RecursionHelper', RAML.Directives.typeSwitcher]);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.validate = function($parse) {
     return {
       require: 'ngModel',
@@ -2006,14 +2130,14 @@
         });
 
         $scope.handleMethodClick = function (element, selectedMethod) {
+          closePanel();
+
           if ($scope.selectedMethod === undefined || $scope.selectedMethod !== selectedMethod) {
             $rootScope.$broadcast('openMethod', $scope);
 
             $scope.element = element;
             $scope.selectedMethod = selectedMethod;
             $scope.showPanel = true;
-          } else {
-            closePanel();
           }
         };
 
@@ -2423,6 +2547,51 @@
 
   angular.module('RAML.Services')
     .service('ramlParserWrapper', ['$rootScope', '$http', 'ramlParser', '$q', RAML.Services.RAMLParserWrapper]);
+})();
+
+(function () {
+  'use strict';
+  angular.module('RAML.Services').factory('RecursionHelper', ['$compile', function ($compile) {
+    return {
+      /**
+      * Manually compiles the element, fixing the recursion loop.
+      * @param element
+      * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
+      * @returns An object containing the linking functions.
+      */
+      compile: function (element, link) {
+        // Normalize the link parameter
+        if (angular.isFunction(link)) {
+          link = { post: link };
+        }
+
+        // Break the recursion loop by removing the contents
+        var contents = element.contents().remove();
+        var compiledContents;
+        return {
+          pre: (link && link.pre) ? link.pre : null,
+          /**
+          * Compiles and re-adds the contents
+          */
+          post: function (scope, element) {
+            // Compile the contents
+            if (!compiledContents) {
+              compiledContents = $compile(contents);
+            }
+            // Re-add the compiled contents to the element
+            compiledContents(scope, function (clone) {
+              element.append(clone);
+            });
+
+            // Call the post-linking function, if any
+            if (link && link.post) {
+              link.post.apply(null, arguments);
+            }
+          }
+        };
+      }
+    };
+  }]);
 })();
 
 'use strict';
@@ -3737,32 +3906,22 @@ RAML.Transformer = (function() {
   }
 
   function transformHeaders(headers) {
-    var newHeaders = transformNamedParameters(headers);
+    if (Array.isArray(headers)) {
+      var newHeaders = transformNamedParameters(headers);
 
-    normalizeNamedParameters(newHeaders);
+      normalizeNamedParameters(newHeaders);
 
-    return filterHeaders(newHeaders);
+      return filterHeaders(newHeaders);
+    }
+    return headers;
   }
   exports.transformHeaders = transformHeaders;
-
-  function transformBodyItem(aBodyItem) {
-    // TODO: handle all possible types
-    var bodyItem = {};
-    // This will only be true with RAML 0.8
-    if (aBodyItem.constructor.name === 'BodyLikeImpl') {
-      bodyItem.formParameters = transformNamedParameters(aBodyItem.formParameters());
-      // TODO: handle the situation where schema/example is a reference.
-      bodyItem.schema = aBodyItem.schema() ? aBodyItem.schema().attr.value() : aBodyItem.schema();
-      bodyItem.example = aBodyItem.example() ? aBodyItem.example().attr.value() : aBodyItem.example();
-    }
-    return bodyItem;
-  }
 
   function transformBody(body) {
     if (body && body.length > 0) {
       var newBody = {};
       body.forEach(function (bodyItem) {
-        newBody[bodyItem.name()] = transformBodyItem(bodyItem);
+        newBody[bodyItem.name()] = bodyItem;
       });
       return newBody;
     }
@@ -3877,6 +4036,61 @@ RAML.Transformer = (function() {
   }
   exports.transformNamedParameters = transformNamedParameters;
 
+  function getBodyType(body) {
+    // TODO: This method should always receive an AST type. Change this when
+    // conversion from runtime type to AST is available.
+    var runtimeType = body.runtimeType ? body.runtimeType() : body;
+    if (body.constructor.name === 'BodyLikeImpl' || runtimeType.isExternal()) {
+      return 'schema';
+    } else if (runtimeType.isUnion()) {
+      return 'union';
+    } else if (runtimeType.isArray()) {
+      return 'array';
+    } else if (runtimeType.isValueType()) {
+      return 'value';
+    } else {
+      return 'type';
+    }
+  }
+  exports.getBodyType = getBodyType;
+
+  function transformSchemaBody(body) {
+    return {
+      formParameters: transformNamedParameters(body.formParameters()),
+      schema: RAML.Transformer.transformValue(body.schema()),
+      example: RAML.Transformer.transformValue(body.example())
+    };
+  }
+  exports.transformSchemaBody = transformSchemaBody;
+
+  function extractSupertypes(runtimeType) {
+    return runtimeType.superTypes().map(function (superType) {
+      return {
+        nameId: superType.nameId(),
+        type: superType
+      };
+    });
+  }
+  exports.extractSupertypes = extractSupertypes;
+
+  function transformProperties(runtimeType) {
+    return runtimeType.allProperties().map(transformProperty);
+  }
+  exports.transformProperties = transformProperties;
+
+  function transformProperty(property) {
+    return {
+      nameId: property.nameId(),
+      description: property.description(),
+      isPrimitive: property.isPrimitive(),
+      domainNameId: property.domain().nameId(),
+      type: {
+        nameId: property.range().nameId(),
+        runtimeType: property.range()
+      }
+    };
+  }
+
   function nullIfEmpty(array) {
     return array && array.length > 0 ? array : null;
   }
@@ -3987,11 +4201,11 @@ RAML.Transformer = (function() {
   };
 
   BodyType.prototype.fillWithExample = function() {
-    this.value = this.contentType.example;
+    this.value = this.contentType.example();
   };
 
   BodyType.prototype.hasExample = function() {
-    return !!this.contentType.example;
+    return !!this.contentType.example();
   };
 
   BodyType.prototype.data = function() {
@@ -5916,27 +6130,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <span ng-click=\"changeResourceBodyType($event, key)\" ng-class=\"{ 'raml-console-is-active' : bodySelected(key)}\" class=\"raml-console-flag raml-console-body-{{getBodyId(key)}}\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</span>\n" +
     "      </h4>\n" +
     "\n" +
-    "      <section ng-if=\"methodInfo.body[currentBodySelected].formParameters\">\n" +
-    "         <div class=\"raml-console-resource-param\" ng-repeat=\"formParam in methodInfo.body[currentBodySelected].formParameters\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{formParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(formParam[0])}}</span></h4>\n" +
-    "\n" +
-    "          <p markdown=\"formParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
-    "\n" +
-    "          <p ng-if=\"formParam[0].example\">\n" +
-    "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
-    "          </p>\n" +
-    "        </div>\n" +
-    "      </section>\n" +
-    "\n" +
-    "      <div ng-if=\"methodInfo.body[currentBodySelected].example\">\n" +
-    "        <span>Example:</span>\n" +
-    "        <pre class=\"raml-console-resource-pre\"><code class=\"raml-console-hljs\" hljs source=\"getBeautifiedExample(methodInfo.body[currentBodySelected].example)\"></code></pre>\n" +
-    "      </div>\n" +
-    "\n" +
-    "      <div class=\"raml-console-schema-container\" ng-if=\"methodInfo.body[currentBodySelected].schema\">\n" +
-    "        <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
-    "        <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeautifiedExample(methodInfo.body[currentBodySelected].schema)\"></code></pre>\n" +
-    "      </div>\n" +
+    "      <type-switcher body=\"methodInfo.body[currentBodySelected]\" media-type=\"currentBodySelected\"></type-switcher>\n" +
     "    </section>\n" +
     "  </div>\n" +
     "\n" +
@@ -5961,16 +6155,21 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <response\n" +
     "          code=\"code\"\n" +
     "          current-body-selected=\"currentBodySelected\"\n" +
-    "          get-beautified-example=\"getBeautifiedExample\"\n" +
     "          response=\"methodInfo.responses[code]\"\n" +
     "          response-info=\"responseInfo[code]\"\n" +
     "          show-schema=\"showSchema\">\n" +
     "        </response>\n" +
     "      </section>\n" +
-    "\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('directives/example.tpl.html',
+    "<pre class=\"raml-console-resource-pre\">\n" +
+    "  <code class=\"raml-console-hljs\" hljs source=\"getBeautifiedExample(example)\"></code>\n" +
+    "</pre>\n"
   );
 
 
@@ -6146,7 +6345,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      class=\"raml-console-resource-panel-primary\"\n" +
     "      method-info=\"methodInfo\"\n" +
     "      resource=\"resource\"\n" +
-    "      security-schemes=\"securitySchemes\">\n" +
+    "      security-schemes=\"securitySchemes\"\n" +
+    "      selected-method=\"selectedMethod\">\n" +
     "    </documentation>\n" +
     "\n" +
     "    <sidebar\n" +
@@ -6217,15 +6417,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <span ng-click=\"changeType($event, key, code)\" ng-class=\"{ 'raml-console-is-active': $first}\" class=\"raml-console-flag\" ng-repeat=\"(key, value) in body\">{{key}}</span>\n" +
     "  </h4>\n" +
     "\n" +
-    "  <div ng-if=\"responseInfo[responseInfo.currentType].example\">\n" +
-    "    <span>Example:</span>\n" +
-    "    <pre class=\"raml-console-resource-pre\"><code class=\"raml-console-hljs\" hljs source=\"getBeautifiedExample(responseInfo[responseInfo.currentType].example)\"></code></pre>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"raml-console-schema-container\" ng-if=\"responseInfo[responseInfo.currentType].schema\">\n" +
-    "    <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
-    "    <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeautifiedExample(responseInfo[responseInfo.currentType].schema)\"></code></pre>\n" +
-    "  </div>\n" +
+    "  <type-switcher body=\"responseInfo[responseInfo.currentType]\"></type-switcher>\n" +
     "</div>\n"
   );
 
@@ -6283,6 +6475,31 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "  </li>\n" +
     "</ol>\n"
+  );
+
+
+  $templateCache.put('directives/schema-body.tpl.html',
+    "<section ng-if=\"body.formParameters\">\n" +
+    "   <div class=\"raml-console-resource-param\" ng-repeat=\"formParam in body.formParameters\">\n" +
+    "    <h4 class=\"raml-console-resource-param-heading\">{{formParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(formParam[0])}}</span></h4>\n" +
+    "\n" +
+    "    <p markdown=\"formParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
+    "\n" +
+    "    <p ng-if=\"formParam[0].example\">\n" +
+    "      <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
+    "    </p>\n" +
+    "  </div>\n" +
+    "</section>\n" +
+    "\n" +
+    "<div ng-if=\"body.example\">\n" +
+    "  <span>Example:</span>\n" +
+    "  <example example=\"body.example\"></example>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div class=\"raml-console-schema-container\" ng-if=\"body.schema\">\n" +
+    "  <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
+    "  <example example=\"body.schema\" media-type=\"mediaType\"></example>\n" +
+    "</div>\n"
   );
 
 
@@ -6500,6 +6717,61 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/theme-switcher.tpl.html',
     "<div class=\"raml-console-meta-button-container\">\n" +
     "  <a class=\"raml-console-meta-button\">Switch Theme</a>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('directives/type-navigator.tpl.html',
+    "<h3>\n" +
+    "  <span class=\"raml-console-clickable\" ng-if=\"previousTypes.length > 0\" ng-click=\"goBack()\">&lt; back</span>\n" +
+    "  {{typeName}}\n" +
+    "  <span ng-if=\"supertypes.length > 0\">:</span>\n" +
+    "  <span\n" +
+    "    class=\"raml-console-clickable\"\n" +
+    "    ng-repeat=\"supertype in supertypes\"\n" +
+    "    ng-click=\"changeType(supertype.type)\">{{supertype.nameId}}</span>\n" +
+    "</h3>\n" +
+    "<div ng-repeat=\"property in properties\">\n" +
+    "  <div>\n" +
+    "    <h4 class=\"raml-console-resource-param-heading\">\n" +
+    "      {{property.nameId}}\n" +
+    "      <span\n" +
+    "        class=\"raml-console-resource-param-instructional\"\n" +
+    "        ng-if=\"property.isPrimitive\">{{property.type.nameId}}</span>\n" +
+    "      <span\n" +
+    "        class=\"raml-console-resource-param-instructional raml-console-clickable\"\n" +
+    "        ng-if=\"!property.isPrimitive\"\n" +
+    "        ng-click=\"changeType(property.type.runtimeType)\">{{property.type.nameId}}</span>\n" +
+    "    </h4>\n" +
+    "  </div>\n" +
+    "  <div>{{property.description}}</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-repeat=\"example in examples\">\n" +
+    "  <span>Example:</span>\n" +
+    "  <example example=\"example\" media-type=\"mediaType\"></example>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('directives/type-switcher.tpl.html',
+    "<div ng-if=\"bodyType === 'schema'\">\n" +
+    "  <schema-body schema=\"body\" media-type=\"mediaType\"></schema-body>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"bodyType === 'array'\">\n" +
+    "  <h4>Array of</h4>\n" +
+    "  <type-switcher body=\"transformArray(body)\" media-type=\"mediaType\"></type-switcher>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"bodyType === 'union'\">\n" +
+    "  <type-switcher body=\"getLeftType(body)\" media-type=\"mediaType\"></type-switcher>\n" +
+    "  <h4>or</h4>\n" +
+    "  <type-switcher body=\"getRightType(body)\" media-type=\"mediaType\"></type-switcher>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"bodyType === 'type'\">\n" +
+    "  <type-navigator type=\"body\" media-type=\"mediaType\"></type-navigator>\n" +
     "</div>\n"
   );
 

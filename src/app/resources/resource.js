@@ -50,14 +50,14 @@
         });
 
         $scope.handleMethodClick = function (element, selectedMethod) {
+          closePanel();
+
           if ($scope.selectedMethod === undefined || $scope.selectedMethod !== selectedMethod) {
             $rootScope.$broadcast('openMethod', $scope);
 
             $scope.element = element;
             $scope.selectedMethod = selectedMethod;
             $scope.showPanel = true;
-          } else {
-            closePanel();
           }
         };
 

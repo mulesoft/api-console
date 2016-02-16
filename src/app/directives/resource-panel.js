@@ -38,8 +38,6 @@
           $scope.methodInfo               = methodInfo;
           $scope.context                  = new RAML.Services.TryIt.Context($scope.baseUriParameters, $scope.resource, $scope.methodInfo);
           $scope.requestUrl               = '';
-          $scope.response                 = {};
-          $scope.requestOptions           = {};
           $scope.securitySchemes          = $scope.methodInfo.securitySchemes;
           $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
           $scope.context.customParameters = { headers: [], queryParameters: [] };
@@ -106,7 +104,7 @@
               if (typeof definitions[key].reset !== 'undefined') {
                 definitions[key].reset($scope.methodInfo.body[key].formParameters);
               } else {
-                definitions[key].value = definitions[key].contentType.example;
+                definitions[key].value = definitions[key].contentType.example();
               }
             });
           }
