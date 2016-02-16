@@ -1,0 +1,32 @@
+#%RAML 0.8
+title:     Test API
+mediaType: application/json
+baseUri:   https://anypoint.mulesoft.com/apiplatform/repository/v2
+
+securitySchemes:
+  - oauth_2_0:
+      description: |
+        OAuth2 is a protocol that lets external apps request authorization to private
+        details in a user's GitHub account without getting their password. This is
+        preferred over BasicSecurityScheme Authentication because tokens can be limited to specific
+        types of data, and can be revoked by users at any time.
+      type: OAuth 2.0
+      describedBy:
+        headers:
+          Authorization:
+            description: |
+              Used to send a valid OAuth 2 access token.
+            type: string
+            displayName: Authorization
+        responses:
+          401:
+            description: Unauthorized
+      settings:
+        authorizationUri: https://anypoint.mulesoft.com/accounts/oauth2/authorize
+        accessTokenUri: https://anypoint.mulesoft.com/accounts/oauth2/token
+        authorizationGrants: [ token, code ]
+
+securedBy: [ oauth_2_0 ]
+
+/public:
+  get:

@@ -1,0 +1,22 @@
+#%RAML 0.8
+title: API Using media type in the URL
+version: v1
+baseUri: https://{communityDomain}.force.com/{path}
+baseUriParameters:
+ communityDomain:
+   displayName: Community Domain
+   type: string
+ path:
+   displayName: path
+   type: string
+   pattern: ^[a-zA-Z0-9][-a-zA-Z0-9]*$
+   minLength: 1
+
+
+/users{mediaTypeExtension}:
+  uriParameters:
+    mediaTypeExtension:
+      displayName: mediaTypeExtension
+      enum: [ .json, .xml ]
+      description: Use .json to specify application/json or .xml to specify text/xml
+  get:

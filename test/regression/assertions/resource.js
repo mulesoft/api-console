@@ -42,11 +42,24 @@ function Resource (poName) {
     schemes              = this.po.getSecuritySchemes(resource);
     securitySchemesCount = schemes.count();
 
-    expect(securitySchemesCount).toBe(2);
+    expect(securitySchemesCount).toBe(expectedSchemes.length);
 
     securitySchemesCount.then(function (count) {
       for (var i = 0; i < count; i++) {
         expect(schemes.get(i).getInnerHtml()).toBe(expectedSchemes[i]);
+      }
+    });
+  };
+
+  this.ifShowingGrants = function (resource, method, expectedGrants) {
+    var grants     = this.po.getGrants(resource);
+    var grantCount = grants.count();
+
+    expect(grantCount).toBe(expectedGrants.length);
+
+    grantCount.then(function (count) {
+      for (var i = 0; i < count; i++) {
+        expect(grants.get(i).getInnerHtml()).toBe(expectedGrants[i]);
       }
     });
   };
@@ -80,6 +93,90 @@ function Resource (poName) {
     var password2 = pageObject.getPasswordField();
     expect(password2.getAttribute('value')).toBe(passwordText);
 
+  };
+
+  this.ifShowingFormParameters = function (resource, method, sectionIndex, expectedFormParameters) {
+    var resourcesGetButton  = this.po.getMethodBtn(0, 0);
+    resourcesGetButton.click();
+
+    // TODO: Remove this button click when merging bugfix/form-parameters
+    var bodyMediaTypeButton = this.po.getBodyMediaTypeBtn(0, 0);
+    bodyMediaTypeButton.click();
+
+    var formParameters      = this.po.getResourceParameters(resource, sectionIndex);
+    var formParametersCount = formParameters.count();
+
+    expect(formParametersCount).toBe(expectedFormParameters.length);
+
+    formParametersCount.then(function (count) {
+      for (var i = 0; i < count; i++) {
+        expect(formParameters.get(i).getInnerHtml()).toMatch(expectedFormParameters[i]);
+      }
+    });
+  };
+
+  this.ifShowingQueryParameters = function (resource, method, sectionIndex, expectedQueryParameters) {
+    var resourcesGetButton  = this.po.getMethodBtn(0, 0);
+    resourcesGetButton.click();
+
+    var queryParameters      = this.po.getResourceParameters(resource, sectionIndex);
+    var queryParametersCount = queryParameters.count();
+
+    expect(queryParametersCount).toBe(expectedQueryParameters.length);
+
+    queryParametersCount.then(function (count) {
+      for (var i = 0; i < count; i++) {
+        expect(queryParameters.get(i).getInnerHtml()).toMatch(expectedQueryParameters[i]);
+      }
+    });
+  };
+
+  this.ifShowingHeaders = function (resource, method, sectionIndex, expectedHeaders) {
+    var resourcesGetButton  = this.po.getMethodBtn(0, 0);
+    resourcesGetButton.click();
+
+    var headers      = this.po.getResourceParameters(resource, sectionIndex);
+    var headersCount = headers.count();
+
+    expect(headersCount).toBe(expectedHeaders.length);
+
+    headersCount.then(function (count) {
+      for (var i = 0; i < count; i++) {
+        expect(headers.get(i).getInnerHtml()).toMatch(expectedHeaders[i]);
+      }
+    });
+  };
+
+  this.ifShowingBaseUriParameters = function (resource, method, sectionIndex, expectedBaseUriParameters) {
+    var resourcesGetButton  = this.po.getMethodBtn(0, 0);
+    resourcesGetButton.click();
+
+    var baseUriParameters      = this.po.getResourceParameters(resource, sectionIndex);
+    var baseUriParametersCount = baseUriParameters.count();
+
+    expect(baseUriParametersCount).toBe(expectedBaseUriParameters.length);
+
+    baseUriParametersCount.then(function (count) {
+      for (var i = 0; i < count; i++) {
+        expect(baseUriParameters.get(i).getInnerHtml()).toMatch(expectedBaseUriParameters[i]);
+      }
+    });
+  };
+
+  this.ifShowingUriParameters = function (resource, method, sectionIndex, expectedUriParameters) {
+    var resourcesGetButton  = this.po.getMethodBtn(0, 0);
+    resourcesGetButton.click();
+
+    var uriParameters      = this.po.getResourceParameters(resource, sectionIndex);
+    var uriParametersCount = uriParameters.count();
+
+    expect(uriParametersCount).toBe(expectedUriParameters.length);
+
+    uriParametersCount.then(function (count) {
+      for (var i = 0; i < count; i++) {
+        expect(uriParameters.get(i).getInnerHtml()).toMatch(expectedUriParameters[i]);
+      }
+    });
   };
 }
 
