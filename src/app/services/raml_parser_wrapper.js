@@ -6,6 +6,7 @@
 
     var load = function(file) {
       setPromise(ramlParser.loadApi(file, {
+        attributeDefaults: true,
         rejectOnErrors: true,
         httpResolver: {
           getResourceAsync: function(path) {
@@ -30,6 +31,7 @@
 
     var parse = function(raml) {
       setPromise(ramlParser.loadApi('api.raml', {
+        attributeDefaults: true,
         rejectOnErrors: true,
         fsResolver: {
           contentAsync: function (path) {
