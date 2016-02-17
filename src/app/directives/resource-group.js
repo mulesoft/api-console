@@ -4,7 +4,7 @@
   RAML.Directives.resourceGroup = function() {
     return {
       restrict: 'E',
-      templateUrl: 'resources/resource-group.tpl.html',
+      templateUrl: 'directives/resource-group.tpl.html',
       scope: {
         baseUri: '=',
         baseUriParameters: '=',
