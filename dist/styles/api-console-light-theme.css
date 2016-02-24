@@ -3780,6 +3780,14 @@ a.raml-console-resource-path-active {
   clear: both;
 }
 
+.raml-console-clickable {
+  cursor: pointer;
+}
+
+.raml-console-clickable:hover {
+  color: #5B9DBD;
+}
+
 .raml-console-error-container {
   max-width: 1260px;
   margin: 0px auto;

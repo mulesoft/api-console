@@ -1,15 +1,52 @@
 (function () {
   'use strict';
 
-  RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
+  RAML.Services.RAMLParserWrapper = function($rootScope, $http, ramlParser, $q) {
     var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
 
     var load = function(file) {
-      setPromise(ramlParser.loadFile(file));
+      setPromise(ramlParser.loadApi(file, {
+        attributeDefaults: true,
+        rejectOnErrors: true,
+        httpResolver: {
+          getResourceAsync: function(path) {
+            return $http.get(path, {
+              transformResponse: function (data) {
+                return data;
+              }
+            })
+            .then(function (response) {
+              return {
+                content: response.data
+              };
+            });
+          }
+        }
+      })
+      .then(function (api) {
+        api = api.expand();
+        return api;
+      }));
     };
 
     var parse = function(raml) {
-      setPromise(ramlParser.load(raml));
+      setPromise(ramlParser.loadApi('api.raml', {
+        attributeDefaults: true,
+        rejectOnErrors: true,
+        fsResolver: {
+          contentAsync: function (path) {
+            if (path === '/api.raml') {
+              var deferred = $q.defer();
+              deferred.resolve(raml);
+              return deferred.promise;
+            }
+          }
+        }
+      })
+      .then(function (api) {
+        api = api.expand();
+        return api;
+      }));
     };
 
     var onParseSuccess = function(cb) {
@@ -50,7 +87,10 @@
     };
 
     $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
-      setPromise($q.when(raml));
+      // Only act when raml is valid
+      if (raml.title) {
+        setPromise($q.when(raml));
+      }
     });
 
     return {
@@ -62,5 +102,5 @@
   };
 
   angular.module('RAML.Services')
-    .service('ramlParserWrapper', ['$rootScope', 'ramlParser', '$q', RAML.Services.RAMLParserWrapper]);
+    .service('ramlParserWrapper', ['$rootScope', '$http', 'ramlParser', '$q', RAML.Services.RAMLParserWrapper]);
 })();

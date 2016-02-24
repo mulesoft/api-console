@@ -9,6 +9,7 @@
       scope: {
         src: '=',
         context: '=',
+        resource: '=',
         type: '@',
         title: '@'
       },
@@ -25,7 +26,7 @@
 
         $scope.segments = [];
 
-        var baseUri = $scope.$parent.raml.baseUri;
+        var baseUri = $scope.baseUri;
 
         if (typeof baseUri !== 'undefined' && baseUri.templated) {
           var tokens = baseUri.tokens;
@@ -38,7 +39,7 @@
           }
         }
 
-        $scope.$parent.resource.pathSegments.map(function (element) {
+        $scope.resource.pathSegments.map(function (element) {
           var tokens = element.tokens;
 
           for (var i = 0; i < tokens.length; i++) {

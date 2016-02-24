@@ -25,7 +25,8 @@
     "url": "https://github.com/mulesoft/api-console/issues"
   },
   "homepage": "https://github.com/mulesoft/api-console",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-angular-templates": "~0.5.7",

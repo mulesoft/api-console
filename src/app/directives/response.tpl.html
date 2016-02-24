@@ -1,0 +1,23 @@
+<a name="code{{code}}"></a>
+<h3 class="raml-console-resource-heading-a">Status {{code}}</h3>
+
+<div class="raml-console-resource-response">
+  <p markdown="description" class="raml-console-marked-content"></p>
+</div>
+
+<div class="raml-console-resource-response" ng-if="headers">
+  <h4 class="raml-console-resource-body-heading">Headers</h4>
+
+  <div class="raml-console-resource-param" ng-repeat="header in headers">
+    <raml-header header="header"></raml-header>
+  </div>
+</div>
+
+<div class="raml-console-resource-response" ng-if="body">
+  <h4 class="raml-console-resource-body-heading">
+    Body
+    <span ng-click="changeType($event, key, code)" ng-class="{ 'raml-console-is-active': $first}" class="raml-console-flag" ng-repeat="(key, value) in body">{{key}}</span>
+  </h4>
+
+  <type-switcher body="responseInfo[responseInfo.currentType]"></type-switcher>
+</div>

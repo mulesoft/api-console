@@ -1,0 +1,16 @@
+#%RAML 0.8
+title: Salesforce Chatter Communities REST API
+version: v28.0
+baseUri: https://{communityDomain}.force.com/{communityPath}
+baseUriParameters:
+ communityDomain:
+   displayName: Community Domain
+   type: string
+ communityPath:
+   displayName: Community Path
+   type: string
+   pattern: ^[a-zA-Z0-9][-a-zA-Z0-9]*$
+   minLength: 1
+
+/resource:
+  get:

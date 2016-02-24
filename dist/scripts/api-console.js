@@ -99,15 +99,15 @@
       restrict: 'E',
       templateUrl: 'directives/close-button.tpl.html',
       replace: true,
-      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
+      scope: {
+        handleCloseClick: '&'
+      },
+      controller: ['$scope', function($scope) {
         $scope.close = function () {
-          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
+          jQuery('.raml-console-tab.raml-console-is-active')
+            .removeClass('raml-console-is-active');
 
-          $rootScope.$broadcast('resetData');
-          $inactiveElements.removeClass('raml-console-is-active');
-          $scope.showPanel = false;
-          $scope.traits = null;
-          $scope.methodInfo = {};
+          $scope.handleCloseClick()();
         };
       }]
     };
@@ -124,13 +124,43 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
-      replace: true,
+      scope: {
+        methodInfo: '=',
+        resource: '=',
+        securitySchemes: '=',
+        selectedMethod: '='
+      },
       controller: ['$scope', function($scope) {
+        function getResponseInfo() {
+          var responseInfo = {};
+          var responses    = $scope.methodInfo.responses;
+
+          if (!responses || responses.length === 0) {
+            return;
+          }
+
+          Object.keys(responses).forEach(function (key) {
+            var body = responses[key].body();
+
+            responseInfo[key] = RAML.Transformer.transformBody(body);
+
+            setCurrent(responseInfo[key], 'Type');
+          });
+
+          return responseInfo;
+        }
+
+        function setCurrent(hash, currentSuffix) {
+          hash['current' + currentSuffix] = Object.keys(hash)[0];
+        }
+
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
         $scope.markedOptions = RAML.Settings.marked;
         $scope.documentationSchemeSelected = defaultSchema;
+        $scope.responseInfo = getResponseInfo();
+        $scope.documentationEnabled = true;
 
         $scope.isSchemeSelected = function isSchemeSelected(scheme) {
           return scheme.id === $scope.documentationSchemeSelected.id;
@@ -160,34 +190,15 @@
           $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
         }
 
+        $scope.currentBodySelected = $scope.responseInfo ?
+          $scope.responseInfo[$scope.currentStatusCode].currentType :
+          ($scope.methodInfo && $scope.methodInfo.body ? Object.keys($scope.methodInfo.body)[0] : null);
+
         $scope.$on('resetData', function() {
           if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
             $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
           }
         });
-
-        function beautify(body, contentType) {
-          if(contentType.indexOf('json')) {
-            body = vkbeautify.json(body, 2);
-          }
-
-          if(contentType.indexOf('xml')) {
-            body = vkbeautify.xml(body, 2);
-          }
-
-          return body;
-        }
-
-        $scope.getBeatifiedExample = function (value) {
-          var result = value;
-
-          try {
-            beautify(value, $scope.currentBodySelected);
-          }
-          catch (e) { }
-
-          return result;
-        };
 
         $scope.getColorCode = function (code) {
           return code[0] + 'xx';
@@ -307,33 +318,21 @@
           return value === $scope.currentBodySelected;
         };
 
-        $scope.$watch('currentBodySelected', function (value) {
-          var $container = jQuery('.raml-console-request-body-heading');
-          var $elements  = $container.find('span');
-
-          $elements.removeClass('raml-console-is-active');
-          $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
+        $scope.$watch('selectedMethod', function (newValue, oldValue) {
+          if (newValue !== oldValue) {
+            $scope.responseInfo = getResponseInfo();
+          }
         });
 
-        $scope.showSchema = function ($event) {
-          var $this   = jQuery($event.currentTarget);
-          var $panel  = $this.closest('.raml-console-schema-container');
-          var $schema = $panel.find('.raml-console-resource-pre-toggle');
+        $scope.$watch('currentBodySelected', function (value) {
+          if (value) {
+            var $container = jQuery('.raml-console-request-body-heading');
+            var $elements  = $container.find('span');
 
-          $this.toggleClass('raml-console-is-active');
-
-          if (!$schema.hasClass('raml-console-is-active')) {
-            $this.text('Hide Schema');
-            $schema
-              .addClass('raml-console-is-active')
-              .velocity('slideDown');
-          } else {
-            $this.text('Show Schema');
-            $schema
-              .removeClass('raml-console-is-active')
-              .velocity('slideUp');
+            $elements.removeClass('raml-console-is-active');
+            $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
           }
-        };
+        });
       }]
     };
   };
@@ -357,6 +356,48 @@
       }]
     };
   }]);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.example = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/example.tpl.html',
+      scope: {
+        example: '=',
+        mediaType: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.getBeautifiedExample = function (value) {
+          var result = value;
+
+          try {
+            result = beautify(value, $scope.mediaType);
+          }
+          catch (e) { }
+
+          return result;
+        };
+
+        function beautify(body, contentType) {
+          if(contentType.indexOf('json')) {
+            body = vkbeautify.json(body, 2);
+          }
+
+          if(contentType.indexOf('xml')) {
+            body = vkbeautify.xml(body, 2);
+          }
+
+          return body;
+        }
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('example', RAML.Directives.example);
 })();
 
 (function () {
@@ -395,177 +436,25 @@
       restrict: 'E',
       templateUrl: 'directives/method-list.tpl.html',
       replace: true,
-      controller: ['$scope', '$timeout', '$rootScope', function($scope, $timeout, $rootScope) {
-        function loadExamples () {
-          $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
-          $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
-          $scope.context.headers.reset($scope.methodInfo.headers.plain);
+      scope: {
+        resource: '=',
+        handleMethodClickRef: '&handleMethodClick'
+      },
+      controller: ['$scope', function($scope) {
+        $scope.methods = RAML.Transformer.transformMethods($scope.resource.methods());
 
-          if ($scope.context.bodyContent) {
-            var definitions = $scope.context.bodyContent.definitions;
+        $scope.handleMethodClick = function ($event, $index) {
+          var $this = jQuery($event.currentTarget);
+          jQuery('.raml-console-tab.raml-console-is-active').not($this)
+            .removeClass('raml-console-is-active');
 
-            Object.keys(definitions).map(function (key) {
-              if (typeof definitions[key].reset !== 'undefined') {
-                definitions[key].reset($scope.methodInfo.body[key].formParameters);
-              } else {
-                definitions[key].value = definitions[key].contentType.example;
-              }
-            });
-          }
-        }
-
-        function getResponseInfo() {
-          var responseInfo = {};
-          var responses    = $scope.methodInfo.responses;
-
-          if (responses) {
-            Object.keys(responses).map(function (key) {
-              if(responses[key] && typeof responses[key].body !== 'undefined' && responses[key].body) {
-                responseInfo[key] = {};
-
-                Object.keys(responses[key].body).sort().reverse().map(function (type) {
-                  responseInfo[key][type] = responses[key].body[type];
-                  responseInfo[key].currentType = type;
-                });
-              }
-            });
-          }
-
-          return responseInfo;
-        }
-
-        function toUIModel (collection) {
-          if(collection) {
-            Object.keys(collection).map(function (key) {
-              collection[key][0].id = key;
-            });
-          }
-        }
-
-        function beautifyCustomSecuritySchemeName (name) {
-          return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
-        }
-
-        $scope.readTraits = function (traits) {
-          var list = [];
-          var traitList = traits || [];
-
-          traitList = traitList.concat($scope.resource.traits);
-
-          traitList.map(function (trait) {
-            if (trait) {
-              if (typeof trait === 'object') {
-              trait = Object.keys(trait).join(', ');
-              }
-
-              if (list.indexOf(trait) === -1) {
-                list.push(trait);
-              }
-            }
-          });
-
-          return list.join(', ');
-        };
-
-        $scope.generateId = function (path) {
-          return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
-        };
-
-        var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource')
-                                                           .add('li')
-                                                           .add('.raml-console-tab');
-
-        $scope.$on('openMethod', function(event, $currentScope) {
-          if ($scope.$id !== $currentScope.$id) {
-            $inactiveElements.removeClass('raml-console-is-active');
-            $scope.showPanel = false;
-          }
-        });
-
-        $scope.showResource = function ($event, $index) {
-          var $this             = jQuery($event.currentTarget);
-          var $resource         = $this.closest('.raml-console-resource');
-          var methodInfo        = $scope.resource.methods[$index];
-          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource')
-                                                             .add('li')
-                                                             .add('.raml-console-tab');
-
-          $scope.methodInfo               = methodInfo;
-          $scope.responseInfo             = getResponseInfo();
-          $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, $scope.resource, $scope.methodInfo);
-          $scope.requestUrl               = '';
-          $scope.response                 = {};
-          $scope.requestOptions           = {};
-          $scope.requestEnd               = false;
-          $scope.showRequestMetadata      = false;
-          $scope.showMoreEnable           = true;
-          $scope.showSpinner              = false;
-          $scope.securitySchemes          = $scope.methodInfo.securitySchemes();
-          $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
-          $scope.context.customParameters = { headers: [], queryParameters: [] };
-          $scope.currentBodySelected      = methodInfo.body ? Object.keys(methodInfo.body)[0] : 'application/json';
-
-          toUIModel($scope.methodInfo.queryParameters);
-          toUIModel($scope.methodInfo.headers.plain);
-          toUIModel($scope.resource.uriParametersForDocumentation);
-
-          Object.keys($scope.securitySchemes).map(function (key) {
-            var type = $scope.securitySchemes[key].type;
-
-            $scope.securitySchemes[key].name = type;
-            $scope.securitySchemes[key].id = type + '|' + key;
-
-            if (type === 'x-custom') {
-              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(key);
-              $scope.securitySchemes[key].id = type + '|' + key;
-            }
-          });
-
-          $rootScope.$broadcast('resetData');
-
-          /*jshint camelcase: false */
-          // Digest Authentication is not supported
-          delete $scope.securitySchemes.digest_auth;
-          /*jshint camelcase: true */
-
-          loadExamples();
-
-          // Hack for codemirror
-          setTimeout(function () {
-            var editors = jQuery('.raml-console-sidebar-content-wrapper #sidebar-body .raml-console-codemirror-body-editor .CodeMirror');
-
-            editors.map(function (index) {
-              var bodyEditor = editors[index].CodeMirror;
-
-              if (bodyEditor && $scope.context.bodyContent) {
-                bodyEditor.setOption('mode', $scope.context.bodyContent.selected);
-                bodyEditor.refresh();
-              }
-            });
-          }, 10);
-
-          if (!$resource.hasClass('raml-console-is-active')) {
-            var hash = $scope.generateId($scope.resource.pathSegments);
-
-            $rootScope.$broadcast('openMethod', $scope);
-            jQuery($this).addClass('raml-console-is-active');
-            $scope.showPanel = true;
-
-            $timeout(function () {
-              jQuery('html, body').animate({
-                scrollTop: jQuery('#'+hash).offset().top + 'px'
-              }, 'fast');
-            }, 10);
-
-          } else if (jQuery($this).hasClass('raml-console-is-active')) {
-            $scope.showPanel = false;
-            $inactiveElements.removeClass('raml-console-is-active');
-            $scope.traits = null;
-            $scope.methodInfo = {};
+          if (!$this.hasClass('raml-console-is-active')) {
+            $this.addClass('raml-console-is-active');
           } else {
-            jQuery($this).addClass('raml-console-is-active');
-            jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
+            $this.removeClass('raml-console-is-active');
           }
+
+          $scope.handleMethodClickRef()($this, $index);
         };
       }]
     };
@@ -586,6 +475,7 @@
       scope: {
         src: '=',
         context: '=',
+        resource: '=',
         type: '@',
         title: '@'
       },
@@ -602,7 +492,7 @@
 
         $scope.segments = [];
 
-        var baseUri = $scope.$parent.raml.baseUri;
+        var baseUri = $scope.baseUri;
 
         if (typeof baseUri !== 'undefined' && baseUri.templated) {
           var tokens = baseUri.tokens;
@@ -615,7 +505,7 @@
           }
         }
 
-        $scope.$parent.resource.pathSegments.map(function (element) {
+        $scope.resource.pathSegments.map(function (element) {
           var tokens = element.tokens;
 
           for (var i = 0; i < tokens.length; i++) {
@@ -777,6 +667,28 @@
 (function () {
   'use strict';
 
+  RAML.Directives.ramlHeader = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/raml-header.tpl.html',
+      scope: {
+        header: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.description = RAML.Transformer.transformValue($scope.header.description());
+        $scope.displayName = $scope.header.name();
+        $scope.type = $scope.header.type();
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('ramlHeader', RAML.Directives.ramlHeader);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.ramlInitializer = function(ramlParserWrapper) {
     return {
       restrict: 'E',
@@ -785,30 +697,34 @@
       controller: ['$scope', '$window', function($scope, $window) {
         $scope.ramlUrl    = '';
 
-        ramlParserWrapper.onParseError(function(error) {
-          /*jshint camelcase: false */
-          var context = error.context_mark || error.problem_mark;
-          /*jshint camelcase: true */
+        ramlParserWrapper.onParseError(function(errors) {
+          errors.parserErrors = errors.parserErrors || [];
+          $scope.errors = errors.parserErrors.map(function (error) {
+            return {
+              errorMessage: error.message,
+              line: error.line,
+              column: error.column
+            };
+          });
 
-          $scope.errorMessage = error.message;
+          if (!$scope.isLoadedFromUrl) {
+            $scope.errors.forEach(function (error) {
+              $window.ramlErrors.push({
+                line: error.line,
+                message: error.errorMessage
+              });
 
-          if (context && !$scope.isLoadedFromUrl) {
-            $scope.raml = context.buffer;
-
-            $window.ramlErrors.line    = context.line;
-            $window.ramlErrors.message = error.message;
-
-            // Hack to update codemirror
-            setTimeout(function () {
-              var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
-              editor.addLineClass(context.line, 'background', 'line-error');
-              editor.doc.setCursor(context.line);
-            }, 10);
+              // Hack to update codemirror
+              setTimeout(function () {
+                // Editor needs to be obtained after the timeout.
+                var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
+                editor.addLineClass(error.line, 'background', 'line-error');
+                editor.doc.setCursor(error.line);
+              }, 10);
+            });
           }
 
           $scope.ramlStatus = null;
-
-          $scope.$apply.apply($scope, null);
         });
 
         ramlParserWrapper.onParseSuccess(function() {
@@ -860,12 +776,254 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/resource-panel.tpl.html',
-      replace: true
+      scope: {
+        baseUri: '=',
+        baseUriParameters: '=',
+        resource: '=',
+        element: '=',
+        generateIdRef: '&generateId',
+        protocols: '=',
+        selectedMethod: '=',
+        singleView: '='
+      },
+      replace: true,
+      controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
+        $scope.methods = RAML.Transformer.transformMethods($scope.resource.methods());
+
+        $scope.generateId = $scope.generateIdRef();
+
+        $scope.$watch('selectedMethod', function (newValue, oldValue) {
+          if (newValue !== oldValue) {
+            $scope.displayPanel();
+          }
+        });
+
+        $scope.displayPanel = function () {
+          var $resource         = $scope.element.closest('.raml-console-resource');
+          var methodInfo        = $scope.methods[$scope.selectedMethod];
+          methodInfo.headers = RAML.Transformer.transformHeaders(
+            methodInfo.headers ? methodInfo.headers : []);
+          methodInfo.queryParameters = methodInfo.queryParameters ?
+            RAML.Transformer.transformNamedParameters(methodInfo.queryParameters) : null;
+
+          $scope.methodInfo               = methodInfo;
+          $scope.context                  = new RAML.Services.TryIt.Context($scope.baseUriParameters, $scope.resource, $scope.methodInfo);
+          $scope.requestUrl               = '';
+          $scope.securitySchemes          = $scope.methodInfo.securitySchemes;
+          $scope.traits                   = $scope.readTraits($scope.methodInfo.is);
+          $scope.context.customParameters = { headers: [], queryParameters: [] };
+
+          toUIModel($scope.methodInfo.queryParameters);
+          toUIModel($scope.methodInfo.headers.plain);
+          toUIModel($scope.resource.uriParametersForDocumentation);
+
+          Object.keys($scope.securitySchemes).map(function (key) {
+            var type = $scope.securitySchemes[key].type;
+
+            $scope.securitySchemes[key].name = type;
+            $scope.securitySchemes[key].id = type + '|' + key;
+
+            if (type === 'x-custom') {
+              $scope.securitySchemes[key].name = beautifyCustomSecuritySchemeName(key);
+              $scope.securitySchemes[key].id = type + '|' + key;
+            }
+          });
+
+          $rootScope.$broadcast('resetData');
+
+          /*jshint camelcase: false */
+          // Digest Authentication is not supported
+          delete $scope.securitySchemes.digest_auth;
+          /*jshint camelcase: true */
+
+          loadExamples();
+
+          // Hack for codemirror
+          setTimeout(function () {
+            var editors = jQuery('.raml-console-sidebar-content-wrapper #sidebar-body .raml-console-codemirror-body-editor .CodeMirror');
+
+            editors.map(function (index) {
+              var bodyEditor = editors[index].CodeMirror;
+
+              if (bodyEditor && $scope.context.bodyContent) {
+                bodyEditor.setOption('mode', $scope.context.bodyContent.selected);
+                bodyEditor.refresh();
+              }
+            });
+          }, 10);
+
+          if (!$resource.hasClass('raml-console-is-active')) {
+            var hash = $scope.generateId($scope.resource.pathSegments);
+
+            $timeout(function () {
+              jQuery('html, body').animate({
+                scrollTop: jQuery('#'+hash).offset().top + 'px'
+              }, 'fast');
+            }, 10);
+          }
+        };
+
+        function loadExamples () {
+          $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
+          $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
+          $scope.context.headers.reset($scope.methodInfo.headers.plain);
+
+          if ($scope.context.bodyContent) {
+            var definitions = $scope.context.bodyContent.definitions;
+
+            Object.keys(definitions).map(function (key) {
+              if (typeof definitions[key].reset !== 'undefined') {
+                definitions[key].reset($scope.methodInfo.body[key].formParameters);
+              } else {
+                definitions[key].value = definitions[key].contentType.example();
+              }
+            });
+          }
+        }
+
+        function toUIModel (collection) {
+          if(collection) {
+            Object.keys(collection).map(function (key) {
+              collection[key][0].id = key;
+            });
+          }
+        }
+
+        function beautifyCustomSecuritySchemeName (name) {
+          return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
+        }
+
+        $scope.collapseSidebar = function ($event) {
+          var $this         = jQuery($event.currentTarget);
+          var $panel        = $this.closest('.raml-console-resource-panel');
+          var $panelContent = $panel.find('.raml-console-resource-panel-primary');
+          var $sidebar      = $panel.find('.raml-console-sidebar');
+          var animation     = 430;
+          var speed         = 200;
+
+          if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
+            animation = 0;
+          }
+
+          if ($scope.singleView) {
+            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
+            speed = 0;
+          }
+
+          $sidebar.velocity(
+            { width: animation },
+            {
+              duration: speed,
+              complete: function (element) {
+                jQuery(element).removeAttr('style');
+                if ($scope.singleView) {
+                  $scope.documentationEnabled = false;
+                }
+                apply();
+              }
+            }
+          );
+
+          $panelContent.velocity(
+            { 'padding-right': animation },
+            {
+              duration: speed,
+              complete: completeAnimation
+            }
+          );
+
+          $sidebar.toggleClass('raml-console-is-collapsed');
+          $sidebar.removeClass('raml-console-is-responsive');
+          $panel.toggleClass('raml-console-has-sidebar-collapsed');
+
+          if ($sidebar.hasClass('raml-console-is-fullscreen') || $scope.singleView) {
+            $sidebar.toggleClass('raml-console-is-fullscreen');
+          }
+        };
+
+        function completeAnimation (element) {
+          jQuery(element).removeAttr('style');
+        }
+
+        function apply () {
+          $scope.$apply.apply($scope, arguments);
+        }
+
+        $scope.readTraits = function (traits) {
+          var list = [];
+          var traitList = traits || [];
+
+          traitList = traitList.concat($scope.resource.traits);
+
+          traitList.map(function (trait) {
+            if (trait) {
+              if (typeof trait === 'object') {
+              trait = Object.keys(trait).join(', ');
+              }
+
+              if (list.indexOf(trait) === -1) {
+                list.push(trait);
+              }
+            }
+          });
+
+          return list.join(', ');
+        };
+
+        $scope.displayPanel();
+      }]
     };
   };
 
   angular.module('RAML.Directives')
     .directive('resourcePanel', RAML.Directives.resourcePanel);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.responseShort = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/response-short.tpl.html',
+      scope: {
+        code: '=',
+        info: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.description = RAML.Transformer.transformValue($scope.info.description());
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('responseShort', RAML.Directives.responseShort);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.response = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/response.tpl.html',
+      scope: {
+        code: '=',
+        currentBodySelected: '=',
+        getBeautifiedExampleRef: '&getBeautifiedExample',
+        response: '=',
+        responseInfo: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.description = RAML.Transformer.transformValue($scope.response.description());
+        $scope.headers = RAML.Transformer.nullIfEmpty($scope.response.headers());
+        $scope.body = RAML.Transformer.transformBody($scope.response.body());
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('response', RAML.Directives.response);
 })();
 
 (function () {
@@ -883,7 +1041,7 @@
         $scope.hasDocumentationWithIndex = function () {
           var regex = /(^#|^##)+\s(.*)$/gim;
 
-          return $scope.raml.documentation.filter(function (el) {
+          return $scope.documentation.filter(function (el) {
             return regex.test(el.content);
           }).length > 0;
         };
@@ -980,21 +1138,77 @@
 (function () {
   'use strict';
 
+  RAML.Directives.schemaBody = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/schema-body.tpl.html',
+      scope: {
+        schema: '=',
+        mediaType: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.body = RAML.Transformer.transformSchemaBody($scope.schema);
+
+        $scope.showSchema = function ($event) {
+          var $this   = jQuery($event.currentTarget);
+          var $panel  = $this.closest('.raml-console-schema-container');
+          var $schema = $panel.find('.raml-console-resource-pre-toggle');
+
+          $this.toggleClass('raml-console-is-active');
+
+          if (!$schema.hasClass('raml-console-is-active')) {
+            $this.text('Hide Schema');
+            $schema
+              .addClass('raml-console-is-active')
+              .velocity('slideDown');
+          } else {
+            $this.text('Show Schema');
+            $schema
+              .removeClass('raml-console-is-active')
+              .velocity('slideUp');
+          }
+        };
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('schemaBody', RAML.Directives.schemaBody);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.sidebar = function() {
     return {
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
-      replace: true,
-      controller: ['$scope', '$timeout', function ($scope, $timeout) {
+      scope: {
+        baseUriParameters: '=',
+        collapseSidebarRef: '&collapseSidebar',
+        context: '=',
+        generateIdRef: '&generateId',
+        methodInfo: '=',
+        protocols: '=',
+        resource: '=',
+        securitySchemes: '=',
+        singleView: '='
+      },
+      controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
 
+        $scope.generateId = $scope.generateIdRef();
+
+        $scope.credentials       = {};
         $scope.markedOptions     = RAML.Settings.marked;
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
-        $scope.currentProtocol   = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
+        $scope.currentProtocol   = $scope.protocols && $scope.protocols.length ? $scope.protocols[0] : null;
+
+        $scope.collapseSidebar = $scope.collapseSidebarRef();
 
         function readCustomSchemeInfo (name) {
           if (!$scope.methodInfo.headers.plain) {
@@ -1011,10 +1225,6 @@
 
         if (defaultSchema.type === 'x-custom') {
           readCustomSchemeInfo(defaultSchema.id.split('|')[1]);
-        }
-
-        function completeAnimation (element) {
-          jQuery(element).removeAttr('style');
         }
 
         function parseHeaders(headers) {
@@ -1179,7 +1389,7 @@
 
           $scope.currentSchemeType           = defaultSchema.type;
           $scope.currentScheme               = defaultSchema.id;
-          $scope.currentProtocol             = $scope.raml.protocols[0];
+          $scope.currentProtocol             = $scope.protocols && $scope.protocols.length ? $scope.protocols[0] : null;
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
 
@@ -1365,9 +1575,9 @@
 
             try {
               var pathBuilder = context.pathBuilder;
-              var client      = RAML.Client.create($scope.raml, function(client) {
-                if ($scope.raml.baseUriParameters) {
-                  Object.keys($scope.raml.baseUriParameters).map(function (key) {
+              var client      = RAML.Client.create($rootScope.raml, function(client) {
+                if ($scope.baseUriParameters) {
+                  Object.keys($scope.baseUriParameters).map(function (key) {
                     var uriParameters = $scope.context.uriParameters.data();
                     pathBuilder.baseUriContext[key] = uriParameters[key][0];
                     delete uriParameters[key];
@@ -1387,7 +1597,8 @@
             $scope.parameters = getParameters(context, 'queryParameters');
 
             request.queryParams($scope.parameters);
-            request.header('Accept', $scope.raml.mediaType || defaultAccept);
+            request.header('Accept',
+              RAML.Transformer.transformValue($rootScope.raml.mediaType()) || defaultAccept);
             request.headers(getParameters(context, 'headers'));
 
             if (context.bodyContent) {
@@ -1398,7 +1609,7 @@
             var authStrategy;
 
             try {
-              var securitySchemes = $scope.methodInfo.securitySchemes();
+              var securitySchemes = $scope.methodInfo.securitySchemes;
               var scheme;
 
               Object.keys(securitySchemes).map(function(key) {
@@ -1512,54 +1723,6 @@
           }
         };
 
-        $scope.collapseSidebar = function ($event) {
-          var $this         = jQuery($event.currentTarget);
-          var $panel        = $this.closest('.raml-console-resource-panel');
-          var $panelContent = $panel.find('.raml-console-resource-panel-primary');
-          var $sidebar      = $panel.find('.raml-console-sidebar');
-          var animation     = 430;
-          var speed         = 200;
-
-          if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
-            animation = 0;
-          }
-
-          if ($scope.singleView) {
-            $panel.toggleClass('raml-console-has-sidebar-fullscreen');
-            speed = 0;
-          }
-
-          $sidebar.velocity(
-            { width: animation },
-            {
-              duration: speed,
-              complete: function (element) {
-                jQuery(element).removeAttr('style');
-                if ($scope.singleView) {
-                  $scope.documentationEnabled = false;
-                }
-                apply();
-              }
-            }
-          );
-
-          $panelContent.velocity(
-            { 'padding-right': animation },
-            {
-              duration: speed,
-              complete: completeAnimation
-            }
-          );
-
-          $sidebar.toggleClass('raml-console-is-collapsed');
-          $sidebar.removeClass('raml-console-is-responsive');
-          $panel.toggleClass('raml-console-has-sidebar-collapsed');
-
-          if ($sidebar.hasClass('raml-console-is-fullscreen') || $scope.singleView) {
-            $sidebar.toggleClass('raml-console-is-fullscreen');
-          }
-        };
-
         $scope.toggleRequestMetadata = function (enabled) {
           if ($scope.showRequestMetadata && !enabled) {
             $scope.showRequestMetadata = false;
@@ -1643,6 +1806,95 @@
 
   angular.module('RAML.Directives')
     .directive('themeSwitcher', RAML.Directives.theme);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.typeNavigator = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/type-navigator.tpl.html',
+      scope: {
+        mediaType: '=',
+        type: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.previousTypes = [];
+
+        $scope.changeType = function (theRuntimeType, ignoreBack) {
+          if (!ignoreBack) {
+            $scope.previousTypes.push($scope.runtimeType);
+          }
+          $scope.runtimeType = theRuntimeType;
+
+          $scope.typeName = $scope.runtimeType.nameId();
+          $scope.supertypes = RAML.Transformer.extractSupertypes($scope.runtimeType);
+          $scope.properties = RAML.Transformer.transformProperties($scope.runtimeType);
+
+          $scope.examples = $scope.runtimeType.examples().map(function (example) {
+            return example.expandAsString();
+          });
+        };
+
+        $scope.goBack = function () {
+          $scope.changeType($scope.previousTypes.pop(), true);
+        };
+
+        // TODO: This component should always receive an AST type. Change this when conversion
+        // from runtime type to AST type is available.
+        $scope.changeType($scope.type.runtimeType ? $scope.type.runtimeType() : $scope.type, true);
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('typeNavigator', RAML.Directives.typeNavigator);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.typeSwitcher = function(RecursionHelper) {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/type-switcher.tpl.html',
+      scope: {
+        body: '=',
+        mediaType: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.bodyType = RAML.Transformer.getBodyType($scope.body);
+
+        $scope.transformArray = function(arrayType) {
+          // TODO: This method should always receive an AST type. Change this when
+          // conversion from runtime type to AST is available.
+          var runtimeType = arrayType.runtimeType ? arrayType.runtimeType() : arrayType;
+          return runtimeType.componentType();
+        };
+
+        $scope.getRightType = function(body) {
+          // TODO: This method should always receive an AST type. Change this when
+          // conversion from runtime type to AST is available.
+          var runtimeType = body.runtimeType ? body.runtimeType() : body;
+          return runtimeType.rightType();
+        };
+
+        $scope.getLeftType = function(body) {
+          // TODO: This method should always receive an AST type. Change this when
+          // conversion from runtime type to AST is available.
+          var runtimeType = body.runtimeType ? body.runtimeType() : body;
+          return runtimeType.leftType();
+        };
+      }],
+      compile: function (element) {
+        return RecursionHelper.compile(element);
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('typeSwitcher', ['RecursionHelper', RAML.Directives.typeSwitcher]);
 })();
 
 (function () {
@@ -1732,23 +1984,198 @@
 (function () {
   'use strict';
 
+  RAML.Directives.resourceGroup = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'resources/resource-group.tpl.html',
+      scope: {
+        baseUri: '=',
+        baseUriParameters: '=',
+        firstResource: '=',
+        generateIdRef: '&generateId',
+        index: '=',
+        protocols: '=',
+        resourcesCollapsed: '=',
+        resourceGroup: '=',
+        resourceList: '=',
+        singleView: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.generateId = $scope.generateIdRef();
+
+
+        $scope.readResourceTraits = function readResourceTraits(traits) {
+          var list = [];
+
+          if (traits) {
+            traits.map(function (trait) {
+              if (trait) {
+                if (typeof trait === 'object') {
+                  list.push(Object.keys(trait).join(', '));
+                } else {
+                  list.push(trait);
+                }
+              }
+            });
+          }
+
+          return list.join(', ');
+        };
+
+        $scope.collapseAll = function ($event, collection, flagKey) {
+          var $this = jQuery($event.currentTarget);
+
+          if ($this.hasClass('raml-console-resources-expanded')) {
+            $scope[flagKey] = true;
+          } else {
+            if (flagKey === 'resourcesCollapsed') {
+              jQuery('.raml-console-resource-description').removeClass('ng-hide');
+            }
+            $scope[flagKey] = false;
+          }
+
+          jQuery('.raml-console-resources-' + flagKey).find('ol.raml-console-resource-list').toggleClass('raml-console-is-collapsed');
+
+          toggleCollapsed($scope[flagKey], collection);
+        };
+
+        function toggleCollapsed (status, collection) {
+          for (var i = 0; i < collection.length; i++) {
+            collection[i] = collection[i] !== null ? status : collection[i];
+          }
+        }
+
+        $scope.hasResourcesWithChilds = function () {
+          return $scope.resourceGroups.filter(function (el) {
+            return el.length > 1;
+          }).length > 0;
+        };
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('resourceGroup', [RAML.Directives.resourceGroup]);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.resourceType = function() {
     return {
       restrict: 'E',
       templateUrl: 'resources/resource-type.tpl.html',
-      replace: true,
+      scope: {
+        resource: '='
+      },
       controller: ['$scope', function ($scope) {
-        var resourceType = $scope.resource.resourceType;
-
-        if (typeof resourceType === 'object') {
-          $scope.resource.resourceType = Object.keys(resourceType).join();
-        }
+        $scope.resourceType = RAML.Transformer.transformResourceType($scope.resource.type());
       }]
     };
   };
 
   angular.module('RAML.Directives')
     .directive('resourceType', RAML.Directives.resourceType);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.resource = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'resources/resource.tpl.html',
+      scope: {
+        baseUri: '=',
+        baseUriParameters: '=',
+        generateIdRef: '&generateId',
+        protocols: '=',
+        resource: '=',
+        resourcesCollapsed: '=',
+        resourceGroup: '=',
+        resourceList: '=',
+        index: '=',
+        isFirst: '=',
+        singleView: '='
+      },
+      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
+        $scope.showPanel = false;
+        $scope.description = RAML.Transformer.getValueIfNotNull($scope.resource.description());
+        $scope.traits = RAML.Transformer.transformTraits($scope.resource.is());
+
+        $scope.resource.uriParametersForDocumentation = $scope.resource.pathSegments
+          .map(function(segment) { return segment.parameters; })
+          .filter(function(params) { return !!params; })
+          .reduce(function(accum, parameters) {
+            for (var key in parameters) {
+              var parameter = parameters[key];
+              if (parameter) {
+                parameter = (parameter instanceof Array) ? parameter : [ parameter ];
+              }
+              accum[key] = parameter;
+            }
+            return accum;
+          }, {});
+
+        if (Object.keys($scope.resource.uriParametersForDocumentation).length === 0) {
+          $scope.resource.uriParametersForDocumentation = null;
+        }
+
+        $scope.generateId = $scope.generateIdRef();
+
+        $scope.$on('openMethod', function(event, $currentScope) {
+          if ($scope.$id !== $currentScope.$id) {
+            closePanel();
+          }
+        });
+
+        $scope.handleMethodClick = function (element, selectedMethod) {
+          closePanel();
+
+          if ($scope.selectedMethod === undefined || $scope.selectedMethod !== selectedMethod) {
+            $rootScope.$broadcast('openMethod', $scope);
+
+            $scope.element = element;
+            $scope.selectedMethod = selectedMethod;
+            $scope.showPanel = true;
+          }
+        };
+
+        $scope.handleCloseClick = function () {
+          $rootScope.$broadcast('resetData');
+          delete $scope.selectedMethod;
+          $scope.showPanel = false;
+        };
+
+        $scope.toggle = function ($event, index, collection, flagKey) {
+          var $this    = jQuery($event.currentTarget);
+          var $section = $this
+            .closest('.raml-console-resource-list-item')
+            .find('.raml-console-resource-list');
+
+          collection[index] = !collection[index];
+
+          $scope[flagKey] = checkItemStatus(false, collection) ? false : $scope[flagKey];
+          $scope[flagKey] = checkItemStatus(true, collection) ? true : $scope[flagKey];
+
+          $section.toggleClass('raml-console-is-collapsed');
+        };
+
+        function checkItemStatus(status, collection) {
+          return collection.filter(function (el) { return el === status || el === null; }).length === collection.length;
+        }
+
+        function closePanel() {
+          delete $scope.element;
+          delete $scope.selectedMethod;
+          $scope.showPanel = false;
+        }
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('resource', [RAML.Directives.resource]);
 })();
 
 (function () {
@@ -1762,12 +2189,11 @@
       scope: {
         src: '@'
       },
-      controller: ['$scope', '$window', '$attrs', function($scope, $window, $attrs) {
+      controller: ['$scope', '$rootScope', '$window', '$attrs', function($scope, $rootScope, $window, $attrs) {
         $scope.proxy                  = $window.RAML.Settings.proxy;
         $scope.disableTitle           = false;
         $scope.resourcesCollapsed     = false;
         $scope.documentationCollapsed = false;
-        $scope.credentials = {};
         $scope.allowUnsafeMarkdown    = false;
         $scope.disableTryIt           = false;
 
@@ -1804,7 +2230,11 @@
         }
 
         if ($scope.src) {
-          ramlParserWrapper.load($scope.src);
+          if (/^https?/i.test($scope.src)) {
+            ramlParserWrapper.load($scope.src);
+          } else {
+            ramlParserWrapper.load($window.location.origin + '/' + $scope.src);
+          }
         }
 
         $scope.readResourceTraits = function readResourceTraits(traits) {
@@ -1827,20 +2257,6 @@
 
         $scope.updateProxyConfig = function (status) {
           $window.RAML.Settings.disableProxy = status;
-        };
-
-        $scope.toggle = function ($event, index, collection, flagKey) {
-          var $this    = jQuery($event.currentTarget);
-          var $section = $this
-            .closest('.raml-console-resource-list-item')
-            .find('.raml-console-resource-list');
-
-          collection[index] = !collection[index];
-
-          $scope[flagKey] = checkItemStatus(false, collection) ? false : $scope[flagKey];
-          $scope[flagKey] = checkItemStatus(true, collection) ? true : $scope[flagKey];
-
-          $section.toggleClass('raml-console-is-collapsed');
         };
 
         $scope.collapseAll = function ($event, collection, flagKey) {
@@ -1866,62 +2282,53 @@
           }
         }
 
-        function checkItemStatus(status, collection) {
-          return collection.filter(function (el) { return el === status || el === null; }).length === collection.length;
-        }
-
         $scope.hasResourcesWithChilds = function () {
-          return $scope.raml.resourceGroups.filter(function (el) {
+          return $scope.resourceGroups.filter(function (el) {
             return el.length > 1;
           }).length > 0;
         };
 
-        ramlParserWrapper.onParseError(function(error) {
-          $scope.error  = error;
-          $scope.loaded = true;
+        $scope.generateId = function (path) {
+          return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
+        };
 
-          /*jshint camelcase: false */
-          var context = error.context_mark || error.problem_mark;
-          /*jshint camelcase: true */
-
-          $scope.errorMessage = error.message;
-
-          if (context) {
-            $scope.raml = context.buffer;
-
-            $window.ramlErrors.line    = context.line;
-            $window.ramlErrors.message = error.message;
-
-            // Hack to update codemirror
-            setTimeout(function () {
-              var editor = jQuery('.raml-console-initializer-input-container .CodeMirror')[0].CodeMirror;
-              editor.addLineClass(context.line, 'background', 'line-error');
-              editor.doc.setCursor(context.line);
-            }, 10);
-          }
-        });
-      }],
-      link: function($scope) {
         ramlParserWrapper.onParseSuccess(function(raml) {
-          $scope.raml         = RAML.Inspector.create(raml);
+          // Store RAML in the Root scope
+          $rootScope.raml     = raml;
+          $scope.raml         = raml;
           $scope.rawRaml      = raml;
           $scope.loaded       = true;
           $scope.resourceList = [];
           $scope.documentList = [];
 
-          for (var i = 0; i < $scope.raml.resourceGroups.length; i++) {
-            var resources = $scope.raml.resourceGroups[i];
+          $scope.baseUri = $scope.raml.baseUri();
+          $scope.baseUriParameters = RAML.Transformer.nullIfEmpty(
+            $scope.raml.allBaseUriParameters());
+
+          // Obtain the API title from the RAML API.
+          $scope.title = $scope.raml.title();
+
+          $scope.resourceGroups = RAML.Transformer.groupResources(
+            $scope.raml.resources());
+
+          $scope.documentation = RAML.Transformer.transformDocumentation(
+            $scope.raml.documentation());
+
+          $scope.protocols = $scope.raml.allProtocols();
+
+          for (var i = 0; i < $scope.resourceGroups.length; i++) {
+            var resources = $scope.resourceGroups[i];
             var status = resources.length > 1 ? false : null;
             $scope.resourceList.push($scope.resourcesCollapsed ? true : status);
           }
 
-          if ($scope.raml.documentation) {
-            for (var j = 0; j < $scope.raml.documentation.length; j++) {
+          if ($scope.documentation) {
+            for (var j = 0; j < $scope.documentation.length; j++) {
               $scope.documentList.push($scope.documentationCollapsed ? true : false);
             }
           }
         });
-      }
+      }]
     };
   };
 
@@ -2040,15 +2447,50 @@
 (function () {
   'use strict';
 
-  RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
+  RAML.Services.RAMLParserWrapper = function($rootScope, $http, ramlParser, $q) {
     var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
 
     var load = function(file) {
-      setPromise(ramlParser.loadFile(file));
+      setPromise(ramlParser.loadApi(file, {
+        rejectOnErrors: true,
+        httpResolver: {
+          getResourceAsync: function(path) {
+            return $http.get(path, {
+              transformResponse: function (data) {
+                return data;
+              }
+            })
+            .then(function (response) {
+              return {
+                content: response.data
+              };
+            });
+          }
+        }
+      })
+      .then(function (api) {
+        api = api.expand();
+        return api;
+      }));
     };
 
     var parse = function(raml) {
-      setPromise(ramlParser.load(raml));
+      setPromise(ramlParser.loadApi('api.raml', {
+        rejectOnErrors: true,
+        fsResolver: {
+          contentAsync: function (path) {
+            if (path === '/api.raml') {
+              var deferred = $q.defer();
+              deferred.resolve(raml);
+              return deferred.promise;
+            }
+          }
+        }
+      })
+      .then(function (api) {
+        api = api.expand();
+        return api;
+      }));
     };
 
     var onParseSuccess = function(cb) {
@@ -2089,7 +2531,10 @@
     };
 
     $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
-      setPromise($q.when(raml));
+      // Only act when raml is valid
+      if (raml.title) {
+        setPromise($q.when(raml));
+      }
     });
 
     return {
@@ -2101,7 +2546,52 @@
   };
 
   angular.module('RAML.Services')
-    .service('ramlParserWrapper', ['$rootScope', 'ramlParser', '$q', RAML.Services.RAMLParserWrapper]);
+    .service('ramlParserWrapper', ['$rootScope', '$http', 'ramlParser', '$q', RAML.Services.RAMLParserWrapper]);
+})();
+
+(function () {
+  'use strict';
+  angular.module('RAML.Services').factory('RecursionHelper', ['$compile', function ($compile) {
+    return {
+      /**
+      * Manually compiles the element, fixing the recursion loop.
+      * @param element
+      * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
+      * @returns An object containing the linking functions.
+      */
+      compile: function (element, link) {
+        // Normalize the link parameter
+        if (angular.isFunction(link)) {
+          link = { post: link };
+        }
+
+        // Break the recursion loop by removing the contents
+        var contents = element.contents().remove();
+        var compiledContents;
+        return {
+          pre: (link && link.pre) ? link.pre : null,
+          /**
+          * Compiles and re-adds the contents
+          */
+          post: function (scope, element) {
+            // Compile the contents
+            if (!compiledContents) {
+              compiledContents = $compile(contents);
+            }
+            // Re-add the compiled contents to the element
+            compiledContents(scope, function (clone) {
+              element.append(clone);
+            });
+
+            // Call the post-linking function, if any
+            if (link && link.post) {
+              link.post.apply(null, arguments);
+            }
+          }
+        };
+      }
+    };
+  }]);
 })();
 
 'use strict';
@@ -2142,13 +2632,13 @@
     },
 
     createBaseUri: function(rootRAML) {
-      var baseUri = rootRAML.baseUri.toString().replace(/\/+$/, '');
+      var baseUri = rootRAML.baseUri() ? rootRAML.baseUri().value().toString().replace(/\/+$/, '') : '';
 
-      return new RAML.Client.ParameterizedString(baseUri, rootRAML.baseUriParameters, { parameterValues: {version: rootRAML.version} });
+      return new RAML.Client.ParameterizedString(baseUri, rootRAML.baseUriParameters(), { parameterValues: {version: rootRAML.version()} });
     },
 
     createPathSegment: function(resourceRAML) {
-      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri, resourceRAML.uriParameters);
+      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri().value(), resourceRAML.allUriParameters());
     }
   };
 })();
@@ -2649,7 +3139,7 @@
       return '{' + parameterName + '}';
     });
 
-    this.parameters = uriParameters;
+    this.parameters = RAML.Transformer.transformNamedParameters(uriParameters);
     this.templated = Object.keys(this.parameters || {}).length > 0;
     this.tokens = tokenize(template);
     this.render = rendererFor(template, uriParameters);
@@ -3280,20 +3770,333 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
-  window.ramlErrors = {};
+  window.ramlErrors = [];
 
   CodeMirror.registerHelper('lint', 'yaml', function () {
     var found = [];
 
-    found.push({
-      message: window.ramlErrors.message,
-      severity: 'error',
-      from: CodeMirror.Pos(window.ramlErrors.line),
-      to: CodeMirror.Pos(window.ramlErrors.line)
+    window.ramlErrors.forEach(function (ramlError) {
+      found.push({
+        message: ramlError.message,
+        severity: 'error',
+        from: CodeMirror.Pos(ramlError.line),
+        to: CodeMirror.Pos(ramlError.line)
+      });
+
     });
 
     return found;
   });
+})();
+
+/**
+ * Transform raml-js-parser-2 output nodes to the format expected by API Console
+ */
+RAML.Transformer = (function() {
+  'use strict';
+
+  var PARAMETER = /\{\*\}/;
+  var exports = {};
+
+  exports.getValueIfNotNull = function(attribute) {
+    return attribute ? attribute.value() : '';
+  };
+
+  exports.groupResources = function(resources) {
+    var resourceGroups = [];
+    var basePathSegments = [];
+    resources.forEach(function (resource) {
+      var resourceGroup = [];
+
+      function buildResourceGroup(pathSegments, aResource) {
+        aResource.pathSegments = pathSegments.concat(RAML.Client.createPathSegment(aResource));
+        resourceGroup.push(aResource);
+
+        if (aResource.resources().length > 0) {
+          aResource.resources().forEach(function (childResource) {
+            buildResourceGroup(aResource.pathSegments, childResource);
+          });
+        }
+      }
+
+      buildResourceGroup(basePathSegments, resource);
+      resourceGroups.push(resourceGroup);
+    });
+
+    return resourceGroups;
+  };
+
+  exports.transformResource = function (resource) {
+    resource.description = exports.getValueIfNotNull(resource.description());
+    resource.resourceType = resource.type() ? transformValue(resource.type()) : null;
+    resource.traits = resource.is().length > 0 ? resource.is().map(transformValue) : null;
+    resource.methods = nullIfEmpty(resource.methods());
+
+    return resource;
+  };
+
+  exports.transformResourceType = function (resourceType) {
+    return resourceType ? transformValue(resourceType) : null;
+  };
+
+  exports.transformTraits = function (traits) {
+    return traits.length > 0 ?
+      traits.map(transformValue).join(', ') : null;
+  };
+
+  exports.transformDocumentation = function(documentation) {
+    return documentation.length > 0 ?
+      documentation.map(function (doc) {
+        return {
+          title: doc.title(),
+          content: doc.content().attr.value()
+        };
+      }) : null;
+  };
+
+  exports.transformMethods = function(methods) {
+    return methods.map(transformMethod);
+  };
+
+  function transformValue(value) {
+    if (value && value.attr) {
+      var val = value.attr.value();
+      if (typeof val === 'string') {
+        return val;
+      } else if (val) {
+        return val.valueName();
+      }
+    }
+  }
+  exports.transformValue = transformValue;
+
+  function filterHeaders(headers) {
+    var filtered = {
+      plain: {},
+      parameterized: {}
+    };
+
+    Object.keys(headers || {}).forEach(function(key) {
+      if (key.match(PARAMETER)) {
+        // filtered.parameterized[key] = wrapWithParameterizedHeader(key, headers[key]);
+      } else {
+        filtered.plain[key] = headers[key];
+      }
+    });
+
+    if(Object.keys(filtered.plain).length === 0) {
+      filtered.plain = null;
+    }
+
+    return filtered;
+  }
+
+  function ensureArray(value) {
+    if (value === undefined || value === null) {
+      return;
+    }
+
+    return (value instanceof Array) ? value : [ value ];
+  }
+
+  function normalizeNamedParameters(parameters) {
+    Object.keys(parameters || {}).forEach(function(key) {
+      parameters[key] = ensureArray(parameters[key]);
+    });
+  }
+
+  function transformHeaders(headers) {
+    if (Array.isArray(headers)) {
+      var newHeaders = transformNamedParameters(headers);
+
+      normalizeNamedParameters(newHeaders);
+
+      return filterHeaders(newHeaders);
+    }
+    return headers;
+  }
+  exports.transformHeaders = transformHeaders;
+
+  function transformBody(body) {
+    if (body && body.length > 0) {
+      var newBody = {};
+      body.forEach(function (bodyItem) {
+        newBody[bodyItem.name()] = bodyItem;
+      });
+      return newBody;
+    }
+  }
+  exports.transformBody = transformBody;
+
+  function transformSecuritySchemes(newMethod, oldMethod) {
+    newMethod.securedBy = oldMethod.allSecuredBy();
+    newMethod.securitySchemes = {};
+
+    if (newMethod.securedBy.length === 0) {
+      newMethod.securitySchemes.anonymous = {
+        type: 'Anonymous'
+      };
+      newMethod.securedBy.push('anonymous');
+    } else {
+      newMethod.securedBy = newMethod.securedBy.map(function (securedBy) {
+        var securitySchemeKey = securedBy.value().valueName();
+        var securityScheme = securedBy.securityScheme();
+
+        newMethod.securitySchemes[securitySchemeKey] = {
+          id: securitySchemeKey,
+          name: securityScheme.type(),
+          settings: transformSettings(securityScheme.settings()),
+          type: securityScheme.type()
+        };
+
+        var describedBy = securityScheme.describedBy();
+        if (describedBy) {
+          newMethod.securitySchemes[securitySchemeKey].describedBy = {
+            headers: transformNamedParameters(describedBy.headers()),
+            queryParameters: transformNamedParameters(describedBy.queryParameters()),
+            responses: transformResponses(describedBy.responses())
+          };
+        }
+
+        return securitySchemeKey;
+      });
+    }
+
+    return newMethod;
+  }
+
+  function transformSettings(settings) {
+    if (settings) {
+      return {
+        accessTokenUri: transformValue(settings.accessTokenUri()),
+        authorizationGrants: settings.authorizationGrants(),
+        authorizationUri: transformValue(settings.authorizationUri())
+      };
+    }
+  }
+
+  function transformMethod(aMethod) {
+    var method = {};
+    method.body = transformBody(nullIfEmpty(aMethod.body()));
+    method.description = exports.getValueIfNotNull(aMethod.description()),
+    method.headers = nullIfEmpty(aMethod.headers());
+    method.method = aMethod.method();
+    method.queryParameters = nullIfEmpty(aMethod.queryParameters());
+
+    var methodResponseCodes = aMethod.responses().map(function (response) {
+      return response.code().attr.value();
+    });
+
+    method.responseCodes = methodResponseCodes.length > 0 ?
+      methodResponseCodes : null;
+
+    method.responses = transformResponses(aMethod.responses());
+
+    transformSecuritySchemes(method, aMethod);
+
+    method.is = nullIfEmpty(aMethod.is());
+    return method;
+  }
+  exports.transformMethod = transformMethod;
+
+  function transformResponses(responses) {
+    var methodResponses = responses.reduce(function (accum, response) {
+      accum[response.code().attr.value()] = response;
+      return accum;
+    }, {});
+
+     return Object.getOwnPropertyNames(methodResponses).length > 0 ?
+      methodResponses : null;
+  }
+
+  function transformNamedParameters(collection) {
+    var result = collection.reduce(function (accum, item) {
+      var name = item.name();
+      accum[name] = [{
+        name: name,
+        default: item.default(),
+        description: transformValue(item.description()),
+        displayName: item.displayName(),
+        example: item.example() ? item.example() : undefined,
+        repeat: item.repeat(),
+        required: item.required(),
+        type: item.type(),
+
+        enum: item.enum && item.enum().length > 0 ? item.enum() : undefined,
+        maximum: item.maximum ? item.maximum() : undefined,
+        maxLength: item.maxLength ? item.maxLength() : undefined,
+        minimum: item.minimum ? item.minimum() : undefined,
+        minLength: item.minLength ? item.minLength() : undefined,
+        pattern: item.pattern ? item.pattern() : undefined
+      }];
+      return accum;
+    }, {});
+
+    return Object.getOwnPropertyNames(result).length > 0 ? result : null;
+  }
+  exports.transformNamedParameters = transformNamedParameters;
+
+  function getBodyType(body) {
+    // TODO: This method should always receive an AST type. Change this when
+    // conversion from runtime type to AST is available.
+    var runtimeType = body.runtimeType ? body.runtimeType() : body;
+    if (body.constructor.name === 'BodyLikeImpl' || runtimeType.isExternal()) {
+      return 'schema';
+    } else if (runtimeType.isUnion()) {
+      return 'union';
+    } else if (runtimeType.isArray()) {
+      return 'array';
+    } else if (runtimeType.isValueType()) {
+      return 'value';
+    } else {
+      return 'type';
+    }
+  }
+  exports.getBodyType = getBodyType;
+
+  function transformSchemaBody(body) {
+    return {
+      formParameters: transformNamedParameters(body.formParameters()),
+      schema: RAML.Transformer.transformValue(body.schema()),
+      example: RAML.Transformer.transformValue(body.example())
+    };
+  }
+  exports.transformSchemaBody = transformSchemaBody;
+
+  function extractSupertypes(runtimeType) {
+    return runtimeType.superTypes().map(function (superType) {
+      return {
+        nameId: superType.nameId(),
+        type: superType
+      };
+    });
+  }
+  exports.extractSupertypes = extractSupertypes;
+
+  function transformProperties(runtimeType) {
+    return runtimeType.allProperties().map(transformProperty);
+  }
+  exports.transformProperties = transformProperties;
+
+  function transformProperty(property) {
+    return {
+      nameId: property.nameId(),
+      description: property.description(),
+      isPrimitive: property.isPrimitive(),
+      domainNameId: property.domain().nameId(),
+      type: {
+        nameId: property.range().nameId(),
+        runtimeType: property.range()
+      }
+    };
+  }
+
+  function nullIfEmpty(array) {
+    return array && array.length > 0 ? array : null;
+  }
+  exports.nullIfEmpty = nullIfEmpty;
+
+  return exports;
 })();
 
 (function() {
@@ -3398,11 +4201,11 @@ RAML.Inspector = (function() {
   };
 
   BodyType.prototype.fillWithExample = function() {
-    this.value = this.contentType.example;
+    this.value = this.contentType.example();
   };
 
   BodyType.prototype.hasExample = function() {
-    return !!this.contentType.example;
+    return !!this.contentType.example();
   };
 
   BodyType.prototype.data = function() {
@@ -3426,8 +4229,9 @@ RAML.Inspector = (function() {
     resource.uriParametersForDocumentation = resource.uriParametersForDocumentation || {};
 
     if (baseUriParameters) {
-      Object.keys(baseUriParameters).map(function (key) {
-        resource.uriParametersForDocumentation[key] = [baseUriParameters[key]];
+      var cloneBaseUriParameters = RAML.Transformer.transformNamedParameters(baseUriParameters);
+      Object.keys(cloneBaseUriParameters).map(function (key) {
+        resource.uriParametersForDocumentation[key] = cloneBaseUriParameters[key];
       });
     }
 
@@ -5303,8 +6107,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <h4 class=\"raml-console-resource-heading-a\">Responses</h4>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-param\" ng-repeat=\"(code, info) in documentationSchemeSelected.describedBy.responses\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{code}}</h4>\n" +
-    "          <p markdown=\"info.description\" class=\"raml-console-marked-content\"></p>\n" +
+    "          <response-short code=\"code\" info=\"info\"></response-short>\n" +
     "        </div>\n" +
     "      </section>\n" +
     "\n" +
@@ -5328,27 +6131,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <span ng-click=\"changeResourceBodyType($event, key)\" ng-class=\"{ 'raml-console-is-active' : bodySelected(key)}\" class=\"raml-console-flag raml-console-body-{{getBodyId(key)}}\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</span>\n" +
     "      </h4>\n" +
     "\n" +
-    "      <section ng-if=\"methodInfo.body[currentBodySelected].formParameters\">\n" +
-    "         <div class=\"raml-console-resource-param\" ng-repeat=\"formParam in methodInfo.body[currentBodySelected].formParameters\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{formParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(formParam[0])}}</span></h4>\n" +
-    "\n" +
-    "          <p markdown=\"formParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
-    "\n" +
-    "          <p ng-if=\"formParam[0].example\">\n" +
-    "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
-    "          </p>\n" +
-    "        </div>\n" +
-    "      </section>\n" +
-    "\n" +
-    "      <div ng-if=\"methodInfo.body[currentBodySelected].example\">\n" +
-    "        <span>Example:</span>\n" +
-    "        <pre class=\"raml-console-resource-pre\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(methodInfo.body[currentBodySelected].example)\"></code></pre>\n" +
-    "      </div>\n" +
-    "\n" +
-    "      <div class=\"raml-console-schema-container\" ng-if=\"methodInfo.body[currentBodySelected].schema\">\n" +
-    "        <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
-    "        <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(methodInfo.body[currentBodySelected].schema)\"></code></pre>\n" +
-    "      </div>\n" +
+    "      <type-switcher body=\"methodInfo.body[currentBodySelected]\" media-type=\"currentBodySelected\"></type-switcher>\n" +
     "    </section>\n" +
     "  </div>\n" +
     "\n" +
@@ -5370,50 +6153,30 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container\" ng-class=\"{'raml-console-is-active':showResponseDocumentation}\">\n" +
     "      <section ng-if=\"isActiveCode(code)\" class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
-    "        <a name=\"code{{code}}\"></a>\n" +
-    "        <h3 class=\"raml-console-resource-heading-a\">Status {{code}}</h3>\n" +
-    "\n" +
-    "        <div class=\"raml-console-resource-response\">\n" +
-    "          <p markdown=\"methodInfo.responses[code].description\" class=\"raml-console-marked-content\"></p>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].headers\">\n" +
-    "          <h4 class=\"raml-console-resource-body-heading\">Headers</h4>\n" +
-    "\n" +
-    "          <div class=\"raml-console-resource-param\" ng-repeat=\"header in methodInfo.responses[code].headers\">\n" +
-    "            <h4 class=\"raml-console-resource-param-heading\">{{header[0].displayName}} <span class=\"raml-console-resource-param-instructional\">{{header[0].type}}</span></h4>\n" +
-    "\n" +
-    "            <p markdown=\"header[0].description\" class=\"raml-console-marked-content\"></p>\n" +
-    "          </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
-    "          <h4 class=\"raml-console-resource-body-heading\">\n" +
-    "            Body\n" +
-    "            <span ng-click=\"changeType($event, key, code)\" ng-class=\"{ 'raml-console-is-active': $first}\" class=\"raml-console-flag\" ng-repeat=\"(key, value) in methodInfo.responses[code].body\">{{key}}</span>\n" +
-    "          </h4>\n" +
-    "\n" +
-    "          <div ng-if=\"responseInfo[code][responseInfo[code].currentType].example\">\n" +
-    "            <span>Example:</span>\n" +
-    "            <pre class=\"raml-console-resource-pre\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)\"></code></pre>\n" +
-    "          </div>\n" +
-    "\n" +
-    "          <div class=\"raml-console-schema-container\" ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
-    "            <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
-    "            <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)\"></code></pre>\n" +
-    "          </div>\n" +
-    "        </div>\n" +
+    "        <response\n" +
+    "          code=\"code\"\n" +
+    "          current-body-selected=\"currentBodySelected\"\n" +
+    "          response=\"methodInfo.responses[code]\"\n" +
+    "          response-info=\"responseInfo[code]\"\n" +
+    "          show-schema=\"showSchema\">\n" +
+    "        </response>\n" +
     "      </section>\n" +
-    "\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
   );
 
 
+  $templateCache.put('directives/example.tpl.html',
+    "<pre class=\"raml-console-resource-pre\">\n" +
+    "  <code class=\"raml-console-hljs\" hljs source=\"getBeautifiedExample(example)\"></code>\n" +
+    "</pre>\n"
+  );
+
+
   $templateCache.put('directives/method-list.tpl.html',
     "<div class=\"raml-console-tab-list\">\n" +
-    "  <div class=\"raml-console-tab\" ng-repeat=\"method in resource.methods\" ng-click=\"showResource($event, $index)\">\n" +
+    "  <div class=\"raml-console-tab\" ng-repeat=\"method in methods\" ng-click=\"handleMethodClick($event, $index)\">\n" +
     "    <span class=\"raml-console-tab-label raml-console-tab-{{method.method}}\">{{method.method.toLocaleUpperCase()}}</span>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -5502,6 +6265,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('directives/raml-header.tpl.html',
+    "<h4 class=\"raml-console-resource-param-heading\">{{displayName}} <span class=\"raml-console-resource-param-instructional\">{{type}}</span></h4>\n" +
+    "\n" +
+    "<p markdown=\"description\" class=\"raml-console-marked-content\"></p>\n"
+  );
+
+
   $templateCache.put('directives/raml-initializer.tpl.html',
     "<div ng-switch=\"ramlStatus\">\n" +
     "  <div class=\"raml-console-initializer-container raml-console-initializer-primary\" ng-switch-default>\n" +
@@ -5514,11 +6284,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </header>\n" +
     "\n" +
     "        <div class=\"raml-console-initializer-row\">\n" +
-    "          <p class=\"raml-console-initializer-input-container\" ng-class=\"{ 'raml-console-initializer-input-container-error': errorMessage }\">\n" +
+    "          <p class=\"raml-console-initializer-input-container\" ng-class=\"{ 'raml-console-initializer-input-container-error': errors }\">\n" +
     "            <input id=\"ramlPath\" autofocus class=\"raml-console-initializer-input raml-console-initializer-raml-field\" ng-model=\"$parent.ramlUrl\" ng-keypress=\"onKeyPressRamlUrl($event)\" ng-change=\"onChange()\">\n" +
     "          </p>\n" +
     "          <div class=\"raml-console-parser-error\" ng-if=\"isLoadedFromUrl\">\n" +
-    "            <span>{{errorMessage}}</span>\n" +
+    "            <div ng-repeat=\"error in errors\">{{error.errorMessage}} at {{error.line + 1}}:{{error.column + 1}}</div>\n" +
     "          </div>\n" +
     "          <div class=\"raml-console-initializer-action-group\" align=\"right\">\n" +
     "            <button id=\"loadRamlFromUrl\" class=\"raml-console-initializer-action raml-console-initializer-action-btn\" ng-click=\"loadFromUrl()\">Load from URL</button>\n" +
@@ -5567,16 +6337,33 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/resource-panel.tpl.html',
-    "<div class=\"raml-console-resource-panel\" ng-if=\"showPanel\" ng-class=\"{ 'raml-console-has-sidebar-collapsed': singleView }\">\n" +
-    "  <div class=\"raml-console-resource-no-baseuri\" ng-hide=\"raml.baseUri\">\n" +
+    "<div class=\"raml-console-resource-panel\" ng-class=\"{ 'raml-console-has-sidebar-collapsed': singleView }\">\n" +
+    "  <div class=\"raml-console-resource-no-baseuri\" ng-hide=\"baseUri\">\n" +
     "    <strong>Try-it</strong> is disabled because <strong>baseUri</strong> is not present\n" +
     "  </div>\n" +
     "  <div class=\"raml-console-resource-panel-wrapper\">\n" +
-    "    <documentation></documentation>\n" +
+    "    <documentation\n" +
+    "      class=\"raml-console-resource-panel-primary\"\n" +
+    "      method-info=\"methodInfo\"\n" +
+    "      resource=\"resource\"\n" +
+    "      security-schemes=\"securitySchemes\"\n" +
+    "      selected-method=\"selectedMethod\">\n" +
+    "    </documentation>\n" +
     "\n" +
-    "    <sidebar ng-show=\"raml.baseUri\"></sidebar>\n" +
+    "    <sidebar\n" +
+    "      ng-show=\"baseUri\"\n" +
+    "      base-uri-parameters=\"baseUriParameters\"\n" +
+    "      collapse-sidebar=\"collapseSidebar\"\n" +
+    "      context=\"context\"\n" +
+    "      generate-id=\"generateId\"\n" +
+    "      method-info=\"methodInfo\"\n" +
+    "      protocols=\"protocols\"\n" +
+    "      resource=\"resource\"\n" +
+    "      security-schemes=\"securitySchemes\"\n" +
+    "      single-view=\"singleView\">\n" +
+    "    </sidebar>\n" +
     "\n" +
-    "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\"ng-hide=\"!raml.baseUri\" ng-if=\"!disableTryIt\">\n" +
+    "    <div class=\"raml-console-sidebar-controls raml-console-sidebar-controls-collapse\" ng-click=\"collapseSidebar($event)\" style=\"right: -1px; position: absolute;\"ng-hide=\"!baseUri\" ng-if=\"!disableTryIt\">\n" +
     "      <button class=\"raml-console-collapse\" style=\"height: 21px; margin-top: 9px;\">\n" +
     "        <svg style=\"transform: rotate(-180deg); display: inline;\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 612 792\" enable-background=\"new 0 0 612 792\" xml:space=\"preserve\">\n" +
     "          <g id=\"Layer_3\">\n" +
@@ -5603,9 +6390,42 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('directives/response-short.tpl.html',
+    "<h4 class=\"raml-console-resource-param-heading\">{{code}}</h4>\n" +
+    "<p markdown=\"description\" class=\"raml-console-marked-content\"></p>\n"
+  );
+
+
+  $templateCache.put('directives/response.tpl.html',
+    "<a name=\"code{{code}}\"></a>\n" +
+    "<h3 class=\"raml-console-resource-heading-a\">Status {{code}}</h3>\n" +
+    "\n" +
+    "<div class=\"raml-console-resource-response\">\n" +
+    "  <p markdown=\"description\" class=\"raml-console-marked-content\"></p>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div class=\"raml-console-resource-response\" ng-if=\"headers\">\n" +
+    "  <h4 class=\"raml-console-resource-body-heading\">Headers</h4>\n" +
+    "\n" +
+    "  <div class=\"raml-console-resource-param\" ng-repeat=\"header in headers\">\n" +
+    "    <raml-header header=\"header\"></raml-header>\n" +
+    "  </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div class=\"raml-console-resource-response\" ng-if=\"body\">\n" +
+    "  <h4 class=\"raml-console-resource-body-heading\">\n" +
+    "    Body\n" +
+    "    <span ng-click=\"changeType($event, key, code)\" ng-class=\"{ 'raml-console-is-active': $first}\" class=\"raml-console-flag\" ng-repeat=\"(key, value) in body\">{{key}}</span>\n" +
+    "  </h4>\n" +
+    "\n" +
+    "  <type-switcher body=\"responseInfo[responseInfo.currentType]\"></type-switcher>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('directives/root-documentation.tpl.html',
-    "<ol id=\"raml-console-documentation-container\" ng-if=\"raml.documentation\" class=\"raml-console-resource-list raml-console-resource-list-root raml-console-root-documentation raml-console-resources-documentationCollapsed\">\n" +
-    "  <li class=\"raml-console-resource-list-item raml-console-documentation-header\" ng-if=\"raml.documentation.length > 0\">\n" +
+    "<ol id=\"raml-console-documentation-container\" ng-if=\"documentation\" class=\"raml-console-resource-list raml-console-resource-list-root raml-console-root-documentation raml-console-resources-documentationCollapsed\">\n" +
+    "  <li class=\"raml-console-resource-list-item raml-console-documentation-header\" ng-if=\"documentation.length > 0\">\n" +
     "    <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\">\n" +
     "      <span ng-if=\"hasDocumentationWithIndex()\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all\" ng-click=\"collapseAll($event, documentList, 'documentationCollapsed')\" ng-class=\"{'raml-console-resources-expanded':!documentationCollapsed}\"><span ng-if=\"!documentationCollapsed\">collapse</span><span ng-if=\"documentationCollapsed\">expand</span> all</span>\n" +
     "      <div class=\"raml-console-resource-path-container\">\n" +
@@ -5616,7 +6436,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </header>\n" +
     "  </li>\n" +
     "\n" +
-    "  <li id=\"{{generateDocId(doc.title)}}\" class=\"raml-console-resource-list-item raml-console-documentation\" ng-repeat=\"doc in raml.documentation\">\n" +
+    "  <li id=\"{{generateDocId(doc.title)}}\" class=\"raml-console-resource-list-item raml-console-documentation\" ng-repeat=\"doc in documentation\">\n" +
     "    <div ng-init=\"content = getMarkdownHeaders(doc.content)\">\n" +
     "      <div class=\"raml-console-resource raml-console-clearfix raml-console-document-header\">\n" +
     "        <div class=\"raml-console-resource-path-container\" style=\"padding-top: 11px;\" ng-init=\"index=$index\">\n" +
@@ -5656,6 +6476,31 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "  </li>\n" +
     "</ol>\n"
+  );
+
+
+  $templateCache.put('directives/schema-body.tpl.html',
+    "<section ng-if=\"body.formParameters\">\n" +
+    "   <div class=\"raml-console-resource-param\" ng-repeat=\"formParam in body.formParameters\">\n" +
+    "    <h4 class=\"raml-console-resource-param-heading\">{{formParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(formParam[0])}}</span></h4>\n" +
+    "\n" +
+    "    <p markdown=\"formParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
+    "\n" +
+    "    <p ng-if=\"formParam[0].example\">\n" +
+    "      <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
+    "    </p>\n" +
+    "  </div>\n" +
+    "</section>\n" +
+    "\n" +
+    "<div ng-if=\"body.example\">\n" +
+    "  <span>Example:</span>\n" +
+    "  <example example=\"body.example\"></example>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div class=\"raml-console-schema-container\" ng-if=\"body.schema\">\n" +
+    "  <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
+    "  <example example=\"body.schema\" media-type=\"mediaType\"></example>\n" +
+    "</div>\n"
   );
 
 
@@ -5712,11 +6557,30 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" title=\"URI Parameters\" show-base-url></named-parameters>\n" +
+    "          <named-parameters\n" +
+    "            ng-if=\"resource.uriParametersForDocumentation\"\n" +
+    "            src=\"resource.uriParametersForDocumentation\"\n" +
+    "            context=\"context\"\n" +
+    "            resource=\"resource\"\n" +
+    "            type=\"uriParameters\"\n" +
+    "            title=\"URI Parameters\"\n" +
+    "            show-base-url></named-parameters>\n" +
     "\n" +
-    "          <named-parameters src=\"methodInfo.headers.plain\" context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
+    "          <named-parameters\n" +
+    "            src=\"methodInfo.headers.plain\"\n" +
+    "            context=\"context\"\n" +
+    "            resource=\"resource\"\n" +
+    "            type=\"headers\"\n" +
+    "            title=\"Headers\"\n" +
+    "            enable-custom-parameters></named-parameters>\n" +
     "\n" +
-    "          <named-parameters src=\"methodInfo.queryParameters\" context=\"context\" type=\"queryParameters\" title=\"Query Parameters\" enable-custom-parameters></named-parameters>\n" +
+    "          <named-parameters\n" +
+    "            src=\"methodInfo.queryParameters\"\n" +
+    "            context=\"context\"\n" +
+    "            resource=\"resource\"\n" +
+    "            type=\"queryParameters\"\n" +
+    "            title=\"Query Parameters\"\n" +
+    "            enable-custom-parameters></named-parameters>\n" +
     "\n" +
     "          <section id=\"sidebar-body\" ng-if=\"methodInfo.body\">\n" +
     "            <header class=\"raml-console-sidebar-row raml-console-sidebar-subheader\">\n" +
@@ -5858,14 +6722,162 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('directives/type-navigator.tpl.html',
+    "<h3>\n" +
+    "  <span class=\"raml-console-clickable\" ng-if=\"previousTypes.length > 0\" ng-click=\"goBack()\">&lt; back</span>\n" +
+    "  {{typeName}}\n" +
+    "  <span ng-if=\"supertypes.length > 0\">:</span>\n" +
+    "  <span\n" +
+    "    class=\"raml-console-clickable\"\n" +
+    "    ng-repeat=\"supertype in supertypes\"\n" +
+    "    ng-click=\"changeType(supertype.type)\">{{supertype.nameId}}</span>\n" +
+    "</h3>\n" +
+    "<div ng-repeat=\"property in properties\">\n" +
+    "  <div>\n" +
+    "    <h4 class=\"raml-console-resource-param-heading\">\n" +
+    "      {{property.nameId}}\n" +
+    "      <span\n" +
+    "        class=\"raml-console-resource-param-instructional\"\n" +
+    "        ng-if=\"property.isPrimitive\">{{property.type.nameId}}</span>\n" +
+    "      <span\n" +
+    "        class=\"raml-console-resource-param-instructional raml-console-clickable\"\n" +
+    "        ng-if=\"!property.isPrimitive\"\n" +
+    "        ng-click=\"changeType(property.type.runtimeType)\">{{property.type.nameId}}</span>\n" +
+    "    </h4>\n" +
+    "  </div>\n" +
+    "  <div>{{property.description}}</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-repeat=\"example in examples\">\n" +
+    "  <span>Example:</span>\n" +
+    "  <example example=\"example\" media-type=\"mediaType\"></example>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('directives/type-switcher.tpl.html',
+    "<div ng-if=\"bodyType === 'schema'\">\n" +
+    "  <schema-body schema=\"body\" media-type=\"mediaType\"></schema-body>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"bodyType === 'array'\">\n" +
+    "  <h4>Array of</h4>\n" +
+    "  <type-switcher body=\"transformArray(body)\" media-type=\"mediaType\"></type-switcher>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"bodyType === 'union'\">\n" +
+    "  <type-switcher body=\"getLeftType(body)\" media-type=\"mediaType\"></type-switcher>\n" +
+    "  <h4>or</h4>\n" +
+    "  <type-switcher body=\"getRightType(body)\" media-type=\"mediaType\"></type-switcher>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"bodyType === 'type'\">\n" +
+    "  <type-navigator type=\"body\" media-type=\"mediaType\"></type-navigator>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('resources/resource-group.tpl.html',
+    "<resource\n" +
+    "  is-first=\"true\"\n" +
+    "  base-uri=\"baseUri\"\n" +
+    "  base-uri-parameters=\"baseUriParameters\"\n" +
+    "  generate-id=\"generateId\"\n" +
+    "  index=\"index\"\n" +
+    "  protocols=\"protocols\"\n" +
+    "  resource=\"firstResource\"\n" +
+    "  resources-collapsed=\"resourcesCollapsed\"\n" +
+    "  resource-group=\"resourceGroup\"\n" +
+    "  resource-list=\"resourceList\"\n" +
+    "  single-view=\"singleView\">\n" +
+    "</resource>\n" +
+    "\n" +
+    "<!-- Child Resources -->\n" +
+    "<ol class=\"raml-console-resource-list\" ng-class=\"{'raml-console-is-collapsed': resourcesCollapsed}\">\n" +
+    "\n" +
+    "  <li id=\"{{generateId(resource.pathSegments)}}\" class=\"raml-console-resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
+    "    <resource\n" +
+    "      base-uri=\"baseUri\"\n" +
+    "      base-uri-parameters=\"baseUriParameters\"\n" +
+    "      generate-id=\"generateId\"\n" +
+    "      protocols=\"protocols\"\n" +
+    "      resource=\"resource\"\n" +
+    "      resources-collapsed=\"resourcesCollapsed\"\n" +
+    "      single-view=\"singleView\">\n" +
+    "    </resource>\n" +
+    "  </li>\n" +
+    "</ol>\n"
+  );
+
+
   $templateCache.put('resources/resource-type.tpl.html',
-    "<span ng-if=\"resource.resourceType\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Type:</b> {{resource.resourceType}}</span>\n"
+    "<span ng-if=\"resourceType\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Type:</b> {{resourceType}}</span>\n"
+  );
+
+
+  $templateCache.put('resources/resource.tpl.html',
+    "<header\n" +
+    "    ng-if=\"isFirst\"\n" +
+    "    class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\"\n" +
+    "    ng-class=\"{ 'raml-console-is-active':showPanel }\">\n" +
+    "\n" +
+    "  <div class=\"raml-console-resource-path-container\" ng-class=\"{'raml-console-resource-with-description': description}\">\n" +
+    "    <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': resourceList[index]}\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event, index, resourceList, 'resourcesCollapsed')\"></button>\n" +
+    "\n" +
+    "    <h2 class=\"raml-console-resource-heading raml-console-resource-heading-large\">\n" +
+    "      <a ng-if=\"resourceGroup.length > 1\" class=\"raml-console-resource-path-active\" ng-class=\"{'raml-console-resource-heading-hover':resourceGroup.length > 1}\" ng-repeat='segment in resource.pathSegments' ng-click=\"toggle($event, index, resourceList, 'resourcesCollapsed')\">{{segment.toString()}}</a>\n" +
+    "\n" +
+    "      <a ng-if=\"resourceGroup.length == 1\" style=\"cursor: default;\" class=\"raml-console-resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</a>\n" +
+    "    </h2>\n" +
+    "\n" +
+    "    <resource-type resource=\"resource\"></resource-type>\n" +
+    "\n" +
+    "    <span ng-if=\"traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{traits}}</span>\n" +
+    "\n" +
+    "    <span class=\"raml-console-resource-level-description raml-console-marked-content\" markdown=\"description\"></span>\n" +
+    "  </div>\n" +
+    "  <method-list resource=\"resource\" handle-method-click=\"handleMethodClick\"></method-list>\n" +
+    "  <close-button handle-close-click=\"handleCloseClick\"></close-button>\n" +
+    "</header>\n" +
+    "\n" +
+    "<div\n" +
+    "    ng-if=\"!isFirst\"\n" +
+    "    class=\"raml-console-resource raml-console-clearfix\"\n" +
+    "    ng-class=\"{ 'raml-console-is-active':showPanel }\">\n" +
+    "  <div class=\"raml-console-resource-path-container\" ng-class=\"{'raml-console-resource-with-description': description}\">\n" +
+    "    <h3 class=\"raml-console-resource-heading\" style=\"cursor: default;\">\n" +
+    "      <span ng-repeat-start='segment in resource.pathSegments' ng-if=\"!$last\">{{segment.toString()}}</span><span ng-repeat-end ng-if=\"$last\" class=\"raml-console-resource-path-active\">{{segment.toString()}}</span>\n" +
+    "    </h3>\n" +
+    "\n" +
+    "    <resource-type resource=\"resource\"></resource-type>\n" +
+    "\n" +
+    "    <span ng-if=\"traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readResourceTraits(traits)}}</span>\n" +
+    "\n" +
+    "    <span class=\"raml-console-resource-level-description raml-console-marked-content\" markdown=\"description\"></span>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <method-list resource=\"resource\" handle-method-click=\"handleMethodClick\"></method-list>\n" +
+    "  <close-button handle-close-click=\"handleCloseClick\"></close-button>\n" +
+    "</div>\n" +
+    "\n" +
+    "<resource-panel\n" +
+    "  ng-if=\"showPanel\"\n" +
+    "  base-uri=\"baseUri\"\n" +
+    "  base-uri-parameters=\"baseUriParameters\"\n" +
+    "  element=\"element\"\n" +
+    "  generate-id=\"generateId\"\n" +
+    "  handle-method-click=\"handleMethodClick\"\n" +
+    "  protocols=\"protocols\"\n" +
+    "  resource=\"resource\"\n" +
+    "  selected-method=\"selectedMethod\"\n" +
+    "  single-view=\"singleView\">\n" +
+    "</resource-panel>\n"
   );
 
 
   $templateCache.put('resources/resources.tpl.html',
     "<main class=\"raml-console-error-container raml-console-error-primary\">\n" +
-    "  <div ng-if=\"!loaded && !error\">\n" +
+    "  <div ng-if=\"!loaded && !errors\">\n" +
     "    <div class=\"raml-console-spinner\">\n" +
     "      <div class=\"raml-console-rect1\"></div>\n" +
     "      <div class=\"raml-console-rect2\"></div>\n" +
@@ -5875,13 +6887,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div ng-if=\"loaded && !error\">\n" +
+    "  <div ng-if=\"loaded && !errors\">\n" +
     "    <div class=\"raml-console-meta-button-group\">\n" +
     "      <theme-switcher ng-if=\"!disableThemeSwitcher\"></theme-switcher>\n" +
     "      <raml-client-generator ng-if=\"!disableRamlClientGenerator\"></raml-client-generator>\n" +
     "    </div>\n" +
     "\n" +
-    "    <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{raml.title}}</h1>\n" +
+    "    <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{title}}</h1>\n" +
     "\n" +
     "    <root-documentation></root-documentation>\n" +
     "\n" +
@@ -5906,63 +6918,24 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </header>\n" +
     "      </li>\n" +
     "\n" +
-    "      <li id=\"{{generateId(resource.pathSegments)}}\" class=\"raml-console-resource-list-item\" ng-repeat=\"resourceGroup in raml.resourceGroups\">\n" +
-    "        <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\" ng-class=\"{ 'raml-console-is-active':showPanel }\" ng-init=\"resource = resourceGroup[0]\">\n" +
-    "          <div class=\"raml-console-resource-path-container\" ng-init=\"index=$index\" ng-class=\"{'raml-console-resource-with-description': resource.description}\">\n" +
-    "            <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': resourceList[$index]}\" ng-if=\"resourceGroup.length > 1\" ng-click=\"toggle($event, index, resourceList, 'resourcesCollapsed')\"></button>\n" +
-    "\n" +
-    "            <h2 class=\"raml-console-resource-heading raml-console-resource-heading-large\">\n" +
-    "              <a ng-if=\"resourceGroup.length > 1\" class=\"raml-console-resource-path-active\" ng-class=\"{'raml-console-resource-heading-hover':resourceGroup.length > 1}\" ng-repeat='segment in resource.pathSegments' ng-click=\"toggle($event, index, resourceList, 'resourcesCollapsed')\">{{segment.toString()}}</a>\n" +
-    "\n" +
-    "              <a ng-if=\"resourceGroup.length == 1\" style=\"cursor: default;\" class=\"raml-console-resource-path-active\" ng-repeat='segment in resource.pathSegments'>{{segment.toString()}}</a>\n" +
-    "            </h2>\n" +
-    "\n" +
-    "            <resource-type></resource-type>\n" +
-    "\n" +
-    "            <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Traits:</b> {{readTraits(methodInfo.is)}}</span>\n" +
-    "\n" +
-    "            <span ng-hide=\"methodInfo.is\" ng-if=\"resource.traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>\n" +
-    "\n" +
-    "            <span class=\"raml-console-resource-level-description raml-console-marked-content\" markdown=\"resource.description\"></span>\n" +
-    "\n" +
-    "          </div>\n" +
-    "          <method-list></method-list>\n" +
-    "          <close-button></close-button>\n" +
-    "        </header>\n" +
-    "\n" +
-    "        <resource-panel></resource-panel>\n" +
-    "\n" +
-    "        <!-- Child Resources -->\n" +
-    "        <ol class=\"raml-console-resource-list\" ng-class=\"{'raml-console-is-collapsed': resourcesCollapsed}\">\n" +
-    "\n" +
-    "          <li id=\"{{generateId(resource.pathSegments)}}\" class=\"raml-console-resource-list-item\" ng-repeat=\"resource in resourceGroup\" ng-if=\"!$first\">\n" +
-    "            <div class=\"raml-console-resource raml-console-clearfix\" ng-class=\"{ 'raml-console-is-active':showPanel }\">\n" +
-    "              <div class=\"raml-console-resource-path-container\" ng-class=\"{'raml-console-resource-with-description': resource.description}\">\n" +
-    "                <h3 class=\"raml-console-resource-heading\" style=\"cursor: default;\">\n" +
-    "                  <span ng-repeat-start='segment in resource.pathSegments' ng-if=\"!$last\">{{segment.toString()}}</span><span ng-repeat-end ng-if=\"$last\" class=\"raml-console-resource-path-active\">{{segment.toString()}}</span>\n" +
-    "                </h3>\n" +
-    "\n" +
-    "                <resource-type></resource-type>\n" +
-    "                <span ng-if=\"methodInfo.is\" class=\"raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait\"><b>Traits:</b> {{readTraits(methodInfo.is)}}</span>\n" +
-    "\n" +
-    "                <span ng-hide=\"methodInfo.is\" ng-if=\"resource.traits\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Traits:</b> {{readResourceTraits(resource.traits)}}</span>\n" +
-    "\n" +
-    "                <span class=\"raml-console-resource-level-description raml-console-marked-content\" markdown=\"resource.description\"></span>\n" +
-    "              </div>\n" +
-    "\n" +
-    "              <method-list></method-list>\n" +
-    "              <close-button></close-button>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <resource-panel></resource-panel>\n" +
-    "          </li>\n" +
-    "        </ol>\n" +
-    "\n" +
+    "      <li id=\"{{generateId(resource.pathSegments)}}\" class=\"raml-console-resource-list-item\" ng-repeat=\"resourceGroup in resourceGroups\" ng-init=\"resource = resourceGroup[0]\">\n" +
+    "        <resource-group\n" +
+    "          base-uri=\"baseUri\"\n" +
+    "          base-uri-parameters=\"baseUriParameters\"\n" +
+    "          first-resource=\"resource\"\n" +
+    "          generate-id=\"generateId\"\n" +
+    "          index=\"$index\"\n" +
+    "          protocols=\"protocols\"\n" +
+    "          resources-collapsed=\"resourcesCollapsed\"\n" +
+    "          resource-group=\"resourceGroup\"\n" +
+    "          resource-list=\"resourceList\"\n" +
+    "          single-view=\"singleView\">\n" +
+    "        </resource-group>\n" +
     "      </li>\n" +
     "    </ol>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div ng-if=\"loaded && error\">\n" +
+    "  <div ng-if=\"loaded && errors\">\n" +
     "    <div class=\"raml-console-initializer-container raml-console-initializer-primary\">\n" +
     "      <h1 class=\"raml-console-title\">RAML Console</h1>\n" +
     "\n" +
@@ -5974,14 +6947,15 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <div class=\"raml-console-initializer-row\">\n" +
     "          <p class=\"raml-console-initializer-input-container\" style=\"height: 550px;\">\n" +
     "            <textarea id=\"raml\" ui-codemirror=\"{\n" +
-    "              lineNumbers: true,\n" +
-    "              lineWrapping : false,\n" +
-    "              tabSize: 2,\n" +
-    "              mode: 'yaml',\n" +
-    "              gutters: ['CodeMirror-lint-markers'],\n" +
-    "              lint: true,\n" +
-    "              theme : 'raml-console'\n" +
-    "            }\" ng-model=\"raml\"></textarea>\n" +
+    "                lineNumbers: true,\n" +
+    "                lineWrapping : false,\n" +
+    "                tabSize: 2,\n" +
+    "                mode: 'yaml',\n" +
+    "                gutters: ['CodeMirror-lint-markers'],\n" +
+    "                lint: true,\n" +
+    "                theme : 'raml-console'\n" +
+    "              }\" ng-model=\"raml\">\n" +
+    "            </textarea>\n" +
     "          </p>\n" +
     "        </div>\n" +
     "      </section>\n" +

@@ -5,13 +5,43 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
-      replace: true,
+      scope: {
+        methodInfo: '=',
+        resource: '=',
+        securitySchemes: '=',
+        selectedMethod: '='
+      },
       controller: ['$scope', function($scope) {
+        function getResponseInfo() {
+          var responseInfo = {};
+          var responses    = $scope.methodInfo.responses;
+
+          if (!responses || responses.length === 0) {
+            return;
+          }
+
+          Object.keys(responses).forEach(function (key) {
+            var body = responses[key].body();
+
+            responseInfo[key] = RAML.Transformer.transformBody(body);
+
+            setCurrent(responseInfo[key], 'Type');
+          });
+
+          return responseInfo;
+        }
+
+        function setCurrent(hash, currentSuffix) {
+          hash['current' + currentSuffix] = Object.keys(hash)[0];
+        }
+
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
         $scope.markedOptions = RAML.Settings.marked;
         $scope.documentationSchemeSelected = defaultSchema;
+        $scope.responseInfo = getResponseInfo();
+        $scope.documentationEnabled = true;
 
         $scope.isSchemeSelected = function isSchemeSelected(scheme) {
           return scheme.id === $scope.documentationSchemeSelected.id;
@@ -41,34 +71,15 @@
           $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
         }
 
+        $scope.currentBodySelected = $scope.responseInfo ?
+          $scope.responseInfo[$scope.currentStatusCode].currentType :
+          ($scope.methodInfo && $scope.methodInfo.body ? Object.keys($scope.methodInfo.body)[0] : null);
+
         $scope.$on('resetData', function() {
           if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
             $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
           }
         });
-
-        function beautify(body, contentType) {
-          if(contentType.indexOf('json')) {
-            body = vkbeautify.json(body, 2);
-          }
-
-          if(contentType.indexOf('xml')) {
-            body = vkbeautify.xml(body, 2);
-          }
-
-          return body;
-        }
-
-        $scope.getBeatifiedExample = function (value) {
-          var result = value;
-
-          try {
-            beautify(value, $scope.currentBodySelected);
-          }
-          catch (e) { }
-
-          return result;
-        };
 
         $scope.getColorCode = function (code) {
           return code[0] + 'xx';
@@ -188,33 +199,21 @@
           return value === $scope.currentBodySelected;
         };
 
-        $scope.$watch('currentBodySelected', function (value) {
-          var $container = jQuery('.raml-console-request-body-heading');
-          var $elements  = $container.find('span');
-
-          $elements.removeClass('raml-console-is-active');
-          $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
+        $scope.$watch('selectedMethod', function (newValue, oldValue) {
+          if (newValue !== oldValue) {
+            $scope.responseInfo = getResponseInfo();
+          }
         });
 
-        $scope.showSchema = function ($event) {
-          var $this   = jQuery($event.currentTarget);
-          var $panel  = $this.closest('.raml-console-schema-container');
-          var $schema = $panel.find('.raml-console-resource-pre-toggle');
+        $scope.$watch('currentBodySelected', function (value) {
+          if (value) {
+            var $container = jQuery('.raml-console-request-body-heading');
+            var $elements  = $container.find('span');
 
-          $this.toggleClass('raml-console-is-active');
-
-          if (!$schema.hasClass('raml-console-is-active')) {
-            $this.text('Hide Schema');
-            $schema
-              .addClass('raml-console-is-active')
-              .velocity('slideDown');
-          } else {
-            $this.text('Show Schema');
-            $schema
-              .removeClass('raml-console-is-active')
-              .velocity('slideUp');
+            $elements.removeClass('raml-console-is-active');
+            $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
           }
-        };
+        });
       }]
     };
   };

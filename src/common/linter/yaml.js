@@ -1,16 +1,19 @@
 (function() {
   'use strict';
 
-  window.ramlErrors = {};
+  window.ramlErrors = [];
 
   CodeMirror.registerHelper('lint', 'yaml', function () {
     var found = [];
 
-    found.push({
-      message: window.ramlErrors.message,
-      severity: 'error',
-      from: CodeMirror.Pos(window.ramlErrors.line),
-      to: CodeMirror.Pos(window.ramlErrors.line)
+    window.ramlErrors.forEach(function (ramlError) {
+      found.push({
+        message: ramlError.message,
+        severity: 'error',
+        from: CodeMirror.Pos(ramlError.line),
+        to: CodeMirror.Pos(ramlError.line)
+      });
+
     });
 
     return found;

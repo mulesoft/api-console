@@ -39,7 +39,10 @@ function ResourcesPO () {
   };
 
   this.getSecuritySchemes = function (index) {
-    return this.resources.get(index+1).all(by.tagName('option'));
+    return this.resources.get(index+1).all(by.tagName('select')).get(0).all(by.tagName('option'));
+  };
+  this.getGrants = function (index) {
+    return this.resources.get(index+1).all(by.tagName('select')).get(1).all(by.tagName('option'));
   };
   this.getUsernameField = function () {
     return element(by.name('username'));
@@ -50,8 +53,15 @@ function ResourcesPO () {
   this.getCloseBtn = function (index) {
     return this.resources.get(index+1).all(by.css('.raml-console-resource-close-btn'));
   };
-
-
+  this.getBodyMediaTypeBtn = function (index) {
+    return this.resources.get(index+1)
+      .all(by.css('.raml-console-body-application_x_www_form_urlencoded'));
+  };
+  this.getResourceParameters = function (index, sectionIndex) {
+    return this.resources.get(index+1)
+      .all(by.css('.raml-console-resource-section')).get(sectionIndex)
+      .all(by.css('.raml-console-resource-param h4'));
+  };
 }
 
 ResourcesPO.prototype = basePO;

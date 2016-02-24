@@ -70,3 +70,11 @@
 .clearfix:after {
     clear: both;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  color: #5B9DBD;
+}

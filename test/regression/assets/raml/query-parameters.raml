@@ -1,0 +1,14 @@
+#%RAML 0.8
+title: GitHub API
+version: v3
+baseUri: https://api.github.com
+/users:
+  get:
+    description: Get a list of users
+    queryParameters:
+      page:
+        displayName: page
+        type: integer
+      per_page:
+        displayName: per_page
+        type: integer
