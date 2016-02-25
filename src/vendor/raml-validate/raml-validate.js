@@ -232,6 +232,11 @@
       // Switch validation type depending on if the value is an array or not.
       var isArray = Array.isArray(value);
 
+      // Short-circuit validation if the value is an empty array.
+      if (isArray && value.length === 0) {
+        return toValidationObject(isOptional, 'required', value, key);
+      }
+
       // Select the validation stack to use based on the (repeated) value.
       var values      = isArray ? value : [value];
       var validations = isArray ? repeatValidations : simpleValidations;
