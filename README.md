@@ -83,9 +83,15 @@ Given the above, OAuth 2 requests would redirect back to that URL.
 
 ### Single View Mode
 
-In *Single View* mode you will be able to see only documentation or try-it. 
+In *Single View* mode you will be able to see only documentation or try-it.
 
     <raml-console src="path-to-raml" single-view></raml-console>
+
+### Sidebar Collapsed Mode
+
+In *Sidebar Collapsed Mode* mode you won't see try-it sidebar by default.
+
+    <raml-console src="path-to-raml" sidebar-collapsed></raml-console>
 
 ### Theme Switcher
 
@@ -115,13 +121,13 @@ In *Single View* mode you will be able to see only documentation or try-it.
 
 *Unsafe Markdown* will be disable by default, if you want to allow unsafe content check the following example:
 
-    <raml-console src="path-to-raml" allow-unsafe-markdown></raml-console>    
+    <raml-console src="path-to-raml" allow-unsafe-markdown></raml-console>
 
 ### Disabling Try-it
 
 *Try-it* will be enable by default, if you want to disable Try-it you can do that by adding the following setting:
 
-    <raml-console src="path-to-raml" disable-try-it></raml-console>    
+    <raml-console src="path-to-raml" disable-try-it></raml-console>
 
 ## Development
 

@@ -50,6 +50,10 @@
           $scope.documentationCollapsed = true;
         }
 
+        if ($attrs.hasOwnProperty('sidebarCollapsed')) {
+          $scope.sidebarCollapsed = true;
+        }
+
         if ($scope.src) {
           ramlParserWrapper.load($scope.src);
         }
