@@ -17,21 +17,29 @@
         $scope.responseDetails   = false;
         $scope.currentProtocol   = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
 
-        function readCustomSchemeInfo (name) {
+        function readSchemeInfoHeaders (name, except) {
           if (!$scope.methodInfo.headers.plain) {
             $scope.methodInfo.headers.plain = {};
           }
 
+          updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers, except);
+        }
+
+        function readSchemeInfoQueryParams (name, except) {
           if (!$scope.methodInfo.queryParameters) {
             $scope.methodInfo.queryParameters = {};
           }
 
-          updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
-          updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+          updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters, except);
         }
 
+        var defaultSchemaName = defaultSchema.id.split('|')[1];
         if (defaultSchema.type.startsWith('x-')) {
-          readCustomSchemeInfo(defaultSchema.id.split('|')[1]);
+          readSchemeInfoHeaders(defaultSchemaName);
+          readSchemeInfoQueryParams(defaultSchemaName);
+        } else if (defaultSchema.type === 'Basic Authentication') {
+          readSchemeInfoHeaders(defaultSchemaName, ['Authorization']);
+          readSchemeInfoQueryParams(defaultSchemaName);
         }
 
         function completeAnimation (element) {
@@ -314,29 +322,31 @@
           }
         }
 
-        function updateContextData (type, scheme, collection, context) {
+        function updateContextData (type, scheme, collection, context, except) {
           var details         = jQuery.extend({}, $scope.securitySchemes[scheme].describedBy || {});
           var securityHeaders = details[type] || {};
 
           if (securityHeaders) {
             Object.keys(securityHeaders).map(function (key) {
-              if (!securityHeaders[key]) {
-                securityHeaders[key] = {
-                  id: key,
-                  type: 'string'
+              if (except == null || (except.indexOf(key) === -1)) {
+                if (!securityHeaders[key]) {
+                  securityHeaders[key] = {
+                    id: key,
+                    type: 'string'
+                  };
+                }
+
+                securityHeaders[key].id                   = key;
+                securityHeaders[key].displayName          = key;
+                securityHeaders[key].isFromSecurityScheme = true;
+                collection[key] = [securityHeaders[key]];
+
+                context.plain[key] = {
+                  definitions: [securityHeaders[key]],
+                  selected: securityHeaders[key].type
                 };
+                context.values[key] = [undefined];
               }
-
-              securityHeaders[key].id                   = key;
-              securityHeaders[key].displayName          = key;
-              securityHeaders[key].isFromSecurityScheme = true;
-              collection[key] = [securityHeaders[key]];
-
-              context.plain[key] = {
-                definitions: [securityHeaders[key]],
-                selected: securityHeaders[key].type
-              };
-              context.values[key] = [undefined];
             });
           }
         }
@@ -359,7 +369,11 @@
           $scope.documentationSchemeSelected = $scope.securitySchemes[name];
 
           if (type.startsWith('x-')) {
-            readCustomSchemeInfo(name);
+            readSchemeInfoHeaders(name);
+            readSchemeInfoQueryParams(name);
+          } else if (defaultSchema.type === 'Basic Authentication') {
+            readSchemeInfoHeaders(name, ['Authorization']);
+            readSchemeInfoQueryParams(name);
           }
         };
 
