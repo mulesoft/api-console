@@ -69,8 +69,9 @@
               trait = Object.keys(trait).join(', ');
               }
 
-              if (list.indexOf(trait) === -1) {
-                list.push(trait);
+              var displayName = $scope.displayName.traits[trait];
+              if (list.indexOf(displayName) === -1) {
+                list.push(displayName);
               }
             }
           });

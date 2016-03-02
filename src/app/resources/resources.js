@@ -61,10 +61,9 @@
             traits.map(function (trait) {
               if (trait) {
                 if (typeof trait === 'object') {
-                  list.push(Object.keys(trait).join(', '));
-                } else {
-                  list.push(trait);
+                  trait = Object.keys(trait).join(', ');
                 }
+                list.push($scope.displayName.traits[trait]);
               }
             });
           }
@@ -149,12 +148,32 @@
         });
       }],
       link: function($scope) {
+        function generateTraitsDictionary(ramlTraits) {
+          var dict = {};
+
+          if (ramlTraits) {
+            ramlTraits.map(function (ramlTrait) {
+              var key = Object.keys(ramlTrait)[0];
+              var displayName = ramlTrait[key].displayName;
+              if (displayName) {
+                dict[key] = displayName;
+              } else {
+                dict[key] = key;
+              }
+            });
+          }
+
+          return dict;
+        }
+
         ramlParserWrapper.onParseSuccess(function(raml) {
           $scope.raml         = RAML.Inspector.create(raml);
           $scope.rawRaml      = raml;
           $scope.loaded       = true;
           $scope.resourceList = [];
           $scope.documentList = [];
+          $scope.displayName  = {};
+          $scope.displayName.traits = generateTraitsDictionary($scope.raml.traits);
 
           for (var i = 0; i < $scope.raml.resourceGroups.length; i++) {
             var resources = $scope.raml.resourceGroups[i];
