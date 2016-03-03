@@ -146,5 +146,20 @@ module.exports = function() {
       assert.ifResourceNameIsPresentAt('/resources', 0);
       assert.ifShowingDefinedMethodsForResourceAt(0, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT']);
     });
+
+    it('should be able to diplay falsy default values', function () {
+      // Arrange
+      var po     = factory.create('initializer');
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000');
+      po.setRaml(po.examples['falsy-defaults']);
+      po.loadRaml();
+
+      // Assert
+      assert.ifResourceNameIsPresentAt('/resource', 0);
+      assert.ifShowingDefaultValueInQueryParameter(0, 0, 0);
+    });
   });
 };

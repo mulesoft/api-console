@@ -138,7 +138,7 @@
               result += ', repeatable';
             }
 
-            if (parameter['default']) {
+            if (parameter['default'] !== undefined) {
               result += ', default: ' + parameter['default'];
             }
           }

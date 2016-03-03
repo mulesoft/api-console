@@ -257,7 +257,7 @@
               result += ', repeatable';
             }
 
-            if (parameter['default']) {
+            if (parameter['default'] !== undefined) {
               result += ', default: ' + parameter['default'];
             }
           }
@@ -5229,7 +5229,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <h4 class=\"raml-console-resource-param-heading\">{{uriParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(uriParam[0])}}</span></h4>\n" +
     "        <p markdown=\"uriParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "        <p ng-if=\"uriParam[0].example\">\n" +
+    "        <p ng-if=\"uriParam[0].example !== undefined\">\n" +
     "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{uriParam[0].example}}</span>\n" +
     "        </p>\n" +
     "      </div>\n" +
@@ -5243,7 +5243,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <p markdown=\"header[0].description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "        <p ng-if=\"header[0].example\">\n" +
+    "        <p ng-if=\"header[0].example !== undefined\">\n" +
     "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{header[0].example}}</span>\n" +
     "        </p>\n" +
     "      </div>\n" +
@@ -5257,7 +5257,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <p markdown=\"queryParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "        <p ng-if=\"queryParam[0].example\">\n" +
+    "        <p ng-if=\"queryParam[0].example !== undefined\">\n" +
     "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{queryParam[0].example}}</span>\n" +
     "        </p>\n" +
     "      </div>\n" +
@@ -5279,7 +5279,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "          <p markdown=\"header.description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "          <p ng-if=\"header.example\">\n" +
+    "          <p ng-if=\"header.example !== undefined\">\n" +
     "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{header.example}}</span>\n" +
     "          </p>\n" +
     "        </div>\n" +
@@ -5293,7 +5293,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "          <p markdown=\"queryParameter.description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "          <p ng-if=\"queryParameter.example\">\n" +
+    "          <p ng-if=\"queryParameter.example !== undefined\">\n" +
     "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{queryParameter.example}}</span>\n" +
     "          </p>\n" +
     "        </div>\n" +
@@ -5334,7 +5334,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "          <p markdown=\"formParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "          <p ng-if=\"formParam[0].example\">\n" +
+    "          <p ng-if=\"formParam[0].example !== undefined\">\n" +
     "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
     "          </p>\n" +
     "        </div>\n" +

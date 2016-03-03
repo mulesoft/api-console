@@ -51,6 +51,9 @@ function ResourcesPO () {
     return this.resources.get(index+1).all(by.css('.raml-console-resource-close-btn'));
   };
 
+  this.getQueryParameterDetails = function (index) {
+    return this.resources.get(index+1).all(by.css('.raml-console-resource-param-heading'));
+  };
 
 }
 
