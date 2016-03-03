@@ -81,6 +81,16 @@ function Resource (poName) {
     expect(password2.getAttribute('value')).toBe(passwordText);
 
   };
+
+  this.ifShowingDefaultValueInQueryParameter = function (resource, method, queryParameterPosition) {
+    var button = this.po.getMethodBtn(resource, method);
+    button.click();
+
+    var queryParameters = this.po.getQueryParameterDetails(resource);
+    var queryParameter  = queryParameters.get(queryParameterPosition);
+
+    expect(queryParameter.getText()).toMatch(/default: false/);
+  };
 }
 
 
