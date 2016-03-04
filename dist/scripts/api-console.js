@@ -1379,6 +1379,7 @@
               client.baseUri = client.baseUri.replace(/(https)|(http)/, $scope.currentProtocol.toLocaleLowerCase());
               url = client.baseUri + pathBuilder(segmentContexts);
             } catch (e) {
+              console.error(e);
               $scope.response = {};
               return;
             }
@@ -1429,6 +1430,7 @@
 
               $scope.requestOptions = request.toOptions();
             } catch (e) {
+              console.error(e);
               // custom strategies aren't supported yet.
             }
           } else {
