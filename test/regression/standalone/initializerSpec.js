@@ -147,19 +147,38 @@ module.exports = function() {
       assert.ifShowingDefinedMethodsForResourceAt(0, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT']);
     });
 
-    it('should be able to diplay falsy default values', function () {
+    it('should be able to display falsy default values', function () {
       // Arrange
       var po     = factory.create('initializer');
       var assert = assertions.create('resource');
 
       // Act
       browser.get('http://localhost:9000');
-      po.setRaml(po.examples['falsy-defaults']);
+      po.setRaml(po.examples['query-parameters']);
       po.loadRaml();
 
       // Assert
       assert.ifResourceNameIsPresentAt('/resource', 0);
       assert.ifShowingDefaultValueInQueryParameter(0, 0, 0);
+    });
+
+    it('should select enum example in Try It section', function () {
+      // Arrange
+      var po         = factory.create('initializer');
+      var assert     = assertions.create('resource');
+      var resourcePo = factory.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000');
+      po.setRaml(po.examples['query-parameters']);
+      po.loadRaml();
+
+      resourcePo.toggleResourceMethod(0, 0);
+
+      // Assert
+      assert.ifResourceNameIsPresentAt('/resource', 0);
+      assert.ifTryItShowsParamExample(0, 1, 'true');
+      assert.ifTryItShowsParamExample(0, 5, 'dos');
     });
   });
 };

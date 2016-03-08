@@ -91,6 +91,12 @@ function Resource (poName) {
 
     expect(queryParameter.getText()).toMatch(/default: false/);
   };
+
+  this.ifTryItShowsParamExample = function (resource, queryParameterPosition, defaultValue) {
+    var input = this.po.getTryItQueryParameterInput(resource, queryParameterPosition);
+
+    expect(input.getAttribute('value')).toEqual(defaultValue);
+  };
 }
 
 

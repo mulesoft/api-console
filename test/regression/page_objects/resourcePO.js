@@ -55,6 +55,14 @@ function ResourcesPO () {
     return this.resources.get(index+1).all(by.css('.raml-console-resource-param-heading'));
   };
 
+  this.getTryItQueryParameterInput = function (resourceIndex, inputIndex) {
+    return this.resources.get(resourceIndex+1).all(by.css('.raml-console-sidebar-content-wrapper .raml-console-sidebar-input')).get(inputIndex);
+  };
+
+  this.toggleResourceMethod = function (resource, method) {
+    var button = this.getMethodBtn(resource, method);
+    button.click();
+  }
 }
 
 ResourcesPO.prototype = basePO;

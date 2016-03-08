@@ -1,0 +1,27 @@
+#%RAML 0.8
+title: My API
+baseUri: http://localhost
+
+/resource:
+  get:
+    queryParameters:
+      active:
+        type: boolean
+        example: true
+        default: false
+      display:
+        type: boolean
+        default: false
+        example: false
+      other:
+        type: string
+        enum: [uno, dos, tres]
+        default: uno
+        example: dos
+      page:
+        type: integer
+        default: 0
+      type:
+        type: string
+        default: hola
+        example: lalala
