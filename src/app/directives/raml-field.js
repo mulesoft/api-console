@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   RAML.Directives.ramlField = function() {
@@ -12,13 +12,13 @@
       },
       controller: ['$scope', function($scope) {
         var bodyContent = $scope.$parent.context.bodyContent;
-        var context = $scope.$parent.context[$scope.$parent.type];
+        var context     = $scope.$parent.context[$scope.$parent.type];
 
         if (bodyContent) {
           context = context || bodyContent.definitions[bodyContent.selected];
         }
 
-        Object.keys(context.plain).map(function(key) {
+        Object.keys(context.plain).map(function (key) {
           var definition = context.plain[key].definitions[0];
 
           if (typeof definition['enum'] !== 'undefined') {
@@ -26,16 +26,16 @@
           }
         });
 
-        $scope.canOverride = function(definition) {
-          return definition.type === 'boolean' || typeof definition['enum'] !== 'undefined';
+        $scope.canOverride = function (definition) {
+          return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
         };
 
-        $scope.overrideField = function($event, definition) {
-          var $this = jQuery($event.currentTarget);
+        $scope.overrideField = function ($event, definition) {
+          var $this      = jQuery($event.currentTarget);
           var $container = $this.closest('p');
-          var $el = $container.find('#' + definition.id);
-          var $checkbox = $container.find('#checkbox_' + definition.id);
-          var $select = $container.find('#select_' + definition.id);
+          var $el        = $container.find('#' + definition.id);
+          var $checkbox  = $container.find('#checkbox_' + definition.id);
+          var $select    = $container.find('#select_' + definition.id);
 
           $el.toggleClass('raml-console-sidebar-override-show');
           $checkbox.toggleClass('raml-console-sidebar-override-hide');
@@ -43,7 +43,7 @@
 
           $this.text('Override');
 
-          if ($el.hasClass('raml-console-sidebar-override-show')) {
+          if($el.hasClass('raml-console-sidebar-override-show')) {
             definition.overwritten = true;
             $this.text('Cancel override');
           } else {
@@ -52,43 +52,31 @@
           }
         };
 
-        /**
-         * Event on mouse down. Sets parameters of the option tags.
-         * 
-         * @param $event Event var.
-         */
-        /* TODO: Commented because this mouse selections are not catched in the queryParameters even if select value is set.
-        $scope.onMouseDown = function($event) {
-            $event.preventDefault();
-          var $this = jQuery($event.currentTarget);
-            $this.prop('selected', $this.prop('selected') ? false : true);
-        };*/
-
-        $scope.onChange = function() {
+        $scope.onChange = function () {
           $scope.$parent.context.forceRequest = false;
         };
 
-        $scope.isDefault = function(definition) {
+        $scope.isDefault = function (definition) {
           return typeof definition['enum'] === 'undefined' && definition.type !== 'boolean';
         };
 
-        $scope.isEnum = function(definition) {
+        $scope.isEnum = function (definition) {
           return (typeof definition['enum'] !== 'undefined' && !definition.repeat);
         };
 
-        $scope.isMultiEnum = function(definition) {
+        $scope.isMultiEnum = function (definition) {
           return (typeof definition['enum'] !== 'undefined' && !!definition.repeat);
         };
 
-        $scope.isBoolean = function(definition) {
+        $scope.isBoolean = function (definition) {
           return definition.type === 'boolean';
         };
 
-        $scope.hasExampleValue = function(value) {
+        $scope.hasExampleValue = function (value) {
           return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
         };
 
-        $scope.reset = function(param) {
+        $scope.reset = function (param) {
           var type = $scope.$parent.type || 'bodyContent';
           var info = {};
 
@@ -97,10 +85,8 @@
           $scope.$parent.context[type].reset(info, param.id);
         };
 
-        $scope.unique = function(arr) {
-          return arr.filter(function(v, i, a) {
-            return a.indexOf(v) === i;
-          });
+        $scope.unique = function (arr) {
+          return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
       }]
     };

@@ -1,12 +1,12 @@
-(function() {
+(function () {
   'use strict';
 
   RAML.Directives.validate = function($parse) {
     return {
       require: 'ngModel',
-      link: function($scope, $element, $attrs, $ctrl) {
-        function clear($ctrl, rules) {
-          Object.keys(rules).map(function(key) {
+      link: function ($scope, $element, $attrs, $ctrl) {
+        function clear ($ctrl, rules) {
+          Object.keys(rules).map(function (key) {
             $ctrl.$setValidity(key, true);
           });
         }
@@ -14,7 +14,7 @@
         function validate(value) {
           var sanitizer = (new RAMLSanitize())(sanitationRules);
           var validator = (new RAMLValidate())(validationRules);
-          var current = {};
+          var current   = {};
           var errors;
 
           value = typeof value !== 'undefined' && value !== null && value.length === 0 ? undefined : value;
@@ -32,10 +32,10 @@
           }
         }
 
-        var validation = $parse($attrs.validate)($scope);
+        var validation      = $parse($attrs.validate)($scope);
         var sanitationRules = {};
         var validationRules = {};
-        var control = $ctrl;
+        var control         = $ctrl;
 
         sanitationRules[validation.id] = {
           type: validation.type || null,

@@ -680,7 +680,7 @@
     .directive('ramlClientGenerator', RAML.Directives.ramlClientGenerator);
 })();
 
-(function() {
+(function () {
   'use strict';
 
   RAML.Directives.ramlField = function() {
@@ -694,13 +694,13 @@
       },
       controller: ['$scope', function($scope) {
         var bodyContent = $scope.$parent.context.bodyContent;
-        var context = $scope.$parent.context[$scope.$parent.type];
+        var context     = $scope.$parent.context[$scope.$parent.type];
 
         if (bodyContent) {
           context = context || bodyContent.definitions[bodyContent.selected];
         }
 
-        Object.keys(context.plain).map(function(key) {
+        Object.keys(context.plain).map(function (key) {
           var definition = context.plain[key].definitions[0];
 
           if (typeof definition['enum'] !== 'undefined') {
@@ -708,16 +708,16 @@
           }
         });
 
-        $scope.canOverride = function(definition) {
-          return definition.type === 'boolean' || typeof definition['enum'] !== 'undefined';
+        $scope.canOverride = function (definition) {
+          return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
         };
 
-        $scope.overrideField = function($event, definition) {
-          var $this = jQuery($event.currentTarget);
+        $scope.overrideField = function ($event, definition) {
+          var $this      = jQuery($event.currentTarget);
           var $container = $this.closest('p');
-          var $el = $container.find('#' + definition.id);
-          var $checkbox = $container.find('#checkbox_' + definition.id);
-          var $select = $container.find('#select_' + definition.id);
+          var $el        = $container.find('#' + definition.id);
+          var $checkbox  = $container.find('#checkbox_' + definition.id);
+          var $select    = $container.find('#select_' + definition.id);
 
           $el.toggleClass('raml-console-sidebar-override-show');
           $checkbox.toggleClass('raml-console-sidebar-override-hide');
@@ -725,7 +725,7 @@
 
           $this.text('Override');
 
-          if ($el.hasClass('raml-console-sidebar-override-show')) {
+          if($el.hasClass('raml-console-sidebar-override-show')) {
             definition.overwritten = true;
             $this.text('Cancel override');
           } else {
@@ -734,43 +734,31 @@
           }
         };
 
-        /**
-         * Event on mouse down. Sets parameters of the option tags.
-         * 
-         * @param $event Event var.
-         */
-        /* TODO: Commented because this mouse selections are not catched in the queryParameters even if select value is set.
-        $scope.onMouseDown = function($event) {
-            $event.preventDefault();
-          var $this = jQuery($event.currentTarget);
-            $this.prop('selected', $this.prop('selected') ? false : true);
-        };*/
-
-        $scope.onChange = function() {
+        $scope.onChange = function () {
           $scope.$parent.context.forceRequest = false;
         };
 
-        $scope.isDefault = function(definition) {
+        $scope.isDefault = function (definition) {
           return typeof definition['enum'] === 'undefined' && definition.type !== 'boolean';
         };
 
-        $scope.isEnum = function(definition) {
+        $scope.isEnum = function (definition) {
           return (typeof definition['enum'] !== 'undefined' && !definition.repeat);
         };
 
-        $scope.isMultiEnum = function(definition) {
+        $scope.isMultiEnum = function (definition) {
           return (typeof definition['enum'] !== 'undefined' && !!definition.repeat);
         };
 
-        $scope.isBoolean = function(definition) {
+        $scope.isBoolean = function (definition) {
           return definition.type === 'boolean';
         };
 
-        $scope.hasExampleValue = function(value) {
+        $scope.hasExampleValue = function (value) {
           return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
         };
 
-        $scope.reset = function(param) {
+        $scope.reset = function (param) {
           var type = $scope.$parent.type || 'bodyContent';
           var info = {};
 
@@ -779,10 +767,8 @@
           $scope.$parent.context[type].reset(info, param.id);
         };
 
-        $scope.unique = function(arr) {
-          return arr.filter(function(v, i, a) {
-            return a.indexOf(v) === i;
-          });
+        $scope.unique = function (arr) {
+          return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
       }]
     };
@@ -995,7 +981,7 @@
     .directive('rootDocumentation', RAML.Directives.rootDocumentation);
 })();
 
-(function() {
+(function () {
   'use strict';
 
   RAML.Directives.sidebar = function() {
@@ -1003,18 +989,18 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: ['$scope', '$timeout', function($scope, $timeout) {
+      controller: ['$scope', '$timeout', function ($scope, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
-        var defaultSchema = $scope.securitySchemes[defaultSchemaKey];
-        var defaultAccept = 'application/json';
+        var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+        var defaultAccept    = 'application/json';
 
-        $scope.markedOptions = RAML.Settings.marked;
+        $scope.markedOptions     = RAML.Settings.marked;
         $scope.currentSchemeType = defaultSchema.type;
-        $scope.currentScheme = defaultSchema.id;
-        $scope.responseDetails = false;
-        $scope.currentProtocol = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
+        $scope.currentScheme     = defaultSchema.id;
+        $scope.responseDetails   = false;
+        $scope.currentProtocol   = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
 
-        function readCustomSchemeInfo(name) {
+        function readCustomSchemeInfo (name) {
           if (!$scope.methodInfo.headers.plain) {
             $scope.methodInfo.headers.plain = {};
           }
@@ -1031,20 +1017,19 @@
           readCustomSchemeInfo(defaultSchema.id.split('|')[1]);
         }
 
-        function completeAnimation(element) {
+        function completeAnimation (element) {
           jQuery(element).removeAttr('style');
         }
 
         function parseHeaders(headers) {
-          var parsed = {},
-            key, val, i;
+          var parsed = {}, key, val, i;
 
           if (!headers) {
             return parsed;
           }
 
           headers.split('\n').forEach(function(line) {
-            i = line.indexOf(':');
+            i   = line.indexOf(':');
             key = line.substr(0, i).trim().toLowerCase();
             val = line.substr(i + 1).trim();
 
@@ -1060,16 +1045,16 @@
           return parsed;
         }
 
-        function apply() {
+        function apply () {
           $scope.$apply.apply($scope, arguments);
         }
 
         function beautify(body, contentType) {
-          if (contentType.indexOf('json')) {
+          if(contentType.indexOf('json')) {
             body = vkbeautify.json(body, 2);
           }
 
-          if (contentType.indexOf('xml')) {
+          if(contentType.indexOf('xml')) {
             body = vkbeautify.xml(body, 2);
           }
 
@@ -1090,14 +1075,15 @@
 
             try {
               $scope.response.body = beautify(jqXhr.responseText, $scope.response.contentType);
-            } catch (e) {
+            }
+            catch (e) {
               $scope.response.body = jqXhr.responseText;
             }
           }
 
-          $scope.requestEnd = true;
-          $scope.showMoreEnable = true;
-          $scope.showSpinner = false;
+          $scope.requestEnd      = true;
+          $scope.showMoreEnable  = true;
+          $scope.showSpinner     = false;
           $scope.responseDetails = true;
 
           // If the response fails because of CORS, responseText is null
@@ -1105,7 +1091,7 @@
 
           if (jqXhr && jqXhr.responseText) {
             var lines = $scope.response.body.split('\n').length;
-            editorHeight = lines > 100 ? 2000 : 25 * lines;
+            editorHeight = lines > 100 ? 2000 : 25*lines;
           }
 
           $scope.editorStyle = {
@@ -1116,11 +1102,11 @@
 
           var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
 
-          $timeout(function() {
+          $timeout(function () {
             if (jqXhr) {
               var $editors = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror').toArray();
 
-              $editors.forEach(function(editor) {
+              $editors.forEach(function (editor) {
                 var cm = editor.CodeMirror;
                 cm.setOption('mode', $scope.response.contentType);
                 cm.refresh();
@@ -1128,7 +1114,7 @@
             }
 
             jQuery('html, body').animate({
-              scrollTop: jQuery('#' + hash).offset().top + 'px'
+              scrollTop: jQuery('#'+hash).offset().top + 'px'
             }, 'fast');
           }, 10);
         }
@@ -1136,10 +1122,10 @@
         function resolveSegementContexts(pathSegments, uriParameters) {
           var segmentContexts = [];
 
-          pathSegments.forEach(function(element) {
+          pathSegments.forEach(function (element) {
             if (element.templated) {
               var segment = {};
-              Object.keys(element.parameters).map(function(key) {
+              Object.keys(element.parameters).map(function (key) {
                 segment[key] = uriParameters[key];
               });
               segmentContexts.push(segment);
@@ -1152,11 +1138,9 @@
         }
 
         function validateForm(form) {
-          var keys = Object.keys(form.form).filter(function(key) {
-            return key.indexOf('$') === -1;
-          });
+          var keys = Object.keys(form.form).filter(function (key) { return key.indexOf('$') === -1;});
 
-          keys.forEach(function(fieldName) {
+          keys.forEach(function (fieldName) {
             form.form[fieldName].$setDirty();
           });
 
@@ -1170,7 +1154,7 @@
          * 
          * @return Splitted params or whole context data as parameters.
          */
-        function splitParameters(contextData) {
+        function splitParameters (contextData) {
           var params = {};
 
           // check all params
@@ -1190,10 +1174,10 @@
           return params;
         }
 
-        function getParameters(context, type) {
-          var params = {};
+        function getParameters (context, type) {
+          var params           = {};
           var customParameters = context.customParameters[type];
-          var contextData = context[type].data();
+          var contextData      = context[type].data();
 
           if (!RAML.Utils.isEmpty(contextData)) {
             if (type === 'queryParameters') {
@@ -1204,18 +1188,19 @@
           }
 
           if (customParameters.length > 0) {
-            for (var i = 0; i < customParameters.length; i++) {
+            for(var i = 0; i < customParameters.length; i++) {
               var key = customParameters[i].name;
 
               params[key] = [];
               params[key].push(customParameters[i].value);
             }
           }
+
           return params;
         }
 
-        function clearCustomFields(types) {
-          types.map(function(type) {
+        function clearCustomFields (types) {
+          types.map(function (type) {
             var custom = $scope.context.customParameters[type];
 
             for (var i = 0; i < custom.length; i++) {
@@ -1226,28 +1211,28 @@
 
         $scope.$on('resetData', function() {
           var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
-          var defaultSchema = $scope.securitySchemes[defaultSchemaKey];
+          var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
-          $scope.currentSchemeType = defaultSchema.type;
-          $scope.currentScheme = defaultSchema.id;
-          $scope.currentProtocol = $scope.raml.protocols[0];
+          $scope.currentSchemeType           = defaultSchema.type;
+          $scope.currentScheme               = defaultSchema.id;
+          $scope.currentProtocol             = $scope.raml.protocols[0];
           $scope.documentationSchemeSelected = defaultSchema;
-          $scope.responseDetails = null;
+          $scope.responseDetails             = null;
 
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
         });
 
-        $scope.cancelRequest = function() {
+        $scope.cancelRequest = function () {
           $scope.showSpinner = false;
         };
 
-        $scope.prefillBody = function(current) {
-          var definition = $scope.context.bodyContent.definitions[current];
+        $scope.prefillBody = function (current) {
+          var definition   = $scope.context.bodyContent.definitions[current];
           definition.value = definition.contentType.example;
         };
 
-        $scope.clearFields = function() {
+        $scope.clearFields = function () {
           $scope.context.uriParameters.clear($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.clear($scope.methodInfo.queryParameters);
           $scope.context.headers.clear($scope.methodInfo.headers.plain);
@@ -1257,7 +1242,7 @@
           $scope.context.forceRequest = false;
 
           if ($scope.credentials) {
-            Object.keys($scope.credentials).map(function(key) {
+            Object.keys($scope.credentials).map(function (key) {
               $scope.credentials[key] = '';
             });
           }
@@ -1265,7 +1250,7 @@
           clearCustomFields(['headers', 'queryParameters']);
 
           if ($scope.context.bodyContent) {
-            var current = $scope.context.bodyContent.selected;
+            var current    = $scope.context.bodyContent.selected;
             var definition = $scope.context.bodyContent.definitions[current];
 
             if (typeof definition.clear !== 'undefined') {
@@ -1276,20 +1261,20 @@
           }
         };
 
-        $scope.resetFormParameter = function(param) {
-          var current = $scope.context.bodyContent.selected;
+        $scope.resetFormParameter = function (param) {
+          var current    = $scope.context.bodyContent.selected;
           var definition = $scope.context.bodyContent.definitions[current];
 
           definition.reset($scope.methodInfo.body[current].formParameters, param.id);
         };
 
-        $scope.resetFields = function() {
+        $scope.resetFields = function () {
           $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
 
           if ($scope.context.bodyContent) {
-            var current = $scope.context.bodyContent.selected;
+            var current    = $scope.context.bodyContent.selected;
             var definition = $scope.context.bodyContent.definitions[current];
 
             if (typeof definition.reset !== 'undefined') {
@@ -1302,12 +1287,12 @@
           $scope.context.forceRequest = false;
         };
 
-        $scope.requestBodySelectionChange = function(bodyType) {
+        $scope.requestBodySelectionChange = function (bodyType) {
           $scope.currentBodySelected = bodyType;
         };
 
-        $scope.toggleBodyType = function($event, bodyType) {
-          var $this = jQuery($event.currentTarget);
+        $scope.toggleBodyType = function ($event, bodyType) {
+          var $this  = jQuery($event.currentTarget);
           var $panel = $this.closest('.raml-console-sidebar-toggle-type').find('button');
 
           $panel.removeClass('raml-console-is-active');
@@ -1316,7 +1301,7 @@
           $scope.context.bodyContent.selected = bodyType;
         };
 
-        $scope.getHeaderValue = function(header) {
+        $scope.getHeaderValue = function (header) {
           if (typeof header === 'string') {
             return header;
           }
@@ -1324,7 +1309,7 @@
           return header[0];
         };
 
-        $scope.hasExampleValue = function(value) {
+        $scope.hasExampleValue = function (value) {
           return typeof value !== 'undefined' ? true : false;
         };
 
@@ -1332,7 +1317,7 @@
 
         function cleanSchemeMetadata(collection, context) {
           if (collection) {
-            Object.keys(collection).map(function(key) {
+            Object.keys(collection).map(function (key) {
               if (collection[key][0].isFromSecurityScheme) {
                 delete collection[key];
               }
@@ -1344,12 +1329,12 @@
           }
         }
 
-        function updateContextData(type, scheme, collection, context) {
-          var details = jQuery.extend({}, $scope.securitySchemes[scheme].describedBy || {});
+        function updateContextData (type, scheme, collection, context) {
+          var details         = jQuery.extend({}, $scope.securitySchemes[scheme].describedBy || {});
           var securityHeaders = details[type] || {};
 
           if (securityHeaders) {
-            Object.keys(securityHeaders).map(function(key) {
+            Object.keys(securityHeaders).map(function (key) {
               if (!securityHeaders[key]) {
                 securityHeaders[key] = {
                   id: key,
@@ -1357,8 +1342,8 @@
                 };
               }
 
-              securityHeaders[key].id = key;
-              securityHeaders[key].displayName = key;
+              securityHeaders[key].id                   = key;
+              securityHeaders[key].displayName          = key;
               securityHeaders[key].isFromSecurityScheme = true;
               collection[key] = [securityHeaders[key]];
 
@@ -1376,9 +1361,9 @@
         };
 
         $scope.securitySchemeChanged = function securitySchemeChanged(scheme) {
-          var info = scheme.split('|');
-          var type = info[0];
-          var name = info[1];
+          var info            = scheme.split('|');
+          var type            = info[0];
+          var name            = info[1];
 
           $scope.currentSchemeType = type;
           $scope.context.forceRequest = false;
@@ -1393,22 +1378,22 @@
           }
         };
 
-        $scope.setFormScope = function(form) {
+        $scope.setFormScope = function (form) {
           $scope.form = form;
         };
 
-        $scope.tryIt = function($event) {
-          $scope.requestOptions = null;
+        $scope.tryIt = function ($event) {
+          $scope.requestOptions  = null;
           $scope.responseDetails = false;
-          $scope.response = {};
+          $scope.response        = {};
 
           if (!$scope.context.forceRequest) {
             jQuery($event.currentTarget).closest('form').find('.ng-invalid').first().focus();
           }
 
-          if ($scope.context.forceRequest || validateForm($scope.form)) {
+          if($scope.context.forceRequest || validateForm($scope.form)) {
             var url;
-            var context = $scope.context;
+            var context         = $scope.context;
             var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
 
             $scope.showSpinner = true;
@@ -1416,9 +1401,9 @@
 
             try {
               var pathBuilder = context.pathBuilder;
-              var client = RAML.Client.create($scope.raml, function(client) {
+              var client      = RAML.Client.create($scope.raml, function(client) {
                 if ($scope.raml.baseUriParameters) {
-                  Object.keys($scope.raml.baseUriParameters).map(function(key) {
+                  Object.keys($scope.raml.baseUriParameters).map(function (key) {
                     var uriParameters = $scope.context.uriParameters.data();
                     pathBuilder.baseUriContext[key] = uriParameters[key][0];
                     delete uriParameters[key];
@@ -1462,7 +1447,7 @@
               //// TODO: Make a uniform interface
               if (scheme && scheme.type === 'OAuth 2.0') {
                 authStrategy = new RAML.Client.AuthStrategies.Oauth2(scheme, $scope.credentials);
-                authStrategy.authenticate(request.toOptions(), function(jqXhr, err) {
+                authStrategy.authenticate(request.toOptions(), function (jqXhr, err) {
                   $scope.requestOptions = request.toOptions();
                   handleResponse(jqXhr, err);
                 });
@@ -1473,12 +1458,8 @@
                 token.sign(request);
                 $scope.requestOptions = request.toOptions();
                 jQuery.ajax(request.toOptions()).then(
-                  function(data, textStatus, jqXhr) {
-                    handleResponse(jqXhr);
-                  },
-                  function(jqXhr) {
-                    handleResponse(jqXhr);
-                  }
+                  function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
+                  function(jqXhr) { handleResponse(jqXhr); }
                 );
               });
 
@@ -1493,35 +1474,36 @@
 
         $scope.documentationEnabled = true;
 
-        $scope.closeSidebar = function($event) {
-          var $this = jQuery($event.currentTarget);
-          var $panel = $this.closest('.raml-console-resource-panel');
-          var $sidebar = $panel.find('.raml-console-sidebar');
-          var sidebarWidth = 0;
+        $scope.closeSidebar = function ($event) {
+          var $this         = jQuery($event.currentTarget);
+          var $panel        = $this.closest('.raml-console-resource-panel');
+          var $sidebar      = $panel.find('.raml-console-sidebar');
+          var sidebarWidth  = 0;
 
           if (jQuery(window).width() > 960) {
             sidebarWidth = 430;
           }
 
           $scope.documentationEnabled = true;
-          $sidebar.velocity({
-            width: 0
-          }, {
-            duration: 200,
-            complete: function(element) {
-              jQuery(element).removeAttr('style');
-              $sidebar.removeClass('raml-console-is-fullscreen');
+          $sidebar.velocity(
+            { width: 0 },
+            {
+              duration: 200,
+              complete: function (element) {
+                jQuery(element).removeAttr('style');
+                $sidebar.removeClass('raml-console-is-fullscreen');
+              }
             }
-          });
+          );
           $sidebar.toggleClass('raml-console-is-collapsed');
           $sidebar.removeClass('raml-console-is-responsive');
           $panel.toggleClass('raml-console-has-sidebar-collapsed');
         };
 
-        $scope.toggleSidebar = function($event) {
-          var $this = jQuery($event.currentTarget);
-          var $panel = $this.closest('.raml-console-resource-panel');
-          var $sidebar = $panel.find('.raml-console-sidebar');
+        $scope.toggleSidebar = function ($event) {
+          var $this        = jQuery($event.currentTarget);
+          var $panel       = $this.closest('.raml-console-resource-panel');
+          var $sidebar     = $panel.find('.raml-console-sidebar');
           var sidebarWidth = 0;
 
           if (jQuery(window).width() > 960) {
@@ -1530,28 +1512,30 @@
 
           if ($sidebar.hasClass('raml-console-is-fullscreen')) {
             $scope.documentationEnabled = true;
-            $sidebar.velocity({
-              width: $scope.singleView ? 0 : sidebarWidth
-            }, {
-              duration: 200,
-              complete: function(element) {
-                jQuery(element).removeAttr('style');
-                $sidebar.removeClass('raml-console-is-fullscreen');
+            $sidebar.velocity(
+              { width: $scope.singleView ? 0 : sidebarWidth },
+              {
+                duration: 200,
+                complete: function (element) {
+                  jQuery(element).removeAttr('style');
+                  $sidebar.removeClass('raml-console-is-fullscreen');
+                }
               }
-            });
+            );
             $sidebar.removeClass('raml-console-is-responsive');
             $panel.removeClass('raml-console-has-sidebar-fullscreen');
           } else {
-            $sidebar.velocity({
-              width: '100%'
-            }, {
-              duration: 200,
-              complete: function(element) {
-                jQuery(element).removeAttr('style');
-                $scope.documentationEnabled = false;
-                apply();
+            $sidebar.velocity(
+              { width: '100%' },
+              {
+                duration: 200,
+                complete: function (element) {
+                  jQuery(element).removeAttr('style');
+                  $scope.documentationEnabled = false;
+                  apply();
+                }
               }
-            });
+            );
 
             $sidebar.addClass('raml-console-is-fullscreen');
             $sidebar.addClass('raml-console-is-responsive');
@@ -1564,13 +1548,13 @@
           }
         };
 
-        $scope.collapseSidebar = function($event) {
-          var $this = jQuery($event.currentTarget);
-          var $panel = $this.closest('.raml-console-resource-panel');
+        $scope.collapseSidebar = function ($event) {
+          var $this         = jQuery($event.currentTarget);
+          var $panel        = $this.closest('.raml-console-resource-panel');
           var $panelContent = $panel.find('.raml-console-resource-panel-primary');
-          var $sidebar = $panel.find('.raml-console-sidebar');
-          var animation = 430;
-          var speed = 200;
+          var $sidebar      = $panel.find('.raml-console-sidebar');
+          var animation     = 430;
+          var speed         = 200;
 
           if ((!$sidebar.hasClass('raml-console-is-fullscreen') && !$sidebar.hasClass('raml-console-is-collapsed')) || $sidebar.hasClass('raml-console-is-responsive')) {
             animation = 0;
@@ -1581,25 +1565,27 @@
             speed = 0;
           }
 
-          $sidebar.velocity({
-            width: animation
-          }, {
-            duration: speed,
-            complete: function(element) {
-              jQuery(element).removeAttr('style');
-              if ($scope.singleView) {
-                $scope.documentationEnabled = false;
+          $sidebar.velocity(
+            { width: animation },
+            {
+              duration: speed,
+              complete: function (element) {
+                jQuery(element).removeAttr('style');
+                if ($scope.singleView) {
+                  $scope.documentationEnabled = false;
+                }
+                apply();
               }
-              apply();
             }
-          });
+          );
 
-          $panelContent.velocity({
-            'padding-right': animation
-          }, {
-            duration: speed,
-            complete: completeAnimation
-          });
+          $panelContent.velocity(
+            { 'padding-right': animation },
+            {
+              duration: speed,
+              complete: completeAnimation
+            }
+          );
 
           $sidebar.toggleClass('raml-console-is-collapsed');
           $sidebar.removeClass('raml-console-is-responsive');
@@ -1610,7 +1596,7 @@
           }
         };
 
-        $scope.toggleRequestMetadata = function(enabled) {
+        $scope.toggleRequestMetadata = function (enabled) {
           if ($scope.showRequestMetadata && !enabled) {
             $scope.showRequestMetadata = false;
           } else {
@@ -1620,7 +1606,7 @@
 
         $scope.showResponseMetadata = true;
 
-        $scope.toggleResponseMetadata = function() {
+        $scope.toggleResponseMetadata = function () {
           $scope.showResponseMetadata = !$scope.showResponseMetadata;
         };
       }]
@@ -1695,15 +1681,15 @@
     .directive('themeSwitcher', RAML.Directives.theme);
 })();
 
-(function() {
+(function () {
   'use strict';
 
   RAML.Directives.validate = function($parse) {
     return {
       require: 'ngModel',
-      link: function($scope, $element, $attrs, $ctrl) {
-        function clear($ctrl, rules) {
-          Object.keys(rules).map(function(key) {
+      link: function ($scope, $element, $attrs, $ctrl) {
+        function clear ($ctrl, rules) {
+          Object.keys(rules).map(function (key) {
             $ctrl.$setValidity(key, true);
           });
         }
@@ -1711,7 +1697,7 @@
         function validate(value) {
           var sanitizer = (new RAMLSanitize())(sanitationRules);
           var validator = (new RAMLValidate())(validationRules);
-          var current = {};
+          var current   = {};
           var errors;
 
           value = typeof value !== 'undefined' && value !== null && value.length === 0 ? undefined : value;
@@ -1729,10 +1715,10 @@
           }
         }
 
-        var validation = $parse($attrs.validate)($scope);
+        var validation      = $parse($attrs.validate)($scope);
         var sanitationRules = {};
         var validationRules = {};
-        var control = $ctrl;
+        var control         = $ctrl;
 
         sanitationRules[validation.id] = {
           type: validation.type || null,
@@ -4887,7 +4873,7 @@ RAML.Inspector = (function() {
   }
 })(this);
 
-(function(root) {
+(function (root) {
   /**
    * `Object.prototype.toString` as a function.
    *
@@ -4901,7 +4887,7 @@ RAML.Inspector = (function() {
    * @param  {Date}    check
    * @return {Boolean}
    */
-  var isDate = function(check) {
+  var isDate = function (check) {
     return toString(check) === '[object Date]' && !isNaN(check.getTime());
   };
 
@@ -4911,7 +4897,7 @@ RAML.Inspector = (function() {
    * @param  {Boolean}  check
    * @return {Boolean}
    */
-  var isBoolean = function(check) {
+  var isBoolean = function (check) {
     return typeof check === 'boolean';
   };
 
@@ -4921,7 +4907,7 @@ RAML.Inspector = (function() {
    * @param  {String}  check
    * @return {Boolean}
    */
-  var isString = function(check) {
+  var isString = function (check) {
     return typeof check === 'string';
   };
 
@@ -4931,7 +4917,7 @@ RAML.Inspector = (function() {
    * @param  {Number}  check
    * @return {Boolean}
    */
-  var isInteger = function(check) {
+  var isInteger = function (check) {
     return typeof check === 'number' && check % 1 === 0;
   };
 
@@ -4941,7 +4927,7 @@ RAML.Inspector = (function() {
    * @param  {Number}  check
    * @return {Boolean}
    */
-  var isNumber = function(check) {
+  var isNumber = function (check) {
     return typeof check === 'number' && isFinite(check);
   };
 
@@ -4951,8 +4937,8 @@ RAML.Inspector = (function() {
    * @param  {Number}   min
    * @return {Function}
    */
-  var isMinimum = function(min) {
-    return function(check) {
+  var isMinimum = function (min) {
+    return function (check) {
       return check >= min;
     };
   };
@@ -4963,8 +4949,8 @@ RAML.Inspector = (function() {
    * @param  {Number}  max
    * @return {Boolean}
    */
-  var isMaximum = function(max) {
-    return function(check) {
+  var isMaximum = function (max) {
+    return function (check) {
       return check <= max;
     };
   };
@@ -4975,8 +4961,8 @@ RAML.Inspector = (function() {
    * @param  {Number}  min
    * @return {Boolean}
    */
-  var isMinimumLength = function(min) {
-    return function(check) {
+  var isMinimumLength = function (min) {
+    return function (check) {
       return check.length >= min;
     };
   };
@@ -4987,8 +4973,8 @@ RAML.Inspector = (function() {
    * @param  {Number}  max
    * @return {Boolean}
    */
-  var isMaximumLength = function(max) {
-    return function(check) {
+  var isMaximumLength = function (max) {
+    return function (check) {
       return check.length <= max;
     };
   };
@@ -4999,8 +4985,8 @@ RAML.Inspector = (function() {
    * @param  {Array}    values
    * @return {Function}
    */
-  var isEnum = function(values) {
-    return function(check) {
+  var isEnum = function (values) {
+    return function (check) {
       return values.indexOf(check) > -1;
     };
   };
@@ -5011,7 +4997,7 @@ RAML.Inspector = (function() {
    * @param  {(String|RegExp)} pattern
    * @return {Function}
    */
-  var isPattern = function(pattern) {
+  var isPattern = function (pattern) {
     if (toString(pattern) !== '[object RegExp]') {
       pattern = new RegExp(pattern);
     }
@@ -5028,13 +5014,8 @@ RAML.Inspector = (function() {
    * @param  {String}  key
    * @return {Object}
    */
-  var toValidationObject = function(valid, rule, value, key) {
-    return {
-      valid: valid,
-      rule: rule,
-      value: value,
-      key: key
-    };
+  var toValidationObject = function (valid, rule, value, key) {
+    return { valid: valid, rule: rule, value: value, key: key };
   };
 
   /**
@@ -5044,11 +5025,11 @@ RAML.Inspector = (function() {
    * @param  {Object}   rules
    * @return {Function}
    */
-  var toValidationFunction = function(config, rules) {
+  var toValidationFunction = function (config, rules) {
     var fns = [];
 
     // Iterate over all of the keys and dynamically push validation rules.
-    Object.keys(config).forEach(function(rule) {
+    Object.keys(config).forEach(function (rule) {
       if (rules.hasOwnProperty(rule)) {
         fns.push([rule, rules[rule](config[rule], rule)]);
       }
@@ -5062,7 +5043,7 @@ RAML.Inspector = (function() {
      * @param  {Object} object
      * @return {Object}
      */
-    return function(value, key, object) {
+    return function (value, key, object) {
       // Run each of the validations returning early when something fails.
       for (var i = 0; i < fns.length; i++) {
         var valid = fns[i][1](value, key, object);
@@ -5084,16 +5065,16 @@ RAML.Inspector = (function() {
    * @param  {Object}   types
    * @return {Function}
    */
-  var toValidation = function(configs, rules, types) {
+  var toValidation = function (configs, rules, types) {
     // Initialize the configs to an array if they aren't already.
     configs = Array.isArray(configs) ? configs : [configs];
 
-    var isOptional = !configs.length;
+    var isOptional        = !configs.length;
     var simpleValidations = [];
     var repeatValidations = [];
 
     // Support multiple type validations.
-    configs.forEach(function(config) {
+    configs.forEach(function (config) {
       var validation = [config.type, toValidationFunction(config, rules)];
 
       // Allow short-circuiting of non-required values.
@@ -5117,7 +5098,7 @@ RAML.Inspector = (function() {
      * @param  {Object} object
      * @return {Object}
      */
-    return function(value, key, object) {
+    return function (value, key, object) {
       // Short-circuit validation if the value is `null`.
       if (value == null) {
         return toValidationObject(isOptional, 'required', value, key);
@@ -5127,7 +5108,7 @@ RAML.Inspector = (function() {
       var isArray = Array.isArray(value);
 
       // Select the validation stack to use based on the (repeated) value.
-      var values = isArray ? value : [value];
+      var values      = isArray ? value : [value];
       var validations = isArray ? repeatValidations : simpleValidations;
 
       // Set the initial response to be an error.
@@ -5136,14 +5117,14 @@ RAML.Inspector = (function() {
       );
 
       // Iterate over each value and test using type validation.
-      validations.some(function(validation) {
+      validations.some(function (validation) {
         // Non-existant types should always be invalid.
         if (!types.hasOwnProperty(validation[0])) {
           return false;
         }
 
         // Check all the types match. If they don't, attempt another validation.
-        var isType = values.every(function(value) {
+        var isType = values.every(function (value) {
           return types[validation[0]](value, key, object);
         });
 
@@ -5154,7 +5135,7 @@ RAML.Inspector = (function() {
 
         // When every value is the correct type, run the validation on each value
         // and break the loop if we get a failure.
-        values.every(function(value) {
+        values.every(function (value) {
           return (response = validation[1](value, key, object)).valid;
         });
 
@@ -5174,21 +5155,21 @@ RAML.Inspector = (function() {
    *
    * @return {Function}
    */
-  RAMLValidate = function() {
+  RAMLValidate = function () {
     /**
      * Return a validation function that validates a model based on the schema.
      *
      * @param  {Object}   schema
      * @return {Function}
      */
-    var validate = function(schema) {
+    var validate = function (schema) {
       var validations = {};
 
       // Convert all parameters into validation functions.
-      Object.keys(schema).forEach(function(param) {
+      Object.keys(schema).forEach(function (param) {
         var config = schema[param];
-        var rules = validate.RULES;
-        var types = validate.TYPES;
+        var rules  = validate.RULES;
+        var types  = validate.TYPES;
 
         validations[param] = toValidation(config, rules, types);
       });
@@ -5200,22 +5181,22 @@ RAML.Inspector = (function() {
        * @param  {Object}  model
        * @return {Boolean}
        */
-      return function(model) {
+      return function (model) {
         model = model || {};
 
         // Map all validations to their object and filter for failures.
-        var errors = Object.keys(validations).map(function(param) {
-          var value = model[param];
+        var errors = Object.keys(validations).map(function (param) {
+          var value      = model[param];
           var validation = validations[param];
 
           // Return the validation result.
           return validation(value, param, model);
-        }).filter(function(validation) {
+        }).filter(function (validation) {
           return !validation.valid;
         });
 
         return {
-          valid: errors.length === 0,
+          valid:  errors.length === 0,
           errors: errors
         };
       };
@@ -5227,11 +5208,11 @@ RAML.Inspector = (function() {
      * @type {Object}
      */
     validate.TYPES = {
-      date: isDate,
-      number: isNumber,
+      date:    isDate,
+      number:  isNumber,
       integer: isInteger,
       "boolean": isBoolean,
-      string: isString
+      string:  isString
     };
 
     /**
@@ -5240,12 +5221,12 @@ RAML.Inspector = (function() {
      * @type {Object}
      */
     validate.RULES = {
-      minimum: isMinimum,
-      maximum: isMaximum,
+      minimum:   isMinimum,
+      maximum:   isMaximum,
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
-      "enum": isEnum,
-      pattern: isPattern
+      "enum":      isEnum,
+      pattern:   isPattern
     };
 
     /**
@@ -5258,7 +5239,7 @@ RAML.Inspector = (function() {
    * Export the raml-validate for multiple environments.
    */
   if (typeof define === 'function' && define.amd) {
-    define([], function() {
+    define([], function () {
       return RAMLValidate;
     });
   } else if (typeof exports === 'object') {
