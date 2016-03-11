@@ -2462,6 +2462,16 @@ a.raml-console-resource-path-active {
   margin-left: 0;
 }
 
+.raml-console-examples-container .raml-console-flag {
+  cursor: pointer;
+  margin: 0 2px 2px 0;
+}
+
+.raml-console-examples-container .raml-console-flag.raml-console-is-active {
+  background: #bbbbbb;
+  color: #333;
+}
+
 .raml-console-resource-panel-subheader {
   padding: 14px 32px 18px 100px;
   border-width: 1px 0;

@@ -1,6 +1,7 @@
 'use strict';
 
 var assertions = require('../assertions');
+var factory    = require('../page_objects');
 
 module.exports = function() {
   it('should be able to diplay the API title', function () {
@@ -125,5 +126,23 @@ module.exports = function() {
 
     //Assert
     assert.ifResourcesAreCollapsed();
+  });
+
+  it('should show response examples', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-with-reponse-examples.html');
+
+    resourcePo.toggleResourceMethod(0, 0);
+
+    // Assert
+    assert.ifShowsResponseExample(0, '{\n' +
+      '  "name": "John",\n' +
+      '  "lastName": "Smith",\n' +
+      '  "title": "Developer"\n' +
+      '}');
   });
 };
