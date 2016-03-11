@@ -63,6 +63,10 @@ function ResourcesPO () {
     var button = this.getMethodBtn(resource, method);
     button.click();
   };
+
+  this.getReponseExamples = function (resource) {
+    return this.resources.get(resource+1).element(by.css('.raml-console-hljs pre code'));
+  };
 }
 
 ResourcesPO.prototype = basePO;
