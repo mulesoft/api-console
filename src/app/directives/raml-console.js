@@ -1,10 +1,10 @@
 (function () {
   'use strict';
 
-  RAML.Directives.resources = function(ramlParserWrapper) {
+  RAML.Directives.ramlConsole = function ramlConsole(ramlParserWrapper) {
     return {
       restrict: 'E',
-      templateUrl: 'resources/resources.tpl.html',
+      templateUrl: 'directives/raml-console.tpl.html',
       replace: true,
       scope: {
         src: '@'
@@ -173,5 +173,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlConsole', ['ramlParserWrapper', RAML.Directives.resources]);
+    .directive('ramlConsole', ['ramlParserWrapper', RAML.Directives.ramlConsole]);
 })();
