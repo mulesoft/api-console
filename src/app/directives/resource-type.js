@@ -4,7 +4,7 @@
   RAML.Directives.resourceType = function() {
     return {
       restrict: 'E',
-      templateUrl: 'resources/resource-type.tpl.html',
+      templateUrl: 'directives/resource-type.tpl.html',
       replace: true,
       controller: ['$scope', function ($scope) {
         var resourceType = $scope.resource.resourceType;
