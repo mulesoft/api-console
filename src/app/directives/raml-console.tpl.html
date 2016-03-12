@@ -1,12 +1,6 @@
 <main class="raml-console-error-container raml-console-error-primary">
   <div ng-if="!loaded && !error">
-    <div class="raml-console-spinner">
-      <div class="raml-console-rect1"></div>
-      <div class="raml-console-rect2"></div>
-      <div class="raml-console-rect3"></div>
-      <div class="raml-console-rect4"></div>
-      <div class="raml-console-rect5"></div>
-    </div>
+    <raml-console-spinner></raml-console-spinner>
   </div>
 
   <div ng-if="loaded && !error">
