@@ -84,7 +84,9 @@
 
       function lintFromError(error) {
         return function getAnnotations() {
+          /*jshint camelcase: false */
           var context = error && (error.context_mark || error.problem_mark);
+          /*jshint camelcase: true */
 
           if (!context) {
             return [];
