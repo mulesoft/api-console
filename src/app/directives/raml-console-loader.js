@@ -45,7 +45,9 @@
           })
           .catch(function (error) {
             $scope.vm.error = angular.extend(error, {
+              /*jshint camelcase: false */
               buffer: (error.context_mark || error.problem_mark).buffer
+              /*jshint camelcase: true */
             });
           })
           .finally(function () {

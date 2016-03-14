@@ -8,6 +8,7 @@
     "LICENSE"
   ],
   "scripts": {
+    "grunt": "grunt",
     "test": "grunt regression"
   },
   "repository": {
