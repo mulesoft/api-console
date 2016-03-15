@@ -18,6 +18,8 @@ securitySchemes:
         authorizationUri: https://acme.com/login/oauth/authorize
         accessTokenUri: https://acme.com/login/oauth/access_token
         authorizationGrants: [ code ]
-securedBy: [ null, oauth_2_0 ]
+  - basic:
+      type: Basic Authentication
+securedBy: [ null, oauth_2_0, basic ]
 /resources:
  get:

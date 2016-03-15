@@ -3,7 +3,7 @@
 var assertions = require('../assertions');
 
 module.exports = function() {
-  it('should be able to diplay the API title', function () {
+  it('should be able to display the API title', function () {
     // Arrange
     var assert = assertions.create('resource');
 
@@ -36,7 +36,7 @@ module.exports = function() {
     browser.get('http://localhost:9000/directive-security-schemes.html');
 
     // Assert
-    assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+    assert.ifShowingSecuritySchemes(0, 0, ['OAuth 2.0', 'Basic Authentication', 'Anonymous']);
   });
 
   it('should be able to cache credentials between resources', function () {
@@ -49,7 +49,7 @@ module.exports = function() {
   });
 
 
-  it('should be able to diplay all HTTP methods', function () {
+  it('should be able to display all HTTP methods', function () {
     // Arrange
     var assert = assertions.create('resource');
 

@@ -42,7 +42,7 @@ function Resource (poName) {
     schemes              = this.po.getSecuritySchemes(resource);
     securitySchemesCount = schemes.count();
 
-    expect(securitySchemesCount).toBe(2);
+    expect(securitySchemesCount).toBe(3);
 
     securitySchemesCount.then(function (count) {
       for (var i = 0; i < count; i++) {
