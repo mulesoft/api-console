@@ -33,6 +33,7 @@
     "element": true,
     "by": true,
     "describe": true,
+    "xdescribe": true,
     "it": true,
     "browser": true,
     "expect": true,
