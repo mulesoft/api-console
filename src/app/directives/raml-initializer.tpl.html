@@ -29,7 +29,7 @@
         </header>
 
         <div class="raml-console-initializer-row">
-          <p class="raml-console-initializer-input-container">
+          <p class="raml-console-initializer-input-container" ng-class="{'raml-console-initializer-input-container-error': !vm.isLoadedFromUrl && vm.error}">
             <textarea id="raml" ui-codemirror="vm.codeMirror" ng-model="vm.ramlString"></textarea>
           </p>
           <div class="raml-console-initializer-action-group" align="right">
