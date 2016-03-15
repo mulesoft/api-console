@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Standalone', function () {
-  describe('Initializer', require('./initializerSpec'));
+  xdescribe('Initializer', require('./initializerSpec'));
   describe('Directive', require('./directiveSpec'));
-  describe('URI Parameter', require('./uriParamSpec'));
+  xdescribe('URI Parameter', require('./uriParamSpec'));
 });
