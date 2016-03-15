@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API Console</title>
+  <link href="styles/api-console-light-theme.css" rel="stylesheet" class="theme">
+</head>
+<body ng-app="ramlConsoleApp" ng-cloak class="raml-console-body">
+  <div ng-controller="typesController" style="margin: 20px;">
+    <div>
+      <span
+        class="raml-console-flag raml-console-is-clickable"
+        ng-repeat="example in examples"
+        ng-click="changeExample(example)"
+        ng-class="{'raml-console-is-active': example.name === currentExample.name}">
+          {{example.name}}
+      </span>
+    </div>
+    <div style="width: 450px;">
+      <types type="currentExample.type" model="model" edit-mode="true"></types>
+    </div>
+    <h4>Model</h4>
+    <code
+      class="raml-console-hljs"
+      hljs
+      source="getBeautifiedExample(model)">
+    </code>
+
+    <h4>Original Type</h4>
+    <code
+      class="raml-console-hljs"
+      hljs
+      source="getBeautifiedExample(currentExample.type)">
+    </code>
+  </div>
+  <script src="scripts/api-console-vendor.js"></script>
+  <script src="scripts/api-console.js"></script>
+  <script>
+    $.noConflict();
+  </script>
+  <script>
+    angular.module('ramlConsoleApp').controller('typesController', function ($scope) {
+      $scope.changeExample = function (example) {
+        $scope.currentExample = example;
+        $scope.model = {};
+      };
+
+      $scope.getBeautifiedExample = function (value) {
+        var result = JSON.stringify(value);
+
+        try {
+          result = vkbeautify.json(result, 2);
+        }
+        catch (e) { }
+
+        return result;
+      };
+
+      var simpleParams = {
+        properties: [{
+          name: 'name',
+          type: 'string',
+          required: false,
+          example: 'Juan'
+        },
+        {
+          name: 'size',
+          type: 'string',
+          enum: ['Small', 'Medium', 'Large'],
+          example: 'Small',
+          required: false
+        }]
+      };
+
+      var simpleType = {
+        type: 'SimplePerson',
+        properties: [{
+          name: 'name',
+          type: 'string',
+          required: false,
+          example: 'Juan'
+        },
+        {
+          name: 'age',
+          type: 'number',
+          required: false
+        }]
+      };
+
+      var complexType = {
+        type: 'ComplexPerson',
+        properties: [{
+          name: 'name',
+          type: 'string',
+          required: false,
+          example: 'Juan'
+        },
+        {
+          name: 'addresses',
+          type: 'array',
+          component: {
+            type: 'string'
+          }
+        },
+        {
+          name: 'manager',
+          type: 'Person',
+          properties: [{
+            name: 'name',
+            type: 'string',
+            required: false,
+            example: 'Pepe'
+          },
+          {
+            name: 'age',
+            type: 'number',
+            required: false,
+            example: '31'
+          },
+          {
+            name: 'profession',
+            type: 'string',
+            required: false,
+            example: 'Fireman'
+          },
+          {
+            name: 'manager',
+            type: 'Person',
+            properties: [{
+              name: 'name',
+              type: 'string',
+              required: false,
+              example: 'Pancho'
+            },
+            {
+              name: 'age',
+              type: 'number',
+              required: false,
+              example: '42'
+            },
+            {
+              name: 'profession',
+              type: 'string',
+              required: false,
+              example: 'Chief'
+            }]
+          }]
+        },
+        {
+          name: 'age',
+          type: 'number',
+          required: false,
+          example: '23'
+        },
+        {
+          name: 'profession',
+          type: 'string',
+          required: false,
+          example: 'Trainee'
+        }]
+      };
+
+      var arrayNativeType = {
+        type: 'array',
+        component: {
+          type: 'string'
+        }
+      };
+
+      var arrayType = {
+        type: 'array',
+        component: {
+          type: 'Person',
+          properties: [{
+            name: 'name',
+            type: 'string',
+            required: false,
+            example: 'Juan'
+          },
+          {
+            name: 'age',
+            type: 'number',
+            required: false,
+            example: '23'
+          },
+          {
+            name: 'profession',
+            type: 'string',
+            required: false,
+            example: 'Trainee'
+          }]
+        }
+      };
+
+      var unionNativeType = {
+        type: 'Person',
+        properties: [{
+          name: 'identification',
+          type: 'union',
+          leftType: {
+            type: 'string',
+            enum: ['a', 'b', 'c']
+          },
+          rightType: {
+            type: 'number'
+          }
+        }]
+      };
+
+      var unionType = {
+        type: 'union',
+        leftType: {
+          type: 'Person',
+          properties: [{
+            name: 'name',
+            type: 'string',
+            required: false,
+            example: 'Juan'
+          },
+          {
+            name: 'age',
+            type: 'number',
+            required: false,
+            example: '23'
+          },
+          {
+            name: 'profession',
+            type: 'string',
+            required: false,
+            example: 'Trainee'
+          }]
+        },
+        rightType: {
+          type: 'Deparment',
+          properties: [{
+            name: 'name',
+            type: 'string',
+            required: false,
+            example: 'IT'
+          },
+          {
+            name: 'employees',
+            type: 'number',
+            required: false,
+            example: '23'
+          }]
+        }
+      };
+
+      var mixedUnionType = {
+        type: 'union',
+        leftType: {
+          type: 'string'
+        },
+        rightType: {
+          type: 'Deparment',
+          properties: [{
+            name: 'name',
+            type: 'string',
+            required: false,
+            example: 'IT'
+          },
+          {
+            name: 'employees',
+            type: 'number',
+            required: false,
+            example: '23'
+          }]
+        }
+      }
+
+      var multipleUnionType = {
+        type: 'union',
+        leftType: {
+          type: 'union',
+          leftType: {
+            type: 'Person',
+            properties: [{
+              name: 'name',
+              type: 'string',
+              required: false,
+              example: 'Juan'
+            },
+            {
+              name: 'age',
+              type: 'number',
+              required: false,
+              example: '23'
+            },
+            {
+              name: 'profession',
+              type: 'string',
+              required: false,
+              example: 'Trainee'
+            }]
+          },
+          rightType: {
+            type: 'Dog',
+            properties: [{
+              name: 'name',
+              type: 'string',
+              required: false,
+              example: 'Ramon'
+            },
+            {
+              name: 'age',
+              type: 'number',
+              required: false,
+              example: '4'
+            }]
+          }
+        },
+        rightType: {
+          type: 'Deparment',
+          properties: [{
+            name: 'name',
+            type: 'string',
+            required: false,
+            example: 'IT'
+          },
+          {
+            name: 'employees',
+            type: 'number',
+            required: false,
+            example: '23'
+          }]
+        }
+      };
+
+      var mixedType = {
+        type: 'union',
+        leftType: {
+          type: 'array',
+          component: {
+            type: 'Person',
+            properties: [{
+              name: 'name',
+              type: 'string',
+              required: false,
+              example: 'Juan'
+            },
+            {
+              name: 'age',
+              type: 'number',
+              required: false,
+              example: '23'
+            },
+            {
+              name: 'profession',
+              type: 'array',
+              component: {
+                type: 'Profession',
+                properties: [{
+                  name: 'name',
+                  type: 'string',
+                  required: false,
+                  example: 'Engineer'
+                }]
+              }
+            },
+            {
+              name: 'pet',
+              type: 'union',
+              leftType: {
+                type: 'Person',
+                properties: [{
+                  name: 'name',
+                  type: 'string',
+                  required: false,
+                  example: 'Juan'
+                },
+                {
+                  name: 'age',
+                  type: 'number',
+                  required: false,
+                  example: '23'
+                },
+                {
+                  name: 'profession',
+                  type: 'string',
+                  required: false,
+                  example: 'Trainee'
+                }]
+              },
+              rightType: {
+                type: 'Dog',
+                properties: [{
+                  name: 'name',
+                  type: 'string',
+                  required: false,
+                  example: 'Ramon'
+                },
+                {
+                  name: 'age',
+                  type: 'number',
+                  required: false,
+                  example: '4'
+                }]
+              }
+            }]
+          }
+        },
+        rightType: {
+          type: 'Deparment',
+          properties: [{
+            name: 'name',
+            type: 'string',
+            required: false,
+            example: 'IT'
+          },
+          {
+            name: 'employees',
+            type: 'number',
+            required: false,
+            example: '23'
+          },
+          {
+            name: 'keys',
+            type: 'array',
+            component: {
+              type: 'string'
+            }
+          }]
+        }
+      };
+
+      $scope.examples = [
+        {
+          name: 'Simple Parameters',
+          type: simpleParams
+        },
+        {
+          name: 'Simple Type',
+          type: simpleType
+        },
+        {
+          name: 'Complex Type',
+          type: complexType
+        },
+        {
+          name: 'Array Native Type',
+          type: arrayNativeType
+        },
+        {
+          name: 'Array Type',
+          type: arrayType
+        },
+        {
+          name: 'Union Native Type',
+          type: unionNativeType
+        },
+        {
+          name: 'Union Type',
+          type: unionType
+        },
+        {
+          name: 'Mixed Union Type',
+          type: mixedUnionType
+        },
+        {
+          name: 'Multiple Union Types',
+          type: multipleUnionType
+        },
+        {
+          name: 'Mixed Type',
+          type: mixedType
+        },
+      ];
+
+      $scope.currentExample = $scope.examples[0];
+      $scope.model = {};
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<div class="raml-console-resource-param" style="position: relative;">
+  <h3>{{type.component.type}}[]</h3>
+  <button class="raml-console-sidebar-add-btn" ng-click="addNewItem()"></button>
+  <div class="raml-console-sidebar-input-container-custom" ng-repeat="item in model.value track by $index">
+    <button class="raml-console-sidebar-input-delete" ng-click="removeItem($index)"></button>
+    <types-switch
+      model="model.value[$index]"
+      level="{{nextLevel}}"
+      type="type.component"
+      edit-mode="editMode">
+    </types-switch>
+  </div>
+</div>

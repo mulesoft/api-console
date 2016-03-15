@@ -1,0 +1,11 @@
+<div
+  class="raml-console-resource-param"
+  ng-if="type.properties">
+    <property
+      ng-if="isNativeType(property.type)"
+      property="property"
+      ng-repeat="property in type.properties"
+      edit-mode="editMode"
+      model="model.value[property.name]">
+    </property>
+</div>

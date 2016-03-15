@@ -1,0 +1,24 @@
+<div>
+  Union Type
+  <span ng-repeat="type in flattenedTypes">
+    <span
+      class="raml-console-flag raml-console-is-clickable"
+      ng-class="{'raml-console-is-active': selectedType === type}"
+      ng-click="selectType(type)">
+        <span ng-if="type.type === 'array'">
+          {{type.component.type}}[]
+        </span>
+        <span ng-if="type.type !== 'array'">
+          {{type.type}}
+        </span>
+    </span>
+    <span ng-if="!$last">or</span>
+  </span>
+</div>
+<types-switch
+  model="model"
+  hide-type="true"
+  level="{{currentLevel}}"
+  type="selectedType"
+  edit-mode="editMode">
+</types-switch>

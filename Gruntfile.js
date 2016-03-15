@@ -125,6 +125,15 @@ module.exports = function (grunt) {
         src:  'src/index.html'
       },
 
+      types: {
+        options: {
+          process: true
+        },
+
+        dest: '<%= distdir %>/types.html',
+        src:  'src/types.html'
+      },
+
       darkTheme: {
         options: {
           process: function process(value) {
@@ -170,6 +179,7 @@ module.exports = function (grunt) {
         'build:scripts',
         'concat:vendor',
         'concat:index',
+        'concat:types',
         'copy:assets',
         'build:styles'
       ],
@@ -247,6 +257,13 @@ module.exports = function (grunt) {
         tasks: ['concat:index'],
         files: [
           '<%= concat.index.src %>'
+        ]
+      },
+
+      types: {
+        tasks: ['concat:types'],
+        files: [
+          '<%= concat.types.src %>'
         ]
       },
 
