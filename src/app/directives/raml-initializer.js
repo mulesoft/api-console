@@ -84,20 +84,14 @@
 
       function lintFromError(error) {
         return function getAnnotations() {
-          /*jshint camelcase: false */
-          var context = error && (error.context_mark || error.problem_mark);
-          /*jshint camelcase: true */
-
-          if (!context) {
-            return [];
-          }
-
-          return [{
-            message:  error.message,
-            severity: 'error',
-            from:     CodeMirror.Pos(context.line),
-            to:       CodeMirror.Pos(context.line)
-          }];
+          return (error.parserErrors || []).map(function (error) {
+            return {
+              message:  error.message,
+              severity: error.isWarning ? 'warning' : 'error',
+              from:     CodeMirror.Pos(error.line),
+              to:       CodeMirror.Pos(error.line)
+            };
+          });
         };
       }
     })
