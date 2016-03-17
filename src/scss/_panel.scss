@@ -204,6 +204,18 @@
   }
 }
 
+.examples-container {
+  .flag {
+    cursor: pointer;
+    margin: 0 2px 2px 0;
+
+    &.is-active {
+      background: $color-body-heading;
+      color: $color-resource-text;
+    }
+  }
+}
+
 .resource-panel-subheader {
   padding: 14px 32px 18px 100px;
   // border-bottom: solid $color-resource-subheader-border;

@@ -128,10 +128,11 @@
         </div>
       </section>
 
-      <div ng-if="methodInfo.body[currentBodySelected].example">
-        <span>Example:</span>
-        <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].example)"></code></pre>
-      </div>
+      <examples
+        ng-if="methodInfo.body[currentBodySelected]"
+        example-container="methodInfo.body[currentBodySelected]"
+        get-beatified-example-ref="getBeatifiedExample">
+      </examples>
 
       <div class="raml-console-schema-container" ng-if="methodInfo.body[currentBodySelected].schema">
         <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
@@ -178,13 +179,20 @@
         <div class="raml-console-resource-response" ng-if="methodInfo.responses[code].body">
           <h4 class="raml-console-resource-body-heading">
             Body
-            <span ng-click="changeType($event, key, code)" ng-class="{ 'raml-console-is-active': $first}" class="raml-console-flag" ng-repeat="(key, value) in methodInfo.responses[code].body">{{key}}</span>
+            <span
+              ng-click="changeType($event, key, code)"
+              ng-class="{ 'raml-console-is-active': responseInfo[currentStatusCode].currentType === key}"
+              class="raml-console-flag"
+              ng-repeat="(key, value) in methodInfo.responses[code].body">
+                {{key}}
+            </span>
           </h4>
 
-          <div ng-if="responseInfo[code][responseInfo[code].currentType].example">
-            <span>Example:</span>
-            <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)"></code></pre>
-          </div>
+          <examples
+            ng-if="responseInfo[currentStatusCode] && responseInfo[currentStatusCode].currentType"
+            example-container="responseInfo[currentStatusCode][responseInfo[currentStatusCode].currentType]"
+            get-beatified-example-ref="getBeatifiedExample">
+          </examples>
 
           <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].schema">
             <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
