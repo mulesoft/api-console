@@ -1,0 +1,41 @@
+<div style="padding-left: {{25 * level}}px">
+  <h3 ng-if="showType(type.type)">{{type.type}}</h3>
+  <property
+    ng-if="isNativeType(type.type)"
+    property="type"
+    edit-mode="editMode"
+    model="model"
+    is-array="isArray">
+  </property>
+
+  <array-type
+    ng-if="isArrayType(type.type)"
+    type="type"
+    edit-mode="editMode"
+    model="model"
+    level="{{currentLevel}}">
+  </array-type>
+
+  <union-type
+    ng-if="isUnionType(type.type)"
+    type="type"
+    edit-mode="editMode"
+    model="model"
+    level="{{currentLevel}}">
+  </union-type>
+
+  <custom-type
+    ng-if="isCustomType(type.type)"
+    type="type"
+    edit-mode="editMode"
+    model="model"
+    level="{{currentLevel}}">
+  </custom-type>
+
+  <properties-type
+    ng-if="isProperties(type)"
+    type="type"
+    edit-mode="editMode"
+    model="model">
+  </properties-type>
+</div>

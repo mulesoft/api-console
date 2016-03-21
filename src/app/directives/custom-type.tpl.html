@@ -1,0 +1,22 @@
+<div
+  class="raml-console-resource-param"
+  ng-if="type.properties">
+    <property
+      ng-if="isNativeType(property.type)"
+      property="property"
+      ng-repeat-start="property in type.properties"
+      edit-mode="editMode"
+      model="model.value[property.name]">
+    </property>
+
+    <div ng-if="!isNativeType(property.type)" ng-repeat-end>
+      <property property="property"></property>
+      <types-switch
+        model="model.value[property.name]"
+        hide-type="true"
+        level="{{nextLevel}}"
+        type="property"
+        edit-mode="editMode">
+      </types-switch>
+    </div>
+</div>

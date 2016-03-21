@@ -2208,6 +2208,15 @@ a.raml-console-resource-path-active {
   font-size: 12px;
 }
 
+.raml-console-flag.raml-console-is-clickable {
+  cursor: pointer;
+}
+
+.raml-console-flag.raml-console-is-active {
+  background: #959595;
+  color: #fff;
+}
+
 .raml-console-resource-heading-flag {
   position: relative;
   top: -1px;
@@ -4094,6 +4103,10 @@ span.raml-console-side-bar-required-field {
   resize: none;
   font-size: 14px;
   border: 1px solid #c6cada;
+}
+
+.raml-console-initializer-input-container-error > div {
+  border: 1px solid #ff0000 !important;
 }
 
 .raml-console-initializer-subheader {

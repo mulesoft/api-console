@@ -66,6 +66,45 @@
 (function () {
   'use strict';
 
+  RAML.Directives.arrayType = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/array-type.tpl.html',
+      scope: {
+        type: '=',
+        editMode: '=',
+        level: '@',
+        model: '='
+      },
+      controller: ['$scope', 'TypeService', function ($scope, TypeService) {
+        $scope.currentLevel = parseInt($scope.level, 10);
+        $scope.nextLevel = $scope.currentLevel + 1;
+
+        $scope.isNativeType = TypeService.isNativeType;
+
+        $scope.$watch('type', function () {
+          $scope.model.value = [];
+          $scope.model.value.push({value: ''});
+        });
+
+        $scope.addNewItem = function () {
+          $scope.model.value.push({value: ''});
+        };
+
+        $scope.removeItem = function (index) {
+          $scope.model.value.splice(index, 1);
+        };
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('arrayType', RAML.Directives.arrayType);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.clickOutside = function ($document) {
     return {
       restrict: 'A',
@@ -115,6 +154,40 @@
 
   angular.module('RAML.Directives')
     .directive('closeButton', RAML.Directives.closeButton);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.customType = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/custom-type.tpl.html',
+      scope: {
+        type: '=',
+        editMode: '=',
+        level: '@',
+        model: '='
+      },
+      controller: ['$scope', 'TypeService', function ($scope, TypeService) {
+        $scope.currentLevel = parseInt($scope.level, 10);
+        $scope.nextLevel = $scope.currentLevel + 1;
+
+        $scope.isNativeType = TypeService.isNativeType;
+
+        $scope.$watch('type', function () {
+          $scope.model.value = {};
+
+          $scope.type.properties.forEach(function (property) {
+            $scope.model.value[property.name] = {value: ''};
+          });
+        });
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('customType', RAML.Directives.customType);
 })();
 
 (function () {
@@ -702,6 +775,82 @@
 (function () {
   'use strict';
 
+  RAML.Directives.propertiesType = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/properties-type.tpl.html',
+      scope: {
+        type: '=',
+        editMode: '=',
+        model: '='
+      },
+      controller: ['$scope', 'TypeService', function ($scope, TypeService) {
+        $scope.isNativeType = TypeService.isNativeType;
+
+        $scope.$watch('type', function () {
+          $scope.model.value = {};
+
+          $scope.type.properties.forEach(function (property) {
+            $scope.model.value[property.name] = {value: ''};
+          });
+        });
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('propertiesType', RAML.Directives.propertiesType);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.property = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/property.tpl.html',
+      scope: {
+        property: '=',
+        editMode: '=',
+        model: '=',
+        isArray: '='
+      },
+      controller: ['$scope', function ($scope) {
+        $scope.type = convertType($scope.property);
+
+        $scope.isValue = function (property) {
+          return !property.enum;
+        };
+
+        $scope.isEnum = function (property) {
+          return property.enum;
+        };
+
+        if ($scope.isArray) {
+
+        }
+
+        $scope.$watch('property', function (value) {
+          $scope.type = convertType(value);
+        });
+      }]
+    };
+  };
+
+  function convertType(property) {
+    if (property.type === 'array') {
+      return property.component.type + '[]';
+    }
+    return property.type;
+  }
+
+  angular.module('RAML.Directives')
+    .directive('property', RAML.Directives.property);
+})();
+
+(function () {
+  'use strict';
+
   var generator = window.ramlClientGenerator;
 
   function downloadClient (language, ast) {
@@ -1145,20 +1294,14 @@
 
       function lintFromError(error) {
         return function getAnnotations() {
-          /*jshint camelcase: false */
-          var context = error && (error.context_mark || error.problem_mark);
-          /*jshint camelcase: true */
-
-          if (!context) {
-            return [];
-          }
-
-          return [{
-            message:  error.message,
-            severity: 'error',
-            from:     CodeMirror.Pos(context.line),
-            to:       CodeMirror.Pos(context.line)
-          }];
+          return (error.parserErrors || []).map(function (error) {
+            return {
+              message:  error.message,
+              severity: error.isWarning ? 'warning' : 'error',
+              from:     CodeMirror.Pos(error.line),
+              to:       CodeMirror.Pos(error.line)
+            };
+          });
         };
       }
     })
@@ -1984,6 +2127,123 @@
 (function () {
   'use strict';
 
+  RAML.Directives.typesSwitch = function(RecursionHelper) {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/types-switch.tpl.html',
+      scope: {
+        type: '=',
+        level: '@',
+        hideType: '@',
+        model: '=',
+        isArray: '=',
+        editMode: '='
+      },
+      controller: ['$scope', 'TypeService', function($scope, TypeService) {
+        $scope.currentLevel = parseInt($scope.level, 10);
+        $scope.nextLevel = $scope.currentLevel + 1;
+
+        $scope.isNativeType = TypeService.isNativeType;
+        $scope.isArrayType = TypeService.isArrayType;
+        $scope.isUnionType = TypeService.isUnionType;
+        $scope.isCustomType = TypeService.isCustomType;
+        $scope.isProperties = TypeService.isProperties;
+
+        $scope.showType = function (type) {
+          return !$scope.hideType && !$scope.isArrayType(type) &&
+            !$scope.isUnionType(type) && !$scope.isNativeType(type);
+        };
+      }],
+      compile: function (element) {
+        return RecursionHelper.compile(element);
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('typesSwitch', ['RecursionHelper', RAML.Directives.typesSwitch]);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.types = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/types.tpl.html',
+      scope: {
+        type: '=',
+        model: '=',
+        editMode: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.$watch('type', function () {
+          $scope.model = {value: ''};
+        });
+      }]
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('types', RAML.Directives.types);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.unionType = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/union-type.tpl.html',
+      scope: {
+        type: '=',
+        level: '@',
+        model: '=',
+        editMode: '='
+      },
+      controller: ['$scope', function($scope) {
+        $scope.currentLevel = parseInt($scope.level, 10);
+        $scope.nextLevel = $scope.currentLevel + 1;
+
+        $scope.flattenedTypes = [];
+        flattenUnionType($scope.type, $scope.flattenedTypes);
+        $scope.selectedType = $scope.flattenedTypes[0];
+
+        $scope.$watch('type', function (value) {
+          $scope.flattenedTypes = [];
+          flattenUnionType(value, $scope.flattenedTypes);
+          $scope.selectedType = $scope.flattenedTypes[0];
+        });
+
+        $scope.selectType = function (type) {
+          $scope.selectedType = type;
+          $scope.model.value = '';
+        };
+      }]
+    };
+  };
+
+  function flattenUnionType(type, types) {
+    if (type.leftType.type !== 'union') {
+      types.push(type.leftType);
+    } else {
+      flattenUnionType(type.leftType, types);
+    }
+
+    if (type.rightType.type !== 'union') {
+      types.push(type.rightType);
+    } else {
+      flattenUnionType(type.rightType, types);
+    }
+  }
+
+  angular.module('RAML.Directives')
+    .directive('unionType', [RAML.Directives.unionType]);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.validate = function($parse) {
     return {
       require: 'ngModel',
@@ -2061,12 +2321,32 @@
 
   angular.module('raml', [])
     .factory('ramlParser', function ramlParser(
+      $http,
       $q
     ) {
-      return angular.extend({}, RAML.Parser, {
-        load:     toQ(RAML.Parser.load),
-        loadFile: toQ(RAML.Parser.loadFile)
-      });
+      return {
+        load:     toQ(load),
+        loadFile: toQ(loadFile)
+      };
+
+      // ---
+
+      function load(text) {
+        var virtualPath = '/' + Date.now() + '.raml';
+        return loadApi(virtualPath, function contentAsync(path) {
+          return (path === virtualPath) ? $q.when(text) : $q.reject(new Error('contentAsync: ' + path + ': path does not exist'));
+        });
+      }
+
+      function loadFile(path) {
+        return loadApi(path, function contentAsync(path) {
+          return $http.get(path, {responseType: 'text'})
+            .then(function (res) {
+              return res.data;
+            })
+          ;
+        });
+      }
 
       // ---
 
@@ -2074,6 +2354,20 @@
         return function toQWrapper() {
           return $q.when(fn.apply(this, arguments));
         };
+      }
+
+      function loadApi(path, contentAsyncFn) {
+        return RAML.Parser.loadApi(path, {
+          attributeDefaults: true,
+          rejectOnErrors:    true,
+          fsResolver:        {
+            contentAsync: contentAsyncFn
+          }
+        })
+          .then(function (api) {
+            return api.toJSON();
+          })
+        ;
       }
     })
   ;
@@ -2189,69 +2483,81 @@
 
 (function () {
   'use strict';
-
-  RAML.Services.RAMLParserWrapper = function($rootScope, ramlParser, $q) {
-    var ramlProcessor, errorProcessor, whenParsed, PARSE_SUCCESS = 'event:raml-parsed';
-
-    var load = function(file) {
-      setPromise(ramlParser.loadFile(file));
-    };
-
-    var parse = function(raml) {
-      setPromise(ramlParser.load(raml));
-    };
-
-    var onParseSuccess = function(cb) {
-      ramlProcessor = function() {
-        cb.apply(this, arguments);
-        if (!$rootScope.$$phase) {
-          // handle aggressive digesters!
-          $rootScope.$digest();
-        }
-      };
-
-      if (whenParsed) {
-        whenParsed.then(ramlProcessor);
-      }
-    };
-
-    var onParseError = function(cb) {
-      errorProcessor = function() {
-        cb.apply(this, arguments);
-        if (!$rootScope.$$phase) {
-          // handle aggressive digesters!
-          $rootScope.$digest();
-        }
-      };
-
-      if (whenParsed) {
-        whenParsed.then(undefined, errorProcessor);
-      }
-
-    };
-
-    var setPromise = function(promise) {
-      whenParsed = promise;
-
-      if (ramlProcessor || errorProcessor) {
-        whenParsed.then(ramlProcessor, errorProcessor);
-      }
-    };
-
-    $rootScope.$on(PARSE_SUCCESS, function(e, raml) {
-      setPromise($q.when(raml));
-    });
-
+  angular.module('RAML.Services').factory('RecursionHelper', ['$compile', function ($compile) {
     return {
-      load: load,
-      parse: parse,
-      onParseSuccess: onParseSuccess,
-      onParseError: onParseError
-    };
-  };
+      /**
+      * Manually compiles the element, fixing the recursion loop.
+      * @param element
+      * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
+      * @returns An object containing the linking functions.
+      */
+      compile: function (element, link) {
+        // Normalize the link parameter
+        if (angular.isFunction(link)) {
+          link = { post: link };
+        }
 
-  angular.module('RAML.Services')
-    .service('ramlParserWrapper', ['$rootScope', 'ramlParser', '$q', RAML.Services.RAMLParserWrapper]);
+        // Break the recursion loop by removing the contents
+        var contents = element.contents().remove();
+        var compiledContents;
+        return {
+          pre: (link && link.pre) ? link.pre : null,
+          /**
+          * Compiles and re-adds the contents
+          */
+          post: function (scope, element) {
+            // Compile the contents
+            if (!compiledContents) {
+              compiledContents = $compile(contents);
+            }
+            // Re-add the compiled contents to the element
+            compiledContents(scope, function (clone) {
+              element.append(clone);
+            });
+
+            // Call the post-linking function, if any
+            if (link && link.post) {
+              link.post.apply(null, arguments);
+            }
+          }
+        };
+      }
+    };
+  }]);
+})();
+
+(function () {
+  'use strict';
+  angular.module('RAML.Services').factory('TypeService', function () {
+    return {
+      isNativeType: isNativeType,
+      isArrayType: isArrayType,
+      isUnionType: isUnionType,
+      isCustomType: isCustomType,
+      isProperties: isProperties
+    };
+
+    function isNativeType(type) {
+      return type === 'string' || type === 'number' || type === 'boolean';
+    }
+
+    function isArrayType(type) {
+      return type === 'array';
+    }
+
+    function isUnionType(type) {
+      return type === 'union';
+    }
+
+    function isCustomType(type) {
+      return type && !isNativeType(type) && !isArrayType(type) &&
+        !isUnionType(type);
+    }
+
+    function isProperties(type) {
+      return !type.type && type.properties;
+    }
+  });
 })();
 
 'use strict';
@@ -5352,10 +5658,53 @@ RAML.Inspector = (function() {
 angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
   'use strict';
 
+  $templateCache.put('directives/array-type.tpl.html',
+    "<div class=\"raml-console-resource-param\" style=\"position: relative;\">\n" +
+    "  <h3>{{type.component.type}}[]</h3>\n" +
+    "  <button class=\"raml-console-sidebar-add-btn\" ng-click=\"addNewItem()\"></button>\n" +
+    "  <div class=\"raml-console-sidebar-input-container-custom\" ng-repeat=\"item in model.value track by $index\">\n" +
+    "    <button class=\"raml-console-sidebar-input-delete\" ng-click=\"removeItem($index)\"></button>\n" +
+    "    <types-switch\n" +
+    "      model=\"model.value[$index]\"\n" +
+    "      level=\"{{nextLevel}}\"\n" +
+    "      type=\"type.component\"\n" +
+    "      edit-mode=\"editMode\">\n" +
+    "    </types-switch>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('directives/close-button.tpl.html',
     "<button class=\"raml-console-resource-close-btn\" ng-click=\"close($event)\">\n" +
     "  Close\n" +
     "</button>\n"
+  );
+
+
+  $templateCache.put('directives/custom-type.tpl.html',
+    "<div\n" +
+    "  class=\"raml-console-resource-param\"\n" +
+    "  ng-if=\"type.properties\">\n" +
+    "    <property\n" +
+    "      ng-if=\"isNativeType(property.type)\"\n" +
+    "      property=\"property\"\n" +
+    "      ng-repeat-start=\"property in type.properties\"\n" +
+    "      edit-mode=\"editMode\"\n" +
+    "      model=\"model.value[property.name]\">\n" +
+    "    </property>\n" +
+    "\n" +
+    "    <div ng-if=\"!isNativeType(property.type)\" ng-repeat-end>\n" +
+    "      <property property=\"property\"></property>\n" +
+    "      <types-switch\n" +
+    "        model=\"model.value[property.name]\"\n" +
+    "        hide-type=\"true\"\n" +
+    "        level=\"{{nextLevel}}\"\n" +
+    "        type=\"property\"\n" +
+    "        edit-mode=\"editMode\">\n" +
+    "      </types-switch>\n" +
+    "    </div>\n" +
+    "</div>\n"
   );
 
 
@@ -5634,6 +5983,51 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   );
 
 
+  $templateCache.put('directives/properties-type.tpl.html',
+    "<div\n" +
+    "  class=\"raml-console-resource-param\"\n" +
+    "  ng-if=\"type.properties\">\n" +
+    "    <property\n" +
+    "      ng-if=\"isNativeType(property.type)\"\n" +
+    "      property=\"property\"\n" +
+    "      ng-repeat=\"property in type.properties\"\n" +
+    "      edit-mode=\"editMode\"\n" +
+    "      model=\"model.value[property.name]\">\n" +
+    "    </property>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('directives/property.tpl.html',
+    "<div style=\"position: relative;\">\n" +
+    "  <!-- <button\n" +
+    "    class=\"raml-console-sidebar-add-btn ng-scope\"\n" +
+    "    ng-if=\"isEditMode\"\n" +
+    "    ng-click=\"addNewInput()\">\n" +
+    "  </button> -->\n" +
+    "  <h4 class=\"raml-console-resource-param-heading\">\n" +
+    "    {{property.name}}\n" +
+    "    <span class=\"raml-console-resource-param-instructional\">{{type}}</span>\n" +
+    "  </h4>\n" +
+    "  <!-- <p ng-if=\"property.example\">\n" +
+    "    <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{property.example}}</span>\n" +
+    "  </p> -->\n" +
+    "  <div ng-if=\"editMode\">\n" +
+    "    <input\n" +
+    "      ng-model=\"model.value\"\n" +
+    "      class=\"raml-console-sidebar-input\"\n" +
+    "      ng-if=\"isValue(property)\"\n" +
+    "      type=\"text\">\n" +
+    "    </input>\n" +
+    "    <select ng-model=\"model.value\" class=\"raml-console-sidebar-input\" ng-if=\"isEnum(property)\">\n" +
+    "      <option ng-if=\"!property.required\"></option>\n" +
+    "      <option ng-repeat=\"value in property.enum\" value=\"{{value}}\">{{value}}</option>\n" +
+    "    </select>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('directives/raml-client-generator.tpl.html',
     "<div class=\"raml-console-meta-button-container\">\n" +
     "  <a\n" +
@@ -5846,7 +6240,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </header>\n" +
     "\n" +
     "        <div class=\"raml-console-initializer-row\">\n" +
-    "          <p class=\"raml-console-initializer-input-container\">\n" +
+    "          <p class=\"raml-console-initializer-input-container\" ng-class=\"{'raml-console-initializer-input-container-error': !vm.isLoadedFromUrl && vm.error}\">\n" +
     "            <textarea id=\"raml\" ui-codemirror=\"vm.codeMirror\" ng-model=\"vm.ramlString\"></textarea>\n" +
     "          </p>\n" +
     "          <div class=\"raml-console-initializer-action-group\" align=\"right\">\n" +
@@ -6158,6 +6552,84 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div class=\"raml-console-meta-button-container\">\n" +
     "  <a class=\"raml-console-meta-button\">Switch Theme</a>\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('directives/types-switch.tpl.html',
+    "<div style=\"padding-left: {{25 * level}}px\">\n" +
+    "  <h3 ng-if=\"showType(type.type)\">{{type.type}}</h3>\n" +
+    "  <property\n" +
+    "    ng-if=\"isNativeType(type.type)\"\n" +
+    "    property=\"type\"\n" +
+    "    edit-mode=\"editMode\"\n" +
+    "    model=\"model\"\n" +
+    "    is-array=\"isArray\">\n" +
+    "  </property>\n" +
+    "\n" +
+    "  <array-type\n" +
+    "    ng-if=\"isArrayType(type.type)\"\n" +
+    "    type=\"type\"\n" +
+    "    edit-mode=\"editMode\"\n" +
+    "    model=\"model\"\n" +
+    "    level=\"{{currentLevel}}\">\n" +
+    "  </array-type>\n" +
+    "\n" +
+    "  <union-type\n" +
+    "    ng-if=\"isUnionType(type.type)\"\n" +
+    "    type=\"type\"\n" +
+    "    edit-mode=\"editMode\"\n" +
+    "    model=\"model\"\n" +
+    "    level=\"{{currentLevel}}\">\n" +
+    "  </union-type>\n" +
+    "\n" +
+    "  <custom-type\n" +
+    "    ng-if=\"isCustomType(type.type)\"\n" +
+    "    type=\"type\"\n" +
+    "    edit-mode=\"editMode\"\n" +
+    "    model=\"model\"\n" +
+    "    level=\"{{currentLevel}}\">\n" +
+    "  </custom-type>\n" +
+    "\n" +
+    "  <properties-type\n" +
+    "    ng-if=\"isProperties(type)\"\n" +
+    "    type=\"type\"\n" +
+    "    edit-mode=\"editMode\"\n" +
+    "    model=\"model\">\n" +
+    "  </properties-type>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('directives/types.tpl.html',
+    "<types-switch level=\"0\" type=\"type\" model=\"model\" edit-mode=\"editMode\"></types-switch>\n"
+  );
+
+
+  $templateCache.put('directives/union-type.tpl.html',
+    "<div>\n" +
+    "  Union Type\n" +
+    "  <span ng-repeat=\"type in flattenedTypes\">\n" +
+    "    <span\n" +
+    "      class=\"raml-console-flag raml-console-is-clickable\"\n" +
+    "      ng-class=\"{'raml-console-is-active': selectedType === type}\"\n" +
+    "      ng-click=\"selectType(type)\">\n" +
+    "        <span ng-if=\"type.type === 'array'\">\n" +
+    "          {{type.component.type}}[]\n" +
+    "        </span>\n" +
+    "        <span ng-if=\"type.type !== 'array'\">\n" +
+    "          {{type.type}}\n" +
+    "        </span>\n" +
+    "    </span>\n" +
+    "    <span ng-if=\"!$last\">or</span>\n" +
+    "  </span>\n" +
+    "</div>\n" +
+    "<types-switch\n" +
+    "  model=\"model\"\n" +
+    "  hide-type=\"true\"\n" +
+    "  level=\"{{currentLevel}}\"\n" +
+    "  type=\"selectedType\"\n" +
+    "  edit-mode=\"editMode\">\n" +
+    "</types-switch>\n"
   );
 
 

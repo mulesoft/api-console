@@ -1,0 +1,26 @@
+<div style="position: relative;">
+  <!-- <button
+    class="raml-console-sidebar-add-btn ng-scope"
+    ng-if="isEditMode"
+    ng-click="addNewInput()">
+  </button> -->
+  <h4 class="raml-console-resource-param-heading">
+    {{property.name}}
+    <span class="raml-console-resource-param-instructional">{{type}}</span>
+  </h4>
+  <!-- <p ng-if="property.example">
+    <span class="raml-console-resource-param-example"><b>Example:</b> {{property.example}}</span>
+  </p> -->
+  <div ng-if="editMode">
+    <input
+      ng-model="model.value"
+      class="raml-console-sidebar-input"
+      ng-if="isValue(property)"
+      type="text">
+    </input>
+    <select ng-model="model.value" class="raml-console-sidebar-input" ng-if="isEnum(property)">
+      <option ng-if="!property.required"></option>
+      <option ng-repeat="value in property.enum" value="{{value}}">{{value}}</option>
+    </select>
+  </div>
+</div>
