@@ -1,0 +1,94 @@
+#%RAML 1.0
+title: API with Types
+baseUri: /media
+types:
+  Person:
+    type: object
+    properties:
+      firstname: string
+      lastname: string
+      age: number
+      manager:
+        type: Person
+  Department:
+    type: object
+    properties:
+      name: string
+    example:
+      name: Engineering
+  User:
+    type: Person
+    properties:
+      firstname:
+        type: string
+        required: false
+      id:
+        type: number
+      department: Department
+  Developer:
+    type: User
+    properties:
+      github: string
+  Saadas:
+    type: Developer | Person | Department
+  Another:
+    type: User | Saadas
+  Test:
+    type: (string | integer)[]
+  Door:
+    type: string
+  Engine:
+    type: string
+  Feet:
+    type: string
+
+/users/{id}:
+  uriParameters:
+    id:
+      type: object
+      properties:
+        as: string
+        temo: integer
+  get:
+    headers:
+      developer:
+        type: Person[]
+      test:
+        type: string
+        required: false
+        enum: ["one", "two", "three"]
+      animal:
+        type: Person | Developer
+        description: The kind of animal
+      car:
+        type: object
+        properties:
+          wheels:
+            type: object
+            properties:
+              prop1: string
+              prop2: number
+          doors:
+            type: Door[]
+          engine:
+            type: Engine | Feet
+
+    queryParameters:
+      developer:
+        type: Person[]
+      test:
+        type: string
+        required: false
+        enum: ["one", "two", "three"]
+      animal:
+        type: Person | Developer
+        description: The kind of animal
+      car:
+        type: object
+        properties:
+          wheels:
+            type: string
+          doors:
+            type: Door[]
+          engine:
+            type: Engine | Feet
