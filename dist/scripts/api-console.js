@@ -712,6 +712,14 @@
         collapsible: '='
       },
       controller: function ($scope) {
+        if (!Array.isArray($scope.list)) {
+          $scope.list = Object.keys($scope.list).map(function (key) {
+            return $scope.list[key];
+          });
+
+          $scope.list = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
+        }
+
         $scope.isCollapsible = function isCollapsible(property) {
           return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
         };
@@ -5523,30 +5531,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <section class=\"raml-console-resource-section raml-console-scheme-headers\" ng-if=\"documentationSchemeSelected.describedBy.headers\">\n" +
     "        <h4 class=\"raml-console-resource-heading-a\">Headers</h4>\n" +
-    "\n" +
-    "        <div class=\"raml-console-resource-param\" ng-repeat=\"(key, header) in documentationSchemeSelected.describedBy.headers\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{key}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(header)}}</span></h4>\n" +
-    "\n" +
-    "          <p markdown=\"header.description\" class=\"raml-console-marked-content\"></p>\n" +
-    "\n" +
-    "          <p ng-if=\"header.example !== undefined\">\n" +
-    "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{header.example}}</span>\n" +
-    "          </p>\n" +
-    "        </div>\n" +
+    "        <properties list=\"documentationSchemeSelected.describedBy.headers\"></properties>\n" +
     "      </section>\n" +
     "\n" +
     "      <section class=\"raml-console-resource-section raml-console-scheme-query-parameters\" ng-if=\"documentationSchemeSelected.describedBy.queryParameters\">\n" +
     "        <h4 class=\"raml-console-resource-heading-a\">Query Parameters</h4>\n" +
-    "\n" +
-    "        <div class=\"raml-console-resource-param\" ng-repeat=\"(key, queryParameter) in documentationSchemeSelected.describedBy.queryParameters\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{key}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(queryParameter)}}</span></h4>\n" +
-    "\n" +
-    "          <p markdown=\"queryParameter.description\" class=\"raml-console-marked-content\"></p>\n" +
-    "\n" +
-    "          <p ng-if=\"queryParameter.example !== undefined\">\n" +
-    "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{queryParameter.example}}</span>\n" +
-    "          </p>\n" +
-    "        </div>\n" +
+    "        <properties list=\"documentationSchemeSelected.describedBy.queryParameters\"></properties>\n" +
     "      </section>\n" +
     "\n" +
     "      <section class=\"raml-console-resource-section raml-console-scheme-responses\" ng-if=\"documentationSchemeSelected.describedBy.responses\">\n" +
