@@ -41,6 +41,18 @@ types:
     type: string
   Feet:
     type: string
+  Car:
+    type: object
+    properties:
+      wheels:
+        type: object
+        properties:
+          prop1: string
+          prop2: number
+      doors:
+        type: Door[]
+      engine:
+        type: Engine | Feet
 
 /users/{id}:
   uriParameters:

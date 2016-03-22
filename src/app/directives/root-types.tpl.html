@@ -1,0 +1,15 @@
+<ol id="raml-console-documentation-container" class="raml-console-resource-list raml-console-resource-list-root raml-console-root-documentation raml-console-resources-documentationCollapsed" ng-init="vm.isCollapsed = true">
+  <li class="raml-console-resource-list-item raml-console-documentation-header">
+    <header class="raml-console-resource raml-console-resource-root raml-console-clearfix">
+      <div class="raml-console-resource-path-container">
+        <h2 class="raml-console-resource-section-title">
+          <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': vm.isCollapsed}" ng-click="vm.isCollapsed = !vm.isCollapsed"></button>
+          <span class="raml-console-resource-path-active">Types</span>
+        </h2>
+      </div>
+    </header>
+  </li>
+  <li ng-if="!vm.isCollapsed" class="raml-console-resource-panel" style="background: white; padding: 32px;">
+    <properties list="types" collapsible="true"></types>
+  </li>
+</ol>
