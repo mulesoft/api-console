@@ -704,7 +704,23 @@
           return Object.keys(value).filter(function (k) {
             return $scope.isValueProvided(value[k]);
           }).length > 0;
-        }
+        };
+
+        $scope.stringify = function stringify(value) {
+          return JSON.stringify(value);
+        };
+
+        $scope.cleanupValue = function cleanupValue(value) {
+          if (typeof value !== 'object') {
+            return value;
+          }
+          var cleanedValue = {};
+          Object.keys(value).forEach(function (key) {
+            cleanedValue[key] = $scope.cleanupValue(value[key] ? value[key][0] : value[key]);
+          });
+
+          return cleanedValue;
+        };
       }]
     };
   };
@@ -5718,7 +5734,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <div ng-show=\"showBaseUrl\" class=\"raml-console-sidebar-method-content\">\n" +
     "      <div class=\"raml-console-sidebar-url\" ng-repeat=\"segment in segments\">\n" +
     "        <div ng-hide=\"segment.templated\">{{segment.name}}</div>\n" +
-    "        <div ng-show=\"segment.templated\" ng-if=\"isValueProvided(context[type].values[segment.name][0])\" class=\"raml-console-sidebar-url-segment\">{{context[type].values[segment.name][0]}}</div>\n" +
+    "        <div ng-show=\"segment.templated\" ng-if=\"isValueProvided(context[type].values[segment.name][0])\" class=\"raml-console-sidebar-url-segment\">{{stringify(cleanupValue(context[type].values[segment.name][0]))}}</div>\n" +
     "        <div ng-show=\"segment.templated\" ng-if=\"!isValueProvided(context[type].values[segment.name][0])\" class=\"raml-console-sidebar-url-segment\"><span ng-non-bindable>&#123;</span>{{segment.name}}<span ng-non-bindable>&#125;</span></div>\n" +
     "      </div>\n" +
     "    </div>\n" +
