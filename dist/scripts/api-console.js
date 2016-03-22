@@ -708,9 +708,14 @@
       templateUrl: 'directives/properties.tpl.html',
       replace: true,
       scope: {
-        list: '='
+        list: '=',
+        collapsible: '='
       },
       controller: function ($scope) {
+        $scope.isCollapsible = function isCollapsible(property) {
+          return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
+        };
+
         $scope.parameterDocumentation = function (parameter) {
           var result = '';
 
@@ -1382,6 +1387,32 @@
 
   angular.module('RAML.Directives')
     .directive('rootDocumentation', RAML.Directives.rootDocumentation);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.rootTypes = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/root-types.tpl.html',
+      replace: true,
+      scope: {
+        types: '='
+      },
+      controller: function ($scope) {
+        var types = {};
+        $scope.types.forEach(function (type) {
+          types[Object.keys(type)[0]] = type[Object.keys(type)[0]];
+        });
+        $scope.types = RAML.Inspector.Properties.normalizeNamedParameters(types);
+
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('rootTypes', RAML.Directives.rootTypes);
 })();
 
 (function () {
@@ -5700,19 +5731,22 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/properties.tpl.html',
     "<div>\n" +
-    "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in list\" ng-if=\"!property[0].isFromSecurityScheme\">\n" +
-    "    <h4 class=\"raml-console-resource-param-heading\">\n" +
-    "      {{property[0].displayName}}\n" +
+    "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in list\" ng-if=\"!property[0].isFromSecurityScheme\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
+    "    <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
+    "      <!-- <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': vm.isCollapsed}\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\"></button> -->\n" +
+    "      <span ng-if=\"isCollapsible(property[0])\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{property[0].displayName}}\n" +
     "      <span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(property[0])}}</span>\n" +
     "    </h4>\n" +
     "\n" +
-    "    <p markdown=\"property[0].description\" class=\"raml-console-marked-content\"></p>\n" +
+    "    <div ng-if=\"!vm.isCollapsed\">\n" +
+    "      <p markdown=\"property[0].description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "    <p ng-if=\"property[0].example !== undefined\">\n" +
-    "      <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{property[0].example}}</span>\n" +
-    "    </p>\n" +
+    "      <p ng-if=\"property[0].example !== undefined\">\n" +
+    "        <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{property[0].example}}</span>\n" +
+    "      </p>\n" +
     "\n" +
-    "    <properties style=\"padding-left: 10px\" list=\"property[0].properties\" ng-if=\"property[0].properties\"></properties>\n" +
+    "      <properties style=\"padding-left: 10px\" list=\"property[0].properties\" ng-if=\"property[0].properties\"></properties>\n" +
+    "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -5794,6 +5828,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{raml.title}}</h1>\n" +
     "\n" +
     "  <root-documentation></root-documentation>\n" +
+    "\n" +
+    "  <root-types types=\"raml.types\" ng-if=\"raml.types\"></root-types>\n" +
     "\n" +
     "  <ol ng-class=\"{'raml-console-resources-container-no-title': disableTitle, 'raml-console-resources-container': !disableTitle}\" id=\"raml-console-resources-container\" class=\"raml-console-resource-list raml-console-resource-list-root raml-console-resources-resourcesCollapsed\">\n" +
     "    <li id=\"raml_documentation\" class=\"raml-console-resource-list-item raml-console-documentation-header\">\n" +
@@ -6041,6 +6077,25 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </li>\n" +
     "      </ol>\n" +
     "    </div>\n" +
+    "  </li>\n" +
+    "</ol>\n"
+  );
+
+
+  $templateCache.put('directives/root-types.tpl.html',
+    "<ol id=\"raml-console-documentation-container\" class=\"raml-console-resource-list raml-console-resource-list-root raml-console-root-documentation raml-console-resources-documentationCollapsed\" ng-init=\"vm.isCollapsed = true\">\n" +
+    "  <li class=\"raml-console-resource-list-item raml-console-documentation-header\">\n" +
+    "    <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\">\n" +
+    "      <div class=\"raml-console-resource-path-container\">\n" +
+    "        <h2 class=\"raml-console-resource-section-title\">\n" +
+    "          <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': vm.isCollapsed}\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\"></button>\n" +
+    "          <span class=\"raml-console-resource-path-active\">Types</span>\n" +
+    "        </h2>\n" +
+    "      </div>\n" +
+    "    </header>\n" +
+    "  </li>\n" +
+    "  <li ng-if=\"!vm.isCollapsed\" class=\"raml-console-resource-panel\" style=\"background: white; padding: 32px;\">\n" +
+    "    <properties list=\"types\" collapsible=\"true\"></types>\n" +
     "  </li>\n" +
     "</ol>\n"
   );
