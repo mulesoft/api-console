@@ -11,6 +11,14 @@
         collapsible: '='
       },
       controller: function ($scope) {
+        if (!Array.isArray($scope.list)) {
+          $scope.list = Object.keys($scope.list).map(function (key) {
+            return $scope.list[key];
+          });
+
+          $scope.list = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
+        }
+
         $scope.isCollapsible = function isCollapsible(property) {
           return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
         };

@@ -1,6 +1,36 @@
 #%RAML 1.0
 title: API with Types
 baseUri: /media
+
+securitySchemes:
+  - oauth_2_0:
+      type: OAuth 2.0
+      describedBy:
+        headers:
+          Authorization:
+            type: string
+          car:
+            type: object
+            properties:
+              wheels:
+                type: object
+                properties:
+                  prop1: string
+                  prop2: number
+              doors:
+                type: Door[]
+              engine:
+                type: Engine | Feet
+        queryParameters:
+          access_token:
+            type: string
+        responses:
+          404:
+            description: Unauthorized
+      settings:
+        authorizationUri: https://acme.com/login/oauth/authorize
+        accessTokenUri: https://acme.com/login/oauth/access_token
+        authorizationGrants: [ code ]
 types:
   Person:
     type: object
@@ -53,6 +83,10 @@ types:
         type: Door[]
       engine:
         type: Engine | Feet
+
+/test:
+  securedBy: [ null, oauth_2_0 ]
+  get:
 
 /users/{id}:
   uriParameters:
