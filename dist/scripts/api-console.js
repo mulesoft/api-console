@@ -5599,12 +5599,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].headers\">\n" +
     "          <h4 class=\"raml-console-resource-body-heading\">Headers</h4>\n" +
-    "\n" +
-    "          <div class=\"raml-console-resource-param\" ng-repeat=\"header in methodInfo.responses[code].headers\">\n" +
-    "            <h4 class=\"raml-console-resource-param-heading\">{{header[0].displayName}} <span class=\"raml-console-resource-param-instructional\">{{header[0].type}}</span></h4>\n" +
-    "\n" +
-    "            <p markdown=\"header[0].description\" class=\"raml-console-marked-content\"></p>\n" +
-    "          </div>\n" +
+    "          <properties list=\"methodInfo.responses[code].headers\"></properties>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
