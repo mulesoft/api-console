@@ -7,7 +7,8 @@
   <link href="styles/<%= grunt.config.get('pkg.name') %>-light-theme.css" rel="stylesheet" class="theme">
 </head>
 <body ng-app="ramlConsoleApp" ng-cloak class="raml-console-body">
-  <raml-initializer></raml-initializer>
+  <!-- <raml-initializer></raml-initializer> -->
+  <raml-console-loader src="examples/properties.raml"></raml-console-loader>
   <script src="scripts/<%= grunt.config.get('pkg.name') %>-vendor.js"></script>
   <script src="scripts/<%= grunt.config.get('pkg.name') %>.js"></script>
   <script>
