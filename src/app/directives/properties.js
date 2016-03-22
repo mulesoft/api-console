@@ -7,9 +7,14 @@
       templateUrl: 'directives/properties.tpl.html',
       replace: true,
       scope: {
-        list: '='
+        list: '=',
+        collapsible: '='
       },
       controller: function ($scope) {
+        $scope.isCollapsible = function isCollapsible(property) {
+          return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
+        };
+
         $scope.parameterDocumentation = function (parameter) {
           var result = '';
 

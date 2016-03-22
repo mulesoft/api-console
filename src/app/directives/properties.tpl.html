@@ -1,16 +1,19 @@
 <div>
-  <div class="raml-console-resource-param" ng-repeat="property in list" ng-if="!property[0].isFromSecurityScheme">
-    <h4 class="raml-console-resource-param-heading">
-      {{property[0].displayName}}
+  <div class="raml-console-resource-param" ng-repeat="property in list" ng-if="!property[0].isFromSecurityScheme" ng-init="vm.isCollapsed = !!collapsible">
+    <h4 class="raml-console-resource-param-heading" style="position: relative">
+      <!-- <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': vm.isCollapsed}" ng-click="vm.isCollapsed = !vm.isCollapsed"></button> -->
+      <span ng-if="isCollapsible(property[0])" ng-click="vm.isCollapsed = !vm.isCollapsed" style="cursor: pointer">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{property[0].displayName}}
       <span class="raml-console-resource-param-instructional">{{parameterDocumentation(property[0])}}</span>
     </h4>
 
-    <p markdown="property[0].description" class="raml-console-marked-content"></p>
+    <div ng-if="!vm.isCollapsed">
+      <p markdown="property[0].description" class="raml-console-marked-content"></p>
 
-    <p ng-if="property[0].example !== undefined">
-      <span class="raml-console-resource-param-example"><b>Example:</b> {{property[0].example}}</span>
-    </p>
+      <p ng-if="property[0].example !== undefined">
+        <span class="raml-console-resource-param-example"><b>Example:</b> {{property[0].example}}</span>
+      </p>
 
-    <properties style="padding-left: 10px" list="property[0].properties" ng-if="property[0].properties"></properties>
+      <properties style="padding-left: 10px" list="property[0].properties" ng-if="property[0].properties"></properties>
+    </div>
   </div>
 </div>
