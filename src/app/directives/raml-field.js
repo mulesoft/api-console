@@ -1,18 +1,20 @@
 (function () {
   'use strict';
 
-  RAML.Directives.ramlField = function() {
+  RAML.Directives.ramlField = function(RecursionHelper) {
     return {
       restrict: 'E',
       templateUrl: 'directives/raml-field.tpl.html',
       replace: true,
       scope: {
+        context: '=',
+        type: '=',
         model: '=',
         param: '='
       },
       controller: ['$scope', function($scope) {
-        var bodyContent = $scope.$parent.context.bodyContent;
-        var context     = $scope.$parent.context[$scope.$parent.type];
+        var bodyContent = $scope.context.bodyContent;
+        var context     = $scope.context[$scope.type];
 
         if (bodyContent) {
           context = context || bodyContent.definitions[bodyContent.selected];
@@ -48,12 +50,12 @@
             $this.text('Cancel override');
           } else {
             definition.overwritten = false;
-            $scope.$parent.context[$scope.$parent.type].values[definition.id][0] = definition['enum'][0];
+            $scope.context[$scope.type].values[definition.id][0] = definition['enum'][0];
           }
         };
 
         $scope.onChange = function () {
-          $scope.$parent.context.forceRequest = false;
+          $scope.context.forceRequest = false;
         };
 
         $scope.isDefault = function (definition) {
@@ -73,18 +75,21 @@
         };
 
         $scope.reset = function (param) {
-          var type = $scope.$parent.type || 'bodyContent';
+          var type = $scope.type || 'bodyContent';
           var info = {};
 
           info[param.id] = [param];
 
-          $scope.$parent.context[type].reset(info, param.id);
+          $scope.context[type].reset(info, param.id);
         };
 
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
-      }]
+      }],
+      compile: function (element) {
+        return RecursionHelper.compile(element);
+      }
     };
   };
 
