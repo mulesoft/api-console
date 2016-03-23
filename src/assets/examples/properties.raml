@@ -145,6 +145,32 @@ types:
             type: Door[]
           engine:
             type: Engine | Feet
+    body:
+      application/json:
+        type: object
+        properties:
+          developer:
+            type: Person[]
+          test:
+            type: string
+            required: false
+            enum: ["one", "two", "three"]
+          animal:
+            type: Person | Developer
+            description: The kind of animal
+          car:
+            type: object
+            properties:
+              wheels:
+                type: object
+                properties:
+                  prop1: string
+                  prop2: number
+              doors:
+                type: Door[]
+              engine:
+                type: Engine | Feet
+
     responses:
       200:
         headers:
@@ -169,3 +195,6 @@ types:
                 type: Door[]
               engine:
                 type: Engine | Feet
+        body:
+          application/json:
+            type: Person
