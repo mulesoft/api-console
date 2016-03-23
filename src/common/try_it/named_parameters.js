@@ -34,8 +34,7 @@
 
       if (typeof data['enum'] !== 'undefined') {
         if (!data.required) {
-          var temp = [''];
-          data['enum'] = temp.concat(data['enum']);
+          data['enum'] = [undefined].concat(data['enum']);
         }
       }
 
@@ -55,26 +54,25 @@
     }.bind(this));
   };
 
-  NamedParameters.prototype.clear = function (info) {
+  NamedParameters.prototype.clear = function () {
     var that = this;
     Object.keys(this.values).map(function (key) {
-      if (typeof info[key][0]['enum'] === 'undefined' || info[key][0].overwritten === true) {
-        that.values[key] = [''];
-      }
+      that.values[key] = [undefined];
     });
   };
 
-  NamedParameters.prototype.reset = function (info, field) {
+  NamedParameters.prototype.reset = function (info, field, index) {
     var that = this;
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          if (typeof info[key][0]['enum'] === 'undefined') {
-            if (info[key][0].type === 'date' && typeof info[key][0].example === 'object') {
-              info[key][0].example = info[key][0].example.toUTCString();
-            }
-
-            that.values[key][0] = info[key][0].example;
+          if (info[key][0].type === 'date' && typeof info[key][0].example === 'object') {
+            info[key][0].example = info[key][0].example.toUTCString();
+          }
+          if(index === undefined) {
+            that.values[key] = [info[key][0].example];
+          } else {
+            that.values[key][index] = info[key][0].example;
           }
         }
       });

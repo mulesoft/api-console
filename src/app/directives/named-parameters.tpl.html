@@ -6,7 +6,7 @@
 
   <div class="raml-console-sidebar-row">
     <p class="raml-console-sidebar-input-container raml-console-sidebar-input-container-custom" ng-repeat="customParam in context.customParameters[type]">
-      <button class="raml-console-sidebar-input-delete" ng-click="removeCutomParam(customParam)"></button>
+      <button class="raml-console-sidebar-input-delete" ng-click="removeCustomParam(customParam)"></button>
       <label for="custom-header" class="raml-console-sidebar-label raml-console-sidebar-label-custom">
         <input class="raml-console-sidebar-custom-input-for-label" ng-model="customParam.name" placeholder="custom key">
       </label>
@@ -23,13 +23,6 @@
     </div>
 
     <p class="raml-console-sidebar-input-container" ng-repeat="param in context[type].plain">
-      <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description" ng-class="{'raml-console-sidebar-input-tooltip-container-enum': param.definitions[0].enum}">
-        <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
-        <span class="raml-console-sidebar-tooltip-flyout">
-          <span markdown="param.definitions[0].description" class="raml-console-marked-content"></span>
-        </span>
-      </span>
-
       <raml-field param="param.definitions[0]" model="context[type].values[param.definitions[0].id]"></raml-field>
     </p>
   </div>

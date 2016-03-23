@@ -243,7 +243,7 @@
 
       // Set the initial response to be an error.
       var response = toValidationObject(
-        false, validations.length ? 'type' : 'repeat', value, key
+        false, 'type', value, key
       );
 
       // Iterate over each value and test using type validation.

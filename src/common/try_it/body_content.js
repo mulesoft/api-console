@@ -66,22 +66,22 @@
     }
   };
 
-  BodyContent.prototype.clear = function (info) {
+  BodyContent.prototype.clear = function () {
     var that = this.definitions[this.selected];
     Object.keys(this.values).map(function (key) {
-      if (typeof info[key][0]['enum'] === 'undefined' || info[key][0].overwritten === true) {
-        that.values[key] = [''];
-      }
+      that.values[key] = [undefined];
     });
   };
 
-  BodyContent.prototype.reset = function (info, field) {
+  BodyContent.prototype.reset = function (info, field, index) {
     var that = this.definitions[this.selected];
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          if (typeof info[key][0]['enum'] === 'undefined') {
-            that.values[key][0] = info[key][0].example;
+          if(index === undefined) {
+            that.values[key] = [info[key][0].example];
+          } else {
+            that.values[key][index] = info[key][0].example;
           }
         }
       });

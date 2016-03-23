@@ -327,6 +327,18 @@
 .sidebar.is-fullscreen .sidebar-input-tooltip {
   display: block;
 }
+
+.sidebar.is-fullscreen .sidebar-input-tooltip-container-description {
+  right: 30px;
+}
+
+.sidebar.is-fullscreen .sidebar-field-with-description {
+  padding-right: 28px;
+}
+
+.sidebar.is-fullscreen .sidebar-field-with-description.sidebar-field-with-example {
+  padding-right: 50px;
+}
 // End Full-Width Sidebar
 
 .sidebar-content {
@@ -515,6 +527,13 @@
     background-color: $color-sidebar-add-btn-bg-hover;
     opacity: 1;
   }
+}
+
+.sidebar-add-btn-repeat {
+  position: relative;
+  left: 3px;
+  top: 0px;
+  transform: translateY(3px);
 }
 
 .sidebar-toggle-group {
@@ -737,7 +756,6 @@
   display: block;
   width: 100%;
   margin-top: 5px;
-  margin-bottom: 18px;
   height: 36px;
   padding: 0 4px 0 36px;
   border: 1px solid $color-input-border;
@@ -750,10 +768,35 @@
   -webkit-font-smoothing: antialiased;
 }
 
+.sidebar-input-remove {
+  position: absolute;
+  bottom: -8px;
+  left: 3px;
+
+  border: 0;
+
+  background: transparent;
+  color: $color-input-reset;
+  font-weight: 900;
+  font-size: 22px;
+  transition: 0.3s ease color;
+
+  &:before {
+    content: "\00d7";
+    display: block;
+
+    -webkit-transform: rotate(-180deg);
+  }
+
+  &:hover {
+    color: $color-input-reset-hover;
+  }
+}
+
 .sidebar-input-reset {
   position: absolute;
-  bottom: 5px;
-  left: 2px;
+  bottom: -4px;
+  right: -6px;
 
   border: 0;
 
@@ -775,7 +818,7 @@
 }
 
 .sidebar-input-tooltip-container-enum {
-  margin-right: 19px;
+  margin-right: 12px;
 }
 
 .sidebar-input-tooltip-container {
@@ -786,12 +829,17 @@
   width: 100%;
 }
 
+.sidebar-input-tooltip-container-remove {
+  left: -2px;
+}
+
 .sidebar-input-left {
   position: static;
 }
 
 .sidebar-input-tooltip {
   position: absolute;
+  z-index: 1;
   right: 0;
   bottom: 0;
 
@@ -878,7 +926,7 @@
 
 .sidebar-tooltip-flyout-left {
   position: absolute;
-  top: 57px;
+  top: 5px;
   left: 0;
   z-index: 20;
 
@@ -945,6 +993,7 @@
 
 .sidebar-input-custom {
   padding-left: 10px;
+  margin-bottom: 18px;
 }
 
 .sidebar-input-delete {
@@ -1122,8 +1171,8 @@
   padding: 0 0 0 11px !important;
 }
 
-.sidebar-field-no-default {
-  padding: 0 0 0 11px !important;
+.sidebar-field-with-example {
+  padding-right: 28px;
 }
 
 .sidebar-base-uri {

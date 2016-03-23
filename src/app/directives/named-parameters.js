@@ -53,7 +53,7 @@
           $scope.context.customParameters[$scope.type].push({});
         };
 
-        $scope.removeCutomParam = function (param) {
+        $scope.removeCustomParam = function (param) {
           $scope.context.customParameters[$scope.type] = $scope.context.customParameters[$scope.type].filter(function (el) {
             return el.name !== param.name;
           });

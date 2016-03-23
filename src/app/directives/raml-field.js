@@ -18,37 +18,25 @@
           context = context || bodyContent.definitions[bodyContent.selected];
         }
 
-        Object.keys(context.plain).map(function (key) {
-          var definition = context.plain[key].definitions[0];
-
-          if (typeof definition['enum'] !== 'undefined') {
-            context.values[definition.id][0] = definition['enum'][0];
-          }
-        });
+        $scope.overrideText = 'Override';
 
         $scope.canOverride = function (definition) {
           return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
         };
 
         $scope.overrideField = function ($event, definition) {
-          var $this      = jQuery($event.currentTarget);
-          var $container = $this.closest('p');
-          var $el        = $container.find('#' + definition.id);
-          var $checkbox  = $container.find('#checkbox_' + definition.id);
-          var $select    = $container.find('#select_' + definition.id);
-
-          $el.toggleClass('raml-console-sidebar-override-show');
-          $checkbox.toggleClass('raml-console-sidebar-override-hide');
-          $select.toggleClass('raml-console-sidebar-override-hide');
-
-          $this.text('Override');
-
-          if($el.hasClass('raml-console-sidebar-override-show')) {
+          if(!definition.overwritten) {
             definition.overwritten = true;
-            $this.text('Cancel override');
+            $scope.overrideText = 'Cancel override';
           } else {
             definition.overwritten = false;
-            $scope.$parent.context[$scope.$parent.type].values[definition.id][0] = definition['enum'][0];
+            $scope.overrideText = 'Override';
+            var validValues = (definition.type === 'boolean') ? [true, false, 'true', 'false'] : definition['enum'];
+            for (var i = 0; i < $scope.model.length; i++) {
+              if(validValues.indexOf($scope.model[i]) === -1) {
+                $scope.model[i] = undefined;
+              }
+            }
           }
         };
 
@@ -68,21 +56,45 @@
           return definition.type === 'boolean';
         };
 
-        $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
+        $scope.isDropdown = function (definition) {
+          return (typeof definition['enum'] !== 'undefined' || definition.type === 'boolean') && !definition.overwritten;
         };
 
-        $scope.reset = function (param) {
+        $scope.hasExampleValue = function (value) {
+          return typeof value.example !== 'undefined';
+        };
+
+        $scope.reset = function (param, index) {
           var type = $scope.$parent.type || 'bodyContent';
           var info = {};
 
           info[param.id] = [param];
 
-          $scope.$parent.context[type].reset(info, param.id);
+          $scope.$parent.context[type].reset(info, param.id, index);
         };
 
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
+        };
+
+        $scope.booleanAsEnum = function () {
+          if($scope.param.required) {
+            return [true, false];
+          } else {
+            return [undefined, true, false];
+          }
+        };
+
+        $scope.addRepeatedParameter = function () {
+          $scope.model.push(undefined);
+        };
+
+        $scope.remove = function (index) {
+          if($scope.model.length === 1) {
+            $scope.model[0] = undefined;
+          } else {
+            $scope.model.splice(index, 1);
+          }
         };
       }]
     };

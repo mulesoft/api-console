@@ -20,6 +20,22 @@
   };
 
   /**
+   * Convert a value into a boolean.
+   *
+   * @param  {String}  value
+   * @return {Boolean}
+   */
+  var toBooleanStrict = function (value) {
+    if ([false, 'false'].indexOf(value) !== -1) {
+      return false;
+    } else if ([true, 'true'].indexOf(value) !== -1) {
+      return true;
+    } else {
+      return null;
+    }
+  };
+
+  /**
    * Convert a value into a number. Non-number strings and infinite values will
    * sanitize into `NaN`.
    *
@@ -234,7 +250,7 @@
       string:  String,
       number:  toNumber,
       integer: toInteger,
-      "boolean": toBoolean,
+      "boolean": toBooleanStrict,
       date:    toDate
     };
 

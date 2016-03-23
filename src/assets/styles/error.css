@@ -2,8 +2,13 @@
   border: 1px solid red;
 }*/
 
+.raml-console-sidebar-input.ng-dirty.ng-invalid-required {
+  border: 1px solid red;
+}
+
 input.ng-dirty.ng-invalid-required {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-required + span.raml-console-field-validation-error::after {
@@ -19,6 +24,7 @@ input.ng-dirty.ng-invalid-required + span.raml-console-field-validation-error::a
 
 input.ng-dirty.ng-invalid-min-length {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-invalid-min-length + span.raml-console-field-validation-error::after {
@@ -34,6 +40,7 @@ input.ng-invalid-min-length + span.raml-console-field-validation-error::after {
 
 input.ng-dirty.ng-invalid-max-length {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-max-length + span.raml-console-field-validation-error::after {
@@ -49,6 +56,7 @@ input.ng-dirty.ng-invalid-max-length + span.raml-console-field-validation-error:
 
 input.ng-dirty.ng-invalid-enum {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-enum + span.raml-console-field-validation-error::after {
@@ -64,6 +72,7 @@ input.ng-dirty.ng-invalid-enum + span.raml-console-field-validation-error::after
 
 input.ng-dirty.ng-invalid-minimum {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-minimum + span.raml-console-field-validation-error::after {
@@ -79,6 +88,7 @@ input.ng-dirty.ng-invalid-minimum + span.raml-console-field-validation-error::af
 
 input.ng-dirty.ng-invalid-maximum {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-maximum + span.raml-console-field-validation-error::after {
@@ -94,6 +104,7 @@ input.ng-dirty.ng-invalid-maximum + span.raml-console-field-validation-error::af
 
 input.ng-dirty.ng-invalid-type {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-type + span.raml-console-field-validation-error::after {
@@ -109,6 +120,7 @@ input.ng-dirty.ng-invalid-type + span.raml-console-field-validation-error::after
 
 input.ng-dirty.ng-invalid-pattern {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-pattern + span.raml-console-field-validation-error::after {
@@ -124,6 +136,7 @@ input.ng-dirty.ng-invalid-pattern + span.raml-console-field-validation-error::af
 
 input.ng-dirty.ng-invalid-repeat {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-repeat + span.raml-console-field-validation-error::after {

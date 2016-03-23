@@ -12,10 +12,12 @@
   // Angular Modules
   angular.module('RAML.Directives', []);
   angular.module('RAML.Services', ['raml']);
+  angular.module('RAML.Filters', []);
   angular.module('RAML.Security', []);
   angular.module('ramlConsoleApp', [
     'RAML.Directives',
     'RAML.Services',
+    'RAML.Filters',
     'RAML.Security',
     'hc.marked',
     'ui.codemirror',

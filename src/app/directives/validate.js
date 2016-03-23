@@ -49,7 +49,7 @@
           minLength: validation.minLength || null,
           maxLength: validation.maxLength || null,
           required: validation.required || null,
-          'enum': validation['enum'] || null,
+          'enum': (validation.type === 'boolean') ? [true, false] : validation['enum'] || null,
           pattern: validation.pattern || null,
           minimum: validation.minimum || null,
           maximum: validation.maximum || null,
