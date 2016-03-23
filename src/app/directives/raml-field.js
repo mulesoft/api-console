@@ -86,6 +86,10 @@
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
+
+        $scope.toString = function toString(value) {
+          return Array.isArray(value) ? value.join(', ') : value;
+        };
       }],
       compile: function (element) {
         return RecursionHelper.compile(element);

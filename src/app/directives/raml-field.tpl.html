@@ -1,5 +1,11 @@
 <div>
-  <label for="{{param.id}}" class="raml-console-sidebar-label">{{param.displayName}} <a class="raml-console-sidebar-override" ng-if="canOverride(param)" ng-click="overrideField($event, param)">Override</a> <span class="raml-console-side-bar-required-field" ng-if="param.required">*</span><label ng-if="param.isFromSecurityScheme" class="raml-console-sidebar-security-label">from security scheme</label></label>
+  <label for="{{param.id}}" class="raml-console-sidebar-label">
+    {{param.displayName}}
+    <a class="raml-console-sidebar-override" ng-if="canOverride(param)" ng-click="overrideField($event, param)">Override</a>
+    <span class="raml-console-side-bar-required-field" ng-if="param.required">*</span>
+    <label ng-if="param.isFromSecurityScheme" class="raml-console-sidebar-security-label">from security scheme</label>
+    <span class="raml-console-resource-param-instructional">{{toString(param.type)}}</span>
+  </label>
 
   <div ng-if="!param.properties" style="position: relative;">
     <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param)">
