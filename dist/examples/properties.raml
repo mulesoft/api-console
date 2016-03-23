@@ -87,6 +87,8 @@ types:
 /test:
   securedBy: [ null, oauth_2_0 ]
   get:
+    queryString:
+      type: Person
 
 /users/{org}/{id}:
   uriParameters:
@@ -94,7 +96,7 @@ types:
     id:
       type: object
       properties:
-        as: string
+        as: string[]
         temo:
           type: object
           properties:

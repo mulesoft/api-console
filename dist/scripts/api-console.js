@@ -2450,11 +2450,11 @@
     createBaseUri: function(rootRAML) {
       var baseUri = rootRAML.baseUri.toString().replace(/\/+$/, '');
 
-      return new RAML.Client.ParameterizedString(baseUri, rootRAML.baseUriParameters, { parameterValues: {version: rootRAML.version} });
+      return new RAML.Client.ParameterizedString(baseUri, rootRAML.baseUriParameters, { parameterValues: {version: rootRAML.version}, encodeURIComponent: true });
     },
 
     createPathSegment: function(resourceRAML) {
-      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri, resourceRAML.uriParameters);
+      return new RAML.Client.ParameterizedString(resourceRAML.relativeUri, resourceRAML.uriParameters, { encodeURIComponent: true });
     }
   };
 })();
@@ -2927,7 +2927,7 @@
     });
   }
 
-  function rendererFor(template) {
+  function rendererFor(template, uriParameters, options) {
     return function renderer(context) {
       context = context || {};
 
@@ -2943,8 +2943,14 @@
           if (typeof context[parameterName][0] !== 'object') {
             return context[parameterName];
           }
-          return JSON.stringify(
+          var tempValue = JSON.stringify(
             RAML.Inspector.Properties.cleanupPropertyValue(context[parameterName][0]));
+
+          if (options.encodeURIComponent) {
+            tempValue = encodeURIComponent(tempValue);
+          }
+
+          return tempValue;
         }
         return '';
       });
@@ -2954,7 +2960,7 @@
   }
 
   RAML.Client.ParameterizedString = function(template, uriParameters, options) {
-    options = options || {parameterValues: {} };
+    options = angular.extend({ parameterValues: {} }, options);
     template = template.replace(templateMatcher, function(match, parameterName) {
       if (options.parameterValues[parameterName]) {
         return options.parameterValues[parameterName];
@@ -2965,7 +2971,7 @@
     this.parameters = uriParameters;
     this.templated = Object.keys(this.parameters || {}).length > 0;
     this.tokens = tokenize(template);
-    this.render = rendererFor(template, uriParameters);
+    this.render = rendererFor(template, uriParameters, options);
     this.toString = function() { return template; };
   };
 })();
