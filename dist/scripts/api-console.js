@@ -66,6 +66,29 @@
 (function () {
   'use strict';
 
+  RAML.Directives.bodyProperties = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/body-properties.tpl.html',
+      replace: true,
+      scope: {
+        type: '='
+      },
+      controller: function ($scope) {
+        $scope.properties = {
+          body: [$scope.type]
+        };
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('bodyProperties', RAML.Directives.bodyProperties);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.clickOutside = function ($document) {
     return {
       restrict: 'A',
@@ -5544,6 +5567,13 @@ RAML.Inspector = (function() {
 angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
   'use strict';
 
+  $templateCache.put('directives/body-properties.tpl.html',
+    "<div>\n" +
+    "  <properties list=\"properties\"></properties>\n" +
+    "<div>\n"
+  );
+
+
   $templateCache.put('directives/close-button.tpl.html',
     "<button class=\"raml-console-resource-close-btn\" ng-click=\"close($event)\">\n" +
     "  Close\n" +
@@ -5648,6 +5678,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
     "        <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(methodInfo.body[currentBodySelected].schema)\"></code></pre>\n" +
     "      </div>\n" +
+    "\n" +
+    "      <div class=\"raml-console-schema-container\" ng-if=\"methodInfo.body[currentBodySelected].type\">\n" +
+    "        <body-properties type=\"methodInfo.body[currentBodySelected]\"></body-properties>\n" +
+    "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
     "\n" +
@@ -5702,6 +5736,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <div class=\"raml-console-schema-container\" ng-if=\"responseInfo[code][responseInfo[code].currentType].schema\">\n" +
     "            <p><button ng-click=\"showSchema($event)\" class=\"raml-console-resource-btn\">Show Schema</button></p>\n" +
     "            <pre class=\"raml-console-resource-pre raml-console-resource-pre-toggle\"><code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)\"></code></pre>\n" +
+    "          </div>\n" +
+    "\n" +
+    "          <div class=\"raml-console-schema-container\" ng-if=\"responseInfo[code][responseInfo[code].currentType].type\">\n" +
+    "            <body-properties type=\"responseInfo[code][responseInfo[code].currentType]\"></body-properties>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
