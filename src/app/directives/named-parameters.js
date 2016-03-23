@@ -73,21 +73,7 @@
           }).length > 0;
         };
 
-        $scope.stringify = function stringify(value) {
-          return JSON.stringify(value);
-        };
-
-        $scope.cleanupValue = function cleanupValue(value) {
-          if (typeof value !== 'object') {
-            return value;
-          }
-          var cleanedValue = {};
-          Object.keys(value).forEach(function (key) {
-            cleanedValue[key] = $scope.cleanupValue(value[key] ? value[key][0] : value[key]);
-          });
-
-          return cleanedValue;
-        };
+        $scope.cleanupValue = RAML.Inspector.Properties.cleanupPropertyValue;
       }]
     };
   };
