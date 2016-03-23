@@ -88,8 +88,9 @@ types:
   securedBy: [ null, oauth_2_0 ]
   get:
 
-/users/{id}:
+/users/{org}/{id}:
   uriParameters:
+    org: string
     id:
       type: object
       properties:
@@ -97,7 +98,7 @@ types:
         temo:
           type: object
           properties:
-            st: string[]
+            st: integer
             adsa: string
   get:
     headers:
