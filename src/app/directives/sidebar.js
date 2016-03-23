@@ -176,7 +176,9 @@
             for(var i = 0; i < customParameters.length; i++) {
               var key = customParameters[i].name;
 
-              params[key] = [];
+              if(!params[key]) {
+                params[key] = [];
+              }
               params[key].push(customParameters[i].value);
             }
           }
