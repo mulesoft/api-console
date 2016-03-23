@@ -23,7 +23,14 @@
       // });
 
       var templated = template.replace(templateMatcher, function(match, parameterName) {
-        return context[parameterName] || '';
+        if (context[parameterName]) {
+          if (typeof context[parameterName][0] !== 'object') {
+            return context[parameterName];
+          }
+          return JSON.stringify(
+            RAML.Inspector.Properties.cleanupPropertyValue(context[parameterName][0]));
+        }
+        return '';
       });
 
       return templated;

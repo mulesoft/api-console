@@ -706,21 +706,7 @@
           }).length > 0;
         };
 
-        $scope.stringify = function stringify(value) {
-          return JSON.stringify(value);
-        };
-
-        $scope.cleanupValue = function cleanupValue(value) {
-          if (typeof value !== 'object') {
-            return value;
-          }
-          var cleanedValue = {};
-          Object.keys(value).forEach(function (key) {
-            cleanedValue[key] = $scope.cleanupValue(value[key] ? value[key][0] : value[key]);
-          });
-
-          return cleanedValue;
-        };
+        $scope.cleanupValue = RAML.Inspector.Properties.cleanupPropertyValue;
       }]
     };
   };
@@ -1631,6 +1617,13 @@
           if (!RAML.Utils.isEmpty(context[type].data())) {
             params = context[type].data();
           }
+
+          Object.keys(params).forEach(function (key) {
+            if (typeof params[key][0] === 'object') {
+              params[key][0] = JSON.stringify(
+                RAML.Inspector.Properties.cleanupPropertyValue(params[key][0]));
+            }
+          });
 
           if (customParameters.length > 0) {
             for(var i = 0; i < customParameters.length; i++) {
@@ -2942,7 +2935,14 @@
       // });
 
       var templated = template.replace(templateMatcher, function(match, parameterName) {
-        return context[parameterName] || '';
+        if (context[parameterName]) {
+          if (typeof context[parameterName][0] !== 'object') {
+            return context[parameterName];
+          }
+          return JSON.stringify(
+            RAML.Inspector.Properties.cleanupPropertyValue(context[parameterName][0]));
+        }
+        return '';
       });
 
       return templated;
@@ -3591,8 +3591,21 @@ RAML.Inspector = (function() {
     return parameters;
   }
 
+  function cleanupPropertyValue(value) {
+    if (typeof value !== 'object') {
+      return value;
+    }
+    var cleanedValue = {};
+    Object.keys(value).forEach(function (key) {
+      cleanedValue[key] = cleanupPropertyValue(value[key] ? value[key][0] : value[key]);
+    });
+
+    return cleanedValue;
+  }
+
   RAML.Inspector.Properties = {
-    normalizeNamedParameters: normalizeNamedParameters
+    normalizeNamedParameters: normalizeNamedParameters,
+    cleanupPropertyValue: cleanupPropertyValue
   };
 })();
 
@@ -5734,7 +5747,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <div ng-show=\"showBaseUrl\" class=\"raml-console-sidebar-method-content\">\n" +
     "      <div class=\"raml-console-sidebar-url\" ng-repeat=\"segment in segments\">\n" +
     "        <div ng-hide=\"segment.templated\">{{segment.name}}</div>\n" +
-    "        <div ng-show=\"segment.templated\" ng-if=\"isValueProvided(context[type].values[segment.name][0])\" class=\"raml-console-sidebar-url-segment\">{{stringify(cleanupValue(context[type].values[segment.name][0]))}}</div>\n" +
+    "        <div ng-show=\"segment.templated\" ng-if=\"isValueProvided(context[type].values[segment.name][0])\" class=\"raml-console-sidebar-url-segment\">{{cleanupValue(context[type].values[segment.name][0])}}</div>\n" +
     "        <div ng-show=\"segment.templated\" ng-if=\"!isValueProvided(context[type].values[segment.name][0])\" class=\"raml-console-sidebar-url-segment\"><span ng-non-bindable>&#123;</span>{{segment.name}}<span ng-non-bindable>&#125;</span></div>\n" +
     "      </div>\n" +
     "    </div>\n" +

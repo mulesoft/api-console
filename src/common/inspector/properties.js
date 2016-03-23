@@ -21,7 +21,20 @@
     return parameters;
   }
 
+  function cleanupPropertyValue(value) {
+    if (typeof value !== 'object') {
+      return value;
+    }
+    var cleanedValue = {};
+    Object.keys(value).forEach(function (key) {
+      cleanedValue[key] = cleanupPropertyValue(value[key] ? value[key][0] : value[key]);
+    });
+
+    return cleanedValue;
+  }
+
   RAML.Inspector.Properties = {
-    normalizeNamedParameters: normalizeNamedParameters
+    normalizeNamedParameters: normalizeNamedParameters,
+    cleanupPropertyValue: cleanupPropertyValue
   };
 })();

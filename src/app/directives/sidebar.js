@@ -172,6 +172,13 @@
             params = context[type].data();
           }
 
+          Object.keys(params).forEach(function (key) {
+            if (typeof params[key][0] === 'object') {
+              params[key][0] = JSON.stringify(
+                RAML.Inspector.Properties.cleanupPropertyValue(params[key][0]));
+            }
+          });
+
           if (customParameters.length > 0) {
             for(var i = 0; i < customParameters.length; i++) {
               var key = customParameters[i].name;
