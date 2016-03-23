@@ -597,8 +597,13 @@ span.CodeMirror-selectedtext { background: none; }
   border: 1px solid red;
 }*/
 
+.raml-console-sidebar-input.ng-dirty.ng-invalid-required {
+  border: 1px solid red;
+}
+
 input.ng-dirty.ng-invalid-required {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-required + span.raml-console-field-validation-error::after {
@@ -614,6 +619,7 @@ input.ng-dirty.ng-invalid-required + span.raml-console-field-validation-error::a
 
 input.ng-dirty.ng-invalid-min-length {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-invalid-min-length + span.raml-console-field-validation-error::after {
@@ -629,6 +635,7 @@ input.ng-invalid-min-length + span.raml-console-field-validation-error::after {
 
 input.ng-dirty.ng-invalid-max-length {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-max-length + span.raml-console-field-validation-error::after {
@@ -644,6 +651,7 @@ input.ng-dirty.ng-invalid-max-length + span.raml-console-field-validation-error:
 
 input.ng-dirty.ng-invalid-enum {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-enum + span.raml-console-field-validation-error::after {
@@ -659,6 +667,7 @@ input.ng-dirty.ng-invalid-enum + span.raml-console-field-validation-error::after
 
 input.ng-dirty.ng-invalid-minimum {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-minimum + span.raml-console-field-validation-error::after {
@@ -674,6 +683,7 @@ input.ng-dirty.ng-invalid-minimum + span.raml-console-field-validation-error::af
 
 input.ng-dirty.ng-invalid-maximum {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-maximum + span.raml-console-field-validation-error::after {
@@ -689,6 +699,7 @@ input.ng-dirty.ng-invalid-maximum + span.raml-console-field-validation-error::af
 
 input.ng-dirty.ng-invalid-type {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-type + span.raml-console-field-validation-error::after {
@@ -704,6 +715,7 @@ input.ng-dirty.ng-invalid-type + span.raml-console-field-validation-error::after
 
 input.ng-dirty.ng-invalid-pattern {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-pattern + span.raml-console-field-validation-error::after {
@@ -719,6 +731,7 @@ input.ng-dirty.ng-invalid-pattern + span.raml-console-field-validation-error::af
 
 input.ng-dirty.ng-invalid-repeat {
   border: 1px solid red;
+  margin-bottom: 18px;
 }
 
 input.ng-dirty.ng-invalid-repeat + span.raml-console-field-validation-error::after {
@@ -2944,6 +2957,18 @@ a.raml-console-resource-path-active {
   display: block;
 }
 
+.raml-console-sidebar.raml-console-is-fullscreen .raml-console-sidebar-input-tooltip-container-description {
+  right: 30px;
+}
+
+.raml-console-sidebar.raml-console-is-fullscreen .raml-console-sidebar-field-with-description {
+  padding-right: 28px;
+}
+
+.raml-console-sidebar.raml-console-is-fullscreen .raml-console-sidebar-field-with-description.raml-console-sidebar-field-with-example {
+  padding-right: 50px;
+}
+
 .raml-console-sidebar-content {
   display: none;
   overflow: hidden;
@@ -3113,6 +3138,13 @@ a.raml-console-resource-path-active {
 .raml-console-sidebar-add-btn:hover {
   background-color: #5685aa;
   opacity: 1;
+}
+
+.raml-console-sidebar-add-btn-repeat {
+  position: relative;
+  left: 3px;
+  top: 0px;
+  transform: translateY(3px);
 }
 
 .raml-console-sidebar-toggle-group {
@@ -3312,7 +3344,6 @@ a.raml-console-resource-path-active {
   display: block;
   width: 100%;
   margin-top: 5px;
-  margin-bottom: 18px;
   height: 36px;
   padding: 0 4px 0 36px;
   border: 1px solid #000;
@@ -3323,10 +3354,32 @@ a.raml-console-resource-path-active {
   -webkit-font-smoothing: antialiased;
 }
 
+.raml-console-sidebar-input-remove {
+  position: absolute;
+  bottom: -8px;
+  left: 3px;
+  border: 0;
+  background: transparent;
+  color: #ccc;
+  font-weight: 900;
+  font-size: 22px;
+  transition: 0.3s ease color;
+}
+
+.raml-console-sidebar-input-remove:before {
+  content: "\00d7";
+  display: block;
+  -webkit-transform: rotate(-180deg);
+}
+
+.raml-console-sidebar-input-remove:hover {
+  color: #777;
+}
+
 .raml-console-sidebar-input-reset {
   position: absolute;
-  bottom: 5px;
-  left: 2px;
+  bottom: -4px;
+  right: -6px;
   border: 0;
   background: transparent;
   color: #ccc;
@@ -3345,7 +3398,7 @@ a.raml-console-resource-path-active {
 }
 
 .raml-console-sidebar-input-tooltip-container-enum {
-  margin-right: 19px;
+  margin-right: 12px;
 }
 
 .raml-console-sidebar-input-tooltip-container {
@@ -3355,12 +3408,17 @@ a.raml-console-resource-path-active {
   width: 100%;
 }
 
+.raml-console-sidebar-input-tooltip-container-remove {
+  left: -2px;
+}
+
 .raml-console-sidebar-input-left {
   position: static;
 }
 
 .raml-console-sidebar-input-tooltip {
   position: absolute;
+  z-index: 1;
   right: 0;
   bottom: 0;
   display: none;
@@ -3437,7 +3495,7 @@ a.raml-console-resource-path-active {
 
 .raml-console-sidebar-tooltip-flyout-left {
   position: absolute;
-  top: 57px;
+  top: 5px;
   left: 0;
   z-index: 20;
   display: none;
@@ -3495,6 +3553,7 @@ a.raml-console-resource-path-active {
 
 .raml-console-sidebar-input-custom {
   padding-left: 10px;
+  margin-bottom: 18px;
 }
 
 .raml-console-sidebar-input-delete {
@@ -3661,8 +3720,8 @@ a.raml-console-resource-path-active {
   padding: 0 0 0 11px !important;
 }
 
-.raml-console-sidebar-field-no-default {
-  padding: 0 0 0 11px !important;
+.raml-console-sidebar-field-with-example {
+  padding-right: 28px;
 }
 
 .raml-console-sidebar-base-uri {
