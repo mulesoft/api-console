@@ -56,6 +56,20 @@
 
           <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" title="Query Parameters" enable-custom-parameters></named-parameters>
 
+          <section ng-if="methodInfo.queryString">
+            <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
+              <h4 class="raml-console-sidebar-subhead">Query String</h4>
+            </header>
+
+            <div class="raml-console-sidebar-row" style="padding-bottom: 0;">
+              <div
+                class="raml-console-codemirror-body-editor"
+                ui-codemirror="{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }"
+                ng-model="context.queryString">
+              </div>
+            </div>
+          </section>
+
           <section id="sidebar-body" ng-if="methodInfo.body">
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
               <h4 class="raml-console-sidebar-subhead">Body</h4>
