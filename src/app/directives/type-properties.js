@@ -1,10 +1,10 @@
 (function () {
   'use strict';
 
-  RAML.Directives.bodyProperties = function() {
+  RAML.Directives.typeProperties = function() {
     return {
       restrict: 'E',
-      templateUrl: 'directives/body-properties.tpl.html',
+      templateUrl: 'directives/type-properties.tpl.html',
       replace: true,
       scope: {
         type: '='
@@ -18,5 +18,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('bodyProperties', RAML.Directives.bodyProperties);
+    .directive('typeProperties', RAML.Directives.typeProperties);
 })();

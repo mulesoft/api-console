@@ -25,6 +25,11 @@
       <properties list="methodInfo.queryParameters"></properties>
     </section>
 
+    <section class="raml-console-resource-section" id="docs-query-string" ng-if="methodInfo.queryString">
+      <h3 class="raml-console-resource-heading-a">Query String</h3>
+      <type-properties type="methodInfo.queryString"></type-properties>
+    </section>
+
     <section class="raml-console-resource-section raml-console-documentation-schemes">
       <h3 class="raml-console-resource-heading-a">Security Schemes</h3>
       <ol class="raml-console-documentation-security-scheme">
@@ -96,7 +101,7 @@
       </div>
 
       <div class="raml-console-schema-container" ng-if="methodInfo.body[currentBodySelected].type">
-        <body-properties type="methodInfo.body[currentBodySelected]"></body-properties>
+        <type-properties type="methodInfo.body[currentBodySelected]"></type-properties>
       </div>
     </section>
   </div>
@@ -155,7 +160,7 @@
           </div>
 
           <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].type">
-            <body-properties type="responseInfo[code][responseInfo[code].currentType]"></body-properties>
+            <type-properties type="responseInfo[code][responseInfo[code].currentType]"></type-properties>
           </div>
         </div>
       </section>
