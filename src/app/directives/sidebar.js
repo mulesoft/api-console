@@ -415,6 +415,25 @@
 
             $scope.parameters = getParameters(context, 'queryParameters');
 
+            if (context.queryString) {
+              var parameters;
+              try {
+                parameters = JSON.parse(context.queryString);
+              } catch (e) {
+                // handle error
+              }
+              Object.keys(parameters).forEach(function (key) {
+                if (!$scope.parameters[key]) {
+                  $scope.parameters[key] = [];
+                }
+                var value = parameters[key];
+                if (typeof value === 'object') {
+                  value = JSON.stringify(value);
+                }
+                $scope.parameters[key].push(value);
+              });
+            }
+
             request.queryParams($scope.parameters);
             request.header('Accept', $scope.raml.mediaType || defaultAccept);
             request.headers(getParameters(context, 'headers'));

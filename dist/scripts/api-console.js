@@ -1865,6 +1865,25 @@
 
             $scope.parameters = getParameters(context, 'queryParameters');
 
+            if (context.queryString) {
+              var parameters;
+              try {
+                parameters = JSON.parse(context.queryString);
+              } catch (e) {
+                // handle error
+              }
+              Object.keys(parameters).forEach(function (key) {
+                if (!$scope.parameters[key]) {
+                  $scope.parameters[key] = [];
+                }
+                var value = parameters[key];
+                if (typeof value === 'object') {
+                  value = JSON.stringify(value);
+                }
+                $scope.parameters[key].push(value);
+              });
+            }
+
             request.queryParams($scope.parameters);
             request.header('Accept', $scope.raml.mediaType || defaultAccept);
             request.headers(getParameters(context, 'headers'));
@@ -6255,6 +6274,20 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <named-parameters src=\"methodInfo.headers.plain\" context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
     "          <named-parameters src=\"methodInfo.queryParameters\" context=\"context\" type=\"queryParameters\" title=\"Query Parameters\" enable-custom-parameters></named-parameters>\n" +
+    "\n" +
+    "          <section ng-if=\"methodInfo.queryString\">\n" +
+    "            <header class=\"raml-console-sidebar-row raml-console-sidebar-subheader\">\n" +
+    "              <h4 class=\"raml-console-sidebar-subhead\">Query String</h4>\n" +
+    "            </header>\n" +
+    "\n" +
+    "            <div class=\"raml-console-sidebar-row\" style=\"padding-bottom: 0;\">\n" +
+    "              <div\n" +
+    "                class=\"raml-console-codemirror-body-editor\"\n" +
+    "                ui-codemirror=\"{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }\"\n" +
+    "                ng-model=\"context.queryString\">\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "          </section>\n" +
     "\n" +
     "          <section id=\"sidebar-body\" ng-if=\"methodInfo.body\">\n" +
     "            <header class=\"raml-console-sidebar-row raml-console-sidebar-subheader\">\n" +
