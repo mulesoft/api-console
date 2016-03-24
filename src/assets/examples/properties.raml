@@ -198,3 +198,15 @@ types:
         body:
           application/json:
             type: Person
+
+/info:
+  get:
+    queryString:
+      type: object
+      properties:
+        developer:
+          type: Person[]
+        test:
+          type: string
+          required: false
+          enum: ["one", "two", "three"]

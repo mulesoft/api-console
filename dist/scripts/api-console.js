@@ -66,29 +66,6 @@
 (function () {
   'use strict';
 
-  RAML.Directives.bodyProperties = function() {
-    return {
-      restrict: 'E',
-      templateUrl: 'directives/body-properties.tpl.html',
-      replace: true,
-      scope: {
-        type: '='
-      },
-      controller: function ($scope) {
-        $scope.properties = {
-          body: [$scope.type]
-        };
-      }
-    };
-  };
-
-  angular.module('RAML.Directives')
-    .directive('bodyProperties', RAML.Directives.bodyProperties);
-})();
-
-(function () {
-  'use strict';
-
   RAML.Directives.clickOutside = function ($document) {
     return {
       restrict: 'A',
@@ -2146,6 +2123,29 @@
 
   angular.module('RAML.Directives')
     .directive('themeSwitcher', RAML.Directives.theme);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.typeProperties = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/type-properties.tpl.html',
+      replace: true,
+      scope: {
+        type: '='
+      },
+      controller: function ($scope) {
+        $scope.properties = {
+          body: [$scope.type]
+        };
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('typeProperties', RAML.Directives.typeProperties);
 })();
 
 (function () {
@@ -5567,13 +5567,6 @@ RAML.Inspector = (function() {
 angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
   'use strict';
 
-  $templateCache.put('directives/body-properties.tpl.html',
-    "<div>\n" +
-    "  <properties list=\"properties\"></properties>\n" +
-    "<div>\n"
-  );
-
-
   $templateCache.put('directives/close-button.tpl.html',
     "<button class=\"raml-console-resource-close-btn\" ng-click=\"close($event)\">\n" +
     "  Close\n" +
@@ -5607,6 +5600,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <section class=\"raml-console-resource-section\" id=\"docs-query-parameters\" ng-if=\"methodInfo.queryParameters\">\n" +
     "      <h3 class=\"raml-console-resource-heading-a\">Query Parameters</h3>\n" +
     "      <properties list=\"methodInfo.queryParameters\"></properties>\n" +
+    "    </section>\n" +
+    "\n" +
+    "    <section class=\"raml-console-resource-section\" id=\"docs-query-string\" ng-if=\"methodInfo.queryString\">\n" +
+    "      <h3 class=\"raml-console-resource-heading-a\">Query String</h3>\n" +
+    "      <type-properties type=\"methodInfo.queryString\"></type-properties>\n" +
     "    </section>\n" +
     "\n" +
     "    <section class=\"raml-console-resource-section raml-console-documentation-schemes\">\n" +
@@ -5680,7 +5678,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "\n" +
     "      <div class=\"raml-console-schema-container\" ng-if=\"methodInfo.body[currentBodySelected].type\">\n" +
-    "        <body-properties type=\"methodInfo.body[currentBodySelected]\"></body-properties>\n" +
+    "        <type-properties type=\"methodInfo.body[currentBodySelected]\"></type-properties>\n" +
     "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
@@ -5739,7 +5737,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          </div>\n" +
     "\n" +
     "          <div class=\"raml-console-schema-container\" ng-if=\"responseInfo[code][responseInfo[code].currentType].type\">\n" +
-    "            <body-properties type=\"responseInfo[code][responseInfo[code].currentType]\"></body-properties>\n" +
+    "            <type-properties type=\"responseInfo[code][responseInfo[code].currentType]\"></type-properties>\n" +
     "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
@@ -6395,6 +6393,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div class=\"raml-console-meta-button-container\">\n" +
     "  <a class=\"raml-console-meta-button\">Switch Theme</a>\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('directives/type-properties.tpl.html',
+    "<div>\n" +
+    "  <properties list=\"properties\"></properties>\n" +
+    "<div>\n"
   );
 
 
