@@ -28,6 +28,18 @@
           }
         });
 
+        $scope.isArray = function (param) {
+          return param.type[0].indexOf('[]') !== -1;
+        };
+
+        $scope.addArrayElement = function (model) {
+          model.push([undefined]);
+        };
+
+        $scope.removeArrayElement = function (model, index) {
+          model.splice(index, 1);
+        };
+
         $scope.canOverride = function (definition) {
           return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
         };
