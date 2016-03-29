@@ -26,9 +26,16 @@
       return value;
     }
     var cleanedValue = {};
-    Object.keys(value).forEach(function (key) {
-      cleanedValue[key] = cleanupPropertyValue(value[key] ? value[key][0] : value[key]);
-    });
+
+    if (Array.isArray(value)) {
+      cleanedValue = value.map(function (arrayItem) {
+        return cleanupPropertyValue(arrayItem[0]);
+      });
+    } else {
+      Object.keys(value).forEach(function (key) {
+        cleanedValue[key] = cleanupPropertyValue(value[key] ? value[key][0] : value[key]);
+      });
+    }
 
     return cleanedValue;
   }

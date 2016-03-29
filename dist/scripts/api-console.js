@@ -1103,6 +1103,18 @@
           }
         });
 
+        $scope.isArray = function (param) {
+          return param.type[0].indexOf('[]') !== -1;
+        };
+
+        $scope.addArrayElement = function (model) {
+          model.push([undefined]);
+        };
+
+        $scope.removeArrayElement = function (model, index) {
+          model.splice(index, 1);
+        };
+
         $scope.canOverride = function (definition) {
           return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
         };
@@ -3648,9 +3660,16 @@ RAML.Inspector = (function() {
       return value;
     }
     var cleanedValue = {};
-    Object.keys(value).forEach(function (key) {
-      cleanedValue[key] = cleanupPropertyValue(value[key] ? value[key][0] : value[key]);
-    });
+
+    if (Array.isArray(value)) {
+      cleanedValue = value.map(function (arrayItem) {
+        return cleanupPropertyValue(arrayItem[0]);
+      });
+    } else {
+      Object.keys(value).forEach(function (key) {
+        cleanedValue[key] = cleanupPropertyValue(value[key] ? value[key][0] : value[key]);
+      });
+    }
 
     return cleanedValue;
   }
@@ -6014,7 +6033,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/raml-field.tpl.html',
-    "<div>\n" +
+    "<div style=\"position: relative;\">\n" +
     "  <label for=\"{{param.id}}\" class=\"raml-console-sidebar-label\">\n" +
     "    {{param.displayName}}\n" +
     "    <a class=\"raml-console-sidebar-override\" ng-if=\"canOverride(param)\" ng-click=\"overrideField($event, param)\">Override</a>\n" +
@@ -6023,7 +6042,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <span class=\"raml-console-resource-param-instructional\">{{toString(param.type)}}</span>\n" +
     "  </label>\n" +
     "\n" +
-    "  <div ng-if=\"!param.properties\" style=\"position: relative;\">\n" +
+    "  <div ng-if=\"!param.properties && !isArray(param)\">\n" +
     "    <span class=\"raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left\" ng-if=\"hasExampleValue(param)\">\n" +
     "      <button tabindex=\"-1\" class=\"raml-console-sidebar-input-reset\" ng-click=\"reset(param)\"><span class=\"raml-console-visuallyhidden\">Reset field</span></button>\n" +
     "      <span class=\"raml-console-sidebar-tooltip-flyout-left\">\n" +
@@ -6040,6 +6059,29 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"model[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
     "\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div ng-if=\"!param.properties && isArray(param)\" ng-init=\"model[0] = [[undefined]]\">\n" +
+    "    <button class=\"raml-console-sidebar-add-btn\" ng-click=\"addArrayElement(model[0])\"></button>\n" +
+    "    <div ng-repeat=\"aModel in model[0] track by $index\" style=\"position: relative;\">\n" +
+    "      <button class=\"raml-console-sidebar-input-delete\" ng-click=\"removeArrayElement(model[0], $index)\"></button>\n" +
+    "      <span class=\"raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left\" ng-if=\"hasExampleValue(param)\">\n" +
+    "        <button tabindex=\"-1\" class=\"raml-console-sidebar-input-reset\" ng-click=\"reset(param)\"><span class=\"raml-console-visuallyhidden\">Reset field</span></button>\n" +
+    "        <span class=\"raml-console-sidebar-tooltip-flyout-left\">\n" +
+    "          <span>Use example value</span>\n" +
+    "        </span>\n" +
+    "      </span>\n" +
+    "\n" +
+    "      <select id=\"select_{{param.id}}\" ng-if=\"isEnum(param)\" name=\"param.id\" class=\"raml-console-sidebar-input\" ng-model=\"aModel[0]\" style=\"margin-bottom: 0;\" ng-change=\"onChange()\">\n" +
+    "       <option ng-repeat=\"enum in unique(param.enum)\" value=\"{{enum}}\" ng-selected=\"{{param.example === enum}}\">{{enum}}</option>\n" +
+    "      </select>\n" +
+    "\n" +
+    "      <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"aModel[0]\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
+    "\n" +
+    "      <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"aModel[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
+    "\n" +
+    "      <span class=\"raml-console-field-validation-error\"></span>\n" +
+    "    </div>\n" +
     "  </div>\n" +
     "\n" +
     "  <div ng-if=\"param.properties\" style=\"padding-left: 10px\">\n" +
