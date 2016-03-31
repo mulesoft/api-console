@@ -62,7 +62,7 @@ function ResourcesPO () {
   this.toggleResourceMethod = function (resource, method) {
     var button = this.getMethodBtn(resource, method);
     button.click();
-  }
+  };
 }
 
 ResourcesPO.prototype = basePO;
