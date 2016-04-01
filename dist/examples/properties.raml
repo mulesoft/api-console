@@ -17,10 +17,6 @@ securitySchemes:
                 properties:
                   prop1: string
                   prop2: number
-              doors:
-                type: Door[]
-              engine:
-                type: Engine | Feet
         queryParameters:
           access_token:
             type: string
@@ -37,15 +33,10 @@ types:
     properties:
       firstname: string
       lastname: string
+      addresses: string[]
       age: number
       manager:
         type: Person
-  Department:
-    type: object
-    properties:
-      name: string
-    example:
-      name: Engineering
   User:
     type: Person
     properties:
@@ -54,35 +45,23 @@ types:
         required: false
       id:
         type: number
-      department: Department
+      department: Department[]
   Developer:
     type: User
     properties:
       github: string
-  Saadas:
-    type: Developer | Person | Department
-  Another:
-    type: User | Saadas
-  Test:
-    type: (string | integer)[]
-  Door:
-    type: string
-  Engine:
-    type: string
-  Feet:
-    type: string
-  Car:
+  Department:
     type: object
     properties:
-      wheels:
-        type: object
-        properties:
-          prop1: string
-          prop2: number
-      doors:
-        type: Door[]
-      engine:
-        type: Engine | Feet
+      name: string
+    example:
+      name: Engineering
+  Team:
+    type: Developer[]
+  CEO:
+    type: User | Developer
+  Planes:
+    type: string[]
 
 /test:
   securedBy: [ null, oauth_2_0 ]
@@ -121,10 +100,6 @@ types:
             properties:
               prop1: string
               prop2: number
-          doors:
-            type: Door[]
-          engine:
-            type: Engine | Feet
 
     queryParameters:
       developer:
@@ -141,10 +116,7 @@ types:
         properties:
           wheels:
             type: string
-          doors:
-            type: Door[]
-          engine:
-            type: Engine | Feet
+
     body:
       application/json:
         type: object
@@ -166,10 +138,6 @@ types:
                 properties:
                   prop1: string
                   prop2: number
-              doors:
-                type: Door[]
-              engine:
-                type: Engine | Feet
 
     responses:
       200:
@@ -191,10 +159,6 @@ types:
                 properties:
                   prop1: string
                   prop2: number
-              doors:
-                type: Door[]
-              engine:
-                type: Engine | Feet
         body:
           application/json:
             type: Person
@@ -232,7 +196,3 @@ types:
                 properties:
                   prop1: string
                   prop2: number
-              doors:
-                type: Door[]
-              engine:
-                type: Engine | Feet
