@@ -17,6 +17,7 @@
     .controller('RamlConsoleController', function RamlConsoleController(
       $attrs,
       $scope,
+      $rootScope,
       $window
     ) {
       $scope.allowUnsafeMarkdown        = $attrs.hasOwnProperty('allowUnsafeMarkdown');
@@ -55,6 +56,7 @@
 
         $scope.$watch('raml', function (raml) {
           raml && inspectRaml(raml);
+          $rootScope.types = raml.types;
         });
       })();
 
