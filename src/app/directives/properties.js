@@ -8,9 +8,10 @@
       replace: true,
       scope: {
         list: '=',
-        collapsible: '='
+        collapsible: '=',
+        isNestedProperty: '='
       },
-      controller: function ($scope) {
+      controller: function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
           $scope.list = Object.keys($scope.list).map(function (key) {
             return $scope.list[key];
@@ -18,6 +19,13 @@
 
           $scope.list = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
         }
+
+        $scope.mergeType = function (type) {
+          if (!$scope.isNestedProperty) {
+            return RAML.Inspector.Types.mergeType(type, $rootScope.types);
+          }
+          return type;
+        };
 
         $scope.isCollapsible = function isCollapsible(property) {
           return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
