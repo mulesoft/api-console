@@ -725,9 +725,10 @@
       replace: true,
       scope: {
         list: '=',
-        collapsible: '='
+        collapsible: '=',
+        isNestedProperty: '='
       },
-      controller: function ($scope) {
+      controller: function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
           $scope.list = Object.keys($scope.list).map(function (key) {
             return $scope.list[key];
@@ -735,6 +736,13 @@
 
           $scope.list = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
         }
+
+        $scope.mergeType = function (type) {
+          if (!$scope.isNestedProperty) {
+            return RAML.Inspector.Types.mergeType(type, $rootScope.types);
+          }
+          return type;
+        };
 
         $scope.isCollapsible = function isCollapsible(property) {
           return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
@@ -938,6 +946,7 @@
     .controller('RamlConsoleController', function RamlConsoleController(
       $attrs,
       $scope,
+      $rootScope,
       $window
     ) {
       $scope.allowUnsafeMarkdown        = $attrs.hasOwnProperty('allowUnsafeMarkdown');
@@ -976,6 +985,7 @@
 
         $scope.$watch('raml', function (raml) {
           raml && inspectRaml(raml);
+          $rootScope.types = raml.types;
         });
       })();
 
@@ -3683,6 +3693,50 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
+  function isNativeType(typeName) {
+    var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
+    return nativeTypes.indexOf(typeName) !== -1;
+  }
+
+  function getType(typeName, types) {
+    typeName = typeName.replace('[]', '');
+    var existingType = types.find(function (aType) {
+      return aType[typeName];
+    });
+    return existingType ? existingType[typeName] : existingType;
+  }
+
+  function getSuperTypesProperties(properties, typeName, types) {
+    if (!isNativeType(typeName)) {
+      var superType = getType(typeName, types);
+
+      if (superType) {
+        properties = angular.extend({}, superType.properties, properties);
+        return getSuperTypesProperties(properties, superType.type[0], types);
+      }
+    } else {
+      return properties;
+    }
+  }
+
+  function mergeType(type, types) {
+    if (!isNativeType(type.type[0])) {
+      var resultingType = angular.copy(type);
+      resultingType.properties = getSuperTypesProperties(type.properties, type.type[0], types);
+
+      return resultingType;
+    }
+    return type;
+  }
+
+  RAML.Inspector.Types = {
+    mergeType: mergeType
+  };
+})();
+
+(function() {
+  'use strict';
+
   window.ramlErrors = {};
 
   CodeMirror.registerHelper('lint', 'yaml', function () {
@@ -5854,20 +5908,22 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/properties.tpl.html',
     "<div>\n" +
     "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in list\" ng-if=\"!property[0].isFromSecurityScheme\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
-    "    <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
-    "      <!-- <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': vm.isCollapsed}\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\"></button> -->\n" +
-    "      <span ng-if=\"isCollapsible(property[0])\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{property[0].displayName}}\n" +
-    "      <span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(property[0])}}</span>\n" +
-    "    </h4>\n" +
+    "    <div ng-init=\"type = mergeType(property[0])\">\n" +
+    "      <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
+    "        <!-- <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': vm.isCollapsed}\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\"></button> -->\n" +
+    "        <span ng-if=\"isCollapsible(type)\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}\n" +
+    "        <span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(type)}}</span>\n" +
+    "      </h4>\n" +
     "\n" +
-    "    <div ng-if=\"!vm.isCollapsed\">\n" +
-    "      <p markdown=\"property[0].description\" class=\"raml-console-marked-content\"></p>\n" +
+    "      <div ng-if=\"!vm.isCollapsed\">\n" +
+    "        <p markdown=\"type.description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "      <p ng-if=\"property[0].example !== undefined\">\n" +
-    "        <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{property[0].example}}</span>\n" +
-    "      </p>\n" +
+    "        <p ng-if=\"type.example !== undefined\">\n" +
+    "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{type.example}}</span>\n" +
+    "        </p>\n" +
     "\n" +
-    "      <properties style=\"padding-left: 10px\" list=\"property[0].properties\" ng-if=\"property[0].properties\"></properties>\n" +
+    "        <properties style=\"padding-left: 10px\" list=\"type.properties\" ng-if=\"type.properties\" is-nested-property=\"true\"></properties>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
