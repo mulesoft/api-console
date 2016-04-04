@@ -5,6 +5,12 @@
         <!-- <button class="raml-console-resource-root-toggle" ng-class="{'raml-console-is-active': vm.isCollapsed}" ng-click="vm.isCollapsed = !vm.isCollapsed"></button> -->
         <span ng-if="isCollapsible(type)" ng-click="vm.isCollapsed = !vm.isCollapsed" style="cursor: pointer">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}
         <span class="raml-console-resource-param-instructional">{{parameterDocumentation(type)}}</span>
+        <span class="raml-console-resource-param-instructional" ng-repeat="typeName in type.type">
+          <span ng-if="isNativeType(typeName)">{{typeName}}</span>
+          <span ng-if="!isNativeType(typeName)" style="position: relative;">
+            <type type-name="typeName" hide-type-links="hideTypeLinks"></type>
+          </span>
+        </span>
       </h4>
 
       <div ng-if="!vm.isCollapsed">
