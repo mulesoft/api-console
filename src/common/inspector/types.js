@@ -2,6 +2,7 @@
   'use strict';
 
   function isNativeType(typeName) {
+    typeName = typeName.replace('[]', '');
     var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
     return nativeTypes.indexOf(typeName) !== -1;
   }
@@ -37,7 +38,30 @@
     return type;
   }
 
+  function getTypeInfo(typeName) {
+    var types = typeName.split('|');
+    var typeInfo = {};
+
+    if (types.length > 1) {
+      typeInfo.type = 'union';
+      typeInfo.parts = types.map(function (type) {
+        return type.trim();
+      });
+    } else if (typeName.indexOf('[]')) {
+      typeInfo.type = 'array';
+      typeInfo.parts = [typeName.replace('[]', '').trim()];
+    } else {
+      typeInfo.type = 'custom';
+      typeInfo.parts = [typeName.trim()];
+    }
+
+    return typeInfo;
+  }
+
   RAML.Inspector.Types = {
-    mergeType: mergeType
+    mergeType: mergeType,
+    isNativeType: isNativeType,
+    getType: getType,
+    getTypeInfo: getTypeInfo
   };
 })();

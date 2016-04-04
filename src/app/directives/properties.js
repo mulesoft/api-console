@@ -9,7 +9,8 @@
       scope: {
         list: '=',
         collapsible: '=',
-        isNestedProperty: '='
+        isNestedProperty: '=',
+        hideTypeLinks: '='
       },
       controller: function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
@@ -26,6 +27,8 @@
           }
           return type;
         };
+
+        $scope.isNativeType = RAML.Inspector.Types.isNativeType;
 
         $scope.isCollapsible = function isCollapsible(property) {
           return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
@@ -47,9 +50,6 @@
               }
 
               result += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
-
-            } else {
-              result += parameter.type || '';
             }
 
             if (parameter.pattern) {
