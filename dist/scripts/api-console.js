@@ -726,7 +726,8 @@
       scope: {
         list: '=',
         collapsible: '=',
-        isNestedProperty: '='
+        isNestedProperty: '=',
+        hideTypeLinks: '='
       },
       controller: function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
@@ -743,6 +744,8 @@
           }
           return type;
         };
+
+        $scope.isNativeType = RAML.Inspector.Types.isNativeType;
 
         $scope.isCollapsible = function isCollapsible(property) {
           return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
@@ -764,9 +767,6 @@
               }
 
               result += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
-
-            } else {
-              result += parameter.type || '';
             }
 
             if (parameter.pattern) {
@@ -2187,6 +2187,36 @@
 
   angular.module('RAML.Directives')
     .directive('typeProperties', RAML.Directives.typeProperties);
+})();
+
+(function () {
+  'use strict';
+
+  RAML.Directives.type = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/type.tpl.html',
+      scope: {
+        typeName: '=',
+        hideTypeLinks: '='
+      },
+      controller: function ($scope, $rootScope) {
+        $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName);
+
+        $scope.selectType = function (type) {
+          jQuery(document).one('click', function () {
+            $scope.selectedType = null;
+          });
+          $scope.selectedType = RAML.Inspector.Types.mergeType(
+            RAML.Inspector.Types.getType(type, $rootScope.types),
+            $rootScope.types);
+        };
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('type', RAML.Directives.type);
 })();
 
 (function () {
@@ -3694,6 +3724,7 @@ RAML.Inspector = (function() {
   'use strict';
 
   function isNativeType(typeName) {
+    typeName = typeName.replace('[]', '');
     var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
     return nativeTypes.indexOf(typeName) !== -1;
   }
@@ -3729,8 +3760,31 @@ RAML.Inspector = (function() {
     return type;
   }
 
+  function getTypeInfo(typeName) {
+    var types = typeName.split('|');
+    var typeInfo = {};
+
+    if (types.length > 1) {
+      typeInfo.type = 'union';
+      typeInfo.parts = types.map(function (type) {
+        return type.trim();
+      });
+    } else if (typeName.indexOf('[]')) {
+      typeInfo.type = 'array';
+      typeInfo.parts = [typeName.replace('[]', '').trim()];
+    } else {
+      typeInfo.type = 'custom';
+      typeInfo.parts = [typeName.trim()];
+    }
+
+    return typeInfo;
+  }
+
   RAML.Inspector.Types = {
-    mergeType: mergeType
+    mergeType: mergeType,
+    isNativeType: isNativeType,
+    getType: getType,
+    getTypeInfo: getTypeInfo
   };
 })();
 
@@ -5913,6 +5967,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <!-- <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': vm.isCollapsed}\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\"></button> -->\n" +
     "        <span ng-if=\"isCollapsible(type)\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}\n" +
     "        <span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(type)}}</span>\n" +
+    "        <span class=\"raml-console-resource-param-instructional\" ng-repeat=\"typeName in type.type\">\n" +
+    "          <span ng-if=\"isNativeType(typeName)\">{{typeName}}</span>\n" +
+    "          <span ng-if=\"!isNativeType(typeName)\" style=\"position: relative;\">\n" +
+    "            <type type-name=\"typeName\" hide-type-links=\"hideTypeLinks\"></type>\n" +
+    "          </span>\n" +
+    "        </span>\n" +
     "      </h4>\n" +
     "\n" +
     "      <div ng-if=\"!vm.isCollapsed\">\n" +
@@ -6531,6 +6591,26 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div>\n" +
     "  <properties list=\"properties\"></properties>\n" +
     "<div>\n"
+  );
+
+
+  $templateCache.put('directives/type.tpl.html',
+    "<span ng-repeat=\"type in typeInfo.parts\">\n" +
+    "  <span ng-if=\"!$first && typeInfo.type === 'union'\"> | </span>\n" +
+    "  <a href=\"\" ng-click=\"selectType(type)\" ng-if=\"!hideTypeLinks\">{{type}}</a>\n" +
+    "  <spane ng-if=\"hideTypeLinks\">{{type}}</span>\n" +
+    "  <span ng-if=\"typeInfo.type === 'array'\">[]</span>\n" +
+    "</span>\n" +
+    "<div ng-if=\"selectedType\" style=\"padding: 10px; position: absolute; top: 20px; left: 0; background-color: #FFF !important; width: 350px; border: 1px solid black; z-index: 99;\">\n" +
+    "  <h3>{{selectedType.displayName}}</h3>\n" +
+    "  <properties\n" +
+    "    ng-click=\"$event.preventDefault()\"\n" +
+    "    list=\"selectedType.properties\"\n" +
+    "    ng-if=\"selectedType.properties\"\n" +
+    "    is-nested-property=\"true\"\n" +
+    "    hide-type-links=\"true\">\n" +
+    "  </properties>\n" +
+    "</div>\n"
   );
 
 
