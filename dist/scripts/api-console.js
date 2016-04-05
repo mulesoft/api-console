@@ -6363,8 +6363,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <li class=\"raml-console-resource-list-item raml-console-documentation-header\">\n" +
     "    <header class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\">\n" +
     "      <div class=\"raml-console-resource-path-container\">\n" +
-    "        <h2 class=\"raml-console-resource-section-title\">\n" +
-    "          <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': vm.isCollapsed}\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\"></button>\n" +
+    "        <h2 class=\"raml-console-resource-section-title raml-console-documentation-heading\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\">\n" +
+    "          <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': vm.isCollapsed}\"></button>\n" +
     "          <span class=\"raml-console-resource-path-active\">Types</span>\n" +
     "        </h2>\n" +
     "      </div>\n" +
