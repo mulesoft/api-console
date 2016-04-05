@@ -2660,6 +2660,21 @@ a.raml-console-resource-path-active {
   font-weight: bold;
 }
 
+.raml-console-type-info-popover {
+  padding: 10px;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  background-color: #FFF;
+  width: 350px;
+  border: 1px solid black;
+  z-index: 99;
+}
+
+.raml-console-type-info-popover .raml-console-resource-param {
+  margin-bottom: 0;
+}
+
 .raml-console-sidebar {
   width: 0;
   flex-shrink: 0;
