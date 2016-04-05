@@ -1,7 +1,7 @@
 <span ng-repeat="type in typeInfo.parts">
   <span ng-if="!$first && typeInfo.type === 'union'"> | </span>
   <a href="" ng-click="selectType(type)" ng-if="!hideTypeLinks">{{type}}</a>
-  <spane ng-if="hideTypeLinks">{{type}}</span>
+  <span ng-if="hideTypeLinks">{{type}}</span>
   <span ng-if="typeInfo.type === 'array'">[]</span>
 </span>
 <div ng-if="selectedType" class="raml-console-type-info-popover">

@@ -3772,7 +3772,7 @@ RAML.Inspector = (function() {
       typeInfo.parts = types.map(function (type) {
         return type.trim();
       });
-    } else if (typeName.indexOf('[]')) {
+    } else if (typeName.indexOf('[]') !== -1) {
       typeInfo.type = 'array';
       typeInfo.parts = [typeName.replace('[]', '').trim()];
     } else {
@@ -6601,7 +6601,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<span ng-repeat=\"type in typeInfo.parts\">\n" +
     "  <span ng-if=\"!$first && typeInfo.type === 'union'\"> | </span>\n" +
     "  <a href=\"\" ng-click=\"selectType(type)\" ng-if=\"!hideTypeLinks\">{{type}}</a>\n" +
-    "  <spane ng-if=\"hideTypeLinks\">{{type}}</span>\n" +
+    "  <span ng-if=\"hideTypeLinks\">{{type}}</span>\n" +
     "  <span ng-if=\"typeInfo.type === 'array'\">[]</span>\n" +
     "</span>\n" +
     "<div ng-if=\"selectedType\" class=\"raml-console-type-info-popover\">\n" +
