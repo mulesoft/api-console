@@ -403,3 +403,18 @@
   font-weight: bold;
   // margin-left: 7px;
 }
+
+.type-info-popover {
+  padding: 10px;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  background-color: #FFF;
+  width: 350px;
+  border: 1px solid black;
+  z-index: 99;
+
+  .resource-param {
+    margin-bottom: 0;
+  }
+}

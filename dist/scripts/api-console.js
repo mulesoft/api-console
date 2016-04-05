@@ -2207,8 +2207,11 @@
           jQuery(document).one('click', function () {
             $scope.selectedType = null;
           });
-          $scope.selectedType = RAML.Inspector.Types.mergeType(
-            RAML.Inspector.Types.getType(type, $rootScope.types),
+
+          $scope.selectedType = RAML.Inspector.Types.mergeType({
+              displayName: type,
+              type: [type]
+            },
             $rootScope.types);
         };
       }
@@ -6601,7 +6604,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <spane ng-if=\"hideTypeLinks\">{{type}}</span>\n" +
     "  <span ng-if=\"typeInfo.type === 'array'\">[]</span>\n" +
     "</span>\n" +
-    "<div ng-if=\"selectedType\" style=\"padding: 10px; position: absolute; top: 20px; left: 0; background-color: #FFF !important; width: 350px; border: 1px solid black; z-index: 99;\">\n" +
+    "<div ng-if=\"selectedType\" class=\"raml-console-type-info-popover\">\n" +
     "  <h3>{{selectedType.displayName}}</h3>\n" +
     "  <properties\n" +
     "    ng-click=\"$event.preventDefault()\"\n" +
