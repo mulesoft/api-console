@@ -47,7 +47,7 @@
       typeInfo.parts = types.map(function (type) {
         return type.trim();
       });
-    } else if (typeName.indexOf('[]')) {
+    } else if (typeName.indexOf('[]') !== -1) {
       typeInfo.type = 'array';
       typeInfo.parts = [typeName.replace('[]', '').trim()];
     } else {
