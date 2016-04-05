@@ -16,8 +16,11 @@
           jQuery(document).one('click', function () {
             $scope.selectedType = null;
           });
-          $scope.selectedType = RAML.Inspector.Types.mergeType(
-            RAML.Inspector.Types.getType(type, $rootScope.types),
+
+          $scope.selectedType = RAML.Inspector.Types.mergeType({
+              displayName: type,
+              type: [type]
+            },
             $rootScope.types);
         };
       }
