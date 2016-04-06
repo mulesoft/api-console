@@ -14,7 +14,7 @@
     "angular-ui-codemirror": "0.1.6",
     "codemirror": "~3.15.0",
     "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
-    "FileSaver": "eligrey/FileSaver.js#683f689326c231002164621dc8a6451df4e86e8a",
+    "FileSaver": "https://github.com/eligrey/FileSaver.js.git",
     "highlight-js": "~7.0.1",
     "jquery": "~2.1.1",
     "jszip": "~2.0.0",

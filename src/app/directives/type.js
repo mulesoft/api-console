@@ -15,7 +15,7 @@
 
         $scope.closePopover = function () {
           $scope.selectedType = null;
-        }
+        };
 
         $rootScope.$on(TOGGLE_POPOVER, function () {
           $scope.closePopover();
