@@ -985,7 +985,14 @@
 
         $scope.$watch('raml', function (raml) {
           raml && inspectRaml(raml);
-          $rootScope.types = raml.types;
+          if (raml.types) {
+            $rootScope.types = angular.copy(raml.types);
+            $rootScope.types = $rootScope.types.map(function (type) {
+              var theType = type[Object.keys(type)[0]];
+              theType.properties = RAML.Inspector.Properties.normalizeNamedParameters(theType.properties);
+              return type;
+            });
+          }
         });
       })();
 
@@ -2193,6 +2200,7 @@
   'use strict';
 
   RAML.Directives.type = function() {
+    var TOGGLE_POPOVER = 'popover:toggle';
     return {
       restrict: 'E',
       templateUrl: 'directives/type.tpl.html',
@@ -2200,19 +2208,33 @@
         typeName: '=',
         hideTypeLinks: '='
       },
-      controller: function ($scope, $rootScope) {
+      controller: function ($scope, $rootScope, $timeout) {
         $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName);
 
-        $scope.selectType = function (type) {
+        $scope.closePopover = function () {
+          $scope.selectedType = null;
+        }
+
+        $rootScope.$on(TOGGLE_POPOVER, function () {
+          $scope.closePopover();
+        });
+
+        $scope.selectType = function ($event, type) {
           jQuery(document).one('click', function () {
-            $scope.selectedType = null;
+            $timeout(function () {
+              $rootScope.$broadcast(TOGGLE_POPOVER);
+            });
           });
+
+          $rootScope.$broadcast(TOGGLE_POPOVER);
 
           $scope.selectedType = RAML.Inspector.Types.mergeType({
               displayName: type,
               type: [type]
             },
             $rootScope.types);
+
+          $event.stopPropagation();
         };
       }
     };
@@ -3748,15 +3770,22 @@ RAML.Inspector = (function() {
         properties = angular.extend({}, superType.properties, properties);
         return getSuperTypesProperties(properties, superType.type[0], types);
       }
-    } else {
-      return properties;
     }
+    return properties;
   }
 
   function mergeType(type, types) {
     if (!isNativeType(type.type[0])) {
       var resultingType = angular.copy(type);
-      resultingType.properties = getSuperTypesProperties(type.properties, type.type[0], types);
+      var initialProperties = resultingType.properties || {};
+      var properties = getSuperTypesProperties(initialProperties, type.type[0], types);
+      var propertiesKeys = Object.keys(properties).sort();
+
+      if (propertiesKeys.length > 0) {
+        resultingType.properties = propertiesKeys.map(function (key) {
+          return properties[key];
+        });
+      }
 
       return resultingType;
     }
@@ -5967,7 +5996,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in list\" ng-if=\"!property[0].isFromSecurityScheme\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
     "    <div ng-init=\"type = mergeType(property[0])\">\n" +
     "      <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
-    "        <!-- <button class=\"raml-console-resource-root-toggle\" ng-class=\"{'raml-console-is-active': vm.isCollapsed}\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\"></button> -->\n" +
     "        <span ng-if=\"isCollapsible(type)\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}\n" +
     "        <span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(type)}}</span>\n" +
     "        <span class=\"raml-console-resource-param-instructional\" ng-repeat=\"typeName in type.type\">\n" +
@@ -6600,7 +6628,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/type.tpl.html',
     "<span ng-repeat=\"type in typeInfo.parts\">\n" +
     "  <span ng-if=\"!$first && typeInfo.type === 'union'\"> | </span>\n" +
-    "  <a href=\"\" ng-click=\"selectType(type)\" ng-if=\"!hideTypeLinks\">{{type}}</a>\n" +
+    "  <a href=\"\" ng-click=\"selectType($event, type)\" ng-if=\"!hideTypeLinks\">{{type}}</a>\n" +
     "  <span ng-if=\"hideTypeLinks\">{{type}}</span>\n" +
     "  <span ng-if=\"typeInfo.type === 'array'\">[]</span>\n" +
     "</span>\n" +

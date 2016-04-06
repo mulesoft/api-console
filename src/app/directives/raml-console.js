@@ -56,7 +56,14 @@
 
         $scope.$watch('raml', function (raml) {
           raml && inspectRaml(raml);
-          $rootScope.types = raml.types;
+          if (raml.types) {
+            $rootScope.types = angular.copy(raml.types);
+            $rootScope.types = $rootScope.types.map(function (type) {
+              var theType = type[Object.keys(type)[0]];
+              theType.properties = RAML.Inspector.Properties.normalizeNamedParameters(theType.properties);
+              return type;
+            });
+          }
         });
       })();
 
