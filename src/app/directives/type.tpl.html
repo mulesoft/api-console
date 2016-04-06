@@ -1,6 +1,6 @@
 <span ng-repeat="type in typeInfo.parts">
   <span ng-if="!$first && typeInfo.type === 'union'"> | </span>
-  <a href="" ng-click="selectType(type)" ng-if="!hideTypeLinks">{{type}}</a>
+  <a href="" ng-click="selectType($event, type)" ng-if="!hideTypeLinks">{{type}}</a>
   <span ng-if="hideTypeLinks">{{type}}</span>
   <span ng-if="typeInfo.type === 'array'">[]</span>
 </span>

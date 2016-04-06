@@ -23,15 +23,22 @@
         properties = angular.extend({}, superType.properties, properties);
         return getSuperTypesProperties(properties, superType.type[0], types);
       }
-    } else {
-      return properties;
     }
+    return properties;
   }
 
   function mergeType(type, types) {
     if (!isNativeType(type.type[0])) {
       var resultingType = angular.copy(type);
-      resultingType.properties = getSuperTypesProperties(type.properties, type.type[0], types);
+      var initialProperties = resultingType.properties || {};
+      var properties = getSuperTypesProperties(initialProperties, type.type[0], types);
+      var propertiesKeys = Object.keys(properties).sort();
+
+      if (propertiesKeys.length > 0) {
+        resultingType.properties = propertiesKeys.map(function (key) {
+          return properties[key];
+        });
+      }
 
       return resultingType;
     }
