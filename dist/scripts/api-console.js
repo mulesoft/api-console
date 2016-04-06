@@ -2213,7 +2213,7 @@
 
         $scope.closePopover = function () {
           $scope.selectedType = null;
-        }
+        };
 
         $rootScope.$on(TOGGLE_POPOVER, function () {
           $scope.closePopover();
@@ -5425,6 +5425,21 @@ RAML.Inspector = (function() {
   };
 
   /**
+   * Check if the value is a JSON string.
+   *
+   * @param  {String}  check
+   * @return {Boolean}
+   */
+  var isJSON = function (check) {
+    try {
+      JSON.parse(check);
+      return true;
+    } catch(e) {
+      return false;
+    }
+  };
+
+  /**
    * Check a number is not smaller than the minimum.
    *
    * @param  {Number}   min
@@ -5641,6 +5656,29 @@ RAML.Inspector = (function() {
     };
   };
 
+  function isNativeType(typeName) {
+    typeName = typeName.replace('[]', '');
+    var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
+    return nativeTypes.indexOf(typeName) !== -1;
+  }
+
+  function convertType(config) {
+    var newConfig = {};
+    // Clone config object.
+    Object.keys(config).forEach(function (key) {
+      newConfig[key] = config[key];
+    });
+
+    if (Array.isArray(newConfig.type)) {
+      newConfig.type = newConfig.type.map(function (aType) {
+        var newType = aType.replace('[]', '');
+        newType = !isNativeType(newType) ? 'object' : newType;
+        return newType;
+      });
+    }
+    return newConfig;
+  }
+
   /**
    * Every time you require the module you're expected to call it as a function
    * to create a new instance. This is to ensure two modules can't make competing
@@ -5660,7 +5698,7 @@ RAML.Inspector = (function() {
 
       // Convert all parameters into validation functions.
       Object.keys(schema).forEach(function (param) {
-        var config = schema[param];
+        var config = convertType(schema[param]);
         var rules  = validate.RULES;
         var types  = validate.TYPES;
 
@@ -5705,7 +5743,8 @@ RAML.Inspector = (function() {
       number:  isNumber,
       integer: isInteger,
       "boolean": isBoolean,
-      string:  isString
+      string:  isString,
+      object: isJSON
     };
 
     /**
