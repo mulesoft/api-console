@@ -34,6 +34,11 @@
     } else {
       Object.keys(value).forEach(function (key) {
         cleanedValue[key] = cleanupPropertyValue(value[key] ? value[key][0] : value[key]);
+
+        // Remove empty array property
+        if (!cleanedValue[key][0]) {
+          delete cleanedValue[key];
+        }
       });
     }
 
