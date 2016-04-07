@@ -47,8 +47,11 @@
 
         function toUIModel (collection) {
           if(collection) {
-            Object.keys(collection).map(function (key) {
+            Object.keys(collection).forEach(function (key) {
               collection[key][0].id = key;
+              if (collection[key][0].properties) {
+                toUIModel(collection[key][0].properties);
+              }
             });
           }
         }

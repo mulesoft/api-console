@@ -74,34 +74,13 @@ types:
 /users/{org}/{id}:
   uriParameters:
     org: string
-    id:
-      type: object
-      properties:
-        as: string[]
-        temo:
-          type: object
-          properties:
-            st: integer
-            adsa: string
+    id: number
   get:
     headers:
-      developer:
-        type: Person[]
-      test:
-        type: string
-        required: false
-        enum: ["one", "two", "three"]
-      animal:
-        type: Person | Developer
-        description: The kind of animal
-      car:
-        type: object
-        properties:
-          wheels:
-            type: object
-            properties:
-              prop1: string
-              prop2: number
+      developer: string
+      test: string
+      animal: string
+      car: string
 
     queryParameters:
       developer:
@@ -117,29 +96,16 @@ types:
         type: object
         properties:
           wheels:
-            type: string
+            type: string[]
 
     body:
       application/json:
         type: object
         properties:
-          developer:
-            type: Person[]
-          test:
-            type: string
-            required: false
-            enum: ["one", "two", "three"]
-          animal:
-            type: Person | Developer
-            description: The kind of animal
-          car:
-            type: object
-            properties:
-              wheels:
-                type: object
-                properties:
-                  prop1: string
-                  prop2: number
+          developer: string
+          test: string
+          animal: string
+          car: string
 
     responses:
       200:
