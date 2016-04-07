@@ -90,13 +90,16 @@ types:
         required: false
         enum: ["one", "two", "three"]
       animal:
-        type: Person | Developer
+        type: integer | Developer
         description: The kind of animal
       car:
         type: object
         properties:
           wheels:
             type: string[]
+          doors:
+            type: integer[]
+            required: false
 
     body:
       application/json:
