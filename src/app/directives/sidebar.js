@@ -177,6 +177,11 @@
               params[key][0] = JSON.stringify(
                 RAML.Inspector.Properties.cleanupPropertyValue(params[key][0]));
             }
+
+            // Remove empty array property
+            if (params[key][0] === '[null]') {
+              delete params[key];
+            }
           });
 
           if (customParameters.length > 0) {
