@@ -29,7 +29,7 @@
   var NamedParameters = function(plain, parameterized) {
     this.plain = copy(plain);
     this.parameterized = parameterized;
-    Object.keys(this.plain).map(function (key) {
+    Object.keys(this.plain).forEach(function (key) {
       var data = this.plain[key].definitions[0];
 
       if (typeof data['enum'] !== 'undefined') {
