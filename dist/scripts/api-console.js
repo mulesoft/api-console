@@ -1659,6 +1659,11 @@
               params[key][0] = JSON.stringify(
                 RAML.Inspector.Properties.cleanupPropertyValue(params[key][0]));
             }
+
+            // Remove empty array property
+            if (params[key][0] === '[null]') {
+              delete params[key];
+            }
           });
 
           if (customParameters.length > 0) {
@@ -3736,6 +3741,11 @@ RAML.Inspector = (function() {
     } else {
       Object.keys(value).forEach(function (key) {
         cleanedValue[key] = cleanupPropertyValue(value[key] ? value[key][0] : value[key]);
+
+        // Remove empty array property
+        if (!cleanedValue[key][0]) {
+          delete cleanedValue[key];
+        }
       });
     }
 
@@ -5442,6 +5452,17 @@ RAML.Inspector = (function() {
     }
   };
 
+  var isUnion = function (check, key, object, configs) {
+    var any = false;
+    configs.forEach(function (config) {
+      config.unionTypes.forEach(function (type) {
+        any = any || validate.TYPES[type](check, key, object, config);
+      });
+    });
+
+    return any;
+  };
+
   /**
    * Check a number is not smaller than the minimum.
    *
@@ -5636,7 +5657,7 @@ RAML.Inspector = (function() {
 
         // Check all the types match. If they don't, attempt another validation.
         var isType = values.every(function (value) {
-          return types[validation[0]](value, key, object);
+          return types[validation[0]](value, key, object, configs);
         });
 
         // Skip to the next check if not all types match.
@@ -5675,6 +5696,14 @@ RAML.Inspector = (function() {
     if (Array.isArray(newConfig.type)) {
       newConfig.type = newConfig.type.map(function (aType) {
         var newType = aType.replace('[]', '');
+        var parts = aType.split('|');
+        if (parts.length > 1) {
+          newType = 'union';
+          newConfig.unionTypes = parts.map(function (part) {
+            part = part.trim();
+            return !isNativeType(part) ? 'object' : part;
+          });
+        }
         newType = !isNativeType(newType) ? 'object' : newType;
         return newType;
       });
@@ -5742,12 +5771,13 @@ RAML.Inspector = (function() {
      * @type {Object}
      */
     validate.TYPES = {
-      date:    isDate,
-      number:  isNumber,
-      integer: isInteger,
+      date:      isDate,
+      number:    isNumber,
+      integer:   isInteger,
       "boolean": isBoolean,
-      string:  isString,
-      object: isJSON
+      string:    isString,
+      object:    isJSON,
+      union:     isUnion
     };
 
     /**
@@ -5760,7 +5790,7 @@ RAML.Inspector = (function() {
       maximum:   isMaximum,
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
-      "enum":      isEnum,
+      "enum":    isEnum,
       pattern:   isPattern
     };
 
