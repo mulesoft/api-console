@@ -52,14 +52,10 @@
   };
 
   /**
-   * Convert a value into an object.
+   * Returns the passed value unchanged.
    */
-  var toObject = function (value) {
-    try {
-      return JSON.parse(value);
-    } catch (e) {
-      return null;
-    }
+  var returnValue = function (value) {
+    return value;
   }
 
   var toUnion = function (value, key, object, configs) {
@@ -232,7 +228,7 @@
     integer:   toInteger,
     "boolean": toBoolean,
     date:      toDate,
-    object:    toObject,
+    object:    returnValue,
     union:     toUnion
   };
 
