@@ -275,11 +275,7 @@
 }
 
 .resource-param {
-  margin-bottom: 24px;
-
-  @media only screen and (min-width: $large-screen) {
-    margin-bottom: 36px;
-  }
+  margin-bottom: 16px;
 
   p {
     margin-bottom: 0;
@@ -415,6 +411,6 @@
   z-index: 99;
 
   .resource-param {
-    margin-bottom: 0;
+    margin-bottom: 5px;
   }
 }

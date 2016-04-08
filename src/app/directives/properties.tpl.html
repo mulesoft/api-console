@@ -3,7 +3,7 @@
     <div ng-init="type = mergeType(property[0])">
       <h4 class="raml-console-resource-param-heading" style="position: relative">
         <span ng-if="isCollapsible(type)" ng-click="vm.isCollapsed = !vm.isCollapsed" style="cursor: pointer">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}
-        <span class="raml-console-resource-param-instructional">{{parameterDocumentation(type)}}</span>
+        <span ng-if="!hidePropertyDetails" class="raml-console-resource-param-instructional">{{parameterDocumentation(type)}}</span>
         <span class="raml-console-resource-param-instructional" ng-repeat="typeName in type.type">
           <span ng-if="isNativeType(typeName)">{{typeName}}</span>
           <span ng-if="!isNativeType(typeName)" style="position: relative;">

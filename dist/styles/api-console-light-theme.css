@@ -2536,13 +2536,7 @@ a.raml-console-resource-path-active {
 }
 
 .raml-console-resource-param {
-  margin-bottom: 24px;
-}
-
-@media only screen and (min-width: 960px) {
-  .raml-console-resource-param {
-    margin-bottom: 36px;
-  }
+  margin-bottom: 16px;
 }
 
 .raml-console-resource-param p {
@@ -2672,7 +2666,7 @@ a.raml-console-resource-path-active {
 }
 
 .raml-console-type-info-popover .raml-console-resource-param {
-  margin-bottom: 0;
+  margin-bottom: 5px;
 }
 
 .raml-console-sidebar {
