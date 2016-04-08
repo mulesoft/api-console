@@ -740,6 +740,8 @@
           });
 
           $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
+        } else {
+          $scope.listArray = $scope.list;
         }
 
         $scope.mergeType = function (type) {
