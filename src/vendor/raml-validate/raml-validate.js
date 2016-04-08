@@ -75,7 +75,7 @@
     var any = false;
     configs.forEach(function (config) {
       config.unionTypes.forEach(function (type) {
-        any = any || validate.TYPES[type](check, key, object, config);
+        any = any || TYPES[type](check, key, object, configs);
       });
     });
 
@@ -322,13 +322,24 @@
             part = part.trim();
             return !isNativeType(part) ? 'object' : part;
           });
+        } else {
+          newType = !isNativeType(newType) ? 'object' : newType;
         }
-        newType = !isNativeType(newType) ? 'object' : newType;
         return newType;
       });
     }
     return newConfig;
   }
+
+  var TYPES = {
+    date:      isDate,
+    number:    isNumber,
+    integer:   isInteger,
+    "boolean": isBoolean,
+    string:    isString,
+    object:    isJSON,
+    union:     isUnion
+  };
 
   /**
    * Every time you require the module you're expected to call it as a function
@@ -389,15 +400,7 @@
      *
      * @type {Object}
      */
-    validate.TYPES = {
-      date:      isDate,
-      number:    isNumber,
-      integer:   isInteger,
-      "boolean": isBoolean,
-      string:    isString,
-      object:    isJSON,
-      union:     isUnion
-    };
+    validate.TYPES = TYPES;
 
     /**
      * Provide overridable validation of parameters.
