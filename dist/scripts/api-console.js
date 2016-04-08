@@ -730,7 +730,8 @@
         list: '=',
         collapsible: '=',
         isNestedProperty: '=',
-        hideTypeLinks: '='
+        hideTypeLinks: '=',
+        hidePropertyDetails: '='
       },
       controller: function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
@@ -6069,7 +6070,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <div ng-init=\"type = mergeType(property[0])\">\n" +
     "      <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
     "        <span ng-if=\"isCollapsible(type)\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}\n" +
-    "        <span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(type)}}</span>\n" +
+    "        <span ng-if=\"!hidePropertyDetails\" class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(type)}}</span>\n" +
     "        <span class=\"raml-console-resource-param-instructional\" ng-repeat=\"typeName in type.type\">\n" +
     "          <span ng-if=\"isNativeType(typeName)\">{{typeName}}</span>\n" +
     "          <span ng-if=\"!isNativeType(typeName)\" style=\"position: relative;\">\n" +
@@ -6471,7 +6472,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </header>\n" +
     "  </li>\n" +
     "  <li ng-if=\"!vm.isCollapsed\" class=\"raml-console-resource-panel\" style=\"background: white; padding: 32px;\">\n" +
-    "    <properties list=\"types\" collapsible=\"true\"></types>\n" +
+    "    <properties list=\"types\" collapsible=\"true\" hide-property-details=\"true\"></types>\n" +
     "  </li>\n" +
     "</ol>\n"
   );
@@ -6692,7 +6693,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/type-properties.tpl.html',
     "<div>\n" +
-    "  <properties list=\"properties\"></properties>\n" +
+    "  <properties list=\"properties\" hide-property-details=\"true\"></properties>\n" +
     "<div>\n"
   );
 
