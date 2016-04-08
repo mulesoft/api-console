@@ -735,11 +735,11 @@
       },
       controller: function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
-          $scope.list = Object.keys($scope.list).map(function (key) {
+          $scope.listArray = Object.keys($scope.list).map(function (key) {
             return $scope.list[key];
           });
 
-          $scope.list = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
+          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
         }
 
         $scope.mergeType = function (type) {
@@ -5170,6 +5170,60 @@ RAML.Inspector = (function() {
   };
 
   /**
+   * Convert a value into an object.
+   */
+  var toObject = function (value) {
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  var toUnion = function (value, key, object, configs) {
+    var any = null;
+    configs.forEach(function (config) {
+      config.unionTypes.forEach(function (type) {
+        any = any || TYPES[type](value, key, object, configs);
+      });
+    });
+
+    return any;
+  }
+
+  function isNativeType(typeName) {
+    typeName = typeName.replace('[]', '');
+    var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
+    return nativeTypes.indexOf(typeName) !== -1;
+  }
+
+  function convertType(config) {
+    var newConfig = {};
+    // Clone config object.
+    Object.keys(config).forEach(function (key) {
+      newConfig[key] = config[key];
+    });
+
+    if (Array.isArray(newConfig.type)) {
+      newConfig.type = newConfig.type.map(function (aType) {
+        var newType = aType.replace('[]', '');
+        var parts = aType.split('|');
+        if (parts.length > 1) {
+          newType = 'union';
+          newConfig.unionTypes = parts.map(function (part) {
+            part = part.trim();
+            return !isNativeType(part) ? 'object' : part;
+          });
+        } else {
+          newType = !isNativeType(newType) ? 'object' : newType;
+        }
+        return newType;
+      });
+    }
+    return newConfig;
+  }
+
+  /**
    * Convert the schema config into a single sanitization function.
    *
    * @param  {Object}   configs
@@ -5211,7 +5265,7 @@ RAML.Inspector = (function() {
       var sanitize = function (value, key, object) {
         // Iterate over each sanitization function and return a single value.
         fns.every(function (fn) {
-          value = fn(value, key, object);
+          value = fn(value, key, object, configs);
 
           // Break when the value returns `null`.
           return value != null;
@@ -5290,6 +5344,16 @@ RAML.Inspector = (function() {
     };
   };
 
+  var TYPES = {
+    string:    String,
+    number:    toNumber,
+    integer:   toInteger,
+    "boolean": toBoolean,
+    date:      toDate,
+    object:    toObject,
+    union:     toUnion
+  };
+
   /**
    * Every time the module is exported and executed, we return a new instance.
    *
@@ -5307,7 +5371,7 @@ RAML.Inspector = (function() {
 
       // Map each parameter in the schema to a validation function.
       Object.keys(schema).forEach(function (param) {
-        var config = schema[param];
+        var config = convertType(schema[param]);
         var types  = sanitize.TYPES;
         var rules  = sanitize.RULES;
 
@@ -5348,13 +5412,7 @@ RAML.Inspector = (function() {
      *
      * @type {Object}
      */
-    sanitize.TYPES = {
-      string:  String,
-      number:  toNumber,
-      integer: toInteger,
-      "boolean": toBoolean,
-      date:    toDate
-    };
+    sanitize.TYPES = TYPES;
 
     /**
      * Provide sanitization based on rules.
@@ -5457,7 +5515,7 @@ RAML.Inspector = (function() {
     var any = false;
     configs.forEach(function (config) {
       config.unionTypes.forEach(function (type) {
-        any = any || validate.TYPES[type](check, key, object, config);
+        any = any || TYPES[type](check, key, object, configs);
       });
     });
 
@@ -5704,13 +5762,24 @@ RAML.Inspector = (function() {
             part = part.trim();
             return !isNativeType(part) ? 'object' : part;
           });
+        } else {
+          newType = !isNativeType(newType) ? 'object' : newType;
         }
-        newType = !isNativeType(newType) ? 'object' : newType;
         return newType;
       });
     }
     return newConfig;
   }
+
+  var TYPES = {
+    date:      isDate,
+    number:    isNumber,
+    integer:   isInteger,
+    "boolean": isBoolean,
+    string:    isString,
+    object:    isJSON,
+    union:     isUnion
+  };
 
   /**
    * Every time you require the module you're expected to call it as a function
@@ -5771,15 +5840,7 @@ RAML.Inspector = (function() {
      *
      * @type {Object}
      */
-    validate.TYPES = {
-      date:      isDate,
-      number:    isNumber,
-      integer:   isInteger,
-      "boolean": isBoolean,
-      string:    isString,
-      object:    isJSON,
-      union:     isUnion
-    };
+    validate.TYPES = TYPES;
 
     /**
      * Provide overridable validation of parameters.
@@ -6066,7 +6127,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/properties.tpl.html',
     "<div>\n" +
-    "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in list\" ng-if=\"!property[0].isFromSecurityScheme\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
+    "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in listArray\" ng-if=\"!property[0].isFromSecurityScheme\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
     "    <div ng-init=\"type = mergeType(property[0])\">\n" +
     "      <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
     "        <span ng-if=\"isCollapsible(type)\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}\n" +

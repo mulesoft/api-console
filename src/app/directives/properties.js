@@ -15,11 +15,11 @@
       },
       controller: function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
-          $scope.list = Object.keys($scope.list).map(function (key) {
+          $scope.listArray = Object.keys($scope.list).map(function (key) {
             return $scope.list[key];
           });
 
-          $scope.list = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
+          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
         }
 
         $scope.mergeType = function (type) {
