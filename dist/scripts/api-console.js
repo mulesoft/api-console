@@ -744,11 +744,23 @@
           $scope.listArray = $scope.list;
         }
 
+        $scope.getType = function (type) {
+          var newType = $scope.mergeType(type);
+          newType.type = $scope.ensureArray(newType.type);
+          return newType;
+        }
+
         $scope.mergeType = function (type) {
+          var newType = angular.copy(type);
+
           if (!$scope.isNestedProperty && $rootScope.types) {
-            return RAML.Inspector.Types.mergeType(type, $rootScope.types);
+            return RAML.Inspector.Types.mergeType(newType, $rootScope.types);
           }
-          return type;
+          return newType;
+        };
+
+        $scope.ensureArray = function (type) {
+          return Array.isArray(type) ? type : [type];
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
@@ -6126,7 +6138,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/properties.tpl.html',
     "<div>\n" +
     "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in listArray\" ng-if=\"!property[0].isFromSecurityScheme\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
-    "    <div ng-init=\"type = mergeType(property[0])\">\n" +
+    "    <div ng-init=\"type = getType(property[0])\">\n" +
     "      <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
     "        <span ng-if=\"isCollapsible(type)\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}\n" +
     "        <span ng-if=\"!hidePropertyDetails\" class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(type)}}</span>\n" +
