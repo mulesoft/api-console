@@ -66,7 +66,7 @@ module.exports = function() {
       po.loadRamlFromUrl();
 
       // Assert
-      assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+      assert.ifShowingSecuritySchemes(0, 0, ['OAuth 2.0', 'Anonymous']);
     });
 
     it('should be able to diplay all HTTP methods', function () {
@@ -129,7 +129,7 @@ module.exports = function() {
       po.loadRaml();
 
       // Assert
-      assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+      assert.ifShowingSecuritySchemes(0, 0, ['OAuth 2.0', 'Anonymous']);
     });
 
     it('should be able to diplay all HTTP methods', function () {
