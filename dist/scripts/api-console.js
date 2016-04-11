@@ -748,7 +748,7 @@
           var newType = $scope.mergeType(type);
           newType.type = $scope.ensureArray(newType.type);
           return newType;
-        }
+        };
 
         $scope.mergeType = function (type) {
           var newType = angular.copy(type);
