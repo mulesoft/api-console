@@ -24,11 +24,23 @@
           $scope.listArray = $scope.list;
         }
 
+        $scope.getType = function (type) {
+          var newType = $scope.mergeType(type);
+          newType.type = $scope.ensureArray(newType.type);
+          return newType;
+        }
+
         $scope.mergeType = function (type) {
+          var newType = angular.copy(type);
+
           if (!$scope.isNestedProperty && $rootScope.types) {
-            return RAML.Inspector.Types.mergeType(type, $rootScope.types);
+            return RAML.Inspector.Types.mergeType(newType, $rootScope.types);
           }
-          return type;
+          return newType;
+        };
+
+        $scope.ensureArray = function (type) {
+          return Array.isArray(type) ? type : [type];
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
