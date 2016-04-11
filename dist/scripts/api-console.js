@@ -745,7 +745,7 @@
         }
 
         $scope.mergeType = function (type) {
-          if (!$scope.isNestedProperty) {
+          if (!$scope.isNestedProperty && $rootScope.types) {
             return RAML.Inspector.Types.mergeType(type, $rootScope.types);
           }
           return type;
