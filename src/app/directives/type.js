@@ -22,7 +22,7 @@
         });
 
         $scope.showTypeLink = function (type) {
-          return !$scope.hideTypeLink && !RAML.Inspector.Types.isNativeType(type);
+          return !$scope.hideTypeLinks && !RAML.Inspector.Types.isNativeType(type);
         };
 
         $scope.selectType = function ($event, type) {
@@ -34,11 +34,13 @@
 
           $rootScope.$broadcast(TOGGLE_POPOVER);
 
-          $scope.selectedType = RAML.Inspector.Types.mergeType({
-              displayName: type,
-              type: [type]
-            },
-            $rootScope.types);
+          $timeout(function () {
+            $scope.selectedType = RAML.Inspector.Types.mergeType({
+                displayName: type,
+                type: [type]
+              },
+              $rootScope.types);
+          });
 
           $event.stopPropagation();
         };
