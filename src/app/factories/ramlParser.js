@@ -47,6 +47,7 @@
           }
         })
           .then(function (api) {
+            api = api.expand();
             return api.toJSON();
           })
         ;
