@@ -6164,7 +6164,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{type.example}}</span>\n" +
     "        </p>\n" +
     "\n" +
-    "        <properties style=\"padding-left: 10px\" list=\"type.properties\" ng-if=\"type.properties\" is-nested-property=\"true\"></properties>\n" +
+    "        <properties style=\"padding-left: 10px; margin-top: 11px;\" list=\"type.properties\" ng-if=\"type.properties\" is-nested-property=\"true\"></properties>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
