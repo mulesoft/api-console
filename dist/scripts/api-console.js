@@ -125,7 +125,7 @@
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
-      controller: ['$scope', function($scope) {
+      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -180,6 +180,15 @@
 
         $scope.getBeatifiedExample = function (value) {
           var result = value;
+
+          if ($rootScope.schemas) {
+            var found = $rootScope.schemas.find(function (schema) {
+              return schema[result];
+            });
+            if (found) {
+              result = found[result];
+            }
+          }
 
           try {
             beautify(value, $scope.currentBodySelected);
@@ -1010,6 +1019,10 @@
               theType.properties = RAML.Inspector.Properties.normalizeNamedParameters(theType.properties);
               return type;
             });
+          }
+
+          if (raml.schemas) {
+            $rootScope.schemas = angular.copy(raml.schemas);
           }
         });
       })();
