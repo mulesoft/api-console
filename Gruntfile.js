@@ -34,7 +34,8 @@ module.exports = function (grunt) {
         'bower_components/jszip/jszip.js',
         'bower_components/slug/slug.js',
         'bower_components/FileSaver/FileSaver.js',
-        'bower_components/raml-client-generator/dist/raml-client-generator.js'
+        'bower_components/raml-client-generator/dist/raml-client-generator.js',
+        'bower_components/resolve-url/resolve-url.js'
       ],
       html: ['src/index.html'],
       scss: ['src/scss/light-theme.scss', 'src/scss/dark-theme.scss'],

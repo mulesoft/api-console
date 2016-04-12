@@ -16,6 +16,7 @@
     })
     .controller('RamlConsoleLoaderController', function RamlConsoleLoaderController(
       $scope,
+      $window,
       ramlParser
     ) {
       $scope.vm = {
@@ -39,7 +40,7 @@
         $scope.vm.loaded = false;
         $scope.vm.error  = void(0);
 
-        return ramlParser.loadFile(url)
+        return ramlParser.loadPath($window.resolveUrl(url))
           .then(function (raml) {
             $scope.vm.raml = raml;
           })
