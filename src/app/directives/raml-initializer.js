@@ -12,6 +12,7 @@
     })
     .controller('RamlInitializerController', function RamlInitializerController(
       $scope,
+      $window,
       ramlParser
     ) {
       $scope.vm = {
@@ -45,7 +46,7 @@
 
       function loadFromUrl(url) {
         $scope.vm.ramlUrl = url;
-        return loadFromPromise(ramlParser.loadFile(url), {isLoadingFromUrl: true});
+        return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
       }
 
       function loadFromString(string) {

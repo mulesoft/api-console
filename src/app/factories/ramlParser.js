@@ -4,29 +4,26 @@
   angular.module('raml', [])
     .factory('ramlParser', function ramlParser(
       $http,
-      $q
+      $q,
+      $window
     ) {
       return {
         load:     toQ(load),
-        loadFile: toQ(loadFile)
+        loadPath: toQ(loadPath)
       };
 
       // ---
 
-      function load(text) {
+      function load(text, contentAsyncFn) {
         var virtualPath = '/' + Date.now() + '.raml';
         return loadApi(virtualPath, function contentAsync(path) {
-          return (path === virtualPath) ? $q.when(text) : $q.reject(new Error('contentAsync: ' + path + ': path does not exist'));
+          return (path === virtualPath) ? $q.when(text) : (contentAsyncFn ? contentAsyncFn(path) : $q.reject(new Error('ramlParser: load: contentAsync: ' + path + ': no such path')));
         });
       }
 
-      function loadFile(path) {
+      function loadPath(path, contentAsyncFn) {
         return loadApi(path, function contentAsync(path) {
-          return $http.get(path, {responseType: 'text'})
-            .then(function (res) {
-              return res.data;
-            })
-          ;
+          return contentAsyncFn ? contentAsyncFn(path) : $q.reject(new Error('ramlParser: loadPath: contentAsync: ' + path + ': no such path'));
         });
       }
 
@@ -44,6 +41,16 @@
           rejectOnErrors:    true,
           fsResolver:        {
             contentAsync: contentAsyncFn
+          },
+          httpResolver:      {
+            getResourceAsync: function getResourceAsync(url) {
+              var proxy = (($window.RAML || {}).Settings || {}).proxy || '';
+              return $http.get(proxy + url, {transformResponse: null})
+                .then(function (res) {
+                  return {content: res.data};
+                })
+              ;
+            }
           }
         })
           .then(function (api) {
