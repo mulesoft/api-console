@@ -2242,6 +2242,10 @@
           $scope.closePopover();
         });
 
+        $scope.showTypeLink = function (type) {
+          return !$scope.hideTypeLink && !RAML.Inspector.Types.isNativeType(type);
+        };
+
         $scope.selectType = function ($event, type) {
           jQuery(document).one('click', function () {
             $timeout(function () {
@@ -6773,8 +6777,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/type.tpl.html',
     "<span ng-repeat=\"type in typeInfo.parts\">\n" +
     "  <span ng-if=\"!$first && typeInfo.type === 'union'\"> | </span>\n" +
-    "  <a href=\"\" ng-click=\"selectType($event, type)\" ng-if=\"!hideTypeLinks\">{{type}}</a>\n" +
-    "  <span ng-if=\"hideTypeLinks\">{{type}}</span>\n" +
+    "  <a href=\"\" ng-click=\"selectType($event, type)\" ng-if=\"showTypeLink(type)\">{{type}}</a>\n" +
+    "  <span ng-if=\"!showTypeLink(type)\">{{type}}</span>\n" +
     "  <span ng-if=\"typeInfo.type === 'array'\">[]</span>\n" +
     "</span>\n" +
     "<div ng-if=\"selectedType\" class=\"raml-console-type-info-popover\">\n" +

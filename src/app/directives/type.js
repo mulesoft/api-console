@@ -21,6 +21,10 @@
           $scope.closePopover();
         });
 
+        $scope.showTypeLink = function (type) {
+          return !$scope.hideTypeLink && !RAML.Inspector.Types.isNativeType(type);
+        };
+
         $scope.selectType = function ($event, type) {
           jQuery(document).one('click', function () {
             $timeout(function () {
