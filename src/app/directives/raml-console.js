@@ -64,6 +64,10 @@
               return type;
             });
           }
+
+          if (raml.schemas) {
+            $rootScope.schemas = angular.copy(raml.schemas);
+          }
         });
       })();
 
