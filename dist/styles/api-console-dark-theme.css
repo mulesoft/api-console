@@ -2347,7 +2347,6 @@ a.raml-console-resource-path-active {
   -ms-flex: 1 auto;
   flex: 1 auto;
   -webkit-flex: 1 auto;
-  overflow: hidden;
   font-size: 16px;
 }
 
@@ -2663,6 +2662,7 @@ a.raml-console-resource-path-active {
   width: 350px;
   border: 1px solid black;
   z-index: 99;
+  margin-bottom: 5px;
 }
 
 .raml-console-type-info-popover .raml-console-resource-param {

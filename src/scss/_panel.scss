@@ -89,7 +89,7 @@
   flex: 1 auto;
   -webkit-flex: 1 auto;
 
-  overflow: hidden;
+  // overflow: hidden;
 
   font-size: 16px;
 
@@ -409,6 +409,7 @@
   width: 350px;
   border: 1px solid black;
   z-index: 99;
+  margin-bottom: 5px;
 
   .resource-param {
     margin-bottom: 5px;
