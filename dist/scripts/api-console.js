@@ -1681,14 +1681,24 @@
           var customParameters = context.customParameters[type];
 
           if (!RAML.Utils.isEmpty(context[type].data())) {
-            params = context[type].data();
+            params = angular.copy(context[type].data());
           }
 
           Object.keys(params).forEach(function (key) {
-            if (typeof params[key][0] === 'object') {
-              params[key][0] = JSON.stringify(
-                RAML.Inspector.Properties.cleanupPropertyValue(params[key][0]));
+            if (Array.isArray(params[key][0])) {
+              var input = angular.copy(params[key][0]);
+
+              input.forEach(function (each, index) {
+                params[key][index] = each[0];
+              });
             }
+
+            params[key].forEach(function (param, index) {
+              if (typeof param === 'object') {
+                params[key][index] = JSON.stringify(
+                  RAML.Inspector.Properties.cleanupPropertyValue(params[key][index]));
+              }
+            });
 
             // Remove empty array property
             if (params[key][0] === '[null]') {
