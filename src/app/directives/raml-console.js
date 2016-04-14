@@ -55,7 +55,12 @@
         });
 
         $scope.$watch('raml', function (raml) {
-          raml && inspectRaml(raml);
+          if (!raml) {
+            return;
+          }
+
+          inspectRaml(raml);
+
           if (raml.types) {
             $rootScope.types = angular.copy(raml.types);
             $rootScope.types = $rootScope.types.map(function (type) {
@@ -139,7 +144,7 @@
       }
 
       function hasResourcesWithChilds() {
-        return $scope.inspectedRaml.resourceGroups.filter(function (el) {
+        return $scope.inspectedRaml && $scope.inspectedRaml.resourceGroups.filter(function (el) {
           return el.length > 1;
         }).length > 0;
       }
