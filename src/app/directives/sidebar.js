@@ -11,27 +11,35 @@
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
 
-        $scope.markedOptions     = RAML.Settings.marked;
-        $scope.currentSchemeType = defaultSchema.type;
-        $scope.currentScheme     = defaultSchema.id;
-        $scope.responseDetails   = false;
-        $scope.currentProtocol   = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
+        $scope.markedOptions           = RAML.Settings.marked;
+        $scope.currentSchemeType       = defaultSchema.type;
+        $scope.context.currentScheme   = defaultSchema.id;
+        $scope.responseDetails         = false;
+        $scope.context.currentProtocol = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
 
-        function readCustomSchemeInfo (name) {
+        function readSchemeInfoHeaders (name, except) {
           if (!$scope.methodInfo.headers.plain) {
             $scope.methodInfo.headers.plain = {};
           }
 
+          updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers, except);
+        }
+
+        function readSchemeInfoQueryParams (name, except) {
           if (!$scope.methodInfo.queryParameters) {
             $scope.methodInfo.queryParameters = {};
           }
 
-          updateContextData('headers', name, $scope.methodInfo.headers.plain, $scope.context.headers);
-          updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters);
+          updateContextData('queryParameters', name, $scope.methodInfo.queryParameters, $scope.context.queryParameters, except);
         }
 
-        if (defaultSchema.type === 'x-custom') {
-          readCustomSchemeInfo(defaultSchema.id.split('|')[1]);
+        var currentSchemeName = $scope.context.currentScheme.split('|')[1];
+        if ($scope.currentSchemeType.startsWith('x-')) {
+          readSchemeInfoHeaders(currentSchemeName);
+          readSchemeInfoQueryParams(currentSchemeName);
+        } else if ($scope.currentSchemeType === 'Basic Authentication') {
+          readSchemeInfoHeaders(currentSchemeName, ['Authorization']);
+          readSchemeInfoQueryParams(currentSchemeName);
         }
 
         function completeAnimation (element) {
@@ -199,13 +207,22 @@
           var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
           $scope.currentSchemeType           = defaultSchema.type;
-          $scope.currentScheme               = defaultSchema.id;
-          $scope.currentProtocol             = $scope.raml.protocols[0];
+          $scope.context.currentScheme       = defaultSchema.id;
+          $scope.context.currentProtocol     = $scope.raml.protocols[0];
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
 
           cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
+
+          var currentSchemeName = $scope.context.currentScheme.split('|')[1];
+          if ($scope.currentSchemeType.startsWith('x-')) {
+            readSchemeInfoHeaders(currentSchemeName);
+            readSchemeInfoQueryParams(currentSchemeName);
+          } else if ($scope.currentSchemeType === 'Basic Authentication') {
+            readSchemeInfoHeaders(currentSchemeName, ['Authorization']);
+            readSchemeInfoQueryParams(currentSchemeName);
+          }
         });
 
         $scope.cancelRequest = function () {
@@ -314,35 +331,37 @@
           }
         }
 
-        function updateContextData (type, scheme, collection, context) {
+        function updateContextData (type, scheme, collection, context, except) {
           var details         = jQuery.extend({}, $scope.securitySchemes[scheme].describedBy || {});
           var securityHeaders = details[type] || {};
 
           if (securityHeaders) {
             Object.keys(securityHeaders).map(function (key) {
-              if (!securityHeaders[key]) {
-                securityHeaders[key] = {
-                  id: key,
-                  type: 'string'
+              if (except == null || (except.indexOf(key) === -1)) {
+                if (!securityHeaders[key]) {
+                  securityHeaders[key] = {
+                    id: key,
+                    type: 'string'
+                  };
+                }
+
+                securityHeaders[key].id                   = key;
+                securityHeaders[key].displayName          = key;
+                securityHeaders[key].isFromSecurityScheme = true;
+                collection[key] = [securityHeaders[key]];
+
+                context.plain[key] = {
+                  definitions: [securityHeaders[key]],
+                  selected: securityHeaders[key].type
                 };
+                context.values[key] = [undefined];
               }
-
-              securityHeaders[key].id                   = key;
-              securityHeaders[key].displayName          = key;
-              securityHeaders[key].isFromSecurityScheme = true;
-              collection[key] = [securityHeaders[key]];
-
-              context.plain[key] = {
-                definitions: [securityHeaders[key]],
-                selected: securityHeaders[key].type
-              };
-              context.values[key] = [undefined];
             });
           }
         }
 
         $scope.protocolChanged = function protocolChanged(protocol) {
-          $scope.currentProtocol = protocol;
+          $scope.context.currentProtocol = protocol;
         };
 
         $scope.securitySchemeChanged = function securitySchemeChanged(scheme) {
@@ -358,8 +377,12 @@
 
           $scope.documentationSchemeSelected = $scope.securitySchemes[name];
 
-          if (type === 'x-custom') {
-            readCustomSchemeInfo(name);
+          if (type.startsWith('x-')) {
+            readSchemeInfoHeaders(name);
+            readSchemeInfoQueryParams(name);
+          } else if (type === 'Basic Authentication') {
+            readSchemeInfoHeaders(name, ['Authorization']);
+            readSchemeInfoQueryParams(name);
           }
         };
 
@@ -397,7 +420,7 @@
                 client.baseUriParameters(pathBuilder.baseUriContext);
               });
 
-              client.baseUri = client.baseUri.replace(/(https)|(http)/, $scope.currentProtocol.toLocaleLowerCase());
+              client.baseUri = client.baseUri.replace(/(https)|(http)/, $scope.context.currentProtocol.toLocaleLowerCase());
               url = client.baseUri + pathBuilder(segmentContexts);
             } catch (e) {
               console.error(e);

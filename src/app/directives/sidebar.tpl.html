@@ -23,7 +23,7 @@
               <h4 class="raml-console-sidebar-subhead">Protocols</h4>
             </header>
             <div class="raml-console-sidebar-row raml-console-sidebar-securty">
-              <select ng-change="protocolChanged(currentProtocol)" class="raml-console-sidebar-input" ng-model="currentProtocol" style="margin-bottom: 0;">
+              <select ng-change="protocolChanged(context.currentProtocol)" class="raml-console-sidebar-input" ng-model="context.currentProtocol" style="margin-bottom: 0;">
                <option ng-repeat="protocol in raml.protocols" value="{{protocol}}">{{protocol}}</option>
               </select>
             </div>
@@ -37,7 +37,7 @@
             <div class="raml-console-sidebar-row raml-console-sidebar-securty">
               <div class="raml-console-toggle-group raml-console-sidebar-toggle-group">
                 <label class="raml-console-sidebar-label">Security Scheme</label>
-                <select ng-change="securitySchemeChanged(currentScheme)" class="raml-console-sidebar-input" ng-model="currentScheme" style="margin-bottom: 0;">
+                <select ng-change="securitySchemeChanged(context.currentScheme)" class="raml-console-sidebar-input" ng-model="context.currentScheme" style="margin-bottom: 0;">
                  <option ng-repeat="(key, scheme) in securitySchemes" value="{{scheme.id}}">{{scheme.name}}</option>
                 </select>
               </div>
