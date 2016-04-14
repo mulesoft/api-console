@@ -7,17 +7,30 @@
     return nativeTypes.indexOf(typeName) !== -1;
   }
 
-  function getType(typeName, types) {
-    typeName = typeName.replace('[]', '');
-    var existingType = types.find(function (aType) {
-      return aType[typeName];
+  function find(name, collection) {
+    return collection.find(function (item) {
+      return item[name];
     });
-    return existingType ? existingType[typeName] : existingType;
+  }
+
+  function findType(typeName, types) {
+    if (types) {
+      typeName = typeName.replace('[]', '');
+      var existingType = find(typeName, types);
+      return existingType ? existingType[typeName] : existingType;
+    }
+  }
+
+  function findSchema(schemaName, schemas) {
+    if (schemas) {
+      var existingSchema = find(schemaName, schemas);
+      return existingSchema ? existingSchema[schemaName] : existingSchema;
+    }
   }
 
   function getSuperTypesProperties(properties, typeName, types) {
     if (!isNativeType(typeName)) {
-      var superType = getType(typeName, types);
+      var superType = findType(typeName, types);
 
       if (superType) {
         properties = angular.extend({}, superType.properties, properties);
@@ -66,9 +79,10 @@
   }
 
   RAML.Inspector.Types = {
-    mergeType: mergeType,
+    mergeType:    mergeType,
     isNativeType: isNativeType,
-    getType: getType,
-    getTypeInfo: getTypeInfo
+    findType:     findType,
+    findSchema:   findSchema,
+    getTypeInfo:  getTypeInfo
   };
 })();
