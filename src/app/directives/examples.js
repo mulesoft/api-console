@@ -36,14 +36,14 @@
         return exampleContainer.examples.map(function (example, index) {
           return {
             name: 'Example ' + index,
-            content: example
+            content: example.content
           };
         });
       } else {
         return Object.keys(exampleContainer.examples).sort().map(function (key) {
           return {
             name: key,
-            content: exampleContainer.examples[key]
+            content: exampleContainer.examples[key].content
           };
         });
       }
