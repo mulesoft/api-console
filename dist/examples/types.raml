@@ -1,0 +1,115 @@
+#%RAML 1.0
+title: API with Types
+baseUri: /media
+
+schemas:
+  - Player: |
+      {
+        "type": "object",
+        "properties": [
+          {
+            "name": "string"
+          }
+        ]
+      }
+types:
+  Person:
+    type: object
+    properties:
+      firstname:
+        type: string
+        description: test
+      lastname: string
+      addresses: string[]
+      age: number
+  User:
+    type: Person
+    properties:
+      firstname:
+        type: string
+        required: false
+      id: number
+      department: Department[]
+  Developer:
+    type: User
+    properties:
+      github: string
+  Department:
+    type: object
+    properties:
+      name: string
+    example:
+      name: Engineering
+  CEO:
+    type: User | Developer
+  Cleaner: |
+    {
+      "type": "object",
+      "properties": [
+        {
+          "name": "string"
+        }
+      ]
+    }
+
+/users:
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          developer: string
+          test: string
+          animal: string
+          car: string
+
+    responses:
+      199:
+        body:
+          application/json:
+            type: object
+            properties:
+              developer: string
+              test: string
+              animal: string
+              car: string
+      200:
+        body:
+          application/json:
+            type: Person
+      201:
+        body:
+          application/json:
+            schema: Cleaner
+      202:
+        body:
+          application/json:
+            schema: Player
+      203:
+        body:
+          application/json:
+            schema: Department
+      204:
+        body:
+          application/json:
+            type: |
+              {
+                "type": "object",
+                "properties": [
+                  {
+                    "name": "string"
+                  }
+                ]
+              }
+      205:
+        body:
+          application/json:
+            schema: |
+              {
+                "type": "object",
+                "properties": [
+                  {
+                    "name": "string"
+                  }
+                ]
+              }

@@ -95,14 +95,11 @@
         get-beatified-example-ref="getBeatifiedExample">
       </examples>
 
-      <div class="raml-console-schema-container" ng-if="methodInfo.body[currentBodySelected].schema">
-        <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-        <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].schema)"></code></pre>
-      </div>
-
-      <div class="raml-console-schema-container" ng-if="methodInfo.body[currentBodySelected].type">
-        <type-properties type="methodInfo.body[currentBodySelected]"></type-properties>
-      </div>
+      <raml-body
+        ng-if="methodInfo.body[currentBodySelected]"
+        body="methodInfo.body[currentBodySelected]"
+        get-beatified-example-ref="getBeatifiedExample">
+      </raml-body>
     </section>
   </div>
 
@@ -154,14 +151,11 @@
             get-beatified-example-ref="getBeatifiedExample">
           </examples>
 
-          <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].schema">
-            <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-            <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)"></code></pre>
-          </div>
-
-          <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].type">
-            <type-properties type="responseInfo[code][responseInfo[code].currentType]"></type-properties>
-          </div>
+          <raml-body
+            ng-if="responseInfo[currentStatusCode] && responseInfo[currentStatusCode].currentType"
+            body="responseInfo[currentStatusCode][responseInfo[currentStatusCode].currentType]"
+            get-beatified-example-ref="getBeatifiedExample">
+          </raml-body>
         </div>
       </section>
 

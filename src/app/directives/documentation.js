@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
-      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
+      controller: ['$scope', function($scope) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -61,15 +61,6 @@
 
         $scope.getBeatifiedExample = function (value) {
           var result = value;
-
-          if ($rootScope.schemas) {
-            var found = $rootScope.schemas.find(function (schema) {
-              return schema[result];
-            });
-            if (found) {
-              result = found[result];
-            }
-          }
 
           try {
             beautify(value, $scope.currentBodySelected);
@@ -204,26 +195,6 @@
           $elements.removeClass('raml-console-is-active');
           $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
         });
-
-        $scope.showSchema = function ($event) {
-          var $this   = jQuery($event.currentTarget);
-          var $panel  = $this.closest('.raml-console-schema-container');
-          var $schema = $panel.find('.raml-console-resource-pre-toggle');
-
-          $this.toggleClass('raml-console-is-active');
-
-          if (!$schema.hasClass('raml-console-is-active')) {
-            $this.text('Hide Schema');
-            $schema
-              .addClass('raml-console-is-active')
-              .velocity('slideDown');
-          } else {
-            $this.text('Show Schema');
-            $schema
-              .removeClass('raml-console-is-active')
-              .velocity('slideUp');
-          }
-        };
       }]
     };
   };
