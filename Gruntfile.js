@@ -11,7 +11,11 @@ module.exports = function (grunt) {
       js: ['src/**/*.js'],
       jsVendor: [
         'bower_components/marked/lib/marked.js',
-        'bower_components/raml-1-parser/raml-1-parser.js',
+        // TODO: Uncomment the line below and remove the one below that one.
+        // This is a temporary hack to use the latest version of the parser
+        // that supports RAML 1.0 RC2
+        // 'bower_components/raml-1-parser/raml-1-parser.js',
+        'temp/raml-1-parser.js',
         'bower_components/highlightjs/highlight.pack.js',
         'bower_components/vkbeautify/vkbeautify.js',
         'bower_components/jquery/dist/jquery.js',
