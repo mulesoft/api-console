@@ -1639,8 +1639,6 @@
               $scope.response.contentType = $scope.response.headers['content-type'].split(';')[0];
             }
 
-            $scope.currentStatusCode = jqXhr.status.toString();
-
             try {
               $scope.response.body = beautify(jqXhr.responseText, $scope.response.contentType);
             }
