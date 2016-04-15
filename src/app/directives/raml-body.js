@@ -27,7 +27,6 @@
 
         $scope.identifyBodyType = function () {
           var node = $scope.body;
-          var topType;
 
           if (node && node.schema && $scope.getTopSchema(node.schema)) {
             $scope.isSchema = true;
