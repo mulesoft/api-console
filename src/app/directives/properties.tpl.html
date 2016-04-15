@@ -15,10 +15,6 @@
       <div ng-if="!vm.isCollapsed">
         <p markdown="type.description" class="raml-console-marked-content"></p>
 
-        <p ng-if="type.example !== undefined">
-          <span class="raml-console-resource-param-example"><b>Example:</b> {{type.example}}</span>
-        </p>
-
         <properties style="padding-left: 10px; margin-top: 11px;" list="type.properties" ng-if="type.properties" is-nested-property="true"></properties>
       </div>
     </div>
