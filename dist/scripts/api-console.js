@@ -831,24 +831,44 @@
           $scope.identifyBodyType();
         });
 
-        $scope.identifyBodyType = function () {
-          if ($scope.body && $scope.body.schema) {
-            var theSchema = Array.isArray($scope.body.schema) ? $scope.body.schema[0] : $scope.body.schema;
-            $scope.getContent(theSchema, $scope.body);
-          } else if ($scope.body && $scope.body.type) {
-            var theType = Array.isArray($scope.body.type) ? $scope.body.type[0] : $scope.body.type;
-            $scope.getContent(theType, $scope.body);
-          }
+        $scope.getTopSchema = function (name) {
+          return RAML.Inspector.Types.findSchema(name, $rootScope.schemas);
         };
 
-        $scope.getContent = function (name, body) {
-          var type = RAML.Inspector.Types.findType(name, $rootScope.types);
-          var schema = RAML.Inspector.Types.findSchema(name, $rootScope.schemas);
-          if ((type && typeof type === 'object') || body.properties) {
-            $scope.isType = true;
-          } else {
+        $scope.getTopType = function (name) {
+          name = Array.isArray(name) ? name[0] : name;
+          return RAML.Inspector.Types.findType(name, $rootScope.types);
+        };
+
+        $scope.identifyBodyType = function () {
+          var node = $scope.body;
+          var topType;
+
+          if (node && node.schema && $scope.getTopSchema(node.schema)) {
             $scope.isSchema = true;
-            $scope.definition = schema || type || name;
+            $scope.definition = $scope.getTopSchema(node.schema);
+          } else if (node && node.type && $scope.getTopSchema(node.type)) {
+            $scope.isSchema = true;
+            $scope.definition = $scope.getTopSchema(node.type);
+          } else if (node && node.schema && $scope.getTopType(node.schema)) {
+            if (node.schemaContent) {
+              $scope.isSchema = true;
+              $scope.definition = node.schemaContent;
+            } else {
+              $scope.isType = true;
+            }
+          } else if (node && node.type && $scope.getTopType(node.type)) {
+            if (node.schemaContent) {
+              $scope.isSchema = true;
+              $scope.definition = node.schemaContent;
+            } else {
+              $scope.isType = true;
+            }
+          } else if (node && node.type && node.properties) {
+            $scope.isType = true;
+          } else if (node.schema) {
+            $scope.isSchema = true;
+            $scope.definition = node.schema;
           }
         };
 
