@@ -869,6 +869,9 @@
           } else if (node.schema) {
             $scope.isSchema = true;
             $scope.definition = node.schema;
+          } else if (node.type) {
+            $scope.isSchema = true;
+            $scope.definition = Array.isArray(node.type) ? node.type[0] : node.type;
           }
         };
 
