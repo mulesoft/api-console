@@ -2669,6 +2669,10 @@ a.raml-console-resource-path-active {
   margin-bottom: 5px;
 }
 
+.raml-console-type-info-popover .raml-console-subtitle {
+  font-size: 12px;
+}
+
 .raml-console-sidebar {
   width: 0;
   flex-shrink: 0;

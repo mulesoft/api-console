@@ -25,6 +25,12 @@
           return !$scope.hideTypeLinks && !RAML.Inspector.Types.isNativeType(type);
         };
 
+        $scope.getSupertTypes = function (type) {
+          return RAML.Inspector.Types.findType(type.type[0], $rootScope.types).type.map(function (aTypeName) {
+            return aTypeName;
+          });
+        };
+
         $scope.selectType = function ($event, type) {
           jQuery(document).one('click', function () {
             $timeout(function () {
