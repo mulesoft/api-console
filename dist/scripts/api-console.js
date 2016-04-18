@@ -2335,6 +2335,12 @@
           return !$scope.hideTypeLinks && !RAML.Inspector.Types.isNativeType(type);
         };
 
+        $scope.getSupertTypes = function (type) {
+          return RAML.Inspector.Types.findType(type.type[0], $rootScope.types).type.map(function (aTypeName) {
+            return aTypeName;
+          });
+        };
+
         $scope.selectType = function ($event, type) {
           jQuery(document).one('click', function () {
             $timeout(function () {
@@ -6902,7 +6908,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <span ng-if=\"typeInfo.type === 'array'\">[]</span>\n" +
     "</span>\n" +
     "<div ng-if=\"selectedType\" class=\"raml-console-type-info-popover\">\n" +
-    "  <h3>{{selectedType.displayName}}</h3>\n" +
+    "  <h3>\n" +
+    "    <span>{{selectedType.displayName}}</span>\n" +
+    "    <div class=\"raml-console-subtitle\">\n" +
+    "      <span ng-repeat-start=\"superType in getSupertTypes(selectedType)\">{{superType}}</span>\n" +
+    "      <span ng-if=\"!$last\" ng-repeat-end>, </span>\n" +
+    "    </div>\n" +
+    "  </h3>\n" +
     "  <properties\n" +
     "    ng-click=\"$event.preventDefault()\"\n" +
     "    list=\"selectedType.properties\"\n" +

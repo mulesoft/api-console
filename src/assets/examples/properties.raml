@@ -59,7 +59,10 @@ types:
     example:
       name: Engineering
   Team:
-    type: Developer[]
+    type: object
+    properties:
+      manager: CEO
+      employees: Developer[]
   CEO:
     type: User | Developer
   Planes:
