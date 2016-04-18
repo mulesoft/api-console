@@ -57,6 +57,10 @@
               result += 'required, ';
             }
 
+            if (parameter.discriminator) {
+              result += 'discriminator, ';
+            }
+
             if (parameter['enum']) {
               var enumValues = $scope.unique(parameter['enum']);
 

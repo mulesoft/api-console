@@ -757,6 +757,10 @@
               result += 'required, ';
             }
 
+            if (parameter.discriminator) {
+              result += 'discriminator, ';
+            }
+
             if (parameter['enum']) {
               var enumValues = $scope.unique(parameter['enum']);
 
@@ -3917,33 +3921,46 @@ RAML.Inspector = (function() {
       var superType = findType(typeName, types);
 
       if (superType) {
-        properties = angular.extend({}, superType.properties, properties);
+        var superTypeProperties = convertProperties(superType);
+        properties = angular.extend({}, superTypeProperties, properties);
         return getSuperTypesProperties(properties, superType.type[0], types);
       }
     }
     return properties;
   }
 
-  function mergeType(type, types) {
-    if (!isNativeType(type.type[0])) {
-      var resultingType = angular.copy(type);
-      var properties = angular.copy(resultingType.properties || {});
+  function convertProperties(type) {
+    if (type.properties) {
+      Object.keys(type.properties).forEach(function (propertyKey) {
+        var aProperty = type.properties[propertyKey];
+        if (type.discriminator && type.discriminator === aProperty[0].name) {
+          aProperty[0].discriminator = true;
+        }
+      });
+    }
+    return type.properties;
+  }
 
+  function mergeType(type, types) {
+    var resultingType = angular.copy(type);
+    var properties = angular.copy(resultingType.properties || {});
+
+    properties = convertProperties(resultingType);
+
+    if (!isNativeType(type.type[0])) {
       type.type.forEach(function (superType) {
         properties = getSuperTypesProperties(properties, superType, types);
       });
-
-      var propertiesKeys = Object.keys(properties).sort();
-
-      if (propertiesKeys.length > 0) {
-        resultingType.properties = propertiesKeys.map(function (key) {
-          return properties[key];
-        });
-      }
-
-      return resultingType;
     }
-    return type;
+    var propertiesKeys = Object.keys(properties).sort();
+
+    if (propertiesKeys.length > 0) {
+      resultingType.properties = propertiesKeys.map(function (key) {
+        return properties[key];
+      });
+    }
+
+    return resultingType;
   }
 
   function getTypeInfo(typeName) {
