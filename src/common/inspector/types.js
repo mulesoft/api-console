@@ -64,12 +64,14 @@
         properties = getSuperTypesProperties(properties, superType, types);
       });
     }
-    var propertiesKeys = Object.keys(properties).sort();
+    if (properties) {
+      var propertiesKeys = Object.keys(properties).sort();
 
-    if (propertiesKeys.length > 0) {
-      resultingType.properties = propertiesKeys.map(function (key) {
-        return properties[key];
-      });
+      if (propertiesKeys.length > 0) {
+        resultingType.properties = propertiesKeys.map(function (key) {
+          return properties[key];
+        });
+      }
     }
 
     return resultingType;
