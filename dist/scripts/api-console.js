@@ -1150,8 +1150,11 @@
             });
           }
 
-          if (raml.schemas) {
-            $rootScope.schemas = angular.copy(raml.schemas);
+          var schemas = raml.schemas ? angular.copy(raml.schemas) : [];
+          var librarySchemas = getLibrarySchemas();
+
+          if (schemas || librarySchemas) {
+            $rootScope.schemas = schemas.concat(librarySchemas);
           }
 
           function getLibraryTypes() {
@@ -1169,6 +1172,24 @@
                   });
                 }
               });
+            }
+
+            return result;
+          }
+
+          function getLibrarySchemas() {
+            var result = [];
+            if (raml.uses) {
+              Object.keys(raml.uses).forEach(function (usesKey) {
+                var usesSchemas = raml.uses[usesKey].schemas;
+                if (usesSchemas) {
+                  usesSchemas.forEach(function (aSchema) {
+                    var tempSchema = {};
+                    tempSchema[usesKey + '.' + aSchema.key] = aSchema.value;
+                    result.push(tempSchema);
+                  });
+                }
+              })
             }
 
             return result;
