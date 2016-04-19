@@ -61,9 +61,13 @@
 
           inspectRaml(raml);
 
-          if (raml.types) {
-            $rootScope.types = angular.copy(raml.types);
-            $rootScope.types = $rootScope.types.map(function (type) {
+          var types = raml.types ? angular.copy(raml.types) : [];
+          var libraryTypes = getLibraryTypes();
+
+          if (types.length || libraryTypes.length) {
+            $scope.types = types.concat(libraryTypes);
+
+            $rootScope.types = $scope.types.map(function (type) {
               var theType = type[Object.keys(type)[0]];
               theType.properties = RAML.Inspector.Properties.normalizeNamedParameters(theType.properties);
               return type;
@@ -72,6 +76,26 @@
 
           if (raml.schemas) {
             $rootScope.schemas = angular.copy(raml.schemas);
+          }
+
+          function getLibraryTypes() {
+            var result = [] ;
+            if (raml.uses) {
+              Object.keys(raml.uses).forEach(function (usesKey) {
+                var usesTypes = raml.uses[usesKey].types;
+                if (usesTypes) {
+                  usesTypes.forEach(function (aType) {
+                    Object.keys(aType).forEach(function (typeKey) {
+                      var tempType = {};
+                      tempType[usesKey + '.' + typeKey] = aType[typeKey];
+                      result.push(tempType);
+                    });
+                  });
+                }
+              });
+            }
+
+            return result;
           }
         });
       })();
