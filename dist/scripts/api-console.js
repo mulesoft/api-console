@@ -726,7 +726,7 @@
 
         $scope.getType = function (type) {
           var newType = $scope.mergeType(type);
-          newType.type = $scope.ensureArray(newType.type);
+          newType.type = RAML.Inspector.Types.ensureArray(newType.type);
           return newType;
         };
 
@@ -737,10 +737,6 @@
             return RAML.Inspector.Types.mergeType(newType, $rootScope.types);
           }
           return newType;
-        };
-
-        $scope.ensureArray = function (type) {
-          return Array.isArray(type) ? type : [type];
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
@@ -4039,7 +4035,7 @@ RAML.Inspector = (function() {
 
       if (propertiesKeys.length > 0) {
         resultingType.properties = propertiesKeys.map(function (key) {
-          return properties[key];
+          return ensureArray(properties[key]);
         });
       }
     }
@@ -4067,12 +4063,17 @@ RAML.Inspector = (function() {
     return typeInfo;
   }
 
+  function ensureArray(type) {
+    return Array.isArray(type) ? type : [type];
+  }
+
   RAML.Inspector.Types = {
     mergeType:    mergeType,
     isNativeType: isNativeType,
     findType:     findType,
     findSchema:   findSchema,
-    getTypeInfo:  getTypeInfo
+    getTypeInfo:  getTypeInfo,
+    ensureArray:  ensureArray
   };
 })();
 
