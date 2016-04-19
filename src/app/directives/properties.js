@@ -50,57 +50,115 @@
         };
 
         $scope.parameterDocumentation = function (parameter) {
-          var result = '';
+          var result = [];
 
           if (parameter) {
             if (parameter.required) {
-              result += 'required, ';
+              result.push('required');
             }
 
             if (parameter.discriminator) {
-              result += 'discriminator, ';
+              result.push('discriminator');
             }
 
             if (parameter['enum']) {
               var enumValues = $scope.unique(parameter['enum']);
+              var enumDescription = ''
 
               if (enumValues.length > 1) {
-                result += 'one of ';
+                enumDescription += 'one of ';
               }
 
-              result += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
+              enumDescription += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
+
+              result.push(enumDescription);
             }
 
             if (parameter.pattern) {
-              result += ' matching ' + parameter.pattern;
+              result.push(' matching ' + parameter.pattern);
             }
 
             if (parameter.minLength && parameter.maxLength) {
-              result += ', ' + parameter.minLength + '-' + parameter.maxLength + ' characters';
+              result.push(parameter.minLength + '-' + parameter.maxLength + ' characters');
             } else if (parameter.minLength && !parameter.maxLength) {
-              result += ', at least ' + parameter.minLength + ' characters';
+              result.push('at least ' + parameter.minLength + ' characters');
             } else if (parameter.maxLength && !parameter.minLength) {
-              result += ', at most ' + parameter.maxLength + ' characters';
+              result.push('at most ' + parameter.maxLength + ' characters');
             }
 
             if (parameter.minimum && parameter.maximum) {
-              result += ' between ' + parameter.minimum + '-' + parameter.maximum;
+              result.push('between ' + parameter.minimum + '-' + parameter.maximum);
             } else if (parameter.minimum && !parameter.maximum) {
-              result += ' ≥ ' + parameter.minimum;
+              result.push('≥ ' + parameter.minimum);
             } else if (parameter.maximum && !parameter.minimum) {
-              result += ' ≤ ' + parameter.maximum;
+              result.push('≤ ' + parameter.maximum);
             }
 
             if (parameter.repeat) {
-              result += ', repeatable';
+              result.push('repeatable');
             }
 
             if (parameter['default'] !== undefined) {
-              result += ', default: ' + parameter['default'];
+              result.push('default: ' + parameter['default']);
             }
           }
 
-          return result;
+          return result.join(', ');
+        };
+
+        $scope.typeDocumentation = function (type) {
+          var result = [];
+
+          if (type.minItems) {
+            result.push('minItems: ' + type.minItems);
+          }
+
+          if (type.maxItems) {
+            result.push('maxItems: ' + type.maxItems);
+          }
+
+          if (type['enum']) {
+            var enumValues = type['enum'];
+            var enumDescription = ''
+
+            if (enumValues.length > 1) {
+              enumDescription += 'one of ';
+            }
+
+            enumDescription += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
+
+            result.push(enumDescription);
+          }
+
+          if (type.pattern) {
+            result.push('pattern: ' + type.pattern);
+          }
+
+          if (type.minLength) {
+            result.push('minLength: ' + type.minLength);
+          }
+
+          if (type.maxLength) {
+            result.push('maxLength: ' + type.maxLength);
+          }
+
+          if (type.minimum) {
+            result.push('minimum: ' + type.minimum);
+          }
+
+          if (type.format) {
+            result.push('format: ' + type.format);
+          }
+
+          if (type.multipleOf) {
+            result.push('multipleOf: ' + type.multipleOf);
+          }
+
+          if (type.fileTypes) {
+            result.push('fileTypes: ' + type.fileTypes.join(', '));
+          }
+
+          return result.join(', ');
         };
 
         $scope.unique = function (arr) {
