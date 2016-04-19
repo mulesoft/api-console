@@ -1,8 +1,14 @@
 (function() {
   'use strict';
 
+  var UNION_ARRAY_REGEXP = /^\([^\)]*\)\[\]$/
+
+  function cleanupTypeName(typeName) {
+    return typeName.replace('[]', '').replace('(', '').replace(')', '').trim();
+  }
+
   function isNativeType(typeName) {
-    typeName = typeName.replace('[]', '');
+    typeName = cleanupTypeName(typeName);
     var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
     return nativeTypes.indexOf(typeName) !== -1;
   }
@@ -15,7 +21,7 @@
 
   function findType(typeName, types) {
     if (types) {
-      typeName = typeName.replace('[]', '');
+      typeName = cleanupTypeName(typeName);
       var existingType = find(typeName, types);
       return existingType ? existingType[typeName] : existingType;
     }
@@ -83,8 +89,9 @@
 
     if (types.length > 1) {
       typeInfo.type = 'union';
+      typeInfo.isArray = typeName.match(UNION_ARRAY_REGEXP);
       typeInfo.parts = types.map(function (type) {
-        return type.trim();
+        return type;
       });
     } else if (typeName.indexOf('[]') !== -1) {
       typeInfo.type = 'array';
