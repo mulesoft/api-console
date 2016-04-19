@@ -63,7 +63,7 @@
 
             if (parameter['enum']) {
               var enumValues = $scope.unique(parameter['enum']);
-              var enumDescription = ''
+              var enumDescription = '';
 
               if (enumValues.length > 1) {
                 enumDescription += 'one of ';
@@ -119,7 +119,7 @@
 
           if (type['enum']) {
             var enumValues = type['enum'];
-            var enumDescription = ''
+            var enumDescription = '';
 
             if (enumValues.length > 1) {
               enumDescription += 'one of ';
