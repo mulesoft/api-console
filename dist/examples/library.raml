@@ -1,0 +1,14 @@
+#%RAML 1.0
+title: API with Library
+version: 1
+
+uses:
+  file-type: !include libraries/file-type.raml
+
+/test:
+  get:
+    responses:
+      201:
+        body:
+          application/json:
+            type: file-type.File

@@ -763,7 +763,7 @@
 
             if (parameter['enum']) {
               var enumValues = $scope.unique(parameter['enum']);
-              var enumDescription = ''
+              var enumDescription = '';
 
               if (enumValues.length > 1) {
                 enumDescription += 'one of ';
@@ -819,7 +819,7 @@
 
           if (type['enum']) {
             var enumValues = type['enum'];
-            var enumDescription = ''
+            var enumDescription = '';
 
             if (enumValues.length > 1) {
               enumDescription += 'one of ';
@@ -1141,9 +1141,13 @@
 
           inspectRaml(raml);
 
-          if (raml.types) {
-            $rootScope.types = angular.copy(raml.types);
-            $rootScope.types = $rootScope.types.map(function (type) {
+          var types = raml.types ? angular.copy(raml.types) : [];
+          var libraryTypes = getLibraryTypes();
+
+          if (types.length || libraryTypes.length) {
+            $scope.types = types.concat(libraryTypes);
+
+            $rootScope.types = $scope.types.map(function (type) {
               var theType = type[Object.keys(type)[0]];
               theType.properties = RAML.Inspector.Properties.normalizeNamedParameters(theType.properties);
               return type;
@@ -1152,6 +1156,26 @@
 
           if (raml.schemas) {
             $rootScope.schemas = angular.copy(raml.schemas);
+          }
+
+          function getLibraryTypes() {
+            var result = [] ;
+            if (raml.uses) {
+              Object.keys(raml.uses).forEach(function (usesKey) {
+                var usesTypes = raml.uses[usesKey].types;
+                if (usesTypes) {
+                  usesTypes.forEach(function (aType) {
+                    Object.keys(aType).forEach(function (typeKey) {
+                      var tempType = {};
+                      tempType[usesKey + '.' + typeKey] = aType[typeKey];
+                      result.push(tempType);
+                    });
+                  });
+                }
+              });
+            }
+
+            return result;
           }
         });
       })();
@@ -6451,7 +6475,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "  <root-documentation></root-documentation>\n" +
     "\n" +
-    "  <root-types types=\"raml.types\" ng-if=\"raml.types\"></root-types>\n" +
+    "  <root-types types=\"types\" ng-if=\"types\"></root-types>\n" +
     "\n" +
     "  <ol ng-class=\"{'raml-console-resources-container-no-title': disableTitle, 'raml-console-resources-container': !disableTitle}\" id=\"raml-console-resources-container\" class=\"raml-console-resource-list raml-console-resource-list-root raml-console-resources-resourcesCollapsed\">\n" +
     "    <li id=\"raml_documentation\" class=\"raml-console-resource-list-item raml-console-documentation-header\">\n" +
