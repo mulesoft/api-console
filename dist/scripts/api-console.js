@@ -3967,8 +3967,14 @@ RAML.Inspector = (function() {
 (function() {
   'use strict';
 
+  var UNION_ARRAY_REGEXP = /^\([^\)]*\)\[\]$/
+
+  function cleanupTypeName(typeName) {
+    return typeName.replace('[]', '').replace('(', '').replace(')', '').trim();
+  }
+
   function isNativeType(typeName) {
-    typeName = typeName.replace('[]', '');
+    typeName = cleanupTypeName(typeName);
     var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
     return nativeTypes.indexOf(typeName) !== -1;
   }
@@ -3981,7 +3987,7 @@ RAML.Inspector = (function() {
 
   function findType(typeName, types) {
     if (types) {
-      typeName = typeName.replace('[]', '');
+      typeName = cleanupTypeName(typeName);
       var existingType = find(typeName, types);
       return existingType ? existingType[typeName] : existingType;
     }
@@ -4049,8 +4055,9 @@ RAML.Inspector = (function() {
 
     if (types.length > 1) {
       typeInfo.type = 'union';
+      typeInfo.isArray = typeName.match(UNION_ARRAY_REGEXP);
       typeInfo.parts = types.map(function (type) {
-        return type.trim();
+        return type;
       });
     } else if (typeName.indexOf('[]') !== -1) {
       typeInfo.type = 'array';
@@ -7005,10 +7012,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/type.tpl.html',
     "<span ng-repeat=\"type in typeInfo.parts\">\n" +
+    "  <span ng-if=\"$first && typeInfo.isArray\">(</span>\n" +
     "  <span ng-if=\"!$first && typeInfo.type === 'union'\"> | </span>\n" +
     "  <a href=\"\" ng-click=\"selectType($event, type)\" ng-if=\"showTypeLink(type)\">{{type}}</a>\n" +
     "  <span ng-if=\"!showTypeLink(type)\">{{type}}</span>\n" +
     "  <span ng-if=\"typeInfo.type === 'array'\">[]</span>\n" +
+    "  <span ng-if=\"$last && typeInfo.isArray\">)[]</span>\n" +
     "</span>\n" +
     "<div ng-if=\"selectedType\" class=\"raml-console-type-info-popover\">\n" +
     "  <h3>\n" +
