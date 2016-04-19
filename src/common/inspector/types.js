@@ -69,7 +69,7 @@
 
       if (propertiesKeys.length > 0) {
         resultingType.properties = propertiesKeys.map(function (key) {
-          return properties[key];
+          return ensureArray(properties[key]);
         });
       }
     }
@@ -97,11 +97,16 @@
     return typeInfo;
   }
 
+  function ensureArray(type) {
+    return Array.isArray(type) ? type : [type];
+  }
+
   RAML.Inspector.Types = {
     mergeType:    mergeType,
     isNativeType: isNativeType,
     findType:     findType,
     findSchema:   findSchema,
-    getTypeInfo:  getTypeInfo
+    getTypeInfo:  getTypeInfo,
+    ensureArray:  ensureArray
   };
 })();
