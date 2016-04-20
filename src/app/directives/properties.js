@@ -41,8 +41,17 @@
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
 
+        $scope.isSchema = function (typeName) {
+          try {
+            JSON.parse(typeName);
+            return true;
+          } catch (error) {
+            return false;
+          }
+        };
+
         $scope.isCollapsible = function isCollapsible(property) {
-          return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
+          return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties || $scope.isSchema(property.type[0]));
         };
 
         $scope.parameterDocumentation = function (parameter) {
