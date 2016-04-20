@@ -26,37 +26,40 @@
         };
 
         $scope.identifyBodyType = function () {
-          var node = $scope.body;
+          var node = angular.copy($scope.body);
+          node.type = node.type || node.schema;
 
-          if (node && node.schema && $scope.getTopSchema(node.schema)) {
-            $scope.isSchema = true;
-            $scope.definition = $scope.getTopSchema(node.schema);
-          } else if (node && node.type && $scope.getTopSchema(node.type)) {
-            $scope.isSchema = true;
-            $scope.definition = $scope.getTopSchema(node.type);
-          } else if (node && node.schema && $scope.getTopType(node.schema)) {
-            if (node.schemaContent) {
-              $scope.isSchema = true;
-              $scope.definition = node.schemaContent;
-            } else {
+          node.type.forEach(function (aType) {
+            var isNative = RAML.Inspector.Types.isNativeType(aType);
+
+            if (isNative) {
               $scope.isType = true;
-            }
-          } else if (node && node.type && $scope.getTopType(node.type)) {
-            if (node.schemaContent) {
-              $scope.isSchema = true;
-              $scope.definition = node.schemaContent;
             } else {
-              $scope.isType = true;
+              var declaredType = RAML.Inspector.Types.findType(aType, $rootScope.types);
+              var declaredSchema = RAML.Inspector.Types.findSchema(aType, $rootScope.schemas);
+
+              if (declaredType) {
+                if (RAML.Inspector.Types.isNativeType(declaredType.type[0]) ||
+                    RAML.Inspector.Types.findType(declaredType.type[0], $rootScope.types)) {
+                  $scope.isType = true;
+                } else {
+                  $scope.isSchema = true;
+                  $scope.definition = declaredType.type[0];
+                }
+              } else {
+                $scope.isSchema = true;
+                if (declaredSchema) {
+                  if (declaredSchema.type) {
+                    $scope.definition = declaredSchema.type[0];
+                  } else {
+                    $scope.definition = declaredSchema;
+                  }
+                } else {
+                  $scope.definition = aType;
+                }
+              }
             }
-          } else if (node && node.type && node.properties) {
-            $scope.isType = true;
-          } else if (node.schema) {
-            $scope.isSchema = true;
-            $scope.definition = node.schema;
-          } else if (node.type) {
-            $scope.isSchema = true;
-            $scope.definition = Array.isArray(node.type) ? node.type[0] : node.type;
-          }
+          });
         };
 
         $scope.showSchema = function ($event) {
