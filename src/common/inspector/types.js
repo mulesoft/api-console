@@ -61,12 +61,13 @@
 
   function mergeType(type, types) {
     var resultingType = angular.copy(type);
+    resultingType.type = resultingType.type || resultingType.schema;
     var properties = angular.copy(resultingType.properties || {});
 
     properties = convertProperties(resultingType);
 
-    if (!isNativeType(type.type[0])) {
-      type.type.forEach(function (superType) {
+    if (!isNativeType(resultingType.type[0])) {
+      resultingType.type.forEach(function (superType) {
         properties = getSuperTypesProperties(properties, superType, types);
       });
     }
