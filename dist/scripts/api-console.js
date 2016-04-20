@@ -701,6 +701,8 @@
 (function () {
   'use strict';
 
+  var PATTERN_PATTERN = /^\/[^\/]*\/$/;
+
   RAML.Directives.properties = function(RecursionHelper) {
     return {
       restrict: 'E',
@@ -740,6 +742,10 @@
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
+
+        $scope.isPattern = function (propertyName) {
+          return propertyName.match(PATTERN_PATTERN);
+        };
 
         $scope.isSchema = function (typeName) {
           try {
@@ -6401,7 +6407,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/properties.tpl.html',
     "<div>\n" +
-    "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in listArray\" ng-if=\"!property[0].isFromSecurityScheme\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
+    "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in listArray\" ng-if=\"!property[0].isFromSecurityScheme && !isPattern(property[0].displayName)\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
     "    <div ng-init=\"type = getType(property[0])\">\n" +
     "      <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
     "        <span ng-if=\"isCollapsible(type)\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}\n" +

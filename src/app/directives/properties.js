@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  var PATTERN_PATTERN = /^\/[^\/]*\/$/;
+
   RAML.Directives.properties = function(RecursionHelper) {
     return {
       restrict: 'E',
@@ -40,6 +42,10 @@
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
+
+        $scope.isPattern = function (propertyName) {
+          return propertyName.match(PATTERN_PATTERN);
+        };
 
         $scope.isSchema = function (typeName) {
           try {
