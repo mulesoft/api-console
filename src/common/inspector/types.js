@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var UNION_ARRAY_REGEXP = /^\([^\)]*\)\[\]$/
+  var UNION_ARRAY_REGEXP = /^\([^\)]*\)\[\]$/;
 
   function cleanupTypeName(typeName) {
     return typeName.replace('[]', '').replace('(', '').replace(')', '').trim();
