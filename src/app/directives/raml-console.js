@@ -113,7 +113,7 @@
                     result.push(tempSchema);
                   });
                 }
-              })
+              });
             }
 
             return result;
