@@ -741,8 +741,17 @@
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
 
+        $scope.isSchema = function (typeName) {
+          try {
+            JSON.parse(typeName);
+            return true;
+          } catch (error) {
+            return false;
+          }
+        };
+
         $scope.isCollapsible = function isCollapsible(property) {
-          return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties);
+          return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties || $scope.isSchema(property.type[0]));
         };
 
         $scope.parameterDocumentation = function (parameter) {
@@ -6396,14 +6405,19 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <span ng-if=\"hidePropertyDetails\" class=\"raml-console-resource-param-instructional\">{{typeDocumentation(type)}}</span>\n" +
     "        <span class=\"raml-console-resource-param-instructional\" ng-repeat=\"typeName in type.type\">\n" +
     "          <span ng-if=\"isNativeType(typeName)\">{{typeName}}</span>\n" +
-    "          <span ng-if=\"!isNativeType(typeName)\" style=\"position: relative;\">\n" +
+    "          <span ng-if=\"isSchema(typeName)\">Schema</span>\n" +
+    "          <span ng-if=\"!isNativeType(typeName) && !isSchema(typeName)\" style=\"position: relative;\">\n" +
     "            <type type-name=\"typeName\" hide-type-links=\"hideTypeLinks\"></type>\n" +
     "          </span>\n" +
     "        </span>\n" +
     "      </h4>\n" +
     "\n" +
     "      <div ng-if=\"!vm.isCollapsed\">\n" +
-    "        <p markdown=\"type.description\" class=\"raml-console-marked-content\"></p>\n" +
+    "        <p ng-if=\"type.description\" markdown=\"type.description\" class=\"raml-console-marked-content\"></p>\n" +
+    "\n" +
+    "        <pre ng-if=\"isSchema(type.type[0])\" class=\"raml-console-resource-pre\">\n" +
+    "          <code class=\"raml-console-hljs\" hljs source=\"type.type[0]\"></code>\n" +
+    "        </pre>\n" +
     "\n" +
     "        <properties style=\"padding-left: 10px; margin-top: 11px;\" list=\"type.properties\" ng-if=\"type.properties\" is-nested-property=\"true\"></properties>\n" +
     "      </div>\n" +
