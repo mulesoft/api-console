@@ -25,6 +25,8 @@
           return !$scope.hideTypeLinks && !RAML.Inspector.Types.isNativeType(type);
         };
 
+        $scope.cleanupTypeName = RAML.Inspector.Types.cleanupTypeName;
+
         $scope.getSupertTypes = function (type) {
           return RAML.Inspector.Types.findType(type.type[0], $rootScope.types).type.map(function (aTypeName) {
             return aTypeName;
