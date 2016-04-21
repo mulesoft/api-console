@@ -15,7 +15,6 @@
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
-        $scope.currentProtocol   = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
 
         function readCustomSchemeInfo (name) {
           if (!$scope.methodInfo.headers.plain) {
@@ -214,13 +213,19 @@
           });
         }
 
+        $scope.$watch('methodInfo', function () {
+          $scope.protocols       = $scope.methodInfo.protocols || $scope.raml.protocols;
+          $scope.currentProtocol = $scope.protocols && $scope.protocols.length ? $scope.protocols[0] : null;
+        });
+
         $scope.$on('resetData', function() {
           var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
           var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
           $scope.currentSchemeType           = defaultSchema.type;
           $scope.currentScheme               = defaultSchema.id;
-          $scope.currentProtocol             = $scope.raml.protocols[0];
+          $scope.protocols                   = $scope.methodInfo.protocols || $scope.raml.protocols;
+          $scope.currentProtocol             = $scope.protocols && $scope.protocols.length ? $scope.protocols[0] : null;
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
 
