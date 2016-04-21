@@ -110,11 +110,12 @@
   }
 
   RAML.Inspector.Types = {
-    mergeType:    mergeType,
-    isNativeType: isNativeType,
-    findType:     findType,
-    findSchema:   findSchema,
-    getTypeInfo:  getTypeInfo,
-    ensureArray:  ensureArray
+    mergeType:       mergeType,
+    isNativeType:    isNativeType,
+    findType:        findType,
+    findSchema:      findSchema,
+    getTypeInfo:     getTypeInfo,
+    ensureArray:     ensureArray,
+    cleanupTypeName: cleanupTypeName
   };
 })();

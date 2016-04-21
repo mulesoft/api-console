@@ -2456,6 +2456,8 @@
           return !$scope.hideTypeLinks && !RAML.Inspector.Types.isNativeType(type);
         };
 
+        $scope.cleanupTypeName = RAML.Inspector.Types.cleanupTypeName;
+
         $scope.getSupertTypes = function (type) {
           return RAML.Inspector.Types.findType(type.type[0], $rootScope.types).type.map(function (aTypeName) {
             return aTypeName;
@@ -4115,12 +4117,13 @@ RAML.Inspector = (function() {
   }
 
   RAML.Inspector.Types = {
-    mergeType:    mergeType,
-    isNativeType: isNativeType,
-    findType:     findType,
-    findSchema:   findSchema,
-    getTypeInfo:  getTypeInfo,
-    ensureArray:  ensureArray
+    mergeType:       mergeType,
+    isNativeType:    isNativeType,
+    findType:        findType,
+    findSchema:      findSchema,
+    getTypeInfo:     getTypeInfo,
+    ensureArray:     ensureArray,
+    cleanupTypeName: cleanupTypeName
   };
 })();
 
@@ -7059,7 +7062,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<span ng-repeat=\"type in typeInfo.parts\">\n" +
     "  <span ng-if=\"$first && typeInfo.isArray\">(</span>\n" +
     "  <span ng-if=\"!$first && typeInfo.type === 'union'\"> | </span>\n" +
-    "  <a href=\"\" ng-click=\"selectType($event, type)\" ng-if=\"showTypeLink(type)\">{{type}}</a>\n" +
+    "  <a href=\"\" ng-click=\"selectType($event, cleanupTypeName(type))\" ng-if=\"showTypeLink(type)\">{{cleanupTypeName(type)}}</a>\n" +
     "  <span ng-if=\"!showTypeLink(type)\">{{type}}</span>\n" +
     "  <span ng-if=\"typeInfo.type === 'array'\">[]</span>\n" +
     "  <span ng-if=\"$last && typeInfo.isArray\">)[]</span>\n" +
