@@ -6260,29 +6260,33 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <span ng-click=\"changeResourceBodyType($event, key)\" ng-class=\"{ 'raml-console-is-active' : bodySelected(key)}\" class=\"raml-console-flag raml-console-body-{{getBodyId(key)}}\" ng-repeat=\"(key, value) in methodInfo.body\">{{key}}</span>\n" +
     "      </h4>\n" +
     "\n" +
-    "      <section ng-if=\"methodInfo.body[currentBodySelected].formParameters\">\n" +
-    "         <div class=\"raml-console-resource-param\" ng-repeat=\"formParam in methodInfo.body[currentBodySelected].formParameters\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{formParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(formParam[0])}}</span></h4>\n" +
+    "      <div ng-repeat=\"(key, value) in methodInfo.body\">\n" +
+    "        <div ng-if=\"key === currentBodySelected\">\n" +
+    "          <section ng-if=\"value.formParameters\">\n" +
+    "             <div class=\"raml-console-resource-param\" ng-repeat=\"formParam in value.formParameters\">\n" +
+    "              <h4 class=\"raml-console-resource-param-heading\">{{formParam[0].displayName}}<span class=\"raml-console-resource-param-instructional\">{{parameterDocumentation(formParam[0])}}</span></h4>\n" +
     "\n" +
-    "          <p markdown=\"formParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
+    "              <p markdown=\"formParam[0].description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
-    "          <p ng-if=\"formParam[0].example !== undefined\">\n" +
-    "            <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
-    "          </p>\n" +
+    "              <p ng-if=\"formParam[0].example !== undefined\">\n" +
+    "                <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{formParam[0].example}}</span>\n" +
+    "              </p>\n" +
+    "            </div>\n" +
+    "          </section>\n" +
+    "\n" +
+    "          <examples\n" +
+    "            ng-if=\"value\"\n" +
+    "            example-container=\"value\"\n" +
+    "            get-beatified-example-ref=\"getBeatifiedExample\">\n" +
+    "          </examples>\n" +
+    "\n" +
+    "          <raml-body\n" +
+    "            ng-if=\"value\"\n" +
+    "            body=\"value\"\n" +
+    "            get-beatified-example-ref=\"getBeatifiedExample\">\n" +
+    "          </raml-body>\n" +
     "        </div>\n" +
-    "      </section>\n" +
-    "\n" +
-    "      <examples\n" +
-    "        ng-if=\"methodInfo.body[currentBodySelected]\"\n" +
-    "        example-container=\"methodInfo.body[currentBodySelected]\"\n" +
-    "        get-beatified-example-ref=\"getBeatifiedExample\">\n" +
-    "      </examples>\n" +
-    "\n" +
-    "      <raml-body\n" +
-    "        ng-if=\"methodInfo.body[currentBodySelected]\"\n" +
-    "        body=\"methodInfo.body[currentBodySelected]\"\n" +
-    "        get-beatified-example-ref=\"getBeatifiedExample\">\n" +
-    "      </raml-body>\n" +
+    "      </div>\n" +
     "    </section>\n" +
     "  </div>\n" +
     "\n" +
@@ -6321,24 +6325,28 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            Body\n" +
     "            <span\n" +
     "              ng-click=\"changeType($event, key, code)\"\n" +
-    "              ng-class=\"{ 'raml-console-is-active': responseInfo[currentStatusCode].currentType === key}\"\n" +
+    "              ng-class=\"{ 'raml-console-is-active': responseInfo[code].currentType === key}\"\n" +
     "              class=\"raml-console-flag\"\n" +
     "              ng-repeat=\"(key, value) in methodInfo.responses[code].body\">\n" +
     "                {{key}}\n" +
     "            </span>\n" +
     "          </h4>\n" +
     "\n" +
-    "          <examples\n" +
-    "            ng-if=\"responseInfo[currentStatusCode] && responseInfo[currentStatusCode].currentType\"\n" +
-    "            example-container=\"responseInfo[currentStatusCode][responseInfo[currentStatusCode].currentType]\"\n" +
-    "            get-beatified-example-ref=\"getBeatifiedExample\">\n" +
-    "          </examples>\n" +
+    "          <div ng-repeat=\"(key, value) in methodInfo.responses[code].body\">\n" +
+    "            <div ng-if=\"responseInfo[code].currentType === key\">\n" +
+    "              <examples\n" +
+    "                ng-if=\"responseInfo[code] && responseInfo[code].currentType\"\n" +
+    "                example-container=\"value\"\n" +
+    "                get-beatified-example-ref=\"getBeatifiedExample\">\n" +
+    "              </examples>\n" +
     "\n" +
-    "          <raml-body\n" +
-    "            ng-if=\"responseInfo[currentStatusCode] && responseInfo[currentStatusCode].currentType\"\n" +
-    "            body=\"responseInfo[currentStatusCode][responseInfo[currentStatusCode].currentType]\"\n" +
-    "            get-beatified-example-ref=\"getBeatifiedExample\">\n" +
-    "          </raml-body>\n" +
+    "              <raml-body\n" +
+    "                ng-if=\"responseInfo[code] && responseInfo[code].currentType\"\n" +
+    "                body=\"value\"\n" +
+    "                get-beatified-example-ref=\"getBeatifiedExample\">\n" +
+    "              </raml-body>\n" +
+    "            </div>\n" +
+    "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
     "\n" +
