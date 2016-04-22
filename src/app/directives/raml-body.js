@@ -28,6 +28,8 @@
         $scope.identifyBodyType = function () {
           var node = angular.copy($scope.body);
           node.type = node.type || node.schema;
+          $scope.isType = false;
+          $scope.isSchema = false;
 
           node.type.forEach(function (aType) {
             var isNative = RAML.Inspector.Types.isNativeType(aType);
