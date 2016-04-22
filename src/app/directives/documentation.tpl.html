@@ -77,29 +77,33 @@
         <span ng-click="changeResourceBodyType($event, key)" ng-class="{ 'raml-console-is-active' : bodySelected(key)}" class="raml-console-flag raml-console-body-{{getBodyId(key)}}" ng-repeat="(key, value) in methodInfo.body">{{key}}</span>
       </h4>
 
-      <section ng-if="methodInfo.body[currentBodySelected].formParameters">
-         <div class="raml-console-resource-param" ng-repeat="formParam in methodInfo.body[currentBodySelected].formParameters">
-          <h4 class="raml-console-resource-param-heading">{{formParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(formParam[0])}}</span></h4>
+      <div ng-repeat="(key, value) in methodInfo.body">
+        <div ng-if="key === currentBodySelected">
+          <section ng-if="value.formParameters">
+             <div class="raml-console-resource-param" ng-repeat="formParam in value.formParameters">
+              <h4 class="raml-console-resource-param-heading">{{formParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(formParam[0])}}</span></h4>
 
-          <p markdown="formParam[0].description" class="raml-console-marked-content"></p>
+              <p markdown="formParam[0].description" class="raml-console-marked-content"></p>
 
-          <p ng-if="formParam[0].example !== undefined">
-            <span class="raml-console-resource-param-example"><b>Example:</b> {{formParam[0].example}}</span>
-          </p>
+              <p ng-if="formParam[0].example !== undefined">
+                <span class="raml-console-resource-param-example"><b>Example:</b> {{formParam[0].example}}</span>
+              </p>
+            </div>
+          </section>
+
+          <examples
+            ng-if="value"
+            example-container="value"
+            get-beatified-example-ref="getBeatifiedExample">
+          </examples>
+
+          <raml-body
+            ng-if="value"
+            body="value"
+            get-beatified-example-ref="getBeatifiedExample">
+          </raml-body>
         </div>
-      </section>
-
-      <examples
-        ng-if="methodInfo.body[currentBodySelected]"
-        example-container="methodInfo.body[currentBodySelected]"
-        get-beatified-example-ref="getBeatifiedExample">
-      </examples>
-
-      <raml-body
-        ng-if="methodInfo.body[currentBodySelected]"
-        body="methodInfo.body[currentBodySelected]"
-        get-beatified-example-ref="getBeatifiedExample">
-      </raml-body>
+      </div>
     </section>
   </div>
 
@@ -138,24 +142,28 @@
             Body
             <span
               ng-click="changeType($event, key, code)"
-              ng-class="{ 'raml-console-is-active': responseInfo[currentStatusCode].currentType === key}"
+              ng-class="{ 'raml-console-is-active': responseInfo[code].currentType === key}"
               class="raml-console-flag"
               ng-repeat="(key, value) in methodInfo.responses[code].body">
                 {{key}}
             </span>
           </h4>
 
-          <examples
-            ng-if="responseInfo[currentStatusCode] && responseInfo[currentStatusCode].currentType"
-            example-container="responseInfo[currentStatusCode][responseInfo[currentStatusCode].currentType]"
-            get-beatified-example-ref="getBeatifiedExample">
-          </examples>
+          <div ng-repeat="(key, value) in methodInfo.responses[code].body">
+            <div ng-if="responseInfo[code].currentType === key">
+              <examples
+                ng-if="responseInfo[code] && responseInfo[code].currentType"
+                example-container="value"
+                get-beatified-example-ref="getBeatifiedExample">
+              </examples>
 
-          <raml-body
-            ng-if="responseInfo[currentStatusCode] && responseInfo[currentStatusCode].currentType"
-            body="responseInfo[currentStatusCode][responseInfo[currentStatusCode].currentType]"
-            get-beatified-example-ref="getBeatifiedExample">
-          </raml-body>
+              <raml-body
+                ng-if="responseInfo[code] && responseInfo[code].currentType"
+                body="value"
+                get-beatified-example-ref="getBeatifiedExample">
+              </raml-body>
+            </div>
+          </div>
         </div>
       </section>
 
