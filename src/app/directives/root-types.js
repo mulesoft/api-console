@@ -10,12 +10,17 @@
         types: '='
       },
       controller: function ($scope) {
-        var types = {};
-        $scope.types.forEach(function (type) {
-          types[Object.keys(type)[0]] = type[Object.keys(type)[0]];
-        });
-        $scope.types = RAML.Inspector.Properties.normalizeNamedParameters(types);
+        $scope.convertTypes = function () {
+          var types = {};
+          $scope.types.forEach(function (type) {
+            types[Object.keys(type)[0]] = type[Object.keys(type)[0]];
+          });
+          $scope.theTypes = RAML.Inspector.Properties.normalizeNamedParameters(types);
+        }
 
+        $scope.$watch('types', function () {
+          $scope.convertTypes();
+        })
       }
     };
   };

@@ -18,6 +18,7 @@
       $attrs,
       $scope,
       $rootScope,
+      $timeout,
       $window
     ) {
       $scope.allowUnsafeMarkdown        = $attrs.hasOwnProperty('allowUnsafeMarkdown');
@@ -58,28 +59,31 @@
           if (!raml) {
             return;
           }
+          delete $scope.types;
 
           inspectRaml(raml);
 
-          var types = raml.types ? angular.copy(raml.types) : [];
-          var libraryTypes = getLibraryTypes();
+          $timeout(function () {
+            var types = raml.types ? angular.copy(raml.types) : [];
+            var libraryTypes = getLibraryTypes();
 
-          if (types.length || libraryTypes.length) {
-            $scope.types = types.concat(libraryTypes);
+            if (types.length || libraryTypes.length) {
+              $scope.types = types.concat(libraryTypes);
 
-            $rootScope.types = $scope.types.map(function (type) {
-              var theType = type[Object.keys(type)[0]];
-              theType.properties = RAML.Inspector.Properties.normalizeNamedParameters(theType.properties);
-              return type;
-            });
-          }
+              $rootScope.types = $scope.types.map(function (type) {
+                var theType = type[Object.keys(type)[0]];
+                theType.properties = RAML.Inspector.Properties.normalizeNamedParameters(theType.properties);
+                return type;
+              });
+            }
 
-          var schemas = raml.schemas ? angular.copy(raml.schemas) : [];
-          var librarySchemas = getLibrarySchemas();
+            var schemas = raml.schemas ? angular.copy(raml.schemas) : [];
+            var librarySchemas = getLibrarySchemas();
 
-          if (schemas || librarySchemas) {
-            $rootScope.schemas = schemas.concat(librarySchemas);
-          }
+            if (schemas || librarySchemas) {
+              $rootScope.schemas = schemas.concat(librarySchemas);
+            }
+          });
 
           function getLibraryTypes() {
             var result = [] ;
