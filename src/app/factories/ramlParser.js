@@ -40,7 +40,8 @@
           attributeDefaults: true,
           rejectOnErrors:    true,
           fsResolver:        {
-            contentAsync: contentAsyncFn
+            contentAsync: contentAsyncFn,
+            content:      content
           },
           httpResolver:      {
             getResourceAsync: function getResourceAsync(url) {
@@ -58,6 +59,12 @@
             return api.toJSON();
           })
         ;
+
+        // ---
+
+        function content(path) {
+          throw new Error('ramlParser: loadPath: loadApi: content: ' + path + ': no such path');
+        }
       }
     })
   ;
