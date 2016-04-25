@@ -1,0 +1,30 @@
+#%RAML 1.0
+title: API with Library
+version: 1
+
+types:
+  Player:
+    type: object
+    properties:
+      firstName: string
+      lastName: string
+      age: integer
+
+/test:
+  get:
+    responses:
+      200:
+        body:
+          application/xml:
+            type: Player
+            examples:
+              football:
+                value:
+                  firstName: Juan
+                  lastName: Perez
+                  age: 31
+              tennis:
+                value:
+                  firstName: Pepe
+                  lastName: Gomez
+                  age: 24

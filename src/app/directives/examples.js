@@ -14,6 +14,8 @@
         $scope.examples = transformExample($scope.exampleContainer);
         $scope.currentExample = 0;
 
+        $scope.isXML = $scope.exampleContainer.name === 'application/xml';
+
         $scope.changeExample = function(example) {
           $scope.currentExample = example;
         };
@@ -35,15 +37,15 @@
       if (Array.isArray(exampleContainer.examples)) {
         return exampleContainer.examples.map(function (example, index) {
           return {
-            name: 'Example ' + index,
-            content: example.content
+            name: example.name || 'Example ' + index,
+            content: JSON.stringify(example.value, null, 2)
           };
         });
       } else {
         return Object.keys(exampleContainer.examples).sort().map(function (key) {
           return {
             name: key,
-            content: exampleContainer.examples[key].content
+            content: exampleContainer.examples[key].value
           };
         });
       }
