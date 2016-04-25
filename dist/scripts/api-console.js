@@ -1695,11 +1695,11 @@
             types[Object.keys(type)[0]] = type[Object.keys(type)[0]];
           });
           $scope.theTypes = RAML.Inspector.Properties.normalizeNamedParameters(types);
-        }
+        };
 
         $scope.$watch('types', function () {
           $scope.convertTypes();
-        })
+        });
       }
     };
   };
@@ -2624,7 +2624,8 @@
           attributeDefaults: true,
           rejectOnErrors:    true,
           fsResolver:        {
-            contentAsync: contentAsyncFn
+            contentAsync: contentAsyncFn,
+            content:      content
           },
           httpResolver:      {
             getResourceAsync: function getResourceAsync(url) {
@@ -2642,6 +2643,12 @@
             return api.toJSON();
           })
         ;
+
+        // ---
+
+        function content(path) {
+          throw new Error('ramlParser: loadPath: loadApi: content: ' + path + ': no such path');
+        }
       }
     })
   ;
