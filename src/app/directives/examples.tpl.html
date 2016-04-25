@@ -6,6 +6,11 @@
     ng-repeat="example in examples"
     ng-click="changeExample($index)">{{example.name}}</span>
 
+  <div
+      class="raml-console-resource-param-instructional"
+      ng-if="isXML">
+    Examples are shown as JSON string for demonstrative purposes only. Actual API output will be in a different format.
+  </div>
   <pre class="raml-console-resource-pre">
     <code class="raml-console-hljs" hljs source="getBeatifiedExample(examples[currentExample].content)"></code>
   </pre>

@@ -355,6 +355,8 @@
         $scope.examples = transformExample($scope.exampleContainer);
         $scope.currentExample = 0;
 
+        $scope.isXML = $scope.exampleContainer.name === 'application/xml';
+
         $scope.changeExample = function(example) {
           $scope.currentExample = example;
         };
@@ -376,15 +378,15 @@
       if (Array.isArray(exampleContainer.examples)) {
         return exampleContainer.examples.map(function (example, index) {
           return {
-            name: 'Example ' + index,
-            content: example.content
+            name: example.name || 'Example ' + index,
+            content: JSON.stringify(example.value, null, 2)
           };
         });
       } else {
         return Object.keys(exampleContainer.examples).sort().map(function (key) {
           return {
             name: key,
-            content: exampleContainer.examples[key].content
+            content: exampleContainer.examples[key].value
           };
         });
       }
@@ -6388,6 +6390,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    ng-repeat=\"example in examples\"\n" +
     "    ng-click=\"changeExample($index)\">{{example.name}}</span>\n" +
     "\n" +
+    "  <div\n" +
+    "      class=\"raml-console-resource-param-instructional\"\n" +
+    "      ng-if=\"isXML\">\n" +
+    "    Examples are shown as JSON string for demonstrative purposes only. Actual API output will be in a different format.\n" +
+    "  </div>\n" +
     "  <pre class=\"raml-console-resource-pre\">\n" +
     "    <code class=\"raml-console-hljs\" hljs source=\"getBeatifiedExample(examples[currentExample].content)\"></code>\n" +
     "  </pre>\n" +
