@@ -945,7 +945,12 @@
                     $scope.definition = declaredSchema;
                   }
                 } else {
-                  $scope.definition = aType;
+                  if (aType.indexOf('|') !== -1) {
+                    $scope.isSchema = false;
+                    $scope.isType = true;
+                  } else {
+                    $scope.definition = aType;
+                  }
                 }
               }
             }
