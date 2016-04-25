@@ -16,11 +16,11 @@
             types[Object.keys(type)[0]] = type[Object.keys(type)[0]];
           });
           $scope.theTypes = RAML.Inspector.Properties.normalizeNamedParameters(types);
-        }
+        };
 
         $scope.$watch('types', function () {
           $scope.convertTypes();
-        })
+        });
       }
     };
   };
