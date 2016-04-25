@@ -2,16 +2,6 @@
 title: API with Types
 baseUri: /media
 
-schemas:
-  - Player: |
-      {
-        "type": "object",
-        "properties": [
-          {
-            "name": "string"
-          }
-        ]
-      }
 types:
   Person:
     type: object
@@ -78,10 +68,6 @@ types:
         body:
           application/json:
             schema: Cleaner
-      202:
-        body:
-          application/json:
-            schema: Player
       203:
         body:
           application/json:

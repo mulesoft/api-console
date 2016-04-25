@@ -36,7 +36,7 @@
   background: $color-body-heading;
   color: $color-resource-text;
 }
-
+root
 .request-body-heading > span {
   margin-left: 5px;
   cursor: pointer;
@@ -64,6 +64,10 @@
   background: $color-resource-bg;
   // box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
   color: $color-resource-text;
+
+  &.type-panel {
+    min-height: 0;
+  }
 
   @media only screen and (min-width: $large-screen) {
     border-width: 1px;
