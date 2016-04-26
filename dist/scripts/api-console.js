@@ -4049,7 +4049,19 @@ RAML.Inspector = (function() {
 
   function isNativeType(typeName) {
     typeName = cleanupTypeName(typeName);
-    var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
+    var nativeTypes = [
+      'object',
+      'string',
+      'number',
+      'integer',
+      'boolean',
+      'date-only',
+      'time-only',
+      'datetime-only',
+      'datetime',
+      'file',
+      'array'
+    ];
     return nativeTypes.indexOf(typeName) !== -1;
   }
 
@@ -5515,7 +5527,19 @@ RAML.Inspector = (function() {
 
   function isNativeType(typeName) {
     typeName = typeName.replace('[]', '');
-    var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
+    var nativeTypes = [
+      'object',
+      'string',
+      'number',
+      'integer',
+      'boolean',
+      'date-only',
+      'time-only',
+      'datetime-only',
+      'datetime',
+      'file',
+      'array'
+    ];
     return nativeTypes.indexOf(typeName) !== -1;
   }
 
@@ -6063,7 +6087,19 @@ RAML.Inspector = (function() {
 
   function isNativeType(typeName) {
     typeName = typeName.replace('[]', '');
-    var nativeTypes = ['string', 'boolean', 'number', 'integer', 'object'];
+    var nativeTypes = [
+      'object',
+      'string',
+      'number',
+      'integer',
+      'boolean',
+      'date-only',
+      'time-only',
+      'datetime-only',
+      'datetime',
+      'file',
+      'array'
+    ];
     return nativeTypes.indexOf(typeName) !== -1;
   }
 
