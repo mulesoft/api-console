@@ -41,8 +41,11 @@
               var declaredSchema = RAML.Inspector.Types.findSchema(aType, $rootScope.schemas);
 
               if (declaredType) {
-                if (RAML.Inspector.Types.isNativeType(declaredType.type[0]) ||
-                    RAML.Inspector.Types.findType(declaredType.type[0], $rootScope.types)) {
+                var typeParts = declaredType.type[0].split('|');
+                var firstType = RAML.Inspector.Types.cleanupTypeName(typeParts[0]);
+
+                if (RAML.Inspector.Types.isNativeType(firstType) ||
+                    RAML.Inspector.Types.findType(firstType, $rootScope.types)) {
                   $scope.isType = true;
                 } else {
                   $scope.isSchema = true;
