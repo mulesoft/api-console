@@ -2640,7 +2640,15 @@
           httpResolver:      {
             getResourceAsync: function getResourceAsync(url) {
               var proxy = (($window.RAML || {}).Settings || {}).proxy || '';
-              return $http.get(proxy + url, {transformResponse: null})
+              var req = {
+                method: 'GET',
+                url: proxy + url,
+                headers: {
+                  'Accept': 'application/raml+yaml'
+                },
+                transformResponse: null
+              };
+              return $http(req)
                 .then(function (res) {
                   return {content: res.data};
                 })
