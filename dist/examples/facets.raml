@@ -1,0 +1,38 @@
+#%RAML 1.0
+title: goasdad
+types:
+ Email:
+   type: object
+   properties:
+     name:
+       type: string
+ Emails:
+   type: array
+   items: Email
+   minItems: 1
+   uniqueItems: true
+ birthday:
+   type: date-only # no implications about time or offset
+   example: 2015-05-23
+ lunchtime:
+   type: time-only # no implications about date or offset
+   example: 12:30:00
+ fireworks:
+   type: datetime-only # no implications about offset
+   example: 2015-07-04T21:00:00
+ created:
+   type: datetime
+   example: 2016-02-28T16:41:41.090Z
+   format: rfc3339 # the default, so no need to specify
+ If-Modified-Since:
+   type: datetime
+   example: Sun, 28 Feb 2016 16:41:41 GMT
+   format: rfc2616 # this time it's required, otherwise, the example format is invalid
+
+/resourceeeee:
+ get:
+   responses:
+     200:
+       body:
+         application/json:
+           type: date-only

@@ -63,8 +63,18 @@
           }
         })
           .then(function (api) {
+            var apiJSON;
+
             api = api.expand();
-            return api.toJSON();
+            apiJSON = api.toJSON();
+            if (api.uses()) {
+              apiJSON.uses = {};
+              api.uses().forEach(function (usesItem) {
+                apiJSON.uses[usesItem.key()] = usesItem.ast().toJSON();
+              });
+            }
+
+            return apiJSON;
           })
         ;
 

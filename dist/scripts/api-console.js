@@ -760,7 +760,7 @@
         };
 
         $scope.isCollapsible = function isCollapsible(property) {
-          return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties || $scope.isSchema(property.type[0]));
+          return $scope.collapsible && !!(property.description || property.properties || $scope.isSchema(property.type[0]));
         };
 
         $scope.parameterDocumentation = function (parameter) {
@@ -2661,8 +2661,18 @@
           }
         })
           .then(function (api) {
+            var apiJSON;
+
             api = api.expand();
-            return api.toJSON();
+            apiJSON = api.toJSON();
+            if (api.uses()) {
+              apiJSON.uses = {};
+              api.uses().forEach(function (usesItem) {
+                apiJSON.uses[usesItem.key()] = usesItem.ast().toJSON();
+              });
+            }
+
+            return apiJSON;
           })
         ;
 
