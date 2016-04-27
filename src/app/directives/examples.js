@@ -31,7 +31,8 @@
     if (exampleContainer.example) {
       return [{
         name: 'Example',
-        content: exampleContainer.example
+        content: (typeof exampleContainer.example === 'object') ?
+            JSON.stringify(exampleContainer.example) : exampleContainer.example
       }];
     } else if (exampleContainer.examples) {
       if (Array.isArray(exampleContainer.examples)) {
