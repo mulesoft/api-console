@@ -57,7 +57,7 @@
         };
 
         $scope.isCollapsible = function isCollapsible(property) {
-          return $scope.collapsible && !!(property.description || (property.example !== undefined) || property.properties || $scope.isSchema(property.type[0]));
+          return $scope.collapsible && !!(property.description || property.properties || $scope.isSchema(property.type[0]));
         };
 
         $scope.parameterDocumentation = function (parameter) {
