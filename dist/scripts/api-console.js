@@ -6513,7 +6513,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <span class=\"raml-console-resource-param-instructional\" ng-repeat=\"typeName in type.type\">\n" +
     "          <span ng-if=\"isNativeType(typeName)\">{{typeName}}</span>\n" +
     "          <span ng-if=\"isSchema(typeName)\">Schema</span>\n" +
-    "          <span ng-if=\"!isNativeType(typeName) && !isSchema(typeName)\" style=\"position: relative;\">\n" +
+    "          <span ng-if=\"!isNativeType(typeName) && !isSchema(typeName)\">\n" +
     "            <type type-name=\"typeName\" hide-type-links=\"hideTypeLinks\"></type>\n" +
     "          </span>\n" +
     "        </span>\n" +
