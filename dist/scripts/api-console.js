@@ -2665,7 +2665,7 @@
 
             api = api.expand();
             apiJSON = api.toJSON();
-            if (api.uses()) {
+            if (api.uses && api.uses()) {
               apiJSON.uses = {};
               api.uses().forEach(function (usesItem) {
                 apiJSON.uses[usesItem.key()] = usesItem.ast().toJSON();
