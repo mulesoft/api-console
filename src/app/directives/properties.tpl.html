@@ -8,7 +8,7 @@
         <span class="raml-console-resource-param-instructional" ng-repeat="typeName in type.type">
           <span ng-if="isNativeType(typeName)">{{typeName}}</span>
           <span ng-if="isSchema(typeName)">Schema</span>
-          <span ng-if="!isNativeType(typeName) && !isSchema(typeName)" style="position: relative;">
+          <span ng-if="!isNativeType(typeName) && !isSchema(typeName)">
             <type type-name="typeName" hide-type-links="hideTypeLinks"></type>
           </span>
         </span>
