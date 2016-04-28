@@ -1228,9 +1228,11 @@
                 var usesSchemas = raml.uses[usesKey].schemas;
                 if (usesSchemas) {
                   usesSchemas.forEach(function (aSchema) {
-                    var tempSchema = {};
-                    tempSchema[usesKey + '.' + aSchema.key] = aSchema.value;
-                    result.push(tempSchema);
+                    Object.keys(aSchema).forEach(function (schemaKey) {
+                      var tempSchema = {};
+                      tempSchema[usesKey + '.' + schemaKey] = aSchema[schemaKey];
+                      result.push(tempSchema);
+                    });
                   });
                 }
               });
@@ -2669,12 +2671,14 @@
           .then(function (api) {
             var apiJSON;
 
-            api = api.expand();
+            api = api.expand ? api.expand() : api;
             apiJSON = api.toJSON();
             if (api.uses && api.uses()) {
               apiJSON.uses = {};
               api.uses().forEach(function (usesItem) {
-                apiJSON.uses[usesItem.key()] = usesItem.ast().toJSON();
+                var libraryAST = usesItem.ast();
+                libraryAST = libraryAST.expand ? libraryAST.expand() : libraryAST;
+                apiJSON.uses[usesItem.key()] = libraryAST.toJSON();
               });
             }
 
@@ -4143,7 +4147,7 @@ RAML.Inspector = (function() {
     var resultingType = angular.copy(type);
     resultingType.type = resultingType.type || resultingType.schema;
     var properties = angular.copy(resultingType.properties || {});
-    var currentType = Array.isArray(resultingType.type[0]) ?
+    var currentType = Array.isArray(resultingType.type) ?
         resultingType.type[0] : resultingType.type;
 
     properties = convertProperties(resultingType);
