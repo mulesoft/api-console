@@ -75,10 +75,12 @@
     var resultingType = angular.copy(type);
     resultingType.type = resultingType.type || resultingType.schema;
     var properties = angular.copy(resultingType.properties || {});
+    var currentType = Array.isArray(resultingType.type[0]) ?
+        resultingType.type[0] : resultingType.type;
 
     properties = convertProperties(resultingType);
 
-    if (!isNativeType(resultingType.type[0])) {
+    if (!isNativeType(currentType)) {
       resultingType.type.forEach(function (superType) {
         properties = getSuperTypesProperties(properties, superType, types);
       });

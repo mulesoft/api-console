@@ -60,6 +60,7 @@
             return;
           }
           delete $scope.types;
+          delete $rootScope.types;
 
           inspectRaml(raml);
 
