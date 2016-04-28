@@ -113,9 +113,11 @@
                 var usesSchemas = raml.uses[usesKey].schemas;
                 if (usesSchemas) {
                   usesSchemas.forEach(function (aSchema) {
-                    var tempSchema = {};
-                    tempSchema[usesKey + '.' + aSchema.key] = aSchema.value;
-                    result.push(tempSchema);
+                    Object.keys(aSchema).forEach(function (schemaKey) {
+                      var tempSchema = {};
+                      tempSchema[usesKey + '.' + schemaKey] = aSchema[schemaKey];
+                      result.push(tempSchema);
+                    });
                   });
                 }
               });

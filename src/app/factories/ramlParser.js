@@ -65,12 +65,14 @@
           .then(function (api) {
             var apiJSON;
 
-            api = api.expand();
+            api = api.expand ? api.expand() : api;
             apiJSON = api.toJSON();
             if (api.uses && api.uses()) {
               apiJSON.uses = {};
               api.uses().forEach(function (usesItem) {
-                apiJSON.uses[usesItem.key()] = usesItem.ast().toJSON();
+                var libraryAST = usesItem.ast();
+                libraryAST = libraryAST.expand ? libraryAST.expand() : libraryAST;
+                apiJSON.uses[usesItem.key()] = libraryAST.toJSON();
               });
             }
 

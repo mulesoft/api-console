@@ -75,7 +75,7 @@
     var resultingType = angular.copy(type);
     resultingType.type = resultingType.type || resultingType.schema;
     var properties = angular.copy(resultingType.properties || {});
-    var currentType = Array.isArray(resultingType.type[0]) ?
+    var currentType = Array.isArray(resultingType.type) ?
         resultingType.type[0] : resultingType.type;
 
     properties = convertProperties(resultingType);
