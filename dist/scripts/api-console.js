@@ -925,42 +925,47 @@
           if (node.type) {
             node.type = Array.isArray(node.type) ? node.type : [node.type];
             node.type.forEach(function (aType) {
-              var isNative = RAML.Inspector.Types.isNativeType(aType);
+              if (typeof aType !== 'object') {
+                var isNative = RAML.Inspector.Types.isNativeType(aType);
 
-              if (isNative) {
-                $scope.isType = true;
-              } else {
-                var declaredType = RAML.Inspector.Types.findType(aType, $rootScope.types);
-                var declaredSchema = RAML.Inspector.Types.findSchema(aType, $rootScope.schemas);
-
-                if (declaredType) {
-                  var typeParts = declaredType.type[0].split('|');
-                  var firstType = RAML.Inspector.Types.cleanupTypeName(typeParts[0]);
-
-                  if (RAML.Inspector.Types.isNativeType(firstType) ||
-                      RAML.Inspector.Types.findType(firstType, $rootScope.types)) {
-                    $scope.isType = true;
-                  } else {
-                    $scope.isSchema = true;
-                    $scope.definition = declaredType.type[0];
-                  }
+                if (isNative) {
+                  $scope.isType = true;
                 } else {
-                  $scope.isSchema = true;
-                  if (declaredSchema) {
-                    if (declaredSchema.type) {
-                      $scope.definition = declaredSchema.type[0];
-                    } else {
-                      $scope.definition = declaredSchema;
-                    }
-                  } else {
-                    if (aType.indexOf('|') !== -1) {
-                      $scope.isSchema = false;
+                  var declaredType = RAML.Inspector.Types.findType(aType, $rootScope.types);
+                  var declaredSchema = RAML.Inspector.Types.findSchema(aType, $rootScope.schemas);
+
+                  if (declaredType) {
+                    var typeParts = declaredType.type[0].split('|');
+                    var firstType = RAML.Inspector.Types.cleanupTypeName(typeParts[0]);
+
+                    if (RAML.Inspector.Types.isNativeType(firstType) ||
+                        RAML.Inspector.Types.findType(firstType, $rootScope.types)) {
                       $scope.isType = true;
                     } else {
-                      $scope.definition = aType;
+                      $scope.isSchema = true;
+                      $scope.definition = declaredType.type[0];
+                    }
+                  } else {
+                    $scope.isSchema = true;
+                    if (declaredSchema) {
+                      if (declaredSchema.type) {
+                        $scope.definition = declaredSchema.type[0];
+                      } else {
+                        $scope.definition = declaredSchema;
+                      }
+                    } else {
+                      if (aType.indexOf('|') !== -1) {
+                        $scope.isSchema = false;
+                        $scope.isType = true;
+                      } else {
+                        $scope.definition = aType;
+                      }
                     }
                   }
                 }
+              } else {
+                $scope.isSchema = true;
+                $scope.definition = JSON.stringify(aType, null, 2);
               }
             });
           }
