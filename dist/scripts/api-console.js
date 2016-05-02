@@ -167,11 +167,11 @@
         });
 
         function beautify(body, contentType) {
-          if(contentType.indexOf('json')) {
+          if(contentType.indexOf('json') !== -1) {
             body = vkbeautify.json(body, 2);
           }
 
-          if(contentType.indexOf('xml')) {
+          if(contentType.indexOf('xml') !== -1) {
             body = vkbeautify.xml(body, 2);
           }
 
@@ -182,7 +182,7 @@
           var result = value;
 
           try {
-            beautify(value, $scope.currentBodySelected);
+            result = beautify(value, $scope.currentBodySelected);
           }
           catch (e) { }
 
