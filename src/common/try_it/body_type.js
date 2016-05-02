@@ -7,7 +7,12 @@
   };
 
   BodyType.prototype.fillWithExample = function() {
-    this.value = this.contentType.example;
+    if (typeof this.contentType.example === 'object') {
+      this.value = JSON.stringify(this.contentType.example);
+    } else {
+      this.value = this.contentType.example;
+    }
+
   };
 
   BodyType.prototype.hasExample = function() {

@@ -447,7 +447,7 @@
               if (typeof definitions[key].reset !== 'undefined') {
                 definitions[key].reset($scope.methodInfo.body[key].formParameters);
               } else {
-                definitions[key].value = definitions[key].contentType.example;
+                definitions[key].fillWithExample();
               }
             });
           }
@@ -4327,7 +4327,12 @@ RAML.Inspector = (function() {
   };
 
   BodyType.prototype.fillWithExample = function() {
-    this.value = this.contentType.example;
+    if (typeof this.contentType.example === 'object') {
+      this.value = JSON.stringify(this.contentType.example);
+    } else {
+      this.value = this.contentType.example;
+    }
+
   };
 
   BodyType.prototype.hasExample = function() {
