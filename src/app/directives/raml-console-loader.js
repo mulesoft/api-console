@@ -40,7 +40,7 @@
         $scope.vm.loaded = false;
         $scope.vm.error  = void(0);
 
-        return ramlParser.loadPath($window.resolveUrl(url))
+        return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
           .then(function (raml) {
             $scope.vm.raml = raml;
           })

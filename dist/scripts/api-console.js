@@ -1079,7 +1079,7 @@
         $scope.vm.loaded = false;
         $scope.vm.error  = void(0);
 
-        return ramlParser.loadPath($window.resolveUrl(url))
+        return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
           .then(function (raml) {
             $scope.vm.raml = raml;
           })
@@ -2620,17 +2620,17 @@
 
       // ---
 
-      function load(text, contentAsyncFn) {
+      function load(text, contentAsyncFn, options) {
         var virtualPath = '/' + Date.now() + '.raml';
         return loadApi(virtualPath, function contentAsync(path) {
           return (path === virtualPath) ? $q.when(text) : (contentAsyncFn ? contentAsyncFn(path) : $q.reject(new Error('ramlParser: load: contentAsync: ' + path + ': no such path')));
-        });
+        }, options);
       }
 
-      function loadPath(path, contentAsyncFn) {
+      function loadPath(path, contentAsyncFn, options) {
         return loadApi(path, function contentAsync(path) {
           return contentAsyncFn ? contentAsyncFn(path) : $q.reject(new Error('ramlParser: loadPath: contentAsync: ' + path + ': no such path'));
-        });
+        }, options);
       }
 
       // ---
@@ -2641,7 +2641,14 @@
         };
       }
 
-      function loadApi(path, contentAsyncFn) {
+      /**
+       * @param  {String}   path
+       * @param  {Function} contentAsyncFn
+       * @param  {Object}   options
+       * @param  {Boolean}  options.bypassProxy
+       */
+      function loadApi(path, contentAsyncFn, options) {
+        options = options || {};
         return RAML.Parser.loadApi(path, {
           attributeDefaults: true,
           rejectOnErrors:    true,
@@ -2651,8 +2658,9 @@
           },
           httpResolver:      {
             getResourceAsync: function getResourceAsync(url) {
-              var proxy = (($window.RAML || {}).Settings || {}).proxy || '';
-              var req = {
+              var settings = ($window.RAML || {}).Settings || {};
+              var proxy    = (options.bypassProxy ? {} : settings).proxy || '';
+              var req      = {
                 method: 'GET',
                 url: proxy + url,
                 headers: {
