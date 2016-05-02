@@ -19,7 +19,7 @@
               if (typeof definitions[key].reset !== 'undefined') {
                 definitions[key].reset($scope.methodInfo.body[key].formParameters);
               } else {
-                definitions[key].value = definitions[key].contentType.example;
+                definitions[key].fillWithExample();
               }
             });
           }
