@@ -732,6 +732,13 @@
         $scope.getType = function (type) {
           var newType = $scope.mergeType(type);
           newType.type = RAML.Inspector.Types.ensureArray(newType.type);
+
+          if (newType.type[0] === 'array') {
+            newType.type = newType.items.type.map(function (aType) {
+              return aType + '[]';
+            });
+          }
+
           return newType;
         };
 
@@ -2477,10 +2484,11 @@
       templateUrl: 'directives/type.tpl.html',
       scope: {
         typeName: '=',
-        hideTypeLinks: '='
+        hideTypeLinks: '=',
+        items: '='
       },
       controller: function ($scope, $rootScope, $timeout) {
-        $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName);
+        $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName, $scope.items);
 
         $scope.closePopover = function () {
           $scope.selectedType = null;

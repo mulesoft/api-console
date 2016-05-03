@@ -8,10 +8,11 @@
       templateUrl: 'directives/type.tpl.html',
       scope: {
         typeName: '=',
-        hideTypeLinks: '='
+        hideTypeLinks: '=',
+        items: '='
       },
       controller: function ($scope, $rootScope, $timeout) {
-        $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName);
+        $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName, $scope.items);
 
         $scope.closePopover = function () {
           $scope.selectedType = null;
