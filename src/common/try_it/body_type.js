@@ -7,10 +7,17 @@
   };
 
   BodyType.prototype.fillWithExample = function() {
-    if (typeof this.contentType.example === 'object') {
-      this.value = JSON.stringify(this.contentType.example);
+    var example;
+    if (this.contentType.examples) {
+      example = this.contentType.examples[0].value;
     } else {
-      this.value = this.contentType.example;
+      example = this.contentType.example;
+    }
+
+    if (typeof example === 'object') {
+      this.value = JSON.stringify(example);
+    } else {
+      this.value = example;
     }
 
   };
