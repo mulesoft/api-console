@@ -2172,6 +2172,7 @@
             var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
 
             $scope.showSpinner = true;
+            $scope.queryStringHasError = false;
             $scope.toggleRequestMetadata($event, true);
 
             try {
@@ -2203,7 +2204,11 @@
               try {
                 parameters = JSON.parse(context.queryString);
               } catch (e) {
-                // handle error
+                $scope.queryStringHasError = true;
+                $scope.response = {};
+
+                $scope.showSpinner = false;
+                return;
               }
               Object.keys(parameters).forEach(function (key) {
                 if (!$scope.parameters[key]) {
@@ -7073,6 +7078,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </header>\n" +
     "\n" +
     "            <div class=\"raml-console-sidebar-row\" style=\"padding-bottom: 0;\">\n" +
+    "              <div\n" +
+    "                class=\"raml-console-resource-param-instructional\"\n" +
+    "                ng-show=\"queryStringHasError\"\n" +
+    "                style=\"color: red;\">\n" +
+    "                  Query String format is invalid, JSON string expected.\n" +
+    "              </div>\n" +
     "              <div\n" +
     "                class=\"raml-console-codemirror-body-editor\"\n" +
     "                ui-codemirror=\"{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }\"\n" +

@@ -407,6 +407,7 @@
             var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
 
             $scope.showSpinner = true;
+            $scope.queryStringHasError = false;
             $scope.toggleRequestMetadata($event, true);
 
             try {
@@ -438,7 +439,11 @@
               try {
                 parameters = JSON.parse(context.queryString);
               } catch (e) {
-                // handle error
+                $scope.queryStringHasError = true;
+                $scope.response = {};
+
+                $scope.showSpinner = false;
+                return;
               }
               Object.keys(parameters).forEach(function (key) {
                 if (!$scope.parameters[key]) {
