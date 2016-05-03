@@ -440,6 +440,29 @@
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
 
+          function beautify(body, contentType) {
+            if(contentType.indexOf('json') !== -1) {
+              body = vkbeautify.json(body, 2);
+            }
+
+            if(contentType.indexOf('xml') !== -1) {
+              body = vkbeautify.xml(body, 2);
+            }
+
+            return body;
+          }
+
+          $scope.getBeatifiedExample = function (value) {
+            var result = value;
+
+            try {
+              result = beautify(value, $scope.currentBodySelected);
+            }
+            catch (e) { }
+
+            return result;
+          };
+
           if ($scope.context.bodyContent) {
             var definitions = $scope.context.bodyContent.definitions;
 
@@ -448,6 +471,9 @@
                 definitions[key].reset($scope.methodInfo.body[key].formParameters);
               } else {
                 definitions[key].fillWithExample();
+                if (definitions[key].value) {
+                  definitions[key].value = $scope.getBeatifiedExample(definitions[key].value);
+                }
               }
             });
           }
@@ -4343,10 +4369,17 @@ RAML.Inspector = (function() {
   };
 
   BodyType.prototype.fillWithExample = function() {
-    if (typeof this.contentType.example === 'object') {
-      this.value = JSON.stringify(this.contentType.example);
+    var example;
+    if (this.contentType.examples) {
+      example = this.contentType.examples[0].value;
     } else {
-      this.value = this.contentType.example;
+      example = this.contentType.example;
+    }
+
+    if (typeof example === 'object') {
+      this.value = JSON.stringify(example);
+    } else {
+      this.value = example;
     }
 
   };
