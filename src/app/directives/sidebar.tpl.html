@@ -63,6 +63,12 @@
 
             <div class="raml-console-sidebar-row" style="padding-bottom: 0;">
               <div
+                class="raml-console-resource-param-instructional"
+                ng-show="queryStringHasError"
+                style="color: red;">
+                  Query String format is invalid, JSON string expected.
+              </div>
+              <div
                 class="raml-console-codemirror-body-editor"
                 ui-codemirror="{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }"
                 ng-model="context.queryString">
