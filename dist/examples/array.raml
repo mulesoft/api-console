@@ -1,0 +1,16 @@
+#%RAML 1.0
+#baseUri: http://www.tshirt.com/api
+baseUri: http://mocksvc.mulesoft.com/mocks/a2126894-176f-4892-b21a-0cd998bcdcdb/api
+title: T-Shirt Ordering Service
+version: 1.0.development
+mediaType: [application/json]
+types:
+  Shirts:
+    type: array
+    items: shirt
+  shirt:
+    type: object
+    properties:
+      size: number
+      productCode: string
+      description: string

@@ -29,6 +29,13 @@
         $scope.getType = function (type) {
           var newType = $scope.mergeType(type);
           newType.type = RAML.Inspector.Types.ensureArray(newType.type);
+
+          if (newType.type[0] === 'array') {
+            newType.type = newType.items.type.map(function (aType) {
+              return aType + '[]';
+            });
+          }
+
           return newType;
         };
 
