@@ -33,10 +33,10 @@
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader" ng-class="{'raml-console-sidebar-subheader-top':raml.protocols.length == 1}">
               <h4 class="raml-console-sidebar-subhead">Authentication</h4>
             </header>
-
             <div class="raml-console-sidebar-row raml-console-sidebar-securty">
               <div class="raml-console-toggle-group raml-console-sidebar-toggle-group">
                 <label class="raml-console-sidebar-label">Security Scheme</label>
+                <span class="raml-console-resource-param-instructional">Custom Security Schemes are not supported in Try It</span>
                 <select ng-change="securitySchemeChanged(currentScheme)" class="raml-console-sidebar-input" ng-model="currentScheme" style="margin-bottom: 0;">
                  <option ng-repeat="(key, scheme) in securitySchemes" value="{{scheme.id}}">{{scheme.name}}</option>
                 </select>
@@ -66,7 +66,7 @@
                 class="raml-console-resource-param-instructional"
                 ng-show="queryStringHasError"
                 style="color: red;">
-                  Query String format is invalid, JSON string expected.
+                  Query String format is invalid, JSON string expected
               </div>
               <div
                 class="raml-console-codemirror-body-editor"
@@ -113,6 +113,12 @@
 
           <section>
             <div class="raml-console-sidebar-row">
+              <span
+                class="raml-console-resource-param-instructional"
+                ng-show="customStrategyError"
+                style="color: red;">
+                  Custom Security Schemes are not supported in Try It
+              </span>
               <div class="raml-console-sidebar-action-group">
                 <button ng-hide="showSpinner" type="submit" class="raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'raml-console-sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
                 </button>

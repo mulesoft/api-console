@@ -2266,7 +2266,10 @@
               $scope.requestOptions = request.toOptions();
             } catch (e) {
               console.error(e);
-              // custom strategies aren't supported yet.
+              $scope.customStrategyError = true;
+              $scope.response = {};
+
+              $scope.showSpinner = false;
             }
           } else {
             $scope.context.forceRequest = true;
@@ -7049,10 +7052,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <header class=\"raml-console-sidebar-row raml-console-sidebar-subheader\" ng-class=\"{'raml-console-sidebar-subheader-top':raml.protocols.length == 1}\">\n" +
     "              <h4 class=\"raml-console-sidebar-subhead\">Authentication</h4>\n" +
     "            </header>\n" +
-    "\n" +
     "            <div class=\"raml-console-sidebar-row raml-console-sidebar-securty\">\n" +
     "              <div class=\"raml-console-toggle-group raml-console-sidebar-toggle-group\">\n" +
     "                <label class=\"raml-console-sidebar-label\">Security Scheme</label>\n" +
+    "                <span class=\"raml-console-resource-param-instructional\">Custom Security Schemes are not supported in Try It</span>\n" +
     "                <select ng-change=\"securitySchemeChanged(currentScheme)\" class=\"raml-console-sidebar-input\" ng-model=\"currentScheme\" style=\"margin-bottom: 0;\">\n" +
     "                 <option ng-repeat=\"(key, scheme) in securitySchemes\" value=\"{{scheme.id}}\">{{scheme.name}}</option>\n" +
     "                </select>\n" +
@@ -7082,7 +7085,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                class=\"raml-console-resource-param-instructional\"\n" +
     "                ng-show=\"queryStringHasError\"\n" +
     "                style=\"color: red;\">\n" +
-    "                  Query String format is invalid, JSON string expected.\n" +
+    "                  Query String format is invalid, JSON string expected\n" +
     "              </div>\n" +
     "              <div\n" +
     "                class=\"raml-console-codemirror-body-editor\"\n" +
@@ -7129,6 +7132,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "          <section>\n" +
     "            <div class=\"raml-console-sidebar-row\">\n" +
+    "              <span\n" +
+    "                class=\"raml-console-resource-param-instructional\"\n" +
+    "                ng-show=\"customStrategyError\"\n" +
+    "                style=\"color: red;\">\n" +
+    "                  Custom Security Schemes are not supported in Try It\n" +
+    "              </span>\n" +
     "              <div class=\"raml-console-sidebar-action-group\">\n" +
     "                <button ng-hide=\"showSpinner\" type=\"submit\" class=\"raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\" ng-class=\"{'raml-console-sidebar-action-force':context.forceRequest}\"><span ng-if=\"context.forceRequest\">Force</span> {{methodInfo.method.toUpperCase()}}\n" +
     "                </button>\n" +
