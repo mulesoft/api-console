@@ -501,7 +501,10 @@
               $scope.requestOptions = request.toOptions();
             } catch (e) {
               console.error(e);
-              // custom strategies aren't supported yet.
+              $scope.customStrategyError = true;
+              $scope.response = {};
+
+              $scope.showSpinner = false;
             }
           } else {
             $scope.context.forceRequest = true;
