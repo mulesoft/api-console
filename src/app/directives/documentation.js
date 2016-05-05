@@ -63,7 +63,7 @@
           var result = value;
 
           try {
-            beautify(value, $scope.currentBodySelected);
+            result = beautify(value, $scope.currentBodySelected);
           }
           catch (e) { }
 
