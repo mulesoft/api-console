@@ -20,10 +20,11 @@
     "jszip": "~2.0.0",
     "marked": "~0.3.1",
     "raml-client-generator": "~0.0.7",
-    "raml-js-parser": "raml-org/raml-js-parser#e1513e34388d6bb6558f5cb5b221c19f90e225e5",
+    "raml-js-parser": "raml-org/raml-js-parser#7d13fe12bb5e71abff8a2b79020f8d1a0f4af150",
     "slug": "~0.8.0",
     "velocity": "~1.1.0",
-    "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29"
+    "vkbeautify": "vkiryukhin/vkBeautify#ecfc3b9e2b911ad8ebd49600c4089aca30619f29",
+    "docson": "lbovet/docson#4c5e24a72e94e7cb2d5cc0d4391556690dc4d5d6"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.0 <1.4.0"
