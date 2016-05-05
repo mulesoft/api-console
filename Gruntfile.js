@@ -10,11 +10,15 @@ module.exports = function (grunt) {
     src: {
       js: ['src/**/*.js'],
       jsVendor: [
+        'bower_components/jquery/dist/jquery.js',
+        'bower_components/docson/lib/jsonpointer.js',
+        'bower_components/docson/lib/handlebars.js',
+        'bower_components/docson/lib/traverse.js',
+        'bower_components/docson/docson.js',
         'bower_components/marked/lib/marked.js',
         'bower_components/raml-js-parser/dist/raml-parser.js',
         'bower_components/highlightjs/highlight.pack.js',
         'bower_components/vkbeautify/vkbeautify.js',
-        'bower_components/jquery/dist/jquery.js',
         'bower_components/velocity/velocity.js',
         'bower_components/crypto-js/rollups/hmac-sha1.js',
         'bower_components/crypto-js/components/enc-base64.js',
@@ -44,7 +48,7 @@ module.exports = function (grunt) {
 
     connect: {
       options: {
-        hostname: '0.0.0.0',
+        hostname: '127.0.0.1',
         port:     9000
       },
 
@@ -89,7 +93,16 @@ module.exports = function (grunt) {
           expand: true,
           src:    [
             '**',
-            '!styles/**/*'
+            '!styles/**/*',
+            '!vendor/**/*'
+          ]
+        },
+        {
+          dest:   '<%= distdir %>',
+          cwd:    'src/assets/vendor/docson',
+          expand: true,
+          src:    [
+            '**/*'
           ]
         }]
       }
@@ -135,6 +148,7 @@ module.exports = function (grunt) {
         dest: '<%= distdir %>/styles/<%= pkg.name %>-dark-theme.css',
         src:  [
           'src/assets/styles/vendor/codemirror.css',
+          'src/assets/styles/vendor/docson.css',
           'src/assets/styles/fonts.css',
           'src/assets/styles/error.css',
           '<%= distdir %>/styles/<%= pkg.name %>-dark-theme.css',
@@ -152,6 +166,7 @@ module.exports = function (grunt) {
         dest: '<%= distdir %>/styles/<%= pkg.name %>-light-theme.css',
         src:  [
           'src/assets/styles/vendor/codemirror.css',
+          'src/assets/styles/vendor/docson.css',
           'src/assets/styles/fonts.css',
           'src/assets/styles/error.css',
           '<%= distdir %>/styles/<%= pkg.name %>-light-theme.css',

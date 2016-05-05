@@ -16,14 +16,14 @@
 
           if ($theme.length === 0) {
             jQuery.ajax({
-              url: 'styles/api-console-dark-theme.css'
+              url: '/styles/api-console-dark-theme.css'
             }).done(function (data) {
               jQuery('head').append('<style id="raml-console-theme-dark">' + data + '</style>');
               jQuery('head').find('#raml-console-theme-light').remove();
             });
           } else {
             jQuery.ajax({
-              url: 'styles/api-console-light-theme.css'
+              url: '/styles/api-console-light-theme.css'
             }).done(function (data) {
               jQuery('head').append('<style id="raml-console-theme-light">' + data + '</style>');
               jQuery('head').find('#raml-console-theme-dark').remove();

@@ -135,7 +135,9 @@
 
       <div class="raml-console-schema-container" ng-if="methodInfo.body[currentBodySelected].schema">
         <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-        <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].schema)"></code></pre>
+        <div class="raml-console-resource-pre raml-console-resource-pre-toggle">
+          <schema-widget src="methodInfo.body[currentBodySelected].schema[2]"/>
+        </div>
       </div>
     </section>
   </div>
@@ -188,7 +190,9 @@
 
           <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].schema">
             <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
-            <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].schema)"></code></pre>
+            <div class="raml-console-resource-pre raml-console-resource-pre-toggle">
+              <schema-widget src="responseInfo[code][responseInfo[code].currentType].schema[2]"></code>
+            </div>
           </div>
         </div>
       </section>
