@@ -37,7 +37,7 @@
     });
     var grantType = this.credentials.grant;
 
-    if (grantType === 'token' || grantType === 'code') {
+    if (grantType === 'token' || grantType === 'code' || grantType === 'authorization_code' || grantType === 'implicit') {
       window.oauth2Callback = function (uri) {
         auth[grantType].getToken(uri, function (err, user, raw) {
           if (err) {
@@ -55,7 +55,7 @@
       popup(auth[grantType].getUri());
     }
 
-    if (grantType === 'owner') {
+    if (grantType === 'owner' || grantType === 'password') {
       auth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
         if (err) {
           done(raw, err);
@@ -69,7 +69,7 @@
       });
     }
 
-    if (grantType === 'credentials') {
+    if (grantType === 'credentials'|| grantType === 'client_credentials') {
       auth.credentials.getToken(function (err, user, raw) {
         if (err) {
           done(raw, err);

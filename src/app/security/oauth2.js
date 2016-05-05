@@ -25,16 +25,32 @@
             value: 'token'
           },
           {
+            label: 'Implicit',
+            value: 'implicit'
+          },
+          {
             label: 'Authorization Code',
             value: 'code'
+          },
+          {
+            label: 'Authorization Code',
+            value: 'authorization_code'
           },
           {
             label: 'Resource Owner Password Credentials',
             value: 'owner'
           },
           {
+            label: 'Resource Owner Password Credentials',
+            value: 'password'
+          },
+          {
             label: 'Client Credentials',
             value: 'credentials'
+          },
+          {
+            label: 'Client Credentials',
+            value: 'client_credentials'
           }
         ];
 
