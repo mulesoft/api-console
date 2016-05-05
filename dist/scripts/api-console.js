@@ -2004,7 +2004,11 @@
 
         $scope.prefillBody = function (current) {
           var definition   = $scope.context.bodyContent.definitions[current];
-          definition.value = definition.contentType.example;
+          definition.fillWithExample();
+
+          if (definition.value) {
+            definition.value = $scope.getBeatifiedExample(definition.value);
+          }
         };
 
         $scope.clearFields = function () {
