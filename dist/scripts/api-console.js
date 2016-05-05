@@ -2819,16 +2819,32 @@
             value: 'token'
           },
           {
+            label: 'Implicit',
+            value: 'implicit'
+          },
+          {
             label: 'Authorization Code',
             value: 'code'
+          },
+          {
+            label: 'Authorization Code',
+            value: 'authorization_code'
           },
           {
             label: 'Resource Owner Password Credentials',
             value: 'owner'
           },
           {
+            label: 'Resource Owner Password Credentials',
+            value: 'password'
+          },
+          {
             label: 'Client Credentials',
             value: 'credentials'
+          },
+          {
+            label: 'Client Credentials',
+            value: 'client_credentials'
           }
         ];
 
@@ -3353,7 +3369,7 @@
     });
     var grantType = this.credentials.grant;
 
-    if (grantType === 'token' || grantType === 'code') {
+    if (grantType === 'token' || grantType === 'code' || grantType === 'authorization_code' || grantType === 'implicit') {
       window.oauth2Callback = function (uri) {
         auth[grantType].getToken(uri, function (err, user, raw) {
           if (err) {
@@ -3371,7 +3387,7 @@
       popup(auth[grantType].getUri());
     }
 
-    if (grantType === 'owner') {
+    if (grantType === 'owner' || grantType === 'password') {
       auth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
         if (err) {
           done(raw, err);
@@ -3385,7 +3401,7 @@
       });
     }
 
-    if (grantType === 'credentials') {
+    if (grantType === 'credentials'|| grantType === 'client_credentials') {
       auth.credentials.getToken(function (err, user, raw) {
         if (err) {
           done(raw, err);
@@ -4944,10 +4960,10 @@ RAML.Inspector = (function() {
   function ClientOAuth2 (options) {
     this.options = options;
 
-    this.code        = new CodeFlow(this);
-    this.token       = new TokenFlow(this);
-    this.owner       = new OwnerFlow(this);
-    this.credentials = new CredentialsFlow(this);
+    this.code        = this['authorization_code'] = new CodeFlow(this);
+    this.token       = this.implicit              = new TokenFlow(this);
+    this.owner       = this.password              = new OwnerFlow(this);
+    this.credentials = this['client_credentials'] = new CredentialsFlow(this);
   }
 
   /**
