@@ -74,7 +74,11 @@
               info[key][0].example = info[key][0].example.toUTCString();
             }
 
-            that.values[key][0] = info[key][0].example;
+            if (info[key][0].example) {
+              that.values[key][0] = info[key][0].example;
+            } else if (info[key][0].examples && info[key][0].examples[0] && info[key][0].examples[0].value) {
+              that.values[key][0] = info[key][0].examples[0].value;
+            }
           }
         }
       });
