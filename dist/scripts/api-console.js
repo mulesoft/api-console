@@ -1455,7 +1455,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
+          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined') ? true : false;
         };
 
         $scope.reset = function (param) {
@@ -4413,7 +4413,7 @@ RAML.Inspector = (function() {
   };
 
   BodyType.prototype.hasExample = function() {
-    return !!this.contentType.example;
+    return !!this.contentType.example || !!this.contentType.examples;
   };
 
   BodyType.prototype.data = function() {
@@ -4569,7 +4569,11 @@ RAML.Inspector = (function() {
               info[key][0].example = info[key][0].example.toUTCString();
             }
 
-            that.values[key][0] = info[key][0].example;
+            if (info[key][0].example) {
+              that.values[key][0] = info[key][0].example;
+            } else if (info[key][0].examples && info[key][0].examples[0] && info[key][0].examples[0].value) {
+              that.values[key][0] = info[key][0].examples[0].value;
+            }
           }
         }
       });

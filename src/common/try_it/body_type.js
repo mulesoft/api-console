@@ -23,7 +23,7 @@
   };
 
   BodyType.prototype.hasExample = function() {
-    return !!this.contentType.example;
+    return !!this.contentType.example || !!this.contentType.examples;
   };
 
   BodyType.prototype.data = function() {
