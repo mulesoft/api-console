@@ -95,7 +95,15 @@
                   usesTypes.forEach(function (aType) {
                     Object.keys(aType).forEach(function (typeKey) {
                       var tempType = {};
+                      aType[typeKey].type = aType[typeKey].type.map(function (typeName) {
+                        if (!RAML.Inspector.Types.isNativeType(typeName)) {
+                          return usesKey + '.' + typeName;
+                        }
+                        return typeName;
+                      });
+
                       tempType[usesKey + '.' + typeKey] = aType[typeKey];
+                      tempType[usesKey + '.' + typeKey].displayName = usesKey + '.' + typeKey;
                       result.push(tempType);
                     });
                   });
