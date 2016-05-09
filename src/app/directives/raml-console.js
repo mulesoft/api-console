@@ -95,12 +95,7 @@
                   usesTypes.forEach(function (aType) {
                     Object.keys(aType).forEach(function (typeKey) {
                       var tempType = {};
-                      aType[typeKey].type = aType[typeKey].type.map(function (typeName) {
-                        if (!RAML.Inspector.Types.isNativeType(typeName)) {
-                          return usesKey + '.' + typeName;
-                        }
-                        return typeName;
-                      });
+                      convertType(aType[typeKey], usesKey);
 
                       tempType[usesKey + '.' + typeKey] = aType[typeKey];
                       tempType[usesKey + '.' + typeKey].displayName = usesKey + '.' + typeKey;
@@ -112,6 +107,21 @@
             }
 
             return result;
+          }
+
+          function convertType(typeNode, usesKey) {
+            typeNode.type = typeNode.type.map(function (typeName) {
+              if (!RAML.Inspector.Types.isNativeType(typeName)) {
+                return usesKey + '.' + typeName;
+              }
+              return typeName;
+            });
+
+            if (typeNode.properties) {
+              Object.keys(typeNode.properties).forEach(function (propertiesKey) {
+                convertType(typeNode.properties[propertiesKey], usesKey);
+              });
+            }
           }
 
           function getLibrarySchemas() {

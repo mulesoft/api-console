@@ -2,7 +2,16 @@
 # This file is located at libraries/file-type.raml
 types:
   File:
+    type: object
     properties:
       name:
       length:
         type: integer
+  Image:
+    type: File
+    properties:
+      format: Format
+  Format:
+    type: object
+    properties:
+      type: string
