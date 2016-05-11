@@ -1,5 +1,9 @@
 #%RAML 1.0 Library
 # This file is located at libraries/file-type.raml
+
+uses:
+  another: ./another-types.raml
+
 types:
   File:
     type: object
@@ -7,6 +11,7 @@ types:
       name:
       length:
         type: integer
+      other: another.Thing
   Image:
     type: File
     properties:
@@ -15,3 +20,12 @@ types:
     type: object
     properties:
       type: string
+  Schema: |
+    {
+      "type": "object",
+      "properties": [
+        {
+          "name": "string"
+        }
+      ]
+    }

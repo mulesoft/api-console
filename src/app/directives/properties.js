@@ -54,14 +54,7 @@
           return propertyName.match(PATTERN_PATTERN);
         };
 
-        $scope.isSchema = function (typeName) {
-          try {
-            JSON.parse(typeName);
-            return true;
-          } catch (error) {
-            return false;
-          }
-        };
+        $scope.isSchema = RAML.Inspector.Types.isSchema;
 
         $scope.isCollapsible = function isCollapsible(property) {
           return $scope.collapsible && !!(property.description || property.properties || $scope.isSchema(property.type[0]));
