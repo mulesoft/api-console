@@ -783,14 +783,7 @@
           return propertyName.match(PATTERN_PATTERN);
         };
 
-        $scope.isSchema = function (typeName) {
-          try {
-            JSON.parse(typeName);
-            return true;
-          } catch (error) {
-            return false;
-          }
-        };
+        $scope.isSchema = RAML.Inspector.Types.isSchema;
 
         $scope.isCollapsible = function isCollapsible(property) {
           return $scope.collapsible && !!(property.description || property.properties || $scope.isSchema(property.type[0]));
@@ -1259,16 +1252,19 @@
 
           function convertType(typeNode, usesKey) {
             typeNode.type = typeNode.type.map(function (typeName) {
-              var typeInfo = RAML.Inspector.Types.getTypeInfo(typeName);
+              if (!RAML.Inspector.Types.isSchema(typeName)) {
+                var typeInfo = RAML.Inspector.Types.getTypeInfo(typeName);
 
-              typeInfo.parts = typeInfo.parts.map(function (theType) {
-                if (!RAML.Inspector.Types.isNativeType(theType)) {
-                  return usesKey + '.' + RAML.Inspector.Types.cleanupTypeName(theType);
-                }
-                return theType;
-              });
+                typeInfo.parts = typeInfo.parts.map(function (theType) {
+                  if (!RAML.Inspector.Types.isNativeType(theType)) {
+                    return usesKey + '.' + RAML.Inspector.Types.cleanupTypeName(theType);
+                  }
+                  return theType;
+                });
 
-              return RAML.Inspector.Types.getTypeFromTypeInfo(typeInfo);
+                return RAML.Inspector.Types.getTypeFromTypeInfo(typeInfo);
+              }
+              return typeName;
             });
 
             if (typeNode.properties) {
@@ -4191,6 +4187,15 @@ RAML.Inspector = (function() {
     return nativeTypes.indexOf(typeName) !== -1;
   }
 
+  function isSchema(typeName) {
+    try {
+      JSON.parse(typeName);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   function find(name, collection) {
     return collection.find(function (item) {
       return item[name];
@@ -4308,6 +4313,7 @@ RAML.Inspector = (function() {
   RAML.Inspector.Types = {
     mergeType:           mergeType,
     isNativeType:        isNativeType,
+    isSchema:            isSchema,
     findType:            findType,
     findSchema:          findSchema,
     getTypeInfo:         getTypeInfo,

@@ -25,6 +25,15 @@
     return nativeTypes.indexOf(typeName) !== -1;
   }
 
+  function isSchema(typeName) {
+    try {
+      JSON.parse(typeName);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   function find(name, collection) {
     return collection.find(function (item) {
       return item[name];
@@ -142,6 +151,7 @@
   RAML.Inspector.Types = {
     mergeType:           mergeType,
     isNativeType:        isNativeType,
+    isSchema:            isSchema,
     findType:            findType,
     findSchema:          findSchema,
     getTypeInfo:         getTypeInfo,
