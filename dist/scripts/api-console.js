@@ -1259,10 +1259,16 @@
 
           function convertType(typeNode, usesKey) {
             typeNode.type = typeNode.type.map(function (typeName) {
-              if (!RAML.Inspector.Types.isNativeType(typeName)) {
-                return usesKey + '.' + typeName;
-              }
-              return typeName;
+              var typeInfo = RAML.Inspector.Types.getTypeInfo(typeName);
+
+              typeInfo.parts = typeInfo.parts.map(function (theType) {
+                if (!RAML.Inspector.Types.isNativeType(theType)) {
+                  return usesKey + '.' + RAML.Inspector.Types.cleanupTypeName(theType);
+                }
+                return theType;
+              });
+
+              return RAML.Inspector.Types.getTypeFromTypeInfo(typeInfo);
             });
 
             if (typeNode.properties) {
@@ -4264,7 +4270,7 @@ RAML.Inspector = (function() {
 
     if (types.length > 1) {
       typeInfo.type = 'union';
-      typeInfo.isArray = typeName.match(UNION_ARRAY_REGEXP);
+      typeInfo.isArray = UNION_ARRAY_REGEXP.test(typeName);
       typeInfo.parts = types.map(function (type) {
         return type;
       });
@@ -4279,18 +4285,35 @@ RAML.Inspector = (function() {
     return typeInfo;
   }
 
+  function getTypeFromTypeInfo(typeInfo) {
+    var type;
+    if (typeInfo.type === 'union') {
+      type = typeInfo.parts.join('|');
+      if (typeInfo.isArray) {
+        type = '(' + type + ')[]';
+      }
+
+      return type;
+    } else if (typeInfo.type === 'array') {
+      return type + '[]';
+    } else {
+      return typeInfo.parts.join('');
+    }
+  }
+
   function ensureArray(type) {
     return Array.isArray(type) ? type : [type];
   }
 
   RAML.Inspector.Types = {
-    mergeType:       mergeType,
-    isNativeType:    isNativeType,
-    findType:        findType,
-    findSchema:      findSchema,
-    getTypeInfo:     getTypeInfo,
-    ensureArray:     ensureArray,
-    cleanupTypeName: cleanupTypeName
+    mergeType:           mergeType,
+    isNativeType:        isNativeType,
+    findType:            findType,
+    findSchema:          findSchema,
+    getTypeInfo:         getTypeInfo,
+    getTypeFromTypeInfo: getTypeFromTypeInfo,
+    ensureArray:         ensureArray,
+    cleanupTypeName:     cleanupTypeName
   };
 })();
 

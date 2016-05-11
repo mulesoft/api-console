@@ -111,10 +111,16 @@
 
           function convertType(typeNode, usesKey) {
             typeNode.type = typeNode.type.map(function (typeName) {
-              if (!RAML.Inspector.Types.isNativeType(typeName)) {
-                return usesKey + '.' + typeName;
-              }
-              return typeName;
+              var typeInfo = RAML.Inspector.Types.getTypeInfo(typeName);
+
+              typeInfo.parts = typeInfo.parts.map(function (theType) {
+                if (!RAML.Inspector.Types.isNativeType(theType)) {
+                  return usesKey + '.' + RAML.Inspector.Types.cleanupTypeName(theType);
+                }
+                return theType;
+              });
+
+              return RAML.Inspector.Types.getTypeFromTypeInfo(typeInfo);
             });
 
             if (typeNode.properties) {
