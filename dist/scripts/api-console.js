@@ -4272,7 +4272,7 @@ RAML.Inspector = (function() {
       typeInfo.type = 'union';
       typeInfo.isArray = UNION_ARRAY_REGEXP.test(typeName);
       typeInfo.parts = types.map(function (type) {
-        return type;
+        return cleanupTypeName(type);
       });
     } else if (typeName.indexOf('[]') !== -1) {
       typeInfo.type = 'array';
@@ -4295,7 +4295,7 @@ RAML.Inspector = (function() {
 
       return type;
     } else if (typeInfo.type === 'array') {
-      return type + '[]';
+      return typeInfo.parts.join('') + '[]';
     } else {
       return typeInfo.parts.join('');
     }
@@ -6675,7 +6675,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <code class=\"raml-console-hljs\" hljs source=\"type.type[0]\"></code>\n" +
     "        </pre>\n" +
     "\n" +
-    "        <properties style=\"padding-left: 10px; margin-top: 11px;\" list=\"type.properties\" ng-if=\"type.properties\" is-nested-property=\"true\"></properties>\n" +
+    "        <properties style=\"padding-left: 10px; margin-top: 11px;\" list=\"type.properties\" ng-if=\"type.properties\" hide-type-links=\"hideTypeLinks\" is-nested-property=\"true\"></properties>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +

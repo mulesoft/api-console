@@ -106,7 +106,7 @@
       typeInfo.type = 'union';
       typeInfo.isArray = UNION_ARRAY_REGEXP.test(typeName);
       typeInfo.parts = types.map(function (type) {
-        return type;
+        return cleanupTypeName(type);
       });
     } else if (typeName.indexOf('[]') !== -1) {
       typeInfo.type = 'array';
@@ -129,7 +129,7 @@
 
       return type;
     } else if (typeInfo.type === 'array') {
-      return type + '[]';
+      return typeInfo.parts.join('') + '[]';
     } else {
       return typeInfo.parts.join('');
     }
