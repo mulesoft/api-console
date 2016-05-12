@@ -52,7 +52,7 @@
         <h4 class="raml-console-resource-heading-a">Responses</h4>
 
         <div class="raml-console-resource-param" ng-repeat="(code, info) in documentationSchemeSelected.describedBy.responses">
-          <h4 class="raml-console-resource-param-heading">{{code}}</h4>
+          <h4 class="raml-console-resource-param-heading">{{info.code}}</h4>
           <p markdown="info.description" class="raml-console-marked-content"></p>
         </div>
       </section>

@@ -62,9 +62,16 @@
           delete $scope.types;
           delete $rootScope.types;
 
-          inspectRaml(raml);
-
           $timeout(function () {
+            var securitySchemes = raml.securitySchemes ? angular.copy(raml.securitySchemes) : [];
+            var librarySecuritySchemes = getSecuritySchemes();
+
+            if (securitySchemes || librarySecuritySchemes) {
+              raml.securitySchemes = securitySchemes.concat(librarySecuritySchemes);
+            }
+
+            inspectRaml(raml);
+
             var types = raml.types ? angular.copy(raml.types) : [];
             var libraryTypes = getLibraryTypes();
 
@@ -143,6 +150,26 @@
                     Object.keys(aSchema).forEach(function (schemaKey) {
                       var tempSchema = {};
                       tempSchema[usesKey + '.' + schemaKey] = aSchema[schemaKey];
+                      result.push(tempSchema);
+                    });
+                  });
+                }
+              });
+            }
+
+            return result;
+          }
+
+          function getSecuritySchemes() {
+            var result = [];
+            if (raml.uses) {
+              Object.keys(raml.uses).forEach(function (usesKey) {
+                var usesSecuritySchemes = raml.uses[usesKey].securitySchemes;
+                if (usesSecuritySchemes) {
+                  usesSecuritySchemes.forEach(function (aScheme) {
+                    Object.keys(aScheme).forEach(function (schemaKey) {
+                      var tempSchema = {};
+                      tempSchema[usesKey + '.' + schemaKey] = aScheme[schemaKey];
                       result.push(tempSchema);
                     });
                   });
