@@ -1203,9 +1203,16 @@
           delete $scope.types;
           delete $rootScope.types;
 
-          inspectRaml(raml);
-
           $timeout(function () {
+            var securitySchemes = raml.securitySchemes ? angular.copy(raml.securitySchemes) : [];
+            var librarySecuritySchemes = getSecuritySchemes();
+
+            if (securitySchemes || librarySecuritySchemes) {
+              raml.securitySchemes = securitySchemes.concat(librarySecuritySchemes);
+            }
+
+            inspectRaml(raml);
+
             var types = raml.types ? angular.copy(raml.types) : [];
             var libraryTypes = getLibraryTypes();
 
@@ -1284,6 +1291,26 @@
                     Object.keys(aSchema).forEach(function (schemaKey) {
                       var tempSchema = {};
                       tempSchema[usesKey + '.' + schemaKey] = aSchema[schemaKey];
+                      result.push(tempSchema);
+                    });
+                  });
+                }
+              });
+            }
+
+            return result;
+          }
+
+          function getSecuritySchemes() {
+            var result = [];
+            if (raml.uses) {
+              Object.keys(raml.uses).forEach(function (usesKey) {
+                var usesSecuritySchemes = raml.uses[usesKey].securitySchemes;
+                if (usesSecuritySchemes) {
+                  usesSecuritySchemes.forEach(function (aScheme) {
+                    Object.keys(aScheme).forEach(function (schemaKey) {
+                      var tempSchema = {};
+                      tempSchema[usesKey + '.' + schemaKey] = aScheme[schemaKey];
                       result.push(tempSchema);
                     });
                   });
@@ -2873,9 +2900,23 @@
         ];
 
         /* jshint camelcase: false */
-        var authorizationGrants = $scope.$parent.securitySchemes.oauth_2_0.settings.authorizationGrants;
+        $scope.getOAuth2Settings = function () {
+          var result;
+          for (var securitySchemesKey in $scope.$parent.securitySchemes) {
+            if ($scope.$parent.securitySchemes.hasOwnProperty(securitySchemesKey)) {
+              if ($scope.$parent.securitySchemes[securitySchemesKey].type === 'OAuth 2.0') {
+                result = $scope.$parent.securitySchemes[securitySchemesKey].settings;
+                break;
+              }
+            }
+          }
+          return result;
+        };
 
-        $scope.scopes = $scope.$parent.securitySchemes.oauth_2_0.settings.scopes;
+        var oauth2Settings = $scope.getOAuth2Settings();
+        var authorizationGrants = oauth2Settings.authorizationGrants;
+
+        $scope.scopes = oauth2Settings.scopes;
         $scope.credentials.scopes = {};
 
         if (authorizationGrants) {
@@ -2889,6 +2930,7 @@
       }]
     };
   };
+
 
   angular.module('RAML.Security')
     .directive('oauth2', RAML.Security.oauth2);
@@ -6472,7 +6514,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <h4 class=\"raml-console-resource-heading-a\">Responses</h4>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-param\" ng-repeat=\"(code, info) in documentationSchemeSelected.describedBy.responses\">\n" +
-    "          <h4 class=\"raml-console-resource-param-heading\">{{code}}</h4>\n" +
+    "          <h4 class=\"raml-console-resource-param-heading\">{{info.code}}</h4>\n" +
     "          <p markdown=\"info.description\" class=\"raml-console-marked-content\"></p>\n" +
     "        </div>\n" +
     "      </section>\n" +
