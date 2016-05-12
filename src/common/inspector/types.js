@@ -35,16 +35,22 @@
   }
 
   function find(name, collection) {
-    return collection.find(function (item) {
-      return item[name];
-    });
+    var found;
+    var length = collection.length;
+    for (var i = 0; i < length; i++) {
+      if (collection[i][name]) {
+        found = collection[i][name];
+        break;
+      }
+    }
+    return found;
   }
 
   function findType(typeName, types) {
     if (types) {
       typeName = cleanupTypeName(typeName);
       var existingType = find(typeName, types);
-      return existingType ? existingType[typeName] : existingType;
+      return existingType;
     }
   }
 
