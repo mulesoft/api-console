@@ -57,7 +57,7 @@
   function findSchema(schemaName, schemas) {
     if (schemas) {
       var existingSchema = find(schemaName, schemas);
-      return existingSchema ? existingSchema[schemaName] : existingSchema;
+      return existingSchema;
     }
   }
 
