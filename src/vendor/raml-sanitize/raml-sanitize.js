@@ -235,13 +235,17 @@
   };
 
   var TYPES = {
-    string:    String,
-    number:    toNumber,
-    integer:   toInteger,
-    "boolean": toBoolean,
-    date:      toDate,
-    object:    returnValue,
-    union:     toUnion
+    string:          String,
+    number:          toNumber,
+    integer:         toInteger,
+    'boolean':       toBoolean,
+    date:            toDate,
+    'date-only':     toDate,
+    'time-only':     toDate,
+    'datetime-only': toDate,
+    'datetime':      toDate,
+    object:          returnValue,
+    union:           toUnion
   };
 
   /**
