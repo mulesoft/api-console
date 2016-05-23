@@ -5906,13 +5906,17 @@ RAML.Inspector = (function() {
   };
 
   var TYPES = {
-    string:    String,
-    number:    toNumber,
-    integer:   toInteger,
-    "boolean": toBoolean,
-    date:      toDate,
-    object:    returnValue,
-    union:     toUnion
+    string:          String,
+    number:          toNumber,
+    integer:         toInteger,
+    'boolean':       toBoolean,
+    date:            toDate,
+    'date-only':     toDate,
+    'time-only':     toDate,
+    'datetime-only': toDate,
+    'datetime':      toDate,
+    object:          returnValue,
+    union:           toUnion
   };
 
   /**
@@ -6345,13 +6349,17 @@ RAML.Inspector = (function() {
   }
 
   var TYPES = {
-    date:      isDate,
-    number:    isNumber,
-    integer:   isInteger,
-    "boolean": isBoolean,
-    string:    isString,
-    object:    isJSON,
-    union:     isUnion
+    date:            isDate,
+    'date-only':     isDate,
+    'time-only':     isDate,
+    'datetime-only': isDate,
+    datetime:        isDate,
+    number:          isNumber,
+    integer:         isInteger,
+    'boolean':       isBoolean,
+    string:          isString,
+    object:          isJSON,
+    union:           isUnion
   };
 
   /**
@@ -6425,7 +6433,7 @@ RAML.Inspector = (function() {
       maximum:   isMaximum,
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
-      "enum":    isEnum,
+      'enum':    isEnum,
       pattern:   isPattern
     };
 

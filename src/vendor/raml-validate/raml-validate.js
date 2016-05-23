@@ -344,13 +344,17 @@
   }
 
   var TYPES = {
-    date:      isDate,
-    number:    isNumber,
-    integer:   isInteger,
-    "boolean": isBoolean,
-    string:    isString,
-    object:    isJSON,
-    union:     isUnion
+    date:            isDate,
+    'date-only':     isDate,
+    'time-only':     isDate,
+    'datetime-only': isDate,
+    datetime:        isDate,
+    number:          isNumber,
+    integer:         isInteger,
+    'boolean':       isBoolean,
+    string:          isString,
+    object:          isJSON,
+    union:           isUnion
   };
 
   /**
@@ -424,7 +428,7 @@
       maximum:   isMaximum,
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
-      "enum":    isEnum,
+      'enum':    isEnum,
       pattern:   isPattern
     };
 
