@@ -763,6 +763,7 @@
             newType.type = newType.items.type.map(function (aType) {
               return aType + '[]';
             });
+            newType.properties = newType.items.properties;
           }
 
           return newType;
@@ -6737,7 +6738,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <code class=\"raml-console-hljs\" hljs source=\"type.type[0]\"></code>\n" +
     "        </pre>\n" +
     "\n" +
-    "        <properties style=\"padding-left: 10px; margin-top: 11px;\" list=\"type.properties\" ng-if=\"type.properties\" hide-type-links=\"hideTypeLinks\" is-nested-property=\"true\"></properties>\n" +
+    "        <properties\n" +
+    "          style=\"padding-left: 10px; margin-top: 11px;\"\n" +
+    "          list=\"type.properties\"\n" +
+    "          ng-if=\"type.properties\"\n" +
+    "          hide-type-links=\"hideTypeLinks\"\n" +
+    "          is-nested-property=\"true\">\n" +
+    "        </properties>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
