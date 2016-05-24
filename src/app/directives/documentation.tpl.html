@@ -12,17 +12,17 @@
 
     <section class="raml-console-resource-section" id="docs-uri-parameters" ng-if="resource.uriParametersForDocumentation">
       <h3 class="raml-console-resource-heading-a">URI Parameters</h3>
-      <properties list="resource.uriParametersForDocumentation"></properties>
+      <properties list="resource.uriParametersForDocumentation" show-examples="true"></properties>
     </section>
 
     <section class="raml-console-resource-section" id="docs-headers" ng-if="methodInfo.headers.plain">
       <h3 class="raml-console-resource-heading-a">Headers</h3>
-      <properties list="methodInfo.headers.plain"></properties>
+      <properties list="methodInfo.headers.plain" show-examples="true"></properties>
     </section>
 
     <section class="raml-console-resource-section" id="docs-query-parameters" ng-if="methodInfo.queryParameters">
       <h3 class="raml-console-resource-heading-a">Query Parameters</h3>
-      <properties list="methodInfo.queryParameters"></properties>
+      <properties list="methodInfo.queryParameters" show-examples="true"></properties>
     </section>
 
     <section class="raml-console-resource-section" id="docs-query-string" ng-if="methodInfo.queryString">
@@ -40,12 +40,12 @@
 
       <section class="raml-console-resource-section raml-console-scheme-headers" ng-if="documentationSchemeSelected.describedBy.headers">
         <h4 class="raml-console-resource-heading-a">Headers</h4>
-        <properties list="documentationSchemeSelected.describedBy.headers"></properties>
+        <properties list="documentationSchemeSelected.describedBy.headers" show-examples="true"></properties>
       </section>
 
       <section class="raml-console-resource-section raml-console-scheme-query-parameters" ng-if="documentationSchemeSelected.describedBy.queryParameters">
         <h4 class="raml-console-resource-heading-a">Query Parameters</h4>
-        <properties list="documentationSchemeSelected.describedBy.queryParameters"></properties>
+        <properties list="documentationSchemeSelected.describedBy.queryParameters" show-examples="true"></properties>
       </section>
 
       <section class="raml-console-resource-section raml-console-scheme-responses" ng-if="documentationSchemeSelected.describedBy.responses">
