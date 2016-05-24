@@ -1,0 +1,34 @@
+#%RAML 1.0
+title: API with Library
+version: 1
+
+uses:
+  file-type: libraries/file-type.raml
+  person-schema: libraries/person-schema.raml
+
+schemas:
+  Player: |
+    {
+      "type": "object",
+      "properties": [
+        {
+          "name": "string"
+        }
+      ]
+    }
+
+/test:
+  get:
+    responses:
+      201:
+        body:
+          application/json:
+            type: file-type.File
+      203:
+        body:
+          application/json:
+            schema: person-schema.Person
+      204:
+        body:
+          application/json:
+            type: file-type.Schema

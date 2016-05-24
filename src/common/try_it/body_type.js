@@ -7,11 +7,23 @@
   };
 
   BodyType.prototype.fillWithExample = function() {
-    this.value = this.contentType.example;
+    var example;
+    if (this.contentType.examples) {
+      example = this.contentType.examples[0].value;
+    } else {
+      example = this.contentType.example;
+    }
+
+    if (typeof example === 'object') {
+      this.value = JSON.stringify(example);
+    } else {
+      this.value = example;
+    }
+
   };
 
   BodyType.prototype.hasExample = function() {
-    return !!this.contentType.example;
+    return !!this.contentType.example || !!this.contentType.examples;
   };
 
   BodyType.prototype.data = function() {

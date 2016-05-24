@@ -58,6 +58,22 @@
             return el.name !== param.name;
           });
         };
+
+        $scope.isValueProvided = function isValueProvided(value) {
+          if (!value) {
+            return false;
+          }
+
+          if (typeof value !== 'object') {
+            return true;
+          }
+
+          return Object.keys(value).filter(function (k) {
+            return $scope.isValueProvided(value[k]);
+          }).length > 0;
+        };
+
+        $scope.cleanupValue = RAML.Inspector.Properties.cleanupPropertyValue;
       }]
     };
   };

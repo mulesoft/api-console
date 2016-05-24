@@ -11,7 +11,7 @@
     });
   }
 
-  function rendererFor(template) {
+  function rendererFor(template, uriParameters, options) {
     return function renderer(context) {
       context = context || {};
 
@@ -23,7 +23,20 @@
       // });
 
       var templated = template.replace(templateMatcher, function(match, parameterName) {
-        return context[parameterName] || '';
+        if (context[parameterName]) {
+          if (typeof context[parameterName][0] !== 'object') {
+            return context[parameterName];
+          }
+          var tempValue = JSON.stringify(
+            RAML.Inspector.Properties.cleanupPropertyValue(context[parameterName][0]));
+
+          if (options.encodeURIComponent) {
+            tempValue = encodeURIComponent(tempValue);
+          }
+
+          return tempValue;
+        }
+        return '';
       });
 
       return templated;
@@ -31,7 +44,7 @@
   }
 
   RAML.Client.ParameterizedString = function(template, uriParameters, options) {
-    options = options || {parameterValues: {} };
+    options = angular.extend({ parameterValues: {} }, options);
     template = template.replace(templateMatcher, function(match, parameterName) {
       if (options.parameterValues[parameterName]) {
         return options.parameterValues[parameterName];
@@ -42,7 +55,7 @@
     this.parameters = uriParameters;
     this.templated = Object.keys(this.parameters || {}).length > 0;
     this.tokens = tokenize(template);
-    this.render = rendererFor(template, uriParameters);
+    this.render = rendererFor(template, uriParameters, options);
     this.toString = function() { return template; };
   };
 })();

@@ -1,0 +1,38 @@
+<div>
+  <div class="raml-console-resource-param" ng-repeat="property in listArray" ng-if="!property[0].isFromSecurityScheme && !isPattern(property[0].displayName)" ng-init="vm.isCollapsed = !!collapsible">
+    <div ng-init="type = getType(property[0])">
+      <h4 class="raml-console-resource-param-heading" style="position: relative">
+        <span ng-if="isCollapsible(type)" ng-click="vm.isCollapsed = !vm.isCollapsed" style="cursor: pointer">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}
+        <span ng-if="!hidePropertyDetails" class="raml-console-resource-param-instructional">{{parameterDocumentation(type)}}</span>
+        <span ng-if="hidePropertyDetails" class="raml-console-resource-param-instructional">{{typeDocumentation(type)}}</span>
+        <span class="raml-console-resource-param-instructional" ng-repeat="typeName in type.type">
+          <span ng-if="isNativeType(typeName)">{{typeName}}</span>
+          <span ng-if="isSchema(typeName)">Schema</span>
+          <span ng-if="!isNativeType(typeName) && !isSchema(typeName)">
+            <type type-name="typeName" hide-type-links="hideTypeLinks"></type>
+          </span>
+        </span>
+      </h4>
+
+      <div ng-if="!vm.isCollapsed">
+        <p ng-if="type.description" markdown="type.description" class="raml-console-marked-content"></p>
+
+        <p ng-if="type.example !== undefined && showExamples">
+          <span class="raml-console-resource-param-example"><b>Example:</b> {{type.example}}</span>
+        </p>
+
+        <pre ng-if="isSchema(type.type[0])" class="raml-console-resource-pre">
+          <code class="raml-console-hljs" hljs source="type.type[0]"></code>
+        </pre>
+
+        <properties
+          style="padding-left: 10px; margin-top: 11px;"
+          list="type.properties"
+          ng-if="type.properties"
+          hide-type-links="hideTypeLinks"
+          is-nested-property="true">
+        </properties>
+      </div>
+    </div>
+  </div>
+</div>

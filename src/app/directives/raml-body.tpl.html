@@ -1,0 +1,10 @@
+<div class="raml-console-schema-container" ng-if="isSchema">
+  <p><button ng-click="showSchema($event)" class="raml-console-resource-btn">Show Schema</button></p>
+  <pre class="raml-console-resource-pre raml-console-resource-pre-toggle">
+    <code class="raml-console-hljs" hljs source="getBeatifiedExample(definition)"></code>
+  </pre>
+</div>
+
+<div class="raml-console-schema-container" ng-if="isType">
+  <type-properties type="body"></type-properties>
+</div>

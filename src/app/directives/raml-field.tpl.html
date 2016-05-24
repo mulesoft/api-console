@@ -1,20 +1,55 @@
-<div>
-  <label for="{{param.id}}" class="raml-console-sidebar-label">{{param.displayName}} <a class="raml-console-sidebar-override" ng-if="canOverride(param)" ng-click="overrideField($event, param)">Override</a> <span class="raml-console-side-bar-required-field" ng-if="param.required">*</span><label ng-if="param.isFromSecurityScheme" class="raml-console-sidebar-security-label">from security scheme</label></label>
+<div style="position: relative;">
+  <label for="{{param.id}}" class="raml-console-sidebar-label">
+    {{param.displayName}}
+    <a class="raml-console-sidebar-override" ng-if="canOverride(param)" ng-click="overrideField($event, param)">Override</a>
+    <span class="raml-console-side-bar-required-field" ng-if="param.required">*</span>
+    <label ng-if="param.isFromSecurityScheme" class="raml-console-sidebar-security-label">from security scheme</label>
+    <span class="raml-console-resource-param-instructional">{{toString(param.type)}}</span>
+  </label>
 
-  <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param)">
-    <button tabindex="-1" class="raml-console-sidebar-input-reset" ng-click="reset(param)"><span class="raml-console-visuallyhidden">Reset field</span></button>
-    <span class="raml-console-sidebar-tooltip-flyout-left">
-      <span>Use example value</span>
+  <div ng-if="!param.properties && !isArray(param)">
+    <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param)">
+      <button tabindex="-1" class="raml-console-sidebar-input-reset" ng-click="reset(param)"><span class="raml-console-visuallyhidden">Reset field</span></button>
+      <span class="raml-console-sidebar-tooltip-flyout-left">
+        <span>Use example value</span>
+      </span>
     </span>
-  </span>
 
-  <select id="select_{{param.id}}" ng-if="isEnum(param)" name="param.id" class="raml-console-sidebar-input" ng-model="model[0]" style="margin-bottom: 0;" ng-change="onChange()">
-   <option ng-repeat="enum in unique(param.enum)" value="{{enum}}" ng-selected="{{param.example === enum}}">{{enum}}</option>
-  </select>
+    <select id="select_{{param.id}}" ng-if="isEnum(param)" name="param.id" class="raml-console-sidebar-input" ng-model="model[0]" style="margin-bottom: 0;" ng-change="onChange()">
+     <option ng-repeat="enum in unique(param.enum)" value="{{enum}}" ng-selected="{{param.example === enum}}">{{enum}}</option>
+    </select>
 
-  <input id="{{param.id}}" ng-hide="!isDefault(param)" class="raml-console-sidebar-input" ng-model="model[0]" ng-class="{'raml-console-sidebar-field-no-default': !hasExampleValue(param)}" validate="param" dynamic-name="param.id" ng-change="onChange()"/>
+    <input id="{{param.id}}" ng-hide="!isDefault(param)" class="raml-console-sidebar-input" ng-model="model[0]" ng-class="{'raml-console-sidebar-field-no-default': !hasExampleValue(param)}" validate="param" dynamic-name="param.id" ng-change="onChange()"/>
 
-  <input id="checkbox_{{param.id}}" ng-if="isBoolean(param)" class="raml-console-sidebar-input" type="checkbox" ng-model="model[0]" dynamic-name="param.id" ng-change="onChange()" />
+    <input id="checkbox_{{param.id}}" ng-if="isBoolean(param)" class="raml-console-sidebar-input" type="checkbox" ng-model="model[0]" dynamic-name="param.id" ng-change="onChange()" />
 
-  <span class="raml-console-field-validation-error"></span>
+    <span class="raml-console-field-validation-error"></span>
+  </div>
+
+  <div ng-if="!param.properties && isArray(param)" ng-init="model[0] = [[undefined]]">
+    <button class="raml-console-sidebar-add-btn" ng-click="addArrayElement(model[0])"></button>
+    <div ng-repeat="aModel in model[0] track by $index" style="position: relative;">
+      <button class="raml-console-sidebar-input-delete" ng-click="removeArrayElement(model[0], $index)"></button>
+      <span class="raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left" ng-if="hasExampleValue(param)">
+        <button tabindex="-1" class="raml-console-sidebar-input-reset" ng-click="reset(param)"><span class="raml-console-visuallyhidden">Reset field</span></button>
+        <span class="raml-console-sidebar-tooltip-flyout-left">
+          <span>Use example value</span>
+        </span>
+      </span>
+
+      <select id="select_{{param.id}}" ng-if="isEnum(param)" name="param.id" class="raml-console-sidebar-input" ng-model="aModel[0]" style="margin-bottom: 0;" ng-change="onChange()">
+       <option ng-repeat="enum in unique(param.enum)" value="{{enum}}" ng-selected="{{param.example === enum}}">{{enum}}</option>
+      </select>
+
+      <input id="{{param.id}}" ng-hide="!isDefault(param)" class="raml-console-sidebar-input" ng-model="aModel[0]" validate="param" dynamic-name="param.id" ng-change="onChange()"/>
+
+      <input id="checkbox_{{param.id}}" ng-if="isBoolean(param)" class="raml-console-sidebar-input" type="checkbox" ng-model="aModel[0]" dynamic-name="param.id" ng-change="onChange()" />
+
+      <span class="raml-console-field-validation-error"></span>
+    </div>
+  </div>
+
+  <div ng-if="param.properties" style="padding-left: 10px">
+    <raml-field ng-repeat="aParam in param.properties" context="context" type="type" param="aParam[0]" ng-init="model[0][aParam[0].name] = [undefined]" model="model[0][aParam[0].name]"></raml-field>
+  </div>
 </div>

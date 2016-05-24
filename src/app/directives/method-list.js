@@ -12,6 +12,29 @@
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
 
+          function beautify(body, contentType) {
+            if(contentType.indexOf('json') !== -1) {
+              body = vkbeautify.json(body, 2);
+            }
+
+            if(contentType.indexOf('xml') !== -1) {
+              body = vkbeautify.xml(body, 2);
+            }
+
+            return body;
+          }
+
+          $scope.getBeatifiedExample = function (value) {
+            var result = value;
+
+            try {
+              result = beautify(value, $scope.currentBodySelected);
+            }
+            catch (e) { }
+
+            return result;
+          };
+
           if ($scope.context.bodyContent) {
             var definitions = $scope.context.bodyContent.definitions;
 
@@ -19,7 +42,10 @@
               if (typeof definitions[key].reset !== 'undefined') {
                 definitions[key].reset($scope.methodInfo.body[key].formParameters);
               } else {
-                definitions[key].value = definitions[key].contentType.example;
+                definitions[key].fillWithExample();
+                if (definitions[key].value) {
+                  definitions[key].value = $scope.getBeatifiedExample(definitions[key].value);
+                }
               }
             });
           }
@@ -47,8 +73,11 @@
 
         function toUIModel (collection) {
           if(collection) {
-            Object.keys(collection).map(function (key) {
+            Object.keys(collection).forEach(function (key) {
               collection[key][0].id = key;
+              if (collection[key][0].properties) {
+                toUIModel(collection[key][0].properties);
+              }
             });
           }
         }

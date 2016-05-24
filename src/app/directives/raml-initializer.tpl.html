@@ -1,5 +1,5 @@
-<div ng-switch="ramlStatus">
-  <div class="raml-console-initializer-container raml-console-initializer-primary" ng-switch-default>
+<div class="raml-console-initializer-container raml-console-initializer-primary">
+  <div ng-if="!vm.isLoading && !vm.raml">
     <h1 class="raml-console-title">RAML Console</h1>
 
     <div class="raml-console-initializer-content-wrapper">
@@ -9,15 +9,17 @@
         </header>
 
         <div class="raml-console-initializer-row">
-          <p class="raml-console-initializer-input-container" ng-class="{ 'raml-console-initializer-input-container-error': errorMessage }">
-            <input id="ramlPath" autofocus class="raml-console-initializer-input raml-console-initializer-raml-field" ng-model="$parent.ramlUrl" ng-keypress="onKeyPressRamlUrl($event)" ng-change="onChange()">
-          </p>
-          <div class="raml-console-parser-error" ng-if="isLoadedFromUrl">
-            <span>{{errorMessage}}</span>
-          </div>
-          <div class="raml-console-initializer-action-group" align="right">
-            <button id="loadRamlFromUrl" class="raml-console-initializer-action raml-console-initializer-action-btn" ng-click="loadFromUrl()">Load from URL</button>
-          </div>
+          <form novalidate ng-submit="vm.loadFromUrl(vm.ramlUrl)">
+            <p class="raml-console-initializer-input-container" ng-class="{'raml-console-initializer-input-container-error': vm.isLoadedFromUrl && vm.error}">
+              <input id="ramlPath" autofocus class="raml-console-initializer-input raml-console-initializer-raml-field" ng-model="vm.ramlUrl">
+            </p>
+            <div class="raml-console-parser-error" ng-if="vm.isLoadedFromUrl && vm.error">
+              <span>{{ vm.error.message }}</span>
+            </div>
+            <div class="raml-console-initializer-action-group" align="right">
+              <button id="loadRamlFromUrl" class="raml-console-initializer-action raml-console-initializer-action-btn" type="submit">Load from URL</button>
+            </div>
+          </form>
         </div>
       </section>
 
@@ -27,34 +29,18 @@
         </header>
 
         <div class="raml-console-initializer-row">
-          <p class="raml-console-initializer-input-container">
-            <textarea id="raml" ui-codemirror="{
-              lineNumbers: true,
-              lineWrapping : true,
-              tabSize: 2,
-              mode: 'yaml',
-              gutters: ['CodeMirror-lint-markers'],
-              lint: true,
-              theme : 'raml-console'
-            }" ng-model="$parent.raml"></textarea>
+          <p class="raml-console-initializer-input-container" ng-class="{'raml-console-initializer-input-container-error': !vm.isLoadedFromUrl && vm.error}">
+            <textarea id="raml" ui-codemirror="vm.codeMirror" ng-model="vm.ramlString"></textarea>
           </p>
           <div class="raml-console-initializer-action-group" align="right">
-            <button id="loadRaml" class="raml-console-initializer-action raml-console-initializer-action-btn" ng-click="loadRaml()">Load RAML</button>
+            <button id="loadRaml" class="raml-console-initializer-action raml-console-initializer-action-btn" ng-click="vm.loadFromString(vm.ramlString)">Load RAML</button>
           </div>
         </div>
       </section>
     </div>
   </div>
 
-  <raml-console ng-switch-when="loaded"></raml-console>
+  <raml-console ng-if="vm.raml" raml="vm.raml"></raml-console>
 
-  <div ng-switch-when="loading">
-    <div class="raml-console-spinner">
-      <div class="raml-console-rect1"></div>
-      <div class="raml-console-rect2"></div>
-      <div class="raml-console-rect3"></div>
-      <div class="raml-console-rect4"></div>
-      <div class="raml-console-rect5"></div>
-    </div>
-  </div>
+  <raml-console-spinner ng-if="vm.isLoading"></raml-console-spinner>
 </div>

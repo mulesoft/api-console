@@ -57,6 +57,32 @@
   };
 
   /**
+   * Check if the value is a JSON string.
+   *
+   * @param  {String}  check
+   * @return {Boolean}
+   */
+  var isJSON = function (check) {
+    try {
+      JSON.parse(check);
+      return true;
+    } catch(e) {
+      return false;
+    }
+  };
+
+  var isUnion = function (check, key, object, configs) {
+    var any = false;
+    configs.forEach(function (config) {
+      config.unionTypes.forEach(function (type) {
+        any = any || TYPES[type](check, key, object, configs);
+      });
+    });
+
+    return any;
+  };
+
+  /**
    * Check a number is not smaller than the minimum.
    *
    * @param  {Number}   min
@@ -250,7 +276,7 @@
 
         // Check all the types match. If they don't, attempt another validation.
         var isType = values.every(function (value) {
-          return types[validation[0]](value, key, object);
+          return types[validation[0]](value, key, object, configs);
         });
 
         // Skip to the next check if not all types match.
@@ -273,6 +299,64 @@
     };
   };
 
+  function isNativeType(typeName) {
+    typeName = typeName.replace('[]', '');
+    var nativeTypes = [
+      'object',
+      'string',
+      'number',
+      'integer',
+      'boolean',
+      'date-only',
+      'time-only',
+      'datetime-only',
+      'datetime',
+      'file',
+      'array'
+    ];
+    return nativeTypes.indexOf(typeName) !== -1;
+  }
+
+  function convertType(config) {
+    var newConfig = {};
+    // Clone config object.
+    Object.keys(config).forEach(function (key) {
+      newConfig[key] = config[key];
+    });
+
+    if (Array.isArray(newConfig.type)) {
+      newConfig.type = newConfig.type.map(function (aType) {
+        var newType = aType.replace('[]', '');
+        var parts = aType.split('|');
+        if (parts.length > 1) {
+          newType = 'union';
+          newConfig.unionTypes = parts.map(function (part) {
+            part = part.trim();
+            return !isNativeType(part) ? 'object' : part;
+          });
+        } else {
+          newType = !isNativeType(newType) ? 'object' : newType;
+        }
+        return newType;
+      });
+    }
+    return newConfig;
+  }
+
+  var TYPES = {
+    date:            isDate,
+    'date-only':     isDate,
+    'time-only':     isDate,
+    'datetime-only': isDate,
+    datetime:        isDate,
+    number:          isNumber,
+    integer:         isInteger,
+    'boolean':       isBoolean,
+    string:          isString,
+    object:          isJSON,
+    union:           isUnion
+  };
+
   /**
    * Every time you require the module you're expected to call it as a function
    * to create a new instance. This is to ensure two modules can't make competing
@@ -292,7 +376,7 @@
 
       // Convert all parameters into validation functions.
       Object.keys(schema).forEach(function (param) {
-        var config = schema[param];
+        var config = convertType(schema[param]);
         var rules  = validate.RULES;
         var types  = validate.TYPES;
 
@@ -332,13 +416,7 @@
      *
      * @type {Object}
      */
-    validate.TYPES = {
-      date:    isDate,
-      number:  isNumber,
-      integer: isInteger,
-      "boolean": isBoolean,
-      string:  isString
-    };
+    validate.TYPES = TYPES;
 
     /**
      * Provide overridable validation of parameters.
@@ -350,7 +428,7 @@
       maximum:   isMaximum,
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
-      "enum":      isEnum,
+      'enum':    isEnum,
       pattern:   isPattern
     };
 

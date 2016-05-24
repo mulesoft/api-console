@@ -1,18 +1,20 @@
 (function () {
   'use strict';
 
-  RAML.Directives.ramlField = function() {
+  RAML.Directives.ramlField = function(RecursionHelper) {
     return {
       restrict: 'E',
       templateUrl: 'directives/raml-field.tpl.html',
       replace: true,
       scope: {
+        context: '=',
+        type: '=',
         model: '=',
         param: '='
       },
       controller: ['$scope', function($scope) {
-        var bodyContent = $scope.$parent.context.bodyContent;
-        var context     = $scope.$parent.context[$scope.$parent.type];
+        var bodyContent = $scope.context.bodyContent;
+        var context     = $scope.context[$scope.type];
 
         if (bodyContent) {
           context = context || bodyContent.definitions[bodyContent.selected];
@@ -25,6 +27,18 @@
             context.values[definition.id][0] = definition['enum'][0];
           }
         });
+
+        $scope.isArray = function (param) {
+          return param.type[0].indexOf('[]') !== -1;
+        };
+
+        $scope.addArrayElement = function (model) {
+          model.push([undefined]);
+        };
+
+        $scope.removeArrayElement = function (model, index) {
+          model.splice(index, 1);
+        };
 
         $scope.canOverride = function (definition) {
           return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
@@ -48,12 +62,12 @@
             $this.text('Cancel override');
           } else {
             definition.overwritten = false;
-            $scope.$parent.context[$scope.$parent.type].values[definition.id][0] = definition['enum'][0];
+            $scope.context[$scope.type].values[definition.id][0] = definition['enum'][0];
           }
         };
 
         $scope.onChange = function () {
-          $scope.$parent.context.forceRequest = false;
+          $scope.context.forceRequest = false;
         };
 
         $scope.isDefault = function (definition) {
@@ -69,22 +83,29 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : typeof value.example !== 'undefined' ? true : false;
+          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined') ? true : false;
         };
 
         $scope.reset = function (param) {
-          var type = $scope.$parent.type || 'bodyContent';
+          var type = $scope.type || 'bodyContent';
           var info = {};
 
           info[param.id] = [param];
 
-          $scope.$parent.context[type].reset(info, param.id);
+          $scope.context[type].reset(info, param.id);
         };
 
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
-      }]
+
+        $scope.toString = function toString(value) {
+          return Array.isArray(value) ? value.join(', ') : value;
+        };
+      }],
+      compile: function (element) {
+        return RecursionHelper.compile(element);
+      }
     };
   };
 

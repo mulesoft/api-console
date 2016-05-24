@@ -29,7 +29,7 @@
   var NamedParameters = function(plain, parameterized) {
     this.plain = copy(plain);
     this.parameterized = parameterized;
-    Object.keys(this.plain).map(function (key) {
+    Object.keys(this.plain).forEach(function (key) {
       var data = this.plain[key].definitions[0];
 
       if (typeof data['enum'] !== 'undefined') {
@@ -74,7 +74,11 @@
               info[key][0].example = info[key][0].example.toUTCString();
             }
 
-            that.values[key][0] = info[key][0].example;
+            if (info[key][0].example) {
+              that.values[key][0] = info[key][0].example;
+            } else if (info[key][0].examples && info[key][0].examples[0] && info[key][0].examples[0].value) {
+              that.values[key][0] = info[key][0].examples[0].value;
+            }
           }
         }
       });

@@ -97,6 +97,12 @@ function Resource (poName) {
 
     expect(input.getAttribute('value')).toEqual(defaultValue);
   };
+
+  this.ifShowsResponseExample = function (resource, expectedValue) {
+    var examples = this.po.getReponseExamples(resource);
+
+    expect(examples.getText()).toEqual(expectedValue);
+  };
 }
 
 

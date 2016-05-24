@@ -295,10 +295,10 @@
   function ClientOAuth2 (options) {
     this.options = options;
 
-    this.code        = new CodeFlow(this);
-    this.token       = new TokenFlow(this);
-    this.owner       = new OwnerFlow(this);
-    this.credentials = new CredentialsFlow(this);
+    this.code        = this['authorization_code'] = new CodeFlow(this);
+    this.token       = this.implicit              = new TokenFlow(this);
+    this.owner       = this.password              = new OwnerFlow(this);
+    this.credentials = this['client_credentials'] = new CredentialsFlow(this);
   }
 
   /**

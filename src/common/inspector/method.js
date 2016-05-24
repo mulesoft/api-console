@@ -3,20 +3,6 @@
 
   var PARAMETER = /\{\*\}/;
 
-  function ensureArray(value) {
-    if (value === undefined || value === null) {
-      return;
-    }
-
-    return (value instanceof Array) ? value : [ value ];
-  }
-
-  function normalizeNamedParameters(parameters) {
-    Object.keys(parameters || {}).forEach(function(key) {
-      parameters[key] = ensureArray(parameters[key]);
-    });
-  }
-
   function wrapWithParameterizedHeader(name, definitions) {
     return definitions.map(function(definition) {
       return RAML.Inspector.ParameterizedHeader.fromRAML(name, definition);
@@ -47,12 +33,12 @@
   function processBody(body) {
     var content = body['application/x-www-form-urlencoded'];
     if (content) {
-      normalizeNamedParameters(content.formParameters);
+      RAML.Inspector.Properties.normalizeNamedParameters(content.formParameters);
     }
 
     content = body['multipart/form-data'];
     if (content) {
-      normalizeNamedParameters(content.formParameters);
+      RAML.Inspector.Properties.normalizeNamedParameters(content.formParameters);
     }
   }
 
@@ -60,7 +46,7 @@
     Object.keys(responses).forEach(function(status) {
       var response = responses[status];
       if (response) {
-        normalizeNamedParameters(response.headers);
+        RAML.Inspector.Properties.normalizeNamedParameters(response.headers);
       }
     });
   }
@@ -135,8 +121,8 @@
       method.responseCodes = Object.keys(method.responses || {});
       method.securitySchemes = securitySchemesExtractor(securitySchemes);
       method.allowsAnonymousAccess = allowsAnonymousAccess;
-      normalizeNamedParameters(method.headers);
-      normalizeNamedParameters(method.queryParameters);
+      RAML.Inspector.Properties.normalizeNamedParameters(method.headers);
+      RAML.Inspector.Properties.normalizeNamedParameters(method.queryParameters);
 
       method.headers = filterHeaders(method.headers);
       processBody(method.body || {});

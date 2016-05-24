@@ -37,6 +37,10 @@
   border: 1px solid #c6cada;
 }
 
+.initializer-input-container-error > div {
+  border: 1px solid #ff0000 !important;
+}
+
 .initializer-subheader {
   margin-top: 10px;
   margin-right: 16px;

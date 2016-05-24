@@ -63,19 +63,15 @@ RAML.Inspector = (function() {
       return aOrder > bOrder ? 1 : -1;
     });
 
-    clone.uriParametersForDocumentation = pathSegments
+    clone.uriParametersForDocumentation = RAML.Inspector.Properties.normalizeNamedParameters(pathSegments
       .map(function(segment) { return segment.parameters; })
       .filter(function(params) { return !!params; })
       .reduce(function(accum, parameters) {
         for (var key in parameters) {
-          var parameter = parameters[key];
-          if (parameter) {
-            parameter = (parameter instanceof Array) ? parameter : [ parameter ];
-          }
-          accum[key] = parameter;
+          accum[key] = parameters[key];
         }
         return accum;
-      }, {});
+      }, {}));
 
     if (Object.keys(clone.uriParametersForDocumentation).length === 0) {
       clone.uriParametersForDocumentation = null;
