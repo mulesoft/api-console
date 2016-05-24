@@ -17,6 +17,10 @@
       <div ng-if="!vm.isCollapsed">
         <p ng-if="type.description" markdown="type.description" class="raml-console-marked-content"></p>
 
+        <p ng-if="type.example !== undefined && showExamples">
+          <span class="raml-console-resource-param-example"><b>Example:</b> {{type.example}}</span>
+        </p>
+
         <pre ng-if="isSchema(type.type[0])" class="raml-console-resource-pre">
           <code class="raml-console-hljs" hljs source="type.type[0]"></code>
         </pre>

@@ -26,7 +26,7 @@ securitySchemes:
     settings:
       authorizationUri: https://acme.com/login/oauth/authorize
       accessTokenUri: https://acme.com/login/oauth/access_token
-      authorizationGrants: [ code ]
+      authorizationGrants: [ authorization_code ]
 types:
   Person:
     type: object
@@ -87,9 +87,11 @@ types:
         type: string
         required: false
         enum: ["one", "two", "three"]
+        example: one
       animal:
         type: integer | Developer
         description: The kind of animal
+        example: 1
       car:
         type: object
         properties:
