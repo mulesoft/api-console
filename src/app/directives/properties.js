@@ -34,6 +34,7 @@
             newType.type = newType.items.type.map(function (aType) {
               return aType + '[]';
             });
+            newType.properties = newType.items.properties;
           }
 
           return newType;
