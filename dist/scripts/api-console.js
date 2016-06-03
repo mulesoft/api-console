@@ -2708,6 +2708,11 @@
       $q,
       $window
     ) {
+      var jsonOptions=  {
+        serializeMetadata: false,
+        dumpSchemaContents: true
+      };
+
       return {
         load:     toQ(load),
         loadPath: toQ(loadPath)
@@ -2775,13 +2780,13 @@
             var apiJSON;
 
             api = api.expand ? api.expand() : api;
-            apiJSON = api.toJSON();
+            apiJSON = api.toJSON(jsonOptions);
             if (api.uses && api.uses()) {
               apiJSON.uses = {};
               api.uses().forEach(function (usesItem) {
                 var libraryAST = usesItem.ast();
                 libraryAST = libraryAST.expand ? libraryAST.expand() : libraryAST;
-                apiJSON.uses[usesItem.key()] = libraryAST.toJSON();
+                apiJSON.uses[usesItem.key()] = libraryAST.toJSON(jsonOptions);
               });
             }
 
