@@ -15,6 +15,7 @@
       };
     })
     .controller('RamlConsoleLoaderController', function RamlConsoleLoaderController(
+      $attrs,
       $scope,
       $window,
       ramlParser
@@ -26,15 +27,22 @@
         raml:    void(0),
         src:     $scope.src
       };
-
+      
       // ---
 
       (function activate() {
+        if (!$scope.vm.options) {
+          $scope.vm.options = {};
+          Object.keys($attrs.$attr).forEach(function (k, v){
+            $scope.vm.options[k] = true;
+          });
+        }
+        
         loadFromUrl($scope.vm.src);
       })();
 
       // ---
-
+      
       function loadFromUrl(url) {
         $scope.vm.raml   = void(0);
         $scope.vm.loaded = false;
