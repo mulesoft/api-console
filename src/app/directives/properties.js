@@ -53,7 +53,7 @@
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
 
         $scope.isPattern = function (propertyName) {
-          return propertyName.match(PATTERN_PATTERN);
+          return propertyName && propertyName.match ? propertyName.match(PATTERN_PATTERN): true;
         };
 
         $scope.isSchema = RAML.Inspector.Types.isSchema;
