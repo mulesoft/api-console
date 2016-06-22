@@ -26,7 +26,10 @@
     "url": "https://github.com/mulesoft/api-console/issues"
   },
   "homepage": "https://github.com/mulesoft/api-console",
-  "dependencies": {},
+  "dependencies": {
+    "grunt-karma": "^0.10.1",
+    "karma": "^0.13.22"
+  },
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-angular-templates": "~0.5.7",
