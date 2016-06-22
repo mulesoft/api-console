@@ -1,0 +1,48 @@
+#%RAML 1.0
+title: Using XML and JSON Schema
+
+schemas: # can also be used with 'types'
+  PersonInline: |
+    {
+      "title": "Person Schema",
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "age": {
+          "description": "Age in years",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["firstName", "lastName"]
+    }
+  PersonInclude: !include person.json
+
+/person:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: PersonInclude # can also be used with 'type'
+  post:
+    body:
+      application/json:
+        schema: | # can also be used with 'type'
+          {
+            "title": "Body Declaration Schema",
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              }
+            }
+          }
