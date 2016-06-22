@@ -3,6 +3,7 @@ node_modules
 .sass-cache
 .idea
 .idea/
+dist
 selenium
 vendor/bower_components
 bower_components
