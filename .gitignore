@@ -6,3 +6,6 @@ node_modules
 selenium
 vendor/bower_components
 bower_components
+dist
+.project
+.settings
