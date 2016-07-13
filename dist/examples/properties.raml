@@ -1,0 +1,169 @@
+#%RAML 1.0
+title: API with Types
+baseUri: /media
+
+securitySchemes:
+  oauth_2_0:
+    type: OAuth 2.0
+    describedBy:
+      headers:
+        Authorization:
+          type: string
+        car:
+          type: object
+          properties:
+            wheels:
+              type: object
+              properties:
+                prop1: string
+                prop2: number
+      queryParameters:
+        access_token:
+          type: string
+      responses:
+        404:
+          description: Unauthorized
+    settings:
+      authorizationUri: https://acme.com/login/oauth/authorize
+      accessTokenUri: https://acme.com/login/oauth/access_token
+      authorizationGrants: [ authorization_code ]
+types:
+  Person:
+    type: object
+    properties:
+      firstname:
+        type: string
+        description: test
+      lastname: string
+      addresses: string[]
+      age: number
+  User:
+    type: Person
+    properties:
+      id:
+        type: number
+      department: Department[]
+  Developer:
+    type: User
+    properties:
+      github: string
+  Department:
+    type: object
+    properties:
+      name: string
+    example:
+      name: Engineering
+  Team:
+    type: object
+    properties:
+      manager: CEO
+      employees: Developer[]
+  CEO:
+    type: User | Developer
+  Planes:
+    type: string[]
+
+/test:
+  securedBy: [ null, oauth_2_0 ]
+  get:
+    queryString:
+      type: Person
+
+/users/{org}/{id}:
+  uriParameters:
+    org: string
+    id: number
+  get:
+    headers:
+      developer: string
+      test: string
+      animal: string
+      car: string
+
+    queryParameters:
+      developer:
+        type: Person[]
+      test:
+        type: string
+        required: false
+        enum: ["one", "two", "three"]
+        example: one
+      animal:
+        type: integer | Developer
+        description: The kind of animal
+        example: 1
+      car:
+        type: object
+        properties:
+          wheels:
+            type: string[]
+          doors:
+            type: integer[]
+            required: false
+
+    body:
+      application/json:
+        type: object
+        properties:
+          developer: string
+          test: string
+          animal: string
+          car: string
+
+    responses:
+      200:
+        headers:
+          developer:
+            type: Person[]
+          test:
+            type: string
+            required: false
+            enum: ["one", "two", "three"]
+          animal:
+            type: Person | Developer
+            description: The kind of animal
+          car:
+            type: object
+            properties:
+              wheels:
+                type: object
+                properties:
+                  prop1: string
+                  prop2: number
+        body:
+          application/json:
+            type: Person
+
+/info:
+  post:
+    queryString:
+      type: object
+      properties:
+        developer:
+          type: Person[]
+        test:
+          type: string
+          required: false
+          enum: ["one", "two", "three"]
+
+    body:
+      application/json:
+        type: object
+        properties:
+          developer:
+            type: Person[]
+          test:
+            type: string
+            required: false
+            enum: ["one", "two", "three"]
+          animal:
+            type: Person | Developer
+            description: The kind of animal
+          car:
+            type: object
+            properties:
+              wheels:
+                type: object
+                properties:
+                  prop1: string
+                  prop2: number
