@@ -13,7 +13,7 @@
     "angular-sanitize": "~1.3.17",
     "angular-ui-codemirror": "0.1.6",
     "codemirror": "~3.15.0",
-    "crypto-js": "https://crypto-js.googlecode.com/files/CryptoJS%20v3.1.2.zip",
+    "crypto-js": "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/crypto-js/CryptoJS%20v3.1.2.zip",
     "FileSaver": "eligrey/FileSaver.js#683f689326c231002164621dc8a6451df4e86e8a",
     "highlight-js": "~7.0.1",
     "jquery": "~2.1.1",
