@@ -81,6 +81,12 @@ A redirect URI for OAuth 2 can be provided in a similar manner:
 
 Given the above, OAuth 2 requests would redirect back to that URL.
 
+### Markdown line breaks
+
+Add the following in a similar manner as proxying or OAuth 2.0 to ignore markdown line breaks as they are:
+
+    RAML.Settings.marked.breaks = false
+
 ### Single View Mode
 
 In *Single View* mode you will be able to see only documentation or try-it.
