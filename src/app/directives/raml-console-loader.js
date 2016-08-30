@@ -15,6 +15,7 @@
       };
     })
     .controller('RamlConsoleLoaderController', function RamlConsoleLoaderController(
+      $attrs,
       $scope,
       $window,
       ramlParser
@@ -30,6 +31,13 @@
       // ---
 
       (function activate() {
+        if (!$scope.vm.options) {
+          $scope.vm.options = {};
+          Object.keys($attrs.$attr).forEach(function (k){
+            $scope.vm.options[k] = true;
+          });
+        }
+
         loadFromUrl($scope.vm.src);
       })();
 

@@ -8,6 +8,10 @@
   }
 
   function isNativeType(typeName) {
+    if (!typeName) {
+      return false;
+    }
+    
     typeName = cleanupTypeName(typeName);
     var nativeTypes = [
       'object',
@@ -114,6 +118,7 @@
   }
 
   function getTypeInfo(typeName) {
+    typeName = typeName || '';
     var types = typeName.split('|');
     var typeInfo = {};
 

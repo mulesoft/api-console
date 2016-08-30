@@ -30,7 +30,7 @@ There are two ways you can include the console: directly, or within an iframe. T
         </body>
 
 2. Include the `<raml-console>` directive, specifying your RAML as a `src` attribute.
-       <raml-console src='path/to/your/api.raml'></raml-console>
+       <raml-console-loader src="path/to/your/api.raml"></raml-console-loader>
 
 3. Please ensure that the container for the console directive provides the CSS properties `overflow: auto` and `position: relative`.
 
@@ -85,43 +85,43 @@ Given the above, OAuth 2 requests would redirect back to that URL.
 
 In *Single View* mode you will be able to see only documentation or try-it. 
 
-    <raml-console src="path-to-raml" single-view></raml-console>
+    <raml-console-loader src="path-to-raml" single-view></raml-console-loader>
 
 ### Theme Switcher
 
 *Theme Switcher* can be disable if needed by adding the following setting:
 
-    <raml-console src="path-to-raml" disable-theme-switcher></raml-console>
+    <raml-console-loader src="path-to-raml" disable-theme-switcher></raml-console-loader>
 
 ### Disabling Client Generator
 
 *Raml client generator* can be disable if needed by adding the following setting:
 
-    <raml-console src="path-to-raml" disable-raml-client-generator></raml-console>
+    <raml-console-loader src="path-to-raml" disable-raml-client-generator></raml-console-loader>
 
 ### Resources collapsed
 
 *Resources* can be collapsed if needed by adding the following setting:
 
-    <raml-console src="path-to-raml" resources-collapsed></raml-console>
+    <raml-console-loader src="path-to-raml" resources-collapsed></raml-console-loader>
 
 ### Documentation collapsed
 
 *Documentation* can be collapsed if needed by adding the following setting:
 
-    <raml-console src="path-to-raml" documentation-collapsed></raml-console>
+    <raml-console-loader src="path-to-raml" documentation-collapsed></raml-console-loader>
 
 ### Allowing Unsafe Markdown
 
 *Unsafe Markdown* will be disable by default, if you want to allow unsafe content check the following example:
 
-    <raml-console src="path-to-raml" allow-unsafe-markdown></raml-console>    
+    <raml-console-loader src="path-to-raml" allow-unsafe-markdown></raml-console-loader>
 
 ### Disabling Try-it
 
 *Try-it* will be enable by default, if you want to disable Try-it you can do that by adding the following setting:
 
-    <raml-console src="path-to-raml" disable-try-it></raml-console>    
+    <raml-console-loader src="path-to-raml" disable-try-it></raml-console-loader>
 
 ## Development
 

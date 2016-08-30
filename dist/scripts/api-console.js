@@ -782,7 +782,7 @@
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
 
         $scope.isPattern = function (propertyName) {
-          return propertyName.match(PATTERN_PATTERN);
+          return propertyName && propertyName.match ? propertyName.match(PATTERN_PATTERN): true;
         };
 
         $scope.isSchema = RAML.Inspector.Types.isSchema;
@@ -1082,6 +1082,7 @@
       };
     })
     .controller('RamlConsoleLoaderController', function RamlConsoleLoaderController(
+      $attrs,
       $scope,
       $window,
       ramlParser
@@ -1097,6 +1098,13 @@
       // ---
 
       (function activate() {
+        if (!$scope.vm.options) {
+          $scope.vm.options = {};
+          Object.keys($attrs.$attr).forEach(function (k){
+            $scope.vm.options[k] = true;
+          });
+        }
+
         loadFromUrl($scope.vm.src);
       })();
 
@@ -4219,6 +4227,10 @@ RAML.Inspector = (function() {
   }
 
   function isNativeType(typeName) {
+    if (!typeName) {
+      return false;
+    }
+    
     typeName = cleanupTypeName(typeName);
     var nativeTypes = [
       'object',
@@ -4325,6 +4337,7 @@ RAML.Inspector = (function() {
   }
 
   function getTypeInfo(typeName) {
+    typeName = typeName || '';
     var types = typeName.split('|');
     var typeInfo = {};
 
