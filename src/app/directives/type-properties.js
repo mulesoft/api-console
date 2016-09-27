@@ -9,11 +9,11 @@
       scope: {
         type: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.properties = {
           body: [$scope.type]
         };
-      }
+      }]
     };
   };
 

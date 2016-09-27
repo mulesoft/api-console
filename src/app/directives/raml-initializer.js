@@ -10,10 +10,8 @@
         controller:  'RamlInitializerController'
       };
     })
-    .controller('RamlInitializerController', function RamlInitializerController(
-      $scope,
-      $window,
-      ramlParser
+    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
+      $scope, $window, ramlParser
     ) {
       $scope.vm = {
         codeMirror: {
@@ -95,6 +93,6 @@
           });
         };
       }
-    })
+    }])
   ;
 })();
