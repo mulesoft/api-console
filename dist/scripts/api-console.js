@@ -743,7 +743,8 @@
         isNestedProperty: '=',
         hideTypeLinks: '=',
         hidePropertyDetails: '=',
-        showExamples: '='
+        showExamples: '=',
+        showSecuritySchemaProperties: '='
       },
       controller: function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
@@ -751,7 +752,7 @@
             return $scope.list[key];
           });
 
-          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
+          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.listArray);
         } else {
           $scope.listArray = $scope.list;
         }
@@ -6517,12 +6518,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <section class=\"raml-console-resource-section raml-console-scheme-headers\" ng-if=\"documentationSchemeSelected.describedBy.headers\">\n" +
     "        <h4 class=\"raml-console-resource-heading-a\">Headers</h4>\n" +
-    "        <properties list=\"documentationSchemeSelected.describedBy.headers\" show-examples=\"true\"></properties>\n" +
+    "        <properties list=\"documentationSchemeSelected.describedBy.headers\" show-security-schema-properties=\"true\" show-examples=\"true\"></properties>\n" +
     "      </section>\n" +
     "\n" +
     "      <section class=\"raml-console-resource-section raml-console-scheme-query-parameters\" ng-if=\"documentationSchemeSelected.describedBy.queryParameters\">\n" +
     "        <h4 class=\"raml-console-resource-heading-a\">Query Parameters</h4>\n" +
-    "        <properties list=\"documentationSchemeSelected.describedBy.queryParameters\" show-examples=\"true\"></properties>\n" +
+    "        <properties list=\"documentationSchemeSelected.describedBy.queryParameters\" show-security-schema-properties=\"true\" show-examples=\"true\"></properties>\n" +
     "      </section>\n" +
     "\n" +
     "      <section class=\"raml-console-resource-section raml-console-scheme-responses\" ng-if=\"documentationSchemeSelected.describedBy.responses\">\n" +
@@ -6722,7 +6723,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/properties.tpl.html',
     "<div>\n" +
-    "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in listArray\" ng-if=\"!property[0].isFromSecurityScheme && !isPattern(property[0].displayName)\" ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
+    "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in listArray\"\n" +
+    "       ng-if=\"(showSecuritySchemaProperties || !property[0].isFromSecurityScheme) && !isPattern(property[0].displayName)\"\n" +
+    "       ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
     "    <div ng-init=\"type = getType(property[0])\">\n" +
     "      <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +
     "        <span ng-if=\"isCollapsible(type)\" ng-click=\"vm.isCollapsed = !vm.isCollapsed\" style=\"cursor: pointer\">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}\n" +
