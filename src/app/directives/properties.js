@@ -14,7 +14,8 @@
         isNestedProperty: '=',
         hideTypeLinks: '=',
         hidePropertyDetails: '=',
-        showExamples: '='
+        showExamples: '=',
+        showSecuritySchemaProperties: '='
       },
       controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
@@ -22,7 +23,7 @@
             return $scope.list[key];
           });
 
-          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
+          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.listArray);
         } else {
           $scope.listArray = $scope.list;
         }
