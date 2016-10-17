@@ -771,6 +771,15 @@
           return newType;
         };
 
+        var isPattern = function (propertyName) {
+          return propertyName.match(PATTERN_PATTERN);
+        };
+
+        $scope.isPropertyVisible = function(property) {
+          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme)
+            && !isPattern(property[0].displayName);
+        };
+
         $scope.mergeType = function (type) {
           var newType = angular.copy(type);
 
@@ -781,10 +790,6 @@
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
-
-        $scope.isPattern = function (propertyName) {
-          return propertyName.match(PATTERN_PATTERN);
-        };
 
         $scope.isSchema = RAML.Inspector.Types.isSchema;
 
@@ -6514,7 +6519,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <li class=\"raml-console-documentation-scheme\" ng-class=\"{'raml-console-is-active':isSchemeSelected(value)}\" ng-click=\"selectDocumentationScheme(value)\" ng-repeat=\"(key, value) in securitySchemes\">{{value.name}}</li>\n" +
     "      </ol>\n" +
     "\n" +
-    "      <p ng-if\"documentationSchemeSelected.description\" markdown=\"documentationSchemeSelected.description\" class=\"raml-console-marked-content\"></p>\n" +
+    "      <p ng-if=\"documentationSchemeSelected.description\" markdown=\"documentationSchemeSelected.description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "      <section class=\"raml-console-resource-section raml-console-scheme-headers\" ng-if=\"documentationSchemeSelected.describedBy.headers\">\n" +
     "        <h4 class=\"raml-console-resource-heading-a\">Headers</h4>\n" +
@@ -6724,7 +6729,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
   $templateCache.put('directives/properties.tpl.html',
     "<div>\n" +
     "  <div class=\"raml-console-resource-param\" ng-repeat=\"property in listArray\"\n" +
-    "       ng-if=\"(showSecuritySchemaProperties || !property[0].isFromSecurityScheme) && !isPattern(property[0].displayName)\"\n" +
+    "       ng-if=\"isPropertyVisible(property)\"\n" +
     "       ng-init=\"vm.isCollapsed = !!collapsible\">\n" +
     "    <div ng-init=\"type = getType(property[0])\">\n" +
     "      <h4 class=\"raml-console-resource-param-heading\" style=\"position: relative\">\n" +

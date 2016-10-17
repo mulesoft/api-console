@@ -42,6 +42,15 @@
           return newType;
         };
 
+        var isPattern = function (propertyName) {
+          return propertyName.match(PATTERN_PATTERN);
+        };
+
+        $scope.isPropertyVisible = function(property) {
+          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme)
+            && !isPattern(property[0].displayName);
+        };
+
         $scope.mergeType = function (type) {
           var newType = angular.copy(type);
 
@@ -52,10 +61,6 @@
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
-
-        $scope.isPattern = function (propertyName) {
-          return propertyName.match(PATTERN_PATTERN);
-        };
 
         $scope.isSchema = RAML.Inspector.Types.isSchema;
 

@@ -36,7 +36,7 @@
         <li class="raml-console-documentation-scheme" ng-class="{'raml-console-is-active':isSchemeSelected(value)}" ng-click="selectDocumentationScheme(value)" ng-repeat="(key, value) in securitySchemes">{{value.name}}</li>
       </ol>
 
-      <p ng-if"documentationSchemeSelected.description" markdown="documentationSchemeSelected.description" class="raml-console-marked-content"></p>
+      <p ng-if="documentationSchemeSelected.description" markdown="documentationSchemeSelected.description" class="raml-console-marked-content"></p>
 
       <section class="raml-console-resource-section raml-console-scheme-headers" ng-if="documentationSchemeSelected.describedBy.headers">
         <h4 class="raml-console-resource-heading-a">Headers</h4>
