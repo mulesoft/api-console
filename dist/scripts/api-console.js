@@ -132,6 +132,33 @@
         $scope.markedOptions = RAML.Settings.marked;
         $scope.documentationSchemeSelected = defaultSchema;
 
+        function mergeResponseCodes(methodCodes, schemas) {
+          var codes = {};
+
+          // Copy all method codes
+          Object.keys(methodCodes).forEach(function (code) {
+            if (methodCodes.hasOwnProperty(code)) { codes[code] = methodCodes[code]; }
+          });
+
+          // Copy schema's code that are not present in the method
+          Object.keys(schemas).forEach(function (key) {
+            if (schemas.hasOwnProperty(key)) { copyToCodesIfNotPresent(codes, schemas[key].describedBy.responses) }
+          });
+
+          return codes;
+        }
+
+        function copyToCodesIfNotPresent(codes, schemaCodes) {
+          Object.keys(schemaCodes).forEach(function (code) {
+            if (schemaCodes.hasOwnProperty(code) && !codes.hasOwnProperty(code)) {
+              codes[code] = schemaCodes[code];
+            }
+          });
+        }
+        $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
+        $scope.fullResponseCodes = Object.keys($scope.fullResponses);
+
+
         $scope.isSchemeSelected = function isSchemeSelected(scheme) {
           return scheme.id === $scope.documentationSchemeSelected.id;
         };
@@ -156,13 +183,13 @@
 
         $scope.currentStatusCode = '200';
 
-        if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
-          $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
+        if ($scope.fullResponseCodes && $scope.fullResponseCodes.length > 0) {
+          $scope.currentStatusCode = $scope.fullResponseCodes[0];
         }
 
         $scope.$on('resetData', function() {
-          if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
-            $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
+          if ($scope.fullResponseCodes && $scope.fullResponseCodes.length > 0) {
+            $scope.currentStatusCode = $scope.fullResponseCodes[0];
           }
         });
 
@@ -6580,7 +6607,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <!-- Response -->\n" +
-    "  <div ng-if=\"methodInfo.responseCodes\">\n" +
+    "  <div ng-if=\"fullResponseCodes\">\n" +
     "    <header class=\"raml-console-resource-header\">\n" +
     "      <h3 class=\"raml-console-resource-head\">\n" +
     "        Response\n" +
@@ -6589,39 +6616,39 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div class=\"raml-console-resource-response-jump\">\n" +
     "      <ul class=\"raml-console-resource-menu\">\n" +
-    "        <li class=\"raml-console-resource-btns raml-console-resource-menu-item\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
+    "        <li class=\"raml-console-resource-btns raml-console-resource-menu-item\" ng-repeat=\"code in fullResponseCodes\">\n" +
     "          <button ng-click=\"showCodeDetails(code)\" class=\"raml-console-resource-btn raml-console-resource-menu-button raml-console-resource-menu-btn-{{getColorCode(code)}}\" ng-class=\"{ 'raml-console-button-is-active': isActiveCode(code) }\" href=\"#code{{code}}\">{{code}}</button>\n" +
     "        </li>\n" +
     "      </ul>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container\" ng-class=\"{'raml-console-is-active':showResponseDocumentation}\">\n" +
-    "      <section ng-if=\"isActiveCode(code)\" class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
+    "      <section ng-if=\"isActiveCode(code)\" class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in fullResponseCodes\">\n" +
     "        <a name=\"code{{code}}\"></a>\n" +
     "        <h3 class=\"raml-console-resource-heading-a\">Status {{code}}</h3>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-response\">\n" +
-    "          <p markdown=\"methodInfo.responses[code].description\" class=\"raml-console-marked-content\"></p>\n" +
+    "          <p markdown=\"fullResponses[code].description\" class=\"raml-console-marked-content\"></p>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].headers\">\n" +
+    "        <div class=\"raml-console-resource-response\" ng-if=\"fullResponses[code].headers\">\n" +
     "          <h4 class=\"raml-console-resource-body-heading\">Headers</h4>\n" +
-    "          <properties list=\"methodInfo.responses[code].headers\"></properties>\n" +
+    "          <properties list=\"fullResponses[code].headers\"></properties>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
+    "        <div class=\"raml-console-resource-response\" ng-if=\"fullResponses[code].body\">\n" +
     "          <h4 class=\"raml-console-resource-body-heading\">\n" +
     "            Body\n" +
     "            <span\n" +
     "              ng-click=\"changeType($event, key, code)\"\n" +
     "              ng-class=\"{ 'raml-console-is-active': responseInfo[code].currentType === key}\"\n" +
     "              class=\"raml-console-flag\"\n" +
-    "              ng-repeat=\"(key, value) in methodInfo.responses[code].body\">\n" +
+    "              ng-repeat=\"(key, value) in fullResponses[code].body\">\n" +
     "                {{key}}\n" +
     "            </span>\n" +
     "          </h4>\n" +
     "\n" +
-    "          <div ng-repeat=\"(key, value) in methodInfo.responses[code].body\">\n" +
+    "          <div ng-repeat=\"(key, value) in fullResponses[code].body\">\n" +
     "            <div ng-if=\"responseInfo[code].currentType === key\">\n" +
     "              <examples\n" +
     "                ng-if=\"responseInfo[code] && responseInfo[code].currentType\"\n" +
