@@ -745,7 +745,7 @@
         hidePropertyDetails: '=',
         showExamples: '='
       },
-      controller: function ($scope, $rootScope) {
+      controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
           $scope.listArray = Object.keys($scope.list).map(function (key) {
             return $scope.list[key];
@@ -906,7 +906,7 @@
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
-      },
+      }],
       compile: function (element) {
         return RecursionHelper.compile(element);
       }
@@ -914,7 +914,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('properties', RAML.Directives.properties);
+    .directive('properties', ['RecursionHelper', RAML.Directives.properties]);
 })();
 
 (function () {
@@ -1157,12 +1157,9 @@
         }
       };
     })
-    .controller('RamlConsoleController', function RamlConsoleController(
-      $attrs,
-      $scope,
-      $rootScope,
-      $timeout,
-      $window
+    .controller('RamlConsoleController', 
+      ['$attrs', '$scope', '$rootScope', '$timeout', '$window', function RamlConsoleController(
+      $attrs, $scope, $rootScope, $timeout, $window
     ) {
       $scope.allowUnsafeMarkdown        = $attrs.hasOwnProperty('allowUnsafeMarkdown');
       $scope.collapseAll                = collapseAll;
@@ -1415,7 +1412,7 @@
           }
         }
       }
-    })
+    }])
   ;
 })();
 
@@ -1531,7 +1528,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlField', RAML.Directives.ramlField);
+    .directive('ramlField', ['RecursionHelper', RAML.Directives.ramlField]);
 })();
 
 (function () {
@@ -1546,10 +1543,8 @@
         controller:  'RamlInitializerController'
       };
     })
-    .controller('RamlInitializerController', function RamlInitializerController(
-      $scope,
-      $window,
-      ramlParser
+    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
+      $scope, $window, ramlParser
     ) {
       $scope.vm = {
         codeMirror: {
@@ -1631,7 +1626,7 @@
           });
         };
       }
-    })
+    }])
   ;
 })();
 
@@ -1792,7 +1787,7 @@
       scope: {
         types: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.convertTypes = function () {
           var types = {};
           $scope.types.forEach(function (type) {
@@ -1804,7 +1799,7 @@
         $scope.$watch('types', function () {
           $scope.convertTypes();
         });
-      }
+      }]
     };
   };
 
@@ -2549,11 +2544,11 @@
       scope: {
         type: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.properties = {
           body: [$scope.type]
         };
-      }
+      }]
     };
   };
 
@@ -2574,7 +2569,7 @@
         hideTypeLinks: '=',
         items: '='
       },
-      controller: function ($scope, $rootScope, $timeout) {
+      controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
         $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName, $scope.items);
 
         $scope.closePopover = function () {
@@ -2616,7 +2611,7 @@
 
           $event.stopPropagation();
         };
-      }
+      }]
     };
   };
 
@@ -2703,7 +2698,7 @@
   'use strict';
 
   angular.module('raml', [])
-    .factory('ramlParser', function ramlParser(
+    .factory('ramlParser', ['$http', '$q', '$window', function ramlParser(
       $http,
       $q,
       $window
@@ -2800,7 +2795,7 @@
           throw new Error('ramlParser: loadPath: loadApi: content: ' + path + ': no such path');
         }
       }
-    })
+    }])
   ;
 })();
 

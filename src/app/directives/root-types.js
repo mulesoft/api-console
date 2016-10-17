@@ -9,7 +9,7 @@
       scope: {
         types: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.convertTypes = function () {
           var types = {};
           $scope.types.forEach(function (type) {
@@ -21,7 +21,7 @@
         $scope.$watch('types', function () {
           $scope.convertTypes();
         });
-      }
+      }]
     };
   };
 

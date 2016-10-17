@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('raml', [])
-    .factory('ramlParser', function ramlParser(
+    .factory('ramlParser', ['$http', '$q', '$window', function ramlParser(
       $http,
       $q,
       $window
@@ -99,6 +99,6 @@
           throw new Error('ramlParser: loadPath: loadApi: content: ' + path + ': no such path');
         }
       }
-    })
+    }])
   ;
 })();

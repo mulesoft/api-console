@@ -11,7 +11,7 @@
         hideTypeLinks: '=',
         items: '='
       },
-      controller: function ($scope, $rootScope, $timeout) {
+      controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
         $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName, $scope.items);
 
         $scope.closePopover = function () {
@@ -53,7 +53,7 @@
 
           $event.stopPropagation();
         };
-      }
+      }]
     };
   };
 
