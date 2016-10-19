@@ -5,7 +5,6 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
-      replace: true,
       controller: ['$scope', function($scope) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
@@ -30,11 +29,19 @@
         }
 
         function copyToCodesIfNotPresent(codes, schemaCodes) {
-          Object.keys(schemaCodes).forEach(function (code) {
-            if (schemaCodes.hasOwnProperty(code) && !codes.hasOwnProperty(code)) {
-              codes[code] = schemaCodes[code];
-            }
-          });
+          if (Array.isArray(schemaCodes)) {
+            schemaCodes.forEach(function (response) {
+              if (!codes.hasOwnProperty(response.code)) {
+                codes[response.code] = response.code;
+              }
+            });
+          } else {
+            Object.keys(schemaCodes).forEach(function (code) {
+              if (schemaCodes.hasOwnProperty(code) && !codes.hasOwnProperty(code)) {
+                codes[code] = schemaCodes[code];
+              }
+            });
+          }
         }
         $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
         $scope.fullResponseCodes = Object.keys($scope.fullResponses);
@@ -222,7 +229,8 @@
           $elements.removeClass('raml-console-is-active');
           $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
         });
-      }]
+      }],
+      replace: true
     };
   };
 
