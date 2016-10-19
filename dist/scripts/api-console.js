@@ -124,7 +124,6 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
-      replace: true,
       controller: ['$scope', function($scope) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
@@ -149,11 +148,19 @@
         }
 
         function copyToCodesIfNotPresent(codes, schemaCodes) {
-          Object.keys(schemaCodes).forEach(function (code) {
-            if (schemaCodes.hasOwnProperty(code) && !codes.hasOwnProperty(code)) {
-              codes[code] = schemaCodes[code];
-            }
-          });
+          if (Array.isArray(schemaCodes)) {
+            schemaCodes.forEach(function (response) {
+              if (!codes.hasOwnProperty(response.code)) {
+                codes[response.code] = response.code;
+              }
+            });
+          } else {
+            Object.keys(schemaCodes).forEach(function (code) {
+              if (schemaCodes.hasOwnProperty(code) && !codes.hasOwnProperty(code)) {
+                codes[code] = schemaCodes[code];
+              }
+            });
+          }
         }
         $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
         $scope.fullResponseCodes = Object.keys($scope.fullResponses);
@@ -341,7 +348,8 @@
           $elements.removeClass('raml-console-is-active');
           $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
         });
-      }]
+      }],
+      replace: true
     };
   };
 
@@ -6724,7 +6732,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div class=\"raml-console-sidebar-row\">\n" +
     "    <p class=\"raml-console-sidebar-input-container raml-console-sidebar-input-container-custom\" ng-repeat=\"customParam in context.customParameters[type]\">\n" +
     "      <button class=\"raml-console-sidebar-input-delete\" ng-click=\"removeCutomParam(customParam)\"></button>\n" +
-    "      <label for=\"custom-header\" class=\"raml-console-sidebar-label raml-console-sidebar-label-custom\">\n" +
+    "      <label class=\"raml-console-sidebar-label raml-console-sidebar-label-custom\">\n" +
     "        <input class=\"raml-console-sidebar-custom-input-for-label\" ng-model=\"customParam.name\" placeholder=\"custom key\">\n" +
     "      </label>\n" +
     "      <input name=\"custom-header\" class=\"raml-console-sidebar-input raml-console-sidebar-input-custom\" placeholder=\"custom value\" ng-model=\"customParam.value\">\n" +
