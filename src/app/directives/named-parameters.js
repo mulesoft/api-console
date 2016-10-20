@@ -9,6 +9,7 @@
       scope: {
         src: '=',
         context: '=',
+        types: '=',
         type: '@',
         title: '@'
       },

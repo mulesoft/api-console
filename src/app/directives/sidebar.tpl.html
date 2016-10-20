@@ -54,7 +54,7 @@
 
           <named-parameters src="methodInfo.headers.plain" context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
 
-          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" title="Query Parameters" enable-custom-parameters></named-parameters>
+          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" types="types" title="Query Parameters" enable-custom-parameters></named-parameters>
 
           <section ng-if="methodInfo.queryString">
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
@@ -105,7 +105,7 @@
                     </span>
                   </span>
 
-                  <raml-field context="context" type="type" param="param.definitions[0]" model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id]"></raml-field>
+                  <raml-field context="context" type="type" types="types" param="param.definitions[0]" model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id]"></raml-field>
                 </p>
               </div>
             </div>

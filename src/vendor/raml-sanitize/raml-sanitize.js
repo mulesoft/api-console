@@ -16,7 +16,8 @@
    * @return {Boolean}
    */
   var toBoolean = function (value) {
-    return [0, false, '', '0', 'false'].indexOf(value) === -1;
+    var index = [0, false, '0', 'false', 1, true, '1', 'true'].indexOf(value);
+    return (index !== -1) ? Boolean(index > 3) : null;
   };
 
   /**
@@ -56,7 +57,7 @@
    */
   var returnValue = function (value) {
     return value;
-  }
+  };
 
   var toUnion = function (value, key, object, configs) {
     var any = null;
@@ -67,7 +68,7 @@
     });
 
     return any;
-  }
+  };
 
   function isNativeType(typeName) {
     typeName = typeName.replace('[]', '');
