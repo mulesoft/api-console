@@ -5697,8 +5697,9 @@ RAML.Inspector = (function() {
    * @return {Boolean}
    */
   var toBoolean = function (value) {
-    var index = [0, false, '0', 'false', 1, true, '1', 'true'].indexOf(value);
-    return (index !== -1) ? Boolean(index > 3) : null;
+    if ([0, false, '0', 'false'].indexOf(value) !== -1) return false;
+    if ([1, true, '1', 'true'].indexOf(value) !== -1) return true;
+    return null;
   };
 
   /**
