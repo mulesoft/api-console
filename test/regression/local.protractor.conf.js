@@ -6,7 +6,7 @@ exports.config = {
   allScriptsTimeout: 120000,
 
   capabilities: {
-    'browserName': 'firefox'
+    'browserName': 'chrome'
   },
 
   baseUrl: 'http://localhost:9000',
