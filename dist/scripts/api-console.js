@@ -132,6 +132,9 @@
         $scope.documentationSchemeSelected = defaultSchema;
 
         function mergeResponseCodes(methodCodes, schemas) {
+          var extractSchema = function (key) { return schemas.hasOwnProperty(key) ? schemas[key] : undefined; };
+          var isValidSchema = function (schema) { return schema.describedBy && schema.describedBy.responses; };
+
           var codes = {};
 
           // Copy all method codes
@@ -140,9 +143,10 @@
           });
 
           // Copy schema's code that are not present in the method
-          Object.keys(schemas).forEach(function (key) {
-            if (schemas.hasOwnProperty(key)) { copyToCodesIfNotPresent(codes, schemas[key].describedBy.responses) }
-          });
+          Object.keys(schemas)
+            .map(extractSchema)
+            .filter(isValidSchema)
+            .forEach(function (schema) { copyToCodesIfNotPresent(codes, schema.describedBy.responses) });
 
           return codes;
         }
