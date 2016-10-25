@@ -14,7 +14,8 @@
         isNestedProperty: '=',
         hideTypeLinks: '=',
         hidePropertyDetails: '=',
-        showExamples: '='
+        showExamples: '=',
+        showSecuritySchemaProperties: '='
       },
       controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
@@ -22,7 +23,7 @@
             return $scope.list[key];
           });
 
-          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
+          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.listArray);
         } else {
           $scope.listArray = $scope.list;
         }
@@ -49,6 +50,15 @@
           return newType;
         };
 
+        var isPattern = function (propertyName) {
+          return propertyName.match(PATTERN_PATTERN);
+        };
+
+        $scope.isPropertyVisible = function(property) {
+          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme)
+            && !isPattern(property[0].displayName);
+        };
+
         $scope.mergeType = function (type) {
           var newType = angular.copy(type);
 
@@ -59,10 +69,6 @@
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
-
-        $scope.isPattern = function (propertyName) {
-          return propertyName.match(PATTERN_PATTERN);
-        };
 
         $scope.isSchema = RAML.Inspector.Types.isSchema;
 
