@@ -50,7 +50,6 @@
         $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
         $scope.fullResponseCodes = Object.keys($scope.fullResponses);
 
-
         $scope.isSchemeSelected = function isSchemeSelected(scheme) {
           return scheme.id === $scope.documentationSchemeSelected.id;
         };
