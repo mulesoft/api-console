@@ -27,12 +27,20 @@
           $scope.listArray = $scope.list;
         }
 
+        var getArrayTypes = function(arrayType) {
+          if (arrayType.items.type || Array.isArray(arrayType.items.type)) {
+            return arrayType.items.type;
+          }
+
+          return [arrayType.items];
+        };
+
         $scope.getType = function (type) {
           var newType = $scope.mergeType(type);
           newType.type = RAML.Inspector.Types.ensureArray(newType.type);
 
           if (newType.type[0] === 'array') {
-            newType.type = newType.items.type.map(function (aType) {
+            newType.type = getArrayTypes(newType).map(function (aType) {
               return aType + '[]';
             });
             newType.properties = newType.items.properties;
