@@ -69,6 +69,19 @@ function Resource (poName) {
     });
   };
 
+  this.ifShowingSecuritySchemaHeaders = function (resource, method, expectedNOfHeaders, expectedHeaders) {
+    var button = this.po.getMethodBtn(resource, method);
+    button.click();
+
+    var headers = this.po.getSecuritySchemeHeaderTitles(resource);
+    var numberOfHeaders = headers.count();
+
+    expect(numberOfHeaders).toBe(expectedNOfHeaders);
+    for(var i = 0; i < expectedHeaders.length; i++) {
+      expect(headers.get(i).getInnerHtml()).toContain(expectedHeaders[i]);
+    }
+  };
+
   this.ifCredentialsUpdateBetweenResources = function () {
     var resourcesGetButton= this.po.getMethodBtn(0, 0);
     var pageObject = this.po;
