@@ -3100,6 +3100,8 @@
         return new RAML.Client.AuthStrategies.Oauth2(scheme, credentials);
       case 'OAuth 1.0':
         return new RAML.Client.AuthStrategies.Oauth1(scheme, credentials);
+      case 'Pass Through':
+        return RAML.Client.AuthStrategies.anonymous();
       case 'x-custom':
         return RAML.Client.AuthStrategies.anonymous();
       case 'Anonymous':
