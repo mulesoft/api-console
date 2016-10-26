@@ -1,5 +1,7 @@
 <div>
-  <div class="raml-console-resource-param" ng-repeat="property in listArray" ng-if="!property[0].isFromSecurityScheme && !isPattern(property[0].displayName)" ng-init="vm.isCollapsed = !!collapsible">
+  <div class="raml-console-resource-param" ng-repeat="property in listArray"
+       ng-if="isPropertyVisible(property)"
+       ng-init="vm.isCollapsed = !!collapsible">
     <div ng-init="type = getType(property[0])">
       <h4 class="raml-console-resource-param-heading" style="position: relative">
         <span ng-if="isCollapsible(type)" ng-click="vm.isCollapsed = !vm.isCollapsed" style="cursor: pointer">{{ vm.isCollapsed ? '▶' : '▼' }}</span>&nbsp;{{type.displayName}}

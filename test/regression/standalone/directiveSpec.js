@@ -40,6 +40,17 @@ module.exports = function() {
     assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
   });
 
+  it('should be able to display security schemagit status headers', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-security-schema-resource.html');
+
+    // Assert
+    assert.ifShowingSecuritySchemaHeaders(0, 0, 4, ['Authorization', '400', '401', '403']);
+  });
+
   it('should be able to cache credentials between resources', function () {
     // Arrange
     var assert = assertions.create('resource');
