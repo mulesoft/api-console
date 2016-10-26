@@ -33,6 +33,24 @@ function Resource (poName) {
     });
   };
 
+  this.ifBeAbleToTryIt = function (resource, method) {
+    var button = this.po.getMethodBtn(resource, method);
+    var schemes, securitySchemesCount;
+
+    button.click();
+
+    schemes              = this.po.getSecuritySchemes(resource);
+    securitySchemesCount = schemes.count();
+    expect(securitySchemesCount).toBe(1);
+
+
+    this.po.getTryItGetBtn(resource).click();
+
+    var errorMessages = this.po.getTryItErrorMessages(resource);
+    expect(errorMessages.count()).toBe(1);
+    expect(errorMessages.get(0).isDisplayed()).toBe(false);
+  };
+
   this.ifShowingSecuritySchemes = function (resource, method, expectedSchemes) {
     var button = this.po.getMethodBtn(resource, method);
     var schemes, securitySchemesCount;

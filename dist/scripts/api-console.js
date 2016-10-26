@@ -124,13 +124,50 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
-      replace: true,
       controller: ['$scope', function($scope) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
         $scope.markedOptions = RAML.Settings.marked;
         $scope.documentationSchemeSelected = defaultSchema;
+
+        function mergeResponseCodes(methodCodes, schemas) {
+          var extractSchema = function (key) { return schemas.hasOwnProperty(key) ? schemas[key] : undefined; };
+          var isValidSchema = function (schema) { return schema.describedBy && schema.describedBy.responses; };
+
+          var codes = {};
+
+          // Copy all method codes
+          Object.keys(methodCodes).forEach(function (code) {
+            if (methodCodes.hasOwnProperty(code)) { codes[code] = methodCodes[code]; }
+          });
+
+          // Copy schema's code that are not present in the method
+          Object.keys(schemas)
+            .map(extractSchema)
+            .filter(isValidSchema)
+            .forEach(function (schema) { copyToCodesIfNotPresent(codes, schema.describedBy.responses) });
+
+          return codes;
+        }
+
+        function copyToCodesIfNotPresent(codes, schemaCodes) {
+          if (Array.isArray(schemaCodes)) {
+            schemaCodes.forEach(function (response) {
+              if (!codes.hasOwnProperty(response.code)) {
+                codes[response.code] = response.code;
+              }
+            });
+          } else {
+            Object.keys(schemaCodes).forEach(function (code) {
+              if (schemaCodes.hasOwnProperty(code) && !codes.hasOwnProperty(code)) {
+                codes[code] = schemaCodes[code];
+              }
+            });
+          }
+        }
+        $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
+        $scope.fullResponseCodes = Object.keys($scope.fullResponses);
 
         $scope.isSchemeSelected = function isSchemeSelected(scheme) {
           return scheme.id === $scope.documentationSchemeSelected.id;
@@ -156,13 +193,13 @@
 
         $scope.currentStatusCode = '200';
 
-        if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
-          $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
+        if ($scope.fullResponseCodes && $scope.fullResponseCodes.length > 0) {
+          $scope.currentStatusCode = $scope.fullResponseCodes[0];
         }
 
         $scope.$on('resetData', function() {
-          if ($scope.methodInfo.responseCodes && $scope.methodInfo.responseCodes.length > 0) {
-            $scope.currentStatusCode = $scope.methodInfo.responseCodes[0];
+          if ($scope.fullResponseCodes && $scope.fullResponseCodes.length > 0) {
+            $scope.currentStatusCode = $scope.fullResponseCodes[0];
           }
         });
 
@@ -314,7 +351,8 @@
           $elements.removeClass('raml-console-is-active');
           $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
         });
-      }]
+      }],
+      replace: true
     };
   };
 
@@ -3062,6 +3100,8 @@
         return new RAML.Client.AuthStrategies.Oauth2(scheme, credentials);
       case 'OAuth 1.0':
         return new RAML.Client.AuthStrategies.Oauth1(scheme, credentials);
+      case 'Pass Through':
+        return RAML.Client.AuthStrategies.anonymous();
       case 'x-custom':
         return RAML.Client.AuthStrategies.anonymous();
       case 'Anonymous':
@@ -6595,7 +6635,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <!-- Response -->\n" +
-    "  <div ng-if=\"methodInfo.responseCodes\">\n" +
+    "  <div ng-if=\"fullResponseCodes\">\n" +
     "    <header class=\"raml-console-resource-header\">\n" +
     "      <h3 class=\"raml-console-resource-head\">\n" +
     "        Response\n" +
@@ -6604,39 +6644,39 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <div class=\"raml-console-resource-response-jump\">\n" +
     "      <ul class=\"raml-console-resource-menu\">\n" +
-    "        <li class=\"raml-console-resource-btns raml-console-resource-menu-item\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
+    "        <li class=\"raml-console-resource-btns raml-console-resource-menu-item\" ng-repeat=\"code in fullResponseCodes\">\n" +
     "          <button ng-click=\"showCodeDetails(code)\" class=\"raml-console-resource-btn raml-console-resource-menu-button raml-console-resource-menu-btn-{{getColorCode(code)}}\" ng-class=\"{ 'raml-console-button-is-active': isActiveCode(code) }\" href=\"#code{{code}}\">{{code}}</button>\n" +
     "        </li>\n" +
     "      </ul>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container\" ng-class=\"{'raml-console-is-active':showResponseDocumentation}\">\n" +
-    "      <section ng-if=\"isActiveCode(code)\" class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in methodInfo.responseCodes\">\n" +
+    "      <section ng-if=\"isActiveCode(code)\" class=\"raml-console-resource-section raml-console-resource-response-section\" ng-repeat=\"code in fullResponseCodes\">\n" +
     "        <a name=\"code{{code}}\"></a>\n" +
     "        <h3 class=\"raml-console-resource-heading-a\">Status {{code}}</h3>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-response\">\n" +
-    "          <p markdown=\"methodInfo.responses[code].description\" class=\"raml-console-marked-content\"></p>\n" +
+    "          <p markdown=\"fullResponses[code].description\" class=\"raml-console-marked-content\"></p>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].headers\">\n" +
+    "        <div class=\"raml-console-resource-response\" ng-if=\"fullResponses[code].headers\">\n" +
     "          <h4 class=\"raml-console-resource-body-heading\">Headers</h4>\n" +
-    "          <properties list=\"methodInfo.responses[code].headers\"></properties>\n" +
+    "          <properties list=\"fullResponses[code].headers\"></properties>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"raml-console-resource-response\" ng-if=\"methodInfo.responses[code].body\">\n" +
+    "        <div class=\"raml-console-resource-response\" ng-if=\"fullResponses[code].body\">\n" +
     "          <h4 class=\"raml-console-resource-body-heading\">\n" +
     "            Body\n" +
     "            <span\n" +
     "              ng-click=\"changeType($event, key, code)\"\n" +
     "              ng-class=\"{ 'raml-console-is-active': responseInfo[code].currentType === key}\"\n" +
     "              class=\"raml-console-flag\"\n" +
-    "              ng-repeat=\"(key, value) in methodInfo.responses[code].body\">\n" +
+    "              ng-repeat=\"(key, value) in fullResponses[code].body\">\n" +
     "                {{key}}\n" +
     "            </span>\n" +
     "          </h4>\n" +
     "\n" +
-    "          <div ng-repeat=\"(key, value) in methodInfo.responses[code].body\">\n" +
+    "          <div ng-repeat=\"(key, value) in fullResponses[code].body\">\n" +
     "            <div ng-if=\"responseInfo[code].currentType === key\">\n" +
     "              <examples\n" +
     "                ng-if=\"responseInfo[code] && responseInfo[code].currentType\"\n" +
@@ -6700,7 +6740,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div class=\"raml-console-sidebar-row\">\n" +
     "    <p class=\"raml-console-sidebar-input-container raml-console-sidebar-input-container-custom\" ng-repeat=\"customParam in context.customParameters[type]\">\n" +
     "      <button class=\"raml-console-sidebar-input-delete\" ng-click=\"removeCutomParam(customParam)\"></button>\n" +
-    "      <label for=\"custom-header\" class=\"raml-console-sidebar-label raml-console-sidebar-label-custom\">\n" +
+    "      <label class=\"raml-console-sidebar-label raml-console-sidebar-label-custom\">\n" +
     "        <input class=\"raml-console-sidebar-custom-input-for-label\" ng-model=\"customParam.name\" placeholder=\"custom key\">\n" +
     "      </label>\n" +
     "      <input name=\"custom-header\" class=\"raml-console-sidebar-input raml-console-sidebar-input-custom\" placeholder=\"custom value\" ng-model=\"customParam.value\">\n" +
