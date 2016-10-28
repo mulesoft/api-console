@@ -38,15 +38,7 @@
           },
           {
             label: 'Resource Owner Password Credentials',
-            value: 'owner'
-          },
-          {
-            label: 'Resource Owner Password Credentials',
             value: 'password'
-          },
-          {
-            label: 'Client Credentials',
-            value: 'credentials'
           },
           {
             label: 'Client Credentials',
