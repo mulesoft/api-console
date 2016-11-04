@@ -2594,6 +2594,11 @@
 
         $scope.cleanupTypeName = RAML.Inspector.Types.cleanupTypeName;
 
+        $scope.typeDocumentation = function(type) {
+          type = RAML.Inspector.Types.findType(type.type[0], $rootScope.types);
+          return RAML.Inspector.Types.typeDocumentation(type);
+        };
+
         $scope.getSupertTypes = function (type) {
           return RAML.Inspector.Types.findType(type.type[0], $rootScope.types).type.map(function (aTypeName) {
             return aTypeName;
@@ -4368,6 +4373,61 @@ RAML.Inspector = (function() {
     return Array.isArray(type) ? type : [type];
   }
 
+  function typeDocumentation(type) {
+    var result = [];
+
+    if (type.minItems) {
+      result.push('minItems: ' + type.minItems);
+    }
+
+    if (type.maxItems) {
+      result.push('maxItems: ' + type.maxItems);
+    }
+
+    if (type['enum']) {
+      var enumValues = type['enum'];
+      var enumDescription = '';
+
+      if (enumValues.length > 1) {
+        enumDescription += 'one of ';
+      }
+
+      enumDescription += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
+
+      result.push(enumDescription);
+    }
+
+    if (type.pattern) {
+      result.push('pattern: ' + type.pattern);
+    }
+
+    if (type.minLength) {
+      result.push('minLength: ' + type.minLength);
+    }
+
+    if (type.maxLength) {
+      result.push('maxLength: ' + type.maxLength);
+    }
+
+    if (type.minimum) {
+      result.push('minimum: ' + type.minimum);
+    }
+
+    if (type.format) {
+      result.push('format: ' + type.format);
+    }
+
+    if (type.multipleOf) {
+      result.push('multipleOf: ' + type.multipleOf);
+    }
+
+    if (type.fileTypes) {
+      result.push('fileTypes: ' + type.fileTypes.join(', '));
+    }
+
+    return result.join(', ');
+  }
+
   RAML.Inspector.Types = {
     mergeType:           mergeType,
     isNativeType:        isNativeType,
@@ -4377,7 +4437,8 @@ RAML.Inspector = (function() {
     getTypeInfo:         getTypeInfo,
     getTypeFromTypeInfo: getTypeFromTypeInfo,
     ensureArray:         ensureArray,
-    cleanupTypeName:     cleanupTypeName
+    cleanupTypeName:     cleanupTypeName,
+    typeDocumentation:   typeDocumentation
   };
 })();
 
@@ -7407,6 +7468,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "<div ng-if=\"selectedType\" class=\"raml-console-type-info-popover\">\n" +
     "  <h3>\n" +
     "    <span>{{selectedType.displayName}}</span>\n" +
+    "    <span class=\"raml-console-resource-param-instructional\">{{typeDocumentation(selectedType)}}</span>\n" +
     "    <div class=\"raml-console-subtitle\">\n" +
     "      <span ng-repeat-start=\"superType in getSupertTypes(selectedType)\">{{superType}}</span>\n" +
     "      <span ng-if=\"!$last\" ng-repeat-end>, </span>\n" +
