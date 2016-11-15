@@ -132,6 +132,9 @@
         $scope.documentationSchemeSelected = defaultSchema;
 
         function mergeResponseCodes(methodCodes, schemas) {
+          var extractSchema = function (key) { return schemas.hasOwnProperty(key) ? schemas[key] : undefined; };
+          var isValidSchema = function (schema) { return schema.describedBy && schema.describedBy.responses; };
+
           var codes = {};
 
           // Copy all method codes
@@ -140,9 +143,10 @@
           });
 
           // Copy schema's code that are not present in the method
-          Object.keys(schemas).forEach(function (key) {
-            if (schemas.hasOwnProperty(key)) { copyToCodesIfNotPresent(codes, schemas[key].describedBy.responses) }
-          });
+          Object.keys(schemas)
+            .map(extractSchema)
+            .filter(isValidSchema)
+            .forEach(function (schema) { copyToCodesIfNotPresent(codes, schema.describedBy.responses) });
 
           return codes;
         }
@@ -164,7 +168,6 @@
         }
         $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
         $scope.fullResponseCodes = Object.keys($scope.fullResponses);
-
 
         $scope.isSchemeSelected = function isSchemeSelected(scheme) {
           return scheme.id === $scope.documentationSchemeSelected.id;
@@ -781,7 +784,7 @@
         showExamples: '=',
         showSecuritySchemaProperties: '='
       },
-      controller: function ($scope, $rootScope) {
+      controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
         if (!Array.isArray($scope.list)) {
           $scope.listArray = Object.keys($scope.list).map(function (key) {
             return $scope.list[key];
@@ -792,12 +795,20 @@
           $scope.listArray = $scope.list;
         }
 
+        var getArrayTypes = function(arrayType) {
+          if (arrayType.items.type || Array.isArray(arrayType.items.type)) {
+            return arrayType.items.type;
+          }
+
+          return [arrayType.items];
+        };
+
         $scope.getType = function (type) {
           var newType = $scope.mergeType(type);
           newType.type = RAML.Inspector.Types.ensureArray(newType.type);
 
           if (newType.type[0] === 'array') {
-            newType.type = newType.items.type.map(function (aType) {
+            newType.type = getArrayTypes(newType).map(function (aType) {
               return aType + '[]';
             });
             newType.properties = newType.items.properties;
@@ -947,7 +958,7 @@
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
-      },
+      }],
       compile: function (element) {
         return RecursionHelper.compile(element);
       }
@@ -955,7 +966,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('properties', RAML.Directives.properties);
+    .directive('properties', ['RecursionHelper', RAML.Directives.properties]);
 })();
 
 (function () {
@@ -1198,12 +1209,9 @@
         }
       };
     })
-    .controller('RamlConsoleController', function RamlConsoleController(
-      $attrs,
-      $scope,
-      $rootScope,
-      $timeout,
-      $window
+    .controller('RamlConsoleController', 
+      ['$attrs', '$scope', '$rootScope', '$timeout', '$window', function RamlConsoleController(
+      $attrs, $scope, $rootScope, $timeout, $window
     ) {
       $scope.allowUnsafeMarkdown        = $attrs.hasOwnProperty('allowUnsafeMarkdown');
       $scope.collapseAll                = collapseAll;
@@ -1456,7 +1464,7 @@
           }
         }
       }
-    })
+    }])
   ;
 })();
 
@@ -1572,7 +1580,7 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlField', RAML.Directives.ramlField);
+    .directive('ramlField', ['RecursionHelper', RAML.Directives.ramlField]);
 })();
 
 (function () {
@@ -1587,10 +1595,8 @@
         controller:  'RamlInitializerController'
       };
     })
-    .controller('RamlInitializerController', function RamlInitializerController(
-      $scope,
-      $window,
-      ramlParser
+    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
+      $scope, $window, ramlParser
     ) {
       $scope.vm = {
         codeMirror: {
@@ -1672,7 +1678,7 @@
           });
         };
       }
-    })
+    }])
   ;
 })();
 
@@ -1833,7 +1839,7 @@
       scope: {
         types: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.convertTypes = function () {
           var types = {};
           $scope.types.forEach(function (type) {
@@ -1845,7 +1851,7 @@
         $scope.$watch('types', function () {
           $scope.convertTypes();
         });
-      }
+      }]
     };
   };
 
@@ -2590,11 +2596,11 @@
       scope: {
         type: '='
       },
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.properties = {
           body: [$scope.type]
         };
-      }
+      }]
     };
   };
 
@@ -2615,7 +2621,7 @@
         hideTypeLinks: '=',
         items: '='
       },
-      controller: function ($scope, $rootScope, $timeout) {
+      controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
         $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName, $scope.items);
 
         $scope.closePopover = function () {
@@ -2657,7 +2663,7 @@
 
           $event.stopPropagation();
         };
-      }
+      }]
     };
   };
 
@@ -2744,7 +2750,7 @@
   'use strict';
 
   angular.module('raml', [])
-    .factory('ramlParser', function ramlParser(
+    .factory('ramlParser', ['$http', '$q', '$window', function ramlParser(
       $http,
       $q,
       $window
@@ -2841,7 +2847,7 @@
           throw new Error('ramlParser: loadPath: loadApi: content: ' + path + ': no such path');
         }
       }
-    })
+    }])
   ;
 })();
 

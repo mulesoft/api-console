@@ -14,12 +14,9 @@
         }
       };
     })
-    .controller('RamlConsoleController', function RamlConsoleController(
-      $attrs,
-      $scope,
-      $rootScope,
-      $timeout,
-      $window
+    .controller('RamlConsoleController', 
+      ['$attrs', '$scope', '$rootScope', '$timeout', '$window', function RamlConsoleController(
+      $attrs, $scope, $rootScope, $timeout, $window
     ) {
       $scope.allowUnsafeMarkdown        = $attrs.hasOwnProperty('allowUnsafeMarkdown');
       $scope.collapseAll                = collapseAll;
@@ -272,6 +269,6 @@
           }
         }
       }
-    })
+    }])
   ;
 })();
