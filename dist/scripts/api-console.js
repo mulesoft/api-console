@@ -694,6 +694,7 @@
       scope: {
         src: '=',
         context: '=',
+        types: '=',
         type: '@',
         title: '@'
       },
@@ -1480,6 +1481,7 @@
       scope: {
         context: '=',
         type: '=',
+        types: '=',
         model: '=',
         param: '='
       },
@@ -2692,7 +2694,7 @@
           var errors;
 
           value = typeof value !== 'undefined' && value !== null && value.length === 0 ? undefined : value;
-          current[validation.id] = value;
+          current[validationId] = value;
 
           errors = validator(sanitizer(current)).errors;
 
@@ -2701,24 +2703,30 @@
             // Note: We want to allow invalid errors for testing purposes
             return value;
           } else {
-            clear(control, validationRules[validation.id]);
+            clear(control, validationRules[validationId]);
             return value;
           }
         }
 
         var validation      = $parse($attrs.validate)($scope);
+        var validationId    = validation.id;
         var sanitationRules = {};
         var validationRules = {};
         var control         = $ctrl;
 
-        sanitationRules[validation.id] = {
+        if (validation && validation.type) {
+          var declaredType = RAML.Inspector.Types.findType(validation.type[0], $scope.types);
+          if (declaredType) { validation = declaredType; }
+        }
+
+        sanitationRules[validationId] = {
           type: validation.type || null,
           repeat: validation.repeat || null
         };
 
-        sanitationRules[validation.id] = RAML.Utils.filterEmpty(sanitationRules[validation.id]);
+        sanitationRules[validationId] = RAML.Utils.filterEmpty(sanitationRules[validationId]);
 
-        validationRules[validation.id] = {
+        validationRules[validationId] = {
           type: validation.type || null,
           minLength: validation.minLength || null,
           maxLength: validation.maxLength || null,
@@ -2730,7 +2738,7 @@
           repeat: validation.repeat || null
         };
 
-        validationRules[validation.id] = RAML.Utils.filterEmpty(validationRules[validation.id]);
+        validationRules[validationId] = RAML.Utils.filterEmpty(validationRules[validationId]);
 
         $ctrl.$formatters.unshift(function(value) {
           return validate(value);
@@ -5744,7 +5752,9 @@ RAML.Inspector = (function() {
    * @return {Boolean}
    */
   var toBoolean = function (value) {
-    return [0, false, '', '0', 'false'].indexOf(value) === -1;
+    if ([0, false, '0', 'false'].indexOf(value) !== -1) return false;
+    if ([1, true, '1', 'true'].indexOf(value) !== -1) return true;
+    return null;
   };
 
   /**
@@ -5784,7 +5794,7 @@ RAML.Inspector = (function() {
    */
   var returnValue = function (value) {
     return value;
-  }
+  };
 
   var toUnion = function (value, key, object, configs) {
     var any = null;
@@ -5795,7 +5805,7 @@ RAML.Inspector = (function() {
     });
 
     return any;
-  }
+  };
 
   function isNativeType(typeName) {
     typeName = typeName.replace('[]', '');
@@ -6764,7 +6774,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </span>\n" +
     "      </span>\n" +
     "\n" +
-    "      <raml-field context=\"context\" type=\"type\" param=\"param.definitions[0]\" model=\"context[type].values[param.definitions[0].id]\"></raml-field>\n" +
+    "      <raml-field context=\"context\" type=\"type\" types=\"types\" param=\"param.definitions[0]\" model=\"context[type].values[param.definitions[0].id]\"></raml-field>\n" +
     "    </p>\n" +
     "  </div>\n" +
     "</section>\n"
@@ -7040,7 +7050,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <div ng-if=\"param.properties\" style=\"padding-left: 10px\">\n" +
-    "    <raml-field ng-repeat=\"aParam in param.properties\" context=\"context\" type=\"type\" param=\"aParam[0]\" ng-init=\"model[0][aParam[0].name] = [undefined]\" model=\"model[0][aParam[0].name]\"></raml-field>\n" +
+    "    <raml-field ng-repeat=\"aParam in param.properties\" context=\"context\" type=\"type\" types=\"types\" param=\"aParam[0]\" ng-init=\"model[0][aParam[0].name] = [undefined]\" model=\"model[0][aParam[0].name]\"></raml-field>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -7270,7 +7280,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "          <named-parameters src=\"methodInfo.headers.plain\" context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
-    "          <named-parameters src=\"methodInfo.queryParameters\" context=\"context\" type=\"queryParameters\" title=\"Query Parameters\" enable-custom-parameters></named-parameters>\n" +
+    "          <named-parameters src=\"methodInfo.queryParameters\" context=\"context\" type=\"queryParameters\" types=\"types\" title=\"Query Parameters\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
     "          <section ng-if=\"methodInfo.queryString\">\n" +
     "            <header class=\"raml-console-sidebar-row raml-console-sidebar-subheader\">\n" +
@@ -7321,7 +7331,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                    </span>\n" +
     "                  </span>\n" +
     "\n" +
-    "                  <raml-field context=\"context\" type=\"type\" param=\"param.definitions[0]\" model=\"context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id]\"></raml-field>\n" +
+    "                  <raml-field context=\"context\" type=\"type\" types=\"types\" param=\"param.definitions[0]\" model=\"context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id]\"></raml-field>\n" +
     "                </p>\n" +
     "              </div>\n" +
     "            </div>\n" +

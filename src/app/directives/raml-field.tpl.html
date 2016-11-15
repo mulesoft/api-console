@@ -50,6 +50,6 @@
   </div>
 
   <div ng-if="param.properties" style="padding-left: 10px">
-    <raml-field ng-repeat="aParam in param.properties" context="context" type="type" param="aParam[0]" ng-init="model[0][aParam[0].name] = [undefined]" model="model[0][aParam[0].name]"></raml-field>
+    <raml-field ng-repeat="aParam in param.properties" context="context" type="type" types="types" param="aParam[0]" ng-init="model[0][aParam[0].name] = [undefined]" model="model[0][aParam[0].name]"></raml-field>
   </div>
 </div>
