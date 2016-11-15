@@ -146,7 +146,9 @@
           Object.keys(schemas)
             .map(extractSchema)
             .filter(isValidSchema)
-            .forEach(function (schema) { copyToCodesIfNotPresent(codes, schema.describedBy.responses) });
+            .forEach(function (schema) {
+              copyToCodesIfNotPresent(codes, schema.describedBy.responses);
+            });
 
           return codes;
         }
@@ -822,8 +824,7 @@
         };
 
         $scope.isPropertyVisible = function(property) {
-          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme)
-            && !isPattern(property[0].displayName);
+          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme) && !isPattern(property[0].displayName);
         };
 
         $scope.mergeType = function (type) {
