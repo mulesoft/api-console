@@ -1162,21 +1162,25 @@
         $scope.vm.loaded = false;
         $scope.vm.error  = void(0);
 
-        return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
-          .then(function (raml) {
-            $scope.vm.raml = raml;
-          })
-          .catch(function (error) {
-            $scope.vm.error = angular.extend(error, {
-              /*jshint camelcase: false */
-              buffer: (error.context_mark || error.problem_mark).buffer
-              /*jshint camelcase: true */
-            });
-          })
-          .finally(function () {
-            $scope.vm.loaded = true;
-          })
-        ;
+        if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
+          $scope.vm.error = {buffer : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
+        } else {
+          return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
+            .then(function (raml) {
+              $scope.vm.raml = raml;
+            })
+            .catch(function (error) {
+              $scope.vm.error = angular.extend(error, {
+                /*jshint camelcase: false */
+                buffer: (error.context_mark || error.problem_mark).buffer
+                /*jshint camelcase: true */
+              });
+            })
+            .finally(function () {
+              $scope.vm.loaded = true;
+            })
+          ;
+        }
       }
     })
   ;
@@ -1596,7 +1600,10 @@
         restrict:    'E',
         templateUrl: 'directives/raml-initializer.tpl.html',
         replace:     true,
-        controller:  'RamlInitializerController'
+        controller:  'RamlInitializerController',
+        scope:       {
+          options: '='
+        }
       };
     })
     .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
@@ -1633,7 +1640,13 @@
 
       function loadFromUrl(url) {
         $scope.vm.ramlUrl = url;
-        return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+
+        if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
+          $scope.vm.isLoadedFromUrl = true;
+          $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
+        } else {
+          return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+        }
       }
 
       function loadFromString(string) {
@@ -1775,7 +1788,7 @@
         };
 
         $scope.getDocumentationContent = function (content, selected) {
-          var lines  = content.split('\n');
+          var lines  = content.split(/\r|\n/);
           var index  = lines.indexOf(selected);
           var result = [];
           var regex  = /(^#|^##)+\s(.*)$/gim;
@@ -4515,6 +4528,41 @@ RAML.Inspector = (function() {
 
     return found;
   });
+})();
+
+(function() {
+  'use strict';
+
+  RAML.LoaderUtils = {
+
+    allowedRamlOrigin : function(options) {
+      var basepath='../';
+      if(typeof options.ramlOriginCheck === 'string') {
+        basepath = options.ramlOriginCheck;
+      }
+      return basepath;
+    },
+
+    // prevent loading stuff from other hosts and/or services
+    ramlOriginValidate: function (url, options) {
+      var absolutePath = function(href) {
+          var link = document.createElement('a');
+          link.href = href;
+          return link.href;
+      };
+
+      var isSameBasePath = function(href, basepath) {
+          var absoluteBasepath=absolutePath(basepath);
+          var absoluteRamlPath=absolutePath(href);
+          return absoluteRamlPath.indexOf(absoluteBasepath, 0) === 0;
+      };
+
+      var decodedRamlUrl=decodeURIComponent(url);
+      return options && options.ramlOriginCheck && !isSameBasePath(decodedRamlUrl, RAML.LoaderUtils.allowedRamlOrigin(options));
+    }
+
+
+  };
 })();
 
 (function() {
