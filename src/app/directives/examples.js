@@ -32,14 +32,15 @@
       return [{
         name: 'Example',
         content: (typeof exampleContainer.example === 'object') ?
-            JSON.stringify(exampleContainer.example) : exampleContainer.example
+            JSON.stringify(exampleContainer.example, null, 2) : exampleContainer.example
       }];
     } else if (exampleContainer.examples) {
       if (Array.isArray(exampleContainer.examples)) {
         return exampleContainer.examples.map(function (example, index) {
           return {
             name: example.name || 'Example ' + index,
-            content: JSON.stringify(example.value, null, 2)
+            content: (typeof example.value === 'object') ?
+                JSON.stringify(example.value, null, 2) : example.value
           };
         });
       } else {

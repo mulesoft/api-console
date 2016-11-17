@@ -36,16 +36,16 @@
         <li class="raml-console-documentation-scheme" ng-class="{'raml-console-is-active':isSchemeSelected(value)}" ng-click="selectDocumentationScheme(value)" ng-repeat="(key, value) in securitySchemes">{{value.name}}</li>
       </ol>
 
-      <p ng-if"documentationSchemeSelected.description" markdown="documentationSchemeSelected.description" class="raml-console-marked-content"></p>
+      <p ng-if="documentationSchemeSelected.description" markdown="documentationSchemeSelected.description" class="raml-console-marked-content"></p>
 
       <section class="raml-console-resource-section raml-console-scheme-headers" ng-if="documentationSchemeSelected.describedBy.headers">
         <h4 class="raml-console-resource-heading-a">Headers</h4>
-        <properties list="documentationSchemeSelected.describedBy.headers" show-examples="true"></properties>
+        <properties list="documentationSchemeSelected.describedBy.headers" show-security-schema-properties="true" show-examples="true"></properties>
       </section>
 
       <section class="raml-console-resource-section raml-console-scheme-query-parameters" ng-if="documentationSchemeSelected.describedBy.queryParameters">
         <h4 class="raml-console-resource-heading-a">Query Parameters</h4>
-        <properties list="documentationSchemeSelected.describedBy.queryParameters" show-examples="true"></properties>
+        <properties list="documentationSchemeSelected.describedBy.queryParameters" show-security-schema-properties="true" show-examples="true"></properties>
       </section>
 
       <section class="raml-console-resource-section raml-console-scheme-responses" ng-if="documentationSchemeSelected.describedBy.responses">
@@ -108,7 +108,7 @@
   </div>
 
   <!-- Response -->
-  <div ng-if="methodInfo.responseCodes">
+  <div ng-if="fullResponseCodes">
     <header class="raml-console-resource-header">
       <h3 class="raml-console-resource-head">
         Response
@@ -117,39 +117,39 @@
 
     <div class="raml-console-resource-response-jump">
       <ul class="raml-console-resource-menu">
-        <li class="raml-console-resource-btns raml-console-resource-menu-item" ng-repeat="code in methodInfo.responseCodes">
+        <li class="raml-console-resource-btns raml-console-resource-menu-item" ng-repeat="code in fullResponseCodes">
           <button ng-click="showCodeDetails(code)" class="raml-console-resource-btn raml-console-resource-menu-button raml-console-resource-menu-btn-{{getColorCode(code)}}" ng-class="{ 'raml-console-button-is-active': isActiveCode(code) }" href="#code{{code}}">{{code}}</button>
         </li>
       </ul>
     </div>
 
     <div class="raml-console-resource-panel-primary-row raml-console-resource-panel-content raml-console-is-active raml-console-response-container" ng-class="{'raml-console-is-active':showResponseDocumentation}">
-      <section ng-if="isActiveCode(code)" class="raml-console-resource-section raml-console-resource-response-section" ng-repeat="code in methodInfo.responseCodes">
+      <section ng-if="isActiveCode(code)" class="raml-console-resource-section raml-console-resource-response-section" ng-repeat="code in fullResponseCodes">
         <a name="code{{code}}"></a>
         <h3 class="raml-console-resource-heading-a">Status {{code}}</h3>
 
         <div class="raml-console-resource-response">
-          <p markdown="methodInfo.responses[code].description" class="raml-console-marked-content"></p>
+          <p markdown="fullResponses[code].description" class="raml-console-marked-content"></p>
         </div>
 
-        <div class="raml-console-resource-response" ng-if="methodInfo.responses[code].headers">
+        <div class="raml-console-resource-response" ng-if="fullResponses[code].headers">
           <h4 class="raml-console-resource-body-heading">Headers</h4>
-          <properties list="methodInfo.responses[code].headers"></properties>
+          <properties list="fullResponses[code].headers"></properties>
         </div>
 
-        <div class="raml-console-resource-response" ng-if="methodInfo.responses[code].body">
+        <div class="raml-console-resource-response" ng-if="fullResponses[code].body">
           <h4 class="raml-console-resource-body-heading">
             Body
             <span
               ng-click="changeType($event, key, code)"
               ng-class="{ 'raml-console-is-active': responseInfo[code].currentType === key}"
               class="raml-console-flag"
-              ng-repeat="(key, value) in methodInfo.responses[code].body">
+              ng-repeat="(key, value) in fullResponses[code].body">
                 {{key}}
             </span>
           </h4>
 
-          <div ng-repeat="(key, value) in methodInfo.responses[code].body">
+          <div ng-repeat="(key, value) in fullResponses[code].body">
             <div ng-if="responseInfo[code].currentType === key">
               <examples
                 ng-if="responseInfo[code] && responseInfo[code].currentType"
