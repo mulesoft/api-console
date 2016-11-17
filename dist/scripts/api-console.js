@@ -7278,7 +7278,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "    </header>\n" +
     "  </li>\n" +
-    "  <li ng-if=\"!vm.isCollapsed\" class=\"raml-console-resource-panel raml-console-type-panel\" style=\"background: white; padding: 32px;\">\n" +
+    "  <li ng-if=\"!vm.isCollapsed\" class=\"raml-console-resource-panel raml-console-type-panel\" style=\"padding: 32px;\">\n" +
     "    <properties list=\"theTypes\" collapsible=\"true\" hide-property-details=\"true\"></types>\n" +
     "  </li>\n" +
     "</ol>\n"
