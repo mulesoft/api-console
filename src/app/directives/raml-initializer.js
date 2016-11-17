@@ -7,7 +7,10 @@
         restrict:    'E',
         templateUrl: 'directives/raml-initializer.tpl.html',
         replace:     true,
-        controller:  'RamlInitializerController'
+        controller:  'RamlInitializerController',
+        scope:       {
+          options: '='
+        }
       };
     })
     .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
@@ -44,7 +47,13 @@
 
       function loadFromUrl(url) {
         $scope.vm.ramlUrl = url;
-        return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+
+        if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
+          $scope.vm.isLoadedFromUrl = true;
+          $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
+        } else {
+          return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+        }
       }
 
       function loadFromString(string) {
