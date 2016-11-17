@@ -9,6 +9,7 @@
       scope: {
         context: '=',
         type: '=',
+        types: '=',
         model: '=',
         param: '='
       },

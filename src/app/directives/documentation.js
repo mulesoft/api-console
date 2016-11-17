@@ -27,7 +27,9 @@
           Object.keys(schemas)
             .map(extractSchema)
             .filter(isValidSchema)
-            .forEach(function (schema) { copyToCodesIfNotPresent(codes, schema.describedBy.responses); });
+            .forEach(function (schema) {
+              copyToCodesIfNotPresent(codes, schema.describedBy.responses);
+            });
 
           return codes;
         }
