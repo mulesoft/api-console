@@ -1,0 +1,24 @@
+#%RAML 1.0
+title: Gello
+baseUri: http://localhost:3000
+securitySchemes:
+  JWT:
+    type: Pass Through
+    description:
+      This API uses JWT to authenticate the requests.
+    describedBy:
+      headers:
+        Authorization:
+          description: |
+            Should contain the JWT token.
+            Format of the value is : bearer $JWT_TOKEN
+          type: string
+      responses:
+        401:
+          description: Unauthorized
+
+
+securedBy: [JWT]
+
+/test:
+  get:

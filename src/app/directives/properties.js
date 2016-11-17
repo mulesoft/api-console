@@ -55,8 +55,7 @@
         };
 
         $scope.isPropertyVisible = function(property) {
-          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme)
-            && !isPattern(property[0].displayName);
+          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme) && !isPattern(property[0].displayName);
         };
 
         $scope.mergeType = function (type) {
