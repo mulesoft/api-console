@@ -50,7 +50,7 @@
         };
 
         $scope.getDocumentationContent = function (content, selected) {
-          var lines  = content.split('\n');
+          var lines  = content.split(/\r|\n/);
           var index  = lines.indexOf(selected);
           var result = [];
           var regex  = /(^#|^##)+\s(.*)$/gim;
