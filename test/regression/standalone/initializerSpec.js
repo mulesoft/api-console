@@ -55,6 +55,20 @@ module.exports = function() {
       assert.ifResourceNameIsPresentAt('/resource2', 4);
     });
 
+    it('should be able to try security schema of type pass through', function () {
+      // Arrange
+      var po     = factory.create('initializer');
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000');
+      po.setRamlPath('http://localhost:9000/raml/security-schema-pass-though.raml');
+      po.loadRamlFromUrl();
+
+      // Assert
+      assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+    });
+
     it('should be able to display security schemes', function () {
       // Arrange
       var po     = factory.create('initializer');

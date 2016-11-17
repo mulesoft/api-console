@@ -1,0 +1,24 @@
+#%RAML 0.8
+title: My REST API
+version: v1
+
+securitySchemes:
+  - Custom:
+      type: x-custom
+      describedBy:
+        headers:
+          Authorization:
+            description: This header MUST be included in all requests that require authentication/authorization. The auth scheme is using a JSON Web Token Bearer Token as the header value. See [JWT](http://jwt.io/introduction/) for an introduction to JWT. (Though you don't really need to know anything about it)
+            type: string
+            required: true
+        responses:
+          400:
+            description: Bad request
+          401:
+            description: Unauthorized
+          403:
+            description: Forbidden. You are not authorized to access this resource
+
+/endpoint:
+  get:
+    securedBy: [ Custom ]

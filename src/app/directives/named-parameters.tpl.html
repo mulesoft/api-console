@@ -7,7 +7,7 @@
   <div class="raml-console-sidebar-row">
     <p class="raml-console-sidebar-input-container raml-console-sidebar-input-container-custom" ng-repeat="customParam in context.customParameters[type]">
       <button class="raml-console-sidebar-input-delete" ng-click="removeCutomParam(customParam)"></button>
-      <label for="custom-header" class="raml-console-sidebar-label raml-console-sidebar-label-custom">
+      <label class="raml-console-sidebar-label raml-console-sidebar-label-custom">
         <input class="raml-console-sidebar-custom-input-for-label" ng-model="customParam.name" placeholder="custom key">
       </label>
       <input name="custom-header" class="raml-console-sidebar-input raml-console-sidebar-input-custom" placeholder="custom value" ng-model="customParam.value">
@@ -30,7 +30,7 @@
         </span>
       </span>
 
-      <raml-field context="context" type="type" param="param.definitions[0]" model="context[type].values[param.definitions[0].id]"></raml-field>
+      <raml-field context="context" type="type" types="types" param="param.definitions[0]" model="context[type].values[param.definitions[0].id]"></raml-field>
     </p>
   </div>
 </section>
