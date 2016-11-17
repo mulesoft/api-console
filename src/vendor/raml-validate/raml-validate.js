@@ -250,13 +250,14 @@
      * @return {Object}
      */
     return function (value, key, object) {
-      // Short-circuit validation if the value is `null`.
-      if (value == null) {
-        return toValidationObject(isOptional, 'required', value, key);
-      }
 
       // Switch validation type depending on if the value is an array or not.
       var isArray = Array.isArray(value);
+
+      // Short-circuit validation if empty value
+      if (value == null || (isArray && value.length === 0)) {
+        return toValidationObject(isOptional, 'required', value, key);
+      }
 
       // Select the validation stack to use based on the (repeated) value.
       var values      = isArray ? value : [value];
