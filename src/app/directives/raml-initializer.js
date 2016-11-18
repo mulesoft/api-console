@@ -47,7 +47,6 @@
 
       function loadFromUrl(url) {
         $scope.vm.ramlUrl = url;
-
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
           $scope.vm.isLoadedFromUrl = true;
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};

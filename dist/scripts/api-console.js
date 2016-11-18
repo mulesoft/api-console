@@ -1640,7 +1640,6 @@
 
       function loadFromUrl(url) {
         $scope.vm.ramlUrl = url;
-
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
           $scope.vm.isLoadedFromUrl = true;
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
@@ -4530,14 +4529,13 @@ RAML.Inspector = (function() {
   });
 })();
 
-(function() {
+(function () {
   'use strict';
 
   RAML.LoaderUtils = {
-
-    allowedRamlOrigin : function(options) {
-      var basepath='../';
-      if(typeof options.ramlOriginCheck === 'string') {
+    allowedRamlOrigin: function (options) {
+      var basepath = '../';
+      if (typeof options.ramlOriginCheck === 'string') {
         basepath = options.ramlOriginCheck;
       }
       return basepath;
@@ -4545,23 +4543,21 @@ RAML.Inspector = (function() {
 
     // prevent loading stuff from other hosts and/or services
     ramlOriginValidate: function (url, options) {
-      var absolutePath = function(href) {
-          var link = document.createElement('a');
-          link.href = href;
-          return link.href;
+      var absolutePath = function (href) {
+        var link = document.createElement('a');
+        link.href = href;
+        return link.href;
       };
 
-      var isSameBasePath = function(href, basepath) {
-          var absoluteBasepath=absolutePath(basepath);
-          var absoluteRamlPath=absolutePath(href);
-          return absoluteRamlPath.indexOf(absoluteBasepath, 0) === 0;
+      var isSameBasePath = function (href, basepath) {
+        var absoluteBasepath = absolutePath(basepath);
+        var absoluteRamlPath = absolutePath(href);
+        return absoluteRamlPath.indexOf(absoluteBasepath, 0) === 0;
       };
 
-      var decodedRamlUrl=decodeURIComponent(url);
+      var decodedRamlUrl = decodeURIComponent(url);
       return options && options.ramlOriginCheck && !isSameBasePath(decodedRamlUrl, RAML.LoaderUtils.allowedRamlOrigin(options));
     }
-
-
   };
 })();
 
