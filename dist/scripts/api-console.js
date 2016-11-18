@@ -1163,18 +1163,14 @@
         $scope.vm.error  = void(0);
 
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
-          $scope.vm.error = {buffer : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
+          $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
           return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
             .then(function (raml) {
               $scope.vm.raml = raml;
             })
             .catch(function (error) {
-              $scope.vm.error = angular.extend(error, {
-                /*jshint camelcase: false */
-                buffer: (error.context_mark || error.problem_mark).buffer
-                /*jshint camelcase: true */
-              });
+              $scope.vm.error = error;
             })
             .finally(function () {
               $scope.vm.loaded = true;
@@ -6979,17 +6975,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </header>\n" +
     "\n" +
     "        <div class=\"raml-console-initializer-row\">\n" +
-    "          <p class=\"raml-console-initializer-input-container\" style=\"height: 550px;\">\n" +
-    "            <textarea id=\"raml\" ui-codemirror=\"{\n" +
-    "              gutters:      ['CodeMirror-lint-markers'],\n" +
-    "              lineNumbers:  true,\n" +
-    "              lineWrapping: false,\n" +
-    "              lint:         true,\n" +
-    "              mode:         'yaml',\n" +
-    "              tabSize:      2,\n" +
-    "              theme:        'raml-console'\n" +
-    "            }\" ng-model=\"vm.error.buffer\"></textarea>\n" +
-    "          </p>\n" +
+    "          <div class=\"raml-console-parser-error\">\n" +
+    "            <span>{{ vm.error.message }}</span>\n" +
+    "          </div>\n" +
+    "          <div class=\"raml-console-error-pre\" ng-repeat=\"err in vm.error.parserErrors\">\n" +
+    "            {{err.message}}\n" +
+    "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
     "    </div>\n" +
