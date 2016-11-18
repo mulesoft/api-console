@@ -1167,8 +1167,8 @@
           $scope.vm.error = {buffer : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
           return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
-            .then(function (raml) {
-              $scope.vm.raml = raml;
+            .then(function (api) {
+              $scope.vm.raml = api.specification;
             })
             .catch(function (error) {
               $scope.vm.error = angular.extend(error, {
@@ -1671,11 +1671,12 @@
 
         return promise
           .then(function (api) {
-            $scope.vm.raml = api.specification;
-          })
-          .catch(function (error) {
-            $scope.vm.error           = error;
-            $scope.vm.codeMirror.lint = lintFromError(error.parseErrors);
+            if (api.errors.length <= 0) {
+              $scope.vm.raml = api.specification;
+            } else {
+              $scope.vm.error           = { message: 'Api contains errors.'};
+              $scope.vm.codeMirror.lint = lintFromError(api.errors);
+            }
           })
           .finally(function () {
             $scope.vm.isLoading       = false;
@@ -2957,7 +2958,7 @@
         options = options || {};
         return RAML.Parser.loadApi(path, {
           attributeDefaults: true,
-          rejectOnErrors:    true,
+          rejectOnErrors:    false,
           fsResolver:        {
             contentAsync: contentAsyncFn,
             content:      content

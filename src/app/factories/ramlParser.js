@@ -52,7 +52,7 @@
         options = options || {};
         return RAML.Parser.loadApi(path, {
           attributeDefaults: true,
-          rejectOnErrors:    true,
+          rejectOnErrors:    false,
           fsResolver:        {
             contentAsync: contentAsyncFn,
             content:      content

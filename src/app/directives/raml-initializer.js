@@ -77,11 +77,12 @@
 
         return promise
           .then(function (api) {
-            $scope.vm.raml = api.specification;
-          })
-          .catch(function (error) {
-            $scope.vm.error           = error;
-            $scope.vm.codeMirror.lint = lintFromError(error.parseErrors);
+            if (api.errors.length <= 0) {
+              $scope.vm.raml = api.specification;
+            } else {
+              $scope.vm.error           = { message: 'Api contains errors.'};
+              $scope.vm.codeMirror.lint = lintFromError(api.errors);
+            }
           })
           .finally(function () {
             $scope.vm.isLoading       = false;
