@@ -1,15 +1,17 @@
 (function () {
   'use strict';
 
-  angular.module('raml', [])
-    .factory('ramlParser', ['$http', '$q', '$window', function ramlParser(
+  angular.module('raml')
+    .factory('ramlParser', ['$http', '$q', '$window', 'ramlExpander', function ramlParser(
       $http,
       $q,
-      $window
+      $window,
+      ramlExpander
     ) {
       var jsonOptions=  {
         serializeMetadata: false,
-        dumpSchemaContents: true
+        dumpSchemaContents: true,
+        rootNodeDetails: true
       };
 
       return {
@@ -74,24 +76,14 @@
               ;
             }
           }
-        })
-          .then(function (api) {
-            var apiJSON;
-
-            api = api.expand ? api.expand() : api;
-            apiJSON = api.toJSON(jsonOptions);
-            if (api.uses && api.uses()) {
-              apiJSON.uses = {};
-              api.uses().forEach(function (usesItem) {
-                var libraryAST = usesItem.ast();
-                libraryAST = libraryAST.expand ? libraryAST.expand() : libraryAST;
-                apiJSON.uses[usesItem.key()] = libraryAST.toJSON(jsonOptions);
-              });
-            }
-
-            return apiJSON;
-          })
-        ;
+        }).then(function(api) {
+          api = api.expand ? api.expand(true) : api;
+          var raml = api.toJSON(jsonOptions);
+          if (raml.specification) {
+            ramlExpander.expandRaml(raml.specification);
+          }
+          return raml;
+        });
 
         // ---
 

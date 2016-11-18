@@ -76,12 +76,12 @@
         $scope.vm.codeMirror.lint = null;
 
         return promise
-          .then(function (raml) {
-            $scope.vm.raml = raml;
+          .then(function (api) {
+            $scope.vm.raml = api.specification;
           })
           .catch(function (error) {
             $scope.vm.error           = error;
-            $scope.vm.codeMirror.lint = lintFromError(error);
+            $scope.vm.codeMirror.lint = lintFromError(error.parseErrors);
           })
           .finally(function () {
             $scope.vm.isLoading       = false;
@@ -90,9 +90,9 @@
         ;
       }
 
-      function lintFromError(error) {
+      function lintFromError(errors) {
         return function getAnnotations() {
-          return (error.parserErrors || []).map(function (error) {
+          return (errors || []).map(function (error) {
             return {
               message:  error.message,
               severity: error.isWarning ? 'warning' : 'error',

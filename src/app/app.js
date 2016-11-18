@@ -11,6 +11,7 @@
 
   // Angular Modules
   angular.module('RAML.Directives', []);
+  angular.module('raml', []);
   angular.module('RAML.Services', ['raml']);
   angular.module('RAML.Security', []);
   angular.module('ramlConsoleApp', [
