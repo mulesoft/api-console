@@ -159,6 +159,7 @@ To run tests, you'll need the following:
 * [Node JS](http://nodejs.org/)
 * [NPM](https://npmjs.org/)
 * [Ruby](https://www.ruby-lang.org)
+* [Java](https://www.java.com/)
 
 ### First Time Setup
 
