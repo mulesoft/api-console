@@ -146,7 +146,9 @@ To run the console, you'll need the following:
 ### Running the server
 
     $ npm start
-    $ open http://localhost:9000
+
+The script should automatically open [http://localhost:9000](http://localhost:9000) in your browser
+when the server has started.
 
 ## Testing
 
