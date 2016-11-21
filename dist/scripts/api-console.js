@@ -790,15 +790,17 @@
         showSecuritySchemaProperties: '='
       },
       controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
-        if (!Array.isArray($scope.list)) {
-          $scope.listArray = Object.keys($scope.list).map(function (key) {
-            return $scope.list[key];
-          });
+        $scope.$watch('list', function () {
+          if (!Array.isArray($scope.list)) {
+            $scope.listArray = Object.keys($scope.list).map(function (key) {
+              return $scope.list[key];
+            });
 
-          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.listArray);
-        } else {
-          $scope.listArray = $scope.list;
-        }
+            $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.listArray);
+          } else {
+            $scope.listArray = $scope.list;
+          }
+        });
 
         var getArrayTypes = function(arrayType) {
           if (arrayType.items.type || Array.isArray(arrayType.items.type)) {
@@ -1164,18 +1166,15 @@
         $scope.vm.error  = void(0);
 
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
-          $scope.vm.error = {buffer : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
+          $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
           return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
             .then(function (api) {
-              $scope.vm.raml = api.specification;
-            })
-            .catch(function (error) {
-              $scope.vm.error = angular.extend(error, {
-                /*jshint camelcase: false */
-                buffer: (error.context_mark || error.problem_mark).buffer
-                /*jshint camelcase: true */
-              });
+              if (api.errors.length <= 0) {
+                $scope.vm.raml = api.specification;
+              } else {
+                $scope.vm.error = { message: 'Api contains errors.', errors : api.errors};
+              }
             })
             .finally(function () {
               $scope.vm.loaded = true;
@@ -1641,7 +1640,6 @@
 
       function loadFromUrl(url) {
         $scope.vm.ramlUrl = url;
-
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
           $scope.vm.isLoadedFromUrl = true;
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
@@ -4652,14 +4650,13 @@ RAML.Inspector = (function() {
   });
 })();
 
-(function() {
+(function () {
   'use strict';
 
   RAML.LoaderUtils = {
-
-    allowedRamlOrigin : function(options) {
-      var basepath='../';
-      if(typeof options.ramlOriginCheck === 'string') {
+    allowedRamlOrigin: function (options) {
+      var basepath = '../';
+      if (typeof options.ramlOriginCheck === 'string') {
         basepath = options.ramlOriginCheck;
       }
       return basepath;
@@ -4667,23 +4664,21 @@ RAML.Inspector = (function() {
 
     // prevent loading stuff from other hosts and/or services
     ramlOriginValidate: function (url, options) {
-      var absolutePath = function(href) {
-          var link = document.createElement('a');
-          link.href = href;
-          return link.href;
+      var absolutePath = function (href) {
+        var link = document.createElement('a');
+        link.href = href;
+        return link.href;
       };
 
-      var isSameBasePath = function(href, basepath) {
-          var absoluteBasepath=absolutePath(basepath);
-          var absoluteRamlPath=absolutePath(href);
-          return absoluteRamlPath.indexOf(absoluteBasepath, 0) === 0;
+      var isSameBasePath = function (href, basepath) {
+        var absoluteBasepath = absolutePath(basepath);
+        var absoluteRamlPath = absolutePath(href);
+        return absoluteRamlPath.indexOf(absoluteBasepath, 0) === 0;
       };
 
-      var decodedRamlUrl=decodeURIComponent(url);
+      var decodedRamlUrl = decodeURIComponent(url);
       return options && options.ramlOriginCheck && !isSameBasePath(decodedRamlUrl, RAML.LoaderUtils.allowedRamlOrigin(options));
     }
-
-
   };
 })();
 
@@ -7105,17 +7100,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </header>\n" +
     "\n" +
     "        <div class=\"raml-console-initializer-row\">\n" +
-    "          <p class=\"raml-console-initializer-input-container\" style=\"height: 550px;\">\n" +
-    "            <textarea id=\"raml\" ui-codemirror=\"{\n" +
-    "              gutters:      ['CodeMirror-lint-markers'],\n" +
-    "              lineNumbers:  true,\n" +
-    "              lineWrapping: false,\n" +
-    "              lint:         true,\n" +
-    "              mode:         'yaml',\n" +
-    "              tabSize:      2,\n" +
-    "              theme:        'raml-console'\n" +
-    "            }\" ng-model=\"vm.error.buffer\"></textarea>\n" +
-    "          </p>\n" +
+    "          <div class=\"raml-console-parser-error\">\n" +
+    "            <span>{{ vm.error.message }}</span>\n" +
+    "          </div>\n" +
+    "          <div class=\"raml-console-error-pre\" ng-repeat=\"err in vm.error.errors\">\n" +
+    "            {{err.message}}\n" +
+    "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
     "    </div>\n" +
