@@ -75,12 +75,13 @@
         $scope.vm.codeMirror.lint = null;
 
         return promise
-          .then(function (raml) {
-            $scope.vm.raml = raml;
-          })
-          .catch(function (error) {
-            $scope.vm.error           = error;
-            $scope.vm.codeMirror.lint = lintFromError(error);
+          .then(function (api) {
+            if (api.errors.length <= 0) {
+              $scope.vm.raml = api.specification;
+            } else {
+              $scope.vm.error           = { message: 'Api contains errors.'};
+              $scope.vm.codeMirror.lint = lintFromError(api.errors);
+            }
           })
           .finally(function () {
             $scope.vm.isLoading       = false;
@@ -89,9 +90,9 @@
         ;
       }
 
-      function lintFromError(error) {
+      function lintFromError(errors) {
         return function getAnnotations() {
-          return (error.parserErrors || []).map(function (error) {
+          return (errors || []).map(function (error) {
             return {
               message:  error.message,
               severity: error.isWarning ? 'warning' : 'error',
