@@ -14,7 +14,7 @@
         }
       };
     })
-    .controller('RamlConsoleController', 
+    .controller('RamlConsoleController',
       ['$attrs', '$scope', '$rootScope', '$timeout', '$window', function RamlConsoleController(
       $attrs, $scope, $rootScope, $timeout, $window
     ) {
@@ -51,6 +51,7 @@
             $scope[property] = true;
           }
         });
+        $scope.csrfPath = $scope.options['csrfPath'];
 
         $scope.$watch('raml', function (raml) {
           if (!raml) {
