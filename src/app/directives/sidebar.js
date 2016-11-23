@@ -1,56 +1,6 @@
 (function () {
   'use strict';
 
-  var csrf = {};
-
-  //Need to be set only once
-  jQuery.ajaxPrefilter(function (options, originalOptions, _jqXHR) {
-    var csrfUrl = options.url.replace(/\/rest\/.*/g,'/rest/csrf');
-    var apiCSRF = csrf[csrfUrl];
-    if (apiCSRF) {
-      if (["POST", "PUT", "DELETE", "PATCH"].indexOf(options.type.toUpperCase()) !== -1) {
-        _jqXHR.setRequestHeader("X-CSRF-Token", apiCSRF);
-      }
-    }
-  });
-  var CSRF = {
-    initialize: function (url) {
-      try {
-        var csrfPromise = jQuery.Deferred();
-
-        if (csrf[url]) {
-          return csrfPromise.resolve();
-        }
-
-        //Need to be set only once
-        var requestPromise = jQuery.ajax({
-          url: url,
-          method: "GET",
-          headers: { "X-CSRF-Token": "Fetch" },
-          async: false
-        });
-
-        requestPromise
-          .then(function (data, sStatus, jqXHR) {
-            //if (data) { location.reload(); } // Reload page if session timed out
-
-            //Need to be set only once
-            csrf[url] = jqXHR.getResponseHeader("X-CSRF-Token");
-            console.log('successfull csrf', csrf, url);
-
-            csrfPromise.resolve.apply(this, arguments);
-          }, function(jqXHR) {
-            console.error('error', arguments);
-            csrfPromise.resolve.apply(this, arguments);
-          });
-        return csrfPromise;
-      }catch(ex) {
-        console.error(ex);
-        return csrfPromise.resolve();
-      }
-    }
-  };
-
   RAML.Directives.sidebar = function() {
     return {
       restrict: 'E',
@@ -546,9 +496,12 @@
               authStrategy.authenticate().then(function(token) {
                 token.sign(request);
                 $scope.requestOptions = request.toOptions();
-                CSRF.initialize(client.baseUri + '/csrf')
+                var csrfUrl = $scope.csrfPath? client.baseUri + $scope.csrfPath : false;
+                RAML.CSRF.initialize(csrfUrl, $scope.requestOptions.method)
                 .then(function() {
-                  jQuery.ajax(request.toOptions()).then(
+                  var options = request.toOptions();
+                  options.csrfUrl = csrfUrl
+                  jQuery.ajax(options).then(
                     function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
                     function(jqXhr) { handleResponse(jqXhr); }
                   );

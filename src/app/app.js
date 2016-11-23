@@ -61,4 +61,54 @@
       return result.join('');
     }
   };
+
+  //CSRF
+  RAML.CSRF = {
+    csrf: {},
+    initialize: function (url, method) {
+      try {
+        var csrfPromise = jQuery.Deferred();
+
+        if (!url ||
+            method.toUpperCase() === 'GET' ||
+            RAML.CSRF.csrf[url]) {
+
+          return csrfPromise.resolve();
+        }
+
+        var requestPromise = jQuery.ajax({
+          url: url,
+          method: "GET",
+          headers: { "X-CSRF-Token": "Fetch" },
+          async: false
+        });
+
+        requestPromise
+          .then(function (data, sStatus, jqXHR) {
+            //Need to be set only once per raml file
+            RAML.CSRF.csrf[url] = jqXHR.getResponseHeader("X-CSRF-Token");
+
+            csrfPromise.resolve.apply(this, arguments);
+          }, function(jqXHR) {
+            console.warn(arguments);
+            csrfPromise.resolve.apply(this, arguments);
+          });
+        return csrfPromise;
+      }catch(ex) {
+        console.error(ex);
+        return csrfPromise.resolve();
+      }
+    }
+  };
+  //Need to be set only once
+  jQuery.ajaxPrefilter(function (options, originalOptions, _jqXHR) {
+    if (!options.csrfUrl) { return; }
+
+    var apiCSRF = RAML.CSRF.csrf[options.csrfUrl];
+    if (apiCSRF) {
+      if (["POST", "PUT", "DELETE", "PATCH"].indexOf(options.type.toUpperCase()) !== -1) {
+        _jqXHR.setRequestHeader("X-CSRF-Token", apiCSRF);
+      }
+    }
+  });
 })(window);
