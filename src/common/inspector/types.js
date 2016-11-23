@@ -154,6 +154,61 @@
     return Array.isArray(type) ? type : [type];
   }
 
+  function typeDocumentation(type) {
+    var result = [];
+
+    if (type.minItems) {
+      result.push('minItems: ' + type.minItems);
+    }
+
+    if (type.maxItems) {
+      result.push('maxItems: ' + type.maxItems);
+    }
+
+    if (type['enum']) {
+      var enumValues = type['enum'];
+      var enumDescription = '';
+
+      if (enumValues.length > 1) {
+        enumDescription += 'one of ';
+      }
+
+      enumDescription += '(' + enumValues.filter(function (value) { return value !== ''; }).join(', ') + ')';
+
+      result.push(enumDescription);
+    }
+
+    if (type.pattern) {
+      result.push('pattern: ' + type.pattern);
+    }
+
+    if (type.minLength) {
+      result.push('minLength: ' + type.minLength);
+    }
+
+    if (type.maxLength) {
+      result.push('maxLength: ' + type.maxLength);
+    }
+
+    if (type.minimum) {
+      result.push('minimum: ' + type.minimum);
+    }
+
+    if (type.format) {
+      result.push('format: ' + type.format);
+    }
+
+    if (type.multipleOf) {
+      result.push('multipleOf: ' + type.multipleOf);
+    }
+
+    if (type.fileTypes) {
+      result.push('fileTypes: ' + type.fileTypes.join(', '));
+    }
+
+    return result.join(', ');
+  }
+
   RAML.Inspector.Types = {
     mergeType:           mergeType,
     isNativeType:        isNativeType,
@@ -163,6 +218,7 @@
     getTypeInfo:         getTypeInfo,
     getTypeFromTypeInfo: getTypeFromTypeInfo,
     ensureArray:         ensureArray,
-    cleanupTypeName:     cleanupTypeName
+    cleanupTypeName:     cleanupTypeName,
+    typeDocumentation:   typeDocumentation
   };
 })();

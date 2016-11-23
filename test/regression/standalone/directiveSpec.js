@@ -4,6 +4,18 @@ var assertions = require('../assertions');
 var factory    = require('../page_objects');
 
 module.exports = function() {
+
+  it('should be able to diplay errors for wrong raml', function () {
+    // Arrange
+    var assert = assertions.create('error');
+
+    // Act
+    browser.get('http://localhost:9000/directive-wrong.html');
+
+    // Assert
+    assert.ifErrorMessageIsPresent('Api contains errors.');
+  });
+
   it('should be able to diplay the API title', function () {
     // Arrange
     var assert = assertions.create('resource');
