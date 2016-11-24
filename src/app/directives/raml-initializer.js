@@ -76,11 +76,19 @@
 
         return promise
           .then(function (api) {
-            if (api.errors.length <= 0) {
+            var success = true;
+            var issues = api.errors; // errors and warnings
+            if (issues && issues.length > 0) {
+              success = issues.filter(function (issue) {
+                  return !issue.isWarning;
+                }).length === 0;
+            }
+
+            if (success) {
               $scope.vm.raml = api.specification;
             } else {
               $scope.vm.error           = { message: 'Api contains errors.'};
-              $scope.vm.codeMirror.lint = lintFromError(api.errors);
+              $scope.vm.codeMirror.lint = lintFromError(issues);
             }
           })
           .finally(function () {

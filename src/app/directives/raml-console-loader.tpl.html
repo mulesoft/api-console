@@ -17,7 +17,7 @@
             <span>{{ vm.error.message }}</span>
           </div>
           <div class="raml-console-error-pre" ng-repeat="err in vm.error.errors">
-            {{err.message}}
+            [{{err.isWarning && 'warning' || 'error'}}] {{err.message}}
           </div>
         </div>
       </section>
