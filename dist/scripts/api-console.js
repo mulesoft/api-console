@@ -1170,10 +1170,18 @@
         } else {
           return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
             .then(function (api) {
-              if (api.errors.length <= 0) {
+              var success = true;
+              var issues = api.errors; // errors and warnings
+              if (issues && issues.length > 0) {
+                success = issues.filter(function (issue) {
+                    return !issue.isWarning;
+                  }).length === 0;
+              }
+
+              if (success) {
                 $scope.vm.raml = api.specification;
               } else {
-                $scope.vm.error = { message: 'Api contains errors.', errors : api.errors};
+                $scope.vm.error = { message: 'Api contains errors.', errors : issues};
               }
             })
             .finally(function () {
@@ -1669,11 +1677,19 @@
 
         return promise
           .then(function (api) {
-            if (api.errors.length <= 0) {
+            var success = true;
+            var issues = api.errors; // errors and warnings
+            if (issues && issues.length > 0) {
+              success = issues.filter(function (issue) {
+                  return !issue.isWarning;
+                }).length === 0;
+            }
+
+            if (success) {
               $scope.vm.raml = api.specification;
             } else {
               $scope.vm.error           = { message: 'Api contains errors.'};
-              $scope.vm.codeMirror.lint = lintFromError(api.errors);
+              $scope.vm.codeMirror.lint = lintFromError(issues);
             }
           })
           .finally(function () {
@@ -7104,7 +7120,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            <span>{{ vm.error.message }}</span>\n" +
     "          </div>\n" +
     "          <div class=\"raml-console-error-pre\" ng-repeat=\"err in vm.error.errors\">\n" +
-    "            {{err.message}}\n" +
+    "            [{{err.isWarning && 'warning' || 'error'}}] {{err.message}}\n" +
     "          </div>\n" +
     "        </div>\n" +
     "      </section>\n" +
