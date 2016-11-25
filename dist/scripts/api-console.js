@@ -1278,6 +1278,7 @@
       $scope.hasResourcesWithChilds     = hasResourcesWithChilds;
       $scope.toggle                     = toggle;
       $scope.updateProxyConfig          = updateProxyConfig;
+      $scope.csrfPath                   = $attrs.hasOwnProperty('csrfPath') && $attrs['csrfPath'];
 
       // ---
 
@@ -1296,7 +1297,9 @@
             $scope[property] = true;
           }
         });
-        $scope.csrfPath = $scope.options['csrfPath'];
+        if ($scope.options) {
+          $scope.csrfPath = $scope.options['csrfPath'];
+        }
 
         $scope.$watch('raml', function (raml) {
           if (!raml) {
