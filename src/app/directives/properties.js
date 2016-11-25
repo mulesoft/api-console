@@ -18,15 +18,17 @@
         showSecuritySchemaProperties: '='
       },
       controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
-        if (!Array.isArray($scope.list)) {
-          $scope.listArray = Object.keys($scope.list).map(function (key) {
-            return $scope.list[key];
-          });
+        $scope.$watch('list', function () {
+          if (!Array.isArray($scope.list)) {
+            $scope.listArray = Object.keys($scope.list).map(function (key) {
+              return $scope.list[key];
+            });
 
-          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.listArray);
-        } else {
-          $scope.listArray = $scope.list;
-        }
+            $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.listArray);
+          } else {
+            $scope.listArray = $scope.list;
+          }
+        });
 
         var getArrayTypes = function(arrayType) {
           if (arrayType.items.type || Array.isArray(arrayType.items.type)) {
@@ -55,8 +57,7 @@
         };
 
         $scope.isPropertyVisible = function(property) {
-          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme)
-            && !isPattern(property[0].displayName);
+          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme) && !isPattern(property[0].displayName);
         };
 
         $scope.mergeType = function (type) {

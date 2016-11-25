@@ -5,7 +5,7 @@ ol.resources-container-no-title {
 }
 
 ol.resources-container {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .resource-level-description {
@@ -23,13 +23,15 @@ ol.resources-container {
 
 .resource-response-jump {
   margin-top: 50px;
-  position: absolute;
+  position: inherit;
   margin-left: 10px;
+  margin-bottom: 5px;
+  float: left;
 }
 
 .resource-menu {
   list-style: none;
-  padding-left: 0px;
+  padding-left: 0;
   margin-top: -5px;
 }
 
@@ -425,7 +427,7 @@ a.resource-path-active {
   position: relative;
   top: -1px;
 
-  padding: 0px 3px;
+  padding: 0 3px;
   border-radius: 3px;
 
   background: $color-console-flag-bg;

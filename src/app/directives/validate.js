@@ -18,7 +18,7 @@
           var errors;
 
           value = typeof value !== 'undefined' && value !== null && value.length === 0 ? undefined : value;
-          current[validation.id] = value;
+          current[validationId] = value;
 
           errors = validator(sanitizer(current)).errors;
 
@@ -27,24 +27,30 @@
             // Note: We want to allow invalid errors for testing purposes
             return value;
           } else {
-            clear(control, validationRules[validation.id]);
+            clear(control, validationRules[validationId]);
             return value;
           }
         }
 
         var validation      = $parse($attrs.validate)($scope);
+        var validationId    = validation.id;
         var sanitationRules = {};
         var validationRules = {};
         var control         = $ctrl;
 
-        sanitationRules[validation.id] = {
+        if (validation && validation.type) {
+          var declaredType = RAML.Inspector.Types.findType(validation.type[0], $scope.types);
+          if (declaredType) { validation = declaredType; }
+        }
+
+        sanitationRules[validationId] = {
           type: validation.type || null,
           repeat: validation.repeat || null
         };
 
-        sanitationRules[validation.id] = RAML.Utils.filterEmpty(sanitationRules[validation.id]);
+        sanitationRules[validationId] = RAML.Utils.filterEmpty(sanitationRules[validationId]);
 
-        validationRules[validation.id] = {
+        validationRules[validationId] = {
           type: validation.type || null,
           minLength: validation.minLength || null,
           maxLength: validation.maxLength || null,
@@ -56,7 +62,7 @@
           repeat: validation.repeat || null
         };
 
-        validationRules[validation.id] = RAML.Utils.filterEmpty(validationRules[validation.id]);
+        validationRules[validationId] = RAML.Utils.filterEmpty(validationRules[validationId]);
 
         $ctrl.$formatters.unshift(function(value) {
           return validate(value);
