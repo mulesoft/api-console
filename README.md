@@ -129,6 +129,12 @@ In *Single View* mode you will be able to see only documentation or try-it.
 
     <raml-console-loader src="path-to-raml" disable-try-it></raml-console-loader>    
 
+### Enable seamlessly CSRF
+
+When *csrfPath* is set, for every destructive request, if previously no csrf token was fetched, will try to fetch a CSRF token from `baseUri + csrfPath` url, before performing the current request. E.g.:
+
+    <raml-console-loader src="path-to-raml" options="{ csrfPath: '/yourcsrfEndPoint' }"></raml-console-loader>    
+
 ## Development
 
 ### Prerequisites
