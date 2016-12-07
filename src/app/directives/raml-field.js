@@ -9,6 +9,7 @@
       scope: {
         context: '=',
         type: '=',
+        types: '=',
         model: '=',
         param: '='
       },
@@ -110,5 +111,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('ramlField', RAML.Directives.ramlField);
+    .directive('ramlField', ['RecursionHelper', RAML.Directives.ramlField]);
 })();

@@ -7,13 +7,14 @@
         restrict:    'E',
         templateUrl: 'directives/raml-initializer.tpl.html',
         replace:     true,
-        controller:  'RamlInitializerController'
+        controller:  'RamlInitializerController',
+        scope:       {
+          options: '='
+        }
       };
     })
-    .controller('RamlInitializerController', function RamlInitializerController(
-      $scope,
-      $window,
-      ramlParser
+    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
+      $scope, $window, ramlParser
     ) {
       $scope.vm = {
         codeMirror: {
@@ -46,7 +47,12 @@
 
       function loadFromUrl(url) {
         $scope.vm.ramlUrl = url;
-        return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+        if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
+          $scope.vm.isLoadedFromUrl = true;
+          $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
+        } else {
+          return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+        }
       }
 
       function loadFromString(string) {
@@ -69,12 +75,21 @@
         $scope.vm.codeMirror.lint = null;
 
         return promise
-          .then(function (raml) {
-            $scope.vm.raml = raml;
-          })
-          .catch(function (error) {
-            $scope.vm.error           = error;
-            $scope.vm.codeMirror.lint = lintFromError(error);
+          .then(function (api) {
+            var success = true;
+            var issues = api.errors; // errors and warnings
+            if (issues && issues.length > 0) {
+              success = issues.filter(function (issue) {
+                  return !issue.isWarning;
+                }).length === 0;
+            }
+
+            if (success) {
+              $scope.vm.raml = api.specification;
+            } else {
+              $scope.vm.error           = { message: 'Api contains errors.'};
+              $scope.vm.codeMirror.lint = lintFromError(issues);
+            }
           })
           .finally(function () {
             $scope.vm.isLoading       = false;
@@ -83,9 +98,9 @@
         ;
       }
 
-      function lintFromError(error) {
+      function lintFromError(errors) {
         return function getAnnotations() {
-          return (error.parserErrors || []).map(function (error) {
+          return (errors || []).map(function (error) {
             return {
               message:  error.message,
               severity: error.isWarning ? 'warning' : 'error',
@@ -95,6 +110,6 @@
           });
         };
       }
-    })
+    }])
   ;
 })();

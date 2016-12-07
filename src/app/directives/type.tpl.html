@@ -9,6 +9,7 @@
 <div ng-if="selectedType" class="raml-console-type-info-popover">
   <h3>
     <span>{{selectedType.displayName}}</span>
+    <span class="raml-console-resource-param-instructional">{{typeDocumentation(selectedType)}}</span>
     <div class="raml-console-subtitle">
       <span ng-repeat-start="superType in getSupertTypes(selectedType)">{{superType}}</span>
       <span ng-if="!$last" ng-repeat-end>, </span>

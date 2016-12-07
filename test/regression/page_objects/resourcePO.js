@@ -38,15 +38,30 @@ function ResourcesPO () {
     return this.getMethodsForResourceAt(resource).get(method).element(by.css('.raml-console-tab-label'));
   };
 
+  this.getTryItGetBtn = function (index) {
+    return this.resources.get(index+1).element(by.css('.raml-console-sidebar-action-get'));
+  };
+
+  this.getTryItErrorMessages = function (index) {
+    return this.resources.get(index+1).all(by.css('.raml-console-sidebar-row > .raml-console-resource-param-instructional'));
+  };
+
   this.getSecuritySchemes = function (index) {
     return this.resources.get(index+1).all(by.tagName('option'));
   };
+
+  this.getSecuritySchemeHeaderTitles = function (index) {
+    return this.resources.get(index+1).all(by.css('.raml-console-resource-param-heading'));
+  };
+
   this.getUsernameField = function () {
     return element(by.name('username'));
   };
+
   this.getPasswordField = function () {
     return element(by.name('password'));
   };
+
   this.getCloseBtn = function (index) {
     return this.resources.get(index+1).all(by.css('.raml-console-resource-close-btn'));
   };

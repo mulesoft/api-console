@@ -1,6 +1,6 @@
 {
   "name": "api-console",
-  "version": "3.0.8",
+  "version": "3.0.11",
   "description": "Api-Console for RAML based app",
   "files": [
     "dist",

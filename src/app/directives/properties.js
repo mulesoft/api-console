@@ -14,31 +14,50 @@
         isNestedProperty: '=',
         hideTypeLinks: '=',
         hidePropertyDetails: '=',
-        showExamples: '='
+        showExamples: '=',
+        showSecuritySchemaProperties: '='
       },
-      controller: function ($scope, $rootScope) {
-        if (!Array.isArray($scope.list)) {
-          $scope.listArray = Object.keys($scope.list).map(function (key) {
-            return $scope.list[key];
-          });
+      controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
+        $scope.$watch('list', function () {
+          if (!Array.isArray($scope.list)) {
+            $scope.listArray = Object.keys($scope.list).map(function (key) {
+              return $scope.list[key];
+            });
 
-          $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.list);
-        } else {
-          $scope.listArray = $scope.list;
-        }
+            $scope.listArray = RAML.Inspector.Properties.normalizeNamedParameters($scope.listArray);
+          } else {
+            $scope.listArray = $scope.list;
+          }
+        });
+
+        var getArrayTypes = function(arrayType) {
+          if (arrayType.items.type || Array.isArray(arrayType.items.type)) {
+            return arrayType.items.type;
+          }
+
+          return [arrayType.items];
+        };
 
         $scope.getType = function (type) {
           var newType = $scope.mergeType(type);
           newType.type = RAML.Inspector.Types.ensureArray(newType.type);
 
           if (newType.type[0] === 'array') {
-            newType.type = newType.items.type.map(function (aType) {
+            newType.type = getArrayTypes(newType).map(function (aType) {
               return aType + '[]';
             });
             newType.properties = newType.items.properties;
           }
 
           return newType;
+        };
+
+        var isPattern = function (propertyName) {
+          return propertyName.match(PATTERN_PATTERN);
+        };
+
+        $scope.isPropertyVisible = function(property) {
+          return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme) && !isPattern(property[0].displayName);
         };
 
         $scope.mergeType = function (type) {
@@ -177,7 +196,7 @@
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
         };
-      },
+      }],
       compile: function (element) {
         return RecursionHelper.compile(element);
       }
@@ -185,5 +204,5 @@
   };
 
   angular.module('RAML.Directives')
-    .directive('properties', RAML.Directives.properties);
+    .directive('properties', ['RecursionHelper', RAML.Directives.properties]);
 })();

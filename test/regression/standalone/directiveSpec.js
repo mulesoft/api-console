@@ -4,6 +4,18 @@ var assertions = require('../assertions');
 var factory    = require('../page_objects');
 
 module.exports = function() {
+
+  it('should be able to diplay errors for wrong raml', function () {
+    // Arrange
+    var assert = assertions.create('error');
+
+    // Act
+    browser.get('http://localhost:9000/directive-wrong.html');
+
+    // Assert
+    assert.ifErrorMessageIsPresent('Api contains errors.');
+  });
+
   it('should be able to diplay the API title', function () {
     // Arrange
     var assert = assertions.create('resource');
@@ -29,6 +41,17 @@ module.exports = function() {
     assert.ifResourceNameIsPresentAt('/resource2', 4);
   });
 
+  it('should be able to try it with security schema Pass Through', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-security-schema-pass-though.html');
+
+    // Assert
+    assert.ifBeAbleToTryIt(0, 0);
+  });
+
   it('should be able to display security schemes', function () {
     // Arrange
     var assert = assertions.create('resource');
@@ -38,6 +61,17 @@ module.exports = function() {
 
     // Assert
     assert.ifShowingSecuritySchemes(0, 0, ['Anonymous', 'OAuth 2.0']);
+  });
+
+  it('should be able to display security schemagit status headers', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-security-schema-resource.html');
+
+    // Assert
+    assert.ifShowingSecuritySchemaHeaders(0, 0, 4, ['Authorization', '400', '401', '403']);
   });
 
   it('should be able to cache credentials between resources', function () {

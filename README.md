@@ -91,43 +91,49 @@ Add the following in a similar manner as proxying or OAuth 2.0 to ignore markdow
 
 In *Single View* mode you will be able to see only documentation or try-it.
 
-    <raml-console-loader src="path-to-raml" single-view></raml-console-loader>
+    <raml-console-loader src="path-to-raml" options="{ singleView: true }"></raml-console-loader>
 
 ### Theme Switcher
 
 *Theme Switcher* can be disable if needed by adding the following setting:
 
-    <raml-console-loader src="path-to-raml" disable-theme-switcher></raml-console-loader>
+    <raml-console-loader src="path-to-raml" options="{ disableThemeSwitcher: true }"></raml-console-loader>
 
 ### Disabling Client Generator
 
 *Raml client generator* can be disable if needed by adding the following setting:
 
-    <raml-console-loader src="path-to-raml" disable-raml-client-generator></raml-console-loader>
+    <raml-console-loader src="path-to-raml" options="{ disableRamlClientGenerator: true }"></raml-console-loader>
 
 ### Resources collapsed
 
 *Resources* can be collapsed if needed by adding the following setting:
 
-    <raml-console-loader src="path-to-raml" resources-collapsed></raml-console-loader>
+    <raml-console-loader src="path-to-raml" options="{ resourceCollapsed: true }"></raml-console-loader>
 
 ### Documentation collapsed
 
 *Documentation* can be collapsed if needed by adding the following setting:
 
-    <raml-console-loader src="path-to-raml" documentation-collapsed></raml-console-loader>
+    <raml-console-loader src="path-to-raml" options="{ documentationCollapsed: true }"></raml-console-loader>
 
 ### Allowing Unsafe Markdown
 
 *Unsafe Markdown* will be disable by default, if you want to allow unsafe content check the following example:
 
-    <raml-console-loader src="path-to-raml" allow-unsafe-markdown></raml-console-loader>
+    <raml-console-loader src="path-to-raml" options="{ allowUnsafeMarkdown: true }"></raml-console-loader>
 
 ### Disabling Try-it
 
 *Try-it* will be enable by default, if you want to disable Try-it you can do that by adding the following setting:
 
-    <raml-console-loader src="path-to-raml" disable-try-it></raml-console-loader>
+    <raml-console-loader src="path-to-raml" options="{ disableTryIt: true }"></raml-console-loader>
+
+### Multiple Options
+
+Multiple of the options above can be provided. The options need to be expressed in camelcase format:
+
+    <raml-console-loader src="path-to-raml" options="{ disableRamlClientGenerator: true, disableTryIt: true }"></raml-console-loader>
 
 ## Development
 

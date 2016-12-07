@@ -11,7 +11,7 @@
         hideTypeLinks: '=',
         items: '='
       },
-      controller: function ($scope, $rootScope, $timeout) {
+      controller: ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
         $scope.typeInfo = RAML.Inspector.Types.getTypeInfo($scope.typeName, $scope.items);
 
         $scope.closePopover = function () {
@@ -27,6 +27,11 @@
         };
 
         $scope.cleanupTypeName = RAML.Inspector.Types.cleanupTypeName;
+
+        $scope.typeDocumentation = function(type) {
+          type = RAML.Inspector.Types.findType(type.type[0], $rootScope.types);
+          return RAML.Inspector.Types.typeDocumentation(type);
+        };
 
         $scope.getSupertTypes = function (type) {
           return RAML.Inspector.Types.findType(type.type[0], $rootScope.types).type.map(function (aTypeName) {
@@ -53,7 +58,7 @@
 
           $event.stopPropagation();
         };
-      }
+      }]
     };
   };
 

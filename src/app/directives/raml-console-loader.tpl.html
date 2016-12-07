@@ -13,17 +13,12 @@
         </header>
 
         <div class="raml-console-initializer-row">
-          <p class="raml-console-initializer-input-container" style="height: 550px;">
-            <textarea id="raml" ui-codemirror="{
-              gutters:      ['CodeMirror-lint-markers'],
-              lineNumbers:  true,
-              lineWrapping: false,
-              lint:         true,
-              mode:         'yaml',
-              tabSize:      2,
-              theme:        'raml-console'
-            }" ng-model="vm.error.buffer"></textarea>
-          </p>
+          <div class="raml-console-parser-error">
+            <span>{{ vm.error.message }}</span>
+          </div>
+          <div class="raml-console-error-pre" ng-repeat="err in vm.error.errors">
+            [{{err.isWarning && 'warning' || 'error'}}] {{err.message}}
+          </div>
         </div>
       </section>
     </div>
