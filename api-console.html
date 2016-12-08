@@ -1,0 +1,245 @@
+<!--
+@license
+Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../raml-js-parser/raml-js-parser.html">
+<link rel="import" href="../raml-aware/raml-aware.html">
+<link rel="import" href="../paper-toast/paper-toast.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../raml-documentation-panel/raml-documentation-panel.html">
+<link rel="import" href="../raml-request-panel/raml-request-panel.html">
+
+<!--
+The API console to be used as a Web Component. In this case you can import the element
+using Bower:
+```
+bower install --save advanced-rest-client/api-console
+```
+And then use it as a regular HTML element.
+But first you have to tell the browser what's the element dfinition by importing it into the
+document:
+```
+<link rel="import" href="bower_components/api-console/api-console.html">
+```
+Because as for now the `import` specification is not standarized accross all browser vendors
+(unlike other WebComponents spec) you have to use polifill:
+
+```
+<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+```
+Thisscript is not a polyfill for web components nor the Polymer. It only load components you want
+to import.
+
+## The Polymer
+Basically you don't have to care about the Polymer framework. It is included internally by the
+components. If the browser don't (yet) support shaddow DOM then Polymer will be available in the
+global scope. Otherwise it is not visible to the DOM.
+In both cases you don't have to use or know Polymer to use this element. You must to know how to
+use HTML, JavaScript and CSS though :)
+
+## Styling
+This section is mean to be updated later, when the element's API is finished.
+
+## Usage
+After installing and including the API console into the document, use it as regular HTML element:
+
+```
+<api-console auto src="https://domain.com/api.raml"></api-console>
+```
+It will load the RAML file definition and initially display the documentation of the API.
+Users have to click on the "try it" button to run the request with given parameters.
+
+To display a request form for particular endpoint of the API you can set a `path` property which
+represents a path to the method in the RAML JSON output.
+```
+<api-console path="resources.0.method.1"></api-console>
+```
+Example above will display second method from first resource in the resources tree.
+You can set attribute `display` to `request` to display a request panel for this method. By default
+it is set to `docs`.
+
+@group UI Elements
+@element api-console
+@demo demo/index.html
+-->
+<dom-module id="api-console">
+  <template>
+    <style>
+     :host {
+      display: block;
+    }
+
+    *[hidden] {
+      display: none !important;
+    }
+    </style>
+    <div class="loader" hidden$="[[!working]]">
+      <paper-spinner active="[[working]]"></paper-spinner>
+      <p>Loading content. Please wait a sec...</p>
+    </div>
+    <iron-pages attr-for-selected="data-display" selected="[[display]]" fallback-selection="e404">
+      <section data-display="docs">
+        <raml-documentation-panel has-selection="[[ramlNodeSelected]]" selected-path="{{path}}" aware="raml"></raml-documentation-panel>
+      </section>
+      <section data-display="request">
+        <raml-request-panel path="{{path}}" aware="raml"></raml-request-panel>
+      </section>
+      <section data-display="e404">
+        <p>The <b>display</b> attribute is incorrect. Set <b>docs</b> or <b>request</b> only.</p>
+      </section>
+    </iron-pages>
+    <raml-js-parser normalize-raml></raml-js-parser>
+    <raml-aware raml="[[raml]]" scope="raml"></raml-aware>
+    <paper-toast text=""></paper-toast>
+  </template>
+  <script>
+  Polymer({
+    is: 'api-console',
+
+    properties: {
+      /**
+       * An URL to the RAML file definition.
+       * If the `auto` attribute is set then after the URL change it wil load the RAML
+       * definition automatically.
+       */
+      src: String,
+      // If set then the element will automatically download RAML definition when `src` changed.
+      auto: Boolean,
+      /**
+       * A screen to display. By default it is `docs` but can be `request` to display a request
+       * panel for given `path`.
+       */
+      display: {
+        type: String,
+        value: 'docs',
+        reflectToAttribute: true
+      },
+      /**
+       * Current path to the resource / method / documentation.
+       * This is updated when the user select a specific node in the RAML JSON structure that
+       * represents one of this properties. When changed from the outside (by the app) it will
+       * update the view to display selected path.
+       */
+      path: {
+        type: String,
+        notify: true
+      },
+      // Will be set to true when parsing the RAML file.
+      working: {
+        type: Boolean,
+        value: false,
+        readOnly: true,
+        notify: true
+      },
+      // RAML as the JSON produced by the parser. The `.specificvation` part of the output.
+      raml: {
+        type: Object,
+        notify: true,
+        readOnly: true
+      },
+      // List of parser errors.
+      errors: {
+        type: Array,
+        notify: true,
+        readOnly: true
+      },
+      // True if the element and child elements has been loaded.
+      _loaded: Boolean,
+      // Will be set to true if the RAML file has been loaded.
+      _hasRaml: {
+        type: Boolean,
+        value: false,
+        computed: '_computeHasRaml(_loaded, raml)'
+      }
+    },
+
+    listeners: {
+      'tryit': '_tryitHandler'
+    },
+
+    observers: [
+      '_autoUpdate(auto, src)'
+    ],
+
+    attached: function() {
+      this._loaded = true;
+      this._autoUpdate(this.auto, this.src);
+    },
+    // Calls `updateSrc` if auto is enabled and URL is set / has been changed.
+    _autoUpdate: function(auto, src) {
+      if (auto && src) {
+        this.updateSrc();
+      }
+    },
+
+    // Downloads and parses the RAML definition for given `src`.
+    updateSrc: function() {
+      if (!this._loaded) {
+        return;
+      }
+      var url = this.src;
+      if (!url) {
+        return;
+      }
+      this._setWorking(true);
+      this._setRaml(undefined);
+      this._setErrors(undefined);
+      var detail = {
+        'url': url
+      };
+      var event = this.fire('parse-raml-url', detail);
+      if (!event.detail.raml) {
+        this._toastMessage('Internal error. RAML parser not in the DOM.');
+        console.error('Event did not contained raml property.');
+        return;
+      }
+      this._handleRamlEvent(event);
+    },
+    // Handles the parser event response.
+    _handleRamlEvent: function(event) {
+      var context = this;
+      event.detail.raml
+        .then(function(result) {
+          context._setRaml(result[1].specification);
+          context._setErrors(result[1].errors);
+          context.fire('raml-ready', {
+            raml: result[1].specification,
+            errors: result[1].errors
+          });
+          context._setWorking(false);
+        })
+        .catch(function(e) {
+          context._toastMessage('Parser error: ' + e.message);
+          context._setWorking(false);
+          console.warn('API error', e);
+        });
+    },
+    // Displays a toast with a `message`.
+    _toastMessage: function(message) {
+      var toast = this.$$('paper-toast');
+      toast.text = message;
+      toast.opened = true;
+    },
+    // Compute is the element received and parsed RAML file.
+    _computeHasRaml: function(_loaded, raml) {
+      return !!(_loaded && !!raml);
+    },
+    // Handler for the `tryit` event fired in the `raml-docs-method-viewer` element.
+    _tryitHandler: function() {
+      this.display = 'request';
+    }
+
+  });
+  </script>
+</dom-module>

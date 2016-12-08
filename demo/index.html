@@ -1,0 +1,83 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>API Console</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../api-console.html">
+  <link rel="import" href="../../font-roboto/roboto.html">
+  <link rel="import" href="../../paper-listbox/paper-listbox.html">
+  <link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html">
+  <link rel="import" href="../../paper-item/paper-item.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+
+  <style is="custom-style">
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+  header {
+    background-color: #e0e0e0;
+    margin: 0;
+    padding: 12px;
+    @apply(--layout-horizontal);
+    @apply(--layout-center);
+  }
+  h1 {
+    padding: 0;
+    margin: 0;
+    @apply(--layout-flex);
+  }
+  </style>
+</head>
+
+<body unresolved>
+  <header>
+    <h1>The API console</h1>
+    <paper-dropdown-menu label="RAML definition">
+      <paper-listbox id="urlSelector" class="dropdown-content" selected="0">
+        <paper-item data-url="https://raw.githubusercontent.com/advanced-rest-client/raml-example-api/master/api.raml">ARC example</paper-item>
+        <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/world-music-api/api.raml">World Music API</paper-item>
+        <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/alainn-mobile-shopping/api.raml">Álainn Cosmetics Mobile Orders API</paper-item>
+        <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/mobile-order-api/api.raml">Mobile Order API</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu>
+  </header>
+  <api-console auto></api-console>
+  <script>
+  (function() {
+    'use strict';
+    function $(selector) {
+      return document.querySelector(selector);
+    }
+    $('#urlSelector').addEventListener('iron-select', function(e) {
+      var url = e.detail.item.dataset.url;
+      $('api-console').src = url;
+    });
+    window.addEventListener('WebComponentsReady', function() {
+
+    });
+  })();
+  </script>
+</body>
+
+</html>
