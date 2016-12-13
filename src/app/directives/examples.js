@@ -11,10 +11,6 @@
       },
       controller: ['$scope', function($scope) {
         $scope.getBeatifiedExample = $scope.getBeatifiedExampleRef();
-        $scope.examples = transformExample($scope.exampleContainer);
-        $scope.currentExample = 0;
-
-        $scope.isXML = $scope.exampleContainer.name === 'application/xml';
 
         $scope.changeExample = function(example) {
           $scope.currentExample = example;
@@ -22,6 +18,9 @@
 
         $scope.$watch('exampleContainer', function (value) {
           $scope.examples = transformExample(value);
+          $scope.currentExample = 0;
+
+          $scope.isXML = value.name === 'application/xml';
         });
       }]
     };
