@@ -10,9 +10,11 @@
         type: '='
       },
       controller: ['$scope', function ($scope) {
-        $scope.properties = {
-          body: [$scope.type]
-        };
+        $scope.$watch('type', function () {
+          $scope.properties = {
+            body: [$scope.type]
+          };
+        });
       }]
     };
   };
