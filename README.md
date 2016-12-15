@@ -61,6 +61,11 @@ You will need to specify a fixed height for the iframe that fits into the design
 1. Your RAML document needs to be hosted on the same domain as the console, or on a domain that allows [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) requests from your domain.
 2. To use **Try It** functionality within the console, your API needs to enable CORS from the console's domain, or you need to use a proxy.
 
+#### Dealing with CORS
+App provides proxy for fetching raml-files that served without Access-Control-Allow-Origin headers.
+
+    http://<app-host>/?raml=/proxy/http://<your-raml-host>/<path-to>.raml
+
 ## Configuration
 
 ### Proxying

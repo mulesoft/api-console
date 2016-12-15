@@ -15,8 +15,9 @@ WORKDIR /data
 COPY . /data
 
 RUN npm install && bower --allow-root install
+RUN /usr/local/bin/grunt build
 
-EXPOSE 9000
+EXPOSE 8000
 
-ENTRYPOINT ["/usr/local/bin/grunt"]
-CMD ["default"]
+ENTRYPOINT ["node"]
+CMD ["express-app.js"]
