@@ -20,4 +20,4 @@ RUN /usr/local/bin/grunt build
 EXPOSE 8000
 
 ENTRYPOINT ["sh"]
-CMD ["-c", "node", "express-app.js"]
+CMD ["-c", "node express-app.js"]
