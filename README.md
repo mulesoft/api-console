@@ -17,13 +17,12 @@ There are two ways you can include the console: directly, or within an iframe. T
 
         <head>
           …
-          <link href="styles/vendor.css" rel="stylesheet" type="text/css">
-          <link rel="stylesheet" href="path/to/dist/styles/light-theme.css" type="text/css" />
+          <link rel="stylesheet" href="path/to/dist/styles/api-console-light-theme.css" type="text/css" />
         </head>
         <body ng-app="ramlConsoleApp" ng-cloak>
           …
-          <script src="path/to/dist/scripts/vendor.js"></script>
-          <script type="text/javascript" src="scripts/api-console.js"></script>
+          <script src="path/to/dist/scripts/api-console-vendor.js"></script>
+          <script type="text/javascript" src="path/to/dist/scripts/api-console.js"></script>
           <script type="text/javascript">
             $.noConflict();
           </script>
