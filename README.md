@@ -114,7 +114,7 @@ In *Single View* mode you will be able to see only documentation or try-it.
 
 *Resources* can be collapsed if needed by adding the following setting:
 
-    <raml-console-loader src="path-to-raml" options="{ resourceCollapsed: true }"></raml-console-loader>
+    <raml-console-loader src="path-to-raml" options="{ resourcesCollapsed: true }"></raml-console-loader>
 
 ### Documentation collapsed
 
