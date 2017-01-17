@@ -11,7 +11,9 @@ module.exports = function (grunt) {
       js: ['src/**/*.js'],
       jsVendor: [
         'bower_components/marked/lib/marked.js',
-        'bower_components/raml-1-parser/raml-1-parser.js',
+        'bower_components/raml-1-parser-browser/browser_version/index.js',
+        'bower_components/raml-json-validation-browser/browser_version_bower/index.js',
+        'bower_components/raml-xml-validation-browser/browser_version_bower/index.js',
         'bower_components/highlightjs/highlight.pack.js',
         'bower_components/vkbeautify/vkbeautify.js',
         'bower_components/jquery/dist/jquery.js',
