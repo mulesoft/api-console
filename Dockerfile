@@ -1,4 +1,4 @@
-FROM node:4.1
+FROM node:4.7
 
 # Install Ruby (for Gem)
 RUN apt-get update \
