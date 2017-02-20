@@ -281,10 +281,10 @@
    */
   function sanitizeScope (scopes) {
     if (!Array.isArray(scopes)) {
-      return scopes == null ? null : String(scopes);
+      return scopes == null || scopes == '' ? null : String(scopes);
     }
-
-    return scopes.join(' ');
+    var scope = scopes.join(' ');
+    return scope != '' ? scope : null;
   }
 
   /**
