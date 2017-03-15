@@ -55,7 +55,7 @@
       popup(auth[grantType].getUri());
     }
 
-    if (grantType === 'owner' || grantType === 'password') {
+    if (grantType === 'password') {
       auth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
         if (err) {
           done(raw, err);
@@ -69,7 +69,7 @@
       });
     }
 
-    if (grantType === 'credentials'|| grantType === 'client_credentials') {
+    if (grantType === 'client_credentials') {
       auth.credentials.getToken(function (err, user, raw) {
         if (err) {
           done(raw, err);

@@ -12,7 +12,7 @@
         };
 
         $scope.ownerOptionsEnabled = function () {
-          return $scope.credentials.grant === 'owner';
+          return $scope.credentials.grant === 'password';
         };
 
         $scope.isImplicitEnabled = function () {
@@ -38,15 +38,7 @@
           },
           {
             label: 'Resource Owner Password Credentials',
-            value: 'owner'
-          },
-          {
-            label: 'Resource Owner Password Credentials',
             value: 'password'
-          },
-          {
-            label: 'Client Credentials',
-            value: 'credentials'
           },
           {
             label: 'Client Credentials',
