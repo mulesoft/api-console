@@ -7160,8 +7160,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <div ng-if=\"!disableDescription\" ng-init=\"actualSize = descriptionLimit\" >\n" +
     "    <div class=\"raml-console-root-description\" markdown=\"raml.description | limitTo : actualSize\"></div>\n" +
     "    <span>\n" +
-    "      <a class=\"raml-console-show-more-less\" ng-click=\"actualSize = descriptionLimit\" ng-hide=\"raml.description.length > actualSize || raml.description.length < actualSize\">show less</a>\n" +
-    "      <a class=\"raml-console-show-more-less\" ng-click=\"actualSize = raml.description.length\" ng-hide=\"raml.description.length == actualSize\">show more</a>\n" +
+    "      <a class=\"raml-console-show-more-less\"\n" +
+    "         ng-hide=\"raml.description.length <= descriptionLimit || raml.description.length > actualSize || raml.description.length < actualSize\"\n" +
+    "         ng-click=\"actualSize = descriptionLimit\"\n" +
+    "      >show less</a>\n" +
+    "      <a class=\"raml-console-show-more-less\"\n" +
+    "         ng-hide=\"raml.description.length <= descriptionLimit || raml.description.length == actualSize\"\n" +
+    "         ng-click=\"actualSize = raml.description.length\"\n" +
+    "      >show more</a>\n" +
     "    </span>\n" +
     "  </div>\n" +
     "\n" +
