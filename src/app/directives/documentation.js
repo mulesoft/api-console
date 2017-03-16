@@ -239,6 +239,16 @@
           $elements.removeClass('raml-console-is-active');
           $container.find('.raml-console-body-' + $scope.getBodyId(value)).addClass('raml-console-is-active');
         });
+
+        $scope.$watch('methodInfo.responses', function (responses) {
+          $scope.methodInfo.responses = responses;
+          $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
+          $scope.fullResponseCodes = Object.keys($scope.fullResponses);
+          if ($scope.fullResponseCodes && $scope.fullResponseCodes.length > 0) {
+            $scope.currentStatusCode = $scope.fullResponseCodes[0];
+          }
+        });
+
       }],
       replace: true
     };
