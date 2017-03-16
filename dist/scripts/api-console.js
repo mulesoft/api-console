@@ -1234,7 +1234,7 @@
         }
       };
     })
-    .controller('RamlConsoleController', 
+    .controller('RamlConsoleController',
       ['$attrs', '$scope', '$rootScope', '$timeout', '$window', function RamlConsoleController(
       $attrs, $scope, $rootScope, $timeout, $window
     ) {
@@ -1246,6 +1246,7 @@
       $scope.disableTitle               = $attrs.hasOwnProperty('disableTitle');
       $scope.disableTryIt               = $attrs.hasOwnProperty('disableTryIt');
       $scope.disableDescription         = $attrs.hasOwnProperty('disableDescription');
+      $scope.descriptionLimit           = $attrs.hasOwnProperty('descriptionLimit') || 50;
       $scope.documentationCollapsed     = $attrs.hasOwnProperty('documentationCollapsed');
       $scope.proxy                      = $window.RAML.Settings.proxy;
       $scope.readResourceTraits         = readResourceTraits;
@@ -7155,7 +7156,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "  <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{raml.title}}</h1>\n" +
     "\n" +
-    "  <div ng-if=\"!disableDescription\" markdown=\"raml.description\"></div>\n" +
+    "\n" +
+    "  <div ng-if=\"!disableDescription\" ng-init=\"actualSize = descriptionLimit\" >\n" +
+    "    <div class=\"raml-console-root-description\" markdown=\"raml.description | limitTo : actualSize\"></div>\n" +
+    "    <span>\n" +
+    "      <a class=\"raml-console-show-more-less\" ng-click=\"actualSize = descriptionLimit\" ng-hide=\"raml.description.length > actualSize || raml.description.length < actualSize\">show less</a>\n" +
+    "      <a class=\"raml-console-show-more-less\" ng-click=\"actualSize = raml.description.length\" ng-hide=\"raml.description.length == actualSize\">show more</a>\n" +
+    "    </span>\n" +
+    "  </div>\n" +
     "\n" +
     "  <root-documentation></root-documentation>\n" +
     "\n" +

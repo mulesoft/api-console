@@ -8,10 +8,10 @@
 
 
   <div ng-if="!disableDescription" ng-init="actualSize = descriptionLimit" >
-    <div markdown="raml.description | limitTo : actualSize"></div>
+    <div class="raml-console-root-description" markdown="raml.description | limitTo : actualSize"></div>
     <span>
-      <a ng-click="actualSize = descriptionLimit" ng-hide="raml.description.length > actualSize || raml.description.length < actualSize" style="cursor: default;">show less</a>
-      <a ng-click="actualSize = raml.description.length" ng-hide="raml.description.length == actualSize" style="cursor: default;">show more</a>
+      <a class="raml-console-show-more-less" ng-click="actualSize = descriptionLimit" ng-hide="raml.description.length > actualSize || raml.description.length < actualSize">show less</a>
+      <a class="raml-console-show-more-less" ng-click="actualSize = raml.description.length" ng-hide="raml.description.length == actualSize">show more</a>
     </span>
   </div>
 
