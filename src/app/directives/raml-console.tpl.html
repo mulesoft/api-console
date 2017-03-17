@@ -7,7 +7,7 @@
   <h1 ng-if="!disableTitle" class="raml-console-title">{{raml.title}}</h1>
 
 
-  <div ng-if="!disableDescription" ng-init="actualSize = descriptionLimit" >
+  <div ng-if="!disableDescription && !!raml.description" ng-init="actualSize = descriptionLimit" >
     <div class="raml-console-root-description" markdown="raml.description | limitTo : actualSize"></div>
     <span>
       <a class="raml-console-show-more-less"
