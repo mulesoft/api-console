@@ -14,7 +14,7 @@ function InitializerPO () {
 
   this.setRaml = function(raml) {
     for (var i = 0; i < raml.length; i++) {
-      browser.executeScript('jQuery(".CodeMirror")[0].CodeMirror.setLine(' + i + ', "' + raml[i] + ' \\n")');
+      browser.executeScript('jQuery(".CodeMirror")[0].CodeMirror.replaceRange("' + raml[i] + ' \\n", {line: ' + i + ', ch: 0}, {line: ' + i + '})');
     }
   };
 
