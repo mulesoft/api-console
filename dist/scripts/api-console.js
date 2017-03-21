@@ -7159,7 +7159,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{raml.title}}</h1>\n" +
     "\n" +
     "\n" +
-    "  <div ng-if=\"!disableDescription && !!raml.description\" ng-init=\"actualSize = descriptionLimit\" >\n" +
+    "  <div ng-if=\"!disableDescription && !!raml.description && raml.description.length > 0\" ng-init=\"actualSize = descriptionLimit\" >\n" +
     "    <div class=\"raml-console-root-description\" markdown=\"raml.description | limitTo : actualSize\"></div>\n" +
     "    <span>\n" +
     "      <a class=\"raml-console-show-more-less\"\n" +
