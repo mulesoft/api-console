@@ -6,6 +6,21 @@
 
   <h1 ng-if="!disableTitle" class="raml-console-title">{{raml.title}}</h1>
 
+
+  <div ng-if="!disableDescription && !!raml.description && raml.description.length > 0" ng-init="actualSize = descriptionLimit" >
+    <div class="raml-console-root-description" markdown="raml.description | limitTo : actualSize"></div>
+    <span>
+      <a class="raml-console-show-more-less"
+         ng-hide="raml.description.length <= descriptionLimit || raml.description.length > actualSize || raml.description.length < actualSize"
+         ng-click="actualSize = descriptionLimit"
+      >show less</a>
+      <a class="raml-console-show-more-less"
+         ng-hide="raml.description.length <= descriptionLimit || raml.description.length == actualSize"
+         ng-click="actualSize = raml.description.length"
+      >show more</a>
+    </span>
+  </div>
+
   <root-documentation></root-documentation>
 
   <root-types types="types" ng-if="types"></root-types>

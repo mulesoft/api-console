@@ -49,7 +49,7 @@
           $rootScope.$broadcast(TOGGLE_POPOVER);
 
           $timeout(function () {
-            $scope.selectedType = RAML.Inspector.Types.mergeType({
+            $scope.selectedType = RAML.Inspector.Types.mergeProperty({
                 displayName: type,
                 type: [type]
               },

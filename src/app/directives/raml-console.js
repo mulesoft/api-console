@@ -14,7 +14,7 @@
         }
       };
     })
-    .controller('RamlConsoleController', 
+    .controller('RamlConsoleController',
       ['$attrs', '$scope', '$rootScope', '$timeout', '$window', function RamlConsoleController(
       $attrs, $scope, $rootScope, $timeout, $window
     ) {
@@ -25,6 +25,8 @@
       $scope.disableThemeSwitcher       = $attrs.hasOwnProperty('disableThemeSwitcher');
       $scope.disableTitle               = $attrs.hasOwnProperty('disableTitle');
       $scope.disableTryIt               = $attrs.hasOwnProperty('disableTryIt');
+      $scope.disableDescription         = $attrs.hasOwnProperty('disableDescription');
+      $scope.descriptionLimit           = $attrs.hasOwnProperty('descriptionLimit') || 50;
       $scope.documentationCollapsed     = $attrs.hasOwnProperty('documentationCollapsed');
       $scope.proxy                      = $window.RAML.Settings.proxy;
       $scope.readResourceTraits         = readResourceTraits;

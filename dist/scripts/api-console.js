@@ -824,18 +824,20 @@
           return [arrayType.items];
         };
 
-        $scope.getType = function (type) {
-          var newType = $scope.mergeType(type);
-          newType.type = RAML.Inspector.Types.ensureArray(newType.type);
+        $scope.getType = function (property) {
+          var newProperty = $scope.mergeProperty(property);
+          newProperty.type = RAML.Inspector.Types.ensureArray(newProperty.type);
 
-          if (newType.type[0] === 'array') {
-            newType.type = getArrayTypes(newType).map(function (aType) {
+          if (newProperty.type[0].type) { newProperty.type = newProperty.type[0].type; }
+
+          if (newProperty.type[0] === 'array') {
+            newProperty.type = getArrayTypes(newProperty).map(function (aType) {
               return aType + '[]';
             });
-            newType.properties = newType.items.properties;
+            newProperty.properties = newProperty.items.properties;
           }
 
-          return newType;
+          return newProperty;
         };
 
         var isPattern = function (propertyName) {
@@ -846,13 +848,13 @@
           return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme) && !isPattern(property[0].displayName);
         };
 
-        $scope.mergeType = function (type) {
-          var newType = angular.copy(type);
+        $scope.mergeProperty = function (property) {
+          var newProperty = angular.copy(property);
 
           if (!$scope.isNestedProperty && $rootScope.types) {
-            return RAML.Inspector.Types.mergeType(newType, $rootScope.types);
+            return RAML.Inspector.Types.mergeType(newProperty, $rootScope.types);
           }
-          return newType;
+          return newProperty;
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;
@@ -1238,7 +1240,7 @@
         }
       };
     })
-    .controller('RamlConsoleController', 
+    .controller('RamlConsoleController',
       ['$attrs', '$scope', '$rootScope', '$timeout', '$window', function RamlConsoleController(
       $attrs, $scope, $rootScope, $timeout, $window
     ) {
@@ -1249,6 +1251,8 @@
       $scope.disableThemeSwitcher       = $attrs.hasOwnProperty('disableThemeSwitcher');
       $scope.disableTitle               = $attrs.hasOwnProperty('disableTitle');
       $scope.disableTryIt               = $attrs.hasOwnProperty('disableTryIt');
+      $scope.disableDescription         = $attrs.hasOwnProperty('disableDescription');
+      $scope.descriptionLimit           = $attrs.hasOwnProperty('descriptionLimit') || 50;
       $scope.documentationCollapsed     = $attrs.hasOwnProperty('documentationCollapsed');
       $scope.proxy                      = $window.RAML.Settings.proxy;
       $scope.readResourceTraits         = readResourceTraits;
@@ -2708,7 +2712,7 @@
           $rootScope.$broadcast(TOGGLE_POPOVER);
 
           $timeout(function () {
-            $scope.selectedType = RAML.Inspector.Types.mergeType({
+            $scope.selectedType = RAML.Inspector.Types.mergeProperty({
                 displayName: type,
                 type: [type]
               },
@@ -3091,7 +3095,7 @@
         };
 
         $scope.ownerOptionsEnabled = function () {
-          return $scope.credentials.grant === 'owner';
+          return $scope.credentials.grant === 'password';
         };
 
         $scope.isImplicitEnabled = function () {
@@ -3117,15 +3121,7 @@
           },
           {
             label: 'Resource Owner Password Credentials',
-            value: 'owner'
-          },
-          {
-            label: 'Resource Owner Password Credentials',
             value: 'password'
-          },
-          {
-            label: 'Client Credentials',
-            value: 'credentials'
           },
           {
             label: 'Client Credentials',
@@ -3689,7 +3685,7 @@
       popup(auth[grantType].getUri());
     }
 
-    if (grantType === 'owner' || grantType === 'password') {
+    if (grantType === 'password') {
       auth.owner.getToken(this.credentials.username, this.credentials.password, function (err, user, raw) {
         if (err) {
           done(raw, err);
@@ -3703,7 +3699,7 @@
       });
     }
 
-    if (grantType === 'credentials'|| grantType === 'client_credentials') {
+    if (grantType === 'client_credentials') {
       auth.credentials.getToken(function (err, user, raw) {
         if (err) {
           done(raw, err);
@@ -7167,6 +7163,21 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <h1 ng-if=\"!disableTitle\" class=\"raml-console-title\">{{raml.title}}</h1>\n" +
+    "\n" +
+    "\n" +
+    "  <div ng-if=\"!disableDescription && !!raml.description && raml.description.length > 0\" ng-init=\"actualSize = descriptionLimit\" >\n" +
+    "    <div class=\"raml-console-root-description\" markdown=\"raml.description | limitTo : actualSize\"></div>\n" +
+    "    <span>\n" +
+    "      <a class=\"raml-console-show-more-less\"\n" +
+    "         ng-hide=\"raml.description.length <= descriptionLimit || raml.description.length > actualSize || raml.description.length < actualSize\"\n" +
+    "         ng-click=\"actualSize = descriptionLimit\"\n" +
+    "      >show less</a>\n" +
+    "      <a class=\"raml-console-show-more-less\"\n" +
+    "         ng-hide=\"raml.description.length <= descriptionLimit || raml.description.length == actualSize\"\n" +
+    "         ng-click=\"actualSize = raml.description.length\"\n" +
+    "      >show more</a>\n" +
+    "    </span>\n" +
+    "  </div>\n" +
     "\n" +
     "  <root-documentation></root-documentation>\n" +
     "\n" +
