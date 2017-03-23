@@ -6,11 +6,14 @@
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
       controller: ['$scope', function($scope) {
-        var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
-        var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
-
         $scope.markedOptions = RAML.Settings.marked;
-        $scope.documentationSchemeSelected = defaultSchema;
+
+        $scope.$watch('securitySchemes', function() {
+          var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
+          var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
+
+          $scope.documentationSchemeSelected = defaultSchema;
+        });
 
         function mergeResponseCodes(methodCodes, schemas) {
           var extractSchema = function (key) { return schemas.hasOwnProperty(key) ? schemas[key] : undefined; };
@@ -49,8 +52,10 @@
             });
           }
         }
-        $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
-        $scope.fullResponseCodes = Object.keys($scope.fullResponses);
+        $scope.$watch('methodInfo', function () {
+          $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
+          $scope.fullResponseCodes = Object.keys($scope.fullResponses);
+        });
 
         $scope.isSchemeSelected = function isSchemeSelected(scheme) {
           return scheme.id === $scope.documentationSchemeSelected.id;
