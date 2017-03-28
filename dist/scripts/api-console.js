@@ -2712,7 +2712,7 @@
           $rootScope.$broadcast(TOGGLE_POPOVER);
 
           $timeout(function () {
-            $scope.selectedType = RAML.Inspector.Types.mergeProperty({
+            $scope.selectedType = RAML.Inspector.Types.mergeType({
                 displayName: type,
                 type: [type]
               },
@@ -4504,7 +4504,10 @@ RAML.Inspector = (function() {
       if (superType) {
         var superTypeProperties = convertProperties(superType);
         properties = angular.extend({}, superTypeProperties, properties);
-        return getSuperTypesProperties(properties, superType.type[0], types);
+        superType.type.forEach(function (typeName) {
+          var typeProperties = getSuperTypesProperties(properties, typeName, types);
+          properties = angular.extend({}, typeProperties, properties);
+        });
       }
     }
     return properties;
