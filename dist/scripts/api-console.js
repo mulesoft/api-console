@@ -7170,8 +7170,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <div class=\"raml-console-initializer-row\">\n" +
     "      <div class=\"raml-console-parser-error\">\n" +
     "        <span>Api contains errors.</span>\n" +
-    "        <a ng-hide=\"showErrorDetail == true\" ng-click=\"showErrorDetail = false\">(Show less)</a>\n" +
-    "        <a ng-hide=\"!showErrorDetail\" ng-click=\"showErrorDetail = true\">(Show more)</a>\n" +
+    "        <a ng-hide=\"!showErrorDetail == true\" ng-click=\"showErrorDetail = false\">(Show less)</a>\n" +
+    "        <a ng-hide=\"showErrorDetail\" ng-click=\"showErrorDetail = true\">(Show more)</a>\n" +
     "      </div>\n" +
     "      <div class=\"raml-console-error-pre\" ng-repeat=\"err in errors\" ng-show=\"showErrorDetail\">\n" +
     "        [{{err.isWarning && 'warning' || 'error'}}] {{err.message}}\n" +
