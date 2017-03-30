@@ -68,7 +68,10 @@
       if (superType) {
         var superTypeProperties = convertProperties(superType);
         properties = angular.extend({}, superTypeProperties, properties);
-        return getSuperTypesProperties(properties, superType.type[0], types);
+        superType.type.forEach(function (typeName) {
+          var typeProperties = getSuperTypesProperties(properties, typeName, types);
+          properties = angular.extend({}, typeProperties, properties);
+        });
       }
     }
     return properties;

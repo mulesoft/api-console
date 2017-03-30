@@ -10,6 +10,7 @@
         controller:  'RamlConsoleController',
         scope:       {
           raml:    '=',
+          errors:  '=',
           options: '='
         }
       };

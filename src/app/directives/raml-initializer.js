@@ -87,7 +87,7 @@
             if (success) {
               $scope.vm.raml = api.specification;
             } else {
-              $scope.vm.error           = { message: 'Api contains errors.'};
+              $scope.vm.error           = { message: 'Api contains errors.', errors: issues};
               $scope.vm.codeMirror.lint = lintFromError(issues);
             }
           })
