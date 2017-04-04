@@ -11,9 +11,8 @@
       },
       controller: ['$scope', function ($scope) {
         $scope.$watch('type', function () {
-          $scope.properties = {
-            body: [$scope.type]
-          };
+          $scope.properties = {};
+          $scope.properties[$scope.type.name] = [$scope.type];
         });
       }]
     };

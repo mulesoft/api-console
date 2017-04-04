@@ -818,7 +818,11 @@
 
         var getArrayTypes = function(arrayType) {
           if (arrayType.items.type || Array.isArray(arrayType.items.type)) {
-            return arrayType.items.type;
+            return [arrayType.items.name];
+          }
+
+          if (Object.prototype.toString.call(arrayType.items) === '[object Object]') {
+            return [typeof arrayType.items];
           }
 
           return [arrayType.items];
@@ -2650,9 +2654,8 @@
       },
       controller: ['$scope', function ($scope) {
         $scope.$watch('type', function () {
-          $scope.properties = {
-            body: [$scope.type]
-          };
+          $scope.properties = {};
+          $scope.properties[$scope.type.name] = [$scope.type];
         });
       }]
     };
@@ -7531,7 +7534,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </header>\n" +
     "  </li>\n" +
     "  <li ng-if=\"!vm.isCollapsed\" class=\"raml-console-resource-panel raml-console-type-panel\" style=\"padding: 32px;\">\n" +
-    "    <properties list=\"theTypes\" collapsible=\"true\" hide-property-details=\"true\"></types>\n" +
+    "    <properties list=\"theTypes\" collapsible=\"true\" hide-property-details=\"true\"></properties>\n" +
     "  </li>\n" +
     "</ol>\n"
   );
