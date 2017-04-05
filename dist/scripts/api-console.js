@@ -708,13 +708,17 @@
       templateUrl: 'directives/named-parameters.tpl.html',
       replace: true,
       scope: {
-        src: '=',
         context: '=',
         types: '=',
         type: '@',
         title: '@'
       },
       controller: ['$scope', '$attrs', function ($scope, $attrs) {
+
+        $scope.keys = function(obj) {
+          return Object.keys(obj);
+        };
+
         $scope.markedOptions = RAML.Settings.marked;
 
         if ($attrs.hasOwnProperty('enableCustomParameters')) {
@@ -7028,7 +7032,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "      </div>\n" +
     "    </div>\n" +
     "\n" +
-    "    <p class=\"raml-console-sidebar-input-container\" ng-repeat=\"param in context[type].plain\">\n" +
+    "    <p class=\"raml-console-sidebar-input-container\" ng-repeat=\"key in keys(context[type].plain)\" ng-init=\"param = context[type].plain[key]\">\n" +
     "      <span class=\"raml-console-sidebar-input-tooltip-container\" ng-if=\"param.definitions[0].description\" ng-class=\"{'raml-console-sidebar-input-tooltip-container-enum': param.definitions[0].enum}\">\n" +
     "        <button tabindex=\"-1\" class=\"raml-console-sidebar-input-tooltip\"><span class=\"raml-console-visuallyhidden\">Show documentation</span></button>\n" +
     "        <span class=\"raml-console-sidebar-tooltip-flyout\">\n" +
@@ -7595,9 +7599,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" title=\"URI Parameters\" show-base-url></named-parameters>\n" +
     "\n" +
-    "          <named-parameters src=\"methodInfo.headers.plain\" context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
+    "          <named-parameters context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
-    "          <named-parameters src=\"methodInfo.queryParameters\" context=\"context\" type=\"queryParameters\" types=\"types\" title=\"Query Parameters\" enable-custom-parameters></named-parameters>\n" +
+    "          <named-parameters context=\"context\" type=\"queryParameters\" types=\"types\" title=\"Query Parameters\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
     "          <section ng-if=\"methodInfo.queryString\">\n" +
     "            <header class=\"raml-console-sidebar-row raml-console-sidebar-subheader\">\n" +
