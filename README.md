@@ -253,6 +253,8 @@ It can be used to pass the RAML data to the console if direct access to the
 element is not possible. This way the RAML data can be set for the element even
 if the elements don't have direct access to each others (e.g. in shadow DOM).
 
+See the [raml-aware documentation](https://elements.advancedrestclient.com/elements/raml-aware) page for more details.
+
 #### Example
 ```html
 <raml-aware scope="main-raml"></raml-aware>
