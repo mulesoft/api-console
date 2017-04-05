@@ -268,6 +268,88 @@ window.addEventListener('raml-json-enhance-ready', function(e) {
 parser.loadApi(urlToApi);
 ```
 
+## Full web app example
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>My API documentation</title>
+    <script>
+      window.Polymer = {
+        dom: 'shadow'
+      };
+      // Load webcomponentsjs polyfill if browser does not support native Web Components
+      (function() {
+        'use strict';
+        var onload = function() {
+          // For native Imports, manually fire WebComponentsReady so user code
+          // can use the same code path for native and polyfill'd imports.
+          if (!window.HTMLImports) {
+            document.dispatchEvent(
+              new CustomEvent('WebComponentsReady', {bubbles: true})
+            );
+          }
+        };
+
+        var webComponentsSupported = (
+          'registerElement' in document &&
+          'import' in document.createElement('link') &&
+          'content' in document.createElement('template')
+        );
+
+        if (!webComponentsSupported) {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.onload = onload;
+          document.head.appendChild(script);
+        } else {
+          onload();
+        }
+      })();
+    </script>
+    <link rel="import" href="bower_components/api-console/api-console.html">
+    <!-- Below polyfills are in the api console dependencies. -->
+    <link rel="import" href="bower_components/fetch-polyfill/fetch-polyfill.html">
+    <link rel="import" href="bower_components/promise-polyfill/promise-polyfill.html">
+  </head>
+<body>
+  <api-console></api-console>
+  <script>
+  function fetchApiData() {
+    // api.json contains cached results of parsing the RAML spec.
+    return fetch('./api.json')
+    .then(function(response) {
+      if (response.ok) {
+        return response.json();
+      }
+    });
+  }
+  function notifyInitError(message) {
+    alert('No API for you this time. ' + message);
+  }
+  function init() {
+    fetchApiData()
+    .then(function(json) {
+      if (json) {
+        var apiConsole = document.querySelector('api-console');
+        apiConsole.json = json;
+      } else {
+        notifyInitError('Data not available.');
+      }
+    })
+    .catch(function(cause) {
+      notifyInitError(cause.message);
+    })
+  };
+  window.addEventListener('WebComponentsReady', init);
+  </script>
+</body>
+</html>
+```
+
 ## Element configuration (attributes)
 | Attribute | Description | Type |
 | --- | --- | ---|
