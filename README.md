@@ -213,7 +213,7 @@ The API console web component requires JavaScript object produced by the [raml-j
 
 Use the `raml-js-parser` element to parse YAML data or to download RAML from remote location. __Note__: You may also use our [raml-js-parser-2](https://github.com/raml-org/raml-js-parser-2) node library as it gives the same output.
 
-Then you must use the `raml-js-enhancer` element to produce data output that is recognizable by the `api-console`.
+Then you must use the `raml-js-enhancer` element to produce data output that is recognizable by the `api-console`. The enhancer creates a common data structure and expands RAML types (flattens it's structure so a type doesn't have complex inheritance structure). Elements used to build the API Console expects the JSON object to contain complete data about a method / endpoint / type / security scheme and so on. They will not look into nor have access to the data in the root of RAML definition. The enhancer replaces objects into arrays (adding a `key` property to each item) so it can be used in a templating systems. Also `example` property of the RAML is always translated to `examples` array. Finally the enhancer creates `fullUrl` property on each HTTP method so the console don't need to compute it each time you open the documentation page.
 
 #### Example: parsing and enhancing RAML as an input for the console
 
@@ -374,10 +374,10 @@ parser.loadApi(urlToApi);
 | --- | --- | ---|
 | `raml` | The JavaScript object or equivalent JSON object representing the RAML structure as a JavaScript object.  | `Object or String` |
 | `json-file` | Path to a file with JSON data that should be read and contents of it should be set to the `raml` attribute | `String` |
-| `path` | Currently selected path in the view. See section [Controlling the view ](#controlling-the-view) for more information. | `String`
-| `aware` | If passing data by using the [raml-aware](https://elements.advancedrestclient.com/elements/raml-aware) element, it is the name as the `scope` attribute used in the aware. | `String`
-| `page` | Currently selected top level view of the console. It can be either `docs` or `request`. The later is the "try it screen". | `String`
-
+| `path` | Currently selected path in the view. See section [Controlling the view ](#controlling-the-view) for more information. | `String` |
+| `aware` | If passing data by using the [raml-aware](https://elements.advancedrestclient.com/elements/raml-aware) element, it is the name as the `scope` attribute used in the aware. | `String` |
+| `page` | Currently selected top level view of the console. It can be either `docs` or `request`. The later is the "try it screen". | `String` |
+| `narrow` | By setting this attribute it will tell the API console to render a "narrow" view. This is a mobile like view (navigation is hidden in a drawer, some views are simplified for narrow screens) that will be presented event if the screen size is wide. This is helpful when inserting the element as a sidebar of your web page. Node that the `narrow` property will be set automatically on mobile devices | `Boolean` |
 
 ## Styling
 
