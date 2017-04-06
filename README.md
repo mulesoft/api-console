@@ -18,7 +18,7 @@ See full usage documentaiton [below](#usage).
 
 1. Clone the element:
 ```
-git clone https://github.com/advanced-rest-client/api-console.git
+git clone https://github.com/mulesoft/api-console.git
 cd api-console
 ```
 
@@ -175,8 +175,6 @@ Example use of the polyfill library:
 
 ## Passing the RAML data
 
-If you are going to use the [API Console CLI](#api-console-cli) to generate the API console directly from the RAML file you may skip this section.
-
 ### Before you begin: asynchronous environment
 
 Web components are asynchronous by nature. It means that elements import,
@@ -262,8 +260,6 @@ The `<api-console>` element also have a convenient `json-file` attribute that yo
 ```html
 <api-console json-file="/path/to/api.json"></api-console>
 ```
-
-Using our CLI tool you can generate the JavaScript object and build a web page with documentation automatically from your RAML file. See the **Building The API console from the command line** below.
 
 ### Using RAML aware to pass the data
 
