@@ -12,56 +12,212 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../raml-js-parser/raml-js-parser.html">
-<link rel="import" href="../raml-aware/raml-aware.html">
-<link rel="import" href="../paper-toast/paper-toast.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
-<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../raml-path-to-object/raml-path-to-object.html">
+<link rel="import" href="../raml-path-selector/raml-path-selector.html">
+<link rel="import" href="../raml-aware/raml-aware.html">
+<link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../paper-toast/paper-toast.html">
+<link rel="import" href="../api-console-ext-comm/api-console-ext-comm.html">
 <link rel="import" href="../raml-documentation-panel/raml-documentation-panel.html">
-<link rel="import" href="../raml-request-panel/raml-request-panel.html">
-
+<link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="../fetch-polyfill/fetch-polyfill.html">
+<link rel="import" href="../promise-polyfill/promise-polyfill.html">
+<link rel="import" href="api-console-styles.html">
+<link rel="import" href="api-console-request.html">
 <!--
-The API console to be used as a Web Component. In this case you can import the element
-using Bower:
+The API console element to be used as a Web Component.
+
+To use the element import it to your project using Bower:
 ```
 bower install --save advanced-rest-client/api-console
 ```
-And then use it as a regular HTML element.
-But first you have to tell the browser what's the element dfinition by importing it into the
-document:
+
+Before importing the element you should add polyfill for web components:
+```javascript
+(function() {
+  'use strict';
+
+  var onload = function() {
+    // For native Imports, manually fire WebComponentsReady so user code
+    // can use the same code path for native and polyfill'd imports.
+    if (!window.HTMLImports) {
+      document.dispatchEvent(
+        new CustomEvent('WebComponentsReady', {bubbles: true})
+      );
+    }
+  };
+
+  var webComponentsSupported = (
+    'registerElement' in document &&
+    'import' in document.createElement('link') &&
+    'content' in document.createElement('template')
+  );
+
+  if (!webComponentsSupported) {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+    script.onload = onload;
+    document.head.appendChild(script);
+  } else {
+    onload();
+  }
+})();
+```
+
+Next import the element into the document:
 ```
 <link rel="import" href="bower_components/api-console/api-console.html">
 ```
-Because as for now the `import` specification is not standarized accross all browser vendors
-(unlike other WebComponents spec) you have to use polifill:
 
+and finally use the element:
 ```
-<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<api-console raml="{...}"></api-console>
 ```
-Thisscript is not a polyfill for web components nor the Polymer. It only load components you want
-to import.
+
+### Full example
+```
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <script>
+      window.Polymer = {
+        dom: 'shadow',
+        lazyRegister: true
+      };
+
+      // Load webcomponentsjs polyfill if browser does not support native Web Components
+      (function() {
+        'use strict';
+
+        var onload = function() {
+          // For native Imports, manually fire WebComponentsReady so user code
+          // can use the same code path for native and polyfill'd imports.
+          if (!window.HTMLImports) {
+            document.dispatchEvent(
+              new CustomEvent('WebComponentsReady', {bubbles: true})
+            );
+          }
+        };
+
+        var webComponentsSupported = (
+          'registerElement' in document &&
+          'import' in document.createElement('link') &&
+          'content' in document.createElement('template')
+        );
+
+        if (!webComponentsSupported) {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.onload = onload;
+          document.head.appendChild(script);
+        } else {
+          onload();
+        }
+      })();
+
+      // Load pre-caching Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js');
+        });
+      }
+    </script>
+    <link rel="import" href="bower_components/api-console/api-console.html">
+  </head>
+<body>
+  <api-console raml="{...}"></api-console>
+</body>
+</html>
+```
+
+Note: The polyfill script is not required if you targeting modern browsers.
 
 ## The Polymer
-Basically you don't have to care about the Polymer framework. It is included internally by the
-components. If the browser don't (yet) support shaddow DOM then Polymer will be available in the
-global scope. Otherwise it is not visible to the DOM.
+You don't have to care about the Polymer library. It is included internally by the components.
+If the browser don't (yet) support shaddow DOM then Polymer will be visible in the
+global scope. Otherwise it is not visible to the user.
 In both cases you don't have to use or know Polymer to use this element. You must to know how to
-use HTML, JavaScript and CSS though :)
+use HTML, JavaScript and CSS, though :)
+
+## Passing RAML data
+### Direct
+The element requires JavaScript object produced by the RAML to JSON parser and `raml-js-enhancer`
+element. Parsing and enhancing RAML is not part of the `api-console` element and must be performed
+separately.
+
+You can use `raml-js-parser` element to parse YAML data or to download RAML from remote location.
+Then you must use `raml-js-enhancer` to produce data output that is recognizable by the `api-console`.
+
+### Example: parsing RAML
+(example from [raml-js-parser docs](https://elements.advancedrestclient.com/elements/raml-js-parser))
+
+```html
+<raml-js-parser json></raml-js-parser>
+<raml-json-enhance></raml-json-enhance>
+<api-console></api-console>
+```
+
+```javascript
+var parser = document.querySelector('raml-js-parser');
+parser.addEventListener('api-parse-ready', function(e) {
+  var enhacer = document.querySelector('raml-json-enhance');
+  enhacer.json = e.detail.json.specification;
+  // parsing errors: e.detail.json.errors;
+});
+window.addEventListener('raml-json-enhance-ready', function(e) {
+  var apiConsole = document.querySelector('raml-json-enhance');
+  apiConsole.raml = e.detail.json;
+});
+parser.loadApi(urlToApi);
+```
+
+The parsing and enhancing costs a lot depending on RAML structure and number of files included.
+Therefore it is a good idea to do it once and cache the results. Then, when the user visit the
+page again restore cached JSON object and pass it as the `api-console` parameter.
+
+### RAML aware
+The API console uses the [raml-aware](https://elements.advancedrestclient.com/elements/raml-aware) element internally.
+It can be used to pass the RAML data to the console if direct access to the
+element is not possible. This way the RAML data can be set for the elemnent even
+if the elements don't have direct access to each others (e.g. in shadow DOM).
+
+#### Example
+```html
+<raml-aware scope="main-raml"></raml-aware>
+<api-console aware="main-raml"></api-console>
+```
+```javascript
+window.addEventListener('raml-json-enhance-ready', function(e) {
+  var aware = document.querySelector('raml-aware');
+  aware.raml = e.detail.json;
+});
+parser.loadApi(urlToApi);
+```
 
 ## Styling
-This section is mean to be updated later, when the element's API is finished.
+The main stylesheet for the element is the `api-console-styles.html` file that resists in the repo.
+The stylesheet contains CSS variables and mixins definitions that are used by the inner elements.
+Styles documentation for an element can be find in it's documentation page in the
+[elements catalog](https://elements.advancedrestclient.com/).
+
+Theming is currently not supported.
+
 
 ## Usage
-After installing and including the API console into the document, use it as regular HTML element:
 
-```
-<api-console auto src="https://domain.com/api.raml"></api-console>
-```
-It will load the RAML file definition and initially display the documentation of the API.
-Users have to click on the "try it" button to run the request with given parameters.
+The `api-console` element includes whole UI for the user and can be controlled from within the
+element. However it exposes few properties that can be used to control element's behavior
+programmatically.
 
-To display a request form for particular endpoint of the API you can set a `path` property which
-represents a path to the method in the RAML JSON output.
+For example `path` property can be used to control to navigate through the RAML structure.
+So, to display a request form for a particular endpoint of the API you can set a `path` property to:
 ```
 <api-console path="resources.0.method.1"></api-console>
 ```
@@ -69,7 +225,28 @@ Example above will display second method from first resource in the resources tr
 You can set attribute `display` to `request` to display a request panel for this method. By default
 it is set to `docs`.
 
-@group UI Elements
+## CORS
+There's no easy way to deal with CORS. In the API Console ecosystem there is an extension for Chrome
+(and soon for Firefox) which will proxy the request without CORS limitations. The user, when using
+selected browsers) will see the install extension banner in the request editor. After installing the
+extension all traffic from the console will be redirected to the extension to get the endpoint
+response.
+The console listens for the `api-console-extension-installed` event that is fired from the
+extension's content script. Once received the console will send an event to the extension
+when the user make the HTTP request. The element responsible for the communication with the extension
+is [api-console-ext-comm](https://elements.advancedrestclient.com/elements/api-console-ext-comm).
+
+Other ways to deal with CORS are comming. File an issue report in the repo if you can help with
+this issue.
+
+## Sizing
+The `api-console` must either be explicitly sized, or contained by the explicitly
+sized parent. Parent container also has to be positioned relatively
+(`position: relative` CSS property). "Explicitly sized", means it either has
+an explicit CSS height property set via a class or inline style, or else is
+sized by other layout means (e.g. the flex layout or absolute positioning).
+
+@group RAML Elements
 @element api-console
 @demo demo/index.html
 -->
@@ -77,169 +254,209 @@ it is set to `docs`.
   <template>
     <style>
      :host {
+      --app-primary-color: #00A2DF;
+      --app-secondary-color: black;
       display: block;
     }
 
     *[hidden] {
       display: none !important;
     }
+
+    iron-pages {
+      height: 100%;
+    }
+
+    iron-pages>* {
+      height: 100%;
+    }
     </style>
-    <div class="loader" hidden$="[[!working]]">
-      <paper-spinner active="[[working]]"></paper-spinner>
-      <p>Loading content. Please wait a sec...</p>
-    </div>
-    <iron-pages attr-for-selected="data-display" selected="[[display]]" fallback-selection="e404">
-      <section data-display="docs">
-        <raml-documentation-panel has-selection="[[ramlNodeSelected]]" selected-path="{{path}}" aware="raml"></raml-documentation-panel>
-      </section>
-      <section data-display="request">
-        <raml-request-panel path="{{path}}" aware="raml"></raml-request-panel>
-      </section>
-      <section data-display="e404">
-        <p>The <b>display</b> attribute is incorrect. Set <b>docs</b> or <b>request</b> only.</p>
-      </section>
-    </iron-pages>
-    <raml-js-parser normalize-raml></raml-js-parser>
-    <raml-aware raml="[[raml]]" scope="raml"></raml-aware>
-    <paper-toast text=""></paper-toast>
+    <paper-drawer-panel responsive-width="860px">
+      <paper-header-panel drawer id="drawer">
+        <paper-toolbar>
+          <div class="title">API console</div>
+        </paper-toolbar>
+        <div class="drawer-content-wrapper">
+          <raml-path-selector
+            narrow="[[narrow]]"
+            raml="[[raml]]"
+            selected-path="{{path}}"
+            force-wide-layout
+            first-level-opened
+            resources-opened
+            documentation-opened></raml-path-selector>
+        </div>
+      </paper-header-panel>
+      <paper-header-panel main>
+        <paper-toolbar>
+          <paper-icon-button icon="arc:menu" paper-drawer-toggle></paper-icon-button>
+          <div class="title">[[raml.title]]</div>
+        </paper-toolbar>
+        <div>
+          <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+            <raml-documentation-panel
+              name="docs"
+              narrow="[[narrow]]"
+              selected-object="[[selectedObject]]"
+              selected-parent="[[selectedParent]]"
+              path="{{path}}"
+              scroll-target="[[scrollTarget]]"
+              handle-path-events></raml-documentation-panel>
+            <api-console-request
+              no-extension-banner="[[noExtensionBanner]]"
+              narrow="{{narrow}}"
+              name="request"
+              page="[[page]]"
+              scroll-target="[[scrollTarget]]"
+              selected-object="[[selectedObject]]"
+              selected-parent="[[selectedParent]]"
+              path="{{path}}"></api-console-request>
+          </iron-pages>
+        </div>
+      </paper-header-panel>
+    </paper-drawer-panel>
+    <template is="dom-if" if="[[aware]]" restamp="true">
+      <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
+    </template>
+    <raml-path-to-object raml="[[raml]]" selected-path="{{path}}" selected-object="{{selectedObject}}" selected-parent="{{selectedParent}}"></raml-path-to-object>
+    <api-console-ext-comm></api-console-ext-comm>
   </template>
   <script>
   Polymer({
     is: 'api-console',
 
+    behaviors: [Polymer.IronScrollTargetBehavior],
+    /**
+     * Fired when the element is ready to work and all DOM initialization have finished.
+     *
+     * @event api-console-ready
+     */
     properties: {
-      /**
-       * An URL to the RAML file definition.
-       * If the `auto` attribute is set then after the URL change it wil load the RAML
-       * definition automatically.
-       */
-      src: String,
-      // If set then the element will automatically download RAML definition when `src` changed.
-      auto: Boolean,
-      /**
-       * A screen to display. By default it is `docs` but can be `request` to display a request
-       * panel for given `path`.
-       */
-      display: {
+      // Currently displayed page. Either `docs` or `request`
+      page: {
         type: String,
-        value: 'docs',
-        reflectToAttribute: true
+        value: 'docs'
       },
+      // RAML as the JSON produced by the parser. The `.specification` part of the output.
+      raml: Object,
       /**
-       * Current path to the resource / method / documentation.
-       * This is updated when the user select a specific node in the RAML JSON structure that
-       * represents one of this properties. When changed from the outside (by the app) it will
-       * update the view to display selected path.
+       * Path to a file with JSON data that should be read and contents of it
+       * should be set to the `raml` attribute
        */
+      jsonFile: String,
+      // Current path in the RAML structure.
       path: {
         type: String,
+        observer: '_pathChanged'
+      },
+      // If true it will display a narrow layout.
+      narrow: {
+        type: Boolean,
         notify: true
       },
-      // Will be set to true when parsing the RAML file.
-      working: {
-        type: Boolean,
-        value: false,
-        readOnly: true,
-        notify: true
-      },
-      // RAML as the JSON produced by the parser. The `.specificvation` part of the output.
-      raml: {
-        type: Object,
-        notify: true,
-        readOnly: true
-      },
-      // List of parser errors.
-      errors: {
-        type: Array,
-        notify: true,
-        readOnly: true
-      },
-      // True if the element and child elements has been loaded.
-      _loaded: Boolean,
-      // Will be set to true if the RAML file has been loaded.
-      _hasRaml: {
-        type: Boolean,
-        value: false,
-        computed: '_computeHasRaml(_loaded, raml)'
+      // Selected object in the navigation menu and parsed by the
+      // `raml-path-selector` element
+      selectedObject: Object,
+      // A parent endpoint of selected method object (if any).
+      selectedParent: Object,
+      // If not set or false then the install extension banner will be allowed to be shown.
+      noExtensionBanner: Boolean,
+      /**
+       * If set it will use the `raml-aware` element to set the RAML data.
+       * Value of this attribute should be the same as the scope attribute
+       * of the `raml-aware` element used to set the data.
+       */
+      aware: String,
+      // An element that handles the scroll of the main document.
+      scrollTarget: {
+        type: HTMLElement,
+        value: function() {
+          return this.$$('paper-header-panel[main]').scroller;
+        }
       }
     },
 
     listeners: {
-      'tryit': '_tryitHandler'
+      'scroll-to': '_onScrollRequested',
+      'raml-path-changed': '_innerPathChanged',
+      'tryit-requested': '_tryitHandler'
     },
 
-    observers: [
-      '_autoUpdate(auto, src)'
-    ],
+    observers: ['_ramlChanged(raml)', '_jsonFileChanged(jsonFile)'],
 
     attached: function() {
-      this._loaded = true;
-      this._autoUpdate(this.auto, this.src);
-    },
-    // Calls `updateSrc` if auto is enabled and URL is set / has been changed.
-    _autoUpdate: function(auto, src) {
-      if (auto && src) {
-        this.updateSrc();
-      }
+      this.listen(window, 'api-console-extension-installed', '_onExtensionInstalled');
     },
 
-    // Downloads and parses the RAML definition for given `src`.
-    updateSrc: function() {
-      if (!this._loaded) {
-        return;
-      }
-      var url = this.src;
-      if (!url) {
-        return;
-      }
-      this._setWorking(true);
-      this._setRaml(undefined);
-      this._setErrors(undefined);
-      var detail = {
-        'url': url
-      };
-      var event = this.fire('parse-raml-url', detail);
-      if (!event.detail.raml) {
-        this._toastMessage('Internal error. RAML parser not in the DOM.');
-        console.error('Event did not contained raml property.');
-        return;
-      }
-      this._handleRamlEvent(event);
+    detached: function() {
+      this.unlisten(window, 'api-console-extension-installed', '_onExtensionInstalled');
     },
-    // Handles the parser event response.
-    _handleRamlEvent: function(event) {
-      var context = this;
-      event.detail.raml
-        .then(function(result) {
-          context._setRaml(result[1].specification);
-          context._setErrors(result[1].errors);
-          context.fire('raml-ready', {
-            raml: result[1].specification,
-            errors: result[1].errors
-          });
-          context._setWorking(false);
-        })
-        .catch(function(e) {
-          context._toastMessage('Parser error: ' + e.message);
-          context._setWorking(false);
-          console.warn('API error', e);
-        });
+
+    ready: function() {
+      this.fire('api-console-ready');
     },
-    // Displays a toast with a `message`.
-    _toastMessage: function(message) {
-      var toast = this.$$('paper-toast');
-      toast.text = message;
-      toast.opened = true;
+    // Scrolls the document to required position.
+    _onScrollRequested: function(e) {
+      this.scroll(e.detail.x || 0, e.detail.y || 0);
     },
-    // Compute is the element received and parsed RAML file.
-    _computeHasRaml: function(_loaded, raml) {
-      return !!(_loaded && !!raml);
+    // Handler for `raml-path-changed` that is fired from docs elements.
+    _innerPathChanged: function(e) {
+      this.set('path', e.detail.path);
     },
-    // Handler for the `tryit` event fired in the `raml-docs-method-viewer` element.
+    // Handler for the extension installed event.
+    _onExtensionInstalled: function() {
+      this.set('noExtensionBanner', true);
+    },
+    /**
+     * Handler for the `tryit-requested` event. Sets current screen to
+     * `request`.
+     */
     _tryitHandler: function() {
-      this.display = 'request';
-    }
+      this.page = 'request';
+    },
+    /**
+     * Handler for path change.
+     * It set's current `page` to the `docs` if it is not pointing to the
+     * docs.
+     */
+    _pathChanged: function() {
+      if (this.page !== 'docs') {
+        this.page = 'docs';
+      }
+    },
+    /**
+     * Handler for the `raml` property change.
+     * Sets the `path` to summary.
+     */
+    _ramlChanged: function() {
+      this.path = 'summary';
+    },
 
+    _notify: function(message) {
+      var t = document.createElement('paper-toast');
+      t.text = message;
+      t.opened = true;
+      document.body.appendChild(t);
+    },
+
+    _jsonFileChanged: function(url) {
+      var context = this;
+      fetch(url)
+      .then(function(response) {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(function(json) {
+        if (!json) {
+          context._notify('Data unavailable under given URL.');
+        }
+        context.set('raml', json);
+      })
+      .catch(function(reason) {
+        context._notify('Unable to download data. ' + reason.message);
+      });
+    }
   });
   </script>
 </dom-module>
