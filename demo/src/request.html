@@ -1,0 +1,47 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/raml-request-panel/raml-request-panel.html">
+<link rel="import" href="../bower_components/response-view/response-view.html">
+<link rel="import" href="../bower_components/raml-aware/raml-aware.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/arc-icons/arc-icons.html">
+<link rel="import" href="../bower_components/fetch-polyfill/fetch-polyfill.html">
+
+</head><body><dom-module id="api-console-request">
+  <template>
+    <style>
+    :host {
+      display: block;
+    }
+
+    .extension-banner {
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+      display: none;
+      padding: 0 24px;
+      border-bottom: 1px rgba(0,0,0,0.12) solid;
+      margin-bottom: 12px;
+      color: rgba(0,0,0,0.54);
+    }
+
+    .extension-banner.active {
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+    }
+    </style>
+    <div class="extension-banner">
+      <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
+      <paper-icon-button icon="arc:close" on-tap="dismissExtensionBanner"></paper-icon-button>
+    </div>
+    <raml-request-panel narrow="{{narrow}}" method="{{selectedObject}}" redirect-url="[[redirectUrl]]" request="{{request}}" response="{{response}}" response-is-xhr="{{responseIsXhr}}" response-error="{{responseError}}" loading-time="{{loadingTime}}" timings="{{timings}}" redirect-timings="{{redirectTimings}}" redirects="{{redirects}}" source-message="{{sourceMessage}}"></raml-request-panel>
+    <template is="dom-if" if="[[hasResponse]]">
+      <response-view request="[[request]]" response="[[response]]" response-error="[[responseError]]" is-xhr="[[responseIsXhr]]" loading-time="{{loadingTime}}" redirects="[[redirects]]" redirect-timings="[[redirectTimings]]" response-timings="[[timings]]" sent-http-message="[[sourceMessage]]"></response-view>
+    </template>
+    <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
+    <paper-toast horizontal-align="right" id="noAuth" text="The required authorization is not set." duration="3000"></paper-toast>
+  </template>
+  <script>Polymer({is:"api-console-request",properties:{path:{type:String,notify:!0},selectedObject:{type:Object,observer:"_selectedObjectChanged"},selectedParent:Object,narrow:{type:Boolean,notify:!0},raml:{type:Object},redirectUrl:String,request:Request,response:Response,responseIsXhr:{type:Boolean,value:!0},responseError:Object,hasResponse:{type:Boolean,value:!1,computed:"_computeHasResponse(response)"},loadingTime:Number,timings:Object,redirectTimings:Array,redirects:Array,sourceMessage:String,noExtensionBanner:Boolean,isChrome:{type:Boolean,value:function(){return/Chrome/.test(navigator.userAgent)&&/Google Inc/.test(navigator.vendor)}}},listeners:{"api-console-request":"_apiRequested","api-console-response-ready":"_onResponseReady"},attached:function(){this.listen(window,"api-console-extension-installed","_onExtensionInstalled")},ready:function(){this._setRedirectUrl(),this._initExtensionBanner()},_setRedirectUrl:function(){var e=document.createElement("a");e.href="/oauth-authorization/oauth-popup.html",this.redirectUrl=e.href},_initExtensionBanner:function(){this.isChrome&&this.async(function(){this.noExtensionBanner||this.openInstallExtensionBanner()},1e3)},_computeHasResponse:function(e){return!!e},_navigateDocs:function(){this.fire("navigate",{url:"/docs/"+this.path.replace(/\./g,"-")})},_apiRequested:function(e){var t=this.selectedObject;t&&t.securedBy&&t.securedBy.length&&(this.authorizationMethod&&this.authorizationSettings||e.detail.headers&&/^authorization\s?:\s?.+$/im.test(e.detail.headers)||(this.$.noAuth.opened=!0))},_selectedObjectChanged:function(){this.set("request",void 0),this.set("response",void 0),this.set("responseError",void 0)},_onResponseReady:function(){this.async(function(){var e=this.$$("response-view"),t=e.offsetTop;this.fire("scroll-to",{y:t})},1)},dismissExtensionBanner:function(){this.$$(".extension-banner").classList.remove("active")},openInstallExtensionBanner:function(){this.$$(".extension-banner").classList.add("active")}});</script>
+</dom-module>
+</body></html>

@@ -1,72 +1,58 @@
-<!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-<html>
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>API Console</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../raml-docs-helpers/raml-docs-parser.html">
+    <title>API Console</title>
+    <meta name="description" content="API Console">
 
-  <link rel="import" href="../api-console.html">
-  <link rel="import" href="../../font-roboto/roboto.html">
+    <link rel="icon" href="/images/favicon.ico">
 
-  <style is="custom-style">
-  html,
-  body {
-    height: 100%;
-    background-color: #fff;
-  }
+    
+    <link rel="manifest" href="/manifest.json">
 
-  body {
-    margin: 0;
-    font-family: "DIN Pro", "Open Sans", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    @apply(--layout-vertical);
-  }
+    
+    <meta name="theme-color" content="#3f51b5">
 
-  #content {
-    @apply(--layout-vertical);
-    @apply(--layout-flex);
-  }
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="API Console">
 
-  .wrapper {
-    position: relative;
-    @apply(--layout-flex);
-  }
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="API Console">
 
-  api-console {
-    background-color: #fff;
-  }
-  </style>
-</head>
+    
+    <link rel="apple-touch-icon" href="/images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="/images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/images/manifest/icon-192x192.png">
 
-<body unresolved>
-  <template is="dom-bind">
+    
+    <meta name="msapplication-TileImage" content="/images/manifest/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#3f51b5">
+    <meta name="msapplication-tap-highlight" content="no">
 
-    <div id="content">
-      <raml-docs-parser raml="{{raml}}"></raml-docs-parser>
-      <div class="wrapper">
-        <api-console raml="[[raml]]"></api-console>
-      </div>
-    </div>
-  </template>
-  <script>
-  (function() {
-    'use strict';
-  })();
-  </script>
-</body>
+    <script>window.Polymer={dom:"shadow",lazyRegister:!0},function(){"use strict";var e=function(){window.HTMLImports||document.dispatchEvent(new CustomEvent("WebComponentsReady",{bubbles:!0}))},n="registerElement"in document&&"import"in document.createElement("link")&&"content"in document.createElement("template");if(n)e();else{var t=document.createElement("script");t.async=!0,t.src="/bower_components/webcomponentsjs/webcomponents-lite.min.js",t.onload=e,document.head.appendChild(t)}}(),"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("/service-worker.js")});</script>
+    <link rel="import" href="/src/api-console-app.html">
+    <style>
+    html,
+    body {
+      height: 100%;
+      background-color: #fff;
+    }
+    body {
+      margin: 0;
+      font-family: "DIN Pro", "Open Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    </style>
+  </head>
+  <body>
+    <api-console-app src="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7782/versions/7918/files/root"></api-console-app>
+    
+  
 
-</html>
+</body></html>

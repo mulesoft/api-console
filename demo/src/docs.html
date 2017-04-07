@@ -1,0 +1,15 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/raml-documentation-panel/raml-documentation-panel.html">
+
+</head><body><dom-module id="api-console-docs">
+  <template>
+    <style>
+    :host {
+      display: block;
+    }
+    </style>
+    <raml-documentation-panel narrow="[[narrow]]" selected-object="[[selectedObject]]" selected-parent="[[selectedParent]]" path="[[path]]"></raml-documentation-panel>
+  </template>
+  <script>Polymer({is:"api-console-docs",properties:{path:{type:String,notify:!0},selectedObject:Object,selectedParent:Object,narrow:Boolean},listeners:{"tryit-requested":"_tryitHandler"},_tryitHandler:function(){this.fire("navigate",{url:"/request/"+(this.path?this.path.replace(/\./g,"-"):"")})}});</script>
+</dom-module>
+</body></html>
