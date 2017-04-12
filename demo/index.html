@@ -58,7 +58,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="content">
       <raml-docs-parser raml="{{raml}}"></raml-docs-parser>
       <div class="wrapper">
-        <api-console raml="[[raml]]"></api-console>
+        <api-console raml="[[raml]]">
+          <select nav>
+            <option>Option 1</option>
+            <option>Option 2</option>
+          </select>
+          <button nav>Test button</button>
+        </api-console>
       </div>
     </div>
   </template>

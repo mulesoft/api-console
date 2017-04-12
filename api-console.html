@@ -479,6 +479,15 @@ sized by other layout means (e.g. the flex layout or absolute positioning).
     iron-pages>* {
       height: 100%;
     }
+
+    .nav-content {
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+    }
+
+    .nav-content ::content * {
+      margin-left: 12px;
+    }
     </style>
     <paper-drawer-panel responsive-width="860px" force-narrow="[[narrow]]">
       <paper-header-panel drawer id="drawer">
@@ -500,6 +509,10 @@ sized by other layout means (e.g. the flex layout or absolute positioning).
         <paper-toolbar>
           <paper-icon-button icon="arc:menu" paper-drawer-toggle></paper-icon-button>
           <div class="title">[[raml.title]]</div>
+          <span class="flex"></span>
+          <div class="nav-content">
+            <content select="[nav]"></content>
+          </div>
         </paper-toolbar>
         <div>
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
