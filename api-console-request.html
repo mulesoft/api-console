@@ -202,7 +202,25 @@ is to proxt the HTTP request and avoid CORS problems.
          * }]
          * ```
          */
-        appendHeaders: Array
+        appendHeaders: Array,
+        /**
+         * If set every request made from the console will be proxied by the service provided in this
+         * value.
+         * It will prefix entered URL with the proxy value. so the call to
+         * `http://domain.com/path/?query=some+value` will become
+         * `https://proxy.com/path/http://domain.com/path/?query=some+value`
+         *
+         * If the proxy require a to pass the URL as a query parameter define value as follows:
+         * `https://proxy.com/path/?url=`. In this case be sure to set `proxy-encode-url`
+         * attribute.
+         */
+        proxy: String,
+        /**
+         * If `proxy` is set, it will URL encode the request URL before appending it to the proxy URL.
+         * `http://domain.com/path/?query=some+value` will become
+         * `https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`
+         */
+        proxyEncodeUrl: Boolean
       },
 
       listeners: {
@@ -251,6 +269,15 @@ is to proxt the HTTP request and avoid CORS problems.
             }
           }
         }
+
+        this._appendConsoleHeaders(event);
+        this._appendProxy(event);
+      },
+      /**
+       * Appends headers defined in the `appendHeaders` array.
+       * @param {CustomEvent} event The `api-console-request` event.
+       */
+      _appendConsoleHeaders: function(event) {
         var headersToAdd = this.appendHeaders;
         if (headersToAdd) {
           var eventHeaders = event.detail.headers || '';
@@ -260,6 +287,19 @@ is to proxt the HTTP request and avoid CORS problems.
           }
           event.detail.headers = eventHeaders;
         }
+      },
+      /**
+       * Sets the proxy URL if the `proxy` property is set.
+       * @param {CustomEvent} event The `api-console-request` event.
+       */
+      _appendProxy: function(event) {
+        var proxy = this.proxy;
+        if (!proxy) {
+          return;
+        }
+        var url = this.proxyEncodeUrl ? encodeURIComponent(event.detail.url) : event.detail.url;
+        url = proxy + url;
+        event.detail.url = url;
       },
 
       _selectedObjectChanged: function() {

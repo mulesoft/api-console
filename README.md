@@ -379,6 +379,8 @@ parser.loadApi(urlToApi);
 | `page` | Currently selected top level view of the console. It can be either `docs` or `request`. The later is the "try it screen". | `String` |
 | `narrow` | By setting this attribute it will tell the API console to render a "narrow" view. This is a mobile like view (navigation is hidden in a drawer, some views are simplified for narrow screens) that will be presented event if the screen size is wide. This is helpful when inserting the element as a sidebar of your web page. Node that the `narrow` property will be set automatically on mobile devices | `Boolean` |
 | `append-headers` | Forces the console to send specific list of headers, overriding user input if needed. | `String` |
+| `proxy` | Sets the proxy URL for the HTTP requests sent from the console. If set all URLs will be altered before sending the data to a transport library bu prefixing the URL with this value | `String`
+| `proxyEncodeUrl` | If required by the `proxy` the URL will be URL encoded. | `Boolean` |
 
 ## Styling
 
@@ -417,6 +419,40 @@ is [api-console-ext-comm](https://elements.advancedrestclient.com/elements/api-c
 
 Other ways to deal with CORS are coming. File an issue report in the repo if you can help with
 this issue.
+
+## Using proxy server
+
+One of ways to deal with CORS is to tell the API console to pass the request through a proxy.
+For this you can use `proxy` attribute. Once set then every request made by the console will be
+passed through the proxy.
+
+When using proxy, the request URL will be altered before sending it to a transport library (possibly
+the XHR call) by prefixing the URL with proxy value.
+
+```html
+<api-console proxy="https://api.proxy.com/api/proxy/"></api-console>
+```
+
+With this configuration a request made to `http://domain.com/path/?query=some+value` endpoint will
+become `https://api.proxy.com/api/proxy/http://domain.com/path/?query=some+value`.
+
+Don't forget to add trailing '/' to the path or produced URL will be invalid.
+
+If the proxy require to set the URL as a query parameter then `proxy` attribute should end with
+parameter name and `=` sign:
+
+```html
+<api-console proxy="https://api.proxy.com/api/proxy/?url=" proxy-encode-url></api-console>
+```
+
+In this case be sure to set `proxy-encode-url` attribute which will tell the console to URL encode
+the URL before appending it ti the final URL
+
+With this configuration a request made to `http://domain.com/path/?query=some+value` endpoint will
+become `https://api.proxy.com/api/proxy/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`.
+
+The proxy URL won't be visible by the user and the user can't do anything to change the behavior
+until your application don't support proxy change in the UI.
 
 ### Handling the HTTP request by the hosting website / application
 
