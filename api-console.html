@@ -25,6 +25,7 @@ the License.
 <link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
 <link rel="import" href="../fetch-polyfill/fetch-polyfill.html">
 <link rel="import" href="../promise-polyfill/promise-polyfill.html">
+<link rel="import" href="../headers-parser-behavior/headers-parser-behavior.html">
 <link rel="import" href="api-console-styles.html">
 <link rel="import" href="api-console-request.html">
 <!--
@@ -407,6 +408,7 @@ parser.loadApi(urlToApi);
 | `aware` | If passing data by using the [raml-aware](https://elements.advancedrestclient.com/elements/raml-aware) element, it is the name as the `scope` attribute used in the aware. | `String` |
 | `page` | Currently selected top level view of the console. It can be either `docs` or `request`. The later is the "try it screen". | `String` |
 | `narrow` | By setting this attribute it will tell the API console to render a "narrow" view. This is a mobile like view (navigation is hidden in a drawer, some views are simplified for narrow screens) that will be presented event if the screen size is wide. This is helpful when inserting the element as a sidebar of your web page. Node that the `narrow` property will be set automatically on mobile devices | `Boolean` |
+| `append-headers` | Forces the console to send specific list of headers, overriding user input if needed. | `String` |
 
 ## Styling
 
@@ -454,6 +456,18 @@ sized parent. Parent container also has to be positioned relatively
 an explicit CSS height property set via a class or inline style, or else is
 sized by other layout means (e.g. the flex layout or absolute positioning).
 
+## Forcing the API Console to send a specific list of headers
+
+You can force the API Console to send a specific list of headers for each request made by it. To
+do this set the `append-headers` attribute. It should contain a HTTP headers string.
+If the user declared a header that is declared in the `append-headers` attribute then user value
+will be overridden. Otherwise headers will be appended to the headers string.
+
+Use "\n" string to set a new line for the headers string.
+
+```
+<api-console append-headers="X-key: my-api-key\nother-header:value"></api-console>
+```
 
 @group RAML Elements
 @element api-console
@@ -532,7 +546,8 @@ sized by other layout means (e.g. the flex layout or absolute positioning).
               scroll-target="[[scrollTarget]]"
               selected-object="[[selectedObject]]"
               selected-parent="[[selectedParent]]"
-              path="{{path}}"></api-console-request>
+              path="{{path}}"
+              append-headers="[[_computeAppendHeaders(appendHeaders)]]"></api-console-request>
           </iron-pages>
         </div>
       </paper-header-panel>
@@ -547,7 +562,10 @@ sized by other layout means (e.g. the flex layout or absolute positioning).
   Polymer({
     is: 'api-console',
 
-    behaviors: [Polymer.IronScrollTargetBehavior],
+    behaviors: [
+      Polymer.IronScrollTargetBehavior,
+      ArcBehaviors.HeadersParserBehavior
+    ],
     /**
      * Fired when the element is ready to work and all DOM initialization have finished.
      *
@@ -595,6 +613,16 @@ sized by other layout means (e.g. the flex layout or absolute positioning).
         value: function() {
           return this.$$('paper-header-panel[main]').scroller;
         }
+      },
+      /**
+       * Forces the console to send headers defined in this string overriding any used defined
+       * header.
+       * It can be useful if the console has to send any recognizable string to a server without
+       * user knowing about it.
+       * The headers should be a HTTP headers string.
+       */
+      appendHeaders: {
+        type: String
       }
     },
 
@@ -678,6 +706,14 @@ sized by other layout means (e.g. the flex layout or absolute positioning).
       .catch(function(reason) {
         context._notify('Unable to download data. ' + reason.message);
       });
+    },
+    // Transforms HTTP headers string to headers map.
+    _computeAppendHeaders: function(headers) {
+      if (headers) {
+        // Hardcoded text set to the attribute will contain "\n" as text and not LN.
+        headers = headers.replace('\\n', '\n');
+      }
+      return this.headersToJSON(headers);
     }
   });
   </script>

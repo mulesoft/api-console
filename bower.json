@@ -42,7 +42,8 @@
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.11",
     "paper-header-panel": "PolymerElements/paper-header-panel#^1.1.7",
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
-    "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.1"
+    "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.1",
+    "headers-parser-behavior": "advanced-rest-client/headers-parser-behavior#^0.1.1"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#1.0.0",

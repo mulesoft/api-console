@@ -378,6 +378,7 @@ parser.loadApi(urlToApi);
 | `aware` | If passing data by using the [raml-aware](https://elements.advancedrestclient.com/elements/raml-aware) element, it is the name as the `scope` attribute used in the aware. | `String` |
 | `page` | Currently selected top level view of the console. It can be either `docs` or `request`. The later is the "try it screen". | `String` |
 | `narrow` | By setting this attribute it will tell the API console to render a "narrow" view. This is a mobile like view (navigation is hidden in a drawer, some views are simplified for narrow screens) that will be presented event if the screen size is wide. This is helpful when inserting the element as a sidebar of your web page. Node that the `narrow` property will be set automatically on mobile devices | `Boolean` |
+| `append-headers` | Forces the console to send specific list of headers, overriding user input if needed. | `String` |
 
 ## Styling
 
@@ -615,3 +616,16 @@ sized parent. Parent container also has to be positioned relatively
 (`position: relative` CSS property). "Explicitly sized", means it either has
 an explicit CSS height property set via a class or inline style, or else is
 sized by other layout means (e.g. the flex layout or absolute positioning).
+
+## Forcing the API Console to send a specific list of headers
+
+You can force the API Console to send a specific list of headers for each request made by it. To
+do this set the `append-headers` attribute. It should contain a HTTP headers string.
+If the user declared a header that is declared in the `append-headers` attribute then user value
+will be overridden. Otherwise headers will be appended to the headers string.
+
+Use "\n" string to set a new line for the headers string.
+
+```
+<api-console append-headers="X-key: my-api-key\nother-header:value"></api-console>
+```

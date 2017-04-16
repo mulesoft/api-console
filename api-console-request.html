@@ -22,6 +22,8 @@ the License.
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../fetch-polyfill/fetch-polyfill.html">
 <link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="../headers-parser-behavior/headers-parser-behavior.html">
+
 <!--
 The request and response panel.
 
@@ -75,7 +77,8 @@ is to proxt the HTTP request and avoid CORS problems.
       timings="{{timings}}"
       redirect-timings="{{redirectTimings}}"
       redirects="{{redirects}}"
-      source-message="{{sourceMessage}}"></raml-request-panel>
+      source-message="{{sourceMessage}}"
+      on-api-console-request="_apiRequested"></raml-request-panel>
     <template is="dom-if" if="[[hasResponse]]">
       <response-view
         request="[[request]]"
@@ -95,7 +98,10 @@ is to proxt the HTTP request and avoid CORS problems.
     Polymer({
       is: 'api-console-request',
 
-      behaviors: [Polymer.IronScrollTargetBehavior],
+      behaviors: [
+        Polymer.IronScrollTargetBehavior,
+        ArcBehaviors.HeadersParserBehavior
+      ],
 
       properties: {
         /**
@@ -184,11 +190,22 @@ is to proxt the HTTP request and avoid CORS problems.
           }
         },
         // Main scroll target for the app.
-        scrollTarget: HTMLElement
+        scrollTarget: HTMLElement,
+        /**
+         * Forces the console to send headers defined in this string overriding any used defined
+         * header.
+         * This should be an array of headers with `name` and `value` keys, e.g.:
+         * ```
+         * [{
+         *   name: "x-token",
+         *   value: "value"
+         * }]
+         * ```
+         */
+        appendHeaders: Array
       },
 
       listeners: {
-        'api-console-request': '_apiRequested',
         'api-console-response-ready': '_onResponseReady'
       },
 
@@ -233,6 +250,15 @@ is to proxt the HTTP request and avoid CORS problems.
               this.$.noAuth.opened = true;
             }
           }
+        }
+        var headersToAdd = this.appendHeaders;
+        if (headersToAdd) {
+          var eventHeaders = event.detail.headers || '';
+          for (var i = 0, len = headersToAdd.length; i < len; i++) {
+            var header = headersToAdd[i];
+            eventHeaders = this.replaceHeaderValue(eventHeaders, header.name, header.value);
+          }
+          event.detail.headers = eventHeaders;
         }
       },
 
