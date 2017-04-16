@@ -1,0 +1,78 @@
+#%RAML 0.8
+title: Vehicle Recall API
+version: "2014-07-16"
+baseUri: https://www.example.com/{version}/api
+baseUriParameters:
+documentation: 
+  - title: test
+    content: test
+mediaType: application/json
+protocols: [ HTTP, HTTPS ]
+
+/vin/{vin}:
+  displayName: recall by vin
+  description: vehicle recall information by vin
+  get: 
+     description: get vehicle recall information based on the supplied vin
+     responses:
+        200:
+          body:
+            application/json: 
+              example: |                
+                {
+                  "vin": "1N7QPZ745T5698527",
+                  "status": true,
+                  "year": 2004,
+                  "make": "Acme",  
+                  "model": "Supra",
+                  "manufacturer_id": "0014",
+                  "recalls_available": false,
+                  "number_of_recalls": 0,
+                  "refresh_date": "Feb 08, 2014",
+                  "recalls": [
+                               {
+                                 "nhtsa_recall_number": "13V702",
+                                 "mfr_recall_number": "NA",
+                                 "recall_date": "Mar 24, 2013",
+                                 "recall_description": "It may be possible to remove the key from the ignition when the vehicle is running. As such, these vehicles fail to conform to the requirements of the FMVSS 114, \"Theft Protection\".",
+                                 "safety_risk_description": "If the ignition key is removed while the vehicle is still on and/or the vehicle is not in Park, the vehicle may rollaway and the unintended movement of the vehicle may result in a possible crash or injury to pedestraians.",
+                                 "remedy_description": "Dealers will reinforce the affected fork locking bolt connections, free of charge. Repair availability expected in November 2013.",
+                                 "mfr_recall_status": 12,
+                                 "mfr_notes": "Visit manufacturer’s website at http://www.example.com or call 1-800-xxx-xxxx example toll-free number for more information.",
+                                 "refresh_date": "Feb 07, 2014",
+                               },
+                               {
+                                 "nhtsa_recall_number": "12V590",
+                                 "mfr_recall_number": "ABC123",
+                                 "recall_date": "Jun 16, 2012",
+                                 "recall_description": "The affected vehicles may have improperly sized terminal crimps on the seat side-airbag wiring harness which may cause the seat side-airbags to malfunction.",
+                                 "safety_risk_description": "In the event of a crash necessitating airbag deployment the airbags may not operate as designed, increasing the risk of injury.",
+                                 "remedy_description": "Dealers will replace the ignition lock cylinder and the two associated keys. This service will be performed free of charge.",
+                                 "mfr_recall_status": 11,
+                                 "mfr_notes": "Visit manufacturer’s website at http://www.example.com or call 1-800-xxx-xxxx example toll-free number for more information.",
+                                 "refresh_date": "Feb 09, 2014",
+                               }
+                             ]
+                }      
+
+        400: # bad request
+          body:
+            application/json: 
+              example: |
+                {
+                  "vin": "1N7QPZ745T5698NNN",
+                  "status": false,
+                  "error_code": 91  # 91 VIN is not valid
+                }
+                
+        500: # server error
+          body:
+            application/json: 
+              example: |
+                {
+                  "vin": "1N7QPZ745T5698NNN",
+                  "status": false,
+                  "error_code": 92  # 92 Server Error
+                }
+              
+            
