@@ -1,6 +1,6 @@
 # RAML Console
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/mulesoft/api-console?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/JoinChat.svg)](https://gitter.im/mulesoft/api-console?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://travis-ci.org/mulesoft/api-console.png)](https://travis-ci.org/mulesoft/api-console) [![Dependency Status](https://david-dm.org/mulesoft/api-console.png)](https://david-dm.org/mulesoft/api-console#info=dependencies)
 [![DevDependency Status](https://david-dm.org/mulesoft/api-console/dev-status.png)](https://david-dm.org/mulesoft/api-console#info=devDependencies) [![npm version](https://badge.fury.io/js/api-console.svg)](https://badge.fury.io/js/api-console) [![Bower version](https://badge.fury.io/bo/api-console.svg)](https://badge.fury.io/bo/api-console)
