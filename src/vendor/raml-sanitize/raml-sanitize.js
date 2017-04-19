@@ -71,6 +71,48 @@
     return any;
   };
 
+  /**
+   * Convert a value into an array.
+   *
+   * @param  {String} value
+   * @param  {String} key
+   * @param  {Object} object
+   * @param  {Object} configs
+   * @return {Array}
+   */
+  var toArray = function (value, key, object, configs) {
+    var arr = null;
+
+    if (value.charAt(0) !== '[' || value.charAt(value.length - 1) !== ']') {
+      return arr;
+    }
+
+    function arrayFromString(str) {
+      var start = 0;
+      var end = str.length - 1;
+      var items = str.substr(start + 1, end - 1);
+
+      return items.length === 0 ? [] : items.split(',');
+    }
+
+    arr = arrayFromString(value);
+    if (arr.length === 0) return arr;
+
+    var sanitizeError = false;
+
+    configs.forEach(function (config) {
+      if (config.hasOwnProperty('items')) {
+        arr.map( function(elem) {
+          var convertedElem = TYPES[config.items](elem, key, object, configs);
+          if (convertedElem === null) sanitizeError = true;
+          return convertedElem;
+        });
+      }
+    });
+
+    return sanitizeError ? null : arr;
+  };
+
   function isNativeType(typeName) {
     typeName = typeName.replace('[]', '');
     var nativeTypes = [
@@ -247,7 +289,8 @@
     'datetime-only': toDate,
     'datetime':      toDate,
     object:          returnValue,
-    union:           toUnion
+    union:           toUnion,
+    array:           toArray
   };
 
   /**

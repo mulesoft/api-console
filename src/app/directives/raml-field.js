@@ -14,6 +14,15 @@
         param: '='
       },
       controller: ['$scope', function($scope) {
+        function getParamType(definition) {
+          if ($scope.types) {
+            var type = RAML.Inspector.Types.findType(definition.type[0], $scope.types);
+            return type ? type : definition;
+          } else {
+            return definition;
+          }
+        }
+
         var bodyContent = $scope.context.bodyContent;
         var context     = $scope.context[$scope.type];
 
@@ -30,15 +39,8 @@
         });
 
         $scope.isArray = function (param) {
-          return param.type[0].indexOf('[]') !== -1;
-        };
-
-        $scope.addArrayElement = function (model) {
-          model.push([undefined]);
-        };
-
-        $scope.removeArrayElement = function (model, index) {
-          model.splice(index, 1);
+          var paramType = getParamType(param);
+          return paramType.type[0] === 'array';
         };
 
         $scope.canOverride = function (definition) {
@@ -84,7 +86,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined') ? true : false;
+          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined');
         };
 
         $scope.reset = function (param) {
