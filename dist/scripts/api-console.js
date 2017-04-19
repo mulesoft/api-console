@@ -6934,7 +6934,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "        <div class=\"raml-console-resource-response\" ng-if=\"fullResponses[code].headers\">\n" +
     "          <h4 class=\"raml-console-resource-body-heading\">Headers</h4>\n" +
-    "          <properties list=\"fullResponses[code].headers\"></properties>\n" +
+    "          <properties class=\"response-headers\" list=\"fullResponses[code].headers\" show-examples=\"true\"></properties>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"raml-console-resource-response\" ng-if=\"fullResponses[code].body\">\n" +
