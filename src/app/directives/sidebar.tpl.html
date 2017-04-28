@@ -52,9 +52,9 @@
 
           <named-parameters ng-if="resource.uriParametersForDocumentation" src="resource.uriParametersForDocumentation" context="context" type="uriParameters" title="URI Parameters" show-base-url></named-parameters>
 
-          <named-parameters src="methodInfo.headers.plain" context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
+          <named-parameters context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
 
-          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" types="types" title="Query Parameters" enable-custom-parameters></named-parameters>
+          <named-parameters context="context" type="queryParameters" types="types" title="Query Parameters" enable-custom-parameters></named-parameters>
 
           <section ng-if="methodInfo.queryString">
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
