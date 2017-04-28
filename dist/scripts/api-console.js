@@ -1184,26 +1184,20 @@
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
-          return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
-            .then(function (api) {
-              var success = true;
-              var issues = api.errors; // errors and warnings
-              if (issues && issues.length > 0) {
-                success = issues.filter(function (issue) {
-                    return !issue.isWarning;
-                  }).length === 0;
-              }
-
-              if (success) {
-                $scope.vm.raml = api.specification;
-              } else {
-                $scope.vm.error = { message: 'Api contains errors.', errors : issues};
-              }
-            })
-            .finally(function () {
-              $scope.vm.loaded = true;
-            })
-          ;
+          return ramlParser.loadFile($window.resolveUrl(url)).then(
+            function(ramlData) {
+              $scope.$apply(function() {
+                $scope.vm.raml = ramlData;
+                $scope.vm.loaded = true;
+              });
+            },
+            function(errorMsg) {
+              $scope.$apply(function() {
+                $scope.vm.error = {message: 'Api contains errors.', errors: errorMsg};
+                $scope.vm.loaded = true;
+              });
+            }
+          );
         }
       }
     })
@@ -1671,7 +1665,7 @@
           $scope.vm.isLoadedFromUrl = true;
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
-          return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+          return loadFromPromise(ramlParser.loadFile($window.resolveUrl(url)), {isLoadingFromUrl: true});
         }
       }
 
@@ -1695,40 +1689,23 @@
         $scope.vm.codeMirror.lint = null;
 
         return promise
-          .then(function (api) {
-            var success = true;
-            var issues = api.errors; // errors and warnings
-            if (issues && issues.length > 0) {
-              success = issues.filter(function (issue) {
-                  return !issue.isWarning;
-                }).length === 0;
-            }
+          .then(function (ramlData) {
+            $scope.$apply(function() {
+              $scope.vm.raml = ramlData;
 
-            if (success) {
-              $scope.vm.raml = api.specification;
-            } else {
-              $scope.vm.error           = { message: 'Api contains errors.', errors: issues};
-              $scope.vm.codeMirror.lint = lintFromError(issues);
-            }
-          })
-          .finally(function () {
-            $scope.vm.isLoading       = false;
-            $scope.vm.isLoadedFromUrl = options.isLoadingFromUrl;
+              $scope.vm.isLoading       = false;
+              $scope.vm.isLoadedFromUrl = options.isLoadingFromUrl;
+            });
+            console.timeEnd('raml:parse');
+          }, function(errorMsg){
+            $scope.$apply(function() {
+              $scope.vm.error = {message: 'Api contains errors.', errors: errorMsg};
+
+              $scope.vm.isLoading       = false;
+              $scope.vm.isLoadedFromUrl = options.isLoadingFromUrl;
+            });
           })
         ;
-      }
-
-      function lintFromError(errors) {
-        return function getAnnotations() {
-          return (errors || []).map(function (error) {
-            return {
-              message:  error.message,
-              severity: error.isWarning ? 'warning' : 'error',
-              from:     CodeMirror.Pos(error.line),
-              to:       CodeMirror.Pos(error.line)
-            };
-          });
-        };
       }
     }])
   ;
@@ -2824,218 +2801,11 @@
 (function () {
   'use strict';
 
-  angular.module('raml')
-    .factory('ramlExpander',['$q', 'jsTraverse', function ramlExpander(
-      $q,
-      jsTraverse
-    ) {
-      return {
-        expandRaml: expandRaml
-      };
-
-      // ---
-
-      function retrieveType(raml, typeName) {
-        if (!raml.types) { return; }
-
-        var object = raml.types.filter(function (type) { return type[typeName]; })[0];
-        return object ? object[typeName] : object;
-      }
-
-      function replaceTypeIfExists(raml, type, value) {
-        var valueHasExamples = value.example || value.examples;
-        var expandedType = retrieveType(raml, type);
-        if (expandedType) {
-          for (var key in expandedType) {
-            if (expandedType.hasOwnProperty(key)) {
-              if (['example', 'examples'].includes(key) && valueHasExamples) { continue; }
-              value[key] = expandedType[key];
-            }
-          }
-        }
-      }
-
-      function dereferenceTypes(raml) {
-        jsTraverse.traverse(raml).forEach(function (value) {
-          if (this.path.slice(-2).join('.') === 'body.application/json' && value.type) {
-            var type = value.type[0];
-            replaceTypeIfExists(raml, type, value);
-          }
-        });
-
-      }
-
-      function extractArrayType(arrayNode) {
-        if(arrayNode.items.type) { return arrayNode.items.type[0]; }
-        return arrayNode.items;
-      }
-
-      function isNotObject(value) {
-        return value === null || typeof value !== 'object';
-      }
-
-      function dereferenceTypesInArrays(raml) {
-        jsTraverse.traverse(raml).forEach(function (value) {
-          if (this.path.slice(-2).join('.') === 'body.application/json' && value.type && value.type[0] === 'array') {
-            var type = extractArrayType(value);
-            if (isNotObject(value.items)) { value.items = {}; }
-            replaceTypeIfExists(raml, type, value.items);
-
-            if (!value.examples && !value.example) { generateArrayExampleIfPossible(value); }
-          }
-        });
-
-      }
-
-      function generateArrayExampleIfPossible(arrayNode) {
-        var examples = getExampleList(arrayNode.items);
-        if (examples.length === 0 ) { return; }
-
-        arrayNode.example = examples;
-      }
-
-      function getExampleList(node) {
-        if(node.examples) {
-          return node.examples.map(function (example) {
-            return example.structuredValue;
-          });
-        }
-        if(node.example) { return [node.example]; }
-
-        return [];
-      }
-
-      function dereferenceSchemas(raml) {
-        jsTraverse.traverse(raml).forEach(function (value) {
-          if (this.path.slice(-2).join('.') === 'body.application/json' && value.schema) {
-            var schema = value.schema[0];
-            replaceSchemaIfExists(raml, schema, value);
-          }
-        });
-
-      }
-
-      function replaceSchemaIfExists(raml, schema, value) {
-        var expandedSchema = retrieveSchema(raml, schema);
-        if (expandedSchema) {
-          value.schema[0] = expandedSchema.type[0];
-        }
-      }
-
-      function retrieveSchema(raml, schemaName) {
-        if (!raml.schemas) { return; }
-
-        var object = raml.schemas.filter(function (schema) { return schema[schemaName]; })[0];
-        return object ? object[schemaName] : object;
-      }
-
-      function expandRaml(raml) {
-        dereferenceTypes(raml);
-        dereferenceSchemas(raml);
-        dereferenceTypesInArrays(raml);
-      }
-
-    }])
-  ;
+  angular.module('raml', [])
+    .factory('ramlParser', function () {
+      return RAML.Parser;
+    });
 })();
-
-(function () {
-  'use strict';
-
-  angular.module('raml')
-    .factory('ramlParser', ['$http', '$q', '$window', 'ramlExpander', function ramlParser(
-      $http,
-      $q,
-      $window,
-      ramlExpander
-    ) {
-      var jsonOptions=  {
-        serializeMetadata: false,
-        dumpSchemaContents: true,
-        rootNodeDetails: true
-      };
-
-      return {
-        load:     toQ(load),
-        loadPath: toQ(loadPath)
-      };
-
-      // ---
-
-      function load(text, contentAsyncFn, options) {
-        var virtualPath = '/' + Date.now() + '.raml';
-        return loadApi(virtualPath, function contentAsync(path) {
-          return (path === virtualPath) ? $q.when(text) : (contentAsyncFn ? contentAsyncFn(path) : $q.reject(new Error('ramlParser: load: contentAsync: ' + path + ': no such path')));
-        }, options);
-      }
-
-      function loadPath(path, contentAsyncFn, options) {
-        return loadApi(path, function contentAsync(path) {
-          return contentAsyncFn ? contentAsyncFn(path) : $q.reject(new Error('ramlParser: loadPath: contentAsync: ' + path + ': no such path'));
-        }, options);
-      }
-
-      // ---
-
-      function toQ(fn) {
-        return function toQWrapper() {
-          return $q.when(fn.apply(this, arguments));
-        };
-      }
-
-      /**
-       * @param  {String}   path
-       * @param  {Function} contentAsyncFn
-       * @param  {Object}   options
-       * @param  {Boolean}  options.bypassProxy
-       */
-      function loadApi(path, contentAsyncFn, options) {
-        options = options || {};
-        return RAML.Parser.loadApi(path, {
-          attributeDefaults: true,
-          rejectOnErrors:    false,
-          fsResolver:        {
-            contentAsync: contentAsyncFn,
-            content:      content
-          },
-          httpResolver:      {
-            getResourceAsync: function getResourceAsync(url) {
-              var settings = ($window.RAML || {}).Settings || {};
-              var proxy    = (options.bypassProxy ? {} : settings).proxy || '';
-              var req      = {
-                method: 'GET',
-                url: proxy + url,
-                headers: {
-                  'Accept': 'application/raml+yaml'
-                },
-                transformResponse: null
-              };
-              return $http(req)
-                .then(function (res) {
-                  return {content: res.data};
-                })
-              ;
-            }
-          }
-        }).then(function(api) {
-          api = api.expand ? api.expand(true) : api;
-          var raml = api.toJSON(jsonOptions);
-          if (raml.specification) {
-            ramlExpander.expandRaml(raml.specification);
-          }
-          return raml;
-        });
-
-        // ---
-
-        function content(path) {
-          throw new Error('ramlParser: loadPath: loadApi: content: ' + path + ': no such path');
-        }
-      }
-    }])
-  ;
-})();
-
 (function () {
   'use strict';
 

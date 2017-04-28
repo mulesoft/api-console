@@ -51,7 +51,7 @@
           $scope.vm.isLoadedFromUrl = true;
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
-          return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+          return loadFromPromise(ramlParser.loadFile($window.resolveUrl(url)), {isLoadingFromUrl: true});
         }
       }
 
@@ -75,40 +75,23 @@
         $scope.vm.codeMirror.lint = null;
 
         return promise
-          .then(function (api) {
-            var success = true;
-            var issues = api.errors; // errors and warnings
-            if (issues && issues.length > 0) {
-              success = issues.filter(function (issue) {
-                  return !issue.isWarning;
-                }).length === 0;
-            }
+          .then(function (ramlData) {
+            $scope.$apply(function() {
+              $scope.vm.raml = ramlData;
 
-            if (success) {
-              $scope.vm.raml = api.specification;
-            } else {
-              $scope.vm.error           = { message: 'Api contains errors.', errors: issues};
-              $scope.vm.codeMirror.lint = lintFromError(issues);
-            }
-          })
-          .finally(function () {
-            $scope.vm.isLoading       = false;
-            $scope.vm.isLoadedFromUrl = options.isLoadingFromUrl;
+              $scope.vm.isLoading       = false;
+              $scope.vm.isLoadedFromUrl = options.isLoadingFromUrl;
+            });
+            console.timeEnd('raml:parse');
+          }, function(errorMsg){
+            $scope.$apply(function() {
+              $scope.vm.error = {message: 'Api contains errors.', errors: errorMsg};
+
+              $scope.vm.isLoading       = false;
+              $scope.vm.isLoadedFromUrl = options.isLoadingFromUrl;
+            });
           })
         ;
-      }
-
-      function lintFromError(errors) {
-        return function getAnnotations() {
-          return (errors || []).map(function (error) {
-            return {
-              message:  error.message,
-              severity: error.isWarning ? 'warning' : 'error',
-              from:     CodeMirror.Pos(error.line),
-              to:       CodeMirror.Pos(error.line)
-            };
-          });
-        };
       }
     }])
   ;

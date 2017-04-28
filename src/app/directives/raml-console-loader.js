@@ -43,26 +43,20 @@
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
-          return ramlParser.loadPath($window.resolveUrl(url), null, $scope.options)
-            .then(function (api) {
-              var success = true;
-              var issues = api.errors; // errors and warnings
-              if (issues && issues.length > 0) {
-                success = issues.filter(function (issue) {
-                    return !issue.isWarning;
-                  }).length === 0;
-              }
-
-              if (success) {
-                $scope.vm.raml = api.specification;
-              } else {
-                $scope.vm.error = { message: 'Api contains errors.', errors : issues};
-              }
-            })
-            .finally(function () {
-              $scope.vm.loaded = true;
-            })
-          ;
+          return ramlParser.loadFile($window.resolveUrl(url)).then(
+            function(ramlData) {
+              $scope.$apply(function() {
+                $scope.vm.raml = ramlData;
+                $scope.vm.loaded = true;
+              });
+            },
+            function(errorMsg) {
+              $scope.$apply(function() {
+                $scope.vm.error = {message: 'Api contains errors.', errors: errorMsg};
+                $scope.vm.loaded = true;
+              });
+            }
+          );
         }
       }
     })
