@@ -53,8 +53,10 @@
           }
         }
         $scope.$watch('methodInfo', function () {
-          $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
-          $scope.fullResponseCodes = Object.keys($scope.fullResponses);
+          if ($scope.methodInfo.responses && $scope.methodInfo.securitySchemes) {
+            $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
+            $scope.fullResponseCodes = Object.keys($scope.fullResponses);
+          }
         });
 
         $scope.isSchemeSelected = function isSchemeSelected(scheme) {
@@ -242,7 +244,7 @@
 
         $scope.$watch('methodInfo.responses', function (responses) {
           $scope.methodInfo.responses = responses;
-          $scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes());
+          $scope.methodInfo.securitySchemes && ($scope.fullResponses = mergeResponseCodes($scope.methodInfo.responses || {}, $scope.methodInfo.securitySchemes()));
           $scope.fullResponseCodes = Object.keys($scope.fullResponses);
           if ($scope.fullResponseCodes && $scope.fullResponseCodes.length > 0) {
             $scope.currentStatusCode = $scope.fullResponseCodes[0];
