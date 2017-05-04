@@ -1305,7 +1305,27 @@
         model: '=',
         param: '='
       },
-      controller: ['$scope', function($scope) {
+      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
+
+        function getParamType(definition) {
+          if ($rootScope.types) {
+            var type = RAML.Inspector.Types.findType(definition.type[0], $rootScope.types);
+            return type ? type : definition;
+          } else {
+            return definition;
+          }
+        }
+
+        $scope.isEnum = function (definition) {
+          var paramType = getParamType(definition);
+          return paramType.hasOwnProperty('enum');
+        };
+
+        $scope.getEnum = function (definition) {
+          var paramType = getParamType(definition);
+          return paramType['enum'];
+        };
+
         var bodyContent = $scope.context.bodyContent;
         var context     = $scope.context[$scope.type];
 
@@ -1316,8 +1336,8 @@
         Object.keys(context.plain).map(function (key) {
           var definition = context.plain[key].definitions[0];
 
-          if (typeof definition['enum'] !== 'undefined') {
-            context.values[definition.id][0] = definition['enum'][0];
+          if ($scope.isEnum(definition)) {
+            context.values[definition.id][0] =  getParamType(definition)['enum'][0];
           }
         });
 
@@ -1334,7 +1354,7 @@
         };
 
         $scope.canOverride = function (definition) {
-          return definition.type === 'boolean' ||  typeof definition['enum'] !== 'undefined';
+          return definition.type === 'boolean' || $scope.isEnum(definition);
         };
 
         $scope.overrideField = function ($event, definition) {
@@ -1355,7 +1375,7 @@
             $this.text('Cancel override');
           } else {
             definition.overwritten = false;
-            $scope.context[$scope.type].values[definition.id][0] = definition['enum'][0];
+            $scope.context[$scope.type].values[definition.id][0] = getParamType(definition)['enum'][0];
           }
         };
 
@@ -1364,11 +1384,7 @@
         };
 
         $scope.isDefault = function (definition) {
-          return typeof definition['enum'] === 'undefined' && definition.type !== 'boolean';
-        };
-
-        $scope.isEnum = function (definition) {
-          return typeof definition['enum'] !== 'undefined';
+          return !$scope.isEnum(definition) && definition.type !== 'boolean';
         };
 
         $scope.isBoolean = function (definition) {
@@ -7426,7 +7442,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </span>\n" +
     "\n" +
     "    <select id=\"select_{{param.id}}\" ng-if=\"isEnum(param)\" name=\"param.id\" class=\"raml-console-sidebar-input\" ng-model=\"model[0]\" style=\"margin-bottom: 0;\" ng-change=\"onChange()\">\n" +
-    "     <option ng-repeat=\"enum in unique(param.enum)\" value=\"{{enum}}\" ng-selected=\"{{param.example === enum}}\">{{enum}}</option>\n" +
+    "     <option ng-repeat=\"enum in unique(getEnum(param))\" value=\"{{enum}}\" ng-selected=\"{{param.example === enum}}\">{{enum}}</option>\n" +
     "    </select>\n" +
     "\n" +
     "    <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"model[0]\" ng-class=\"{'raml-console-sidebar-field-no-default': !hasExampleValue(param)}\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
