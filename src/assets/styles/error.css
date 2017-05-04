@@ -122,6 +122,43 @@ input.ng-dirty.ng-invalid-pattern + span.raml-console-field-validation-error::af
   text-align: center;
 }
 
+input.ng-dirty.ng-invalid-min-items, input.ng-dirty.ng-invalid-max-items, input.ng-dirty.ng-invalid-unique-items {
+  border: 1px solid red;
+}
+
+input.ng-dirty.ng-invalid-min-items + span.raml-console-field-validation-error::after {
+  content: 'Invalid minItems';
+  color: white;
+  position: absolute;
+  margin-top: -20px;
+  font-size: 13px;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+}
+
+input.ng-dirty.ng-invalid-max-items + span.raml-console-field-validation-error::after {
+  content: 'Invalid maxItems';
+  color: white;
+  position: absolute;
+  margin-top: -20px;
+  font-size: 13px;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+}
+
+input.ng-dirty.ng-invalid-unique-items + span.raml-console-field-validation-error::after {
+  content: 'Repeated items';
+  color: white;
+  position: absolute;
+  margin-top: -20px;
+  font-size: 13px;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+}
+
 input.ng-dirty.ng-invalid-repeat {
   border: 1px solid red;
 }

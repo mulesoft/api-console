@@ -1305,11 +1305,10 @@
         model: '=',
         param: '='
       },
-      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
-
+      controller: ['$scope', function($scope) {
         function getParamType(definition) {
-          if ($rootScope.types) {
-            var type = RAML.Inspector.Types.findType(definition.type[0], $rootScope.types);
+          if ($scope.types) {
+            var type = RAML.Inspector.Types.findType(definition.type[0], $scope.types);
             return type ? type : definition;
           } else {
             return definition;
@@ -1342,15 +1341,8 @@
         });
 
         $scope.isArray = function (param) {
-          return param.type[0].indexOf('[]') !== -1;
-        };
-
-        $scope.addArrayElement = function (model) {
-          model.push([undefined]);
-        };
-
-        $scope.removeArrayElement = function (model, index) {
-          model.splice(index, 1);
+          var paramType = getParamType(param);
+          return paramType.type[0] === 'array';
         };
 
         $scope.canOverride = function (definition) {
@@ -1375,7 +1367,7 @@
             $this.text('Cancel override');
           } else {
             definition.overwritten = false;
-            $scope.context[$scope.type].values[definition.id][0] = getParamType(definition)['enum'][0];
+            $scope.context[$scope.type].values[definition.id][0] = $scope.getEnum(definition)[0];
           }
         };
 
@@ -1392,7 +1384,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined') ? true : false;
+          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined');
         };
 
         $scope.reset = function (param) {
@@ -2997,7 +2989,8 @@
 
         sanitationRules[validationId] = {
           type: validation.type || null,
-          repeat: validation.repeat || null
+          repeat: validation.repeat || null,
+          items: validation.items || null
         };
 
         sanitationRules[validationId] = RAML.Utils.filterEmpty(sanitationRules[validationId]);
@@ -3011,7 +3004,10 @@
           pattern: validation.pattern || null,
           minimum: validation.minimum || null,
           maximum: validation.maximum || null,
-          repeat: validation.repeat || null
+          repeat: validation.repeat || null,
+          minItems: validation.minItems || null,
+          maxItems: validation.maxItems || null,
+          uniqueItems: validation.uniqueItems || null
         };
 
         validationRules[validationId] = RAML.Utils.filterEmpty(validationRules[validationId]);
@@ -6286,6 +6282,48 @@ RAML.Inspector = (function() {
     return any;
   };
 
+  /**
+   * Convert a value into an array.
+   *
+   * @param  {String} value
+   * @param  {String} key
+   * @param  {Object} object
+   * @param  {Object} configs
+   * @return {Array}
+   */
+  var toArray = function (value, key, object, configs) {
+    var arr = null;
+
+    if (value.charAt(0) !== '[' || value.charAt(value.length - 1) !== ']') {
+      return arr;
+    }
+
+    function arrayFromString(str) {
+      var start = 0;
+      var end = str.length - 1;
+      var items = str.substr(start + 1, end - 1);
+
+      return items.length === 0 ? [] : items.split(',');
+    }
+
+    arr = arrayFromString(value);
+    if (arr.length === 0) return arr;
+
+    var sanitizeError = false;
+
+    configs.forEach(function (config) {
+      if (config.hasOwnProperty('items')) {
+        arr.map( function(elem) {
+          var convertedElem = TYPES[config.items](elem, key, object, configs);
+          if (convertedElem === null) sanitizeError = true;
+          return convertedElem;
+        });
+      }
+    });
+
+    return sanitizeError ? null : arr;
+  };
+
   function isNativeType(typeName) {
     typeName = typeName.replace('[]', '');
     var nativeTypes = [
@@ -6462,7 +6500,8 @@ RAML.Inspector = (function() {
     'datetime-only': toDate,
     'datetime':      toDate,
     object:          returnValue,
-    union:           toUnion
+    union:           toUnion,
+    array:           toArray
   };
 
   /**
@@ -6634,6 +6673,32 @@ RAML.Inspector = (function() {
   };
 
   /**
+   * Check if the value is an Array string. If so, then check the type of the items
+   *
+   * @param  {Array} check
+   * @param  {String} key
+   * @param  {Object} object
+   * @param  {Object} configs
+   * @return {Boolean}
+   */
+  var isArray = function (check, key, object, configs) {
+
+    if (!Array.isArray(check)) return false;
+
+    var isArray = true;
+
+    configs.forEach(function (config) {
+      if (config.hasOwnProperty('items')) {
+        check.forEach(function(elem) {
+          isArray = isArray && TYPES[config.items](elem, key, object, configs);
+        });
+      }
+    });
+
+    return isArray;
+  };
+
+  /**
    * Check a number is not smaller than the minimum.
    *
    * @param  {Number}   min
@@ -6649,7 +6714,7 @@ RAML.Inspector = (function() {
    * Check a number doesn't exceed the maximum.
    *
    * @param  {Number}  max
-   * @return {Boolean}
+   * @return {Function}
    */
   var isMaximum = function (max) {
     return function (check) {
@@ -6661,7 +6726,7 @@ RAML.Inspector = (function() {
    * Check a string is not smaller than a minimum length.
    *
    * @param  {Number}  min
-   * @return {Boolean}
+   * @return {Function}
    */
   var isMinimumLength = function (min) {
     return function (check) {
@@ -6673,7 +6738,7 @@ RAML.Inspector = (function() {
    * Check a string does not exceed a maximum length.
    *
    * @param  {Number}  max
-   * @return {Boolean}
+   * @return {Function}
    */
   var isMaximumLength = function (max) {
     return function (check) {
@@ -6705,6 +6770,53 @@ RAML.Inspector = (function() {
     }
 
     return pattern.test.bind(pattern);
+  };
+
+  /**
+   * Check array is not smaller than a minimum length.
+   *
+   * @param  {Number}  min
+   * @return {Function}
+   */
+  var hasMinimumItems = function (min) {
+    return function (check) {
+      return check.length >= min;
+    };
+  };
+
+  /**
+   * Check array does not exceed a maximum length.
+   *
+   * @param  {Number}  max
+   * @return {Function}
+   */
+  var hasMaximumItems = function (max) {
+    return function (check) {
+      return check.length <= max;
+    };
+  };
+
+  /**
+   * Check array has unique items.
+   *
+   * @param  {Boolean}  checkUniqueness
+   * @return {Function}
+   */
+  var hasUniqueItems = function (checkUniqueness) {
+    return function(check) {
+      if (!checkUniqueness) return true;
+
+      var unique = {}, i;
+
+      for (i = 0; i < check.length; i += 1) {
+        if (unique[check[i]]) {
+          return false;
+        }
+        unique[check[i]] = true;
+      }
+
+      return true;
+    };
   };
 
   /**
@@ -6774,6 +6886,7 @@ RAML.Inspector = (function() {
     var isOptional        = !configs.length;
     var simpleValidations = [];
     var repeatValidations = [];
+    var repeatable        = false;
 
     // Support multiple type validations.
     configs.forEach(function (config) {
@@ -6787,6 +6900,7 @@ RAML.Inspector = (function() {
       // Push validations into each stack depending on the "repeat".
       if (config.repeat) {
         repeatValidations.push(validation);
+        repeatable = true;
       } else {
         simpleValidations.push(validation);
       }
@@ -6802,8 +6916,8 @@ RAML.Inspector = (function() {
      */
     return function (value, key, object) {
 
-      // Switch validation type depending on if the value is an array or not.
-      var isArray = Array.isArray(value);
+      // Switch validation type depending on if the value is an array or not and if raml is 0.8.
+      var isArray = Array.isArray(value) && repeatable;
 
       // Short-circuit validation if empty value
       if (value == null || (isArray && value.length === 0)) {
@@ -6906,7 +7020,8 @@ RAML.Inspector = (function() {
     'boolean':       isBoolean,
     string:          isString,
     object:          isJSON,
-    union:           isUnion
+    union:           isUnion,
+    array:           isArray
   };
 
   /**
@@ -6981,7 +7096,10 @@ RAML.Inspector = (function() {
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
       'enum':    isEnum,
-      pattern:   isPattern
+      pattern:   isPattern,
+      minItems:  hasMinimumItems,
+      maxItems:  hasMaximumItems,
+      uniqueItems: hasUniqueItems
     };
 
     /**
@@ -7452,27 +7570,24 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div ng-if=\"!param.properties && isArray(param)\" ng-init=\"model[0] = [[undefined]]\">\n" +
-    "    <button class=\"raml-console-sidebar-add-btn\" ng-click=\"addArrayElement(model[0])\"></button>\n" +
-    "    <div ng-repeat=\"aModel in model[0] track by $index\" style=\"position: relative;\">\n" +
-    "      <button class=\"raml-console-sidebar-input-delete\" ng-click=\"removeArrayElement(model[0], $index)\"></button>\n" +
-    "      <span class=\"raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left\" ng-if=\"hasExampleValue(param)\">\n" +
-    "        <button tabindex=\"-1\" class=\"raml-console-sidebar-input-reset\" ng-click=\"reset(param)\"><span class=\"raml-console-visuallyhidden\">Reset field</span></button>\n" +
-    "        <span class=\"raml-console-sidebar-tooltip-flyout-left\">\n" +
-    "          <span>Use example value</span>\n" +
-    "        </span>\n" +
+    "  <div ng-if=\"!param.properties && isArray(param)\">\n" +
+    "    <i class=\"raml-console-sidebar-info-btn\" tooltip=\"Format example: [hello, world]\"></i>\n" +
+    "    <span class=\"raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left\" ng-if=\"hasExampleValue(param)\">\n" +
+    "      <button tabindex=\"-1\" class=\"raml-console-sidebar-input-reset\" ng-click=\"reset(param)\"><span class=\"raml-console-visuallyhidden\">Reset field</span></button>\n" +
+    "      <span class=\"raml-console-sidebar-tooltip-flyout-left\">\n" +
+    "        <span>Use example value</span>\n" +
     "      </span>\n" +
+    "    </span>\n" +
     "\n" +
-    "      <select id=\"select_{{param.id}}\" ng-if=\"isEnum(param)\" name=\"param.id\" class=\"raml-console-sidebar-input\" ng-model=\"aModel[0]\" style=\"margin-bottom: 0;\" ng-change=\"onChange()\">\n" +
-    "       <option ng-repeat=\"enum in unique(param.enum)\" value=\"{{enum}}\" ng-selected=\"{{param.example === enum}}\">{{enum}}</option>\n" +
-    "      </select>\n" +
+    "    <select id=\"select_{{param.id}}\" ng-if=\"isEnum(param)\" name=\"param.id\" class=\"raml-console-sidebar-input\" ng-model=\"model[0]\" style=\"margin-bottom: 0;\" ng-change=\"onChange()\">\n" +
+    "     <option ng-repeat=\"enum in unique(param.enum)\" value=\"{{enum}}\" ng-selected=\"{{param.example === enum}}\">{{enum}}</option>\n" +
+    "    </select>\n" +
     "\n" +
-    "      <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"aModel[0]\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
+    "    <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"model[0]\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
     "\n" +
-    "      <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"aModel[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
+    "    <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"model[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
     "\n" +
-    "      <span class=\"raml-console-field-validation-error\"></span>\n" +
-    "    </div>\n" +
+    "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </div>\n" +
     "\n" +
     "  <div ng-if=\"param.properties\" style=\"padding-left: 10px\">\n" +

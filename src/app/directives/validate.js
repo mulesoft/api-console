@@ -45,7 +45,8 @@
 
         sanitationRules[validationId] = {
           type: validation.type || null,
-          repeat: validation.repeat || null
+          repeat: validation.repeat || null,
+          items: validation.items || null
         };
 
         sanitationRules[validationId] = RAML.Utils.filterEmpty(sanitationRules[validationId]);
@@ -59,7 +60,10 @@
           pattern: validation.pattern || null,
           minimum: validation.minimum || null,
           maximum: validation.maximum || null,
-          repeat: validation.repeat || null
+          repeat: validation.repeat || null,
+          minItems: validation.minItems || null,
+          maxItems: validation.maxItems || null,
+          uniqueItems: validation.uniqueItems || null
         };
 
         validationRules[validationId] = RAML.Utils.filterEmpty(validationRules[validationId]);

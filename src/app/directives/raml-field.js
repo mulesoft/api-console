@@ -13,11 +13,10 @@
         model: '=',
         param: '='
       },
-      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
-
+      controller: ['$scope', function($scope) {
         function getParamType(definition) {
-          if ($rootScope.types) {
-            var type = RAML.Inspector.Types.findType(definition.type[0], $rootScope.types);
+          if ($scope.types) {
+            var type = RAML.Inspector.Types.findType(definition.type[0], $scope.types);
             return type ? type : definition;
           } else {
             return definition;
@@ -50,15 +49,8 @@
         });
 
         $scope.isArray = function (param) {
-          return param.type[0].indexOf('[]') !== -1;
-        };
-
-        $scope.addArrayElement = function (model) {
-          model.push([undefined]);
-        };
-
-        $scope.removeArrayElement = function (model, index) {
-          model.splice(index, 1);
+          var paramType = getParamType(param);
+          return paramType.type[0] === 'array';
         };
 
         $scope.canOverride = function (definition) {
@@ -83,7 +75,7 @@
             $this.text('Cancel override');
           } else {
             definition.overwritten = false;
-            $scope.context[$scope.type].values[definition.id][0] = getParamType(definition)['enum'][0];
+            $scope.context[$scope.type].values[definition.id][0] = $scope.getEnum(definition)[0];
           }
         };
 
@@ -100,7 +92,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined') ? true : false;
+          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined');
         };
 
         $scope.reset = function (param) {
