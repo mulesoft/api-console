@@ -1241,17 +1241,10 @@
       }
 
       function toggle($event, index, collection, flagKey) {
-        var $this    = jQuery($event.currentTarget);
-        // var $section = $this
-        //   .closest('.raml-console-resource-list-item')
-        //   .find('.raml-console-resource-list');
-
         collection[index] = !collection[index];
 
         $scope[flagKey] = checkItemStatus(false, collection) ? false : $scope[flagKey];
         $scope[flagKey] = checkItemStatus(true, collection) ? true : $scope[flagKey];
-
-        // $section.toggleClass('raml-console-is-collapsed');
       }
 
       function updateProxyConfig(status) {
@@ -7692,9 +7685,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        >\n" +
     "          <span\n" +
     "            class=\"raml-console-tab-label raml-console-tab-{{method.method}}\"\n" +
-    "          >\n" +
-    "            {{method.method.toLocaleUpperCase()}}\n" +
-    "          </span>\n" +
+    "          >{{method.method.toLocaleUpperCase()}}</span>\n" +
     "        </div>\n" +
     "      </div>\n" +
     "\n" +
