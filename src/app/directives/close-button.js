@@ -8,13 +8,14 @@
       replace: true,
       controller: ['$scope', '$rootScope', function($scope, $rootScope) {
         $scope.close = function () {
-          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
-
           $rootScope.$broadcast('resetData');
-          $inactiveElements.removeClass('raml-console-is-active');
+          $rootScope.$broadcast('methodClick', null, $rootScope.currentId);
           $scope.showPanel = false;
           $scope.traits = null;
           $scope.methodInfo = {};
+          $scope.currentId               = null;
+          $rootScope.currentId           = null;
+          $rootScope.currentMethod       = null;
         };
       }]
     };

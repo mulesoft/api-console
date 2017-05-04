@@ -1,14 +1,10 @@
 (function () {
   'use strict';
 
-  RAML.Directives.methodList = function() {
-    return {
-      restrict: 'E',
-      templateUrl: 'directives/method-list.tpl.html',
-      replace: true,
-      controller: ['$scope', '$timeout', '$rootScope', function($scope, $timeout, $rootScope) {
-        function loadExamples () {
-          $scope.context.uriParameters.reset($scope.resource.uriParametersForDocumentation);
+  angular.module('RAML.Directives')
+    .factory('showResource', ['$timeout', '$rootScope', 'resourceId', function($timeout, $rootScope, resourceId) {
+        function loadExamples ($scope, resource) {
+          $scope.context.uriParameters.reset(resource.uriParametersForDocumentation);
           $scope.context.queryParameters.reset($scope.methodInfo.queryParameters);
           $scope.context.headers.reset($scope.methodInfo.headers.plain);
 
@@ -51,7 +47,7 @@
           }
         }
 
-        function getResponseInfo() {
+        function getResponseInfo($scope) {
           var responseInfo = {};
           var responses    = $scope.methodInfo.responses;
 
@@ -71,12 +67,12 @@
           return responseInfo;
         }
 
-        function toUIModel (collection) {
+        function toUIModel ($scope, collection) {
           if(collection) {
             Object.keys(collection).forEach(function (key) {
               collection[key][0].id = key;
               if (collection[key][0].properties) {
-                toUIModel(collection[key][0].properties);
+                toUIModel($scope, collection[key][0].properties);
               }
             });
           }
@@ -86,53 +82,43 @@
           return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
         }
 
-        $scope.readTraits = function (traits) {
-          var list = [];
-          var traitList = traits || [];
+        return function showResource($scope, resource, $event, $index) {
+          var methodInfo        = resource.methods[$index];
+          var oldId             = $rootScope.currentId;
 
-          traitList = traitList.concat($scope.resource.traits);
+          $scope.readTraits = function (traits) {
+            var list = [];
+            var traitList = traits || [];
 
-          traitList.map(function (trait) {
-            if (trait) {
-              if (typeof trait === 'object') {
-              trait = Object.keys(trait).join(', ');
+            traitList = traitList.concat(resource.traits);
+
+            traitList.map(function (trait) {
+              if (trait) {
+                if (typeof trait === 'object') {
+                  trait = Object.keys(trait).join(', ');
+                }
+
+                if (list.indexOf(trait) === -1) {
+                  list.push(trait);
+                }
               }
+            });
 
-              if (list.indexOf(trait) === -1) {
-                list.push(trait);
-              }
-            }
-          });
+            return list.join(', ');
+          };
 
-          return list.join(', ');
-        };
 
-        $scope.generateId = function (path) {
-          return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
-        };
+          var id = resourceId(resource);
+          var isDifferentMethod = $rootScope.currentId !== id || $scope.currentMethod !== methodInfo.method;
 
-        var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource')
-                                                           .add('li')
-                                                           .add('.raml-console-tab');
-
-        $scope.$on('openMethod', function(event, $currentScope) {
-          if ($scope.$id !== $currentScope.$id) {
-            $inactiveElements.removeClass('raml-console-is-active');
-            $scope.showPanel = false;
-          }
-        });
-
-        $scope.showResource = function ($event, $index) {
-          var $this             = jQuery($event.currentTarget);
-          var $resource         = $this.closest('.raml-console-resource');
-          var methodInfo        = $scope.resource.methods[$index];
-          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource')
-                                                             .add('li')
-                                                             .add('.raml-console-tab');
+          $rootScope.currentId           = id;
+          $scope.currentId               = id;
+          $scope.currentMethod           = methodInfo.method;
+          $scope.resource                = resource;
 
           $scope.methodInfo               = methodInfo;
-          $scope.responseInfo             = getResponseInfo();
-          $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, $scope.resource, $scope.methodInfo);
+          $scope.responseInfo             = getResponseInfo($scope);
+          $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, resource, $scope.methodInfo);
           $scope.requestUrl               = '';
           $scope.response                 = {};
           $scope.requestOptions           = {};
@@ -145,9 +131,9 @@
           $scope.context.customParameters = { headers: [], queryParameters: [] };
           $scope.currentBodySelected      = methodInfo.body ? Object.keys(methodInfo.body)[0] : 'application/json';
 
-          toUIModel($scope.methodInfo.queryParameters);
-          toUIModel($scope.methodInfo.headers.plain);
-          toUIModel($scope.resource.uriParametersForDocumentation);
+          toUIModel($scope, $scope.methodInfo.queryParameters);
+          toUIModel($scope, $scope.methodInfo.headers.plain);
+          toUIModel($scope, resource.uriParametersForDocumentation);
 
           Object.keys($scope.securitySchemes).map(function (key) {
             var type = $scope.securitySchemes[key].type;
@@ -168,7 +154,7 @@
           delete $scope.securitySchemes.digest_auth;
           /*jshint camelcase: true */
 
-          loadExamples();
+          loadExamples($scope, resource);
 
           // Hack for codemirror
           setTimeout(function () {
@@ -184,11 +170,10 @@
             });
           }, 10);
 
-          if (!$resource.hasClass('raml-console-is-active')) {
-            var hash = $scope.generateId($scope.resource.pathSegments);
+          if (isDifferentMethod) {
+            var hash = id;
 
-            $rootScope.$broadcast('openMethod', $scope);
-            jQuery($this).addClass('raml-console-is-active');
+            $rootScope.$broadcast('methodClick', id, oldId !== id ? oldId : null);
             $scope.showPanel = true;
 
             $timeout(function () {
@@ -197,20 +182,15 @@
               }, 'fast');
             }, 10);
 
-          } else if (jQuery($this).hasClass('raml-console-is-active')) {
+          } else {
+            $rootScope.$broadcast('methodClick', null, oldId);
             $scope.showPanel = false;
-            $inactiveElements.removeClass('raml-console-is-active');
             $scope.traits = null;
             $scope.methodInfo = {};
-          } else {
-            jQuery($this).addClass('raml-console-is-active');
-            jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
+            $scope.currentId               = null;
+            $rootScope.currentId           = null;
+            $rootScope.currentMethod       = null;
           }
         };
-      }]
-    };
-  };
-
-  angular.module('RAML.Directives')
-    .directive('methodList', RAML.Directives.methodList);
+      }]);
 })();
