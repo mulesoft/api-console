@@ -640,17 +640,21 @@
         };
 
         $scope.toggleRequestMetadata = function (enabled) {
-          if ($scope.showRequestMetadata && !enabled) {
-            $scope.showRequestMetadata = false;
-          } else {
-            $scope.showRequestMetadata = true;
-          }
+          $scope.showRequestMetadata = !($scope.showRequestMetadata && !enabled);
         };
 
         $scope.showResponseMetadata = true;
 
         $scope.toggleResponseMetadata = function () {
           $scope.showResponseMetadata = !$scope.showResponseMetadata;
+        };
+
+        $scope.isFileBody = function (param) {
+          return param.contentType && param.contentType.type[0] === 'file';
+        };
+
+        $scope.uploadFile = function (event) {
+          $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value  = event.files[0];
         };
       }]
     };

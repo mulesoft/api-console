@@ -83,6 +83,16 @@
   };
 
   /**
+   * Check if the value is file.
+   *
+   * @param  {Object}  check
+   * @return {Boolean}
+   */
+  var isFile = function (check) {
+    return check.constructor === File;
+  };
+
+  /**
    * Check a number is not smaller than the minimum.
    *
    * @param  {Number}   min
@@ -154,6 +164,22 @@
     }
 
     return pattern.test.bind(pattern);
+  };
+
+  /**
+   * Check if a file type is included in values.
+   *
+   * @param  {Array<String>} values
+   * @return {Function}
+   */
+  var isValidFileTypes = function (values) {
+    return function (check) {
+      check = check.toLowerCase();
+      var checkInValue = values.find(function (value) {
+        return value.toLowerCase() === check
+      });
+      return checkInValue ? true : false;
+    }
   };
 
   /**
@@ -355,7 +381,8 @@
     'boolean':       isBoolean,
     string:          isString,
     object:          isJSON,
-    union:           isUnion
+    union:           isUnion,
+    file:            isFile
   };
 
   /**
@@ -430,7 +457,8 @@
       minLength: isMinimumLength,
       maxLength: isMaximumLength,
       'enum':    isEnum,
-      pattern:   isPattern
+      pattern:   isPattern,
+      fileTypes: isValidFileTypes
     };
 
     /**

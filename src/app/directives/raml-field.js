@@ -29,6 +29,10 @@
           }
         });
 
+        $scope.isFile = function (param) {
+          return param.type === 'file';
+        };
+
         $scope.isArray = function (param) {
           return param.type[0].indexOf('[]') !== -1;
         };
@@ -72,7 +76,7 @@
         };
 
         $scope.isDefault = function (definition) {
-          return typeof definition['enum'] === 'undefined' && definition.type !== 'boolean';
+          return typeof definition['enum'] === 'undefined' && definition.type !== 'boolean' && !$scope.isFile(definition);
         };
 
         $scope.isEnum = function (definition) {
@@ -103,6 +107,17 @@
         $scope.toString = function toString(value) {
           return Array.isArray(value) ? value.join(', ') : value;
         };
+
+        $scope.uploadFile = function (event) {
+          $scope.$apply(function() {
+            $scope.model[0] = event.files[0];
+          });
+        };
+
+        $scope.$on('clearBody', function () {
+          angular.element('raml-console-sidebar-input-file').val(null);
+          $scope.model[0] = undefined;
+        });
       }],
       compile: function (element) {
         return RecursionHelper.compile(element);

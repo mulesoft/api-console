@@ -59,7 +59,8 @@
           pattern: validation.pattern || null,
           minimum: validation.minimum || null,
           maximum: validation.maximum || null,
-          repeat: validation.repeat || null
+          repeat: validation.repeat || null,
+          fileTypes: validation.fileTypes || null
         };
 
         validationRules[validationId] = RAML.Utils.filterEmpty(validationRules[validationId]);
