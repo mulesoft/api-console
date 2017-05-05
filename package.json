@@ -21,7 +21,7 @@
     "api"
   ],
   "author": "MuleSoft, Inc.",
-  "license": "Apache 2.0",
+  "license": "CPAL-1.0",
   "bugs": {
     "url": "https://github.com/mulesoft/api-console/issues"
   },
