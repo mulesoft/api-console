@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: ['$scope', '$timeout', function ($scope, $timeout) {
+      controller: ['$scope', '$timeout', 'resourceId', function ($scope, $timeout, resourceId) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
@@ -15,6 +15,7 @@
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
+        $scope.resourceIdFn      = resourceId;
 
         function readCustomSchemeInfo (name) {
           if (!$scope.methodInfo.headers.plain) {
@@ -114,7 +115,7 @@
 
           apply();
 
-          var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
+          var hash = 'request_' + resourceId($scope.resource);
 
           $timeout(function () {
             if (jqXhr) {
@@ -229,7 +230,7 @@
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
 
-          cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
+          $scope.methodInfo.headers && cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
         });
 

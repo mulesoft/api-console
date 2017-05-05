@@ -52,9 +52,9 @@
 
           <named-parameters ng-if="resource.uriParametersForDocumentation" src="resource.uriParametersForDocumentation" context="context" type="uriParameters" title="URI Parameters" show-base-url></named-parameters>
 
-          <named-parameters src="methodInfo.headers.plain" context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
+          <named-parameters context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
 
-          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" types="types" title="Query Parameters" enable-custom-parameters></named-parameters>
+          <named-parameters context="context" type="queryParameters" types="types" title="Query Parameters" enable-custom-parameters></named-parameters>
 
           <section ng-if="methodInfo.queryString">
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
@@ -144,7 +144,7 @@
           </section>
 
           <div ng-if="responseDetails">
-            <section id="request_{{generateId(resource.pathSegments)}}" class="raml-console-side-bar-try-it-description">
+            <section id="request_{{resourceIdFn(resource)}}" class="raml-console-side-bar-try-it-description">
               <header class="raml-console-sidebar-row raml-console-sidebar-header">
                 <h3 class="raml-console-sidebar-head raml-console-sidebar-head-expand">
                   <button ng-class="{'raml-console-is-open':showRequestMetadata, 'raml-console-is-collapsed':!showRequestMetadata}" class="raml-console-sidebar-expand-btn" ng-click="toggleRequestMetadata()">

@@ -93,6 +93,32 @@
   };
 
   /**
+   * Check if the value is an Array string. If so, then check the type of the items
+   *
+   * @param  {Array} check
+   * @param  {String} key
+   * @param  {Object} object
+   * @param  {Object} configs
+   * @return {Boolean}
+   */
+  var isArray = function (check, key, object, configs) {
+
+    if (!Array.isArray(check)) return false;
+
+    var isArray = true;
+
+    configs.forEach(function (config) {
+      if (config.hasOwnProperty('items')) {
+        check.forEach(function(elem) {
+          isArray = isArray && TYPES[config.items](elem, key, object, configs);
+        });
+      }
+    });
+
+    return isArray;
+  };
+
+  /**
    * Check a number is not smaller than the minimum.
    *
    * @param  {Number}   min
@@ -108,7 +134,7 @@
    * Check a number doesn't exceed the maximum.
    *
    * @param  {Number}  max
-   * @return {Boolean}
+   * @return {Function}
    */
   var isMaximum = function (max) {
     return function (check) {
@@ -120,7 +146,7 @@
    * Check a string is not smaller than a minimum length.
    *
    * @param  {Number}  min
-   * @return {Boolean}
+   * @return {Function}
    */
   var isMinimumLength = function (min) {
     return function (check) {
@@ -132,7 +158,7 @@
    * Check a string does not exceed a maximum length.
    *
    * @param  {Number}  max
-   * @return {Boolean}
+   * @return {Function}
    */
   var isMaximumLength = function (max) {
     return function (check) {
@@ -180,6 +206,53 @@
       });
       return checkInValue ? true : false;
     }
+  };
+
+  /**
+   * Check array is not smaller than a minimum length.
+   *
+   * @param  {Number}  min
+   * @return {Function}
+   */
+  var hasMinimumItems = function (min) {
+    return function (check) {
+      return check.length >= min;
+    };
+  };
+
+  /**
+   * Check array does not exceed a maximum length.
+   *
+   * @param  {Number}  max
+   * @return {Function}
+   */
+  var hasMaximumItems = function (max) {
+    return function (check) {
+      return check.length <= max;
+    };
+  };
+
+  /**
+   * Check array has unique items.
+   *
+   * @param  {Boolean}  checkUniqueness
+   * @return {Function}
+   */
+  var hasUniqueItems = function (checkUniqueness) {
+    return function(check) {
+      if (!checkUniqueness) return true;
+
+      var unique = {}, i;
+
+      for (i = 0; i < check.length; i += 1) {
+        if (unique[check[i]]) {
+          return false;
+        }
+        unique[check[i]] = true;
+      }
+
+      return true;
+    };
   };
 
   /**
@@ -249,6 +322,7 @@
     var isOptional        = !configs.length;
     var simpleValidations = [];
     var repeatValidations = [];
+    var repeatable        = false;
 
     // Support multiple type validations.
     configs.forEach(function (config) {
@@ -262,6 +336,7 @@
       // Push validations into each stack depending on the "repeat".
       if (config.repeat) {
         repeatValidations.push(validation);
+        repeatable = true;
       } else {
         simpleValidations.push(validation);
       }
@@ -277,8 +352,8 @@
      */
     return function (value, key, object) {
 
-      // Switch validation type depending on if the value is an array or not.
-      var isArray = Array.isArray(value);
+      // Switch validation type depending on if the value is an array or not and if raml is 0.8.
+      var isArray = Array.isArray(value) && repeatable;
 
       // Short-circuit validation if empty value
       if (value == null || (isArray && value.length === 0)) {
@@ -382,6 +457,7 @@
     string:          isString,
     object:          isJSON,
     union:           isUnion,
+    array:           isArray,
     file:            isFile
   };
 
@@ -458,6 +534,9 @@
       maxLength: isMaximumLength,
       'enum':    isEnum,
       pattern:   isPattern,
+      minItems:  hasMinimumItems,
+      maxItems:  hasMaximumItems,
+      uniqueItems: hasUniqueItems,
       fileTypes: isValidFileTypes
     };
 
