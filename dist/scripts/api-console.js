@@ -7402,6 +7402,12 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </span>\n" +
     "      </h4>\n" +
     "\n" +
+    "      <div ng-if=\"!isCollapsible(type) && vm.isCollapsed === undefined\">\n" +
+    "        <p ng-if=\"type.example !== undefined && showExamples\">\n" +
+    "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{type.example}}</span>\n" +
+    "        </p>\n" +
+    "      </div>\n" +
+    "\n" +
     "      <div ng-if=\"!vm.isCollapsed\">\n" +
     "        <p ng-if=\"type.description\" markdown=\"type.description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
@@ -7418,7 +7424,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          list=\"type.properties\"\n" +
     "          ng-if=\"type.properties\"\n" +
     "          hide-type-links=\"hideTypeLinks\"\n" +
-    "          is-nested-property=\"true\">\n" +
+    "          is-nested-property=\"true\"\n" +
+    "          show-examples=\"showExamples\">\n" +
     "        </properties>\n" +
     "      </div>\n" +
     "    </div>\n" +
@@ -7920,7 +7927,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </header>\n" +
     "  </li>\n" +
     "  <li ng-if=\"!vm.isCollapsed\" class=\"raml-console-resource-panel raml-console-type-panel\" style=\"padding: 32px;\">\n" +
-    "    <properties list=\"theTypes\" collapsible=\"true\" hide-property-details=\"true\"></properties>\n" +
+    "    <properties list=\"theTypes\" collapsible=\"true\" hide-property-details=\"true\" show-examples=\"true\"></properties>\n" +
     "  </li>\n" +
     "</ol>\n"
   );
