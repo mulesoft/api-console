@@ -1,6 +1,15 @@
 (function () {
   'use strict';
 
+  var clearScope = function ($scope) {
+    $scope.showPanel = false;
+    $scope.showPanel = false;
+    $scope.traits = null;
+    $scope.methodInfo = {};
+    $scope.currentId = null;
+    $scope.currentMethod = null;
+  };
+
   RAML.Directives.closeButton = function() {
     return {
       restrict: 'E',
@@ -10,12 +19,9 @@
         $scope.close = function () {
           $rootScope.$broadcast('resetData');
           $rootScope.$broadcast('methodClick', null, $rootScope.currentId);
-          $scope.showPanel = false;
-          $scope.traits = null;
-          $scope.methodInfo = {};
-          $scope.currentId               = null;
-          $rootScope.currentId           = null;
-          $rootScope.currentMethod       = null;
+          clearScope($scope);
+          clearScope($scope.$parent);
+          $rootScope.currentId = null;
         };
       }]
     };

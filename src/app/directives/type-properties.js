@@ -7,7 +7,8 @@
       templateUrl: 'directives/type-properties.tpl.html',
       replace: true,
       scope: {
-        type: '='
+        type: '=',
+        showExamples: '='
       },
       controller: ['$scope', function ($scope) {
         $scope.$watch('type', function () {

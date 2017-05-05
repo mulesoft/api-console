@@ -111,8 +111,8 @@
           var id = resourceId(resource);
           var isDifferentMethod = $rootScope.currentId !== id || $scope.currentMethod !== methodInfo.method;
 
-          $rootScope.currentId           = id;
           $scope.currentId               = id;
+          $rootScope.currentId           = id;
           $scope.currentMethod           = methodInfo.method;
           $scope.resource                = resource;
 
@@ -173,8 +173,8 @@
           if (isDifferentMethod) {
             var hash = id;
 
-            $rootScope.$broadcast('methodClick', id, oldId !== id ? oldId : null);
             $scope.showPanel = true;
+            $rootScope.$broadcast('methodClick', id, oldId !== id ? oldId : null);
 
             $timeout(function () {
               jQuery('html, body').animate({
@@ -187,9 +187,9 @@
             $scope.showPanel = false;
             $scope.traits = null;
             $scope.methodInfo = {};
-            $scope.currentId               = null;
-            $rootScope.currentId           = null;
-            $rootScope.currentMethod       = null;
+            $scope.currentId = null;
+            $scope.currentMethod = null;
+            $rootScope.currentId = null;
           }
         };
       }]);

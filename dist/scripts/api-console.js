@@ -95,6 +95,15 @@
 (function () {
   'use strict';
 
+  var clearScope = function ($scope) {
+    $scope.showPanel = false;
+    $scope.showPanel = false;
+    $scope.traits = null;
+    $scope.methodInfo = {};
+    $scope.currentId = null;
+    $scope.currentMethod = null;
+  };
+
   RAML.Directives.closeButton = function() {
     return {
       restrict: 'E',
@@ -104,12 +113,9 @@
         $scope.close = function () {
           $rootScope.$broadcast('resetData');
           $rootScope.$broadcast('methodClick', null, $rootScope.currentId);
-          $scope.showPanel = false;
-          $scope.traits = null;
-          $scope.methodInfo = {};
-          $scope.currentId               = null;
-          $rootScope.currentId           = null;
-          $rootScope.currentMethod       = null;
+          clearScope($scope);
+          clearScope($scope.$parent);
+          $rootScope.currentId = null;
         };
       }]
     };
@@ -794,6 +800,7 @@
       templateUrl: 'directives/raml-body.tpl.html',
       scope: {
         body: '=',
+        showExamples: '=',
         getBeatifiedExampleRef: '&'
       },
       controller: ['$scope', '$rootScope', function($scope, $rootScope) {
@@ -850,11 +857,16 @@
                         $scope.definition = declaredSchema;
                       }
                     } else {
-                      if (aType.indexOf('|') !== -1) {
-                        $scope.isSchema = false;
-                        $scope.isType = true;
-                      } else {
+                      try {
+                        JSON.parse(aType);
                         $scope.definition = aType;
+                      } catch (e) {
+                        if (aType.indexOf('|') !== -1) {
+                          $scope.isSchema = false;
+                          $scope.isType = true;
+                        } else {
+                          $scope.definition = aType;
+                        }
                       }
                     }
                   }
@@ -1877,8 +1889,8 @@
           var id = resourceId(resource);
           var isDifferentMethod = $rootScope.currentId !== id || $scope.currentMethod !== methodInfo.method;
 
-          $rootScope.currentId           = id;
           $scope.currentId               = id;
+          $rootScope.currentId           = id;
           $scope.currentMethod           = methodInfo.method;
           $scope.resource                = resource;
 
@@ -1939,8 +1951,8 @@
           if (isDifferentMethod) {
             var hash = id;
 
-            $rootScope.$broadcast('methodClick', id, oldId !== id ? oldId : null);
             $scope.showPanel = true;
+            $rootScope.$broadcast('methodClick', id, oldId !== id ? oldId : null);
 
             $timeout(function () {
               jQuery('html, body').animate({
@@ -1953,9 +1965,9 @@
             $scope.showPanel = false;
             $scope.traits = null;
             $scope.methodInfo = {};
-            $scope.currentId               = null;
-            $rootScope.currentId           = null;
-            $rootScope.currentMethod       = null;
+            $scope.currentId = null;
+            $scope.currentMethod = null;
+            $rootScope.currentId = null;
           }
         };
       }]);
@@ -2859,7 +2871,8 @@
       templateUrl: 'directives/type-properties.tpl.html',
       replace: true,
       scope: {
-        type: '='
+        type: '=',
+        showExamples: '='
       },
       controller: ['$scope', function ($scope) {
         $scope.$watch('type', function () {
@@ -7235,7 +7248,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <raml-body\n" +
     "            ng-if=\"value\"\n" +
     "            body=\"value\"\n" +
-    "            get-beatified-example-ref=\"getBeatifiedExample\">\n" +
+    "            get-beatified-example-ref=\"getBeatifiedExample\"\n" +
+    "            show-examples=\"false\">\n" +
     "          </raml-body>\n" +
     "        </div>\n" +
     "      </div>\n" +
@@ -7429,7 +7443,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "</div>\n" +
     "\n" +
     "<div class=\"raml-console-schema-container\" ng-if=\"isType\">\n" +
-    "  <type-properties type=\"body\"></type-properties>\n" +
+    "  <type-properties type=\"body\" show-examples=\"showExamples\"></type-properties>\n" +
     "</div>\n"
   );
 
@@ -7829,7 +7843,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <close-button></close-button>\n" +
     "    </header>\n" +
-    "\n" +
     "    <resource-panel ng-if=\"currentId ===  resourceIdFn(rootResource)\"></resource-panel>\n" +
     "\n" +
     "    <!-- Child Resources -->\n" +
@@ -8147,7 +8160,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/type-properties.tpl.html',
     "<div>\n" +
-    "  <properties list=\"properties\" hide-property-details=\"true\" show-examples=\"true\"></properties>\n" +
+    "  <properties list=\"properties\" hide-property-details=\"true\" show-examples=\"showExamples\"></properties>\n" +
     "<div>\n"
   );
 
