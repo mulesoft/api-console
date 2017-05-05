@@ -32,7 +32,11 @@
 
         var getArrayTypes = function(arrayType) {
           if (arrayType.items.type || Array.isArray(arrayType.items.type)) {
-            return arrayType.items.type;
+            return [arrayType.items.name];
+          }
+
+          if (Object.prototype.toString.call(arrayType.items) === '[object Object]') {
+            return [typeof arrayType.items];
           }
 
           return [arrayType.items];

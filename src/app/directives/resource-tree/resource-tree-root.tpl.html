@@ -1,0 +1,137 @@
+<ol
+  class="raml-console-resource-list raml-console-resource-list-root raml-console-resources-resourcesCollapsed"
+  id="raml-console-resources-container"
+>
+  <li
+    id="raml_documentation"
+    class="raml-console-resource-list-item raml-console-documentation-header"
+  >
+    <div ng-if="proxy" align="right" class="raml-console-resource-proxy">
+      <label for="raml-console-api-behind-firewall">
+        API is behind a firewall
+        <a
+          href="http://www.mulesoft.org/documentation/display/current/Accessing+Your+API+Behind+a+Firewall"
+          target="_blank"
+        >
+          (?)
+        </a>
+      </label>
+      <input
+        id="raml-console-api-behind-firewall"
+        type="checkbox"
+        ng-model="disableProxy"
+        ng-change="updateProxyConfig(disableProxy)"
+      >
+    </div>
+
+    <header class="raml-console-resource raml-console-resource-root raml-console-clearfix">
+      <span
+        ng-if="hasResourcesWithChilds()"
+        class="raml-console-flag raml-console-resource-heading-flag raml-console-toggle-all"
+        ng-click="collapseAll($event, resourceList, 'resourcesCollapsed')"
+        ng-class="{'raml-console-resources-expanded':!resourcesCollapsed}"
+      >
+        <span ng-if="!resourcesCollapsed">collapse</span>
+        <span ng-if="resourcesCollapsed">expand</span>
+        all
+      </span>
+
+      <div class="raml-console-resource-path-container">
+        <h2 class="raml-console-resource-section-title">
+          <span class="raml-console-resource-path-active">
+            Resources
+          </span>
+        </h2>
+      </div>
+      <close-button></close-button>
+    </header>
+  </li>
+
+  <li
+    id="{{::resourceIdFn(resourceGroup[0])}}"
+    class="raml-console-resource-list-item"
+    ng-repeat="resourceGroup in inspectedRaml.resourceGroups"
+  >
+    <header
+      class="raml-console-resource raml-console-resource-root raml-console-clearfix"
+      ng-class="{ 'raml-console-is-active': (currentId === resourceIdFn(rootResource)) }"
+      ng-init="rootResource = resourceGroup[0]; resource = resourceGroup[0];"
+    >
+      <div
+        class="raml-console-resource-path-container"
+        ng-init="index=$index"
+        ng-class="{'raml-console-resource-with-description': rootResource.description}"
+      >
+        <button class="raml-console-resource-root-toggle"
+                ng-class="{'raml-console-is-active': resourceList[$index]}"
+                ng-if="resourceGroup.length > 1"
+                ng-click="toggle($event, index, resourceList, 'resourcesCollapsed')"
+        ></button>
+
+        <h2 class="raml-console-resource-heading raml-console-resource-heading-large">
+          <a
+            ng-if="resourceGroup.length > 1" class="raml-console-resource-path-active"
+            ng-class="{'raml-console-resource-heading-hover':resourceGroup.length > 1}"
+            ng-repeat='segment in rootResource.pathSegments'
+            ng-click="toggle($event, index, resourceList, 'resourcesCollapsed')"
+          >
+            {{::segment.toString()}}
+          </a>
+
+          <a
+            ng-if="resourceGroup.length == 1"
+            style="cursor: default;"
+            class="raml-console-resource-path-active"
+            ng-repeat='segment in rootResource.pathSegments'
+          >
+            {{::segment.toString()}}
+          </a>
+        </h2>
+
+        <resource-type></resource-type>
+
+        <span
+          ng-if="methodInfo.is"
+          class="raml-console-flag raml-console-resource-heading-flag raml-console-resource-trait"
+        >
+          <b>Traits:</b>
+          {{::readTraits(methodInfo.is)}}
+        </span>
+
+        <span
+          ng-if="!methodInfo.is && rootResource.traits"
+          class="raml-console-flag raml-console-resource-heading-flag"
+        >
+          <b>Traits:</b>
+          {{::readResourceTraits(rootResource.traits)}}
+        </span>
+
+        <span
+          class="raml-console-resource-level-description raml-console-marked-content"
+          markdown="rootResource.description"
+        ></span>
+
+      </div>
+
+      <div class="raml-console-tab-list">
+        <div
+          class="raml-console-tab"
+          ng-class="{ 'raml-console-is-active': (resourceId === resourceIdFn(rootResource) && method.method === currentMethod) }"
+          ng-repeat="method in rootResource.methods"
+          ng-click="showResource($event, $index, rootResource)"
+        >
+          <span
+            class="raml-console-tab-label raml-console-tab-{{method.method}}"
+          >{{method.method.toLocaleUpperCase()}}</span>
+        </div>
+      </div>
+
+      <close-button></close-button>
+    </header>
+    <resource-panel ng-if="currentId ===  resourceIdFn(rootResource)"></resource-panel>
+
+    <!-- Child Resources -->
+    <resource-list ng-class="{'raml-console-is-collapsed': resourceList[$index]}"></resource-list>
+
+  </li>
+</ol>

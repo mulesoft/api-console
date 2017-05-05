@@ -517,6 +517,52 @@
   }
 }
 
+.sidebar-info-btn {
+  position: absolute;
+  top: 36px;
+  left: 10px;
+
+  width: 17px;
+  height: 17px;
+  border: none;
+  border-radius: 50%;
+
+  background: $color-sidebar-add-btn-bg;
+  color: $color-sidebar-add-btn;
+  opacity: 0.4;
+  transition: 0.2s ease all;
+
+  &:before {
+    content: "\02139";
+
+    position: absolute;
+    top: -1px;
+    left: 2px;
+
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  &:hover {
+    background-color: $color-sidebar-add-btn-bg-hover;
+    opacity: 1;
+
+    &:after {
+      content: attr(tooltip);
+      position: absolute;
+      background: #9ea0ad;
+      color: #333;
+      white-space: nowrap;
+      top: -15px;
+      left: 25px;
+      font-size: 14px;
+      padding: 2px 8px;
+      border-radius: 5px;
+      border: 1px solid #d5d7d9;
+    }
+  }
+}
+
 .sidebar-toggle-group {
   padding: 5px 0;
 }

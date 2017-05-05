@@ -1,6 +1,15 @@
 (function () {
   'use strict';
 
+  var clearScope = function ($scope) {
+    $scope.showPanel = false;
+    $scope.showPanel = false;
+    $scope.traits = null;
+    $scope.methodInfo = {};
+    $scope.currentId = null;
+    $scope.currentMethod = null;
+  };
+
   RAML.Directives.closeButton = function() {
     return {
       restrict: 'E',
@@ -8,13 +17,11 @@
       replace: true,
       controller: ['$scope', '$rootScope', function($scope, $rootScope) {
         $scope.close = function () {
-          var $inactiveElements = jQuery('.raml-console-tab').add('.raml-console-resource').add('li');
-
           $rootScope.$broadcast('resetData');
-          $inactiveElements.removeClass('raml-console-is-active');
-          $scope.showPanel = false;
-          $scope.traits = null;
-          $scope.methodInfo = {};
+          $rootScope.$broadcast('methodClick', null, $rootScope.currentId);
+          clearScope($scope);
+          clearScope($scope.$parent);
+          $rootScope.currentId = null;
         };
       }]
     };

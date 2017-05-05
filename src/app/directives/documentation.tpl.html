@@ -100,7 +100,8 @@
           <raml-body
             ng-if="value"
             body="value"
-            get-beatified-example-ref="getBeatifiedExample">
+            get-beatified-example-ref="getBeatifiedExample"
+            show-examples="false">
           </raml-body>
         </div>
       </div>
@@ -134,7 +135,7 @@
 
         <div class="raml-console-resource-response" ng-if="fullResponses[code].headers">
           <h4 class="raml-console-resource-body-heading">Headers</h4>
-          <properties list="fullResponses[code].headers"></properties>
+          <properties class="response-headers" list="fullResponses[code].headers" show-examples="true"></properties>
         </div>
 
         <div class="raml-console-resource-response" ng-if="fullResponses[code].body">
