@@ -7,6 +7,7 @@
       templateUrl: 'directives/raml-body.tpl.html',
       scope: {
         body: '=',
+        showExamples: '=',
         getBeatifiedExampleRef: '&'
       },
       controller: ['$scope', '$rootScope', function($scope, $rootScope) {
