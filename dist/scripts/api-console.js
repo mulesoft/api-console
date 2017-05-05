@@ -95,6 +95,15 @@
 (function () {
   'use strict';
 
+  var clearScope = function ($scope) {
+    $scope.showPanel = false;
+    $scope.showPanel = false;
+    $scope.traits = null;
+    $scope.methodInfo = {};
+    $scope.currentId = null;
+    $scope.currentMethod = null;
+  };
+
   RAML.Directives.closeButton = function() {
     return {
       restrict: 'E',
@@ -104,12 +113,9 @@
         $scope.close = function () {
           $rootScope.$broadcast('resetData');
           $rootScope.$broadcast('methodClick', null, $rootScope.currentId);
-          $scope.showPanel = false;
-          $scope.traits = null;
-          $scope.methodInfo = {};
-          $scope.currentId               = null;
-          $rootScope.currentId           = null;
-          $rootScope.currentMethod       = null;
+          clearScope($scope);
+          clearScope($scope.$parent);
+          $rootScope.currentId = null;
         };
       }]
     };
@@ -851,11 +857,16 @@
                         $scope.definition = declaredSchema;
                       }
                     } else {
-                      if (aType.indexOf('|') !== -1) {
-                        $scope.isSchema = false;
-                        $scope.isType = true;
-                      } else {
+                      try {
+                        JSON.parse(aType);
                         $scope.definition = aType;
+                      } catch (e) {
+                        if (aType.indexOf('|') !== -1) {
+                          $scope.isSchema = false;
+                          $scope.isType = true;
+                        } else {
+                          $scope.definition = aType;
+                        }
                       }
                     }
                   }
@@ -1878,8 +1889,8 @@
           var id = resourceId(resource);
           var isDifferentMethod = $rootScope.currentId !== id || $scope.currentMethod !== methodInfo.method;
 
-          $rootScope.currentId           = id;
           $scope.currentId               = id;
+          $rootScope.currentId           = id;
           $scope.currentMethod           = methodInfo.method;
           $scope.resource                = resource;
 
@@ -1940,8 +1951,8 @@
           if (isDifferentMethod) {
             var hash = id;
 
-            $rootScope.$broadcast('methodClick', id, oldId !== id ? oldId : null);
             $scope.showPanel = true;
+            $rootScope.$broadcast('methodClick', id, oldId !== id ? oldId : null);
 
             $timeout(function () {
               jQuery('html, body').animate({
@@ -1954,9 +1965,9 @@
             $scope.showPanel = false;
             $scope.traits = null;
             $scope.methodInfo = {};
-            $scope.currentId               = null;
-            $rootScope.currentId           = null;
-            $rootScope.currentMethod       = null;
+            $scope.currentId = null;
+            $scope.currentMethod = null;
+            $rootScope.currentId = null;
           }
         };
       }]);
@@ -7825,7 +7836,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "      <close-button></close-button>\n" +
     "    </header>\n" +
-    "\n" +
     "    <resource-panel ng-if=\"currentId ===  resourceIdFn(rootResource)\"></resource-panel>\n" +
     "\n" +
     "    <!-- Child Resources -->\n" +
