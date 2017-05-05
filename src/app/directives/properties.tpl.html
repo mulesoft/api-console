@@ -16,6 +16,12 @@
         </span>
       </h4>
 
+      <div ng-if="!isCollapsible(type) && vm.isCollapsed === undefined">
+        <p ng-if="type.example !== undefined && showExamples">
+          <span class="raml-console-resource-param-example"><b>Example:</b> {{type.example}}</span>
+        </p>
+      </div>
+
       <div ng-if="!vm.isCollapsed">
         <p ng-if="type.description" markdown="type.description" class="raml-console-marked-content"></p>
 
@@ -32,7 +38,8 @@
           list="type.properties"
           ng-if="type.properties"
           hide-type-links="hideTypeLinks"
-          is-nested-property="true">
+          is-nested-property="true"
+          show-examples="showExamples">
         </properties>
       </div>
     </div>
