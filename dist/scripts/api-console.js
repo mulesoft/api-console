@@ -800,6 +800,7 @@
       templateUrl: 'directives/raml-body.tpl.html',
       scope: {
         body: '=',
+        showExamples: '=',
         getBeatifiedExampleRef: '&'
       },
       controller: ['$scope', '$rootScope', function($scope, $rootScope) {
@@ -2870,7 +2871,8 @@
       templateUrl: 'directives/type-properties.tpl.html',
       replace: true,
       scope: {
-        type: '='
+        type: '=',
+        showExamples: '='
       },
       controller: ['$scope', function ($scope) {
         $scope.$watch('type', function () {
@@ -7246,7 +7248,8 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          <raml-body\n" +
     "            ng-if=\"value\"\n" +
     "            body=\"value\"\n" +
-    "            get-beatified-example-ref=\"getBeatifiedExample\">\n" +
+    "            get-beatified-example-ref=\"getBeatifiedExample\"\n" +
+    "            show-examples=\"false\">\n" +
     "          </raml-body>\n" +
     "        </div>\n" +
     "      </div>\n" +
@@ -7433,7 +7436,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "</div>\n" +
     "\n" +
     "<div class=\"raml-console-schema-container\" ng-if=\"isType\">\n" +
-    "  <type-properties type=\"body\"></type-properties>\n" +
+    "  <type-properties type=\"body\" show-examples=\"showExamples\"></type-properties>\n" +
     "</div>\n"
   );
 
@@ -8150,7 +8153,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
   $templateCache.put('directives/type-properties.tpl.html',
     "<div>\n" +
-    "  <properties list=\"properties\" hide-property-details=\"true\" show-examples=\"true\"></properties>\n" +
+    "  <properties list=\"properties\" hide-property-details=\"true\" show-examples=\"showExamples\"></properties>\n" +
     "<div>\n"
   );
 
