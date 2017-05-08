@@ -48,6 +48,10 @@
           }
         });
 
+        $scope.isFile = function (param) {
+          return param.type === 'file';
+        };
+
         $scope.isArray = function (param) {
           var paramType = getParamType(param);
           return paramType.type[0] === 'array';
@@ -84,7 +88,7 @@
         };
 
         $scope.isDefault = function (definition) {
-          return !$scope.isEnum(definition) && definition.type !== 'boolean';
+          return !$scope.isEnum(definition) && definition.type !== 'boolean' && !$scope.isFile(definition);
         };
 
         $scope.isBoolean = function (definition) {
@@ -111,6 +115,17 @@
         $scope.toString = function toString(value) {
           return Array.isArray(value) ? value.join(', ') : value;
         };
+
+        $scope.uploadFile = function (event) {
+          $scope.$apply(function() {
+            $scope.model[0] = event.files[0];
+          });
+        };
+
+        $scope.$on('clearBody', function () {
+          angular.element('raml-console-sidebar-input-file').val(null);
+          $scope.model[0] = undefined;
+        });
       }],
       compile: function (element) {
         return RecursionHelper.compile(element);

@@ -83,6 +83,16 @@
   };
 
   /**
+   * Check if the value is file.
+   *
+   * @param  {Object}  check
+   * @return {Boolean}
+   */
+  var isFile = function (check) {
+    return check.constructor === File;
+  };
+
+  /**
    * Check if the value is an Array string. If so, then check the type of the items
    *
    * @param  {Array} check
@@ -180,6 +190,22 @@
     }
 
     return pattern.test.bind(pattern);
+  };
+
+  /**
+   * Check if a file type is included in values.
+   *
+   * @param  {Array<String>} values
+   * @return {Function}
+   */
+  var isValidFileTypes = function (values) {
+    return function (check) {
+      check = check.toLowerCase();
+      var checkInValue = values.find(function (value) {
+        return value.toLowerCase() === check
+      });
+      return checkInValue ? true : false;
+    }
   };
 
   /**
@@ -431,7 +457,8 @@
     string:          isString,
     object:          isJSON,
     union:           isUnion,
-    array:           isArray
+    array:           isArray,
+    file:            isFile
   };
 
   /**
@@ -509,7 +536,8 @@
       pattern:   isPattern,
       minItems:  hasMinimumItems,
       maxItems:  hasMaximumItems,
-      uniqueItems: hasUniqueItems
+      uniqueItems: hasUniqueItems,
+      fileTypes: isValidFileTypes
     };
 
     /**
