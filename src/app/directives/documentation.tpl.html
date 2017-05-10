@@ -54,6 +54,29 @@
         <div class="raml-console-resource-param" ng-repeat="(code, info) in documentationSchemeSelected.describedBy.responses">
           <h4 class="raml-console-resource-param-heading">{{info.code}}</h4>
           <p markdown="info.description" class="raml-console-marked-content"></p>
+
+          <div class="raml-console-schema-body raml-console-resource-response" ng-if="info.body">
+            <h4 class="raml-console-resource-body-heading">
+              Body
+              <span
+                      ng-click="changeSchemaType($event, key, code)"
+                      ng-class="{ 'raml-console-is-active': schemaResponses[info.code].currentType === key}"
+                      class="raml-console-flag"
+                      ng-repeat="(key, value) in info.body">
+                {{key}}
+            </span>
+            </h4>
+
+            <div ng-repeat="(key, value) in info.body">
+              <div ng-if="schemaResponses[code].currentType === key">
+                <examples
+                  example-container="value"
+                  get-beatified-example-ref="getBeatifiedExample">
+                </examples>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 

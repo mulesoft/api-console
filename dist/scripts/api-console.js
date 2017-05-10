@@ -140,7 +140,25 @@
           var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
           $scope.documentationSchemeSelected = defaultSchema;
+
+          if (defaultSchema.describedBy && defaultSchema.describedBy.responses) {
+            $scope.schemaResponses = defaultSchema.describedBy.responses;
+          }
         });
+
+        $scope.changeSchemaType = function ($event, type, code) {
+          var $this        = jQuery($event.currentTarget);
+          var $panel       = $this.closest('.raml-console-resource-body-heading');
+          var $eachContent = $panel.find('span');
+
+          $eachContent.removeClass('raml-console-is-active');
+          $this.addClass('raml-console-is-active');
+
+          if (!$scope.schemaResponses[code]) {
+            $scope.schemaResponses[code] = {};
+          }
+          $scope.schemaResponses[code].currentType = type;
+        };
 
         function mergeResponseCodes(methodCodes, schemas) {
           var extractSchema = function (key) { return schemas.hasOwnProperty(key) ? schemas[key] : undefined; };
@@ -7250,6 +7268,29 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <div class=\"raml-console-resource-param\" ng-repeat=\"(code, info) in documentationSchemeSelected.describedBy.responses\">\n" +
     "          <h4 class=\"raml-console-resource-param-heading\">{{info.code}}</h4>\n" +
     "          <p markdown=\"info.description\" class=\"raml-console-marked-content\"></p>\n" +
+    "\n" +
+    "          <div class=\"raml-console-schema-body raml-console-resource-response\" ng-if=\"info.body\">\n" +
+    "            <h4 class=\"raml-console-resource-body-heading\">\n" +
+    "              Body\n" +
+    "              <span\n" +
+    "                      ng-click=\"changeSchemaType($event, key, code)\"\n" +
+    "                      ng-class=\"{ 'raml-console-is-active': schemaResponses[info.code].currentType === key}\"\n" +
+    "                      class=\"raml-console-flag\"\n" +
+    "                      ng-repeat=\"(key, value) in info.body\">\n" +
+    "                {{key}}\n" +
+    "            </span>\n" +
+    "            </h4>\n" +
+    "\n" +
+    "            <div ng-repeat=\"(key, value) in info.body\">\n" +
+    "              <div ng-if=\"schemaResponses[code].currentType === key\">\n" +
+    "                <examples\n" +
+    "                  example-container=\"value\"\n" +
+    "                  get-beatified-example-ref=\"getBeatifiedExample\">\n" +
+    "                </examples>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "          </div>\n" +
+    "\n" +
     "        </div>\n" +
     "      </section>\n" +
     "\n" +

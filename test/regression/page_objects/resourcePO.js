@@ -79,7 +79,7 @@ function ResourcesPO () {
     button.click();
   };
 
-  this.getReponseExamples = function (resource) {
+  this.getResponseExamples = function (resource) {
     return this.resources.get(resource+1).element(by.css('.raml-console-hljs pre code'));
   };
 }

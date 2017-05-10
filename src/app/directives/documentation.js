@@ -13,7 +13,25 @@
           var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
           $scope.documentationSchemeSelected = defaultSchema;
+
+          if (defaultSchema.describedBy && defaultSchema.describedBy.responses) {
+            $scope.schemaResponses = defaultSchema.describedBy.responses;
+          }
         });
+
+        $scope.changeSchemaType = function ($event, type, code) {
+          var $this        = jQuery($event.currentTarget);
+          var $panel       = $this.closest('.raml-console-resource-body-heading');
+          var $eachContent = $panel.find('span');
+
+          $eachContent.removeClass('raml-console-is-active');
+          $this.addClass('raml-console-is-active');
+
+          if (!$scope.schemaResponses[code]) {
+            $scope.schemaResponses[code] = {};
+          }
+          $scope.schemaResponses[code].currentType = type;
+        };
 
         function mergeResponseCodes(methodCodes, schemas) {
           var extractSchema = function (key) { return schemas.hasOwnProperty(key) ? schemas[key] : undefined; };

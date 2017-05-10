@@ -130,7 +130,7 @@ function Resource (poName) {
   };
 
   this.ifShowsResponseExample = function (resource, expectedValue) {
-    var examples = this.po.getReponseExamples(resource);
+    var examples = this.po.getResponseExamples(resource);
 
     expect(examples.getText()).toEqual(expectedValue);
   };
