@@ -84,7 +84,7 @@ module.exports = function() {
   });
 
 
-  it('should be able to diplay all HTTP methods', function () {
+  it('should be able to display all HTTP methods', function () {
     // Arrange
     var assert = assertions.create('resource');
 

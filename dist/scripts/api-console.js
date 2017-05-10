@@ -628,7 +628,11 @@
           var newProperty = $scope.mergeProperty(property);
           newProperty.type = RAML.Inspector.Types.ensureArray(newProperty.type);
 
-          if (newProperty.type[0].type) { newProperty.type = newProperty.type[0].type; }
+          if (newProperty.type[0].type) {
+            var originalType = newProperty.type[0];
+            newProperty.type = originalType.type;
+            newProperty.properties = originalType.properties;
+          }
 
           if (newProperty.type[0] === 'array') {
             newProperty.type = getArrayTypes(newProperty).map(function (aType) {
