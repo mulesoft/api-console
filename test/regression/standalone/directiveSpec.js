@@ -60,7 +60,7 @@ module.exports = function() {
     browser.get('http://localhost:9000/directive-security-schema-pass-though.html');
 
     // Assert
-    assert.ifShowsResponseExample(0, '{\n' +
+    assert.ifShowsResponseSchemaExample(0, '{\n' +
       '  "status": "denied"\n' +
       '}');
   });

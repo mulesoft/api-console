@@ -82,6 +82,13 @@ function ResourcesPO () {
   this.getResponseExamples = function (resource) {
     return this.resources.get(resource+1).element(by.css('.raml-console-hljs pre code'));
   };
+
+  this.getResponseSchemaExamples = function (resource) {
+    var button = this.resources.get(resource+1).element(by.css('.raml-console-schema-body h4 .raml-console-flag'));
+    button.click();
+
+    return this.resources.get(resource+1).element(by.css('.raml-console-hljs pre code'));
+  };
 }
 
 ResourcesPO.prototype = basePO;

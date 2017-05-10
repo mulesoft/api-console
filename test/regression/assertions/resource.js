@@ -134,6 +134,12 @@ function Resource (poName) {
 
     expect(examples.getText()).toEqual(expectedValue);
   };
+
+  this.ifShowsResponseSchemaExample = function (resource, expectedValue) {
+    var examples = this.po.getResponseSchemaExamples(resource);
+
+    expect(examples.getText()).toEqual(expectedValue);
+  };
 }
 
 
