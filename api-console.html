@@ -984,7 +984,7 @@ Use "\n" string to set a new line for the headers string.
     },
 
     _navigationOpenedChanged: function(value) {
-      if (value === undefined) {
+      if (value === undefined || !this.manualNavigation) {
         return;
       }
       if (value) {
