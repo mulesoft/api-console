@@ -475,7 +475,9 @@
       controller: ['$scope', '$sanitize', '$window', '$element', function($scope, $sanitize, $window, $element) {
         $scope.$watch('markdown', function (markdown) {
           var allowUnsafeMarkdown = $scope.$parent.allowUnsafeMarkdown;
-          var html = $window.marked(markdown || '', RAML.Settings.marked);
+
+          var markdownString = typeof markdown === 'string' ? markdown || '' : '';
+          var html = $window.marked(markdownString, RAML.Settings.marked);
 
           if (!allowUnsafeMarkdown) {
             html = $sanitize(html);
@@ -628,7 +630,11 @@
           var newProperty = $scope.mergeProperty(property);
           newProperty.type = RAML.Inspector.Types.ensureArray(newProperty.type);
 
-          if (newProperty.type[0].type) { newProperty.type = newProperty.type[0].type; }
+          if (newProperty.type[0].type) {
+            var originalType = newProperty.type[0];
+            newProperty.type = originalType.type;
+            newProperty.properties = originalType.properties;
+          }
 
           if (newProperty.type[0] === 'array') {
             newProperty.type = getArrayTypes(newProperty).map(function (aType) {
@@ -1352,6 +1358,10 @@
           }
         });
 
+        $scope.isFile = function (param) {
+          return param.type === 'file';
+        };
+
         $scope.isArray = function (param) {
           var paramType = getParamType(param);
           return paramType.type[0] === 'array';
@@ -1388,7 +1398,7 @@
         };
 
         $scope.isDefault = function (definition) {
-          return !$scope.isEnum(definition) && definition.type !== 'boolean';
+          return !$scope.isEnum(definition) && definition.type !== 'boolean' && !$scope.isFile(definition);
         };
 
         $scope.isBoolean = function (definition) {
@@ -1415,6 +1425,17 @@
         $scope.toString = function toString(value) {
           return Array.isArray(value) ? value.join(', ') : value;
         };
+
+        $scope.uploadFile = function (event) {
+          $scope.$apply(function() {
+            $scope.model[0] = event.files[0];
+          });
+        };
+
+        $scope.$on('clearBody', function () {
+          angular.element('raml-console-sidebar-input-file').val(null);
+          $scope.model[0] = undefined;
+        });
       }],
       compile: function (element) {
         return RecursionHelper.compile(element);
@@ -1984,7 +2005,7 @@
       controller: ['$scope', function ($scope) {
         var resourceType = $scope.resource.resourceType;
 
-        if (typeof resourceType === 'object') {
+        if (resourceType !== null && typeof resourceType === 'object') {
           $scope.resource.resourceType = Object.keys(resourceType).join();
         }
       }]
@@ -2778,17 +2799,21 @@
         };
 
         $scope.toggleRequestMetadata = function (enabled) {
-          if ($scope.showRequestMetadata && !enabled) {
-            $scope.showRequestMetadata = false;
-          } else {
-            $scope.showRequestMetadata = true;
-          }
+          $scope.showRequestMetadata = !($scope.showRequestMetadata && !enabled);
         };
 
         $scope.showResponseMetadata = true;
 
         $scope.toggleResponseMetadata = function () {
           $scope.showResponseMetadata = !$scope.showResponseMetadata;
+        };
+
+        $scope.isFileBody = function (param) {
+          return param.contentType && param.contentType.type[0] === 'file';
+        };
+
+        $scope.uploadFile = function (event) {
+          $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value  = event.files[0];
         };
       }]
     };
@@ -3020,7 +3045,8 @@
           repeat: validation.repeat || null,
           minItems: validation.minItems || null,
           maxItems: validation.maxItems || null,
-          uniqueItems: validation.uniqueItems || null
+          uniqueItems: validation.uniqueItems || null,
+          fileTypes: validation.fileTypes || null
         };
 
         validationRules[validationId] = RAML.Utils.filterEmpty(validationRules[validationId]);
@@ -6686,6 +6712,16 @@ RAML.Inspector = (function() {
   };
 
   /**
+   * Check if the value is file.
+   *
+   * @param  {Object}  check
+   * @return {Boolean}
+   */
+  var isFile = function (check) {
+    return check.constructor === File;
+  };
+
+  /**
    * Check if the value is an Array string. If so, then check the type of the items
    *
    * @param  {Array} check
@@ -6783,6 +6819,22 @@ RAML.Inspector = (function() {
     }
 
     return pattern.test.bind(pattern);
+  };
+
+  /**
+   * Check if a file type is included in values.
+   *
+   * @param  {Array<String>} values
+   * @return {Function}
+   */
+  var isValidFileTypes = function (values) {
+    return function (check) {
+      check = check.toLowerCase();
+      var checkInValue = values.find(function (value) {
+        return value.toLowerCase() === check
+      });
+      return checkInValue ? true : false;
+    }
   };
 
   /**
@@ -7034,7 +7086,8 @@ RAML.Inspector = (function() {
     string:          isString,
     object:          isJSON,
     union:           isUnion,
-    array:           isArray
+    array:           isArray,
+    file:            isFile
   };
 
   /**
@@ -7112,7 +7165,8 @@ RAML.Inspector = (function() {
       pattern:   isPattern,
       minItems:  hasMinimumItems,
       maxItems:  hasMaximumItems,
-      uniqueItems: hasUniqueItems
+      uniqueItems: hasUniqueItems,
+      fileTypes: isValidFileTypes
     };
 
     /**
@@ -7586,7 +7640,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"model[0]\" ng-class=\"{'raml-console-sidebar-field-no-default': !hasExampleValue(param)}\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
     "\n" +
-    "    <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"model[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
+    "    <input ng-hide=\"!isFile(param)\" id=\"{{param.id}}\" type=\"file\" class=\"raml-console-sidebar-input-file\" ng-model=\"model[0]\" validate=\"param\"\n" +
+    "             dynamic-name=\"param.id\"\n" +
+    "             onchange=\"angular.element(this).scope().uploadFile(this)\"/>\n" +
+    "\n" +
+    "    <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"model[0]\" dynamic-name=\"param.id\" ng-change=\"onSelectedFile()\" />\n" +
     "\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </div>\n" +
@@ -7606,7 +7664,11 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "    <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"model[0]\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
     "\n" +
-    "    <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"model[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
+    "    <input ng-hide=\"!isFile(param)\" id=\"{{param.id}}\" type=\"file\" class=\"raml-console-sidebar-input-file\" ng-model=\"aModel[0]\" validate=\"param\"\n" +
+    "             dynamic-name=\"param.id\"\n" +
+    "             onchange=\"angular.element(this).scope().uploadFile(this)\"/>\n" +
+    "\n" +
+    "    <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"aModel[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
     "\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </div>\n" +
@@ -7986,7 +8048,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" title=\"URI Parameters\" show-base-url></named-parameters>\n" +
+    "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" types=\"types\" title=\"URI Parameters\" show-base-url></named-parameters>\n" +
     "\n" +
     "          <named-parameters context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
@@ -8025,9 +8087,23 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "\n" +
     "            <div class=\"raml-console-sidebar-row\" ng-switch=\"context.bodyContent.isForm(context.bodyContent.selected)\">\n" +
     "              <div ng-switch-when=\"false\">\n" +
-    "                <div class=\"raml-console-codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
-    "                <div class=\"raml-console-sidebar-prefill raml-console-sidebar-row\" align=\"right\" ng-if=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
-    "                  <button class=\"raml-console-sidebar-action-prefill\" ng-click=\"prefillBody(context.bodyContent.selected)\">Prefill with example</button>\n" +
+    "\n" +
+    "                <div ng-switch=\"isFileBody(context.bodyContent.definitions[context.bodyContent.selected])\">\n" +
+    "                  <div ng-switch-when=\"true\">\n" +
+    "                    <input type=\"file\" class=\"raml-console-sidebar-input-file\"\n" +
+    "                           ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"\n" +
+    "                           validate=\"context.bodyContent.definitions[context.bodyContent.selected].contentType\"\n" +
+    "                           onchange=\"angular.element(this).scope().uploadFile(this)\"/>\n" +
+    "\n" +
+    "                    <span class=\"raml-console-field-validation-error\"></span>\n" +
+    "                  </div>\n" +
+    "\n" +
+    "                  <div ng-switch-when=\"false\">\n" +
+    "                    <div class=\"raml-console-codemirror-body-editor\" ui-codemirror=\"{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }\" ng-model=\"context.bodyContent.definitions[context.bodyContent.selected].value\"></div>\n" +
+    "                    <div class=\"raml-console-sidebar-prefill raml-console-sidebar-row\" align=\"right\" ng-if=\"context.bodyContent.definitions[context.bodyContent.selected].hasExample()\">\n" +
+    "                      <button class=\"raml-console-sidebar-action-prefill\" ng-click=\"prefillBody(context.bodyContent.selected)\">Prefill with example</button>\n" +
+    "                    </div>\n" +
+    "                  </div>\n" +
     "                </div>\n" +
     "              </div>\n" +
     "\n" +

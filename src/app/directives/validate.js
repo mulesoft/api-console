@@ -63,7 +63,8 @@
           repeat: validation.repeat || null,
           minItems: validation.minItems || null,
           maxItems: validation.maxItems || null,
-          uniqueItems: validation.uniqueItems || null
+          uniqueItems: validation.uniqueItems || null,
+          fileTypes: validation.fileTypes || null
         };
 
         validationRules[validationId] = RAML.Utils.filterEmpty(validationRules[validationId]);

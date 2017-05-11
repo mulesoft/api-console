@@ -50,7 +50,7 @@
             </div>
           </section>
 
-          <named-parameters ng-if="resource.uriParametersForDocumentation" src="resource.uriParametersForDocumentation" context="context" type="uriParameters" title="URI Parameters" show-base-url></named-parameters>
+          <named-parameters ng-if="resource.uriParametersForDocumentation" src="resource.uriParametersForDocumentation" context="context" type="uriParameters" types="types" title="URI Parameters" show-base-url></named-parameters>
 
           <named-parameters context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
 
@@ -89,9 +89,23 @@
 
             <div class="raml-console-sidebar-row" ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
               <div ng-switch-when="false">
-                <div class="raml-console-codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
-                <div class="raml-console-sidebar-prefill raml-console-sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
-                  <button class="raml-console-sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
+
+                <div ng-switch="isFileBody(context.bodyContent.definitions[context.bodyContent.selected])">
+                  <div ng-switch-when="true">
+                    <input type="file" class="raml-console-sidebar-input-file"
+                           ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"
+                           validate="context.bodyContent.definitions[context.bodyContent.selected].contentType"
+                           onchange="angular.element(this).scope().uploadFile(this)"/>
+
+                    <span class="raml-console-field-validation-error"></span>
+                  </div>
+
+                  <div ng-switch-when="false">
+                    <div class="raml-console-codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+                    <div class="raml-console-sidebar-prefill raml-console-sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
+                      <button class="raml-console-sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
