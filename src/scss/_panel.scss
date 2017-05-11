@@ -27,6 +27,14 @@
   }
 }
 
+.schema-body {
+  font-size: 12px;
+  padding-top: 8px;
+  .flag {
+    font-size: 12px !important;
+  }
+}
+
 .resource-body-heading > span {
   margin-left: 5px;
   cursor: pointer;
