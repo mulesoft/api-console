@@ -9,7 +9,7 @@
       controller: ['$scope', function ($scope) {
         var resourceType = $scope.resource.resourceType;
 
-        if (typeof resourceType === 'object') {
+        if (resourceType !== null && typeof resourceType === 'object') {
           $scope.resource.resourceType = Object.keys(resourceType).join();
         }
       }]

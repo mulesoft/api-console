@@ -493,7 +493,9 @@
       controller: ['$scope', '$sanitize', '$window', '$element', function($scope, $sanitize, $window, $element) {
         $scope.$watch('markdown', function (markdown) {
           var allowUnsafeMarkdown = $scope.$parent.allowUnsafeMarkdown;
-          var html = $window.marked(markdown || '', RAML.Settings.marked);
+
+          var markdownString = typeof markdown === 'string' ? markdown || '' : '';
+          var html = $window.marked(markdownString, RAML.Settings.marked);
 
           if (!allowUnsafeMarkdown) {
             html = $sanitize(html);
@@ -646,7 +648,11 @@
           var newProperty = $scope.mergeProperty(property);
           newProperty.type = RAML.Inspector.Types.ensureArray(newProperty.type);
 
-          if (newProperty.type[0].type) { newProperty.type = newProperty.type[0].type; }
+          if (newProperty.type[0].type) {
+            var originalType = newProperty.type[0];
+            newProperty.type = originalType.type;
+            newProperty.properties = originalType.properties;
+          }
 
           if (newProperty.type[0] === 'array') {
             newProperty.type = getArrayTypes(newProperty).map(function (aType) {
@@ -2017,7 +2023,7 @@
       controller: ['$scope', function ($scope) {
         var resourceType = $scope.resource.resourceType;
 
-        if (typeof resourceType === 'object') {
+        if (resourceType !== null && typeof resourceType === 'object') {
           $scope.resource.resourceType = Object.keys(resourceType).join();
         }
       }]
@@ -8083,7 +8089,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "            </div>\n" +
     "          </section>\n" +
     "\n" +
-    "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" title=\"URI Parameters\" show-base-url></named-parameters>\n" +
+    "          <named-parameters ng-if=\"resource.uriParametersForDocumentation\" src=\"resource.uriParametersForDocumentation\" context=\"context\" type=\"uriParameters\" types=\"types\" title=\"URI Parameters\" show-base-url></named-parameters>\n" +
     "\n" +
     "          <named-parameters context=\"context\" type=\"headers\" title=\"Headers\" enable-custom-parameters></named-parameters>\n" +
     "\n" +
