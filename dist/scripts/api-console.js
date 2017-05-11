@@ -475,7 +475,9 @@
       controller: ['$scope', '$sanitize', '$window', '$element', function($scope, $sanitize, $window, $element) {
         $scope.$watch('markdown', function (markdown) {
           var allowUnsafeMarkdown = $scope.$parent.allowUnsafeMarkdown;
-          var html = $window.marked(markdown || '', RAML.Settings.marked);
+
+          var markdownString = typeof markdown === 'string' ? markdown || '' : '';
+          var html = $window.marked(markdownString, RAML.Settings.marked);
 
           if (!allowUnsafeMarkdown) {
             html = $sanitize(html);
@@ -2003,7 +2005,7 @@
       controller: ['$scope', function ($scope) {
         var resourceType = $scope.resource.resourceType;
 
-        if (typeof resourceType === 'object') {
+        if (resourceType !== null && typeof resourceType === 'object') {
           $scope.resource.resourceType = Object.keys(resourceType).join();
         }
       }]
