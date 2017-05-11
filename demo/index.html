@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>API Console</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../raml-docs-helpers/raml-docs-parser.html">
-
+  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../api-console.html">
   <link rel="import" href="../../font-roboto/roboto.html">
 
@@ -49,29 +49,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   api-console {
     background-color: #fff;
   }
+
+  :root {
+    --paper-checkbox-unchecked-color: #fff;
+    --paper-checkbox-label-color: #fff;
+  }
   </style>
 </head>
 
 <body unresolved>
-  <template is="dom-bind">
+  <template is="dom-bind" id="app">
 
     <div id="content">
       <raml-docs-parser raml="{{raml}}"></raml-docs-parser>
       <div class="wrapper">
-        <api-console raml="[[raml]]" append-headers="X-key: my-api-key\nOther-header:value">
-          <select nav>
-            <option>Option 1</option>
-            <option>Option 2</option>
-          </select>
-          <button nav>Test button</button>
+        <api-console raml="[[raml]]" append-headers="X-key: my-api-key\nOther-header:value" narrow="[[narrow]]" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]">
+          <paper-checkbox nav checked="{{noTryIt}}">No try it</paper-checkbox>
+          <paper-checkbox nav checked="{{narrow}}">Render narrow</paper-checkbox>
+          <paper-checkbox nav checked="{{manualNavigation}}">Manual navigation</paper-checkbox>
+          <button nav hidden="[[!manualNavigation]]" on-tap="toggleNavigation">Toggle navigation</button>
         </api-console>
       </div>
     </div>
   </template>
   <script>
-  (function() {
+  (function(scope) {
     'use strict';
-  })();
+    // scope.navigationOpened = false;
+    scope.toggleNavigation = function() {
+      if (scope.navigationOpened === undefined) {
+        scope.navigationOpened = true;
+      } else {
+        scope.navigationOpened = !scope.navigationOpened;
+      }
+    };
+  })(document.querySelector('#app'));
   </script>
 </body>
 

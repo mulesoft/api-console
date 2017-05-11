@@ -675,6 +675,22 @@ Use "\n" string to set a new line for the headers string.
       display: block;
     }
 
+    :host([manual-navigation]) raml-path-selector {
+      @apply(--layout-fit);
+      transition-property: -webkit-transform;
+      transition-property: transform;
+      -webkit-transition-duration: 0.24s;
+      transition-duration: 0.24s;
+      -webkit-transform: translate3d(-100%, 0, 0);
+      transform: translate3d(-100%, 0, 0);
+      background-color: var(--api-console-manual-navigation-background-color, #fff);
+      z-index: 1;
+    }
+
+    :host([manual-navigation]) raml-path-selector[opened] {
+      transform: translate3d(0px, 0px, 0px);
+    }
+
     *[hidden] {
       display: none !important;
     }
@@ -696,25 +712,27 @@ Use "\n" string to set a new line for the headers string.
       margin-left: 12px;
     }
     </style>
-    <paper-drawer-panel responsive-width="860px" force-narrow="[[narrow]]">
-      <paper-header-panel drawer id="drawer">
-        <paper-toolbar>
-          <div class="title">API console</div>
-        </paper-toolbar>
-        <div class="drawer-content-wrapper">
-          <raml-path-selector
-            narrow="[[narrow]]"
-            raml="[[raml]]"
-            selected-path="{{path}}"
-            force-wide-layout
-            first-level-opened
-            resources-opened
-            documentation-opened></raml-path-selector>
-        </div>
-      </paper-header-panel>
+    <paper-drawer-panel responsive-width="860px" force-narrow="[[manualNavigation]]">
+      <template is="dom-if" if="[[!manualNavigation]]">
+        <paper-header-panel drawer id="drawer">
+          <paper-toolbar>
+            <div class="title">API console</div>
+          </paper-toolbar>
+          <div class="drawer-content-wrapper">
+            <raml-path-selector
+              narrow="[[narrow]]"
+              raml="[[raml]]"
+              selected-path="{{path}}"
+              force-wide-layout
+              first-level-opened
+              resources-opened
+              documentation-opened></raml-path-selector>
+          </div>
+        </paper-header-panel>
+      </template>
       <paper-header-panel main>
         <paper-toolbar>
-          <paper-icon-button icon="arc:menu" paper-drawer-toggle></paper-icon-button>
+          <paper-icon-button icon="arc:menu" paper-drawer-toggle hidden="[[manualNavigation]]"></paper-icon-button>
           <div class="title">[[raml.title]]</div>
           <span class="flex"></span>
           <div class="nav-content">
@@ -722,7 +740,16 @@ Use "\n" string to set a new line for the headers string.
           </div>
         </paper-toolbar>
         <div>
-          <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+          <template is="dom-if" if="[[manualNavigation]]">
+            <raml-path-selector opened$=[[navigationOpened]]
+              narrow="[[narrow]]"
+              raml="[[raml]]"
+              selected-path="{{path}}"
+              first-level-opened
+              resources-opened
+              documentation-opened></raml-path-selector>
+          </template>
+          <iron-pages selected="[[page]]" attr-for-selected="name" role="main" id="mainPages">
             <raml-documentation-panel
               name="docs"
               narrow="[[narrow]]"
@@ -730,10 +757,11 @@ Use "\n" string to set a new line for the headers string.
               selected-parent="[[selectedParent]]"
               path="{{path}}"
               scroll-target="[[scrollTarget]]"
+              no-try-it="[[noTryIt]]"
               handle-path-events></raml-documentation-panel>
             <api-console-request
               no-extension-banner="[[noExtensionBanner]]"
-              narrow="{{narrow}}"
+              narrow="[[narrow]]"
               name="request"
               page="[[page]]"
               scroll-target="[[scrollTarget]]"
@@ -836,7 +864,33 @@ Use "\n" string to set a new line for the headers string.
        * `http://domain.com/path/?query=some+value` will become
        * `https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`
        */
-      proxyEncodeUrl: Boolean
+      proxyEncodeUrl: Boolean,
+      /**
+       * If set then the API console hide the "try it" button from the
+       * method documentation view. The request and response panels still will
+       * be available, but to enter this section you'll have to do it
+       * programatically.
+       */
+      noTryIt: Boolean,
+      /**
+       * If set, the open navigation button will be always hidden.
+       * The left hand side navigation will be hidden until `navigationOpened`
+       * property is set.
+       * The navigation will cover full screen, hidding the content.
+       * This works best with `narrow` layout.
+       */
+      manualNavigation: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
+      /**
+       * True when navigation is or should be opened.
+       */
+      navigationOpened: {
+        type: Boolean,
+        notify: true,
+        observer: '_navigationOpenedChanged'
+      }
     },
 
     listeners: {
@@ -927,6 +981,26 @@ Use "\n" string to set a new line for the headers string.
         headers = headers.replace('\\n', '\n');
       }
       return this.headersToJSON(headers);
+    },
+
+    _navigationOpenedChanged: function(value) {
+      if (value === undefined) {
+        return;
+      }
+      if (value) {
+        var context = this;
+        this.__originallScrollTop = this.scrollTarget.scrollTop;
+        this.scrollTarget.scrollTop = 0;
+        this.__hideMainTimeout = setTimeout(function() {
+          context.$.mainPages.setAttribute('hidden', true);
+        }, 200);
+      } else {
+        if (this.__hideMainTimeout) {
+          clearTimeout(this.__hideMainTimeout);
+        }
+        this.$.mainPages.removeAttribute('hidden');
+        this.scrollTarget.scrollTop = this.__originallScrollTop;
+      }
     }
   });
   </script>
