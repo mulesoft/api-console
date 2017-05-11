@@ -381,6 +381,9 @@ parser.loadApi(urlToApi);
 | `append-headers` | Forces the console to send specific list of headers, overriding user input if needed. | `String` |
 | `proxy` | Sets the proxy URL for the HTTP requests sent from the console. If set all URLs will be altered before sending the data to a transport library bu prefixing the URL with this value | `String`
 | `proxyEncodeUrl` | If required by the `proxy` the URL will be URL encoded. | `Boolean` |
+| `noTryIt` | Disables the "try it" button in the method documentation view. The request editor and the response viewer is still available but you must open it programmatically setting `page` proerty to ` request` | `Boolean` |  
+| `manualNavigation` | Disables navigation in the drawer and renders the navigation full screen, when requested. This is ideal to use in the narrow layouts together with `narrow` property. | `Boolean` |
+| `navigationOpened` | If set and `manualNavigation` is used then it will open / close the full screen navigation. | `Boolean` |
 
 ## Styling
 
@@ -456,8 +459,8 @@ until your application don't support proxy change in the UI.
 
 ### Handling the HTTP request by the hosting website / application
 
-When a user runs the request from the "try it" screen the API Console will send the `api-console-request` custom event. If your application can handle transport for the HTTP request (by providing proxy or other solution) you should listen for this event and cancel it by calling `event.preventDefault()`. 
-If the event was cancelled then the API Console will listen for the `api-console-response` custom 
+When a user runs the request from the "try it" screen the API Console will send the `api-console-request` custom event. If your application can handle transport for the HTTP request (by providing proxy or other solution) you should listen for this event and cancel it by calling `event.preventDefault()`.
+If the event was cancelled then the API Console will listen for the `api-console-response` custom
 event that should contain response details. Otherwise the console will use build in fallback function to get the resource using Fetch API / XHR.
 
 #### api-console-request custom event
