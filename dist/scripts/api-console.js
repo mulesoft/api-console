@@ -1881,6 +1881,19 @@
           return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/_/g, ' ');
         }
 
+      function expandBodyExamples($scope, methodInfo) {
+        if (methodInfo.body) {
+          Object.keys(methodInfo.body).forEach(function (key) {
+            var bodyType = methodInfo.body[key];
+            var type = RAML.Inspector.Types.findType(bodyType.type[0], $scope.types);
+            if (!bodyType.example && type && type.example) {
+              bodyType.example = type.example;
+            }
+          });
+        }
+        return methodInfo;
+      }
+
         return function showResource($scope, resource, $event, $index) {
           var methodInfo        = resource.methods[$index];
           var oldId             = $rootScope.currentId;
@@ -1915,7 +1928,7 @@
           $scope.currentMethod           = methodInfo.method;
           $scope.resource                = resource;
 
-          $scope.methodInfo               = methodInfo;
+          $scope.methodInfo               = expandBodyExamples($scope, methodInfo);
           $scope.responseInfo             = getResponseInfo($scope);
           $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, resource, $scope.methodInfo);
           $scope.requestUrl               = '';
