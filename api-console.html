@@ -876,12 +876,13 @@ Use "\n" string to set a new line for the headers string.
        * If set, the open navigation button will be always hidden.
        * The left hand side navigation will be hidden until `navigationOpened`
        * property is set.
-       * The navigation will cover full screen, hidding the content.
+       * The navigation will cover full screen, hiding the content.
        * This works best with `narrow` layout.
        */
       manualNavigation: {
         type: Boolean,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        value: false
       },
       /**
        * True when navigation is or should be opened.
