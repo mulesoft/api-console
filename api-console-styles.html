@@ -20,10 +20,10 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 <style is="custom-style">
 
 :root {
-  --primary-color: var(--anypoint-color-primary, #00A2DF);
+  --primary-color: var(--anypoint-color-primary, #00a2df);
   --secondary-color: var(--anypoint-color-secondary, #506773);
   --primary-background-color: #fff;
-  --accent-color: var(--anypoint-color-violet3, #CC143C);
+  --accent-color: var(--anypoint-color-violet3, #cc143c);
 
   /* THEME */
   --arc-font-common-base: {
@@ -174,6 +174,42 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     @apply(--arc-font-subhead);
   }
 
+  /* Anypoint styles */
+    /*Tabs (horizontal)*/
+  --anypoint-paper-tabs-content: {
+    height: calc(100% - 3px);
+    border-bottom: 3px solid rgba(39,47,51,.1);
+    @apply(--anypoint-font-common-base);
+    font-style: normal;
+    color: #3a3b3c;
+  };
+
+  --anypoint-paper-tabs-selection-bar: {
+    border-width: 3px;
+    border-color: var(--primary-color);
+  };
+
+  --anypoint-paper-tab-content: {
+    font-weight: 400!important;
+  };
+
+  --anypoint-paper-tab-content-unselected: {
+    color: #6b6c6d;
+  };
+
+  /*Table*/
+  --anypoint-params-table-header-background-color: transparent;
+  --anypoint-params-table-row-border-color: #e0e0e0;
+  --anypoint-params-table-header-color: #000;
+
+  --anypoint-docs-parameters-table-header: {
+    border-bottom: 3px solid #e0e0e0!important;
+  };
+
+  --anypoint-docs-parameters-table-cell: {
+    padding: 10px;
+  };
+
     /* PATH selector */
   --raml-docs-tree-item-selected-background: rgb(3, 169, 244);
   --raml-docs-tree-item-selected-color: #fff;
@@ -190,7 +226,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     margin-left: 16px;
   }
   --request-form-panels: {
-    margin: 12px 16px;
+    margin: 0 0 12px 16px;
   }
   --raml-request-url-editor: {
     @apply(--request-form-panels);
@@ -226,45 +262,48 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     background-color: transparent;
   }
   --app-drawer-content-container: {
-    background-color: var(--anypoint-color-aluminum2, #EEEEEE);
-  };
-  --paper-drawer-panel-drawer-container: {
-    background-color: var(--anypoint-color-aluminum2, #EEEEEE);
-  };
+    background-color: var(--anypoint-color-aluminum2, #eee);
+  }
   --raml-docs-response-panel-docs-content: {
     padding: 8px;
     margin-left: 0px;
-  };
+  }
 
   /* Documentation panels */
-  --params-table-header-background-color: var(--anypoint-color-steel2, #757575);
-  --params-table-subheader-background-color: var(--anypoint-color-aluminum3, #E0E0E3);
-  --params-table-row-border-color: var(--params-table-header-background-color);
+  --params-table-header-background-color: var(--anypoint-params-table-header-background-color);
+  --params-table-subheader-background-color: var(--anypoint-params-table-header-background-color);
+  --params-table-row-border-color: var(--anypoint-params-table-row-border-color);
+  --params-table-row-subproperty-border-color: var(--anypoint-params-table-row-border-color);
+  --params-table-header-color: var(--anypoint-params-table-header-color);
 
-  --inline-documentation-color: #1A237E;
-  --raml-headers-form-docs-color: #1A237E;
+  --docs-parameters-table-header: {
+    @apply(--anypoint-docs-parameters-table-header);
+  };
+
+  --docs-parameters-table-cell: {
+    @apply(--anypoint-docs-parameters-table-cell);
+  };
+
+  --inline-documentation-color: #1a237e;
+  --raml-headers-form-docs-color: #1a237e;
 
   --response-error-view: {
     margin-top: 24px;
   }
 
-  --code-type-text-value-color: #0D47A1;
-  --code-type-number-value-color: #03A9F4;
-  --code-type-boolean-value-color: #0288D1;
-  --code-type-null-value-color: #0288D1;
+  --code-type-text-value-color: #0d47a1;
+  --code-type-number-value-color: #03a9f4;
+  --code-type-boolean-value-color: #0288d1;
+  --code-type-null-value-color: #0288d1;
   --code-punctuation-value-color: #757575;
   --code-type-link-color: #757575;
   --code-array-index-color: rgba(1, 87, 155, 0.57);
-  --code-background-color: rgba(227, 242, 253, 0.74);
+  --code-background-color: var(--anypoint-color-aluminum2);
 
   --method-display-color-selected: #000;
   --raml-docs-main-content-width: 1200px;
 
   --paper-checkbox-label: {
-    @apply(--arc-font-body1);
-  };
-
-  --paper-button: {
     @apply(--arc-font-body1);
   };
 
@@ -278,6 +317,102 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --raml-docs-link: {
     @apply(--arc-font-body1);
   };
+
+  /* tabs */
+  --paper-tabs-selection-bar: {
+    @apply(--anypoint-paper-tabs-selection-bar);
+  };
+
+  --paper-tabs-content: {
+    @apply(--anypoint-paper-tabs-content);
+  };
+
+  --paper-tab-content: {
+    @apply(--anypoint-paper-tab-content);
+  };
+
+  --paper-tab-content-unselected: {
+    @apply(--anypoint-paper-tab-content-unselected);
+  };
+
+  /* buttons */
+
+  --paper-button: {
+    @apply(--anypoint-font-body);
+    font-size: 14px;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    text-transform: none;
+  };
+
+  --btn-danger-nofill: {
+    @apply(--arc-font-body1);
+    border: 1px solid var(--anypoint-color-danger);
+    background-color: transparent;
+    box-shadow: none;
+    color: var(--anypoint-color-danger);
+  }
+
+  --btn-danger-nofill-hover: {
+    background-color: var(--anypoint-color-danger);
+    color: white;
+  }
+
+  --paper-button-ink-color: transparent;
+  --paper-icon-button-ink-color: transparent;
+
+  --toggle-button: {
+    @apply(--arc-font-body1);
+    border: 1px solid var(--anypoint-color-robustBlue2);
+    color: var(--anypoint-color-robustBlue2);
+    transition: none;
+    margin-right: 0;
+    font-weight: normal;
+  }
+
+  --toggle-button-hover: {
+    border: 1px solid var(--anypoint-color-robustBlue1);
+    background: var(--anypoint-color-robustBlue1);
+    color: white;
+  }
+
+  --action-button: {
+    background-color: var(--primary-color);
+    color: var(--primary-action-color, #fff);
+  }
+
+  --action-button-hover: {
+    background-color: var(--anypoint-color-coreBlue2);
+    color: white;
+  }
+
+  --auth-button: {
+    @apply(--btn-danger-nofill);
+  }
+
+  --auth-button-hover: {
+    @apply(--btn-danger-nofill-hover);
+  }
+
+  --raml-docs-resource-viewer-navigation-wide-layout: {
+    background-color: var(--anypoint-color-aluminum2);
+    margin: 0;
+    border-left: 0;
+  }
+
+  --sidebar-list: {
+  }
+
+  --sidebar-list-link: {
+    @apply(--arc-font-body1);
+    padding: 10px 12px;
+  }
+
+  --sidebar-list-link-hover: {
+    color: var(--anypoint-color-coreBlue2);
+  }
 }
 
 </style>
