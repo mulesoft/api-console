@@ -219,11 +219,13 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     margin-bottom: 20px;
     max-width: 900px;
     margin-left: 16px;
+    margin-right: 12px;
   }
   --response-view: {
     margin-bottom: 20px;
     max-width: 900px;
     margin-left: 16px;
+    margin-right: 12px;
   }
   --request-form-panels: {
     margin: 0 0 12px 16px;
@@ -242,6 +244,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     /*@apply(--request-form-panels);*/
   }
   --raml-docs-method-viewer: {
+    margin-right: 12px;
   }
   --raml-request-headers-editor: {
     @apply(--request-form-panels);
@@ -255,11 +258,12 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   }
   --raml-summary-view: {
     @apply(--request-form-panels);
+    margin-right: 12px;
   }
   --raml-path-selector: {
     overflow: auto;
-    height: 100%;
     background-color: transparent;
+    @apply(--layout-flex);
   }
   --app-drawer-content-container: {
     background-color: var(--anypoint-color-aluminum2, #eee);
