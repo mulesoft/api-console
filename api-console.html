@@ -810,7 +810,8 @@ Use "\n" string to set a new line for the headers string.
       // Currently displayed page. Either `docs` or `request`
       page: {
         type: String,
-        value: 'docs'
+        value: 'docs',
+        notify: true
       },
       // RAML as the JSON produced by the parser. The `.specification` part of the output.
       raml: Object,
@@ -822,7 +823,8 @@ Use "\n" string to set a new line for the headers string.
       // Current path in the RAML structure.
       path: {
         type: String,
-        observer: '_pathChanged'
+        observer: '_pathChanged',
+        notify: true
       },
       // If true it will display a narrow layout.
       narrow: {
