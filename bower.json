@@ -57,7 +57,8 @@
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.4.3",
     "paper-listbox": "polymerelements/paper-listbox#^1.1.2",
     "paper-item": "PolymerElements/paper-item#^1.2.1",
-    "raml-docs-helpers": "advanced-rest-client/raml-docs-helpers#^1.0.5"
+    "raml-docs-helpers": "advanced-rest-client/raml-docs-helpers#^1.0.5",
+    "app-route": "PolymerElements/app-route#^1.0.0"
   },
   "ignore": [
     "**/.*",
