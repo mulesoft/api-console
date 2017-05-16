@@ -711,6 +711,17 @@ Use "\n" string to set a new line for the headers string.
     .nav-content > ::content > * {
       margin-left: 12px;
     }
+
+    .drawer-content-wrapper {
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+    }
+
+    #drawer {
+      --paper-header-panel-container: {
+        @apply(--layout-horizontal);
+      }
+    }
     </style>
     <paper-drawer-panel responsive-width="860px" force-narrow="[[manualNavigation]]">
       <template is="dom-if" if="[[!manualNavigation]]">
@@ -727,6 +738,7 @@ Use "\n" string to set a new line for the headers string.
               first-level-opened
               resources-opened
               documentation-opened></raml-path-selector>
+            <content select="[nav-addon]"></content>
           </div>
         </paper-header-panel>
       </template>
