@@ -195,4 +195,18 @@ module.exports = function() {
       '  "title": "Developer"\n' +
       '}');
   });
+
+  it('should show request url in try it panel', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-query-parameters.html');
+
+    resourcePo.toggleResourceMethod(0, 0);
+
+    // Assert
+    assert.ifShowsRequestUrl(0, 'http://localhost/resource?active=true&display=false&type=lalala');
+  });
 };

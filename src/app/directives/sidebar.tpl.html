@@ -54,7 +54,7 @@
 
           <named-parameters context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
 
-          <named-parameters context="context" type="queryParameters" types="types" title="Query Parameters" enable-custom-parameters></named-parameters>
+          <named-parameters context="context" type="queryParameters" types="types" title="Query Parameters" upload-request="setRequestUrl" enable-custom-parameters></named-parameters>
 
           <section ng-if="methodInfo.queryString">
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
@@ -188,7 +188,7 @@
               </div>
             </section>
 
-            <section class="raml-console-side-bar-try-it-description">
+            <section class="raml-console-side-bar-try-it-description" ng-if="!partialRequestUrl">
               <header class="raml-console-sidebar-row raml-console-sidebar-header">
                 <h3 class="raml-console-sidebar-head">
                   <button ng-class="{'raml-console-is-open':showResponseMetadata, 'raml-console-is-collapsed':!showResponseMetadata}" class="raml-console-sidebar-expand-btn" ng-click="toggleResponseMetadata()">

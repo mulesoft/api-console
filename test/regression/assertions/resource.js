@@ -140,6 +140,11 @@ function Resource (poName) {
 
     expect(examples.getText()).toEqual(expectedValue);
   };
+
+  this.ifShowsRequestUrl = function (resource, expectedValue) {
+    var request = this.po.getRequestUrl(resource);
+    expect(request.getText()).toEqual(expectedValue);
+  };
 }
 
 

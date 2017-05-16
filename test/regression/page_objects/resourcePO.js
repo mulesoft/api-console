@@ -89,6 +89,14 @@ function ResourcesPO () {
 
     return this.getResponseExamples(resource);
   };
+
+  this.getRequestUrl = function (resource) {
+    var requestSection = this.resources.get(resource + 1).element(by.css('.raml-console-sidebar-expand-btn'));
+    requestSection.click();
+
+    return this.resources.get(resource + 1)
+      .element(by.css('.raml-console-sidebar-request-url'));
+  };
 }
 
 ResourcesPO.prototype = basePO;
