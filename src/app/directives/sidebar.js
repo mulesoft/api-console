@@ -16,7 +16,6 @@
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
         $scope.resourceIdFn      = resourceId;
-        $scope.partialRequestUrl = false;
 
         function readCustomSchemeInfo (name) {
           if (!$scope.methodInfo.headers.plain) {
@@ -135,7 +134,7 @@
           }, 10);
         }
 
-        function resolveSegementContexts(pathSegments, uriParameters) {
+        function resolveSegmentContexts(pathSegments, uriParameters) {
           var segmentContexts = [];
 
           pathSegments.forEach(function (element) {
@@ -400,10 +399,7 @@
 
         $scope.setRequestUrl = function() {
           var request = getRequest();
-
-          $scope.partialRequestUrl    = true;
           $scope.responseDetails      = true;
-          $scope.showResponseMetadata = false;
           $scope.requestOptions.url   = request.toOptions().url;
         };
 
@@ -414,7 +410,7 @@
 
           var url;
           var context         = $scope.context;
-          var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
+          var segmentContexts = resolveSegmentContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
           var tryIt           = $event !== undefined;
 
           if (tryIt) {
@@ -486,7 +482,7 @@
           $scope.requestOptions  = null;
           $scope.responseDetails = false;
           $scope.response        = {};
-          $scope.partialRequestUrl = false;
+          $scope.showResponseMetadata = false;
 
           if (!$scope.context.forceRequest) {
             jQuery($event.currentTarget).closest('form').find('.ng-invalid').first().focus();
