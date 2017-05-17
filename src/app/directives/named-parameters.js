@@ -9,6 +9,7 @@
       scope: {
         context: '=',
         types: '=',
+        uploadRequest: '=',
         type: '@',
         title: '@'
       },

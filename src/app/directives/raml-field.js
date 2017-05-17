@@ -11,7 +11,8 @@
         type: '=',
         types: '=',
         model: '=',
-        param: '='
+        param: '=',
+        uploadRequest: '='
       },
       controller: ['$scope', function($scope) {
         function getParamType(definition) {
@@ -85,6 +86,9 @@
 
         $scope.onChange = function () {
           $scope.context.forceRequest = false;
+          if ($scope.uploadRequest) {
+            $scope.uploadRequest();
+          }
         };
 
         $scope.isDefault = function (definition) {
@@ -96,7 +100,11 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined');
+          var hasExample = $scope.isEnum(value) ? false : value.type === 'boolean' ? false : typeof value['enum'] !== 'undefined' ? false : (typeof value.example !== 'undefined' || typeof value.examples !== 'undefined');
+          if (hasExample && $scope.uploadRequest) {
+            $scope.uploadRequest();
+          }
+          return hasExample;
         };
 
         $scope.reset = function (param) {

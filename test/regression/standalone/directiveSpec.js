@@ -52,6 +52,22 @@ module.exports = function() {
     assert.ifBeAbleToTryIt(0, 0);
   });
 
+  it('should be able to display schema responses information', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-security-schema-pass-though.html');
+
+    resourcePo.toggleResourceMethod(0, 0);
+
+    // Assert
+    assert.ifShowsResponseSchemaExample(0, '{\n' +
+      '  "status": "denied"\n' +
+      '}');
+  });
+
   it('should be able to display security schemes', function () {
     // Arrange
     var assert = assertions.create('resource');
@@ -178,5 +194,19 @@ module.exports = function() {
       '  "lastName": "Smith",\n' +
       '  "title": "Developer"\n' +
       '}');
+  });
+
+  it('should show request url in try it panel', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-query-parameters.html');
+
+    resourcePo.toggleResourceMethod(0, 0);
+
+    // Assert
+    assert.ifShowsRequestUrl(0, 'http://localhost/resource?active=true&display=false&type=lalala');
   });
 };
