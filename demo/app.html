@@ -19,7 +19,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../raml-docs-helpers/raml-docs-parser.html">
   <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../../app-route/app-location.html">
-  <link rel="import" href="../../app-route/app-route.html">
   <link rel="import" href="../api-console.html">
 
   <style is="custom-style">
@@ -71,81 +70,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved>
-  <template is="dom-bind" id="app">
+  <app-location use-hash-as-path></app-location>
 
-    <app-location route="{{route}}" use-hash-as-path></app-location>
-    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-    <app-route route="{{subroute}}" pattern="/:path" data="{{subrouteData}}"></app-route>
-
-    <div id="content">
-      <raml-docs-parser raml="{{raml}}" on-raml-ready="ramlLoaded"></raml-docs-parser>
-      <div class="wrapper">
-        <api-console raml="[[raml]]" page="{{page}}" path="{{path}}">
-          <div class="powered-by" nav-addon>
-            <a href="https://github.com/mulesoft/api-console" target="_blank"><img src="poweredByMuleSoft.png" /></a>
-          </div>
-        </api-console>
-      </div>
+  <div id="content">
+    <raml-docs-parser></raml-docs-parser>
+    <div class="wrapper">
+      <api-console>
+        <div class="powered-by" nav-addon>
+          <a href="https://github.com/mulesoft/api-console" target="_blank"><img src="poweredByMuleSoft.png" /></a>
+        </div>
+      </api-console>
     </div>
-  </template>
-  <script>
-  (function(scope) {
-    'use strict';
-    scope.page = 'docs';
-    scope.observers = [
-      'routePageChanged(routeData.page)',
-      'urlPathChanged(subrouteData.path)',
-      'pathChanged(path)'
-    ];
-
-    window.addEventListener('WebComponentsReady', function() {
-      // sets the initial path for routing from external source.
-      // The API console sets default path to `summary` after RAML change.
-      scope.__initialPage = scope.routeData && scope.routeData.page;
-      scope.__initialPath = scope.subrouteData && scope.subrouteData.path;
-    });
-
-    scope.routePageChanged = function(page) {
-      if (page === '/' || page === '') {
-        return scope.set('route.path', '/docs');
-      }
-      scope.page = page || 'docs';
-    };
-    // Decodes path to internal data model.
-    scope.urlPathChanged = function(path) {
-      if (!path) {
-        scope.set('path', '');
-        return;
-      }
-      var parsedPath = path.replace(/\-/g, '.');
-      if (parsedPath !== scope.path) {
-        scope.set('path', parsedPath);
-      }
-    };
-    scope.pathChanged = function(path) {
-      if (scope.page !== 'docs') {
-        return scope.set('route.path', '/docs/' + path.replace(/\./g, '-'));
-      }
-      if (!path) {
-        scope.set('subrouteData.path', '');
-        return;
-      }
-      var parsedPath = path.replace(/\./g, '-');
-      if (parsedPath !== scope.subrouteData.path) {
-        return scope.set('route.path', '/' + scope.page + '/' + parsedPath);
-      }
-    };
-    // Checks for initial route data and update current route if needed.
-    scope.ramlLoaded = function() {
-      if (scope.__initialPage && scope.__initialPage !== scope.page) {
-        scope.page = scope.__initialPage;
-      }
-      if (scope.__initialPath && scope.__initialPath !== scope.path) {
-        scope.path = scope.__initialPath;
-      }
-    };
-  })(document.querySelector('#app'));
-  </script>
+  </div>
+  <script src="app.js"></script>
 </body>
 
 </html>
