@@ -26,8 +26,6 @@
   var apiconsole = {};
   // Namespace for standalone application.
   apiconsole.app = {};
-  // Cache object
-  apiconsole.app.__data__ = {};
   /**
    * Initialize event listeners for console's path and page properties and observers
    * router data change.
@@ -41,10 +39,21 @@
   apiconsole.app.setInitialRouteData = function() {
     // sets the initial path for routing from external source.
     // The API console sets default path to `summary` after RAML change.
-    var route = document.getElementById('route');
-    var subroute = document.getElementById('subroute');
-    apiconsole.app.__initialPage = route.data && route.data.page;
-    apiconsole.app.__initialPath = subroute.data && subroute.data.path;
+    var location = document.querySelector('app-location');
+    var locationPath = location.path;
+    if (!locationPath) {
+      return;
+    }
+    var parsedPath = locationPath.replace(/\-/g, '.');
+    if (parsedPath[0] === '/') {
+      parsedPath = parsedPath.substr(1);
+    }
+    var _route = parsedPath.split('/');
+    var page = _route[0];
+    var path = _route[1];
+
+    apiconsole.app.__initialPage = page;
+    apiconsole.app.__initialPath = path;
   };
   /**
    * Adds event listeres to elements that are related to RAML dataq parsing.
@@ -56,12 +65,12 @@
       apiConsole.raml = e.detail.raml;
 
       if (apiconsole.app.__initialPage && apiconsole.app.__initialPage !== apiConsole.page) {
-        apiconsole.app.pageChanged(apiConsole.__initialPage);
-        apiConsole.__initialPage = undefined;
+        apiconsole.app.pageChanged(apiconsole.app.__initialPage);
+        apiconsole.app.__initialPage = undefined;
       }
       if (apiconsole.app.__initialPath && apiconsole.app.__initialPath !== apiConsole.path) {
-        apiconsole.app.pathChanged(apiConsole.__initialPath);
-        apiConsole.__initialPath = undefined;
+        apiconsole.app.pathChanged(apiconsole.app.__initialPath);
+        apiconsole.app.__initialPath = undefined;
       }
     });
   };
@@ -72,55 +81,25 @@
   apiconsole.app.observeRouteEvents = function() {
     var apiConsole = document.querySelector('api-console');
     var location = document.querySelector('app-location');
-    var route = document.getElementById('route');
-    var subroute = document.getElementById('subroute');
 
     apiConsole.addEventListener('path-changed', apiconsole.app._pathChanged);
     apiConsole.addEventListener('page-changed', apiconsole.app._pageChanged);
     location.addEventListener('route-changed', apiconsole.app._routeChanged);
-    route.addEventListener('route-changed', apiconsole.app._routeChanged);
-    route.addEventListener('data-changed', apiconsole.app._routeDataChanged);
-    route.addEventListener('tail-changed', apiconsole.app._subrouteChanged);
-    subroute.addEventListener('route-changed', apiconsole.app._subrouteChanged);
-    subroute.addEventListener('data-changed', apiconsole.app._subrouteDataChanged);
   };
   // Event handler for the path change.
   apiconsole.app._pathChanged = function(e) {
     apiconsole.app.pathChanged(e.detail.value);
   };
-  // Called when path change.
+  // Called when path changed from the api-console.
   apiconsole.app.pathChanged = function(path) {
-    if ('path' in apiconsole.app.__data__) {
-      if (apiconsole.app.__data__.path === path) {
-        return;
-      }
-    }
-    apiconsole.app.__data__.path = path;
-    var apiConsole = document.querySelector('api-console');
-    var location = document.querySelector('app-location');
-    var route = location.route;
-    if (apiConsole.page !== 'docs') {
-      route.path = '/docs/' + path.replace(/\./g, '-');
-      apiconsole.app.routeChanged(route);
-      return;
-    }
-    var subrouteElement = document.getElementById('subroute');
-    var subrouteData = subrouteElement.data;
-
     if (!path) {
-      subrouteData.path = '';
-      apiconsole.app.subrouteDataChanged(subrouteData);
       return;
     }
-
+    var location = document.querySelector('app-location');
     var parsedPath = path.replace(/\./g, '-');
-    if (parsedPath !== subrouteData.path) {
-      var newPath = '/' + apiConsole.page + '/' + parsedPath;
-      if (route.path !== newPath) {
-        route.path = newPath;
-        apiconsole.app.routeChanged(route);
-      }
-      return;
+    var newPath = '/docs/' + parsedPath;
+    if (newPath !== location.path) {
+      location.set('path', newPath);
     }
   };
   // Event handler for the page change.
@@ -129,12 +108,6 @@
   };
   // Called when page change.
   apiconsole.app.pageChanged = function(page) {
-    if ('page' in apiconsole.app.__data__) {
-      if (apiconsole.app.__data__.page === page) {
-        return;
-      }
-    }
-    apiconsole.app.__data__.page = page;
     var apiConsole = document.querySelector('api-console');
     if (apiConsole.page !== page) {
       apiConsole.page = page;
@@ -144,95 +117,51 @@
   apiconsole.app._routeChanged = function(e) {
     apiconsole.app.routeChanged(e.detail.value);
   };
-  // Updates all elements that use the route object.
+  // Updates api console path if different than curent URL
   apiconsole.app.routeChanged = function(route) {
-    var location = document.querySelector('app-location');
-    var routeElement = document.getElementById('route');
-    // It uses type and value check to not override a value on the object that initialized
-    // the change.
-    // It also makes a copy of the object so change in one element will not cause unhandled change
-    // in the other elements.
-    if (!apiconsole.app._routeEquals(location.route, route)) {
-      location.route = Object.assign({}, route);
+    var locationPath = route.path;
+    if (!locationPath || locationPath === '/') {
+      document.querySelector('app-location').set('path', '/docs');
+      return;
     }
-    if (!apiconsole.app._routeEquals(routeElement.route, route)) {
-      // debugger;
-      routeElement.route = Object.assign({}, route);
+    var parsedPath = locationPath.replace(/\-/g, '.');
+    if (parsedPath[0] === '/') {
+      parsedPath = parsedPath.substr(1);
     }
-  };
-  // Check if route objects equals. Simplified version for the API Console.
-  apiconsole.app._routeEquals = function(a, b) {
-    if ((a && a.path) !== (b && b.path)) {
-      return false;
+    var _route = parsedPath.split('/');
+    var page = _route[0];
+    var path = _route[1];
+    var apiConsole = document.querySelector('api-console');
+    if (apiConsole.page !== page) {
+      apiConsole.page = page;
     }
-    if ((a && a.prefix) !== (b && b.prefix)) {
-      return false;
-    }
-    return true;
-  };
-  // Event handler for the routeData change.
-  apiconsole.app._routeDataChanged = function(e) {
-    apiconsole.app.routeDataChanged(e.detail.value);
-  };
-  // Called when routeData change.
-  apiconsole.app.routeDataChanged = function(routeData) {
-    var routeElement = document.getElementById('route');
-    if (routeElement.data !== routeData) {
-      routeElement.data = routeData;
-    }
-    apiconsole.app.routePageChanged(routeData.page);
-  };
-  // Event handler for the subroute change.
-  apiconsole.app._subrouteChanged = function(e) {
-    apiconsole.app.subrouteChanged(e.detail.value);
-  };
-  // Updates all elements that use the subroute object.
-  apiconsole.app.subrouteChanged = function(subroute) {
-    var route = document.getElementById('route');
-    var subrouteElement = document.getElementById('subroute');
-    if (route.tail !== subroute) {
-      route.tail = subroute;
-    }
-    if (subrouteElement.route !== subroute) {
-      subrouteElement.route = subroute;
+    if (apiConsole.path !== path) {
+      apiConsole.path = path;
     }
   };
-  // Event handler for the subrouteData change.
-  apiconsole.app._subrouteDataChanged = function(e) {
-    apiconsole.app.subrouteDataChanged(e.detail.value);
+  /**
+   * Reads page name and the path from location path.
+   *
+   * @param {String} locationPath Current path read from path change event or read fomr the
+   * `app-location` element.
+   */
+  apiconsole.app._readPagePath = function(locationPath) {
+    var parsedPath = locationPath.replace(/\-/g, '.');
+    if (parsedPath[0] === '/') {
+      parsedPath = parsedPath.substr(1);
+    }
+    var _route = parsedPath.split('/');
+    var page = _route[0];
+    var path = _route[1];
+    return {
+      page: page,
+      path: path
+    };
   };
-  // Updates all elements that use the subrouteData object.
-  apiconsole.app.subrouteDataChanged = function(subrouteData) {
-    var subrouteElement = document.getElementById('subroute');
-    subrouteElement.data = subrouteData;
-    apiconsole.app.urlPathChanged(subrouteData.path);
-  };
+
   // Notifys user when something went wrong...
   apiconsole.app.notifyInitError = function(message) {
     window.alert('Cannot initialize API console. ' + message);
   };
-
-  apiconsole.app.routePageChanged = function(page) {
-    if (page === '/' || page === '') {
-      var location = document.querySelector('app-location');
-      var route = location.route;
-      route.path = '/docs';
-      apiconsole.app.routeChanged(route);
-      return;
-    }
-    apiconsole.app.pageChanged(page || 'docs');
-  };
-  apiconsole.app.urlPathChanged = function(path) {
-    if (!path) {
-      apiconsole.app.pathChanged('');
-      return;
-    }
-    var parsedPath = path.replace(/\-/g, '.');
-    var apiConsole = document.querySelector('api-console');
-    if (parsedPath !== apiConsole.path) {
-      apiconsole.app.pathChanged(parsedPath);
-    }
-  };
-
   apiconsole.app.init();
 })();

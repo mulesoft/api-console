@@ -19,7 +19,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../raml-docs-helpers/raml-docs-parser.html">
   <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../../app-route/app-location.html">
-  <link rel="import" href="../../app-route/app-route.html">
   <link rel="import" href="../api-console.html">
 
   <style is="custom-style">
@@ -71,10 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved>
-
   <app-location use-hash-as-path></app-location>
-  <app-route id="route" pattern="/:page"></app-route>
-  <app-route id="subroute" pattern="/:path"></app-route>
 
   <div id="content">
     <raml-docs-parser></raml-docs-parser>
