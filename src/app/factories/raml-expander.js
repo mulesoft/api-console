@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('raml')
-    .factory('ramlExpander',['$q', 'jsTraverse', function ramlExpander(
+    .factory('ramlExpander',['$http', '$q', 'jsTraverse', function ramlExpander(
+      $http,
       $q,
       jsTraverse
     ) {
@@ -89,7 +90,94 @@
             replaceSchemaIfExists(raml, schema, value);
           }
         });
+      }
 
+      function inlineSchemaRefs(raml) {
+
+        function inlineSchema(obj) {
+          delete obj.$schema;
+          delete obj.id;
+          return obj;
+        }
+
+        // get a property of obj. Property path is defined as an array.
+        function getProperty(obj, namesArray) {
+          return namesArray.reduce(function(obj, field){return obj[field];}, obj);
+        }
+
+        // Set a property of obj. Property path is defined as an array.
+        function setProperty(obj, namesArray, value) {
+          if(namesArray.length == 0) {
+            return value;
+          }
+          var prop = getProperty(obj, namesArray.slice(0, -1));
+          prop[namesArray[namesArray.length - 1]] = value;
+        }
+
+        // returns - Array[{key: Array, value: Object}], where key is a full path to the value.
+        function flatten(obj) {
+          return jsTraverse.traverse(obj).paths()
+            .map(function(path){return {key: path, value: getProperty(obj, path)};});
+        }
+
+        // Returns - fully exapanded schema at the ref.
+        function expandRef(ref) {
+          var defaultResult = Promise.resolve(ref);
+          if (ref.startsWith('http')) {
+            return $http.get(ref).then(function(refSchema) {
+              return expandSchema(refSchema.data)
+            });
+          }
+          else {
+            // Relative references to other files are not supported,
+            // because we don't know relative schema locations.
+            // I.e. something like `definitions.schema#/definitions` won't work.
+            // TODO: add local ref resolution (should happen in a separate pass).
+            console.warn('Unsupported schema reference: ' + ref);
+          }
+          return defaultResult;
+        }
+
+        function expandSchema(schema) {
+          var expandedRefsP = flatten(schema)
+            .filter(function(e){ return e.key[e.key.length-1] === '$ref';})
+            .map(function(e){
+              return expandRef(e.value)
+                .then(function(expandedSchema){
+                  return {key: e.key.slice(0, -1), value: inlineSchema(expandedSchema)};
+                });
+            });
+
+          return Promise.all(expandedRefsP)
+            .then(function(expandedRefs){
+              expandedRefs.forEach(function(expandedRef){
+                setProperty(schema, expandedRef.key, expandedRef.value);
+              });
+            })
+            .then(function(){
+              return schema;
+            });
+        }
+
+        var schemaRegex = /{\s+"\$schema"/;
+        var expandedSchemasP = flatten(raml)
+          .filter(function(e){
+            return angular.isString(e.value) && e.value.match(schemaRegex);
+          })
+          .map(function(e){
+            return expandSchema(JSON.parse(e.value))
+              .then(function(schema){
+                return {key: e.key, value: schema};
+              });
+          });
+
+        return Promise.all(expandedSchemasP)
+          .then(function(expandedSchemas) {
+            expandedSchemas.forEach(function(expandedSchema){
+              setProperty(raml, expandedSchema.key, JSON.stringify(expandedSchema.value, null, 2));
+            });
+          })
+          .then(function() {return raml;});
       }
 
       function replaceSchemaIfExists(raml, schema, value) {
@@ -110,6 +198,7 @@
         dereferenceTypes(raml);
         dereferenceSchemas(raml);
         dereferenceTypesInArrays(raml);
+        return inlineSchemaRefs(raml);
       }
 
     }])

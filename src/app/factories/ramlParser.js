@@ -80,9 +80,11 @@
           api = api.expand ? api.expand(true) : api;
           var raml = api.toJSON(jsonOptions);
           if (raml.specification) {
-            ramlExpander.expandRaml(raml.specification);
+            return ramlExpander.expandRaml(raml.specification).then(function(){return raml;});
           }
-          return raml;
+          else {
+            return Promise.resolve(raml);
+          }
         });
 
         // ---
