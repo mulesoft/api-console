@@ -86,7 +86,7 @@
         if (methodInfo.body) {
           Object.keys(methodInfo.body).forEach(function (key) {
             var bodyType = methodInfo.body[key];
-            var type = RAML.Inspector.Types.findType(bodyType.type[0], $scope.types);
+            var type = bodyType.type ? RAML.Inspector.Types.findType(bodyType.type[0], $scope.types) : undefined;
             if (!bodyType.example && type && type.example) {
               bodyType.example = type.example;
             }

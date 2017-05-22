@@ -3,7 +3,6 @@
 
   var clearScope = function ($scope) {
     $scope.showPanel = false;
-    $scope.showPanel = false;
     $scope.traits = null;
     $scope.methodInfo = {};
     $scope.currentId = null;
@@ -19,7 +18,6 @@
         $scope.close = function () {
           $rootScope.$broadcast('resetData');
           $rootScope.$broadcast('methodClick', null, $rootScope.currentId);
-          clearScope($scope);
           clearScope($scope.$parent);
           $rootScope.currentId = null;
         };
