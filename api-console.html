@@ -980,10 +980,13 @@ Use "\n" string to set a new line for the headers string.
         }
       })
       .then(function(json) {
+        context.set('raml', json);
         if (!json) {
           context._notify('Data unavailable under given URL.');
+          context.fire('json-file-loaded-error');
+        } else {
+          context.fire('json-file-loaded');
         }
-        context.set('raml', json);
       })
       .catch(function(reason) {
         context._notify('Unable to download data. ' + reason.message);
