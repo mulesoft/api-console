@@ -97,7 +97,6 @@
 
   var clearScope = function ($scope) {
     $scope.showPanel = false;
-    $scope.showPanel = false;
     $scope.traits = null;
     $scope.methodInfo = {};
     $scope.currentId = null;
@@ -113,7 +112,6 @@
         $scope.close = function () {
           $rootScope.$broadcast('resetData');
           $rootScope.$broadcast('methodClick', null, $rootScope.currentId);
-          clearScope($scope);
           clearScope($scope.$parent);
           $rootScope.currentId = null;
         };
@@ -1656,13 +1654,6 @@
       }
     });
 
-    // update on 'closeMethodClick' if must
-    $scope.$on('closeMethodClick', function(event, oldId) {
-      if (id === oldId) {
-        updateListItemElement(element, $scope, $compile, resource, null, showResource, resourceId);
-      }
-    });
-
     return element;
   }
 
@@ -1746,8 +1737,8 @@
   function resourceTypeElement(resource) {
     if (resource.resourceType) {
       var element = angular.element('<span class="raml-console-flag raml-console-resource-heading-flag"></span>');
-      element.append('<b>Type:</b>');
-      element.append(resource.resourceType.toString());
+      element.append('<b>Type: </b>');
+      element.append(Object.keys(resource.resourceType)[0]);
 
       return element;
     }
@@ -1786,7 +1777,7 @@
   RAML.Directives.resourceList = function resourceList($rootScope, $compile, showResource, resourceId) {
     return {
       restrict: 'E',
-      template: '<ol class="raml-console-resource-list"></ol>',
+      templateUrl: 'directives/resource-tree/resource-list.tpl.html',
       replace: true,
       link: function ($scope, element) {
         var resources = $scope.resourceGroup;
@@ -1912,7 +1903,7 @@
         if (methodInfo.body) {
           Object.keys(methodInfo.body).forEach(function (key) {
             var bodyType = methodInfo.body[key];
-            var type = RAML.Inspector.Types.findType(bodyType.type[0], $scope.types);
+            var type = bodyType.type ? RAML.Inspector.Types.findType(bodyType.type[0], $scope.types) : undefined;
             if (!bodyType.example && type && type.example) {
               bodyType.example = type.example;
             }
@@ -2875,7 +2866,7 @@
         };
 
         $scope.isFileBody = function (param) {
-          return param.contentType && param.contentType.type[0] === 'file';
+          return param.contentType && param.contentType.type && param.contentType.type[0] === 'file' ? true : false;
         };
 
         $scope.uploadFile = function (event) {

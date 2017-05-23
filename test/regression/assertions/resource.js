@@ -145,7 +145,11 @@ function Resource (poName) {
     var request = this.po.getRequestUrl(resource);
     expect(request.getText()).toEqual(expectedValue);
   };
-}
 
+  this.ifMethodIsOpen = function (resource, isOpen) {
+    var panel = this.po.getResourcePanel(resource);
+    expect(panel.isPresent()).toBe(isOpen);
+  };
+}
 
 module.exports = Resource;

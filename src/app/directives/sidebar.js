@@ -677,7 +677,7 @@
         };
 
         $scope.isFileBody = function (param) {
-          return param.contentType && param.contentType.type[0] === 'file';
+          return param.contentType && param.contentType.type && param.contentType.type[0] === 'file' ? true : false;
         };
 
         $scope.uploadFile = function (event) {
