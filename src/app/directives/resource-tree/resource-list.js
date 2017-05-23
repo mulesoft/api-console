@@ -14,13 +14,6 @@
       }
     });
 
-    // update on 'closeMethodClick' if must
-    $scope.$on('closeMethodClick', function(event, oldId) {
-      if (id === oldId) {
-        updateListItemElement(element, $scope, $compile, resource, null, showResource, resourceId);
-      }
-    });
-
     return element;
   }
 

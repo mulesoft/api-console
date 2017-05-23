@@ -38,6 +38,10 @@ function ResourcesPO () {
     return this.getMethodsForResourceAt(resource).get(method).element(by.css('.raml-console-tab-label'));
   };
 
+  this.getCloseMethodBtn = function (resource) {
+    return this.resources.get(resource+1).element(by.css('.raml-console-resource-close-btn'));
+  };
+
   this.getTryItGetBtn = function (index) {
     return this.resources.get(index+1).element(by.css('.raml-console-sidebar-action-get'));
   };
@@ -79,6 +83,11 @@ function ResourcesPO () {
     button.click();
   };
 
+  this.toggleCloseMethod = function(resource, method) {
+    var button = this.getCloseMethodBtn(resource, method);
+    button.click();
+  };
+
   this.getResponseExamples = function (resource) {
     return this.resources.get(resource+1).element(by.css('.raml-console-hljs pre code'));
   };
@@ -96,6 +105,10 @@ function ResourcesPO () {
 
     return this.resources.get(resource + 1)
       .element(by.css('.raml-console-sidebar-request-url'));
+  };
+
+  this.getResourcePanel = function(resource) {
+    return this.resources.get(resource + 1).element(by.css('.raml-console-resource-panel'));
   };
 }
 
