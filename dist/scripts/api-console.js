@@ -1746,8 +1746,8 @@
   function resourceTypeElement(resource) {
     if (resource.resourceType) {
       var element = angular.element('<span class="raml-console-flag raml-console-resource-heading-flag"></span>');
-      element.append('<b>Type:</b>');
-      element.append(resource.resourceType.toString());
+      element.append('<b>Type: </b>');
+      element.append(Object.keys(resource.resourceType)[0]);
 
       return element;
     }
@@ -1786,7 +1786,7 @@
   RAML.Directives.resourceList = function resourceList($rootScope, $compile, showResource, resourceId) {
     return {
       restrict: 'E',
-      template: '<ol class="raml-console-resource-list"></ol>',
+      templateUrl: 'directives/resource-tree/resource-list.tpl.html',
       replace: true,
       link: function ($scope, element) {
         var resources = $scope.resourceGroup;
