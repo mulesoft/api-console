@@ -95,37 +95,6 @@
 (function () {
   'use strict';
 
-  var clearScope = function ($scope) {
-    $scope.showPanel = false;
-    $scope.traits = null;
-    $scope.methodInfo = {};
-    $scope.currentId = null;
-    $scope.currentMethod = null;
-  };
-
-  RAML.Directives.closeButton = function() {
-    return {
-      restrict: 'E',
-      templateUrl: 'directives/close-button.tpl.html',
-      replace: true,
-      controller: ['$scope', '$rootScope', function($scope, $rootScope) {
-        $scope.close = function () {
-          $rootScope.$broadcast('resetData');
-          $rootScope.$broadcast('methodClick', null, $rootScope.currentId);
-          clearScope($scope.$parent);
-          $rootScope.currentId = null;
-        };
-      }]
-    };
-  };
-
-  angular.module('RAML.Directives')
-    .directive('closeButton', RAML.Directives.closeButton);
-})();
-
-(function () {
-  'use strict';
-
   RAML.Directives.documentation = function() {
     return {
       restrict: 'E',
@@ -1686,12 +1655,7 @@
     element.append(resourceHeadingFlagElement($scope, resource));
     element.append(resourceLevelDescriptionElement(resource));
     element.append(methodListElement($scope, resource, currentId, showResource, resourceId));
-
-    if (resourceId(resource) === currentId) {
-      var closeButton = angular.element('<close-button></close-button>');
-      $compile(closeButton)($scope);
-      element.append(closeButton);
-    }
+    element.append(closeMethodButton($scope, resource, currentId, showResource, resourceId));
 
     return element;
   }
@@ -1774,6 +1738,20 @@
     return element;
   }
 
+  function closeMethodButton($scope, resource, currentId, showResource, resourceId) {
+    if (resourceId(resource) === currentId) {
+      var closeButton = angular.element('<button class="raml-console-resource-close-btn"> Close </button>');
+      closeButton.on('click', function (event) {
+        showResource($scope, resource, event, 0);
+        $scope.$apply();
+      });
+
+      return closeButton;
+    }
+
+    return '';
+  }
+
   RAML.Directives.resourceList = function resourceList($rootScope, $compile, showResource, resourceId) {
     return {
       restrict: 'E',
@@ -1807,9 +1785,7 @@
           element.addClass($scope.disableTitle ? 'raml-console-resources-container-no-title' : 'raml-console-resources-container');
           $scope.resourceIdFn = resourceId;
 
-          $scope.showResource = function ($event, $index, resource) {
-            showResource($scope, resource, $event, $index);
-          };
+          $scope.showResource = showResource;
         }
       };
     }]);
@@ -2034,10 +2010,10 @@
       templateUrl: 'directives/resource-type.tpl.html',
       replace: true,
       controller: ['$scope', function ($scope) {
-        var resourceType = $scope.resource.resourceType;
+        var resourceType = $scope.rootResource.resourceType;
 
         if (resourceType !== null && typeof resourceType === 'object') {
-          $scope.resource.resourceType = Object.keys(resourceType).join();
+          $scope.rootResource.resourceType = Object.keys(resourceType).join();
         }
       }]
     };
@@ -7249,13 +7225,6 @@ RAML.Inspector = (function() {
 angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
   'use strict';
 
-  $templateCache.put('directives/close-button.tpl.html',
-    "<button class=\"raml-console-resource-close-btn\" ng-click=\"close($event)\">\n" +
-    "  Close\n" +
-    "</button>\n"
-  );
-
-
   $templateCache.put('directives/documentation.tpl.html',
     "<div class=\"raml-console-resource-panel-primary\" ng-if=\"documentationEnabled\">\n" +
     "  <!-- Request -->\n" +
@@ -7900,7 +7869,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          </span>\n" +
     "        </h2>\n" +
     "      </div>\n" +
-    "      <close-button></close-button>\n" +
     "    </header>\n" +
     "  </li>\n" +
     "\n" +
@@ -7912,7 +7880,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <header\n" +
     "      class=\"raml-console-resource raml-console-resource-root raml-console-clearfix\"\n" +
     "      ng-class=\"{ 'raml-console-is-active': (currentId === resourceIdFn(rootResource)) }\"\n" +
-    "      ng-init=\"rootResource = resourceGroup[0]; resource = resourceGroup[0];\"\n" +
+    "      ng-init=\"rootResource = resourceGroup[0]; resource = resourceGroup[0]; scope = this;\"\n" +
     "    >\n" +
     "      <div\n" +
     "        class=\"raml-console-resource-path-container\"\n" +
@@ -7975,7 +7943,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "          class=\"raml-console-tab\"\n" +
     "          ng-class=\"{ 'raml-console-is-active': (resourceId === resourceIdFn(rootResource) && method.method === currentMethod) }\"\n" +
     "          ng-repeat=\"method in rootResource.methods\"\n" +
-    "          ng-click=\"showResource($event, $index, rootResource)\"\n" +
+    "          ng-click=\"showResource(scope, rootResource, $event, $index)\"\n" +
     "        >\n" +
     "          <span\n" +
     "            class=\"raml-console-tab-label raml-console-tab-{{method.method}}\"\n" +
@@ -7983,7 +7951,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        </div>\n" +
     "      </div>\n" +
     "\n" +
-    "      <close-button></close-button>\n" +
+    "      <button class=\"raml-console-resource-close-btn\" ng-click=\"showResource(scope, rootResource, $event, 0)\">\n" +
+    "        Close\n" +
+    "      </button>\n" +
     "    </header>\n" +
     "    <resource-panel ng-if=\"currentId ===  resourceIdFn(rootResource)\"></resource-panel>\n" +
     "\n" +
@@ -7996,7 +7966,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
 
 
   $templateCache.put('directives/resource-type.tpl.html',
-    "<span ng-if=\"resource.resourceType\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Type:</b> {{resource.resourceType}}</span>\n"
+    "<span ng-if=\"rootResource.resourceType\" class=\"raml-console-flag raml-console-resource-heading-flag\"><b>Type:</b> {{rootResource.resourceType}}</span>\n"
   );
 
 
