@@ -46,12 +46,7 @@
     element.append(resourceHeadingFlagElement($scope, resource));
     element.append(resourceLevelDescriptionElement(resource));
     element.append(methodListElement($scope, resource, currentId, showResource, resourceId));
-
-    if (resourceId(resource) === currentId) {
-      var closeButton = angular.element('<close-button></close-button>');
-      $compile(closeButton)($scope);
-      element.append(closeButton);
-    }
+    element.append(closeMethodButton($scope, resource, currentId, showResource, resourceId));
 
     return element;
   }
@@ -132,6 +127,20 @@
       });
 
     return element;
+  }
+
+  function closeMethodButton($scope, resource, currentId, showResource, resourceId) {
+    if (resourceId(resource) === currentId) {
+      var closeButton = angular.element('<button class="raml-console-resource-close-btn"> Close </button>');
+      closeButton.on('click', function (event) {
+        showResource($scope, resource, event, 0);
+        $scope.$apply();
+      });
+
+      return closeButton;
+    }
+
+    return '';
   }
 
   RAML.Directives.resourceList = function resourceList($rootScope, $compile, showResource, resourceId) {

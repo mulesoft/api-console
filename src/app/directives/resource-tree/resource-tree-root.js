@@ -11,9 +11,7 @@
           element.addClass($scope.disableTitle ? 'raml-console-resources-container-no-title' : 'raml-console-resources-container');
           $scope.resourceIdFn = resourceId;
 
-          $scope.showResource = function ($event, $index, resource) {
-            showResource($scope, resource, $event, $index);
-          };
+          $scope.showResource = showResource;
         }
       };
     }]);
