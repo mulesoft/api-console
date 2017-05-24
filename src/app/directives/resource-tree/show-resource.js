@@ -96,30 +96,8 @@
       }
 
         return function showResource($scope, resource, $event, $index) {
-          var methodInfo        = resource.methods[$index];
+          var methodInfo        = $index === null ? $scope.methodInfo : resource.methods[$index];
           var oldId             = $rootScope.currentId;
-
-          $scope.readTraits = function (traits) {
-            var list = [];
-            var traitList = traits || [];
-
-            traitList = traitList.concat(resource.traits);
-
-            traitList.map(function (trait) {
-              if (trait) {
-                if (typeof trait === 'object') {
-                  trait = Object.keys(trait).join(', ');
-                }
-
-                if (list.indexOf(trait) === -1) {
-                  list.push(trait);
-                }
-              }
-            });
-
-            return list.join(', ');
-          };
-
 
           var id = resourceId(resource);
           var isDifferentMethod = $rootScope.currentId !== id || $scope.currentMethod !== methodInfo.method;

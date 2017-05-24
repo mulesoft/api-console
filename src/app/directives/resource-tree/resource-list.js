@@ -1,11 +1,11 @@
 (function () {
   'use strict';
 
-  function listItemElement($rootScope, $scope, $compile, resource, showResource, resourceId) {
+  function listItemElement($scope, $compile, resource, showResource, resourceId) {
     var id = resourceId(resource);
     var element = angular.element('<li class="raml-console-resource-list-item"></li>');
     element.attr('id', id);
-    updateListItemElement(element, $scope, $compile, resource, $rootScope.currentId, showResource, resourceId);
+    updateListItemElement(element, $scope, $compile, resource, $scope.currentId, showResource, resourceId);
 
     // update on 'methodClick' if must
     $scope.$on('methodClick', function(event, currentId, oldId) {
@@ -93,7 +93,11 @@
     if (resource.resourceType) {
       var element = angular.element('<span class="raml-console-flag raml-console-resource-heading-flag"></span>');
       element.append('<b>Type: </b>');
-      element.append(Object.keys(resource.resourceType)[0]);
+      if (typeof resource.resourceType === 'string' ) {
+        element.append(resource.resourceType);
+      } else {
+        element.append(Object.keys(resource.resourceType)[0]);
+      }
 
       return element;
     }
@@ -133,7 +137,7 @@
     if (resourceId(resource) === currentId) {
       var closeButton = angular.element('<button class="raml-console-resource-close-btn"> Close </button>');
       closeButton.on('click', function (event) {
-        showResource($scope, resource, event, 0);
+        showResource($scope, resource, event, null);
         $scope.$apply();
       });
 
@@ -143,7 +147,7 @@
     return '';
   }
 
-  RAML.Directives.resourceList = function resourceList($rootScope, $compile, showResource, resourceId) {
+  RAML.Directives.resourceList = function resourceList($compile, showResource, resourceId) {
     return {
       restrict: 'E',
       templateUrl: 'directives/resource-tree/resource-list.tpl.html',
@@ -153,12 +157,12 @@
         resources
           .forEach(function (resource, index) {
             if (index === 0) { return; }
-            element.append(listItemElement($rootScope, $scope, $compile, resource, showResource, resourceId));
+            element.append(listItemElement($scope, $compile, resource, showResource, resourceId));
           });
       }
     };
   };
 
   angular.module('RAML.Directives')
-    .directive('resourceList', ['$rootScope', '$compile', 'showResource', 'resourceId', RAML.Directives.resourceList]);
+    .directive('resourceList', ['$compile', 'showResource', 'resourceId', RAML.Directives.resourceList]);
 })();
