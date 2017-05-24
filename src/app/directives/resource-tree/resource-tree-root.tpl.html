@@ -53,7 +53,7 @@
   >
     <header
       class="raml-console-resource raml-console-resource-root raml-console-clearfix"
-      ng-class="{ 'raml-console-is-active': (currentId === resourceIdFn(rootResource)) }"
+      ng-class="{ 'raml-console-is-active': (isCurrentResourceFn(this, rootResource)) }"
       ng-init="rootResource = resourceGroup[0]; resource = resourceGroup[0]; scope = this;"
     >
       <div
@@ -115,7 +115,7 @@
       <div class="raml-console-tab-list">
         <div
           class="raml-console-tab"
-          ng-class="{ 'raml-console-is-active': (resourceId === resourceIdFn(rootResource) && method.method === currentMethod) }"
+          ng-class="{ 'raml-console-is-active': (isCurrentResourceFn(this, rootResource) && method.method === currentMethod) }"
           ng-repeat="method in rootResource.methods"
           ng-click="showResource(scope, rootResource, $event, $index)"
         >
@@ -129,7 +129,7 @@
         Close
       </button>
     </header>
-    <resource-panel ng-if="currentId ===  resourceIdFn(rootResource)"></resource-panel>
+    <resource-panel ng-if="isCurrentResourceFn(this, rootResource)"></resource-panel>
 
     <!-- Child Resources -->
     <resource-list ng-class="{'raml-console-is-collapsed': resourceList[$index]}"></resource-list>
