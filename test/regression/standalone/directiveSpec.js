@@ -207,7 +207,7 @@ module.exports = function() {
     resourcePo.toggleResourceMethod(0, 0);
 
     // Assert
-    assert.ifShowsRequestUrl(0, 'http://localhost/resource?active=true&display=false&type=lalala');
+    assert.ifShowsRequestUrl(0, 'http://localhost/resource?display=false&type=lalala&active=true');
   });
 
   it('should be able to open and close a resource', function () {
@@ -241,5 +241,31 @@ module.exports = function() {
     //Close method
     resourcePo.toggleResourceMethod(0, 0);
     assert.ifMethodIsOpen(0, false);
+  });
+
+  it('should preserve query parameters order', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-query-parameters.html');
+
+    resourcePo.toggleResourceMethod(0, 0);
+
+    assert.ifShowingQueryParametersInCorrectOrder(0, ['display', 'type', 'other', 'page', 'active']);
+  });
+
+  it('should preserve properties order in root types', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-types.html');
+
+    resourcePo.toggleRootTypes();
+
+    assert.ifShowingTypesPropertiesInCorrectOrder(0, ['c', 'a', 'b']);
   });
 };

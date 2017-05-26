@@ -104,7 +104,7 @@
       });
     }
     if (properties) {
-      var propertiesKeys = Object.keys(properties).sort();
+      var propertiesKeys = Object.keys(properties);
 
       if (propertiesKeys.length > 0) {
         resultingType.properties = propertiesKeys.map(function (key) {
