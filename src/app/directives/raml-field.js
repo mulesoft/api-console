@@ -24,16 +24,6 @@
           }
         }
 
-        function updateStringModel() {
-          $scope.myModel = Array.isArray($scope.model[0]) ?  '[' + $scope.model[0].join(', ') + ']' : $scope.model[0];
-        }
-
-        updateStringModel();
-
-        $scope.$watch('myModel', function () {
-          console.log(arguments);
-        });
-
         $scope.isEnum = function (definition) {
           var paramType = getParamType(definition);
           return paramType.hasOwnProperty('enum');
@@ -102,7 +92,7 @@
         };
 
         $scope.isDefault = function (definition) {
-          return !$scope.isEnum(definition) && definition.type !== 'boolean' && !$scope.isFile(definition);
+          return !$scope.isArray(definition) && !$scope.isEnum(definition) && definition.type !== 'boolean' && !$scope.isFile(definition);
         };
 
         $scope.isBoolean = function (definition) {
@@ -124,7 +114,6 @@
           info[param.id] = [param];
 
           $scope.context[type].reset(info, param.id);
-          updateStringModel();
         };
 
         $scope.unique = function (arr) {

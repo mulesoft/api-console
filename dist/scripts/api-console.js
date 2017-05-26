@@ -67,6 +67,60 @@
 (function () {
   'use strict';
 
+  RAML.Directives.arrayField = function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/array-field.tpl.html',
+      require: 'ngModel',
+      replace: true,
+      link: function(scope, iElement, iAttrs, controller) {
+        var ngModelCtrl = iElement.controller('ngModel');
+
+        function getAllMatches(value, regex) {
+          var result = [];
+
+          var match;
+          do {
+            match = regex.exec(value);
+            if (match) {
+              result.push(match[0]);
+            }
+          } while (match);
+
+          return result;
+        }
+
+        ngModelCtrl.$formatters.push(function(modelValue) {
+          var value = Array.isArray(modelValue) ? modelValue : [];
+          return "[" + value.join(',') + "]";
+        });
+
+        ngModelCtrl.$render = function() {
+          iElement.val(ngModelCtrl.$viewValue);
+        };
+
+        iElement[0].addEventListener('change', function () {
+          ngModelCtrl.$setViewValue(iElement.val());
+        });
+
+        ngModelCtrl.$parsers.push(function() {
+          if (!ngModelCtrl.$viewValue || ngModelCtrl.$viewValue === '') { return ''; }
+
+          return getAllMatches(ngModelCtrl.$viewValue, /([^\]\[,]+)/g)
+            .map(function (value) { return value.replace(/^\s+/g, ''); })
+            .map(function (value) { return value.replace(/\s+$/g, ''); });
+        });
+      }
+    };
+  };
+
+  angular.module('RAML.Directives')
+    .directive('arrayField', [RAML.Directives.arrayField]);
+})();
+
+(function () {
+  'use strict';
+
   RAML.Directives.clickOutside = function ($document) {
     return {
       restrict: 'A',
@@ -1354,16 +1408,6 @@
           }
         }
 
-        function updateStringModel() {
-          $scope.myModel = Array.isArray($scope.model[0]) ?  '[' + $scope.model[0].join(', ') + ']' : $scope.model[0];
-        }
-
-        updateStringModel();
-
-        $scope.$watch('myModel', function () {
-          console.log(arguments);
-        });
-
         $scope.isEnum = function (definition) {
           var paramType = getParamType(definition);
           return paramType.hasOwnProperty('enum');
@@ -1432,7 +1476,7 @@
         };
 
         $scope.isDefault = function (definition) {
-          return !$scope.isEnum(definition) && definition.type !== 'boolean' && !$scope.isFile(definition);
+          return !$scope.isArray(definition) && !$scope.isEnum(definition) && definition.type !== 'boolean' && !$scope.isFile(definition);
         };
 
         $scope.isBoolean = function (definition) {
@@ -1454,7 +1498,6 @@
           info[param.id] = [param];
 
           $scope.context[type].reset(info, param.id);
-          updateStringModel();
         };
 
         $scope.unique = function (arr) {
@@ -2398,7 +2441,7 @@
               var input = angular.copy(params[key][0]);
 
               input.forEach(function (each, index) {
-                params[key][index] = each[0];
+                params[key][index] = each;
               });
             }
 
@@ -7288,6 +7331,11 @@ RAML.Inspector = (function() {
 angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache) {
   'use strict';
 
+  $templateCache.put('directives/array-field.tpl.html',
+    "<input class=\"raml-console-sidebar-input\"/>\n"
+  );
+
+
   $templateCache.put('directives/documentation.tpl.html',
     "<div class=\"raml-console-resource-panel-primary\" ng-if=\"documentationEnabled\">\n" +
     "  <!-- Request -->\n" +
@@ -7773,8 +7821,9 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "     <option ng-repeat=\"enum in unique(param.enum)\" value=\"{{enum}}\" ng-selected=\"{{param.example === enum}}\">{{enum}}</option>\n" +
     "    </select>\n" +
     "\n" +
-    "    <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"myModel\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
+    "    <input id=\"{{param.id}}\" ng-if=\"isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"model[0]\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
     "\n" +
+    "    <array-field id=\"{{param.id}}\" ng-if=\"isArray(param)\" ng-model=\"model[0]\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\" ></array-field>\n" +
     "\n" +
     "    <input id=\"{{param.id}}\" ng-if=\"isFile(param)\" type=\"file\" class=\"raml-console-sidebar-input-file\" ng-model=\"model[0]\" validate=\"param\"\n" +
     "             dynamic-name=\"param.id\"\n" +
