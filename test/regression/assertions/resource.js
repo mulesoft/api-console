@@ -123,6 +123,26 @@ function Resource (poName) {
     expect(queryParameter.getText()).toMatch(/default: false/);
   };
 
+  this.ifShowingQueryParametersInCorrectOrder = function (resource, queryParametersName) {
+    var queryParameters = this.po.getQueryParameterDetails(resource);
+
+    queryParametersName.forEach(function(name, index) {
+      var queryParameter  = queryParameters.get(index);
+      expect(queryParameter.getText()).toContain(name);
+    });
+  };
+
+  this.ifShowingTypesPropertiesInCorrectOrder = function (type, queryParametersName) {
+    this.po.toggleRootType(type);
+
+    var properties = this.po.getTypeProperties();
+
+    queryParametersName.forEach(function(name, index) {
+      var queryParameter  = properties.get(index + 1);
+      expect(queryParameter.getText()).toContain(name);
+    });
+  };
+
   this.ifTryItShowsParamExample = function (resource, queryParameterPosition, defaultValue) {
     var input = this.po.getTryItQueryParameterInput(resource, queryParameterPosition);
 
