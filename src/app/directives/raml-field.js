@@ -24,6 +24,16 @@
           }
         }
 
+        function updateStringModel() {
+          $scope.myModel = Array.isArray($scope.model[0]) ?  '[' + $scope.model[0].join(', ') + ']' : $scope.model[0];
+        }
+
+        updateStringModel();
+
+        $scope.$watch('myModel', function () {
+          console.log(arguments);
+        });
+
         $scope.isEnum = function (definition) {
           var paramType = getParamType(definition);
           return paramType.hasOwnProperty('enum');
@@ -114,6 +124,7 @@
           info[param.id] = [param];
 
           $scope.context[type].reset(info, param.id);
+          updateStringModel();
         };
 
         $scope.unique = function (arr) {

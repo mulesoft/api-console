@@ -519,7 +519,7 @@
           for (var i = 0; i < tokens.length; i++) {
             $scope.segments.push({
               name: tokens[i],
-              templated: typeof baseUri.parameters[tokens[i]] !== 'undefined' ? true : false
+              templated: typeof baseUri.parameters[tokens[i]] !== 'undefined'
             });
           }
         }
@@ -560,6 +560,40 @@
         };
 
         $scope.cleanupValue = RAML.Inspector.Properties.cleanupPropertyValue;
+
+        function getType(param) {
+          if ($scope.types) {
+            var rootType = RAML.Inspector.Types.findType(param.type[0], $scope.types);
+            return rootType ? rootType : param;
+          } else {
+            return param;
+          }
+        }
+
+        function isArray (param) {
+          var type = getType(param);
+          return type && type.hasOwnProperty('type') && type.type[0] === 'array';
+        }
+
+        function usageExample (param) {
+          return isArray(param) ? '[hello, world]' : '';
+        }
+
+        $scope.hasUsageExample = function(param) {
+          return isArray(param);
+        };
+
+        $scope.getDescription = function(param) {
+          var description = param.description;
+          var usage       = usageExample(param);
+
+          if (!description && !usage) {
+            return undefined;
+          }
+
+          var separator   = (description ? (usage ? '\n' : '') : ('') )+ 'Format example: ';
+          return description + separator + usage;
+        };
       }]
     };
   };
@@ -1320,6 +1354,16 @@
           }
         }
 
+        function updateStringModel() {
+          $scope.myModel = Array.isArray($scope.model[0]) ?  '[' + $scope.model[0].join(', ') + ']' : $scope.model[0];
+        }
+
+        updateStringModel();
+
+        $scope.$watch('myModel', function () {
+          console.log(arguments);
+        });
+
         $scope.isEnum = function (definition) {
           var paramType = getParamType(definition);
           return paramType.hasOwnProperty('enum');
@@ -1410,6 +1454,7 @@
           info[param.id] = [param];
 
           $scope.context[type].reset(info, param.id);
+          updateStringModel();
         };
 
         $scope.unique = function (arr) {
@@ -2577,6 +2622,11 @@
 
         $scope.setRequestUrl = function() {
           var request = getRequest();
+
+          if (!request) {
+            return;
+          }
+
           $scope.responseDetails      = true;
           $scope.requestOptions.url   = request.toOptions().url;
         };
@@ -7485,10 +7535,10 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    </div>\n" +
     "\n" +
     "    <p class=\"raml-console-sidebar-input-container\" ng-repeat=\"key in keys(context[type].plain)\" ng-init=\"param = context[type].plain[key]\">\n" +
-    "      <span class=\"raml-console-sidebar-input-tooltip-container\" ng-if=\"param.definitions[0].description\" ng-class=\"{'raml-console-sidebar-input-tooltip-container-enum': param.definitions[0].enum}\">\n" +
+    "      <span class=\"raml-console-sidebar-input-tooltip-container\" ng-if=\"param.definitions[0].description || hasUsageExample(param.definitions[0])\" ng-class=\"{'raml-console-sidebar-input-tooltip-container-enum': param.definitions[0].enum}\">\n" +
     "        <button tabindex=\"-1\" class=\"raml-console-sidebar-input-tooltip\"><span class=\"raml-console-visuallyhidden\">Show documentation</span></button>\n" +
     "        <span class=\"raml-console-sidebar-tooltip-flyout\">\n" +
-    "          <span markdown=\"param.definitions[0].description\" class=\"raml-console-marked-content\"></span>\n" +
+    "          <span markdown=\"getDescription(param.definitions[0])\" class=\"raml-console-marked-content\"></span>\n" +
     "        </span>\n" +
     "      </span>\n" +
     "\n" +
@@ -7712,7 +7762,6 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "  </div>\n" +
     "\n" +
     "  <div ng-if=\"!param.properties && isArray(param)\">\n" +
-    "    <i class=\"raml-console-sidebar-info-btn\" tooltip=\"Format example: [hello, world]\"></i>\n" +
     "    <span class=\"raml-console-sidebar-input-tooltip-container raml-console-sidebar-input-left\" ng-if=\"hasExampleValue(param)\">\n" +
     "      <button tabindex=\"-1\" class=\"raml-console-sidebar-input-reset\" ng-click=\"reset(param)\"><span class=\"raml-console-visuallyhidden\">Reset field</span></button>\n" +
     "      <span class=\"raml-console-sidebar-tooltip-flyout-left\">\n" +
@@ -7724,13 +7773,14 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "     <option ng-repeat=\"enum in unique(param.enum)\" value=\"{{enum}}\" ng-selected=\"{{param.example === enum}}\">{{enum}}</option>\n" +
     "    </select>\n" +
     "\n" +
-    "    <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"model[0]\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
+    "    <input id=\"{{param.id}}\" ng-hide=\"!isDefault(param)\" class=\"raml-console-sidebar-input\" ng-model=\"myModel\" validate=\"param\" dynamic-name=\"param.id\" ng-change=\"onChange()\"/>\n" +
     "\n" +
-    "    <input ng-hide=\"!isFile(param)\" id=\"{{param.id}}\" type=\"file\" class=\"raml-console-sidebar-input-file\" ng-model=\"aModel[0]\" validate=\"param\"\n" +
+    "\n" +
+    "    <input id=\"{{param.id}}\" ng-if=\"isFile(param)\" type=\"file\" class=\"raml-console-sidebar-input-file\" ng-model=\"model[0]\" validate=\"param\"\n" +
     "             dynamic-name=\"param.id\"\n" +
     "             onchange=\"angular.element(this).scope().uploadFile(this)\"/>\n" +
     "\n" +
-    "    <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"aModel[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
+    "    <input id=\"checkbox_{{param.id}}\" ng-if=\"isBoolean(param)\" class=\"raml-console-sidebar-input\" type=\"checkbox\" ng-model=\"model[0]\" dynamic-name=\"param.id\" ng-change=\"onChange()\" />\n" +
     "\n" +
     "    <span class=\"raml-console-field-validation-error\"></span>\n" +
     "  </div>\n" +
