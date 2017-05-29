@@ -112,7 +112,7 @@
           }
 
           var separator   = (description ? (usage ? '\n' : '') : ('') )+ 'Format example: ';
-          return description + separator + usage;
+          return (description ? description : '') + separator + usage;
         };
       }]
     };

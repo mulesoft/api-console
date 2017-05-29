@@ -25,8 +25,8 @@
         }
 
         ngModelCtrl.$formatters.push(function(modelValue) {
-          var value = Array.isArray(modelValue) ? modelValue : [];
-          return '[' + value.join(',') + ']';
+          var value = Array.isArray(modelValue) ? modelValue : null;
+          return value ? '[' + value.join(',') + ']' : '';
         });
 
         ngModelCtrl.$render = function() {

@@ -487,7 +487,6 @@
           $scope.requestOptions  = null;
           $scope.responseDetails = false;
           $scope.response        = {};
-          $scope.showResponseMetadata = false;
 
           if (!$scope.context.forceRequest) {
             jQuery($event.currentTarget).closest('form').find('.ng-invalid').first().focus();
