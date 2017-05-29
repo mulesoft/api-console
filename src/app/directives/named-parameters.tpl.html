@@ -23,10 +23,10 @@
     </div>
 
     <p class="raml-console-sidebar-input-container" ng-repeat="key in keys(context[type].plain)" ng-init="param = context[type].plain[key]">
-      <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description" ng-class="{'raml-console-sidebar-input-tooltip-container-enum': param.definitions[0].enum}">
+      <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description || hasUsageExample(param.definitions[0])" ng-class="{'raml-console-sidebar-input-tooltip-container-enum': param.definitions[0].enum}">
         <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
         <span class="raml-console-sidebar-tooltip-flyout">
-          <span markdown="param.definitions[0].description" class="raml-console-marked-content"></span>
+          <span markdown="getDescription(param.definitions[0])" class="raml-console-marked-content"></span>
         </span>
       </span>
 

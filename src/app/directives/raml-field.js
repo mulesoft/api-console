@@ -92,7 +92,7 @@
         };
 
         $scope.isDefault = function (definition) {
-          return !$scope.isEnum(definition) && definition.type !== 'boolean' && !$scope.isFile(definition);
+          return !$scope.isArray(definition) && !$scope.isEnum(definition) && definition.type !== 'boolean' && !$scope.isFile(definition);
         };
 
         $scope.isBoolean = function (definition) {
