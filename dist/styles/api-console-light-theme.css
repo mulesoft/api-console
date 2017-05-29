@@ -2423,6 +2423,7 @@ root
 }
 
 .raml-console-resource-panel-primary {
+  width: 60%;
   -ms-flex: 1 auto;
   flex: 1 auto;
   -webkit-flex: 1 auto;
@@ -2708,6 +2709,7 @@ root
   background: rgba(255, 255, 255, 0.75);
   font-family: Source Code Pro;
   font-size: 14px;
+  overflow: auto;
 }
 
 .raml-console-resource-pre code pre {
@@ -4740,11 +4742,14 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 
 .raml-console-hljs {
   display: block;
-  overflow-x: auto;
   padding: 0.5em;
   background: #fff;
   color: #657b83;
   -webkit-text-size-adjust: none;
+}
+
+.raml-console-hljs pre {
+  overflow: inherit;
 }
 
 .raml-console-hljs-string {
