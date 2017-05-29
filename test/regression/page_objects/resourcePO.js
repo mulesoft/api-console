@@ -5,6 +5,7 @@ var basePO = require('./basePO');
 function ResourcesPO () {
   this.title           = element(by.css('.raml-console-title'));
   this.resources       = element.all(by.css('.raml-console-resource-list-item'));
+  this.types           = element(by.id('raml-console-documentation-container'));
 
   this.getTitle = function () {
     return this.title.getText();
@@ -36,6 +37,10 @@ function ResourcesPO () {
 
   this.getMethodBtn = function (resource, method) {
     return this.getMethodsForResourceAt(resource).get(method).element(by.css('.raml-console-tab-label'));
+  };
+
+  this.getTypesBtn = function () {
+    return this.types.element(by.css('.raml-console-resource-root-toggle'));
   };
 
   this.getCloseMethodBtn = function (resource) {
@@ -78,8 +83,22 @@ function ResourcesPO () {
     return this.resources.get(resourceIndex+1).all(by.css('.raml-console-sidebar-content-wrapper .raml-console-sidebar-input')).get(inputIndex);
   };
 
+  this.getTypeProperties = function () {
+    return element.all(by.css('.raml-console-resource-param'));
+  };
+
+  this.toggleRootType = function(type) {
+    var button = element.all(by.css('.raml-console-resource-param-heading span')).get(type);
+    button.click();
+  };
+
   this.toggleResourceMethod = function (resource, method) {
     var button = this.getMethodBtn(resource, method);
+    button.click();
+  };
+
+  this.toggleRootTypes = function () {
+    var button = this.getTypesBtn();
     button.click();
   };
 

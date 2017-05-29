@@ -39,7 +39,7 @@
           for (var i = 0; i < tokens.length; i++) {
             $scope.segments.push({
               name: tokens[i],
-              templated: typeof baseUri.parameters[tokens[i]] !== 'undefined' ? true : false
+              templated: typeof baseUri.parameters[tokens[i]] !== 'undefined'
             });
           }
         }
@@ -80,6 +80,40 @@
         };
 
         $scope.cleanupValue = RAML.Inspector.Properties.cleanupPropertyValue;
+
+        function getType(param) {
+          if ($scope.types) {
+            var rootType = RAML.Inspector.Types.findType(param.type[0], $scope.types);
+            return rootType ? rootType : param;
+          } else {
+            return param;
+          }
+        }
+
+        function isArray (param) {
+          var type = getType(param);
+          return type && type.hasOwnProperty('type') && type.type[0] === 'array';
+        }
+
+        function usageExample (param) {
+          return isArray(param) ? '[hello, world]' : '';
+        }
+
+        $scope.hasUsageExample = function(param) {
+          return isArray(param);
+        };
+
+        $scope.getDescription = function(param) {
+          var description = param.description;
+          var usage       = usageExample(param);
+
+          if (!description && !usage) {
+            return undefined;
+          }
+
+          var separator   = (description ? (usage ? '\n' : '') : ('') )+ 'Format example: ';
+          return description + separator + usage;
+        };
       }]
     };
   };

@@ -175,7 +175,7 @@
               var input = angular.copy(params[key][0]);
 
               input.forEach(function (each, index) {
-                params[key][index] = each[0];
+                params[key][index] = each;
               });
             }
 
@@ -399,6 +399,11 @@
 
         $scope.setRequestUrl = function() {
           var request = getRequest();
+
+          if (!request) {
+            return;
+          }
+
           $scope.responseDetails      = true;
           $scope.requestOptions.url   = request.toOptions().url;
         };

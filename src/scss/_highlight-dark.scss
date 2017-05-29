@@ -6,12 +6,15 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 
 .hljs {
   display: block;
-  overflow-x: auto;
   padding: 0.5em;
   background: #002b36;
   color: #839496;
   -webkit-text-size-adjust: none;
   // text-shadow: #002b36 0 1px;
+}
+
+.hljs pre {
+  overflow: inherit;
 }
 
 .hljs-number {
