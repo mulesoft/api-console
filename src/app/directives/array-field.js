@@ -7,7 +7,7 @@
       templateUrl: 'directives/array-field.tpl.html',
       require: 'ngModel',
       replace: true,
-      link: function(scope, iElement, iAttrs, controller) {
+      link: function(scope, iElement) {
         var ngModelCtrl = iElement.controller('ngModel');
 
         function getAllMatches(value, regex) {
@@ -26,7 +26,7 @@
 
         ngModelCtrl.$formatters.push(function(modelValue) {
           var value = Array.isArray(modelValue) ? modelValue : [];
-          return "[" + value.join(',') + "]";
+          return '[' + value.join(',') + ']';
         });
 
         ngModelCtrl.$render = function() {
