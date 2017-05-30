@@ -4,17 +4,93 @@ An API console for RAML (Restful Api Modeling Language) documents. The RAML Cons
 
 ## Introduction
 
-The API console is a single HTML element build on top of the [Web Components specifications](https://www.webcomponents.org/introduction) and powered by the [Polymer library](https://www.polymer-project.org/). Knowledge about how polymer works won't be necessary for using the console.
+The API console is a single HTML element build on top of the [Web Components specifications](https://www.webcomponents.org/introduction) and powered by the [Polymer library](https://www.polymer-project.org/). Knowledge about how Polymer works won't be necessary when using the console.
 
-The element can be used to display documentation for the API defined in RAML. Basic usage of the element is as simple as using any other HTML element:
+## 1. Using the API console
+
+The API console comes with two flavors: as a **HTML element** and as a **standalone application**. Depending on your use case you should choose the best option for your users.
+
+### Standalone application
+
+API Console as a standalone application should be used to display the documentation for your API as a web page.
+
+The application will support routing ([Deep linking][deep linking]) and it will render the documentation full screen.
+
+Also, if needed, the application can include RAML parser so it can accept the RAML file and transform its content into internal data model. See [Optimization](#optimisation-options) section below for more information.
+
+Basic example of the standalone application you will find in [demo application] inside this repository.
+
+### HTML element
+
+The API Console was build on top of new Web Components specification. When you include sources of the console into your web application it will register a new HTML element, the `<api-console>` element, that can be used as any other element on your page or web application. This means that you can embed the console into your blog post or as a part of press release and your users will be able to get know your API without being redirected to another web page.
+
+For example:
 
 ```html
 <api-console></api-console>
 ```
 
-See full usage documentaiton [below](#usage).
+See full usage documentation and how to import sources into your web page in the [api console element docs].
 
-## Preview and development
+## 2. Optimisation options
+
+The API Console displays a documentation for RAML definition. It means that it must perform some heavy duty computations to transform RAML data into JavaScript object and this takes time. There are, however, few options to optimise loading time of the API console. It depends on your use case.
+
+### RAML data source
+
+If your API is under active development and changes often, you may want to consider using the RAML file hosted on a server as a data source. The API console application will then parse RAML file using RAML JavaScript parser and use the parser output as a data source. It will take some time during console's load time but you will always display your APIs newest version.
+
+Because this use case requires to include more custom HTML elements it's not suitable for the standalone version. Other options would be a better fit.
+
+### JSON data source
+
+This is a good choice if your API doesn't change often or if you are using our [build tools] in your CI process. In this case you can generate a JSON file from the RAML and use it as a data input in the `<api-console>` element.
+
+This option will significantly reduce the API Console load time. It is also suitable for both standalone application and the HTML element.
+
+### JSON inlined in the page source
+
+This option gives you the fastest load time but may increase initial page weight. It is the same option as the JSON data source but the JSON data are not kept in separate JSON file but the data are included in the page source as a JavaScript object.
+
+You should use this if your API changes rarely or never. Every change to source RAML file would require regenerating the whole page. Though, it can be automated with our [build tools].
+
+## 3. API Console configuration options
+
+Configuration options differs from previous version. Because the API console is a (custom) HTML element it's configuration is based on HTML attributes. You can pass values as an attribute value or set boolean option by simply setting the attribute. Configuration from JavaScript code is based on setting a JavaScript property as the attribute name on the element. If the attribute name contains dashes then the property name should be [camel cased].
+
+Example:
+
+```html
+<api-console append-headers="x-api-key: 1234" narrow></api-console>
+```
+
+which is equivalent of:
+
+```javascript
+var console = document.querySelector('api-console');
+console.narrow = true;
+console.appendHeaders = 'x-api-key: 1234';
+```
+
+Full list of the API console configuration options can be found in the [configuring the api console] document.
+
+## 4. Build tools
+
+The API Console comes with a set of build tools that will help you create the API console from the RAML file. Build tools are configured to produce a production optimized version of the API Console. The build tools can generate both standalone and embeddable version of the console. You can also configure data source strategy (RAML, JSON or inline JSON as a data source).
+
+Available build tools are the `api-console` CLI and node modules: `api-console-builder` and `raml-json-enhance-node`. Depending on your needs you can choose whether you want to use a CLI tool or a node module.
+
+Build tools can be helpful in the CI process to automate documentation release cycle. See the [build tools] documentation for more information and build strategies.
+
+## 5. Theming
+
+The API console support theming. By default it comes with it's own styling but you can create your own theme and style the console to match your corporate style guide.
+
+Theming is based on CSS variables and CSS mixins. Basic concepts of using the variables and mixins are described in [Polymer 1.0 styling] documentation. You can check the [api-console-styles.html](api-console-styles.html) file to see current theme definition and then read [theming documentation] to learn how to create your own theme.
+
+## 6. Preview and development
+
+The API Console is a custom element that serves as a shell element for other custom web components. It means that to develop the API console most probably you'd have to develop one of over a hundred other web components that creates the console. All the elements are described in [the elements catalogue].
 
 1. Clone the element:
 ```
@@ -22,12 +98,12 @@ git clone https://github.com/mulesoft/api-console.git
 cd api-console
 ```
 
-2. Checkout develop version
+2. Checkout latest version
 ```
-git checkout develop
+git checkout release/4.0.0
 ```
 
-3. Install [polymer-cli](https://www.polymer-project.org/1.0/docs/tools/polymer-cli) and Bower
+3. Install [polymer-cli] and [Bower].
 ```
 sudo npm install -g bower polymer-cli
 ```
@@ -42,629 +118,34 @@ bower install
 polymer serve --open -p 8080
 ```
 
-Default page is the element documentation. Switch to demo to see working example.
+Default page is the element's documentation. Switch to demo to see working example.
 
 You can also append the `/demo/` to the URL to switch to demo page permanently.
 
-## Usage
+## 7. Reporting issues and features requests
 
-### Install
+The API Console and the Advanced REST client is open and we encourage the community to contribute in the project. However, it is very important to follow couple of simple rules when you create an issue report or send a pull request.
 
-Install the console as a dependency of your project. We use [bower](https://bower.io/) for this.
+Please, see CONTRIBUTING.md for description of how to file issue report of feature request.
 
-```
-bower install --save mulesoft/api-console#4.0.0
-```
+### Contributor's Agreement
 
-Bower will also install dependencies of the console.
+To contribute source code to this repository, please read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following the instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43
 
-### Import to the web page
+## 8. License
 
-For the element to be recognized by the browser as a new HTML element you have to include it in the page source.
+The API console is shared under Common Public Attribution License Version 1.0 (CPAL-1.0).
 
-```html
-<link rel="import" href="bower_components/api-console/api-console.html">
-```
+See the LICENSE.md file for more information.
 
-### Use the HTML tag
-
-```html
-<body>
-  <api-console raml="{...}"></api-console>
-</body>
-```
-
-How to pass RAML data to the element is described below in the [Passing the RAML data](#passing-the-raml-data) section.
-
-A full list of available configurations for the `api-console` element can be found inside section [Element configuration (attributes)](#element-configuration-attributes).
-
-### Setup polyfills
-
-This step is not required if you targeting modern browsers only!
-
-Web components are based on four new specifications (Custom elements, shadow DOM, HTML imports and HTML template) that are not fully supported in legacy browsers (like IE). Also, browser vendors still discussing the HTML imports specification so it's not implemented in Edge and Firefox yet.
-
-If you planning to target these browsers you must include a polyfill for Web Components. The polyfill library is already included into your project (giving you have installed the element using `bower`).
-
-Example use of the polyfill library:
-
-```html
-<head>
-  ...
-  <script>
-  (function() {
-    'use strict';
-    var onload = function() {
-      // For native Imports, manually fire WebComponentsReady so user code
-      // can use the same code path for native and polyfill'd imports.
-      if (!window.HTMLImports) {
-        document.dispatchEvent(
-          new CustomEvent('WebComponentsReady', {bubbles: true})
-        );
-      }
-    };
-    var webComponentsSupported = (
-      'registerElement' in document &&
-      'import' in document.createElement('link') &&
-      'content' in document.createElement('template')
-    );
-    if (!webComponentsSupported) {
-      var script = document.createElement('script');
-      script.async = true;
-      script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
-      script.onload = onload;
-      document.head.appendChild(script);
-    } else {
-      onload();
-    }
-  })();
-  </script>
-</head>
-...
-```
-
-### Full example
-
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-    <script>
-      window.Polymer = {
-        dom: 'shadow' // this is optional
-      };
-      // Load webcomponentsjs polyfill if browser does not support native Web Components
-      (function() {
-        'use strict';
-        var onload = function() {
-          // For native Imports, manually fire WebComponentsReady so user code
-          // can use the same code path for native and polyfill'd imports.
-          if (!window.HTMLImports) {
-            document.dispatchEvent(
-              new CustomEvent('WebComponentsReady', {bubbles: true})
-            );
-          }
-        };
-
-        var webComponentsSupported = (
-          'registerElement' in document &&
-          'import' in document.createElement('link') &&
-          'content' in document.createElement('template')
-        );
-
-        if (!webComponentsSupported) {
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
-          script.onload = onload;
-          document.head.appendChild(script);
-        } else {
-          onload();
-        }
-      })();
-    </script>
-    <link rel="import" href="bower_components/api-console/api-console.html">
-  </head>
-<body>
-  <api-console raml="{...}"></api-console>
-</body>
-</html>
-```
-
-## Passing the RAML data
-
-### Before you begin: asynchronous environment
-
-Web components are asynchronous by nature. It means that elements import,
-registering them in the DOM and finally initializing the element is made asynchronously. Therefore you can't expect the element to work right after loading the page (as regular HTML elements does). Consider following example:
-
-```html
-<raml-js-parser json></raml-js-parser>
-<script>
-var parser = document.querySelector('raml-js-parser');
-parser.loadApi(apiFileUrl);
-</script>
-```
-
-Running this code on page load will throw a `TypeError` with the message: `parser.loadApi is not a function`.
-
-It's because at the time of execution of the script block the browser knows nothing about the `raml-js-parser` element. At the time it is an instance of `HTMLUnknownElement`.
-
-The browser hast to execute the import first and then the Polymer library has to register the HTML element called `raml-js-parser`.
-
-To run the code properly you have to listen for the `WebComponentsReady` event. It's fired when the elements are ready to use.
-
-```html
-<raml-js-parser json></raml-js-parser>
-<script>
-function init() {
-  var parser = document.querySelector('raml-js-parser');
-  parser.loadApi(apiFileUrl);
-};
-window.addEventListener('WebComponentsReady', init);
-</script>
-```
-
-### JSON instead of RAML
-
-The API console web component requires JavaScript object produced by the [raml-js-parser](https://elements.advancedrestclient.com/elements/raml-js-parser) and [raml-js-enhancer](https://elements.advancedrestclient.com/elements/raml-json-enhance) elements. Parsing and enhancing RAML is not part of the `api-console` element and must be performed separately as described below.
-
-Use the `raml-js-parser` element to parse YAML data or to download RAML from remote location. __Note__: You may also use our [raml-js-parser-2](https://github.com/raml-org/raml-js-parser-2) node library as it gives the same output.
-
-Then you must use the `raml-js-enhancer` element to produce data output that is recognizable by the `api-console`. The enhancer creates a common data structure and expands RAML types (flattens it's structure so a type doesn't have complex inheritance structure). Elements used to build the API Console expects the JSON object to contain complete data about a method / endpoint / type / security scheme and so on. They will not look into nor have access to the data in the root of RAML definition. The enhancer replaces objects into arrays (adding a `key` property to each item) so it can be used in a templating systems. Also `example` property of the RAML is always translated to `examples` array. Finally the enhancer creates `fullUrl` property on each HTTP method so the console don't need to compute it each time you open the documentation page.
-
-#### Example: parsing and enhancing RAML as an input for the console
-
-```html
-<raml-js-parser json></raml-js-parser>
-<raml-json-enhance></raml-json-enhance>
-<script>
-var parser = document.querySelector('raml-js-parser');
-parser.addEventListener('api-parse-ready', function(e) {
-  var enhacer = document.querySelector('raml-json-enhance');
-  enhacer.json = e.detail.json.specification;
-});
-window.addEventListener('raml-json-enhance-ready', function(e) {
-  // The e.detail.json contains the final JavaScript object
-  console.log(e.detail.json);
-});
-function init() {
-  parser.loadApi(apiFileUrl);
-};
-window.addEventListener('WebComponentsReady', init);
-</script>
-```
-
-The parsing and enhancing costs a lot depending on RAML structure and number of files included. Therefore it is a good idea to do it once and cache the results. Then, when the user visit the page again restore cached JSON object and pass it as the `api-console` parameter (see below).
-
-### Setting RAML data as an HTML attribute
-
-The basic method to tell the API console what to display is to use the `raml` attribute. It accepts the JavaScript object produced by the parser and the enhancer described above.
-
-```html
-<api-console></api-console>
-<script>
-function init() {
-  var apiConsole = document.querySelector('api-console');
-  var json = getRamlJsObject();
-  apiConsole.json = json;
-};
-window.addEventListener('WebComponentsReady', init);
-</script>
-```
-
-The `<api-console>` element also have a convenient `json-file` attribute that you can set to point to a file containing the parsed and enhanced JSON data.
-
-```html
-<api-console json-file="/path/to/api.json"></api-console>
-```
-
-### Using RAML aware to pass the data
-
-The API console uses the [raml-aware](https://elements.advancedrestclient.com/elements/raml-aware) element internally.
-It can be used to pass the RAML data to the console if direct access to the
-element is not possible. This way the RAML data can be set for the element even
-if the elements don't have direct access to each others (e.g. in shadow DOM).
-
-See the [raml-aware documentation](https://elements.advancedrestclient.com/elements/raml-aware) page for more details.
-
-#### Example
-
-```html
-<raml-aware scope="main-raml"></raml-aware>
-<api-console aware="main-raml"></api-console>
-```
-
-```javascript
-window.addEventListener('raml-json-enhance-ready', function(e) {
-  var aware = document.querySelector('raml-aware');
-  aware.raml = e.detail.json;
-});
-parser.loadApi(urlToApi);
-```
-
-## Full web app example
-
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-    <title>My API documentation</title>
-    <script>
-      window.Polymer = {
-        dom: 'shadow'
-      };
-      // Load webcomponentsjs polyfill if browser does not support native Web Components
-      (function() {
-        'use strict';
-        var onload = function() {
-          // For native Imports, manually fire WebComponentsReady so user code
-          // can use the same code path for native and polyfill'd imports.
-          if (!window.HTMLImports) {
-            document.dispatchEvent(
-              new CustomEvent('WebComponentsReady', {bubbles: true})
-            );
-          }
-        };
-
-        var webComponentsSupported = (
-          'registerElement' in document &&
-          'import' in document.createElement('link') &&
-          'content' in document.createElement('template')
-        );
-
-        if (!webComponentsSupported) {
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
-          script.onload = onload;
-          document.head.appendChild(script);
-        } else {
-          onload();
-        }
-      })();
-    </script>
-    <link rel="import" href="bower_components/api-console/api-console.html">
-    <!-- Below polyfills are in the api console dependencies. -->
-    <link rel="import" href="bower_components/fetch-polyfill/fetch-polyfill.html">
-    <link rel="import" href="bower_components/promise-polyfill/promise-polyfill.html">
-  </head>
-<body>
-  <api-console></api-console>
-  <script>
-  function fetchApiData() {
-    // api.json contains cached results of parsing the RAML spec.
-    return fetch('./api.json')
-    .then(function(response) {
-      if (response.ok) {
-        return response.json();
-      }
-    });
-  }
-  function notifyInitError(message) {
-    alert('No API for you this time. ' + message);
-  }
-  function init() {
-    fetchApiData()
-    .then(function(json) {
-      if (json) {
-        var apiConsole = document.querySelector('api-console');
-        apiConsole.json = json;
-      } else {
-        notifyInitError('Data not available.');
-      }
-    })
-    .catch(function(cause) {
-      notifyInitError(cause.message);
-    })
-  };
-  window.addEventListener('WebComponentsReady', init);
-  </script>
-</body>
-</html>
-```
-
-## Element configuration (attributes)
-
-| Attribute | Description | Type |
-| --- | --- | ---|
-| `raml` | The JavaScript object or equivalent JSON object representing the RAML structure as a JavaScript object.  | `Object or String` |
-| `json-file` | Path to a file with JSON data that should be read and contents of it should be set to the `raml` attribute | `String` |
-| `path` | Currently selected path in the view. See section [Controlling the view ](#controlling-the-view) for more information. | `String` |
-| `aware` | If passing data by using the [raml-aware](https://elements.advancedrestclient.com/elements/raml-aware) element, it is the name as the `scope` attribute used in the aware. | `String` |
-| `page` | Currently selected top level view of the console. It can be either `docs` or `request`. The later is the "try it screen". | `String` |
-| `narrow` | By setting this attribute it will tell the API console to render a "narrow" view. This is a mobile like view (navigation is hidden in a drawer, some views are simplified for narrow screens) that will be presented event if the screen size is wide. This is helpful when inserting the element as a sidebar of your web page. Node that the `narrow` property will be set automatically on mobile devices | `Boolean` |
-| `append-headers` | Forces the console to send specific list of headers, overriding user input if needed. | `String` |
-| `proxy` | Sets the proxy URL for the HTTP requests sent from the console. If set all URLs will be altered before sending the data to a transport library bu prefixing the URL with this value | `String`
-| `proxyEncodeUrl` | If required by the `proxy` the URL will be URL encoded. | `Boolean` |
-| `noTryIt` | Disables the "try it" button in the method documentation view. The request editor and the response viewer is still available but you must open it programmatically setting `page` proerty to ` request` | `Boolean` |  
-| `manualNavigation` | Disables navigation in the drawer and renders the navigation full screen, when requested. This is ideal to use in the narrow layouts together with `narrow` property. | `Boolean` |
-| `navigationOpened` | If set and `manualNavigation` is used then it will open / close the full screen navigation. | `Boolean` |
-
-## Styling
-
-The main stylesheet for the element is the `api-console-styles.html` file that resists in this repo.
-The stylesheet contains CSS variables and mixins definitions that are used by the inner elements.
-Styles documentation for any element used in the console can be find in it's documentation page in the
-[elements catalog](https://elements.advancedrestclient.com/).
-
-Theming is currently not supported.
-
-## Controlling the view
-
-The `<api-console>` element includes the UI for the user and can be controlled from within the
-element. However it exposes few properties that can be used to control element's behavior programmatically.
-
-For example `path` property can be used to control to navigate through the RAML structure.
-So, to display a request form for a particular endpoint of the API you can set a `path` property to:
-```html
-<api-console path="resources.0.method.1"></api-console>
-```
-Example above will display second method from first resource in the resources tree.
-You can set attribute `display` to `request` to display a request panel for this method. By default
-it is set to `docs`.
-
-## CORS
-
-There's no easy way to deal with CORS. In the API Console ecosystem there is an extension for Chrome
-(and soon for Firefox) which will proxy the request without CORS limitations. The user, when using
-selected browsers) will see the install extension banner in the request editor. After installing the
-extension all traffic from the console will be redirected to the extension to get the endpoint
-response.
-The console listens for the `api-console-extension-installed` event that is fired from the
-extension's content script. Once received the console will send an event to the extension
-when the user make the HTTP request. The element responsible for the communication with the extension
-is [api-console-ext-comm](https://elements.advancedrestclient.com/elements/api-console-ext-comm).
-
-Other ways to deal with CORS are coming. File an issue report in the repo if you can help with
-this issue.
-
-## Using proxy server
-
-One of ways to deal with CORS is to tell the API console to pass the request through a proxy.
-For this you can use `proxy` attribute. Once set then every request made by the console will be
-passed through the proxy.
-
-When using proxy, the request URL will be altered before sending it to a transport library (possibly
-the XHR call) by prefixing the URL with proxy value.
-
-```html
-<api-console proxy="https://api.proxy.com/api/proxy/"></api-console>
-```
-
-With this configuration a request made to `http://domain.com/path/?query=some+value` endpoint will
-become `https://api.proxy.com/api/proxy/http://domain.com/path/?query=some+value`.
-
-Don't forget to add trailing '/' to the path or produced URL will be invalid.
-
-If the proxy require to set the URL as a query parameter then `proxy` attribute should end with
-parameter name and `=` sign:
-
-```html
-<api-console proxy="https://api.proxy.com/api/proxy/?url=" proxy-encode-url></api-console>
-```
-
-In this case be sure to set `proxy-encode-url` attribute which will tell the console to URL encode
-the URL before appending it ti the final URL
-
-With this configuration a request made to `http://domain.com/path/?query=some+value` endpoint will
-become `https://api.proxy.com/api/proxy/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`.
-
-The proxy URL won't be visible by the user and the user can't do anything to change the behavior
-until your application don't support proxy change in the UI.
-
-### Handling the HTTP request by the hosting website / application
-
-When a user runs the request from the "try it" screen the API Console will send the `api-console-request` custom event. If your application can handle transport for the HTTP request (by providing proxy or other solution) you should listen for this event and cancel it by calling `event.preventDefault()`.
-If the event was cancelled then the API Console will listen for the `api-console-response` custom
-event that should contain response details. Otherwise the console will use build in fallback function to get the resource using Fetch API / XHR.
-
-#### api-console-request custom event
-
-Event's `detail` object will contain following properties
-
-Property | Type | Description
-----------------|-------------|----------
-`url` | String | The request URL
-`method` | String | The HTTP method
-`headers` | String | HTTP headers string to send with the message
-`payload` | String | Body to send
-
-#### api-console-response
-
-This event must be fired when the hosting app finish the request. It must contain generated Request
-and Response object as defined in the [Fetch specification](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch). The API console has polyfill for the Fetch API included.
-
-Property | Type | Description
-----------------|-------------|----------
-`request` | Object | The request object as defined in the Fetch API spec.
-`response` | Object | The response object as defined in the Fetch API spec.
-`isXhr` | Boolean | Default to `true`. Indicated if the transport method doesn't support advanced timings and redirects information. See [request-panel](https://elements.advancedrestclient.com/elements/raml-request-panel) documentation for detailed description.
-`error` | Error | When the request / response is errored (`request.ok` equals `false`) then the error object should be set with the human readable message that will be displayed to the user.
-
-#### Example with handling request / response events
-
-```javascript
-// Start time of executing the request
-var startTime;
-// Initial request data passed by the event.
-var requestData;
-/**
- * Creates a Headers object based on the HTTP headers string.
- *
- * @param {String} headers HTTP headers.
- * @return {Headers} Parsed headers object.
- */
-createHeaders: function(headers) {
-  if (!headers) {
-    return new Headers();
-  }
-  var result = new Headers();
-  var list = headers.split('\n').map(function(line) {
-    var _parts = line.split(':');
-    var _name = _parts[0];
-    var _value = _parts[1];
-    _name = _name ? _name.trim() : null;
-    _value = _value ? _value.trim() : null;
-    if (!_name || !_value) {
-      return null;
-    }
-    return {
-      name: _name,
-      value: _value
-    };
-  }).filter(function(item) {
-    return !!item;
-  });
-  list.forEach(function(item) {
-    result.append(item.name, item.value);
-  });
-  return result;
-}
-/**
- * Creates a request object from the event's request data.
- *
- * @param {Object} data Latest request data as in the `api-console-request` object event.
- * @return {Request} The Request object.
- */
-function createRequest(data) {
-  var init = {
-    method: data.method,
-    mode: 'cors'
-  };
-  if (data.headers) {
-    init.headers = createHeaders(data.headers);
-  }
-  if (['GET', 'HEAD'].indexOf(data.method) !== -1) {
-    data.payload = undefined;
-  } else {
-    if (data.payload) {
-      init.body = data.payload;
-    }
-  }
-  return new Request(data.url, init);
-}
-/**
- * Creates a response object from the response data.
- * If the response is invalid then returned Response object will be errored.
- *
- * @param {XMLHttpRequest} xhr The XHR object used to make a connection.
- * @return {Response} The response object.
- */
-function createResponse(xhr) {
-  var status = xhr.status;
-  if (!status || status < 200) {
-    return Response.error();
-  }
-  var init = {
-    status: status,
-    statusText: xhr.statusText
-  };
-  var headers = xhr.getAllResponseHeaders();
-  if (headers) {
-    init.headers = createHeaders(headers);
-  }
-  try {
-    return new Response(xhr.responseText, init);
-  } catch (e) {
-    return Response.error();
-  }
-}
-// General error handler.
-function errorHandler(e) {
-  var loadTime = performance.now() - startTime;
-  var request = createRequest(requestData);
-  var detail = {
-    request: request,
-    response: Response.error(),
-    loadingTime: loadTime,
-    isXhr: true,
-    error:  new Error('Resource is unavailable')
-  };
-  var event = new CustomEvent('api-console-response', {
-    cancelable: false,
-    bubbles: true,
-    composed: true,
-    detail: detail
-  });
-  document.body.dispatchEvent(event);
-}
-// Handler for load event
-function loadHandler(e) {
-  var loadTime = performance.now() - startTime;
-  var request = createRequest(requestData);
-  var response = createResponse(e.target);
-  var detail = {
-    request: request,
-    response: response,
-    loadingTime: loadTime,
-    isXhr: true
-  };
-  if (!response.ok) {
-    detail.error = new Error('Resource is unavailable');
-  }
-  var event = new CustomEvent('api-console-response', {
-    cancelable: false,
-    bubbles: true,
-    composed: true,
-    detail: detail
-  });
-  document.body.dispatchEvent(event);
-}
-// Handler to the event, sends the request
-function consoleRequestHandler(e) {
-  requestData = e.detail;
-  var xhr = new XMLHttpRequest();
-  xhr.open(requestData.method, requestData.url, true);
-  if (requestData.headers) {
-    requestData.headers.split('\n').forEach(function(header) {
-      var data = header.split(':');
-      var name = data[0].trim();
-      var value = '';
-      if (data[1]) {
-        value = data[1].trim();
-      }
-      try {
-        xhr.setRequestHeader(name, value);
-      } catch (e) {
-        console.log('Can\'t set header ' + name ' in the XHR call.');
-      }
-    });
-  }
-  xhr.addEventListener('load', loadHandler);
-  xhr.addEventListener('error', errorHandler);
-  xhr.addEventListener('timeout', errorHandler);
-  try {
-    startTime = performance.now();
-    xhr.send(requestData.payload);
-  } catch (e) {
-    errorHandler(e);
-  }
-}
-window.addEventListener('api-console-request', consoleRequestHandler);
-```
-
-## Sizing
-
-The `api-console` must either be explicitly sized, or contained by the explicitly
-sized parent. Parent container also has to be positioned relatively
-(`position: relative` CSS property). "Explicitly sized", means it either has
-an explicit CSS height property set via a class or inline style, or else is
-sized by other layout means (e.g. the flex layout or absolute positioning).
-
-## Forcing the API Console to send a specific list of headers
-
-You can force the API Console to send a specific list of headers for each request made by it. To
-do this set the `append-headers` attribute. It should contain a HTTP headers string.
-If the user declared a header that is declared in the `append-headers` attribute then user value
-will be overridden. Otherwise headers will be appended to the headers string.
-
-Use "\n" string to set a new line for the headers string.
-
-```
-<api-console append-headers="X-key: my-api-key\nother-header:value"></api-console>
-```
+[deep linking]: https://en.wikipedia.org/wiki/Deep_linking
+[demo application]: demo/api.html
+[api console element docs]: docs/api-console-element.md
+[build tools]: docs/build-tools.md
+[configuring the api console]: docs/configuring-api-console.md
+[theming documentation]: docs/theming.md
+[camel cased]: https://en.wikipedia.org/wiki/Camel_case
+[polymer-cli]: https://www.polymer-project.org/1.0/docs/tools/polymer-cli
+[Bower]: https://bower.io/
+[Polymer 1.0 styling]: https://www.polymer-project.org/1.0/docs/devguide/styling
+[the elements catalogue]: https://elements.advancedrestclient.com/
