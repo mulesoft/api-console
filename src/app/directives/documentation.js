@@ -5,7 +5,7 @@
     return {
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
-      controller: ['$scope', function($scope) {
+      controller: ['$scope', 'idGenerator', function($scope, idGenerator) {
         $scope.markedOptions = RAML.Settings.marked;
 
         $scope.$watch('securitySchemes', function() {
@@ -245,7 +245,7 @@
         };
 
         $scope.getBodyId = function (bodyType) {
-          return jQuery.trim(bodyType.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
+          return idGenerator(bodyType.toString());
         };
 
         $scope.bodySelected = function (value) {
