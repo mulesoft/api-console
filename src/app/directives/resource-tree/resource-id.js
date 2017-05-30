@@ -2,9 +2,9 @@
   'use strict';
 
   angular.module('RAML.Directives')
-    .factory('resourceId', [function resourceId() {
+    .factory('resourceId', ['idGenerator', function resourceId(idGenerator) {
       return function(resource) {
-        return jQuery.trim(resource.pathSegments.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_');
+        return idGenerator(resource.pathSegments.toString());
       };
     }]);
 })();
