@@ -2,6 +2,11 @@
 
 The API console comes with a set of tools that will help you with creating a documentation for your API very quickly.
 
+**Learn more!**
+Check out our examples of how to use our build tools in the CI process based on Travis:
+- [Building API Console for GitHub pages on Travis](gh-pages.md)
+- [Rebuilding the api.json file in the CI process](rebuilding-api-json.md)
+
 ## api-console CLI
 
 ### Installation
