@@ -46,7 +46,49 @@ Repeat this for any part of the API Console you'd like to style.
 
 ## Including custom styles into the console
 
+Currently the only way to apply custom stylesheet in the console is to replace
+the original theme file. The way to do this vary and depends on how you use the API Console.
 
+If you working on a clone or fork of the repository then you may alter the `api-console-styles.html` file directly.
+
+If you request the `api-console` as a bower component then you'll have to replace the style file manually each time you update bower components or you can automate this tasks.
+
+To automate this task first create the `.bowerrc` file in your project's directory (where you keep `bower.json` file). Then add the following code to the file:
+
+```json
+{
+  "scripts": {
+    "postinstall": "node update-styles.js"
+  }
+}
+```
+
+It says that each time when components are installed or updated then run the `update-styles.js` script in node.
+
+Next create the `update-styles.js` file with the following content:
+
+```javascript
+const fs = require('fs');
+
+const sourceStyles = 'api-console-styles.html';
+const destinationStyles = 'bower_components/api-console/api-console-styles.html';
+
+fs.readFile(sourceStyles, 'utf8', (err, data) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+    return;
+  }
+  fs.writeFile(destinationStyles, data, 'utf8', (err) => {
+    console.error(err);
+    process.exit(1);
+    return;
+  });
+  console.log('API Console styles updated.');
+});
+```
+
+This just copy contents from `sourceStyles` file to `destinationStyles` file.
 
 ## Sizing the embeddable element
 
@@ -58,3 +100,4 @@ sized by other layout means (e.g. the flex layout or absolute positioning).
 
 [CSS variables]: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
 [Polymer 1.0 styling]: https://www.polymer-project.org/1.0/docs/devguide/styling
+[build tools]: build-tools.md
