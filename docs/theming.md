@@ -16,20 +16,37 @@ This way theming is possible for encapsulated web components. Also, most of the 
 
 To start creating your own theme you should be familiar with [ARC elements catalog](https://elements.advancedrestclient.com/). It contains all web components used to build the API console. Here you will find documentation and styling guide for all components.
 
+## Identifying styles
+
 So, let's assume you'd like to change a style for the title of the HTTP method in the documentation:
 
 ![Documentation > HTTP method > title](method-title.png "Title of the HTTP method")
 
-The fastest way to style it is to recognize the custom element that contains this title. Use Chrome DevTools inspector (or any other) to inspect this title element.
+The fastest way to style it is to recognize the custom element that contain this title. Use Chrome DevTools inspector (or any other) to inspect this title element.
 
 ![Source of: Documentation > HTTP method > title](method-title-source.png "Source code of the title of the HTTP method")
 
-As you can see, this title is hosted by the `<raml-docs-method-viewer>` element that can be find in the catalog at https://elements.advancedrestclient.com/elements/raml-docs-method-viewer. From the documentation we can see that there are few methods to style this element:
+As you can see, this title is hosted by the `<raml-docs-method-viewer>` element that can be find in the catalog at https://elements.advancedrestclient.com/elements/raml-docs-method-viewer. In the documentation for this element we can read that there are 3 methods to style this element:
+
 - `--raml-docs-h1` mixin
 - `--raml-docs-method-viewer-title-method-font-weight` variable
 - `--arc-font-headline` mixin
 
-Setting any of above properties in your own style definition will alter this element's styles.
+Setting any of above properties in your own style definition will alter this element's styles. So we could use more general `--arc-font-headline` mixin that will be applied to any headline (h1) elements in the console or more specific `--raml-docs-h1` that will be applied to all `<h1>`'s in the documentation pages.
+
+```css
+:root {
+  --raml-docs-h1: {
+    color: red;
+  };
+}
+```
+
+Repeat this for any part of the API Console you'd like to style.
+
+## Including custom styles into the console
+
+
 
 ## Sizing the embeddable element
 
