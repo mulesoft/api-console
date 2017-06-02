@@ -44,6 +44,8 @@ And finally use the HTML tag
 
 See full usage documentation and how to import sources into your web page in the [api console element docs]. Also, if you are a developer you can check out [demo application source code].
 
+You can also build the API Console as a embeddable HTML element using one of our [build tools].
+
 ## 2. Optimisation options
 
 The API Console displays a documentation for RAML definition. It means that it must perform some heavy duty computations to transform RAML data into JavaScript object and this takes time. There are, however, few options to optimise loading time of the API console. It depends on your use case.
