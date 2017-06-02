@@ -12,25 +12,37 @@ The API console comes with two flavors: as a **HTML element** and as a **standal
 
 ### Standalone application
 
-API Console as a standalone application should be used to display the documentation for your API as a web page.
+API Console as a standalone application should be used to display the documentation for your API as a web page. The application supports [Deep linking][deep linking] which allows you to share a link to a particular part of you API documentation.
 
-The application will support routing ([Deep linking][deep linking]) and it will render the documentation full screen.
+To build the API Console as a standalone application use one of our [build tools].
 
-Also, if needed, the application can include RAML parser so it can accept the RAML file and transform its content into internal data model. See [Optimization](#optimisation-options) section below for more information.
-
-Basic example of the standalone application you will find in [demo application] inside this repository.
+Basic example of the standalone application you will find in [demo application].
 
 ### HTML element
 
-The API Console was build on top of new Web Components specification. When you include sources of the console into your web application it will register a new HTML element, the `<api-console>` element, that can be used as any other element on your page or web application. This means that you can embed the console into your blog post or as a part of press release and your users will be able to get know your API without being redirected to another web page.
+The API Console was build on top of new Web Components specification. When you include sources of the console into your web application it will register a new HTML element, the `<api-console>` element, that can be used as any other element on the page or web application. This means that you can embed the console into your blog post or as a part of press release and your users will be able to get know your API without being redirected to another web page.
 
-For example:
+Use [bower] to install the console and it's dependencies:
 
-```html
-<api-console></api-console>
+```bash
+$ bower install --save mulesoft/api-console
 ```
 
-See full usage documentation and how to import sources into your web page in the [api console element docs].
+Then include the element in you web page:
+
+```html
+<link rel="import" href="bower_components/api-console/api-console.html">
+```
+
+And finally use the HTML tag
+
+```html
+<body>
+  <api-console raml="{...}"></api-console>
+</body>
+```
+
+See full usage documentation and how to import sources into your web page in the [api console element docs]. Also, if you are a developer you can check out [demo application source code].
 
 ## 2. Optimisation options
 
@@ -88,7 +100,19 @@ The API console support theming. By default it comes with it's own styling but y
 
 Theming is based on CSS variables and CSS mixins. Basic concepts of using the variables and mixins are described in [Polymer 1.0 styling] documentation. You can check the [api-console-styles.html](api-console-styles.html) file to see current theme definition and then read [theming documentation] to learn how to create your own theme.
 
-## 6. Preview and development
+## 6. CORS
+
+Cross-origin resource sharing (CORS) allows sharing resources from one domain with other domains. Browsers block all requests to other domains but with special set of headers authors can allow other domains to request a resource (Read more in [CORS Wiki]).
+
+If your API is not allowing CORS for any reason then the API Console won't be able to make a request to an endpoint. API Console currently support 3 ways of dealing with this issue:
+
+- by installing the **API Console Chrome extension**
+- by setting up a **proxy server**
+- by handling HTTP requests by hosting application
+
+Read our [CORS guideline] for more information about each of this solutions.
+
+## 7. Preview and development
 
 The API Console is a custom element that serves as a shell element for other custom web components. It means that to develop the API console most probably you'd have to develop one of over a hundred other web components that creates the console. All the elements are described in [the elements catalogue].
 
@@ -122,7 +146,7 @@ Default page is the element's documentation. Switch to demo to see working examp
 
 You can also append the `/demo/` to the URL to switch to demo page permanently.
 
-## 7. Reporting issues and features requests
+## 8. Reporting issues and features requests
 
 The API Console and the Advanced REST client is open and we encourage the community to contribute in the project. However, it is very important to follow couple of simple rules when you create an issue report or send a pull request.
 
@@ -132,14 +156,15 @@ Please, see CONTRIBUTING.md for description of how to file issue report of featu
 
 To contribute source code to this repository, please read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following the instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43
 
-## 8. License
+## 9. License
 
 The API console is shared under Common Public Attribution License Version 1.0 (CPAL-1.0).
 
 See the LICENSE.md file for more information.
 
 [deep linking]: https://en.wikipedia.org/wiki/Deep_linking
-[demo application]: demo/api.html
+[demo application]: https://mulesoft.github.io/api-console
+[demo application source code]: demo/api.html
 [api console element docs]: docs/api-console-element.md
 [build tools]: docs/build-tools.md
 [configuring the api console]: docs/configuring-api-console.md
@@ -149,3 +174,6 @@ See the LICENSE.md file for more information.
 [Bower]: https://bower.io/
 [Polymer 1.0 styling]: https://www.polymer-project.org/1.0/docs/devguide/styling
 [the elements catalogue]: https://elements.advancedrestclient.com/
+[bower]: https://bower.io/
+[CORS Wiki]: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+[CORS guideline]: docs/cors.md

@@ -1,16 +1,20 @@
 # CORS
 
-There's no easy way to deal with CORS. In the API Console ecosystem there is an extension for Chrome (and soon will be for Firefox) which will proxy the request without CORS limitations. The user (when using selected browsers) will see the install extension banner in the request editor. After installing the
+## API Console Chrome extension
+
+There's no easy way to deal with CORS. In the API Console ecosystem there is an extension for Chrome (and soon will be for Firefox) which will proxy the request without CORS limitations. The user (when using supported browser) will see the install extension banner in the request editor. After installing the
 extension all traffic from the console will be redirected to the extension to perform the request (without CORS limitations) and to get the response.
+
+#### TL;DR: Extension technical background
 
 The console listens for the `api-console-extension-installed` event that is fired by the extension. Once initialized the console will send an event to the extension when the user make the HTTP request. The element responsible for the communication with the extension is [api-console-ext-comm](https://elements.advancedrestclient.com/elements/api-console-ext-comm).
 
-Other ways to deal with CORS are coming soon. File an issue report in the repo if you can help with this issue.
+Other ways to deal with CORS are coming soon. File an issue report in this repository if you can help with this issue.
 
-# Using proxy server
+## Proxy server
 
 One of the ways to deal with CORS is to tell the API console to pass the request through a proxy.
-For this you can use `proxy` attribute. Once set then every request made by the console will be passed through the proxy.
+For this you can use `proxy` attribute of the element. Once set then every request made by the console will be passed through the proxy.
 
 When using proxy, the request URL will be altered before sending it to a transport library (possibly the XHR call) by prefixing the URL with proxy value.
 
@@ -37,7 +41,7 @@ become `https://api.proxy.com/api/proxy/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3
 
 The proxy URL won't be visible by the user and the user can't do anything to change this behavior (until your application doesn't support proxy change in some custom UI).
 
-# Handling HTTP request by the hosting website / application
+## Handling HTTP request by the hosting website / application
 
 When the user runs the request from the "try it" screen the API Console will fire the `api-console-request` [custom event](https://developer.mozilla.org/en/docs/Web/API/CustomEvent). If your application can handle the transport (by providing a proxy or other solution) you should listen for this event and cancel it by calling `event.preventDefault()`. If the event was cancelled then the API Console will listen for the `api-console-response` custom
 event that should contain response details. Otherwise the console will use build in fallback function to get the resource using Fetch API / XHR.
