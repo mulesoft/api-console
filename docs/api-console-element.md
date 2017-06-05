@@ -1,18 +1,18 @@
 # Using the API Console HTML element
 
-1) Install the console as a dependency of your project. We use [bower] for this. Bower will also install dependencies of the console.
+1) Install the console as a dependency of your project. We use [bower] for this. Bower also installs dependencies of the console.
 
 ```
 bower install --save mulesoft/api-console#release/4.0.0
 ```
 
-2) Import the console to your page. For the element to be recognized by the browser as a new HTML element you have to include it in the page source.
+2) Import the console to your page. For the element to be recognized by the browser as a new HTML element, you have to include it in the page source.
 
 ```html
 <link rel="import" href="bower_components/api-console/api-console.html">
 ```
 
-3) Use the HTML tag
+3) Use the HTML tag.
 
 ```html
 <body>
@@ -20,15 +20,17 @@ bower install --save mulesoft/api-console#release/4.0.0
 </body>
 ```
 
-Learn how to pass RAML data to the element in the [Passing the RAML data](passing-raml-data.md) section.
+To pass RAML data to the element, see the [Passing the RAML data](passing-raml-data.md) section.
 
-Full list of available configuration options for the `api-console` element can be found in [configuring the API Console](configuring-api-console.md) document.
+For a complete list of available configuration options for the `api-console` element, see the [configuring the API Console](configuring-api-console.md) document.
 
 ## Setup polyfills
 
-Web components are based on four new specifications (Custom elements, shadow DOM, HTML imports and HTML template) that are not fully supported in old browsers (like IE). Also, browser vendors still discussing the HTML imports specification so it's [not yet implemented](http://caniuse.com/#feat=imports) in Edge and Firefox.
+Web components are based on four new specifications (Custom elements, shadow DOM, HTML imports, and HTML template) that are not fully supported in old browsers, such as IE. Also, browser vendors are still discussing the HTML imports specification, so it's [not yet implemented](http://caniuse.com/#feat=imports) in Edge and Firefox.
 
-If you planning to target these browsers you should include a polyfill for Web Components. The polyfill library is already included into your project (giving that you have installed the element using `bower`). It's the `bower_components/webcomponentsjs/webcomponents-lite.min.js` file.
+If you plan to target these browsers you should include a polyfill for Web Components. The following polyfill library is already included into your project, assuming you have installed the element using `bower`:
+
+`bower_components/webcomponentsjs/webcomponents-lite.min.js`
 
 ## Full web app example
 
