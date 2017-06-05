@@ -10,6 +10,8 @@ In this reporitory, you can find the source for a single HTML element that repre
 
 The HTML element is built on top of the [Web Components specifications](https://www.webcomponents.org/introduction) and powered by the [Polymer library](https://www.polymer-project.org/). Although, there is no additional knowledge about how Polymer works necessary to use the console.
 
+The following sections give you a brief overview on how to build and use the console. For a much more in depth overview, please see the [docs](docs) directory in this repository. 
+
 ## Using the API console
 
 The API Console comes in two flavors which you can choose from: as a **standalone web-application** and as an embeddable **HTML element**. 
@@ -50,11 +52,11 @@ You can also build the API Console as a embeddable HTML element using one of our
 
 ## Optimisation options
 
-The API Console displays a documentation for RAML documents. It means that it must perform some heavy duty computations to transform RAML data into JavaScript object and this takes time. There are, however, few options to optimise loading time of the API console. It depends on your use case.
+The API Console displays a documentation for RAML documents. It means that it must perform some heavy duty computations to transform RAML data into JavaScript object and this takes time. There are, however, few options to optimise loading time of the API Console. It depends on your use case.
 
 ### RAML data source
 
-If your API is under active development and changes often, you may want to consider using the RAML file hosted on a server as a data source. The API console application will then parse RAML file using RAML JavaScript parser and use the parser output as a data source. It will take some time during console's load time but you will always display your APIs newest version.
+If your API is under active development and changes often, you may want to consider using the RAML file hosted on a server as a data source. The API Console application will then parse RAML file using RAML JavaScript parser and use the parser output as a data source. It will take some time during console's load time but you will always display your APIs newest version.
 
 Because this use case requires to include more custom HTML elements it's not suitable for the standalone version. Other options would be a better fit.
 
@@ -88,11 +90,11 @@ console.narrow = true;
 console.appendHeaders = 'x-api-key: 1234';
 ```
 
-Full list of the API console configuration options can be found in the [configuring the api console] document.
+Full list of the API Console configuration options can be found in the [configuring the api console] document.
 
 ## Build tools
 
-The API Console comes with a set of build tools that will help you create the API console from the RAML file. Build tools are configured to produce a production optimized version of the API Console. The build tools can generate both standalone and embeddable version of the console. You can also configure data source strategy (RAML, JSON or inline JSON as a data source).
+The API Console comes with a set of build tools that will help you create the API Console from the RAML file. Build tools are configured to produce a production optimized version of the API Console. The build tools can generate both standalone and embeddable version of the console. You can also configure data source strategy (RAML, JSON or inline JSON as a data source).
 
 Available build tools are the `api-console` CLI and node modules: `api-console-builder` and `raml-json-enhance-node`. Depending on your needs you can choose whether you want to use a CLI tool or a node module.
 
@@ -118,7 +120,7 @@ Read our [CORS guideline] for more information about each of this solutions.
 
 ## Preview and development
 
-The API Console is a custom element that serves as a shell element for other custom web components. It means that to develop the API console most probably you'd have to develop one of over a hundred other web components that creates the console. All the elements are described in [the elements catalogue].
+The API Console is a custom element that serves as a shell element for other custom web components. It means that to develop the API Console most probably you'd have to develop one of over a hundred other web components that creates the console. All the elements are described in [the elements catalogue].
 
 1. Clone the element:
 ```
@@ -162,7 +164,7 @@ To contribute source code to this repository, please read our [contributor's agr
 
 ## License
 
-The API console is shared under Common Public Attribution License Version 1.0 (CPAL-1.0).
+The API Console is shared under Common Public Attribution License Version 1.0 (CPAL-1.0).
 
 See the LICENSE.md file for more information.
 
