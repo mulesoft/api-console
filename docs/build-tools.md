@@ -7,7 +7,7 @@ Check out our examples of how to use our build tools in the CI process based on 
 - [Building API Console for GitHub pages on Travis](gh-pages.md)
 - [Rebuilding the api.json file in the CI process](rebuilding-api-json.md)
 
-## api-console CLI
+## CLI
 
 ### Installation
 
@@ -46,7 +46,7 @@ $ api-console build --json api.raml
 
 **Note** Because of series of optimizations (among others the most computing power and time consuming JavaScript compilation) it will take few minutes to build the console. You can pass `--no-optimization` flag to make the build process faster but it should be used in development environment only.
 
-## API Console node modules
+## Node
 
 ### api-console-builder
 
@@ -54,13 +54,13 @@ The node module to build the API console from the api-console element either as 
 
 See detailed documentation in the [api-console-builder](https://www.npmjs.com/package/api-console-builder) page.
 
-### Installation
+#### Installation
 
 ```shell
 $ npm i api-console-builder
 ```
 
-### Examples
+#### Examples
 
 Will build a standalone application of the API Console that uses a specific release version from GitHub as the element source and API definition from the `api.raml` file. It will generate a separate `api.json` file with RAML parsing results for faster initialization.
 
@@ -86,13 +86,13 @@ It's ideal to use it in your CI process to replace the `api.json` file instead o
 
 See detailed documentation in the [raml-json-enhance-node](https://www.npmjs.com/package/raml-json-enhance-node) page.
 
-### Installation
+#### Installation
 
 ```shell
 $ npm i raml-json-enhance-node
 ```
 
-### Examples
+#### Examples
 
 Generating enhanced JSON from the RAML file:
 
