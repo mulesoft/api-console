@@ -64,6 +64,7 @@
 
       /**
        * @param {Promise} promise
+       * @param {Object} options
        * @param {Boolean} options.isLoadingFromUrl
        */
       function loadFromPromise(promise, options) {

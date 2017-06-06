@@ -41,13 +41,15 @@
           context = context || bodyContent.definitions[bodyContent.selected];
         }
 
-        Object.keys(context.plain).map(function (key) {
-          var definition = context.plain[key].definitions[0];
+        if (context.plain) {
+          Object.keys(context.plain).map(function (key) {
+            var definition = context.plain[key].definitions[0];
 
-          if ($scope.isEnum(definition)) {
-            context.values[definition.id][0] =  getParamType(definition)['enum'][0];
-          }
-        });
+            if ($scope.isEnum(definition)) {
+              context.values[definition.id][0] =  getParamType(definition)['enum'][0];
+            }
+          });
+        }
 
         $scope.isFile = function (param) {
           return param.type === 'file';

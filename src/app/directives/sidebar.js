@@ -325,7 +325,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return typeof value !== 'undefined' ? true : false;
+          return typeof value !== 'undefined';
         };
 
         $scope.context.forceRequest = false;
@@ -511,7 +511,6 @@
               Object.keys(securitySchemes).map(function(key) {
                 if (securitySchemes[key].type === $scope.currentSchemeType) {
                   scheme = securitySchemes && securitySchemes[key];
-                  return;
                 }
               });
 
@@ -687,6 +686,19 @@
 
         $scope.uploadFile = function (event) {
           $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value  = event.files[0];
+        };
+
+        $scope.hasFormParameters = $scope.context.bodyContent && $scope.context.bodyContent.selected ? $scope.methodInfo.body[$scope.context.bodyContent.selected].hasOwnProperty('formParameters') : undefined;
+
+
+        $scope.getFormModel = function(param) {
+          var definitions = $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected];
+          if ($scope.hasFormParameters) {
+            return definitions.values[param.definitions[0].id];
+          } else if (definitions.contentType && param.name) {
+            var example = definitions.contentType[param.name].example;
+            return example ? [example] : example;
+          }
         };
       }]
     };

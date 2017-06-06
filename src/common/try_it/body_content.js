@@ -19,12 +19,17 @@
       }
 
       switch (contentType) {
-      case FORM_URLENCODED:
-      case FORM_DATA:
-        definitions[contentType] = new RAML.Services.TryIt.NamedParameters(definition.formParameters);
-        break;
-      default:
-        definitions[contentType] = new RAML.Services.TryIt.BodyType(definition);
+        case FORM_URLENCODED:
+        case FORM_DATA:
+          //For RAML 0.8 formParameters should be defined, but for RAML 1.0 properties node
+          if (definition.formParameters) {
+            definitions[contentType] = new RAML.Services.TryIt.NamedParameters(definition.formParameters);
+          } else if (definition.properties) {
+            definitions[contentType] = new RAML.Services.TryIt.BodyType(definition.properties);
+          }
+          break;
+        default:
+          definitions[contentType] = new RAML.Services.TryIt.BodyType(definition);
       }
     });
   };

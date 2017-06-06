@@ -170,6 +170,15 @@ function Resource (poName) {
     var panel = this.po.getResourcePanel(resource);
     expect(panel.isPresent()).toBe(isOpen);
   };
+
+  this.ifDisplayingProperties = function (resource, properties) {
+    var bodyProperties = this.po.getTryItBodyPanelParameters(resource);
+
+    properties.forEach(function (name, index) {
+      var property = bodyProperties.get(index);
+      expect(property.getText()).toContain(name);
+    });
+  };
 }
 
 module.exports = Resource;
