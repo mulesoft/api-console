@@ -60,7 +60,7 @@ Now, add the encrypted key to your repository using [Travis CLI](https://github.
   cp ~/.ssh/gh-travis_rsa ./
 ```
 
-2. Install Travis CLI as described in [installation guide](https://github.com/travis-ci/travis.rb#installation) if you haven't already done so.
+2. Install Travis CLI as described in the [installation guide](https://github.com/travis-ci/travis.rb#installation) if you haven't already done so.
 
 3. Use Travis CLI to add an encrypted key to your repository.
 
