@@ -5,7 +5,6 @@ var basePO = require('./basePO');
 function ResourcesPO () {
   this.title           = element(by.css('.raml-console-title'));
   this.resources       = element.all(by.css('.raml-console-resource-list-item'));
-  this.types           = element(by.id('raml-console-documentation-container'));
 
   this.getTitle = function () {
     return this.title.getText();
@@ -40,7 +39,7 @@ function ResourcesPO () {
   };
 
   this.getTypesBtn = function () {
-    return this.types.element(by.css('.raml-console-resource-root-toggle'));
+    return element(by.id('raml-console-documentation-container')).element(by.css('.raml-console-resource-root-toggle'));
   };
 
   this.getCloseMethodBtn = function (resource) {
@@ -128,6 +127,13 @@ function ResourcesPO () {
 
   this.getResourcePanel = function(resource) {
     return this.resources.get(resource + 1).element(by.css('.raml-console-resource-panel'));
+  };
+
+  this.getTryItBodyPanelParameters = function (resource) {
+    return this.resources.get(resource + 1)
+      .element(by.id('sidebar-body'))
+      .element(by.css('.raml-console-sidebar-row.raml-console-body-data'))
+      .all(by.tagName('p'));
   };
 }
 
