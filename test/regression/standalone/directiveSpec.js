@@ -268,4 +268,34 @@ module.exports = function() {
 
     assert.ifShowingTypesPropertiesInCorrectOrder(0, ['c', 'a', 'b']);
   });
+
+  describe('should display form body fields', function () {
+    it('should display properties for raml 1.0', function () {
+      // Arrange
+      var assert     = assertions.create('resource');
+      var resourcePo = factory.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/directive-resource-bodies-10.html');
+
+      resourcePo.toggleResourceMethod(0, 0);
+
+      //Assert
+      assert.ifDisplayingProperties(0, ['one', 'two']);
+    });
+
+    it('should display formParameters for raml 0.8', function () {
+      // Arrange
+      var assert     = assertions.create('resource');
+      var resourcePo = factory.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/directive-resource-bodies-08.html');
+
+      resourcePo.toggleResourceMethod(0, 0);
+
+      //Assert
+      assert.ifDisplayingProperties(0, ['one', 'two']);
+    });
+  });
 };

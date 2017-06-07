@@ -1,0 +1,15 @@
+#%RAML 1.0
+baseUri: http://localhost
+title: Resource bodies
+
+/test:
+  put:
+    body:
+      multipart/form-data:
+        properties:
+          one:
+            type: file
+          two:
+            type: string
+            required: true
+            example: blah
