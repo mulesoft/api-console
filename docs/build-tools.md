@@ -1,8 +1,8 @@
 # API Console build tools
 
-The API console comes with a set of tools that will help you with creating a documentation for your API very quickly.
+The API console comes with a set of tools to help you create documentation for your API quickly.
 
-**Learn more!**
+**Learn more**
 Check out our examples of how to use our build tools in the CI process based on Travis:
 - [Building API Console for GitHub pages on Travis](gh-pages.md)
 - [Rebuilding the api.json file in the CI process](rebuilding-api-json.md)
@@ -11,48 +11,50 @@ Check out our examples of how to use our build tools in the CI process based on 
 
 ### Installation
 
-Preferred way is to install the CLI tool globally. If you can't then install it without `-g` and run the commands prefixing the `api-console` with `./node_modules/.bin/`.
+Install the CLI tool globally using `-g` if possible. 
 
 ```shell
 $ sudo npm install -g api-console-cli
 ```
 
+If you can't perform the global installation for some reason, then omit `-g` and run the command prefixing `api-console-cli` with `./node_modules/.bin/`.
+
 ### Features
 
-- build - Build the api console application optimized for production
-- generate-json - Regenerates the JSON file that can be used as a data source in the Console
+- build - Builds the api console application optimized for production.
+- generate-json - Regenerates the JSON file that can be used as a data source in the console.
 
-See https://github.com/mulesoft-labs/api-console-cli for full documentation.
+For more information, see https://github.com/mulesoft-labs/api-console-cli.
 
 ### Examples
 
-Build the API console from the latest released version and using `https://domain.com/api.raml` as a data source.
+Build API Console from the latest released version and use `https://domain.com/api.raml` as a data source.
 
 ```shell
 $ api-console build https://domain.com/api.raml
 ```
 
-Build the API Console from local sources (`--source api-console-release.zip`) that is a zip file of a release (`--source-is-zip`). Note that this command will automatically assume the `--json` option to be set.
+Build API Console from local sources (`--source api-console-release.zip`) that is a zip file of a release (`--source-is-zip`). This command will automatically assume the `--json` option is set.
 
 ```shell
 $ api-console build --source api-console-release.zip --source-is-zip api.raml
 ```
 
-Build the API console and generate the `api.json` file that will be included in the build.
+Build API console and generate the `api.json` file that will be included in the build.
 
 ```shell
 $ api-console build --json api.raml
 ```
 
-**Note** Because of series of optimizations (among others the most computing power and time consuming JavaScript compilation) it will take few minutes to build the console. You can pass `--no-optimization` flag to make the build process faster but it should be used in development environment only.
+**Note** The build includes a series of optimizations, such as a power and time intensive JavaScript compilation, that take a few minutes. You can pass  the `--no-optimization` flag to make the build process faster, but do so only in a development environment.
 
 ## Node
 
 ### api-console-builder
 
-The node module to build the API console from the api-console element either as a embeddable element or as a standalone application.
+This is the node module that builds API console from the api-console element either as a embeddable element or as a standalone application.
 
-See detailed documentation in the [api-console-builder](https://www.npmjs.com/package/api-console-builder) page.
+For more information, see the [api-console-builder](https://www.npmjs.com/package/api-console-builder) page.
 
 #### Installation
 
@@ -62,7 +64,7 @@ $ npm i api-console-builder
 
 #### Examples
 
-Will build a standalone application of the API Console that uses a specific release version from GitHub as the element source and API definition from the `api.raml` file. It will generate a separate `api.json` file with RAML parsing results for faster initialization.
+This example builds a standalone application of API Console that uses a specific release version from GitHub as the element source and an API definition from the `api.raml` file. The build generates a separate `api.json` file with RAML parsing results for faster initialization.
 
 ```javascript
 const builder = require('api-console-builder');
@@ -80,11 +82,11 @@ builder({
 
 ### raml-json-enhance-node
 
-A RAML's JSON enhancer node package to enhance JSON output of the RAML parser. Enhanced JSON to be used as an input for ARC elements and the API Console.
+This is the node package that enhances JSON output of the RAML parser. Enhanced JSON is used as an input for ARC elements and API Console.
 
-It's ideal to use it in your CI process to replace the `api.json` file instead of regenerating the whole API console application.
+Use this package in your CI process to replace the `api.json` file instead of regenerating the whole API console application.
 
-See detailed documentation in the [raml-json-enhance-node](https://www.npmjs.com/package/raml-json-enhance-node) page.
+For more information, see the [raml-json-enhance-node](https://www.npmjs.com/package/raml-json-enhance-node) page.
 
 #### Installation
 
@@ -94,7 +96,7 @@ $ npm i raml-json-enhance-node
 
 #### Examples
 
-Generating enhanced JSON from the RAML file:
+Generate enhanced JSON from the RAML file:
 
 ```javascript
 const {RamlJsonGenerator} = require('raml-json-enhance-node');
@@ -106,7 +108,7 @@ enhancer.generate()
 });
 ```
 
-Like above but output will be saved to a file:
+Generate enhanced JSON from the RAML file, but save output to a file:
 
 ```javascript
 const {RamlJsonGenerator} = require('raml-json-enhance-node');
