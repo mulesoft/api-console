@@ -2,72 +2,69 @@
 
 ## API Console Chrome extension
 
-There's no easy way to deal with CORS. In the API Console ecosystem there is an extension for Chrome (and soon will be for Firefox) which will proxy the request without CORS limitations. The user (when using supported browser) will see the install extension banner in the request editor. After installing the
-extension all traffic from the console will be redirected to the extension to perform the request (without CORS limitations) and to get the response.
+There's no easy way to deal with CORS. In the API Console ecosystem, an extension for Chrome (and soon, for Firefox) acts as a proxy for the request without CORS limitations. In a supported browser, the install extension banner appears in the request editor. After you install the
+extension, all traffic from the console is redirected to the extension to perform the request (without CORS limitations) and to get the response.
 
 #### TL;DR: Extension technical background
 
-The console listens for the `api-console-extension-installed` event that is fired by the extension. Once initialized the console will send an event to the extension when the user make the HTTP request. The element responsible for the communication with the extension is [api-console-ext-comm](https://elements.advancedrestclient.com/elements/api-console-ext-comm).
+The console listens for the `api-console-extension-installed` event that is fired by the extension. After initialization, the console sends an event to the extension when the user makes the HTTP request. The element responsible for the communication with the extension is [api-console-ext-comm](https://elements.advancedrestclient.com/elements/api-console-ext-comm).
 
 Other ways to deal with CORS are coming soon. File an issue report in this repository if you can help with this issue.
 
 ## Proxy server
 
-One of the ways to deal with CORS is to tell the API console to pass the request through a proxy.
-For this you can use `proxy` attribute of the element. Once set then every request made by the console will be passed through the proxy.
+To deal with CORS, you can use a `proxy attribute` of the element to tell the API console to pass the request through a proxy. After setting the attribute, every request made by the console is passed through the proxy.
 
-When using proxy, the request URL will be altered before sending it to a transport library (possibly the XHR call) by prefixing the URL with proxy value.
+Before sending the request to a transport library (possibly the XHR call), the request URL is altered by prefixing the URL with proxy value.
 
 ```html
 <api-console proxy="https://api.proxy.com/api/proxy/"></api-console>
 ```
 
-With this configuration a request made to `http://domain.com/path/?query=some+value` endpoint will
-become `https://api.proxy.com/api/proxy/http://domain.com/path/?query=some+value`.
+This configuration changes the request endpoint from `http://domain.com/path/?query=some+value` to `https://api.proxy.com/api/proxy/http://domain.com/path/?query=some+value`.
 
-Don't forget to add trailing '/' to the path or produced URL will be invalid.
+Don't forget to add trailing '/' to the path or the produced URL will be invalid.
 
-If the proxy require to set the URL as a query parameter then `proxy` attribute should end with
+If the proxy requires the URL as a query parameter, then the `proxy` attribute should end with
 parameter name and `=` sign:
 
 ```html
 <api-console proxy="https://api.proxy.com/api/proxy/?url=" proxy-encode-url></api-console>
 ```
 
-In this case be sure to set `proxy-encode-url` attribute which will tell the console to URL encode the URL before appending it to the final URL.
+In this case, be sure to set the `proxy-encode-url` attribute, so the console URL-encodes the URL before appending it to the final URL.
 
-With this configuration a request made to `http://domain.com/path/?query=some+value` endpoint will
-become `https://api.proxy.com/api/proxy/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`.
+This configuration changes the request endpoint from `http://domain.com/path/?query=some+value` to `https://api.proxy.com/api/proxy/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`.
 
-The proxy URL won't be visible by the user and the user can't do anything to change this behavior (until your application doesn't support proxy change in some custom UI).
+The proxy URL won't be visible by the user. The user can't do anything to change this behavior unless your application includes a custom UI that supports such a change.
 
 ## Handling HTTP request by the hosting website / application
 
-When the user runs the request from the "try it" screen the API Console will fire the `api-console-request` [custom event](https://developer.mozilla.org/en/docs/Web/API/CustomEvent). If your application can handle the transport (by providing a proxy or other solution) you should listen for this event and cancel it by calling `event.preventDefault()`. If the event was cancelled then the API Console will listen for the `api-console-response` custom
-event that should contain response details. Otherwise the console will use build in fallback function to get the resource using Fetch API / XHR.
+When the user runs the request from the "try it" screen, API Console fires the `api-console-request` [custom event](https://developer.mozilla.org/en/docs/Web/API/CustomEvent). If your application can handle the transport (by providing a proxy, for example), listen for this event, and cancel it by calling `event.preventDefault()`. If the event is cancelled, API Console listens for the `api-console-response` custom
+event that should contain response details. Otherwise, the console uses the build in fallback function to get the resource using Fetch API / XHR.
 
 #### api-console-request custom event
 
-Event's `detail` object will contain following properties
+The Event `detail` object contains following properties:
 
 Property | Type | Description
 ----------------|-------------|----------
-`url` | `String` | The request URL. If proxy is set it will be final URL with the proxy value.
+`url` | `String` | The request URL. If proxy is set, it will be the final URL with the proxy value.
 `method` | `String` | The HTTP method
 `headers` | `String` | HTTP headers string to send with the message
 `payload` | `String` | Body to send
 
 #### api-console-response
 
-This event must be fired when the hosting app finish the request. It must contain generated Request
-and Response object as defined in the [Fetch specification](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch). The API console has a polyfill for the Fetch API already included.
+This event must be fired when the hosting app finishes the request. It must contain a generated Request
+and Response object as defined in the [Fetch specification](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch). API Console includes a polyfill for the Fetch API.
 
 Property | Type | Description
 ----------------|-------------|----------
-`request` | `Request` | The request object as defined in the Fetch API spec. See [Request docs](https://developer.mozilla.org/en-US/docs/Web/API/Request) for more details.
-`response` | `Response` | The response object as defined in the Fetch API spec. See [Response docs](https://developer.mozilla.org/en-US/docs/Web/API/Response) for more details.
-`isXhr` | `Boolean` | Default to `true`. Indicates that the transport method doesn't support advanced timings and redirects information. See [request-panel](https://elements.advancedrestclient.com/elements/raml-request-panel) documentation for detailed description.
-`error` | `Error` | When the request / response is errored (`request.ok` equals `false`) then the error object should be set with the human readable message that will be displayed to the user.
+`request` | `Request` | The request object as defined in the Fetch API spec. See [Request docs](https://developer.mozilla.org/en-US/docs/Web/API/Request) for more information.
+`response` | `Response` | The response object as defined in the Fetch API spec. See [Response docs](https://developer.mozilla.org/en-US/docs/Web/API/Response) for more information.
+`isXhr` | `Boolean` | Default is `true`. Indicates that the transport method doesn't support advanced timings and redirects information. See [request-panel](https://elements.advancedrestclient.com/elements/raml-request-panel) documentation for more information.
+`error` | `Error` | When the request / response encounters an error (`request.ok` equals `false`), the error object is set with the human readable message for the user.
 
 #### Example with handling request / response events
 
