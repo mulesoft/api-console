@@ -16,7 +16,7 @@ parser.loadApi(apiFileUrl);
 
 Running this code as the page loads throws a `TypeError` with the message: `parser.loadApi is not a function`.
 
-At the time of execution of this script, the browser knows nothing about the `raml-js-parser` element. At this time, the element is an instance of `HTMLUnknownElement`. The browser is blocked.
+At the time of execution of this script block, the browser knows nothing about the `raml-js-parser` element. At this time, the element is an instance of `HTMLUnknownElement`.
 
 The browser has to import the source of the element first, and then the Polymer library has to register custom HTML element called `raml-js-parser`.
 
