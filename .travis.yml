@@ -1,0 +1,20 @@
+language: node_js
+sudo: required
+dist: trusty
+node_js: stable
+before_script:
+- npm install --silent bower polymer-cli
+- "./node_modules/.bin/bower install --silent"
+addons:
+  sauce_connect: true
+script:
+- npm run lint
+- ./node_modules/.bin/polymer test --plugin sauce --job-name "api-console:${TRAVIS_BRANCH}"
+  --build-number=${TRAVIS_BUILD_NUMBER}
+cache:
+  directories:
+  - node_modules
+env:
+  global:
+  - secure: JMRvm+Pj3mTEcrhFNZTnKShuHISqGX+mR4ICFwWT8zEKF/mMosRQsVBf7xVc5DXB0x3CxjP/CauVG98/0AktVwmP1sEp0g+FFePFzux+VzvDbmynX3kkpgS82Sq11Rp6YnYb85pLjCMUG6pKCNkp8XMkcW7IX9c9AYrRgsXmQEY=
+  - secure: fZzj04OSXUCcScIxxjsqFIyZ+RE22fAVDG/qx73sU9BqjvhOLrUFsxYVOcYARgBfzNuf3c0mB5GI//hyIRfAFCgx6bqYG8erN/VoryPBREnN5fGvR/AkrFzJeJ/2AlcHpXqWyQnlLXZwfUb1RBidYYzhEUAfEso0AyMoWJzgFQs=

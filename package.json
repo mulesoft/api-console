@@ -1,0 +1,35 @@
+{
+  "name": "api-console",
+  "version": "4.0.0-beta",
+  "license": "CPAL-1.0",
+  "description": "The API Console used in RAML platform.",
+  "devDependencies": {
+    "polymer-cli": "^0.17.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "private": true,
+  "main": [
+    "api-console.html"
+  ],
+  "authors": [
+    "The Advanced REST client authors <arc@mulesoft.com>"
+  ],
+  "scripts": {
+    "serve": "node_modules/.bin/polymer serve",
+    "lint": "node_modules/.bin/polymer lint api-console.html api-console-request.html",
+    "test-sauce": "exit 0; node_modules/.bin/polymer test --plugin sauce --job-name \"api-console:local-test\"",
+    "test": "node_modules/.bin/polymer test",
+    "deps": "npm i --quiet && bower install --quiet",
+    "update-deps": "npm i --quiet && bower update --quiet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mulesoft/api-console.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mulesoft/api-console/issues",
+    "email": "arc@mulesoft.com"
+  }
+}
