@@ -39,7 +39,7 @@ The following table describes HTML attributes.
 | `proxy-encodeUrl` | If required by the `proxy` the URL is URL-encoded. | `Boolean` |
 | `no-try-it` | Disables the "try it" button in the method documentation view. The request editor and the response viewer is still available, but you must open it programmatically by setting `page` property to ` request`. | `Boolean` |  
 | `manual-navigation` | Disables navigation in the drawer and renders the navigation full screen when requested. Use in the narrow layouts with the `narrow` property. Set the `navigationOpened` property to `true` or `false` to open/close the navigation. | `Boolean` |
-| `navigation-opened` | If this and the `manual-navigation` attribute are set, then the full screen navigation will open/close. | `Boolean` |
+| `navigation-opened` | If set, the `manual-navigation` attribute is set, and the full screen navigation will open/close. | `Boolean` |
 
 ## Controlling the view
 
@@ -79,7 +79,6 @@ Use a "\n" string to set a new line for the headers string.
 <api-console append-headers="X-key: my-api-key\nother-header:value"></api-console>
 ```
 
-[camel case]: https://en.wikipedia.org/wiki/Camel_case
 [raml-aware]: https://elements.advancedrestclient.com/elements/raml-aware
 [RAML parser]: https://github.com/raml-org/raml-js-parser-2
 [raml-path-selector]: https://elements.advancedrestclient.com/elements/raml-path-selector
