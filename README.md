@@ -384,6 +384,7 @@ parser.loadApi(urlToApi);
 | `noTryIt` | Disables the "try it" button in the method documentation view. The request editor and the response viewer is still available but you must open it programmatically setting `page` proerty to ` request` | `Boolean` |  
 | `manualNavigation` | Disables navigation in the drawer and renders the navigation full screen, when requested. This is ideal to use in the narrow layouts together with `narrow` property. | `Boolean` |
 | `navigationOpened` | If set and `manualNavigation` is used then it will open / close the full screen navigation. | `Boolean` |
+| `bowerLocation` | If the path to the `bower_components` is different than default (in the root path) then set this attribute to point the location of the folder, including folder name. | `Boolean`
 
 ## Styling
 

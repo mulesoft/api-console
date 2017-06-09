@@ -153,7 +153,8 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
               path="{{path}}"
               append-headers="[[_computeAppendHeaders(appendHeaders)]]"
               proxy="[[proxy]]"
-              proxy-encode-url="[[proxyEncodeUrl]]"></api-console-request>
+              proxy-encode-url="[[proxyEncodeUrl]]"
+              bower-location="[[bowerLocation]]"></api-console-request>
           </iron-pages>
         </div>
       </paper-header-panel>
@@ -276,7 +277,12 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
         type: Boolean,
         notify: true,
         observer: '_navigationOpenedChanged'
-      }
+      },
+      /**
+       * Location of the `bower_components` folder.
+       * It should be a path from server's root path including bower_components.
+       */
+      bowerLocation: String
     },
 
     listeners: {

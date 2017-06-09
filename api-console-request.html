@@ -220,7 +220,12 @@ is to proxt the HTTP request and avoid CORS problems.
          * `http://domain.com/path/?query=some+value` will become
          * `https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`
          */
-        proxyEncodeUrl: Boolean
+        proxyEncodeUrl: Boolean,
+        /**
+         * Location of the `bower_components` folder.
+         * It should be a path from server's root path including bower_components.
+         */
+        bowerLocation: String
       },
 
       listeners: {
@@ -234,7 +239,14 @@ is to proxt the HTTP request and avoid CORS problems.
       // Sets OAuth 2 redirect URL for the authorization panel
       _setRedirectUrl: function() {
         var a = document.createElement('a');
-        a.href = 'bower_components/oauth-authorization/oauth-popup.html';
+        var location = this.bowerLocation;
+        if (!location) {
+          location = 'bower_components/';
+        }
+        if (location && location[location.length - 1] !== '/') {
+          location += '/';
+        }
+        a.href = location + 'oauth-authorization/oauth-popup.html';
         this.redirectUrl = a.href;
       },
 
