@@ -2,6 +2,12 @@
 baseUri: http://localhost
 title: Resource bodies
 
+types:
+  userPicture:
+    type: file
+    fileTypes: ['image/jpeg', 'image/png']
+    maxLength: 307200
+
 /test:
   put:
     body:
@@ -13,3 +19,11 @@ title: Resource bodies
             type: string
             required: true
             example: blah
+
+/test-root-types:
+  put:
+    body:
+      multipart/form-data:
+        properties:
+          one:
+            type: userPicture
