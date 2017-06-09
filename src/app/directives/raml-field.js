@@ -16,8 +16,11 @@
       },
       controller: ['$scope', function($scope) {
         function getParamType(definition) {
-          if ($scope.types) {
-            var type = RAML.Inspector.Types.findType(definition.type[0], $scope.types);
+          var currentType = definition.type[0];
+          var isNative = RAML.Inspector.Types.isNativeType(currentType);
+
+          if (!isNative && $scope.types) {
+            var type = RAML.Inspector.Types.findType(currentType, $scope.types);
             return type ? type : definition;
           } else {
             return definition;
@@ -52,7 +55,12 @@
         }
 
         $scope.isFile = function (param) {
-          return param.type === 'file';
+          if (!Array.isArray(param.type)) {
+            param.type = [param.type];
+          }
+
+          var rootType = getParamType(param);
+          return rootType.type[0] === 'file';
         };
 
         $scope.isArray = function (param) {

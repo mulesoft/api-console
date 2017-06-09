@@ -171,12 +171,15 @@ function Resource (poName) {
     expect(panel.isPresent()).toBe(isOpen);
   };
 
-  this.ifDisplayingProperties = function (resource, properties) {
+  this.ifDisplayingProperties = function (resource, propertiesName, propertiesType) {
     var bodyProperties = this.po.getTryItBodyPanelParameters(resource);
 
-    properties.forEach(function (name, index) {
+    propertiesName.forEach(function (name, index) {
       var property = bodyProperties.get(index);
       expect(property.getText()).toContain(name);
+
+      var type = propertiesType[index];
+      expect(property.getText()).toContain(type);
     });
   };
 }

@@ -135,7 +135,9 @@
                         </span>
                       </span>
 
-                      <raml-field context="context" type="type" types="types" param="param" model="getFormModel(param)"></raml-field>
+                      <span ng-init="paramModel = getExample(param)">
+                        <raml-field context="context" type="type" types="types" param="param" model="paramModel"></raml-field>
+                      </span>
                     </p>
                   </div>
                 </div>
