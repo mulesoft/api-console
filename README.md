@@ -1,6 +1,6 @@
 # The API Console
 
-MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) documents. A mechanism provides direct interaction between the consumer and an API.
+MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) documents. In addition to providing documentation, the tool provides the capability for users to try out requests on the fly.
 
 ![](images/new-console-header.png)
 
@@ -29,7 +29,7 @@ To build the API Console as a standalone application use one of our [build tools
 
 ### Embed as an HTML element
 
-The API Console was built on top of a new Web Components specification. When you include sources of the console into your web application it registers a new HTML element, `<api-console>`. You can use this element in the same way as any other element on the page or web application. For example, you can embed the console into your blog post or as a part of a press release. Your users can explore your API without being redirected to another web page.
+The API Console was built on top of the new Web Components specification. When you include sources of the console into your web application it registers a new HTML element, `<api-console>`. You can use this element in the same way as any other element on the page or web application. For example, you can embed the console into your blog post or as a part of a press release. Your users can explore your API without being redirected to another web page.
 
 First, use [bower] to install the console and its dependencies:
 
