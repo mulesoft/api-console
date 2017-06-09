@@ -689,15 +689,10 @@
 
         $scope.hasFormParameters = $scope.context.bodyContent && $scope.context.bodyContent.selected ? $scope.methodInfo.body[$scope.context.bodyContent.selected].hasOwnProperty('formParameters') : undefined;
 
-
-        $scope.getFormModel = function(param) {
+        $scope.getExample = function(param) {
           var definitions = $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected];
-          if ($scope.hasFormParameters) {
-            return definitions.values[param.definitions[0].id];
-          } else if (definitions.contentType && param.name) {
-            var example = definitions.contentType[param.name].example;
-            return example ? [example] : example;
-          }
+          var example = definitions.contentType[param.name].example;
+          return example ? [example] : example;
         };
       }]
     };
