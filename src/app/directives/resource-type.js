@@ -7,10 +7,10 @@
       templateUrl: 'directives/resource-type.tpl.html',
       replace: true,
       controller: ['$scope', function ($scope) {
-        var resourceType = $scope.resource.resourceType;
+        var resourceType = $scope.rootResource.resourceType;
 
-        if (typeof resourceType === 'object') {
-          $scope.resource.resourceType = Object.keys(resourceType).join();
+        if (resourceType !== null && typeof resourceType === 'object') {
+          $scope.rootResource.resourceType = Object.keys(resourceType).join();
         }
       }]
     };

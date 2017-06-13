@@ -24,6 +24,8 @@ after_success:
   - scp -r dist/* ${ACCEPTANCE_USER}@${ACCEPTANCE_HOST}:${DIST_DIR}/
 addons:
   firefox: "36.0"
+notifications:
+  slack: mulesoft:xDxuJW1lgf2uyG529ISR6k4i
 env:
   global:
   - secure: M7tZ5uMFAPBNkzNuD0HF9PxeoH3Q9gMsvOCheQd5WCxxcSQwGsw8naErJshXYdAvFLsuTYT0MfHYt/TfcoEHfrykK5GiGaaSQB0MQtDWokQPHUl3S8Cjjh8+Aj3V/J+yyEFZ7AY9PvoSnHdeEuZfAYO/tuj9IBmC9tsbV5K5hX4=

@@ -1,6 +1,6 @@
 {
   "name": "api-console",
-  "version": "3.0.14",
+  "version": "3.0.19",
   "description": "Api-Console for RAML based app",
   "files": [
     "dist",
@@ -21,7 +21,7 @@
     "api"
   ],
   "author": "MuleSoft, Inc.",
-  "license": "Apache 2.0",
+  "license": "CPAL-1.0",
   "bugs": {
     "url": "https://github.com/mulesoft/api-console/issues"
   },
@@ -44,6 +44,7 @@
     "grunt-karma": "~0.10.1",
     "grunt-protractor-runner": "~1.1.4",
     "jasmine-spec-reporter": "~1.1.0",
+    "karma": "^0.12.37",
     "load-grunt-tasks": "~2.0.0",
     "serve-static": "~1.8.0"
   }

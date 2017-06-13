@@ -54,6 +54,29 @@
         <div class="raml-console-resource-param" ng-repeat="(code, info) in documentationSchemeSelected.describedBy.responses">
           <h4 class="raml-console-resource-param-heading">{{info.code}}</h4>
           <p markdown="info.description" class="raml-console-marked-content"></p>
+
+          <div class="raml-console-schema-body raml-console-resource-response" ng-if="info.body">
+            <h4 class="raml-console-resource-body-heading">
+              Body
+              <span
+                      ng-click="changeSchemaType($event, key, code)"
+                      ng-class="{ 'raml-console-is-active': schemaResponses[info.code].currentType === key}"
+                      class="raml-console-flag"
+                      ng-repeat="(key, value) in info.body">
+                {{key}}
+            </span>
+            </h4>
+
+            <div ng-repeat="(key, value) in info.body">
+              <div ng-if="schemaResponses[code].currentType === key">
+                <examples
+                  example-container="value"
+                  get-beatified-example-ref="getBeatifiedExample">
+                </examples>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -68,7 +91,7 @@
     </section>
 
 
-    <section class="raml-console-resource-section" ng-if="methodInfo.body">
+    <section class="raml-console-resource-section raml-console-documentation-body" ng-if="methodInfo.body">
       <h3 class="raml-console-resource-heading-a">
         Body
       </h3>
@@ -82,12 +105,7 @@
           <section ng-if="value.formParameters">
              <div class="raml-console-resource-param" ng-repeat="formParam in value.formParameters">
               <h4 class="raml-console-resource-param-heading">{{formParam[0].displayName}}<span class="raml-console-resource-param-instructional">{{parameterDocumentation(formParam[0])}}</span></h4>
-
               <p markdown="formParam[0].description" class="raml-console-marked-content"></p>
-
-              <p ng-if="formParam[0].example !== undefined">
-                <span class="raml-console-resource-param-example"><b>Example:</b> {{formParam[0].example}}</span>
-              </p>
             </div>
           </section>
 
@@ -100,7 +118,8 @@
           <raml-body
             ng-if="value"
             body="value"
-            get-beatified-example-ref="getBeatifiedExample">
+            get-beatified-example-ref="getBeatifiedExample"
+            show-examples="false">
           </raml-body>
         </div>
       </div>
@@ -134,7 +153,7 @@
 
         <div class="raml-console-resource-response" ng-if="fullResponses[code].headers">
           <h4 class="raml-console-resource-body-heading">Headers</h4>
-          <properties list="fullResponses[code].headers"></properties>
+          <properties class="response-headers" list="fullResponses[code].headers" show-examples="true"></properties>
         </div>
 
         <div class="raml-console-resource-response" ng-if="fullResponses[code].body">

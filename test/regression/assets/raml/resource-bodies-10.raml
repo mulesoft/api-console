@@ -1,0 +1,29 @@
+#%RAML 1.0
+baseUri: http://localhost
+title: Resource bodies
+
+types:
+  userPicture:
+    type: file
+    fileTypes: ['image/jpeg', 'image/png']
+    maxLength: 307200
+
+/test:
+  put:
+    body:
+      multipart/form-data:
+        properties:
+          one:
+            type: file
+          two:
+            type: string
+            required: true
+            example: blah
+
+/test-root-types:
+  put:
+    body:
+      multipart/form-data:
+        properties:
+          one:
+            type: userPicture

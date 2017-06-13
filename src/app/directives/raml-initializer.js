@@ -64,6 +64,7 @@
 
       /**
        * @param {Promise} promise
+       * @param {Object} options
        * @param {Boolean} options.isLoadingFromUrl
        */
       function loadFromPromise(promise, options) {
@@ -87,7 +88,7 @@
             if (success) {
               $scope.vm.raml = api.specification;
             } else {
-              $scope.vm.error           = { message: 'Api contains errors.'};
+              $scope.vm.error           = { message: 'Api contains errors.', errors: issues};
               $scope.vm.codeMirror.lint = lintFromError(issues);
             }
           })

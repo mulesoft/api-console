@@ -123,6 +123,26 @@ function Resource (poName) {
     expect(queryParameter.getText()).toMatch(/default: false/);
   };
 
+  this.ifShowingQueryParametersInCorrectOrder = function (resource, queryParametersName) {
+    var queryParameters = this.po.getQueryParameterDetails(resource);
+
+    queryParametersName.forEach(function(name, index) {
+      var queryParameter  = queryParameters.get(index);
+      expect(queryParameter.getText()).toContain(name);
+    });
+  };
+
+  this.ifShowingTypesPropertiesInCorrectOrder = function (type, queryParametersName) {
+    this.po.toggleRootType(type);
+
+    var properties = this.po.getTypeProperties();
+
+    queryParametersName.forEach(function(name, index) {
+      var queryParameter  = properties.get(index + 1);
+      expect(queryParameter.getText()).toContain(name);
+    });
+  };
+
   this.ifTryItShowsParamExample = function (resource, queryParameterPosition, defaultValue) {
     var input = this.po.getTryItQueryParameterInput(resource, queryParameterPosition);
 
@@ -130,11 +150,38 @@ function Resource (poName) {
   };
 
   this.ifShowsResponseExample = function (resource, expectedValue) {
-    var examples = this.po.getReponseExamples(resource);
+    var examples = this.po.getResponseExamples(resource);
 
     expect(examples.getText()).toEqual(expectedValue);
   };
-}
 
+  this.ifShowsResponseSchemaExample = function (resource, expectedValue) {
+    var examples = this.po.getResponseSchemaExamples(resource);
+
+    expect(examples.getText()).toEqual(expectedValue);
+  };
+
+  this.ifShowsRequestUrl = function (resource, expectedValue) {
+    var request = this.po.getRequestUrl(resource);
+    expect(request.getText()).toEqual(expectedValue);
+  };
+
+  this.ifMethodIsOpen = function (resource, isOpen) {
+    var panel = this.po.getResourcePanel(resource);
+    expect(panel.isPresent()).toBe(isOpen);
+  };
+
+  this.ifDisplayingProperties = function (resource, propertiesName, propertiesType) {
+    var bodyProperties = this.po.getTryItBodyPanelParameters(resource);
+
+    propertiesName.forEach(function (name, index) {
+      var property = bodyProperties.get(index);
+      expect(property.getText()).toContain(name);
+
+      var type = propertiesType[index];
+      expect(property.getText()).toContain(type);
+    });
+  };
+}
 
 module.exports = Resource;

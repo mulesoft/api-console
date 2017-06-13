@@ -32,24 +32,34 @@
 
         var getArrayTypes = function(arrayType) {
           if (arrayType.items.type || Array.isArray(arrayType.items.type)) {
-            return arrayType.items.type;
+            return [arrayType.items.name];
+          }
+
+          if (Object.prototype.toString.call(arrayType.items) === '[object Object]') {
+            return [typeof arrayType.items];
           }
 
           return [arrayType.items];
         };
 
-        $scope.getType = function (type) {
-          var newType = $scope.mergeType(type);
-          newType.type = RAML.Inspector.Types.ensureArray(newType.type);
+        $scope.getType = function (property) {
+          var newProperty = $scope.mergeProperty(property);
+          newProperty.type = RAML.Inspector.Types.ensureArray(newProperty.type);
 
-          if (newType.type[0] === 'array') {
-            newType.type = getArrayTypes(newType).map(function (aType) {
-              return aType + '[]';
-            });
-            newType.properties = newType.items.properties;
+          if (newProperty.type[0].type) {
+            var originalType = newProperty.type[0];
+            newProperty.type = originalType.type;
+            newProperty.properties = originalType.properties;
           }
 
-          return newType;
+          if (newProperty.type[0] === 'array') {
+            newProperty.type = getArrayTypes(newProperty).map(function (aType) {
+              return aType + '[]';
+            });
+            newProperty.properties = newProperty.items.properties;
+          }
+
+          return newProperty;
         };
 
         var isPattern = function (propertyName) {
@@ -60,13 +70,13 @@
           return ($scope.showSecuritySchemaProperties || !property[0].isFromSecurityScheme) && !isPattern(property[0].displayName);
         };
 
-        $scope.mergeType = function (type) {
-          var newType = angular.copy(type);
+        $scope.mergeProperty = function (property) {
+          var newProperty = angular.copy(property);
 
           if (!$scope.isNestedProperty && $rootScope.types) {
-            return RAML.Inspector.Types.mergeType(newType, $rootScope.types);
+            return RAML.Inspector.Types.mergeType(newProperty, $rootScope.types);
           }
-          return newType;
+          return newProperty;
         };
 
         $scope.isNativeType = RAML.Inspector.Types.isNativeType;

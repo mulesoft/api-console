@@ -7,6 +7,7 @@
       templateUrl: 'directives/raml-body.tpl.html',
       scope: {
         body: '=',
+        showExamples: '=',
         getBeatifiedExampleRef: '&'
       },
       controller: ['$scope', '$rootScope', function($scope, $rootScope) {
@@ -63,11 +64,16 @@
                         $scope.definition = declaredSchema;
                       }
                     } else {
-                      if (aType.indexOf('|') !== -1) {
-                        $scope.isSchema = false;
-                        $scope.isType = true;
-                      } else {
+                      try {
+                        JSON.parse(aType);
                         $scope.definition = aType;
+                      } catch (e) {
+                        if (aType.indexOf('|') !== -1) {
+                          $scope.isSchema = false;
+                          $scope.isType = true;
+                        } else {
+                          $scope.definition = aType;
+                        }
                       }
                     }
                   }

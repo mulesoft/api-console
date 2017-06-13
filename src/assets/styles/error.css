@@ -6,6 +6,10 @@ input.ng-dirty.ng-invalid-required {
   border: 1px solid red;
 }
 
+input[type="file"].ng-dirty.ng-invalid-required + span.raml-console-field-validation-error::after {
+  margin-top: 0;
+}
+
 input.ng-dirty.ng-invalid-required + span.raml-console-field-validation-error::after {
   content: 'Required';
   color: white;
@@ -21,6 +25,10 @@ input.ng-dirty.ng-invalid-min-length {
   border: 1px solid red;
 }
 
+input[type="file"].ng-invalid-min-length + span.raml-console-field-validation-error::after {
+  margin-top: 0;
+}
+
 input.ng-invalid-min-length + span.raml-console-field-validation-error::after {
   content: 'Invalid min length';
   color: white;
@@ -34,6 +42,10 @@ input.ng-invalid-min-length + span.raml-console-field-validation-error::after {
 
 input.ng-dirty.ng-invalid-max-length {
   border: 1px solid red;
+}
+
+input[type="file"].ng-dirty.ng-invalid-max-length + span.raml-console-field-validation-error::after {
+  margin-top: 0;
 }
 
 input.ng-dirty.ng-invalid-max-length + span.raml-console-field-validation-error::after {
@@ -113,6 +125,43 @@ input.ng-dirty.ng-invalid-pattern {
 
 input.ng-dirty.ng-invalid-pattern + span.raml-console-field-validation-error::after {
   content: 'Invalid pattern';
+  color: white;
+  position: absolute;
+  margin-top: -20px;
+  font-size: 13px;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+}
+
+input.ng-dirty.ng-invalid-min-items, input.ng-dirty.ng-invalid-max-items, input.ng-dirty.ng-invalid-unique-items {
+  border: 1px solid red;
+}
+
+input.ng-dirty.ng-invalid-min-items + span.raml-console-field-validation-error::after {
+  content: 'Invalid minItems';
+  color: white;
+  position: absolute;
+  margin-top: -20px;
+  font-size: 13px;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+}
+
+input.ng-dirty.ng-invalid-max-items + span.raml-console-field-validation-error::after {
+  content: 'Invalid maxItems';
+  color: white;
+  position: absolute;
+  margin-top: -20px;
+  font-size: 13px;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+}
+
+input.ng-dirty.ng-invalid-unique-items + span.raml-console-field-validation-error::after {
+  content: 'Repeated items';
   color: white;
   position: absolute;
   margin-top: -20px;

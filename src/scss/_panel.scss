@@ -27,6 +27,14 @@
   }
 }
 
+.schema-body {
+  font-size: 12px;
+  padding-top: 8px;
+  .flag {
+    font-size: 12px !important;
+  }
+}
+
 .resource-body-heading > span {
   margin-left: 5px;
   cursor: pointer;
@@ -88,7 +96,7 @@ root
 }
 
 .resource-panel-primary {
-  // width: 100%;
+  width: 60%;
   -ms-flex: 1 auto;
   flex: 1 auto;
   -webkit-flex: 1 auto;
@@ -378,6 +386,7 @@ root
   background: $color-sidebar-pre-bg;
   font-family: Source Code Pro;
   font-size: 14px;
+  overflow: auto;
 
   code {
     pre {

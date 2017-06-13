@@ -16,7 +16,11 @@ securitySchemes:
       responses:
         401:
           description: Unauthorized
-
+          body:
+            application/json:
+              example:
+                value:
+                  status: denied
 
 securedBy: [JWT]
 

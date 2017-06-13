@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: ['$scope', '$timeout', function ($scope, $timeout) {
+      controller: ['$scope', '$timeout', 'resourceId', function ($scope, $timeout, resourceId) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
@@ -15,6 +15,7 @@
         $scope.currentSchemeType = defaultSchema.type;
         $scope.currentScheme     = defaultSchema.id;
         $scope.responseDetails   = false;
+        $scope.resourceIdFn      = resourceId;
 
         function readCustomSchemeInfo (name) {
           if (!$scope.methodInfo.headers.plain) {
@@ -114,7 +115,7 @@
 
           apply();
 
-          var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
+          var hash = 'request_' + resourceId($scope.resource);
 
           $timeout(function () {
             if (jqXhr) {
@@ -133,7 +134,7 @@
           }, 10);
         }
 
-        function resolveSegementContexts(pathSegments, uriParameters) {
+        function resolveSegmentContexts(pathSegments, uriParameters) {
           var segmentContexts = [];
 
           pathSegments.forEach(function (element) {
@@ -174,7 +175,7 @@
               var input = angular.copy(params[key][0]);
 
               input.forEach(function (each, index) {
-                params[key][index] = each[0];
+                params[key][index] = each;
               });
             }
 
@@ -229,7 +230,7 @@
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
 
-          cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
+          $scope.methodInfo.headers && cleanSchemeMetadata($scope.methodInfo.headers.plain, $scope.context.headers);
           cleanSchemeMetadata($scope.methodInfo.queryParameters, $scope.context.queryParameters);
         });
 
@@ -324,7 +325,7 @@
         };
 
         $scope.hasExampleValue = function (value) {
-          return typeof value !== 'undefined' ? true : false;
+          return typeof value !== 'undefined';
         };
 
         $scope.context.forceRequest = false;
@@ -396,6 +397,92 @@
           $scope.form = form;
         };
 
+        $scope.setRequestUrl = function() {
+          var request = getRequest();
+
+          if (!request) {
+            return;
+          }
+
+          $scope.responseDetails      = true;
+          $scope.requestOptions.url   = request.toOptions().url;
+        };
+
+        function getRequest($event) {
+          if (!validateForm($scope.form)) {
+            return;
+          }
+
+          var url;
+          var context         = $scope.context;
+          var segmentContexts = resolveSegmentContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
+          var tryIt           = $event !== undefined;
+
+          if (tryIt) {
+            $scope.showSpinner = true;
+            $scope.queryStringHasError = false;
+            $scope.toggleRequestMetadata($event, true);
+          }
+
+          try {
+            var pathBuilder = context.pathBuilder;
+            var client      = RAML.Client.create($scope.raml, function(client) {
+              if ($scope.raml.baseUriParameters) {
+                Object.keys($scope.raml.baseUriParameters).map(function (key) {
+                  var uriParameters = $scope.context.uriParameters.data();
+                  pathBuilder.baseUriContext[key] = uriParameters[key][0];
+                  delete uriParameters[key];
+                });
+              }
+              client.baseUriParameters(pathBuilder.baseUriContext);
+            });
+
+            client.baseUri = client.baseUri.replace(/(https)|(http)/, $scope.currentProtocol.toLocaleLowerCase());
+            url = client.baseUri + pathBuilder(segmentContexts);
+          } catch (e) {
+            console.error(e);
+            $scope.response = {};
+            return;
+          }
+
+          var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
+
+          $scope.parameters = getParameters(context, 'queryParameters');
+
+          if (context.queryString) {
+            var parameters;
+            try {
+              parameters = JSON.parse(context.queryString);
+            } catch (e) {
+              $scope.queryStringHasError = true;
+              $scope.response = {};
+
+              $scope.showSpinner = false;
+              return;
+            }
+            Object.keys(parameters).forEach(function (key) {
+              if (!$scope.parameters[key]) {
+                $scope.parameters[key] = [];
+              }
+              var value = parameters[key];
+              if (typeof value === 'object') {
+                value = JSON.stringify(value);
+              }
+              $scope.parameters[key].push(value);
+            });
+          }
+
+          request.queryParams($scope.parameters);
+          request.header('Accept', $scope.raml.mediaType || defaultAccept);
+          request.headers(getParameters(context, 'headers'));
+
+          if (context.bodyContent) {
+            request.header('Content-Type', context.bodyContent.selected);
+            request.data(context.bodyContent.data());
+          }
+          return request;
+        }
+
         $scope.tryIt = function ($event) {
           $scope.requestOptions  = null;
           $scope.responseDetails = false;
@@ -406,64 +493,8 @@
           }
 
           if($scope.context.forceRequest || validateForm($scope.form)) {
-            var url;
-            var context         = $scope.context;
-            var segmentContexts = resolveSegementContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
-
-            $scope.showSpinner = true;
-            $scope.queryStringHasError = false;
-            $scope.toggleRequestMetadata($event, true);
-
-            try {
-              var pathBuilder = context.pathBuilder;
-              var client      = RAML.Client.create($scope.raml, function(client) {
-                if ($scope.raml.baseUriParameters) {
-                  Object.keys($scope.raml.baseUriParameters).map(function (key) {
-                    var uriParameters = $scope.context.uriParameters.data();
-                    pathBuilder.baseUriContext[key] = uriParameters[key][0];
-                    delete uriParameters[key];
-                  });
-                }
-                client.baseUriParameters(pathBuilder.baseUriContext);
-              });
-
-              client.baseUri = client.baseUri.replace(/(https)|(http)/, $scope.currentProtocol.toLocaleLowerCase());
-              url = client.baseUri + pathBuilder(segmentContexts);
-            } catch (e) {
-              console.error(e);
-              $scope.response = {};
-              return;
-            }
-            var request = RAML.Client.Request.create(url, $scope.methodInfo.method);
-
-            $scope.parameters = getParameters(context, 'queryParameters');
-
-            if (context.queryString) {
-              var parameters;
-              try {
-                parameters = JSON.parse(context.queryString);
-              } catch (e) {
-                $scope.queryStringHasError = true;
-                $scope.response = {};
-
-                $scope.showSpinner = false;
-                return;
-              }
-              Object.keys(parameters).forEach(function (key) {
-                if (!$scope.parameters[key]) {
-                  $scope.parameters[key] = [];
-                }
-                var value = parameters[key];
-                if (typeof value === 'object') {
-                  value = JSON.stringify(value);
-                }
-                $scope.parameters[key].push(value);
-              });
-            }
-
-            request.queryParams($scope.parameters);
-            request.header('Accept', $scope.raml.mediaType || defaultAccept);
-            request.headers(getParameters(context, 'headers'));
+            var context = $scope.context;
+            var request = getRequest($event);
 
             if (context.bodyContent) {
               request.header('Content-Type', context.bodyContent.selected);
@@ -479,7 +510,6 @@
               Object.keys(securitySchemes).map(function(key) {
                 if (securitySchemes[key].type === $scope.currentSchemeType) {
                   scheme = securitySchemes && securitySchemes[key];
-                  return;
                 }
               });
 
@@ -640,17 +670,29 @@
         };
 
         $scope.toggleRequestMetadata = function (enabled) {
-          if ($scope.showRequestMetadata && !enabled) {
-            $scope.showRequestMetadata = false;
-          } else {
-            $scope.showRequestMetadata = true;
-          }
+          $scope.showRequestMetadata = !($scope.showRequestMetadata && !enabled);
         };
 
         $scope.showResponseMetadata = true;
 
         $scope.toggleResponseMetadata = function () {
           $scope.showResponseMetadata = !$scope.showResponseMetadata;
+        };
+
+        $scope.isFileBody = function (param) {
+          return param.contentType && param.contentType.type && param.contentType.type[0] === 'file' ? true : false;
+        };
+
+        $scope.uploadFile = function (event) {
+          $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value  = event.files[0];
+        };
+
+        $scope.hasFormParameters = $scope.context.bodyContent && $scope.context.bodyContent.selected ? $scope.methodInfo.body[$scope.context.bodyContent.selected].hasOwnProperty('formParameters') : undefined;
+
+        $scope.getExample = function(param) {
+          var definitions = $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected];
+          var example = definitions.contentType[param.name].example;
+          return example ? [example] : example;
         };
       }]
     };

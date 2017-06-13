@@ -50,11 +50,11 @@
             </div>
           </section>
 
-          <named-parameters ng-if="resource.uriParametersForDocumentation" src="resource.uriParametersForDocumentation" context="context" type="uriParameters" title="URI Parameters" show-base-url></named-parameters>
+          <named-parameters ng-if="resource.uriParametersForDocumentation" src="resource.uriParametersForDocumentation" context="context" type="uriParameters" types="types" title="URI Parameters" show-base-url></named-parameters>
 
-          <named-parameters src="methodInfo.headers.plain" context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
+          <named-parameters context="context" type="headers" title="Headers" enable-custom-parameters></named-parameters>
 
-          <named-parameters src="methodInfo.queryParameters" context="context" type="queryParameters" types="types" title="Query Parameters" enable-custom-parameters></named-parameters>
+          <named-parameters context="context" type="queryParameters" types="types" title="Query Parameters" upload-request="setRequestUrl" enable-custom-parameters></named-parameters>
 
           <section ng-if="methodInfo.queryString">
             <header class="raml-console-sidebar-row raml-console-sidebar-subheader">
@@ -87,26 +87,61 @@
               </select>
             </div>
 
-            <div class="raml-console-sidebar-row" ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
+            <div class="raml-console-sidebar-row raml-console-body-data" ng-switch="context.bodyContent.isForm(context.bodyContent.selected)">
               <div ng-switch-when="false">
-                <div class="raml-console-codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
-                <div class="raml-console-sidebar-prefill raml-console-sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
-                  <button class="raml-console-sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
+
+                <div ng-switch="isFileBody(context.bodyContent.definitions[context.bodyContent.selected])">
+                  <div ng-switch-when="true">
+                    <input type="file" class="raml-console-sidebar-input-file"
+                           ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"
+                           validate="context.bodyContent.definitions[context.bodyContent.selected].contentType"
+                           onchange="angular.element(this).scope().uploadFile(this)"/>
+
+                    <span class="raml-console-field-validation-error"></span>
+                  </div>
+
+                  <div ng-switch-when="false">
+                    <div class="raml-console-codemirror-body-editor" ui-codemirror="{ lineNumbers: true, tabSize: 2, theme : 'raml-console', mode: context.bodyContent.selected }" ng-model="context.bodyContent.definitions[context.bodyContent.selected].value"></div>
+                    <div class="raml-console-sidebar-prefill raml-console-sidebar-row" align="right" ng-if="context.bodyContent.definitions[context.bodyContent.selected].hasExample()">
+                      <button class="raml-console-sidebar-action-prefill" ng-click="prefillBody(context.bodyContent.selected)">Prefill with example</button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
 
               <div ng-switch-when="true">
-                <p class="raml-console-sidebar-input-container" ng-repeat="param in context.bodyContent.definitions[context.bodyContent.selected].plain">
-                  <span class="raml-console-sidebar-input-tooltip-container" ng-if="param.definitions[0].description">
-                    <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
-                    <span class="raml-console-sidebar-tooltip-flyout">
-                      <span markdown="param.definitions[0].description" class="raml-console-marked-content"></span>
-                    </span>
-                  </span>
 
-                  <raml-field context="context" type="type" types="types" param="param.definitions[0]" model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id]"></raml-field>
-                </p>
+                <div ng-switch="hasFormParameters">
+                  <div ng-switch-when="true">
+                    <p class="raml-console-sidebar-input-container" ng-repeat="param in context.bodyContent.definitions[context.bodyContent.selected].plain">
+                      <span class="raml-console-sidebar-input-tooltip-container" ng-init="paramDescription = param.definitions[0].description" ng-if="paramDescription">
+                        <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
+                        <span class="raml-console-sidebar-tooltip-flyout">
+                          <span markdown="paramDescription" class="raml-console-marked-content"></span>
+                        </span>
+                      </span>
+
+                      <raml-field context="context" type="type" types="types" param="param.definitions[0]" model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id]"></raml-field>
+                    </p>
+                  </div>
+
+                  <div ng-switch-when="false">
+                    <p class="raml-console-sidebar-input-container" ng-repeat="(key, param) in context.bodyContent.definitions[context.bodyContent.selected].contentType">
+                      <span class="raml-console-sidebar-input-tooltip-container" ng-init="paramDescription = param.description" ng-if="paramDescription">
+                        <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
+                        <span class="raml-console-sidebar-tooltip-flyout">
+                          <span markdown="paramDescription" class="raml-console-marked-content"></span>
+                        </span>
+                      </span>
+
+                      <span ng-init="paramModel = getExample(param)">
+                        <raml-field context="context" type="type" types="types" param="param" model="paramModel"></raml-field>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
               </div>
             </div>
           </section>
@@ -130,7 +165,7 @@
           </section>
 
           <div ng-if="responseDetails">
-            <section id="request_{{generateId(resource.pathSegments)}}" class="raml-console-side-bar-try-it-description">
+            <section id="request_{{resourceIdFn(resource)}}" class="raml-console-side-bar-try-it-description">
               <header class="raml-console-sidebar-row raml-console-sidebar-header">
                 <h3 class="raml-console-sidebar-head raml-console-sidebar-head-expand">
                   <button ng-class="{'raml-console-is-open':showRequestMetadata, 'raml-console-is-collapsed':!showRequestMetadata}" class="raml-console-sidebar-expand-btn" ng-click="toggleRequestMetadata()">
@@ -173,7 +208,6 @@
                 </div>
               </div>
             </section>
-
             <section class="raml-console-side-bar-try-it-description">
               <header class="raml-console-sidebar-row raml-console-sidebar-header">
                 <h3 class="raml-console-sidebar-head">
@@ -183,7 +217,7 @@
                 </h3>
               </header>
 
-              <div class="raml-console-sidebar-row raml-console-sidebar-response" ng-class="{'raml-console-is-active':showResponseMetadata}">
+              <div class="raml-console-sidebar-row raml-console-sidebar-response" ng-class="{'raml-console-is-active': showResponseMetadata}">
                 <h3 class="raml-console-sidebar-response-head">Status</h3>
                 <p class="raml-console-sidebar-response-item">{{response.status}}</p>
 

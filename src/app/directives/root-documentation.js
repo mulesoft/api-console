@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/root-documentation.tpl.html',
       replace: true,
-      controller: ['$scope', '$timeout', function($scope, $timeout) {
+      controller: ['$scope', '$timeout', 'idGenerator', function($scope, $timeout, idGenerator) {
         $scope.markedOptions = RAML.Settings.marked;
         $scope.selectedSection = 'all';
 
@@ -19,7 +19,7 @@
         };
 
         $scope.generateDocId = function (path) {
-          return jQuery.trim(path.toString().replace(/\W/g, ' ')).replace(/\s+/g, '_').toLowerCase();
+          return idGenerator(path.toString());
         };
 
         $scope.toggleSection = function ($event, key, section) {

@@ -10,11 +10,12 @@
         controller:  'RamlConsoleController',
         scope:       {
           raml:    '=',
+          errors:  '=',
           options: '='
         }
       };
     })
-    .controller('RamlConsoleController', 
+    .controller('RamlConsoleController',
       ['$attrs', '$scope', '$rootScope', '$timeout', '$window', function RamlConsoleController(
       $attrs, $scope, $rootScope, $timeout, $window
     ) {
@@ -25,6 +26,8 @@
       $scope.disableThemeSwitcher       = $attrs.hasOwnProperty('disableThemeSwitcher');
       $scope.disableTitle               = $attrs.hasOwnProperty('disableTitle');
       $scope.disableTryIt               = $attrs.hasOwnProperty('disableTryIt');
+      $scope.disableDescription         = $attrs.hasOwnProperty('disableDescription');
+      $scope.descriptionLimit           = $attrs.hasOwnProperty('descriptionLimit') || 50;
       $scope.documentationCollapsed     = $attrs.hasOwnProperty('documentationCollapsed');
       $scope.proxy                      = $window.RAML.Settings.proxy;
       $scope.readResourceTraits         = readResourceTraits;
@@ -53,6 +56,7 @@
         });
 
         $scope.$watch('raml', function (raml) {
+
           if (!raml) {
             return;
           }
@@ -217,17 +221,10 @@
       }
 
       function toggle($event, index, collection, flagKey) {
-        var $this    = jQuery($event.currentTarget);
-        var $section = $this
-          .closest('.raml-console-resource-list-item')
-          .find('.raml-console-resource-list');
-
         collection[index] = !collection[index];
 
         $scope[flagKey] = checkItemStatus(false, collection) ? false : $scope[flagKey];
         $scope[flagKey] = checkItemStatus(true, collection) ? true : $scope[flagKey];
-
-        $section.toggleClass('raml-console-is-collapsed');
       }
 
       function updateProxyConfig(status) {

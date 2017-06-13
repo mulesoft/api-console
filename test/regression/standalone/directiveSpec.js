@@ -5,7 +5,7 @@ var factory    = require('../page_objects');
 
 module.exports = function() {
 
-  it('should be able to diplay errors for wrong raml', function () {
+  it('should be able to display errors for wrong raml', function () {
     // Arrange
     var assert = assertions.create('error');
 
@@ -16,7 +16,7 @@ module.exports = function() {
     assert.ifErrorMessageIsPresent('Api contains errors.');
   });
 
-  it('should be able to diplay the API title', function () {
+  it('should be able to display the API title', function () {
     // Arrange
     var assert = assertions.create('resource');
 
@@ -52,6 +52,22 @@ module.exports = function() {
     assert.ifBeAbleToTryIt(0, 0);
   });
 
+  it('should be able to display schema responses information', function () {
+    // Arrange
+    var assert = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-security-schema-pass-though.html');
+
+    resourcePo.toggleResourceMethod(0, 0);
+
+    // Assert
+    assert.ifShowsResponseSchemaExample(0, '{\n' +
+      '  "status": "denied"\n' +
+      '}');
+  });
+
   it('should be able to display security schemes', function () {
     // Arrange
     var assert = assertions.create('resource');
@@ -84,7 +100,7 @@ module.exports = function() {
   });
 
 
-  it('should be able to diplay all HTTP methods', function () {
+  it('should be able to display all HTTP methods', function () {
     // Arrange
     var assert = assertions.create('resource');
 
@@ -178,5 +194,122 @@ module.exports = function() {
       '  "lastName": "Smith",\n' +
       '  "title": "Developer"\n' +
       '}');
+  });
+
+  it('should show request url in try it panel', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-query-parameters.html');
+
+    resourcePo.toggleResourceMethod(0, 0);
+
+    // Assert
+    assert.ifShowsRequestUrl(0, 'http://localhost/resource?display=false&type=lalala&active=true');
+  });
+
+  it('should be able to open and close a resource', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-resources.html');
+
+    //Open method
+    resourcePo.toggleResourceMethod(0, 0);
+    assert.ifMethodIsOpen(0, true);
+
+    //Close method
+    resourcePo.toggleResourceMethod(0, 0);
+    assert.ifMethodIsOpen(0, false);
+
+    //Open method
+    resourcePo.toggleResourceMethod(0, 0);
+    assert.ifMethodIsOpen(0, true);
+
+    //Close method with close button
+    resourcePo.toggleCloseMethod(0, 0);
+    assert.ifMethodIsOpen(0, false);
+
+    //Open method
+    resourcePo.toggleResourceMethod(0, 0);
+    assert.ifMethodIsOpen(0, true);
+
+    //Close method
+    resourcePo.toggleResourceMethod(0, 0);
+    assert.ifMethodIsOpen(0, false);
+  });
+
+  it('should preserve query parameters order', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-query-parameters.html');
+
+    resourcePo.toggleResourceMethod(0, 0);
+
+    assert.ifShowingQueryParametersInCorrectOrder(0, ['display', 'type', 'other', 'page', 'active']);
+  });
+
+  it('should preserve properties order in root types', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/directive-types.html');
+
+    resourcePo.toggleRootTypes();
+
+    assert.ifShowingTypesPropertiesInCorrectOrder(0, ['c', 'a', 'b']);
+  });
+
+  describe('should display form body fields', function () {
+    it('should display properties for raml 1.0', function () {
+      // Arrange
+      var assert     = assertions.create('resource');
+      var resourcePo = factory.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/directive-resource-bodies-10.html');
+
+      resourcePo.toggleResourceMethod(1, 0);
+
+      //Assert
+      assert.ifDisplayingProperties(1, ['one', 'two'], ['file', 'string']);
+    });
+
+    it('should display properties inheriting from root types for raml 1.0', function () {
+      // Arrange
+      var assert     = assertions.create('resource');
+      var resourcePo = factory.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/directive-resource-bodies-10.html');
+
+      resourcePo.toggleResourceMethod(2, 0);
+
+      //Assert
+      assert.ifDisplayingProperties(2, ['one'], ['userPicture']);
+    });
+
+    it('should display formParameters for raml 0.8', function () {
+      // Arrange
+      var assert     = assertions.create('resource');
+      var resourcePo = factory.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/directive-resource-bodies-08.html');
+
+      resourcePo.toggleResourceMethod(0, 0);
+
+      //Assert
+      assert.ifDisplayingProperties(0, ['one', 'two'], ['file', 'string']);
+    });
   });
 };

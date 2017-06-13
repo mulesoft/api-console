@@ -1,5 +1,5 @@
 <div class="raml-console-initializer-container raml-console-initializer-primary">
-  <div ng-if="!vm.isLoading && !vm.raml">
+  <div ng-if="!vm.isLoading && !vm.raml && !vm.error">
     <h1 class="raml-console-title">RAML Console</h1>
 
     <div class="raml-console-initializer-content-wrapper">
@@ -10,12 +10,9 @@
 
         <div class="raml-console-initializer-row">
           <form novalidate ng-submit="vm.loadFromUrl(vm.ramlUrl)">
-            <p class="raml-console-initializer-input-container" ng-class="{'raml-console-initializer-input-container-error': vm.isLoadedFromUrl && vm.error}">
+            <p class="raml-console-initializer-input-container">
               <input id="ramlPath" autofocus class="raml-console-initializer-input raml-console-initializer-raml-field" ng-model="vm.ramlUrl">
             </p>
-            <div class="raml-console-parser-error" ng-if="vm.isLoadedFromUrl && vm.error">
-              <span>{{ vm.error.message }}</span>
-            </div>
             <div class="raml-console-initializer-action-group" align="right">
               <button id="loadRamlFromUrl" class="raml-console-initializer-action raml-console-initializer-action-btn" type="submit">Load from URL</button>
             </div>
@@ -29,7 +26,7 @@
         </header>
 
         <div class="raml-console-initializer-row">
-          <p class="raml-console-initializer-input-container" ng-class="{'raml-console-initializer-input-container-error': !vm.isLoadedFromUrl && vm.error}">
+          <p class="raml-console-initializer-input-container">
             <textarea id="raml" ui-codemirror="vm.codeMirror" ng-model="vm.ramlString"></textarea>
           </p>
           <div class="raml-console-initializer-action-group" align="right">
@@ -40,7 +37,7 @@
     </div>
   </div>
 
-  <raml-console ng-if="vm.raml" raml="vm.raml"></raml-console>
+  <raml-console ng-if="vm.raml || vm.error" errors="vm.error.errors" raml="vm.raml"></raml-console>
 
   <raml-console-spinner ng-if="vm.isLoading"></raml-console-spinner>
 </div>

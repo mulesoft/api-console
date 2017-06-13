@@ -38,6 +38,14 @@ function ResourcesPO () {
     return this.getMethodsForResourceAt(resource).get(method).element(by.css('.raml-console-tab-label'));
   };
 
+  this.getTypesBtn = function () {
+    return element(by.id('raml-console-documentation-container')).element(by.css('.raml-console-resource-root-toggle'));
+  };
+
+  this.getCloseMethodBtn = function (resource) {
+    return this.resources.get(resource+1).element(by.css('.raml-console-resource-close-btn'));
+  };
+
   this.getTryItGetBtn = function (index) {
     return this.resources.get(index+1).element(by.css('.raml-console-sidebar-action-get'));
   };
@@ -74,13 +82,58 @@ function ResourcesPO () {
     return this.resources.get(resourceIndex+1).all(by.css('.raml-console-sidebar-content-wrapper .raml-console-sidebar-input')).get(inputIndex);
   };
 
+  this.getTypeProperties = function () {
+    return element.all(by.css('.raml-console-resource-param'));
+  };
+
+  this.toggleRootType = function(type) {
+    var button = element.all(by.css('.raml-console-resource-param-heading span')).get(type);
+    button.click();
+  };
+
   this.toggleResourceMethod = function (resource, method) {
     var button = this.getMethodBtn(resource, method);
     button.click();
   };
 
-  this.getReponseExamples = function (resource) {
+  this.toggleRootTypes = function () {
+    var button = this.getTypesBtn();
+    button.click();
+  };
+
+  this.toggleCloseMethod = function(resource, method) {
+    var button = this.getCloseMethodBtn(resource, method);
+    button.click();
+  };
+
+  this.getResponseExamples = function (resource) {
     return this.resources.get(resource+1).element(by.css('.raml-console-hljs pre code'));
+  };
+
+  this.getResponseSchemaExamples = function (resource) {
+    var button = this.resources.get(resource+1).element(by.css('.raml-console-schema-body h4 .raml-console-flag'));
+    button.click();
+
+    return this.getResponseExamples(resource);
+  };
+
+  this.getRequestUrl = function (resource) {
+    var requestSection = this.resources.get(resource + 1).element(by.css('.raml-console-sidebar-expand-btn'));
+    requestSection.click();
+
+    return this.resources.get(resource + 1)
+      .element(by.css('.raml-console-sidebar-request-url'));
+  };
+
+  this.getResourcePanel = function(resource) {
+    return this.resources.get(resource + 1).element(by.css('.raml-console-resource-panel'));
+  };
+
+  this.getTryItBodyPanelParameters = function (resource) {
+    return this.resources.get(resource + 1)
+      .element(by.id('sidebar-body'))
+      .element(by.css('.raml-console-sidebar-row.raml-console-body-data'))
+      .all(by.tagName('p'));
   };
 }
 
