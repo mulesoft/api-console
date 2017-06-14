@@ -19,7 +19,7 @@
      <option ng-repeat="enum in unique(getEnum(param))" value="{{enum}}" ng-selected="{{param.example === enum}}">{{enum}}</option>
     </select>
 
-    <input id="{{param.id}}" ng-hide="!isDefault(param)" class="raml-console-sidebar-input" ng-model="model[0]" ng-class="{'raml-console-sidebar-field-no-default': !hasExampleValue(param)}" validate="param" dynamic-name="param.id" ng-change="onChange()"/>
+    <input id="{{param.id}}" ng-if="isDefault(param)" class="raml-console-sidebar-input" ng-model="model[0]" ng-class="{'raml-console-sidebar-field-no-default': !hasExampleValue(param)}" validate="param" dynamic-name="param.id" ng-change="onChange()"/>
 
     <input ng-if="isFile(param)" id="{{param.id}}" type="file" class="raml-console-sidebar-input-file" ng-model="model[0]" validate="param"
              dynamic-name="param.id"

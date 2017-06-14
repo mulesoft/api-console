@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var Context = function(baseUriParameters, resource, method) {
+  var Context = function(baseUriParameters, resource, method, types) {
     this.headers = new RAML.Services.TryIt.NamedParameters(method.headers.plain, method.headers.parameterized);
     this.queryParameters = new RAML.Services.TryIt.NamedParameters(method.queryParameters);
 
@@ -20,7 +20,7 @@
     this.uriParameters = new RAML.Services.TryIt.NamedParameters(resource.uriParametersForDocumentation);
 
     if (method.body) {
-      this.bodyContent = new RAML.Services.TryIt.BodyContent(method.body);
+      this.bodyContent = new RAML.Services.TryIt.BodyContent(method.body, types);
     }
 
     this.pathBuilder = new RAML.Client.PathBuilder.create(resource.pathSegments);
