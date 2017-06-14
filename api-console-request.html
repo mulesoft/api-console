@@ -78,6 +78,7 @@ is to proxt the HTTP request and avoid CORS problems.
       redirect-timings="{{redirectTimings}}"
       redirects="{{redirects}}"
       source-message="{{sourceMessage}}"
+      no-url-editor="{{noUrlEditor}}"
       on-api-console-request="_apiRequested"></raml-request-panel>
     <template is="dom-if" if="[[hasResponse]]">
       <response-view
@@ -225,7 +226,13 @@ is to proxt the HTTP request and avoid CORS problems.
          * Location of the `bower_components` folder.
          * It should be a path from server's root path including bower_components.
          */
-        bowerLocation: String
+        bowerLocation: String,
+        /**
+         * Hides the URL editor from the view.
+         * Note that the editor is still in the DOM. This property just hiddes
+         * it.
+         */
+        noUrlEditor: Boolean
       },
 
       listeners: {

@@ -154,7 +154,8 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
               append-headers="[[_computeAppendHeaders(appendHeaders)]]"
               proxy="[[proxy]]"
               proxy-encode-url="[[proxyEncodeUrl]]"
-              bower-location="[[bowerLocation]]"></api-console-request>
+              bower-location="[[bowerLocation]]"
+              no-url-editor="{{noUrlEditor}}"></api-console-request>
           </iron-pages>
         </div>
       </paper-header-panel>
@@ -282,7 +283,13 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
        * Location of the `bower_components` folder.
        * It should be a path from server's root path including bower_components.
        */
-      bowerLocation: String
+      bowerLocation: String,
+      /**
+       * Hides the URL editor from the view.
+       * Note that the editor is still in the DOM. This property just hiddes
+       * it.
+       */
+      noUrlEditor: Boolean
     },
 
     listeners: {

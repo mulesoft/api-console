@@ -40,7 +40,8 @@ The following table describes HTML attributes.
 | `no-try-it` | Disables the "try it" button in the method documentation view. The request editor and the response viewer is still available, but you must open it programmatically by setting `page` property to ` request`. | `Boolean` |  
 | `manual-navigation` | Disables navigation in the drawer and renders the navigation full screen when requested. Use in the narrow layouts with the `narrow` property. Set the `navigationOpened` property to `true` or `false` to open/close the navigation. | `Boolean` |
 | `navigation-opened` | If set, the `manual-navigation` attribute is set, and the full screen navigation will open/close. | `Boolean` |
-| `bowerLocation` | If the path to the `bower_components` is different than default (in the root path) then set this attribute to point the location of the folder, including folder name. | `Boolean` |
+| `bower-location` | If the path to the `bower_components` is different than default (in the root path) then set this attribute to point the location of the folder, including folder name. | `String` |
+| `no-url-editor` | If set, the URL editor is hidden in the Try it panel. The editor is still attached to the DOM but it's invisible to the user. | `Boolean`
 
 ## Controlling the view
 
