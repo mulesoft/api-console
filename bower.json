@@ -68,7 +68,9 @@
     "node_modules",
     "bower_components",
     "test",
-    "tasks"
+    "tasks",
+    "demo",
+    "docs"
   ],
   "version": "4.0.0-beta"
 }
