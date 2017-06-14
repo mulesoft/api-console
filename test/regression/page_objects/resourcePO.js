@@ -135,6 +135,19 @@ function ResourcesPO () {
       .element(by.css('.raml-console-sidebar-row.raml-console-body-data'))
       .all(by.tagName('p'));
   };
+
+  this.getTryItBodyPanelParameter = function (resource, id) {
+    return this.resources.get(resource + 1)
+      .element(by.id('sidebar-body'))
+      .element(by.css('.raml-console-sidebar-row.raml-console-body-data'))
+      .element(by.id(id));
+  };
+
+  this.getDocumentationBodyPanelParameters = function (resource) {
+    return this.resources.get(resource + 1)
+      .element(by.css('.raml-console-documentation-body'))
+      .all(by.css('.raml-console-resource-param'));
+  };
 }
 
 ResourcesPO.prototype = basePO;

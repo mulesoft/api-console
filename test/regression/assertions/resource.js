@@ -182,6 +182,23 @@ function Resource (poName) {
       expect(property.getText()).toContain(type);
     });
   };
+
+  this.ifDisplayingPropertyExample = function (resource, property, name) {
+    var bodyProperty = this.po.getTryItBodyPanelParameter(resource, property);
+    expect(bodyProperty.getAttribute('value')).toBe(name);
+  };
+
+  this.ifDisplayingDocumentationBodyProperties = function (resource, propertiesName, propertiesType) {
+    var bodyProperties = this.po.getDocumentationBodyPanelParameters(resource);
+
+    propertiesName.forEach(function (name, index) {
+      var property = bodyProperties.get(index + 1);
+      expect(property.getText()).toContain(name);
+
+      var type = propertiesType[index];
+      expect(property.getText()).toContain(type);
+    });
+  };
 }
 
 module.exports = Resource;

@@ -4,7 +4,17 @@
   var FORM_URLENCODED = 'application/x-www-form-urlencoded';
   var FORM_DATA = 'multipart/form-data';
 
-  var BodyContent = function(contentTypes) {
+  var BodyContent = function(contentTypes, types) {
+    function toObjectArray(properties) {
+      Object.keys(properties).forEach(function (property) {
+        if (!Array.isArray(properties[property])) {
+          properties[property].id = properties[property].name;
+          properties[property] = [properties[property]];
+        }
+      });
+      return properties;
+    }
+
     this.contentTypes = Object.keys(contentTypes).sort();
     this.selected = this.contentTypes[0];
 
@@ -24,8 +34,23 @@
           //For RAML 0.8 formParameters should be defined, but for RAML 1.0 properties node
           if (definition.formParameters) {
             definitions[contentType] = new RAML.Services.TryIt.NamedParameters(definition.formParameters);
-          } else if (definition.properties) {
-            definitions[contentType] = new RAML.Services.TryIt.BodyType(definition.properties);
+          } else {
+            var type = definition.type[0];
+            var isNativeType = RAML.Inspector.Types.isNativeType(type);
+
+            var inlineProperties;
+            if (definition.properties) {
+              inlineProperties = toObjectArray(definition.properties);
+            }
+
+            var rootProperties;
+            if (!isNativeType && types) {
+              var rootType = RAML.Inspector.Types.findType(type, types);
+              rootProperties = rootType && rootType.properties ? toObjectArray(rootType.properties) : undefined;
+            }
+
+            var properties = Object.assign({}, inlineProperties, rootProperties);
+            definitions[contentType] = new RAML.Services.TryIt.NamedParameters(properties);
           }
           break;
         default:

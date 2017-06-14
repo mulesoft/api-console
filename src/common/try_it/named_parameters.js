@@ -102,7 +102,6 @@
   NamedParameters.prototype.remove = function(name) {
     delete this.plain[name];
     delete this.values[name];
-    return;
   };
 
   NamedParameters.prototype.data = function() {

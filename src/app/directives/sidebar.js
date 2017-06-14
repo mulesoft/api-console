@@ -687,13 +687,6 @@
           $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected].value  = event.files[0];
         };
 
-        $scope.hasFormParameters = $scope.context.bodyContent && $scope.context.bodyContent.selected ? $scope.methodInfo.body[$scope.context.bodyContent.selected].hasOwnProperty('formParameters') : undefined;
-
-        $scope.getExample = function(param) {
-          var definitions = $scope.context.bodyContent.definitions[$scope.context.bodyContent.selected];
-          var example = definitions.contentType[param.name].example;
-          return example ? [example] : example;
-        };
       }]
     };
   };

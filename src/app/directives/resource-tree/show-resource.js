@@ -36,7 +36,10 @@
 
             Object.keys(definitions).map(function (key) {
               if (typeof definitions[key].reset !== 'undefined') {
-                definitions[key].reset($scope.methodInfo.body[key].formParameters);
+                //Reset formParameters or properties depending on RAML version
+                var body = $scope.methodInfo.body[key];
+                var parameters = body.formParameters ? body.formParameters : body.properties;
+                definitions[key].reset(parameters);
               } else {
                 definitions[key].fillWithExample();
                 if (definitions[key].value) {
@@ -83,14 +86,22 @@
         }
 
       function expandBodyExamples($scope, methodInfo) {
-        if (methodInfo.body) {
-          Object.keys(methodInfo.body).forEach(function (key) {
-            var bodyType = methodInfo.body[key];
-            var type = bodyType.type ? RAML.Inspector.Types.findType(bodyType.type[0], $scope.types) : undefined;
-            if (!bodyType.example && type && type.example) {
-              bodyType.example = type.example;
+        function expandExamples(body) {
+          Object.keys(body).forEach(function (key) {
+            var info = body[key];
+            var type = info.type ? RAML.Inspector.Types.findType(info.type[0], $scope.types) : undefined;
+            if (!body.example && type && type.example) {
+              info.example = type.example;
+            }
+
+            if (info.properties) {
+              expandExamples(info.properties);
             }
           });
+        }
+
+        if (methodInfo.body) {
+          expandExamples(methodInfo.body);
         }
         return methodInfo;
       }
@@ -109,7 +120,7 @@
 
           $scope.methodInfo               = expandBodyExamples($scope, methodInfo);
           $scope.responseInfo             = getResponseInfo($scope);
-          $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, resource, $scope.methodInfo);
+          $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, resource, $scope.methodInfo, $scope.types);
           $scope.requestUrl               = '';
           $scope.response                 = {};
           $scope.requestOptions           = {};
