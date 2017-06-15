@@ -2,7 +2,9 @@
 
 MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) documents. In addition to providing documentation, the tool provides the capability for users to try out requests on the fly.
 
-![](docs/new-console-header.png)
+[![API Console](docs/new-console-header.png)](https://mulesoft.github.io/api-console)
+
+**See live example of the API console in our [demo application].**
 
 ## Introduction
 
