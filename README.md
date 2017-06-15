@@ -165,7 +165,7 @@ You can also append the `/demo/` to the URL to switch to a demo page permanently
 
 ## Reporting issues and features requests
 
-The API Console and the Advanced REST client is open and we encourage the community to contribute to the project. However, it is very important to follow a few simple rules when you create an issue report or send a pull request.
+The API Console is open and we encourage the community to contribute to the project. However, it is very important to follow a few simple rules when you create an issue report or send a pull request.
 
 See CONTRIBUTING.md for description of how to file issue report of feature request.
 
