@@ -39,7 +39,6 @@
     "response-view": "advanced-rest-client/response-view#^0.1.1",
     "fetch-polyfill": "advanced-rest-client/fetch-polyfill#^0.1.1",
     "api-console-ext-comm": "advanced-rest-client/api-console-ext-comm#^0.1.1",
-    "anypoint-styles": "advanced-rest-client/anypoint-styles#^0.1.2",
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.11",
     "paper-header-panel": "PolymerElements/paper-header-panel#^1.1.7",
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
