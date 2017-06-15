@@ -21,7 +21,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 :root {
   --primary-color: var(--arc-color-primary, #00a2df);
   --secondary-color: var(--arc-color-secondary, #506773);
-  --primary-background-color: #fff;
+  --primary-background-color: var(--arc-color-primary-background, #fff);
   --accent-color: var(--arc-accent-color, #cc143c);
 
   /* THEME */
@@ -123,18 +123,18 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
-  }
+  };
 
   /* Mixin applied to all the "missing info" paragraphs. By deafult all elements this kind are the <p> elements. But it may vary. */
   --no-info-message: {
     @apply(--arc-font-body1);
     font-style: italic;
-  }
+  };
 
     /* Mixin applied to all labels that are form elements */
   --form-label: {
     font-weight: 500;
-  }
+  };
 
   --input-line-color:  var(--primary-color);
 
@@ -161,9 +161,10 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --paper-toolbar-background: var(--arc-toolbar-background, #121314);
+
   --paper-toolbar-title: {
     margin-left: 0px;
-  }
+  };
 
     /* Paper tabs styling */
   --paper-tabs-selection-bar-color: var(--arc-tabs-selection-bar-color, --primary-color);
@@ -191,7 +192,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     /* Documentaion */
   --raml-docs-main-content: {
     margin-bottom: var(--raml-docs-main-content-margin-bottom, 20px);
-  }
+  };
 
     /* Inputs */
   --paper-input-container-color: var(--arc-input-container-color, rgba(0, 0, 0, 0.24));
@@ -202,7 +203,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
   --raml-request-parameters-editor-subheader: {
     @apply(--arc-font-subhead);
-    @apply(--arc-request-parameters-editor-subheader)
+    @apply(--arc-request-parameters-editor-subheader);
   };
 
   /*Table*/
@@ -289,7 +290,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     padding: 8px;
     margin-left: 0px;
     @apply(--arc-docs-response-panel-docs-content);
-  }
+  };
 
   /* Documentation panels */
   --params-table-header-background-color: var(--arc-params-table-header-background-color, #616161);
@@ -304,7 +305,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --response-error-view: {
     margin-top: var(--response-error-view-margin-top, 24px);
     @apply(--arc-response-error-view);
-  }
+  };
 
   --code-type-text-value-color: #0d47a1;
   --code-type-number-value-color: #03a9f4;
