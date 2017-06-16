@@ -123,7 +123,7 @@ Theming is based on CSS variables and CSS mixins. Basic concepts of using the va
 
 Cross-origin resource sharing (CORS) allows sharing resources from one domain to other domains. Browsers block all requests to other domains but with a special set of headers authors can allow other domains to request a resource. For more information, see the [CORS Wiki].
 
-If your API does not allow CORS for some reason then API Console won't be able to make a request to an endpoint. API Console currently supports 3 ways of dealing with this issue:
+If your API does not allow CORS and you hosting your API documentation in different domain then API Console won't be able to make a request to an endpoint. API Console currently supports 3 ways of dealing with this issue:
 
 - by installing the **API Console Chrome extension**
 - by setting up a **proxy server**
