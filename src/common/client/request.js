@@ -8,6 +8,7 @@
     var rawData;
     var queryParams;
     var isMultipartRequest;
+    var withCredentials;
 
     this.data = function(data) {
       if (data === undefined) {
@@ -28,6 +29,10 @@
     this.queryParam = function(name, value) {
       queryParams = queryParams || {};
       queryParams[name] = value;
+    };
+
+    this.withCredentials = function(val) {
+      withCredentials = val;
     };
 
     this.header = function(name, value) {
@@ -97,6 +102,13 @@
 
       if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
         o.url = RAML.Settings.proxy + o.url;
+      }
+
+      if (withCredentials)
+      {
+        o.xhrFields = {
+          withCredentials: true
+        };
       }
 
       return o;

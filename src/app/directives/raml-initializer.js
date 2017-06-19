@@ -13,8 +13,8 @@
         }
       };
     })
-    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
-      $scope, $window, ramlParser
+    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', 'urlSearchParams', function RamlInitializerController(
+      $scope, $window, ramlParser, urlSearchParams
     ) {
       $scope.vm = {
         codeMirror: {
@@ -38,20 +38,28 @@
       // ---
 
       (function activate() {
-        if (document.location.search.indexOf('?raml=') !== -1) {
-          loadFromUrl(document.location.search.replace('?raml=', ''));
+        var params = urlSearchParams.search();
+        if (params.raml) {
+          loadFromUrl(params.raml, !!params.withCredentials);
         }
       })();
 
       // ---
 
-      function loadFromUrl(url) {
+      function loadFromUrl(url, withCredentials) {
         $scope.vm.ramlUrl = url;
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
           $scope.vm.isLoadedFromUrl = true;
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
-          return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+          return loadFromPromise(
+            ramlParser.loadPath(
+              $window.resolveUrl(url), undefined, {
+                withCredentials: withCredentials
+              }
+            ),
+            {isLoadingFromUrl: true}
+          );
         }
       }
 

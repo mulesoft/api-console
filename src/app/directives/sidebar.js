@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: ['$scope', '$timeout', 'resourceId', function ($scope, $timeout, resourceId) {
+      controller: ['$scope', '$timeout', 'resourceId', 'urlSearchParams', function ($scope, $timeout, resourceId, urlSearchParams) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
@@ -480,6 +480,9 @@
             request.header('Content-Type', context.bodyContent.selected);
             request.data(context.bodyContent.data());
           }
+
+          request.withCredentials(!!urlSearchParams.search().withCredentials);
+
           return request;
         }
 

@@ -1554,8 +1554,8 @@
         }
       };
     })
-    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
-      $scope, $window, ramlParser
+    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', 'urlSearchParams', function RamlInitializerController(
+      $scope, $window, ramlParser, urlSearchParams
     ) {
       $scope.vm = {
         codeMirror: {
@@ -1579,20 +1579,28 @@
       // ---
 
       (function activate() {
-        if (document.location.search.indexOf('?raml=') !== -1) {
-          loadFromUrl(document.location.search.replace('?raml=', ''));
+        var params = urlSearchParams.search();
+        if (params.raml) {
+          loadFromUrl(params.raml, !!params.withCredentials);
         }
       })();
 
       // ---
 
-      function loadFromUrl(url) {
+      function loadFromUrl(url, withCredentials) {
         $scope.vm.ramlUrl = url;
         if(RAML.LoaderUtils.ramlOriginValidate(url, $scope.options)) {
           $scope.vm.isLoadedFromUrl = true;
           $scope.vm.error = {message : 'RAML origin check failed. Raml does not reside underneath the path:' + RAML.LoaderUtils.allowedRamlOrigin($scope.options)};
         } else {
-          return loadFromPromise(ramlParser.loadPath($window.resolveUrl(url)), {isLoadingFromUrl: true});
+          return loadFromPromise(
+            ramlParser.loadPath(
+              $window.resolveUrl(url), undefined, {
+                withCredentials: withCredentials
+              }
+            ),
+            {isLoadingFromUrl: true}
+          );
         }
       }
 
@@ -2295,7 +2303,7 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: ['$scope', '$timeout', 'resourceId', function ($scope, $timeout, resourceId) {
+      controller: ['$scope', '$timeout', 'resourceId', 'urlSearchParams', function ($scope, $timeout, resourceId, urlSearchParams) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
         var defaultAccept    = 'application/json';
@@ -2769,6 +2777,9 @@
             request.header('Content-Type', context.bodyContent.selected);
             request.data(context.bodyContent.data());
           }
+
+          request.withCredentials(!!urlSearchParams.search().withCredentials);
+
           return request;
         }
 
@@ -3431,7 +3442,8 @@
                 headers: {
                   'Accept': 'application/raml+yaml'
                 },
-                transformResponse: null
+                transformResponse: null,
+                withCredentials: options.withCredentials
               };
               return $http(req)
                 .then(function (res) {
@@ -3458,6 +3470,46 @@
     }])
   ;
 })();
+
+(function () {
+  'use strict';
+
+  angular.module('raml')
+    .factory('urlSearchParams', ['$window', '$location', function($window, $location) {
+
+      function search() {
+        var left = $window.location.search
+          .split(/[&||?]/)
+          .filter(function (x) {
+            return x.indexOf('=') > -1;
+          })
+          .map(function (x) {
+            return x.split(/=/);
+          })
+          .map(function (x) {
+            x[1] = x[1].replace(/\+/g, ' ');
+            return x;
+          })
+          .reduce(function (acc, current) {
+            acc[current[0]] = current[1];
+            return acc;
+          }, {});
+
+        var right = $location.search() || {};
+
+        return Object.keys(right)
+          .reduce(function (acc, current) {
+            acc[current] = right[current];
+            return acc;
+          }, left);
+      }
+
+      return {
+        search: search
+      };
+    }]);
+
+}());
 
 (function () {
   'use strict';
@@ -4229,6 +4281,7 @@
     var rawData;
     var queryParams;
     var isMultipartRequest;
+    var withCredentials;
 
     this.data = function(data) {
       if (data === undefined) {
@@ -4249,6 +4302,10 @@
     this.queryParam = function(name, value) {
       queryParams = queryParams || {};
       queryParams[name] = value;
+    };
+
+    this.withCredentials = function(val) {
+      withCredentials = val;
     };
 
     this.header = function(name, value) {
@@ -4318,6 +4375,13 @@
 
       if (!RAML.Settings.disableProxy && RAML.Settings.proxy) {
         o.url = RAML.Settings.proxy + o.url;
+      }
+
+      if (withCredentials)
+      {
+        o.xhrFields = {
+          withCredentials: true
+        };
       }
 
       return o;

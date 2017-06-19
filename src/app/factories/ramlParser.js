@@ -67,7 +67,8 @@
                 headers: {
                   'Accept': 'application/raml+yaml'
                 },
-                transformResponse: null
+                transformResponse: null,
+                withCredentials: options.withCredentials
               };
               return $http(req)
                 .then(function (res) {
