@@ -196,7 +196,6 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
       // Current path in the RAML structure.
       path: {
         type: String,
-        observer: '_pathChanged',
         notify: true
       },
       // If true it will display a narrow layout.
@@ -295,7 +294,8 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
     listeners: {
       'scroll-to': '_onScrollRequested',
       'raml-path-changed': '_innerPathChanged',
-      'tryit-requested': '_tryitHandler'
+      'tryit-requested': '_tryitHandler',
+      'raml-selected-path-changed': '_pathChangedEventHandler'
     },
 
     observers: ['_ramlChanged(raml)', '_jsonFileChanged(jsonFile)'],
@@ -329,16 +329,6 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
      */
     _tryitHandler: function() {
       this.page = 'request';
-    },
-    /**
-     * Handler for path change.
-     * It set's current `page` to the `docs` if it is not pointing to the
-     * docs.
-     */
-    _pathChanged: function() {
-      if (this.page !== 'docs') {
-        this.page = 'docs';
-      }
     },
     /**
      * Handler for the `raml` property change.
@@ -402,6 +392,12 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
         }
         this.$.mainPages.removeAttribute('hidden');
         this.scrollTarget.scrollTop = this.__originallScrollTop;
+      }
+    },
+    // Handler for the path changed event. Switches to docs if needed.
+    _pathChangedEventHandler: function(e) {
+      if (this.page !== 'docs') {
+        this.page = 'docs';
       }
     }
   });
