@@ -1,0 +1,405 @@
+<!--
+@license
+Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../raml-path-to-object/raml-path-to-object.html">
+<link rel="import" href="../raml-path-selector/raml-path-selector.html">
+<link rel="import" href="../raml-aware/raml-aware.html">
+<link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../paper-toast/paper-toast.html">
+<link rel="import" href="../api-console-ext-comm/api-console-ext-comm.html">
+<link rel="import" href="../raml-documentation-panel/raml-documentation-panel.html">
+<link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="../fetch-polyfill/fetch-polyfill.html">
+<link rel="import" href="../promise-polyfill/promise-polyfill.html">
+<link rel="import" href="../headers-parser-behavior/headers-parser-behavior.html">
+<link rel="import" href="api-console-styles.html">
+<link rel="import" href="api-console-request.html">
+<!--
+# The API Console
+
+The API console for RAML (Restful Api Modeling Language) documents.
+The RAML Console allows browsing of API documentation and in-browser testing of API methods.
+
+@element api-console
+@demo demo/index.html
+-->
+<dom-module id="api-console">
+  <template>
+    <style>
+     :host {
+      --app-primary-color: #00A2DF;
+      --app-secondary-color: black;
+      display: block;
+    }
+
+    :host([manual-navigation]) raml-path-selector {
+      @apply(--layout-fit);
+      transition-property: -webkit-transform;
+      transition-property: transform;
+      -webkit-transition-duration: 0.24s;
+      transition-duration: 0.24s;
+      -webkit-transform: translate3d(-100%, 0, 0);
+      transform: translate3d(-100%, 0, 0);
+      background-color: var(--api-console-manual-navigation-background-color, #fff);
+      z-index: 1;
+    }
+
+    :host([manual-navigation]) raml-path-selector[opened] {
+      transform: translate3d(0px, 0px, 0px);
+    }
+
+    *[hidden] {
+      display: none !important;
+    }
+
+    iron-pages {
+      height: 100%;
+    }
+
+    iron-pages>* {
+      height: 100%;
+    }
+
+    .nav-content {
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+    }
+
+    .nav-content > ::content > * {
+      margin-left: 12px;
+    }
+
+    .drawer-content-wrapper {
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+    }
+
+    #drawer {
+      --paper-header-panel-container: {
+        @apply(--layout-horizontal);
+      }
+    }
+    </style>
+    <paper-drawer-panel responsive-width="860px" force-narrow="[[manualNavigation]]">
+      <template is="dom-if" if="[[!manualNavigation]]">
+        <paper-header-panel drawer id="drawer">
+          <paper-toolbar>
+            <div class="title">API console</div>
+          </paper-toolbar>
+          <div class="drawer-content-wrapper">
+            <raml-path-selector
+              narrow="[[narrow]]"
+              raml="[[raml]]"
+              selected-path="{{path}}"
+              force-wide-layout
+              first-level-opened
+              resources-opened
+              documentation-opened></raml-path-selector>
+            <content select="[nav-addon]"></content>
+          </div>
+        </paper-header-panel>
+      </template>
+      <paper-header-panel main>
+        <paper-toolbar>
+          <paper-icon-button icon="arc:menu" paper-drawer-toggle hidden$="[[manualNavigation]]"></paper-icon-button>
+          <div class="title">[[raml.title]]</div>
+          <span class="flex"></span>
+          <div class="nav-content">
+            <content select="[nav]"></content>
+          </div>
+        </paper-toolbar>
+        <div>
+          <template is="dom-if" if="[[manualNavigation]]">
+            <raml-path-selector opened$=[[navigationOpened]]
+              narrow="[[narrow]]"
+              raml="[[raml]]"
+              selected-path="{{path}}"
+              first-level-opened
+              resources-opened
+              documentation-opened></raml-path-selector>
+          </template>
+          <iron-pages selected="[[page]]" attr-for-selected="name" role="main" id="mainPages">
+            <raml-documentation-panel
+              name="docs"
+              narrow="[[narrow]]"
+              selected-object="[[selectedObject]]"
+              selected-parent="[[selectedParent]]"
+              path="{{path}}"
+              scroll-target="[[scrollTarget]]"
+              no-try-it="[[noTryIt]]"
+              handle-path-events></raml-documentation-panel>
+            <api-console-request
+              no-extension-banner="[[noExtensionBanner]]"
+              narrow="[[narrow]]"
+              name="request"
+              page="[[page]]"
+              scroll-target="[[scrollTarget]]"
+              selected-object="[[selectedObject]]"
+              selected-parent="[[selectedParent]]"
+              path="{{path}}"
+              append-headers="[[_computeAppendHeaders(appendHeaders)]]"
+              proxy="[[proxy]]"
+              proxy-encode-url="[[proxyEncodeUrl]]"
+              bower-location="[[bowerLocation]]"
+              no-url-editor="{{noUrlEditor}}"></api-console-request>
+          </iron-pages>
+        </div>
+      </paper-header-panel>
+    </paper-drawer-panel>
+    <template is="dom-if" if="[[aware]]" restamp="true">
+      <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
+    </template>
+    <raml-path-to-object raml="[[raml]]" selected-path="{{path}}" selected-object="{{selectedObject}}" selected-parent="{{selectedParent}}"></raml-path-to-object>
+    <api-console-ext-comm></api-console-ext-comm>
+  </template>
+  <script>
+  Polymer({
+    is: 'api-console',
+
+    behaviors: [
+      Polymer.IronScrollTargetBehavior,
+      ArcBehaviors.HeadersParserBehavior
+    ],
+    /**
+     * Fired when the element is ready to work and all DOM initialization have finished.
+     *
+     * @event api-console-ready
+     */
+    properties: {
+      // Currently displayed page. Either `docs` or `request`
+      page: {
+        type: String,
+        value: 'docs',
+        notify: true
+      },
+      // RAML as the JSON produced by the parser. The `.specification` part of the output.
+      raml: Object,
+      /**
+       * Path to a file with JSON data that should be read and contents of it
+       * should be set to the `raml` attribute
+       */
+      jsonFile: String,
+      // Current path in the RAML structure.
+      path: {
+        type: String,
+        notify: true
+      },
+      // If true it will display a narrow layout.
+      narrow: {
+        type: Boolean,
+        notify: true
+      },
+      // Selected object in the navigation menu and parsed by the
+      // `raml-path-selector` element
+      selectedObject: Object,
+      // A parent endpoint of selected method object (if any).
+      selectedParent: Object,
+      // If not set or false then the install extension banner will be allowed to be shown.
+      noExtensionBanner: Boolean,
+      /**
+       * If set it will use the `raml-aware` element to set the RAML data.
+       * Value of this attribute should be the same as the scope attribute
+       * of the `raml-aware` element used to set the data.
+       */
+      aware: String,
+      // An element that handles the scroll of the main document.
+      scrollTarget: {
+        type: HTMLElement,
+        value: function() {
+          return this.$$('paper-header-panel[main]').scroller;
+        }
+      },
+      /**
+       * Forces the console to send headers defined in this string overriding any used defined
+       * header.
+       * It can be useful if the console has to send any recognizable string to a server without
+       * user knowing about it.
+       * The headers should be a HTTP headers string.
+       */
+      appendHeaders: {
+        type: String
+      },
+      /**
+       * If set every request made from the console will be proxied by the service provided in this
+       * value.
+       * It will prefix entered URL with the proxy value. so the call to
+       * `http://domain.com/path/?query=some+value` will become
+       * `https://proxy.com/path/http://domain.com/path/?query=some+value`
+       *
+       * If the proxy require a to pass the URL as a query parameter define value as follows:
+       * `https://proxy.com/path/?url=`. In this case be sure to set `proxy-encode-url`
+       * attribute.
+       */
+      proxy: String,
+      /**
+       * If `proxy` is set, it will URL encode the request URL before appending it to the proxy URL.
+       * `http://domain.com/path/?query=some+value` will become
+       * `https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`
+       */
+      proxyEncodeUrl: Boolean,
+      /**
+       * If set then the API console hide the "try it" button from the
+       * method documentation view. The request and response panels still will
+       * be available, but to enter this section you'll have to do it
+       * programatically.
+       */
+      noTryIt: Boolean,
+      /**
+       * If set, the open navigation button will be always hidden.
+       * The left hand side navigation will be hidden until `navigationOpened`
+       * property is set.
+       * The navigation will cover full screen, hiding the content.
+       * This works best with `narrow` layout.
+       */
+      manualNavigation: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
+      },
+      /**
+       * True when navigation is or should be opened.
+       */
+      navigationOpened: {
+        type: Boolean,
+        notify: true,
+        observer: '_navigationOpenedChanged'
+      },
+      /**
+       * Location of the `bower_components` folder.
+       * It should be a path from server's root path including bower_components.
+       */
+      bowerLocation: String,
+      /**
+       * Hides the URL editor from the view.
+       * Note that the editor is still in the DOM. This property just hiddes
+       * it.
+       */
+      noUrlEditor: Boolean
+    },
+
+    listeners: {
+      'scroll-to': '_onScrollRequested',
+      'raml-path-changed': '_innerPathChanged',
+      'tryit-requested': '_tryitHandler',
+      'raml-selected-path-changed': '_pathChangedEventHandler'
+    },
+
+    observers: ['_ramlChanged(raml)', '_jsonFileChanged(jsonFile)'],
+
+    attached: function() {
+      this.listen(window, 'api-console-extension-installed', '_onExtensionInstalled');
+    },
+
+    detached: function() {
+      this.unlisten(window, 'api-console-extension-installed', '_onExtensionInstalled');
+    },
+
+    ready: function() {
+      this.fire('api-console-ready');
+    },
+    // Scrolls the document to required position.
+    _onScrollRequested: function(e) {
+      this.scroll(e.detail.x || 0, e.detail.y || 0);
+    },
+    // Handler for `raml-path-changed` that is fired from docs elements.
+    _innerPathChanged: function(e) {
+      this.set('path', e.detail.path);
+    },
+    // Handler for the extension installed event.
+    _onExtensionInstalled: function() {
+      this.set('noExtensionBanner', true);
+    },
+    /**
+     * Handler for the `tryit-requested` event. Sets current screen to
+     * `request`.
+     */
+    _tryitHandler: function() {
+      this.page = 'request';
+    },
+    /**
+     * Handler for the `raml` property change.
+     * Sets the `path` to summary.
+     */
+    _ramlChanged: function() {
+      this.path = 'summary';
+    },
+
+    _notify: function(message) {
+      var t = document.createElement('paper-toast');
+      t.text = message;
+      t.opened = true;
+      document.body.appendChild(t);
+    },
+
+    _jsonFileChanged: function(url) {
+      var context = this;
+      fetch(url)
+      .then(function(response) {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(function(json) {
+        context.set('raml', json);
+        if (!json) {
+          context._notify('Data unavailable under given URL.');
+          context.fire('json-file-loaded-error');
+        } else {
+          context.fire('json-file-loaded');
+        }
+      })
+      .catch(function(reason) {
+        context._notify('Unable to download data. ' + reason.message);
+      });
+    },
+    // Transforms HTTP headers string to headers map.
+    _computeAppendHeaders: function(headers) {
+      if (headers) {
+        // Hardcoded text set to the attribute will contain "\n" as text and not LN.
+        headers = headers.replace('\\n', '\n');
+      }
+      return this.headersToJSON(headers);
+    },
+
+    _navigationOpenedChanged: function(value) {
+      if (value === undefined || !this.manualNavigation) {
+        return;
+      }
+      if (value) {
+        var context = this;
+        this.__originallScrollTop = this.scrollTarget.scrollTop;
+        this.scrollTarget.scrollTop = 0;
+        this.__hideMainTimeout = setTimeout(function() {
+          context.$.mainPages.setAttribute('hidden', true);
+        }, 200);
+      } else {
+        if (this.__hideMainTimeout) {
+          clearTimeout(this.__hideMainTimeout);
+        }
+        this.$.mainPages.removeAttribute('hidden');
+        this.scrollTarget.scrollTop = this.__originallScrollTop;
+      }
+    },
+    // Handler for the path changed event. Switches to docs if needed.
+    _pathChangedEventHandler: function(e) {
+      if (this.page !== 'docs') {
+        this.page = 'docs';
+      }
+    }
+  });
+  </script>
+</dom-module>

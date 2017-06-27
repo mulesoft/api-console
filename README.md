@@ -1,186 +1,198 @@
-# RAML Console
+# The API Console
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/mulesoft/api-console?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) documents. In addition to providing documentation, the tool provides the capability for users to try out requests on the fly.
 
-[![Build Status](https://travis-ci.org/mulesoft/api-console.png)](https://travis-ci.org/mulesoft/api-console) [![Dependency Status](https://david-dm.org/mulesoft/api-console.png)](https://david-dm.org/mulesoft/api-console#info=dependencies)
-[![DevDependency Status](https://david-dm.org/mulesoft/api-console/dev-status.png)](https://david-dm.org/mulesoft/api-console#info=devDependencies) [![npm version](https://badge.fury.io/js/api-console.svg)](https://badge.fury.io/js/api-console) [![Bower version](https://badge.fury.io/bo/api-console.svg)](https://badge.fury.io/bo/api-console)
+[![API Console](docs/new-console-header.png)](https://mulesoft.github.io/api-console)
 
-An API console for [RAML](http://raml.org) (Restful Api Modeling Language) documents. The RAML Console allows browsing of API documentation and in-browser testing of API methods.
+**See live example of the API console in our [demo application].**
 
-## Using the console
+## Introduction
 
-There are two ways you can include the console: directly, or within an iframe. The direct method is seamless but has the potential of CSS and JS conflicts. Using an iframe avoids conflicts, but has its own quirks noted below.
+In this repository, you can find the source for a single HTML element that represents API Console.
 
-### Including the console directly
+The HTML element is built on top of the [Web Components specifications](https://www.webcomponents.org/introduction) and powered by the [Polymer library](https://www.polymer-project.org/). Familiarity with Polymer isn't necessary to use the console.
 
-1. Include the packaged CSS and JS in your document
+The following sections briefly describe how to build and use the console. For more information, see the [docs](docs) directory in this repository.
 
-        <head>
-          …
-          <link href="styles/vendor.css" rel="stylesheet" type="text/css">
-          <link rel="stylesheet" href="path/to/dist/styles/light-theme.css" type="text/css" />
-        </head>
-        <body ng-app="ramlConsoleApp" ng-cloak>
-          …
-          <script src="path/to/dist/scripts/vendor.js"></script>
-          <script type="text/javascript" src="scripts/api-console.js"></script>
-          <script type="text/javascript">
-            $.noConflict();
-          </script>
-        </body>
+## Using the API console
 
-2. Include the `<raml-console-loader>` directive, specifying your RAML as a `src` attribute.
-       <raml-console-loader src='path/to/your/api.raml'></raml-console-loader>
+API Console comes in two flavors.
 
-3. Please ensure that the container for the console directive provides the CSS properties `overflow: auto` and `position: relative`.
+* A **standalone web-application**  
+* embeddable **HTML element**  
 
-#### Caveats
+You can select which one suits your needs.
 
-##### CSS Conflicts
+### Run as a standalone web-application
 
-The CSS for the console is namespaced so that it won't affect other parts of the page it's included on. However, general styles you have (such as on `h1`s) may inadvertently bleed into the console.
+Use API Console as a standalone application to display the documentation for your API as a web page. The application supports [Deep linking][deep linking], which allows you to share a link to a particular part of your API documentation. You can find a basic example of the standalone application on our [demo application] web page.
 
-##### JS Conflicts
+To build the API Console as a standalone application use one of our [build tools].
 
-The console's javascript includes various dependencies, for example [AngularJS](http://angularjs.org/) and [jQuery](http://jquery.com/). If your document requires different versions or includes conflicting libraries, your page may break.
+### Embed as an HTML element
 
-### Including the console via an iframe
+The API Console was built on top of the new Web Components specification. When you include sources of the console into your web application it registers a new HTML element, `<api-console>`. You can use this element in the same way as any other element on the page or web application. For example, you can embed the console into your blog post or as a part of a press release. Your users can explore your API without being redirected to another web page.
 
-1. Within the page that you would like to include the console into, add the following:
+First, use [bower] to install the console and its dependencies:
 
-        <iframe src="path/to/dist/index.html?raml=path/to/your.api.raml"/>
+```bash
+$ bower install --save mulesoft/api-console
+```
 
-#### Caveats
+Next, include the element in your web page:
 
-##### Sizing
+```html
+<link rel="import" href="bower_components/api-console/api-console.html">
+```
 
-You will need to specify a fixed height for the iframe that fits into the design of your page. Since iframes do not automatically resize to fit content, the user may have to scroll within the iframe.
+Finally use the HTML tag:
 
-### General considerations
+```html
+<body>
+  <api-console raml="{...}"></api-console>
+</body>
+```
 
-1. Your RAML document needs to be hosted on the same domain as the console, or on a domain that allows [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) requests from your domain.
-2. To use **Try It** functionality within the console, your API needs to enable CORS from the console's domain, or you need to use a proxy.
+See complete documentation about how to import sources into your web page in the [api console element docs]. Also, if you are a developer you can check out [demo application source code].
 
-## Configuration
+You can also build API Console as a embeddable HTML element using one of our [build tools].
 
-### Proxying
+## Optimization options
 
-A proxy for Try It can be provided after loading the console JavaScript. For example:
+API Console displays documentation for RAML documents by performing heavy duty computations to transform RAML data into a JavaScript object. Naturally, this takes time. There are, however, a few options to optimize loading time of API Console, depending on your use case.
 
-    RAML.Settings.proxy = 'http://www.someproxy.com/somepath/'
+### RAML data source
 
-Given the above, trying a GET to `http://www.someapi.com/resource` would get
+If your API is under active development and changes often, you may want to consider using the RAML file hosted on a server as a data source. The API Console application will then parse RAML file using the RAML JavaScript parser and use the parser output as a data source. Parsing occurs during API Console load time, but during that time, the latest API version is displayed.
 
-    http://www.someproxy.com/somepath/http://www.someapi.com/resource
+Because this use case requires you to include more custom HTML elements it's not suitable for the standalone version. Other options would be a better fit.
 
-### OAuth 2
+### JSON data source
 
-A redirect URI for OAuth 2 can be provided in a similar manner:
+If your API doesn't change often or if you are using our [build tools] in your CI process, using a JSON data source is a good choice. In this case, you can generate a JSON file from the RAML and use it as a data input in the `<api-console>` element.
 
-    RAML.Settings.oauth2RedirectUri = 'http://www.raml.org/console/'
+This option significantly reduces the API Console load time. It is also suitable for both standalone application and the HTML element.
 
-Given the above, OAuth 2 requests would redirect back to that URL.
+### Inline JSON in the page source
 
-### Markdown line breaks
+This option gives you the fastest load time but may increase initial page weight. It is the same option as the JSON data source but the JSON data is not kept in separate JSON file. The data is included in the page source as a JavaScript object.
 
-Add the following in a similar manner as proxying or OAuth 2.0 to ignore markdown line breaks as they are:
+Use this option if your API rarely, or never, changes. Every change to the source RAML file requires regenerating the whole page, which can be automated with our [build tools].
 
-    RAML.Settings.marked.breaks = false
+## API Console configuration options
 
-### Single View Mode
+Configuration options differ from the previous version. Because API Console is a (custom) HTML element its configuration is based on HTML attributes. You can pass values as an attribute value, or use a boolean option by simply setting the attribute. Configuration from JavaScript code is based on setting a JavaScript property as the attribute name on the element. If the attribute name contains dashes then make the property name [camel case].
 
-In *Single View* mode you will be able to see only documentation or try-it.
+Example:
 
-    <raml-console-loader src="path-to-raml" options="{ singleView: true }"></raml-console-loader>
+```html
+<api-console append-headers="x-api-key: 1234" narrow></api-console>
+```
 
-### Theme Switcher
+An equivalent example is:
 
-*Theme Switcher* can be disable if needed by adding the following setting:
+```javascript
+var console = document.querySelector('api-console');
+console.narrow = true;
+console.appendHeaders = 'x-api-key: 1234';
+```
 
-    <raml-console-loader src="path-to-raml" options="{ disableThemeSwitcher: true }"></raml-console-loader>
+See the full list of API Console configuration options in the [configuring the api console] document.
 
-### Disabling Client Generator
+## Build tools
 
-*Raml client generator* can be disable if needed by adding the following setting:
+A set of build tools is included to help you create API Console from the RAML file. Build tools are configured to produce a production optimized version of API Console. The build tools can generate both standalone and embeddable version of the console. You can also configure data source strategy (RAML, JSON or inline JSON as a data source).
 
-    <raml-console-loader src="path-to-raml" options="{ disableRamlClientGenerator: true }"></raml-console-loader>
+The following build tools are available:
 
-### Resources collapsed
+* The `api-console` CLI
+* The node modules
+  * `api-console-builder`
+  * `raml-json-enhance-node`  
 
-*Resources* can be collapsed if needed by adding the following setting:
+Depending on your needs you can choose whether you want to use a CLI tool or a node module.
 
-    <raml-console-loader src="path-to-raml" options="{ resourcesCollapsed: true }"></raml-console-loader>
+Build tools can be helpful in the CI process to automate the documentation release cycle. See the [build tools] documentation for more information and build strategies.
 
-### Documentation collapsed
+## Theming
+API Console supports theming and comes with a default theme. You can create your own theme. For example, you can tweak the style of the console to match your corporate style guide.
 
-*Documentation* can be collapsed if needed by adding the following setting:
+Theming is based on CSS variables and CSS mixins. Basic concepts of using the variables and mixins are described in the [Polymer 1.0 styling] documentation. You can check the [api-console-styles.html](api-console-styles.html) file to see the current theme definition, and then read the [theming documentation] to learn how to create your own theme.
 
-    <raml-console-loader src="path-to-raml" options="{ documentationCollapsed: true }"></raml-console-loader>
+## CORS
 
-### Allowing Unsafe Markdown
+Cross-origin resource sharing (CORS) allows sharing resources from one domain to other domains. Browsers block all requests to other domains but with a special set of headers authors can allow other domains to request a resource. For more information, see the [CORS Wiki].
 
-*Unsafe Markdown* will be disable by default, if you want to allow unsafe content check the following example:
+If your API does not allow CORS and you hosting your API documentation in different domain then API Console won't be able to make a request to an endpoint. API Console currently supports 3 ways of dealing with this issue:
 
-    <raml-console-loader src="path-to-raml" options="{ allowUnsafeMarkdown: true }"></raml-console-loader>    
+- by installing the **API Console Chrome extension**
+- by setting up a **proxy server**
+- by handling HTTP requests from the hosting application
 
-### Disabling Try-it
+Read our [CORS guideline] for more information about each of these solutions.
 
-*Try-it* will be enable by default, if you want to disable Try-it you can do that by adding the following setting:
+## Preview and development
 
-    <raml-console-loader src="path-to-raml" options="{ disableTryIt: true }"></raml-console-loader>    
+The API Console is a custom element that serves as a shell element for other custom web components. To develop the API Console most probably you'd have to develop one of over a hundred other web components that creates the console. All the elements are described in [the elements catalog][the elements catalogue].
 
-### Multiple Options
+1. Clone the element.
+```
+git clone https://github.com/mulesoft/api-console.git
+cd api-console
+```
 
-Multiple of the options above can be provided. The options need to be expressed in camelcase format:
+2. Checkout the latest version.
+```
+git checkout release/4.0.0
+```
 
-    <raml-console-loader src="path-to-raml" options="{ disableRamlClientGenerator: true, disableTryIt: true }"></raml-console-loader> 
+3. Install [polymer-cli] and [Bower].
+```
+sudo npm install -g bower polymer-cli
+```
 
-## Development
+4. Install dependencies.
+```
+bower install
+```
 
-### Prerequisites
+5. Serve the element.
+```
+polymer serve --open -p 8080
+```
 
-To run the console, you'll need the following:
+The default page is the element's documentation. Switch to demo to see a working example.
 
-* [Node JS](http://nodejs.org/)
-* [NPM](https://npmjs.org/)
-* [Ruby](https://www.ruby-lang.org)
+You can also append the `/demo/` to the URL to switch to a demo page permanently.
 
-### First Time Setup
+## Reporting issues and features requests
 
-1. Install Sass - `gem install sass`
-1. Install grunt-cli globally - `npm install -g grunt-cli`
-1. Install bower globally - `npm install -g bower`
-1. Install the console's NPM packages - `npm install`
-1. Install the console's Bower packages - `bower install`
+The API Console is open and we encourage the community to contribute to the project. However, it is very important to follow a few simple rules when you create an issue report or send a pull request.
 
-### Running the server
+See CONTRIBUTING.md for description of how to file issue report of feature request.
 
-    $ grunt
-    $ open http://localhost:9000
+### Contributor's Agreement
 
-## Testing
+To contribute source code to this repository, read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following these instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43
 
-### Prerequisites
+## License
 
-To run tests, you'll need the following:
+The API Console is shared under Common Public Attribution License Version 1.0 (CPAL-1.0).
 
-* [Node JS](http://nodejs.org/)
-* [NPM](https://npmjs.org/)
-* [Protractor](http://angular.github.io/protractor)
-* [Ruby](https://www.ruby-lang.org)
+See the LICENSE.md file for more information.
 
-### First Time Setup
-
-1. Install Sass - `gem install sass`
-1. Install grunt-cli globally - `npm install -g grunt-cli`
-1. Install protractor globally - `npm install -g protractor`
-1. Install the console's NPM packages - `npm install`
-1. Run  `node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update`
-
-### Running Tests
-
-    $ grunt regression
-
-## Contributor's Agreement
-
-To contribute source code to this repository, please read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following the instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43
+[deep linking]: https://en.wikipedia.org/wiki/Deep_linking
+[demo application]: https://mulesoft.github.io/api-console
+[demo application source code]: demo/api.html
+[api console element docs]: docs/api-console-element.md
+[build tools]: docs/build-tools.md
+[configuring the api console]: docs/configuring-api-console.md
+[theming documentation]: docs/theming.md
+[camel cased]: https://en.wikipedia.org/wiki/Camel_case
+[polymer-cli]: https://www.polymer-project.org/1.0/docs/tools/polymer-cli
+[Bower]: https://bower.io/
+[Polymer 1.0 styling]: https://www.polymer-project.org/1.0/docs/devguide/styling
+[the elements catalogue]: https://elements.advancedrestclient.com/
+[bower]: https://bower.io/
+[CORS Wiki]: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+[CORS guideline]: docs/cors.md
