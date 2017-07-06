@@ -2,7 +2,7 @@
   "name": "api-console",
   "version": "4.0.0-beta",
   "license": "CPAL-1.0",
-  "description": "The API Console used in RAML platform.",
+  "description": "The API console used in RAML platform.",
   "devDependencies": {
     "polymer-cli": "^0.17.0"
   },

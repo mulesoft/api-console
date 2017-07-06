@@ -1,6 +1,6 @@
 {
   "name": "api-console",
-  "description": "The API Console used in RAML platform.",
+  "description": "The API console used in RAML platform.",
   "authors": [
     "The Advanced REST client authors <arc@mulesoft.com>"
   ],
