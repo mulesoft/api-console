@@ -16,7 +16,7 @@
   "main": "api-console.html",
   "repository": {
     "type": "git",
-    "url": "git@github.com:advanced-rest-client/api-console.git"
+    "url": "git@github.com:mulesoft/api-console.git"
   },
   "dependencies": {
     "polymer": "Polymer/polymer#^1.6.0",
