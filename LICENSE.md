@@ -128,6 +128,8 @@ in the absence of Modifications made by that Contributor.
 
 3.  Distribution Obligations.
 
+
+
 3.1  Application of License.
 
 The Modifications which You create or to which You contribute are governed by
@@ -243,6 +245,8 @@ fulfilled for the Covered Code.
 
 4.  Inability to Comply Due to Statute or Regulation.
 
+
+
 If it is impossible for You to comply with any of the terms of this License with
 respect to some or all of the Covered Code due to statute, judicial order, or
 regulation then You must: (a) comply with the terms of this License to the
@@ -255,10 +259,14 @@ it.
 
 5.  Application of this License.
 
+
+
 This License applies to code to which the Initial Developer has attached the
 notice in Exhibit A and to related Covered Code.
 
 6.  Versions of the License.
+
+
 
 6.1  New Versions.
 
@@ -288,6 +296,8 @@ themselves be deemed to be modifications of this License.)
 
 7.  DISCLAIMER OF WARRANTY.
 
+
+
 COVERED CODE IS PROVIDED UNDER THIS LICENSE ON AN “AS IS” BASIS, WITHOUT
 WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT
 LIMITATION, WARRANTIES THAT THE COVERED CODE IS FREE OF DEFECTS, MERCHANTABLE,
@@ -300,6 +310,8 @@ OF THIS LICENSE. NO USE OF ANY COVERED CODE IS AUTHORIZED HEREUNDER EXCEPT UNDER
 THIS DISCLAIMER.
 
 8.  TERMINATION.
+
+
 
 8.1  This License and the rights granted hereunder will terminate automatically
 if You fail to comply with terms herein and fail to cure such breach within 30
@@ -347,6 +359,8 @@ survive termination.
 
 9.  LIMITATION OF LIABILITY.
 
+
+
 UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER TORT (INCLUDING
 NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL YOU, THE INITIAL DEVELOPER, ORIGINAL
 DEVELOPER, ANY OTHER CONTRIBUTOR, OR ANY DISTRIBUTOR OF COVERED CODE, OR ANY
@@ -363,6 +377,8 @@ LIMITATION MAY NOT APPLY TO YOU.
 
 10.  U.S. GOVERNMENT END USERS.
 
+
+
 The Covered Code is a “commercial item,” as that term is defined in 48 C.F.R.
 2.101 (Oct. 1995), consisting of “commercial computer software” and “commercial
 computer software documentation,” as such terms are used in 48 C.F.R. 12.212
@@ -371,6 +387,8 @@ computer software documentation,” as such terms are used in 48 C.F.R. 12.212
 only those rights set forth herein.
 
 11.  MISCELLANEOUS.
+
+
 
 This License represents the complete agreement concerning subject matter hereof.
 If any provision of this License is held to be unenforceable, such provision
@@ -390,6 +408,8 @@ drafter shall not apply to this License.
 
 12.  RESPONSIBILITY FOR CLAIMS.
 
+
+
 As between Initial Developer, Original Developer and the Contributors, each
 party is responsible for claims and damages arising, directly or indirectly, out
 of its utilization of rights under this License and You agree to work with
@@ -398,6 +418,8 @@ responsibility on an equitable basis. Nothing herein is intended or shall be
 deemed to constitute any admission of liability.
 
 13.  MULTIPLE-LICENSED CODE.
+
+
 
 Initial Developer may designate portions of the Covered Code as
 Multiple-Licensed. Multiple-Licensed means that the Initial Developer permits
@@ -455,6 +477,8 @@ as expressly set out in this License.
 
 15.  ADDITIONAL TERM: NETWORK USE.
 
+
+
 The term “External Deployment” means the use, distribution, or communication of
 the Original Code or Modifications in any way such that the Original Code or
 Modifications may be used by anyone other than You, whether those works are
@@ -464,7 +488,13 @@ license hereunder, You must treat any External Deployment by You of the Original
 Code or Modifications as a distribution under section 3.1 and make Source Code
 available under Section 3.2.
 
+
+
+
+
 EXHIBIT A
+
+
 
 “The contents of this file are subject to the Common Public Attribution License
 Version 1.0 (the “License”); you may not use this file except in compliance with
