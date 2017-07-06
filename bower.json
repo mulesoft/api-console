@@ -1,6 +1,6 @@
 {
   "name": "api-console",
-  "description": "The API Console used in RAML platform.",
+  "description": "The API console used in RAML platform.",
   "authors": [
     "The Advanced REST client authors <arc@mulesoft.com>"
   ],
@@ -16,7 +16,7 @@
   "main": "api-console.html",
   "repository": {
     "type": "git",
-    "url": "git@github.com:advanced-rest-client/api-console.git"
+    "url": "git@github.com:mulesoft/api-console.git"
   },
   "dependencies": {
     "polymer": "Polymer/polymer#^1.6.0",
@@ -63,7 +63,6 @@
   },
   "ignore": [
     "**/.*",
-    "dependencyci.yml",
     "node_modules",
     "bower_components",
     "test",
@@ -71,5 +70,5 @@
     "demo",
     "docs"
   ],
-  "version": "4.0.0-beta"
+  "version": "4.0.0"
 }
