@@ -59,7 +59,8 @@
     "paper-item": "PolymerElements/paper-item#^1.2.1",
     "raml-docs-helpers": "advanced-rest-client/raml-docs-helpers#^1.0.5",
     "app-route": "PolymerElements/app-route#^1.0.0",
-    "raml-aware": "advanced-rest-client/raml-aware#^1.0.3"
+    "raml-aware": "advanced-rest-client/raml-aware#^1.0.3",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#<2"
   },
   "ignore": [
     "**/.*",
