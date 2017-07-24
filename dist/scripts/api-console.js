@@ -3275,7 +3275,7 @@
         if (expandedType) {
           for (var key in expandedType) {
             if (expandedType.hasOwnProperty(key)) {
-              if (['example', 'examples'].includes(key) && valueHasExamples) { continue; }
+              if ((key === 'example' || key === 'examples') && valueHasExamples) { continue; }
               value[key] = expandedType[key];
             }
           }
