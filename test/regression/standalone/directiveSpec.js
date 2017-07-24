@@ -345,5 +345,29 @@ module.exports = function() {
       //Assert
       assert.ifDisplayingProperties(0, ['one', 'two'], ['file', 'string']);
     });
+
+    it('should display description for all resources', function () {
+      // Arrange
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/descriptions.html');
+
+      //Assert
+      assert.ifDisplayingDescription(0, 'Product');
+      assert.ifDisplayingDescription(1, 'Get Product by ID');
+      assert.ifDisplayingDescription(2, 'Get Product Info');
+    });
+
+    it('should display root description', function () {
+      // Arrange
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/descriptions.html');
+
+      //Assert
+      assert.ifDisplayingRootDescription('Product API');
+    });
   });
 };

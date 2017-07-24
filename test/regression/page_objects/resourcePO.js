@@ -148,6 +148,15 @@ function ResourcesPO () {
       .element(by.css('.raml-console-documentation-body'))
       .all(by.css('.raml-console-resource-param'));
   };
+
+  this.getDescription = function (resource) {
+    return this.resources.get(resource + 1)
+      .element(by.css('.raml-console-resource-level-description'));
+  };
+
+  this.getRootDescription = function () {
+    return element(by.css('.raml-console-root-description'));
+  };
 }
 
 ResourcesPO.prototype = basePO;

@@ -199,6 +199,18 @@ function Resource (poName) {
       expect(property.getText()).toContain(type);
     });
   };
+
+  this.ifDisplayingDescription = function (resource, expectedDescription) {
+    var resourceDescription = this.po.getDescription(resource);
+
+    expect(resourceDescription.getText()).toContain(expectedDescription);
+  };
+
+  this.ifDisplayingRootDescription = function (expectedDescription) {
+    var rootDescription = this.po.getRootDescription();
+
+    expect(rootDescription.getText()).toContain(expectedDescription);
+  };
 }
 
 module.exports = Resource;
