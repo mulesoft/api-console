@@ -112,35 +112,20 @@
 
               <div ng-switch-when="true">
 
-                <div ng-switch="hasFormParameters">
-                  <div ng-switch-when="true">
-                    <p class="raml-console-sidebar-input-container" ng-repeat="param in context.bodyContent.definitions[context.bodyContent.selected].plain">
-                      <span class="raml-console-sidebar-input-tooltip-container" ng-init="paramDescription = param.definitions[0].description" ng-if="paramDescription">
-                        <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
-                        <span class="raml-console-sidebar-tooltip-flyout">
-                          <span markdown="paramDescription" class="raml-console-marked-content"></span>
-                        </span>
-                      </span>
+                <p class="raml-console-sidebar-input-container"
+                   ng-repeat="param in context.bodyContent.definitions[context.bodyContent.selected].plain">
+                  <span class="raml-console-sidebar-input-tooltip-container"
+                        ng-init="paramDescription = param.definitions[0].description" ng-if="paramDescription">
+                    <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span
+                      class="raml-console-visuallyhidden">Show documentation</span></button>
+                    <span class="raml-console-sidebar-tooltip-flyout">
+                      <span markdown="paramDescription" class="raml-console-marked-content"></span>
+                    </span>
+                  </span>
 
-                      <raml-field context="context" type="type" types="types" param="param.definitions[0]" model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id]"></raml-field>
-                    </p>
-                  </div>
-
-                  <div ng-switch-when="false">
-                    <p class="raml-console-sidebar-input-container" ng-repeat="(key, param) in context.bodyContent.definitions[context.bodyContent.selected].contentType">
-                      <span class="raml-console-sidebar-input-tooltip-container" ng-init="paramDescription = param.description" ng-if="paramDescription">
-                        <button tabindex="-1" class="raml-console-sidebar-input-tooltip"><span class="raml-console-visuallyhidden">Show documentation</span></button>
-                        <span class="raml-console-sidebar-tooltip-flyout">
-                          <span markdown="paramDescription" class="raml-console-marked-content"></span>
-                        </span>
-                      </span>
-
-                      <span ng-init="paramModel = getExample(param)">
-                        <raml-field context="context" type="type" types="types" param="param" model="paramModel"></raml-field>
-                      </span>
-                    </p>
-                  </div>
-                </div>
+                  <raml-field context="context" type="type" types="types" param="param.definitions[0]"
+                              model="context.bodyContent.definitions[context.bodyContent.selected].values[param.definitions[0].id]"></raml-field>
+                </p>
 
               </div>
             </div>

@@ -282,6 +282,8 @@ module.exports = function() {
 
       //Assert
       assert.ifDisplayingProperties(1, ['one', 'two'], ['file', 'string']);
+      assert.ifDisplayingDocumentationBodyProperties(1, ['one', 'two'], ['file', 'string']);
+      assert.ifDisplayingPropertyExample(1, 'two', 'blah');
     });
 
     it('should display properties inheriting from root types for raml 1.0', function () {
@@ -295,7 +297,39 @@ module.exports = function() {
       resourcePo.toggleResourceMethod(2, 0);
 
       //Assert
-      assert.ifDisplayingProperties(2, ['one'], ['userPicture']);
+      assert.ifDisplayingProperties(2, ['one', 'two'], ['userPicture', 'userName']);
+      assert.ifDisplayingDocumentationBodyProperties(2, ['one', 'two'], ['userPicture', 'userName']);
+      assert.ifDisplayingPropertyExample(2, 'two', 'blah');
+    });
+
+    it('should display type inheriting from root types for raml 1.0', function () {
+      // Arrange
+      var assert     = assertions.create('resource');
+      var resourcePo = factory.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/directive-resource-bodies-10.html');
+
+      resourcePo.toggleResourceMethod(3, 0);
+
+      //Assert
+      assert.ifDisplayingProperties(3, ['one', 'two'], ['file', 'string']);
+      assert.ifDisplayingDocumentationBodyProperties(3, ['one', 'two'], ['file', 'string']);
+    });
+
+    it('should display type and properties for raml 1.0', function () {
+      // Arrange
+      var assert     = assertions.create('resource');
+      var resourcePo = factory.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/directive-resource-bodies-10.html');
+
+      resourcePo.toggleResourceMethod(4, 0);
+
+      //Assert
+      assert.ifDisplayingProperties(4, ['one', 'three', 'two'], ['file', 'string', 'string']);
+      assert.ifDisplayingDocumentationBodyProperties(4, ['one', 'two', 'three'], ['file', 'string', 'string']);
     });
 
     it('should display formParameters for raml 0.8', function () {
@@ -310,6 +344,30 @@ module.exports = function() {
 
       //Assert
       assert.ifDisplayingProperties(0, ['one', 'two'], ['file', 'string']);
+    });
+
+    it('should display description for all resources', function () {
+      // Arrange
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/descriptions.html');
+
+      //Assert
+      assert.ifDisplayingDescription(0, 'Product');
+      assert.ifDisplayingDescription(1, 'Get Product by ID');
+      assert.ifDisplayingDescription(2, 'Get Product Info');
+    });
+
+    it('should display root description', function () {
+      // Arrange
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/descriptions.html');
+
+      //Assert
+      assert.ifDisplayingRootDescription('Product API');
     });
   });
 };

@@ -143,26 +143,36 @@
   };
 
   /**
-   * Check a string is not smaller than a minimum length.
+   * Check a string (or file) is not smaller than a minimum length.
+   * This facet can be defined for string and file
    *
    * @param  {Number}  min
    * @return {Function}
    */
   var isMinimumLength = function (min) {
     return function (check) {
-      return check.length >= min;
+      if (check.constructor === File) {
+        return check.size <= min;
+      } else {
+        return check.length >= min;
+      }
     };
   };
 
   /**
-   * Check a string does not exceed a maximum length.
+   * Check a string (or file) does not exceed a maximum length.
+   * This facet can be defined for string and file
    *
    * @param  {Number}  max
    * @return {Function}
    */
   var isMaximumLength = function (max) {
     return function (check) {
-      return check.length <= max;
+      if (check.constructor === File) {
+        return check.size <= max;
+      } else {
+        return check.length <= max;
+      }
     };
   };
 
@@ -200,7 +210,7 @@
    */
   var isValidFileTypes = function (values) {
     return function (check) {
-      check = check.toLowerCase();
+      check = check.type;
       var checkInValue = values.find(function (value) {
         return value.toLowerCase() === check
       });

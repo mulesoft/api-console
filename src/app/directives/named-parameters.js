@@ -111,7 +111,7 @@
             return undefined;
           }
 
-          var separator   = (description ? (usage ? '\n' : '') : ('') )+ 'Format example: ';
+          var separator = (description ? (usage ? '\n Format example: ' : '') : ('') );
           return (description ? description : '') + separator + usage;
         };
       }]

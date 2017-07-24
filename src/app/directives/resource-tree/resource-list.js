@@ -70,7 +70,7 @@
 
   function resourceLevelDescriptionElement(resource) {
     var element = angular.element('<span class="raml-console-resource-level-description raml-console-marked-content"></span>');
-    element.attr('markdown', resource.description);
+    element.append(angular.element('<p>' + resource.description + '</p>'));
     return element;
   }
 
