@@ -297,7 +297,7 @@ module.exports = function() {
       resourcePo.toggleResourceMethod(2, 0);
 
       //Assert
-      assert.ifDisplayingProperties(2, ['one', 'two'], ['userPicture', 'userName']);
+      assert.ifDisplayingProperties(2, ['one', 'two'], ['file', 'string']);
       assert.ifDisplayingDocumentationBodyProperties(2, ['one', 'two'], ['userPicture', 'userName']);
       assert.ifDisplayingPropertyExample(2, 'two', 'blah');
     });

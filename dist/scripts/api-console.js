@@ -1411,6 +1411,11 @@
           }
         }
 
+        $scope.getNativeType = function(type) {
+          var paramType = getParamType(type).type;
+          return Array.isArray(paramType) ? paramType[0] : paramType;
+        };
+
         $scope.isEnum = function (definition) {
           var paramType = getParamType(definition);
           return paramType.hasOwnProperty('enum');
@@ -7850,7 +7855,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "    <a class=\"raml-console-sidebar-override\" ng-if=\"canOverride(param)\" ng-click=\"overrideField($event, param)\">Override</a>\n" +
     "    <span class=\"raml-console-side-bar-required-field\" ng-if=\"param.required\">*</span>\n" +
     "    <label ng-if=\"param.isFromSecurityScheme\" class=\"raml-console-sidebar-security-label\">from security scheme</label>\n" +
-    "    <span class=\"raml-console-resource-param-instructional\">{{toString(param.type)}}</span>\n" +
+    "    <span class=\"raml-console-resource-param-instructional\">{{getNativeType(param)}}</span>\n" +
     "  </label>\n" +
     "\n" +
     "  <div ng-if=\"!param.properties && !isArray(param)\">\n" +
