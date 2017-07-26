@@ -34,6 +34,7 @@
     apiconsole.app.setInitialRouteData();
     apiconsole.app.addParserListeners();
     apiconsole.app.observeRouteEvents();
+    apiconsole.app.observeConsoleControls();
   };
 
   apiconsole.app.setInitialRouteData = function() {
@@ -157,6 +158,32 @@
       page: page,
       path: path
     };
+  };
+
+  apiconsole.app.observeConsoleControls = function() {
+    var toggles = document.querySelectorAll('.console-controls paper-toggle-button');
+    for (var i = 0, len = toggles.length; i < len; i++) {
+      toggles[i].addEventListener('checked-changed', apiconsole.app.consoleControlsChanged);
+    }
+  };
+
+  apiconsole.app.consoleControlsChanged = function(e) {
+    var action = e.target.dataset.action;
+    switch (action) {
+      case 'parser':
+        var parser = document.querySelector('raml-docs-parser');
+        if (e.detail.value) {
+          parser.removeAttribute('hidden');
+        } else {
+          parser.setAttribute('hidden', true);
+        }
+        break;
+      case 'noTryIt':
+      case 'narrow':
+        var apiConsole = document.querySelector('api-console');
+        apiConsole[action] = e.detail.value;
+        break;
+    }
   };
 
   // Notifys user when something went wrong...
