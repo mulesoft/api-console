@@ -17,22 +17,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/test-helpers.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../../raml-js-parser/raml-js-parser.html">
-  <link rel="import" href="../../raml-json-enhance/raml-json-enhance.html">
+  <link rel="import" href="../../fetch-polyfill/fetch-polyfill.html">
   <link rel="import" href="../api-console-request.html">
 </head>
 
 <body>
-  <test-fixture id="parser">
-    <template>
-      <raml-js-parser json></raml-js-parser>
-    </template>
-  </test-fixture>
-  <test-fixture id="enhancer">
-    <template>
-      <raml-json-enhance></raml-json-enhance>
-    </template>
-  </test-fixture>
   <test-fixture id="basic">
     <template>
       <api-console-request></api-console-request>
@@ -55,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </test-fixture>
   <script>
   /* global fixture, assert, TestHelpers */
-  suite('basic', function() {
+  suite('basic api-console-request', function() {
     var element;
 
     setup(function() {
@@ -77,16 +66,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   suite('Response handling', function() {
     var element;
-    var response = new Response('test', {
-      statusCode: 200,
-      headers: {
-        'content-type': 'x-test'
-      }
-    });
+    var response;
 
     setup(function() {
       element = fixture('basic');
-      element.response = response;
+      element.response = new Response('test', {
+        statusCode: 200,
+        headers: {
+          'content-type': 'x-test'
+        }
+      });
       TestHelpers.forceXIfStamp(element);
     });
 
@@ -179,7 +168,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     test('Encodes URL for proxy', function() {
       element.proxyEncodeUrl = true;
       element._appendProxy(event);
-      assert.equal(event.detail.url, 'https://domain.com/http%3A%2F%2Ftest.domain.com%2F%3Fparam%3Dvalue');
+      assert.equal(event.detail.url,
+        'https://domain.com/http%3A%2F%2Ftest.domain.com%2F%3Fparam%3Dvalue');
     });
   });
 
