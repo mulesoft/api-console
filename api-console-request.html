@@ -105,24 +105,12 @@ is to proxt the HTTP request and avoid CORS problems.
       ],
 
       properties: {
-        /**
-         * Current path to the resource / method / documentation.
-         * This is updated when the user select a specific node in the RAML JSON structure that
-         * represents one of this properties. When changed from the outside (by the app) it will
-         * update the view to display selected path.
-         */
-        path: {
-          type: String,
-          notify: true
-        },
         // Selected object in the navigation menu and parsed by the
         // `raml-path-selector` element
         selectedObject: {
           type: Object,
           observer: '_selectedObjectChanged'
         },
-        // A parent endpoint of selected method object (if any).
-        selectedParent: Object,
         // If true it will display a narrow layout.
         narrow: {
           type: Boolean,
