@@ -4,7 +4,7 @@
   "license": "CPAL-1.0",
   "description": "The API console used in RAML platform.",
   "devDependencies": {
-    "polymer-cli": "^0.17.0"
+    "polymer-cli": "^1.2.0"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -19,8 +19,8 @@
   "scripts": {
     "serve": "node_modules/.bin/polymer serve",
     "lint": "node_modules/.bin/polymer lint api-console.html api-console-request.html",
-    "test-sauce": "exit 0; node_modules/.bin/polymer test --plugin sauce --job-name \"api-console:local-test\"",
-    "test": "node_modules/.bin/polymer test",
+    "test-sauce": "node_modules/.bin/polymer test --plugin sauce --job-name \"api-console:local-test\"",
+    "test": "node_modules/.bin/polymer test --plugin local",
     "deps": "npm i --quiet && bower install --quiet",
     "update-deps": "npm i --quiet && bower update --quiet"
   },
