@@ -214,7 +214,10 @@ is to proxt the HTTP request and avoid CORS problems.
          * Location of the `bower_components` folder.
          * It should be a path from server's root path including bower_components.
          */
-        bowerLocation: String,
+        bowerLocation: {
+          type: String,
+          observer: '_updateRedirectUrl'
+        },
         /**
          * Hides the URL editor from the view.
          * Note that the editor is still in the DOM. This property just hiddes
@@ -228,13 +231,14 @@ is to proxt the HTTP request and avoid CORS problems.
       },
 
       ready: function() {
-        this._setRedirectUrl();
+        if (!this.redirectUrl) {
+          this._updateRedirectUrl(this.bowerLocation);
+        }
         this._initExtensionBanner();
       },
       // Sets OAuth 2 redirect URL for the authorization panel
-      _setRedirectUrl: function() {
+      _updateRedirectUrl: function(location) {
         var a = document.createElement('a');
-        var location = this.bowerLocation;
         if (!location) {
           location = 'bower_components/';
         }
