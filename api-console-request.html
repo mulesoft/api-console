@@ -105,33 +105,19 @@ is to proxt the HTTP request and avoid CORS problems.
       ],
 
       properties: {
-        /**
-         * Current path to the resource / method / documentation.
-         * This is updated when the user select a specific node in the RAML JSON structure that
-         * represents one of this properties. When changed from the outside (by the app) it will
-         * update the view to display selected path.
-         */
-        path: {
-          type: String,
-          notify: true
-        },
         // Selected object in the navigation menu and parsed by the
         // `raml-path-selector` element
         selectedObject: {
           type: Object,
           observer: '_selectedObjectChanged'
         },
-        // A parent endpoint of selected method object (if any).
-        selectedParent: Object,
         // If true it will display a narrow layout.
         narrow: {
           type: Boolean,
           notify: true
         },
         // The RAML definition JSON object
-        raml: {
-          type: Object
-        },
+        raml: Object,
         // OAuth2 redirect URL
         redirectUrl: String,
         /**
@@ -156,7 +142,6 @@ is to proxt the HTTP request and avoid CORS problems.
         // Computed value, true, when the response object is set.
         hasResponse: {
           type: Boolean,
-          value: false,
           computed: '_computeHasResponse(response)'
         },
         // Response full loading time.
@@ -226,7 +211,10 @@ is to proxt the HTTP request and avoid CORS problems.
          * Location of the `bower_components` folder.
          * It should be a path from server's root path including bower_components.
          */
-        bowerLocation: String,
+        bowerLocation: {
+          type: String,
+          observer: '_updateRedirectUrl'
+        },
         /**
          * Hides the URL editor from the view.
          * Note that the editor is still in the DOM. This property just hiddes
@@ -240,13 +228,14 @@ is to proxt the HTTP request and avoid CORS problems.
       },
 
       ready: function() {
-        this._setRedirectUrl();
+        if (!this.redirectUrl) {
+          this._updateRedirectUrl(this.bowerLocation);
+        }
         this._initExtensionBanner();
       },
       // Sets OAuth 2 redirect URL for the authorization panel
-      _setRedirectUrl: function() {
+      _updateRedirectUrl: function(location) {
         var a = document.createElement('a');
-        var location = this.bowerLocation;
         if (!location) {
           location = 'bower_components/';
         }

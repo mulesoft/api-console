@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>API Console</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../raml-docs-helpers/raml-docs-parser.html">
-  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
   <link rel="import" href="../../app-route/app-location.html">
   <link rel="import" href="../api-console.html">
 
@@ -43,16 +43,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   .wrapper {
     position: relative;
+    background-color: #fff;
     @apply(--layout-flex);
   }
 
   api-console {
     background-color: #fff;
-  }
-
-  :root {
-    --paper-checkbox-unchecked-color: #fff;
-    --paper-checkbox-label-color: #fff;
   }
 
   .powered-by {
@@ -66,6 +62,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   a img {
     text-underline: none;
   }
+
+  .console-controls {
+    padding: 4px 12px;
+    @apply --layout-horizontal;
+    @apply --layout-center;
+  }
+
+  .console-controls > * {
+    margin-right: 12px;
+  }
+
+  .console-controls paper-toggle-button {
+    cursor: pointer;
+  }
+
+  .console-controls {
+    --paper-toggle-button-checked-button-color: #00A2DF;
+  }
+
+  raml-docs-parser {
+    margin: 4px 12px;
+  }
   </style>
 </head>
 
@@ -73,6 +91,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <app-location use-hash-as-path></app-location>
 
   <div id="content">
+    <div class="console-controls">
+      <paper-toggle-button data-action="parser" checked>Display RAML parser</paper-toggle-button>
+      <paper-toggle-button data-action="noTryIt">No try it</paper-toggle-button>
+      <paper-toggle-button data-action="narrow">Render narrow</paper-toggle-button>
+    </div>
     <raml-docs-parser></raml-docs-parser>
     <div class="wrapper">
       <api-console>
