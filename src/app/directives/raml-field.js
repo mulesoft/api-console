@@ -27,6 +27,11 @@
           }
         }
 
+        $scope.getNativeType = function(type) {
+          var paramType = getParamType(type).type;
+          return Array.isArray(paramType) ? paramType[0] : paramType;
+        };
+
         $scope.isEnum = function (definition) {
           var paramType = getParamType(definition);
           return paramType.hasOwnProperty('enum');

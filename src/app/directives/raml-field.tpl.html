@@ -4,7 +4,7 @@
     <a class="raml-console-sidebar-override" ng-if="canOverride(param)" ng-click="overrideField($event, param)">Override</a>
     <span class="raml-console-side-bar-required-field" ng-if="param.required">*</span>
     <label ng-if="param.isFromSecurityScheme" class="raml-console-sidebar-security-label">from security scheme</label>
-    <span class="raml-console-resource-param-instructional">{{toString(param.type)}}</span>
+    <span class="raml-console-resource-param-instructional">{{getNativeType(param)}}</span>
   </label>
 
   <div ng-if="!param.properties && !isArray(param)">
