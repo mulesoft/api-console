@@ -6,7 +6,7 @@ const {RamlJsonGenerator} = require('raml-json-enhance-node');
 const RAML_SOURCE = 'api/api.raml';
 const API_OUTPUT = 'api.json';
 
-const enhancer = new RamlJsonGenerator(APIFILE, {
+const enhancer = new RamlJsonGenerator(RAML_SOURCE, {
   output: API_OUTPUT
 });
 
