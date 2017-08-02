@@ -1,0 +1,16 @@
+{
+  "name": "api-console-example-custom-build",
+  "version": "0.0.1",
+  "description": "Custom build of the api console.",
+  "authors": [
+    "The Advanced REST client authors <arc@mulesoft.com>"
+  ],
+  "private": true,
+  "scripts": {
+    "build-console": "node build.js"
+  },
+  "dependencies": {
+    "api-console-builder": "^0.1.0",
+    "raml-json-enhance-node": "^0.2.1"
+  }
+}

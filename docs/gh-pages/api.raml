@@ -1,0 +1,73 @@
+#%RAML 1.0
+title: My super cool, example API
+version: v1
+baseUri: http://{environment}.api.domain.com/{version}/
+mediaType: [ application/json, application/xml ]
+
+baseUriParameters:
+  environment:
+    type: string
+    description: |
+      API environment. The value can be one of "development", "stage" or "production"
+      Development environment is avaibale for dev keys (client id).
+      Stage is available internally only and keys are whitelisted for this environment. Keys that are not whitelisted will always return 404 for any call.
+      Production is available for redular keys (klient ids).
+    pattern: (development|stage|production)
+    example: production
+documentation:
+  - title: Read this!
+    content: |
+      # This is an example API spec
+      The API doesn't exists in the real world therefore calls made to any endpoint will always fail.
+      If you'd like to perform actual request and see the response try GitHub API (which doesn't require user authentication in some endpoints) or other APIs.
+      Note that you may need a Client ID or valid authorization token to perform a call to some APIs that are secured by the OAuth 2 protocol.
+      Thank you for testing the API console. Your feedback is welcome. Email us: arc@mulesoft.com
+  - title: Test docs
+    content: |
+      # A test documentation.
+      This text was created by ARC's RAML editor.
+      You probably see this because you are testing ARC's web components and this component
+      is responsible for displaying a documentation from the RAML definition.
+      Play around with the element and use it in your project.
+      Please, note the licensing information available in every ARC component.
+      If you have any question email me: arc@mulesoft.com
+      Or slack me (internally only): Pawel Psztyc (P3)
+types:
+  ErrorResource:
+    description: A response that is errored
+    type: object
+    properties:
+      error:
+        type: boolean
+        required: true
+        example: true
+        default: true
+        description: Indicate that the response is errored.
+      message:
+        type: string
+        description: The error message associated with the error.
+        example: <<example>>
+        required: true
+  Feature:
+    description: A feature to test enum values in the URI parameters.
+    type: string
+    enum:
+        - A
+        - B
+        - C
+/test-parameters/{feature}:
+  uriParameters:
+    feature:
+      type: string
+      enum:
+        - A
+        - B
+        - C
+  get:
+    description: To test enum values in the URI parameters for inline type declaration.
+  /{typeFeature}:
+    uriParameters:
+      typeFeature:
+        type: Feature
+    get:
+      description: To test enum values in the URI parameters for global type declaration.
