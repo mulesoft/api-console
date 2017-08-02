@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../raml-docs-helpers/raml-docs-parser.html">
   <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
   <link rel="import" href="../api-console.html">
   <link rel="import" href="../../font-roboto/roboto.html">
 
@@ -43,6 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   .wrapper {
     position: relative;
+    background-color: #fff;
     @apply(--layout-flex);
   }
 
@@ -56,8 +58,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   .powered-by {
-    @apply(--layout-horizontal);
-    @apply(--layout-center-center);
+    @apply --layout-horizontal;
+    @apply --layout-center-center;
     padding: 12px 0px;
     border-top: 1px rgba(0,0,0,0.24) solid;
     margin: 8px 12px 0 12px;
@@ -66,6 +68,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   a img {
     text-underline: none;
   }
+
+  .console-controls {
+    padding: 4px 12px;
+    @apply --layout-horizontal;
+    @apply --layout-center;
+  }
+
+  .console-controls > * {
+    margin-right: 12px;
+  }
+
+  .console-controls paper-toggle-button {
+    cursor: pointer;
+  }
+
+  .console-controls {
+    --paper-toggle-button-checked-button-color: #00A2DF;
+  }
+
+  raml-docs-parser {
+    margin: 4px 12px;
+  }
   </style>
 </head>
 
@@ -73,11 +97,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template is="dom-bind" id="app">
 
     <div id="content">
-      <raml-docs-parser raml="{{raml}}"></raml-docs-parser>
+      <div class="console-controls">
+        <paper-toggle-button checked="{{parserEnabled}}">Display RAML parser</paper-toggle-button>
+        <paper-toggle-button checked="{{noTryIt}}">No try it</paper-toggle-button>
+        <paper-toggle-button checked="{{narrow}}">Render narrow</paper-toggle-button>
+      </div>
+      <raml-docs-parser raml="{{raml}}" hidden$="[[!parserEnabled]]"></raml-docs-parser>
       <div class="wrapper">
         <api-console raml="[[raml]]" append-headers="X-key: my-api-key\nOther-header:value" narrow="[[narrow]]" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]">
-          <paper-checkbox nav checked="{{noTryIt}}">No try it</paper-checkbox>
-          <paper-checkbox nav checked="{{narrow}}">Render narrow</paper-checkbox>
           <paper-checkbox nav checked="{{manualNavigation}}">Manual navigation</paper-checkbox>
           <button nav hidden="[[!manualNavigation]]" on-tap="toggleNavigation">Toggle navigation</button>
           <div class="powered-by" nav-addon>
@@ -90,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
   (function(scope) {
     'use strict';
-    // scope.navigationOpened = false;
+    scope.parserEnabled = true;
     scope.toggleNavigation = function() {
       if (scope.navigationOpened === undefined) {
         scope.navigationOpened = true;
