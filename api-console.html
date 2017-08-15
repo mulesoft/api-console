@@ -152,7 +152,8 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
               proxy="[[proxy]]"
               proxy-encode-url="[[proxyEncodeUrl]]"
               bower-location="[[bowerLocation]]"
-              no-url-editor="{{noUrlEditor}}"></api-console-request>
+              no-url-editor="{{noUrlEditor}}"
+              base-uri="[[baseUri]]"></api-console-request>
           </iron-pages>
         </div>
       </paper-header-panel>
@@ -285,7 +286,14 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
        * Note that the editor is still in the DOM. This property just hiddes
        * it.
        */
-      noUrlEditor: Boolean
+      noUrlEditor: Boolean,
+      /**
+       * A base URI for the API. To be set if RAML spec is missing `baseUri`
+       * declaration and this produces invalid URL input. This information
+       * is passed to the URL editor that prefixes the URL with `baseUri` value
+       * if passed URL is a relative URL.
+       */
+      baseUri: String
     },
 
     listeners: {
