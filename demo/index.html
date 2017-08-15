@@ -102,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-toggle-button checked="{{noTryIt}}">No try it</paper-toggle-button>
         <paper-toggle-button checked="{{narrow}}">Render narrow</paper-toggle-button>
       </div>
-      <raml-docs-parser raml="{{raml}}" hidden$="[[!parserEnabled]]"></raml-docs-parser>
+      <raml-docs-parser raml="{{raml}}" hidden$="[[!parserEnabled]]" raml-file-url="https://cdn.rawgit.com/advanced-rest-client/echo-advancedrestclient-com/01671154/api/api.raml"></raml-docs-parser>
       <div class="wrapper">
         <api-console raml="[[raml]]" append-headers="X-key: my-api-key\nOther-header:value" narrow="[[narrow]]" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]">
           <paper-checkbox nav checked="{{manualNavigation}}">Manual navigation</paper-checkbox>
