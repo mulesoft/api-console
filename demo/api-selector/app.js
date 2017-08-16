@@ -13,8 +13,8 @@
  */
 
 /**
- * The following script will handle API console routing when using the console as a standalone
- * application.
+ * The following script will handle API console routing when using the console as
+ * a standalone application.
  *
  * It uses native JavaScript APIs so it can be used outside Polymer scope.
  *
@@ -34,7 +34,8 @@
     apiconsole.app.setInitialRouteData();
     apiconsole.app.addParserListeners();
     apiconsole.app.observeRouteEvents();
-    apiconsole.app.observeConsoleControls();
+    apiconsole.app.observeApiToggle();
+    apiconsole.app.loadDefault();
   };
 
   apiconsole.app.setInitialRouteData = function() {
@@ -60,11 +61,23 @@
    * Adds event listeres to elements that are related to RAML dataq parsing.
    */
   apiconsole.app.addParserListeners = function() {
-    document.querySelector('raml-docs-parser')
-    .addEventListener('raml-ready', function(e) {
-      var apiConsole = document.querySelector('api-console');
-      apiConsole.raml = e.detail.raml;
+    document.querySelector('raml-js-parser')
+    .addEventListener('api-parse-ready', function(e) {
+      document.querySelector('raml-json-enhance')
+      .json = e.detail.json.specification;
+    });
 
+    document.querySelector('paper-menu.api-menu')
+    .addEventListener('selected-changed', function(e) {
+      var url = e.detail.value;
+      document.querySelector('raml-js-parser').loadApi(url);
+      document.getElementById('loadingApi').active = true;
+    });
+
+    window.addEventListener('raml-json-enhance-ready', function(e) {
+      var apiConsole = document.querySelector('api-console');
+      apiConsole.raml = e.detail.json;
+      document.getElementById('loadingApi').active = false;
       if (apiconsole.app.__initialPage && apiconsole.app.__initialPage !== apiConsole.page) {
         apiconsole.app.pageChanged(apiconsole.app.__initialPage);
         apiconsole.app.__initialPage = undefined;
@@ -160,30 +173,18 @@
     };
   };
 
-  apiconsole.app.observeConsoleControls = function() {
-    var toggles = document.querySelectorAll('.console-controls paper-toggle-button');
-    for (var i = 0, len = toggles.length; i < len; i++) {
-      toggles[i].addEventListener('checked-changed', apiconsole.app.consoleControlsChanged);
-    }
+  apiconsole.app.observeApiToggle = function() {
+    document.getElementById('apiSelectorToggle')
+    .addEventListener('tap', function() {
+      document.querySelector('.api-console-content')
+      .classList.toggle('closed');
+    });
   };
 
-  apiconsole.app.consoleControlsChanged = function(e) {
-    var action = e.target.dataset.action;
-    switch (action) {
-      case 'parser':
-        var parser = document.querySelector('raml-docs-parser');
-        if (e.detail.value) {
-          parser.removeAttribute('hidden');
-        } else {
-          parser.setAttribute('hidden', true);
-        }
-        break;
-      case 'noTryIt':
-      case 'narrow':
-        var apiConsole = document.querySelector('api-console');
-        apiConsole[action] = e.detail.value;
-        break;
-    }
+  apiconsole.app.loadDefault = function() {
+    var url = document.querySelector('paper-menu.api-menu').selected;
+    document.querySelector('raml-js-parser').loadApi(url);
+    document.getElementById('loadingApi').active = true;
   };
 
   // Notifys user when something went wrong...

@@ -79,6 +79,7 @@ is to proxt the HTTP request and avoid CORS problems.
       redirects="{{redirects}}"
       source-message="{{sourceMessage}}"
       no-url-editor="{{noUrlEditor}}"
+      base-uri="[[baseUri]]"
       on-api-console-request="_apiRequested"></raml-request-panel>
     <template is="dom-if" if="[[hasResponse]]">
       <response-view
@@ -220,7 +221,11 @@ is to proxt the HTTP request and avoid CORS problems.
          * Note that the editor is still in the DOM. This property just hiddes
          * it.
          */
-        noUrlEditor: Boolean
+        noUrlEditor: Boolean,
+        /**
+         * Api's base URI.
+         */
+        baseUri: String
       },
 
       listeners: {

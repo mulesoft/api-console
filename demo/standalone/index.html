@@ -15,11 +15,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>API Console</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../raml-docs-helpers/raml-docs-parser.html">
-  <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
-  <link rel="import" href="../../app-route/app-location.html">
-  <link rel="import" href="../api-console.html">
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../../raml-docs-helpers/raml-docs-parser.html">
+  <link rel="import" href="../../../paper-toggle-button/paper-toggle-button.html">
+  <link rel="import" href="../../../app-route/app-location.html">
+  <link rel="import" href="../../api-console.html">
 
   <style is="custom-style">
   html,
@@ -49,18 +49,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   api-console {
     background-color: #fff;
-  }
-
-  .powered-by {
-    @apply(--layout-horizontal);
-    @apply(--layout-center-center);
-    padding: 12px 0px;
-    border-top: 1px rgba(0,0,0,0.24) solid;
-    margin: 8px 12px 0 12px;
-  }
-
-  a img {
-    text-underline: none;
   }
 
   .console-controls {
@@ -95,14 +83,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-toggle-button data-action="parser" checked>Display RAML parser</paper-toggle-button>
       <paper-toggle-button data-action="noTryIt">No try it</paper-toggle-button>
       <paper-toggle-button data-action="narrow">Render narrow</paper-toggle-button>
+      <paper-toggle-button data-action="noAttribution">No attribution (see license)</paper-toggle-button>
     </div>
     <raml-docs-parser></raml-docs-parser>
     <div class="wrapper">
-      <api-console>
-        <div class="powered-by" nav-addon>
-          <a href="https://github.com/mulesoft/api-console" target="_blank"><img src="poweredByMuleSoft.png" /></a>
-        </div>
-      </api-console>
+      <api-console></api-console>
     </div>
   </div>
   <script src="app.js"></script>
