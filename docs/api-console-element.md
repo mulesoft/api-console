@@ -1,6 +1,6 @@
 # Using the API Console HTML element
 
-1) Install the console as a dependency of your project. We use [bower] for this. Bower also installs dependencies of the console.
+1) Install the console as a dependency of your project. We use [bower][bower] for this. Bower also installs dependencies of the console.
 
 ```
 bower install --save mulesoft/api-console#release/4.0.0
