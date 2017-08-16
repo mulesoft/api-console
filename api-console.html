@@ -139,12 +139,11 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
         <paper-toolbar>
           <paper-icon-button icon="arc:menu" paper-drawer-toggle hidden$="[[manualNavigation]]"></paper-icon-button>
           <div class="title">[[raml.title]]</div>
-          <span class="flex"></span>
           <div class="nav-content">
             <content select="[nav]"></content>
           </div>
         </paper-toolbar>
-        <div>
+        <div class="main-content">
           <template is="dom-if" if="[[manualNavigation]]">
             <raml-path-selector opened$=[[navigationOpened]]
               narrow="[[narrow]]"
