@@ -66,8 +66,14 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
       display: none !important;
     }
 
-    iron-pages {
+    .main-content {
+      min-height: 100%;
+      @apply --api-console-main-container;
+    }
+
+    .pages-content {
       height: 100%;
+      @apply --api-console-pages-container;
     }
 
     iron-pages>* {
@@ -153,7 +159,7 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
               resources-opened
               documentation-opened></raml-path-selector>
           </template>
-          <iron-pages selected="[[page]]" attr-for-selected="name" role="main" id="mainPages">
+          <iron-pages class="pages-content" selected="[[page]]" attr-for-selected="name" role="main" id="mainPages">
             <raml-documentation-panel
               name="docs"
               narrow="[[narrow]]"
@@ -176,6 +182,7 @@ The RAML Console allows browsing of API documentation and in-browser testing of 
               no-url-editor="{{noUrlEditor}}"
               base-uri="[[baseUri]]"></api-console-request>
           </iron-pages>
+          <content select=".api-console-content"></content>
         </div>
       </paper-header-panel>
     </paper-drawer-panel>
