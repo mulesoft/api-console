@@ -95,21 +95,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <body unresolved>
   <template is="dom-bind" id="app">
-
     <div id="content">
       <div class="console-controls">
         <paper-toggle-button checked="{{parserEnabled}}">Display RAML parser</paper-toggle-button>
         <paper-toggle-button checked="{{noTryIt}}">No try it</paper-toggle-button>
         <paper-toggle-button checked="{{narrow}}">Render narrow</paper-toggle-button>
+        <paper-toggle-button checked="{{noAttribution}}">No attribution (see license)</paper-toggle-button>
       </div>
       <raml-docs-parser raml="{{raml}}" hidden$="[[!parserEnabled]]" raml-file-url="https://cdn.rawgit.com/advanced-rest-client/echo-advancedrestclient-com/01671154/api/api.raml"></raml-docs-parser>
       <div class="wrapper">
-        <api-console raml="[[raml]]" append-headers="X-key: my-api-key\nOther-header:value" narrow="[[narrow]]" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]">
+        <api-console raml="[[raml]]" append-headers="X-key: my-api-key\nOther-header:value" narrow="[[narrow]]" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]" no-attribution="[[noAttribution]]">
           <paper-checkbox nav checked="{{manualNavigation}}">Manual navigation</paper-checkbox>
           <button nav hidden="[[!manualNavigation]]" on-tap="toggleNavigation">Toggle navigation</button>
-          <div class="powered-by" nav-addon>
-            <a href="https://github.com/mulesoft/api-console" target="_blank"><img src="poweredByMuleSoft.png" /></a>
-          </div>
         </api-console>
       </div>
     </div>

@@ -180,6 +180,7 @@
         break;
       case 'noTryIt':
       case 'narrow':
+      case 'noAttribution':
         var apiConsole = document.querySelector('api-console');
         apiConsole[action] = e.detail.value;
         break;

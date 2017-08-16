@@ -51,18 +51,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background-color: #fff;
   }
 
-  .powered-by {
-    @apply(--layout-horizontal);
-    @apply(--layout-center-center);
-    padding: 12px 0px;
-    border-top: 1px rgba(0,0,0,0.24) solid;
-    margin: 8px 12px 0 12px;
-  }
-
-  a img {
-    text-underline: none;
-  }
-
   .console-controls {
     padding: 4px 12px;
     @apply --layout-horizontal;
@@ -95,14 +83,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-toggle-button data-action="parser" checked>Display RAML parser</paper-toggle-button>
       <paper-toggle-button data-action="noTryIt">No try it</paper-toggle-button>
       <paper-toggle-button data-action="narrow">Render narrow</paper-toggle-button>
+      <paper-toggle-button data-action="noAttribution">No attribution (see license)</paper-toggle-button>
     </div>
     <raml-docs-parser></raml-docs-parser>
     <div class="wrapper">
-      <api-console>
-        <div class="powered-by" nav-addon>
-          <a href="https://github.com/mulesoft/api-console" target="_blank"><img src="poweredByMuleSoft.png" /></a>
-        </div>
-      </api-console>
+      <api-console></api-console>
     </div>
   </div>
   <script src="app.js"></script>
