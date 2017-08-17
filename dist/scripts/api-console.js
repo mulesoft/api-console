@@ -4958,12 +4958,16 @@ RAML.Inspector = (function() {
     return type.properties;
   }
 
+  function getType(type) {
+    return type.type ? (Array.isArray(type.type) ? type.type[0] : getType(type.type)) : type.type;
+  }
+
   function mergeType(type, types) {
     var resultingType = angular.copy(type);
     resultingType.type = resultingType.type || resultingType.schema;
     var properties = angular.copy(resultingType.properties || {});
-    var currentType = Array.isArray(resultingType.type) ?
-        resultingType.type[0] : resultingType.type;
+
+    var currentType = getType(resultingType);
 
     properties = convertProperties(resultingType);
 
