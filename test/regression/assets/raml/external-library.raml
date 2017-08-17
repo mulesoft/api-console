@@ -1,0 +1,60 @@
+#%RAML 1.0
+title: Stores Data Network API
+version: v1
+baseUri: http://api.lbi.com
+uses:
+  Common: store-types.raml
+
+types:
+  brandNameType:
+      type: string
+      description: brand name like BBW VSS LZA
+      enum: [
+          "CORP",
+          "BBW",
+          "BPR",
+          "BBC",
+          "VSS",
+          "VSC",
+          "VUK",
+          "VPR",
+          "LZA",
+          "LZU"
+        ]
+      required: true
+
+
+/storesDataNetwork:
+  post:
+    queryParameters:
+      brandName:
+        type: Common.brandNameType
+      brandName2:
+        type: string
+        description: brand name like BBW VSS LZA
+        enum: [
+            "CORP",
+            "BBW",
+            "BPR",
+            "BBC",
+            "VSS",
+            "VSC",
+            "VUK",
+            "VPR",
+            "LZA",
+            "LZU"
+          ]
+        required: true
+      brandName3:
+        type: brandNameType
+    body:
+          application/xml:
+
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "message" : "Hello World"
+              }

@@ -117,18 +117,27 @@ function Resource (poName) {
     var button = this.po.getMethodBtn(resource, method);
     button.click();
 
-    var queryParameters = this.po.getQueryParameterDetails(resource);
+    var queryParameters = this.po.getQueryParametersDetail(resource);
     var queryParameter  = queryParameters.get(queryParameterPosition);
 
     expect(queryParameter.getText()).toMatch(/default: false/);
   };
 
   this.ifShowingQueryParametersInCorrectOrder = function (resource, queryParametersName) {
-    var queryParameters = this.po.getQueryParameterDetails(resource);
+    var queryParameters = this.po.getQueryParametersDetail(resource);
 
     queryParametersName.forEach(function(name, index) {
       var queryParameter  = queryParameters.get(index);
       expect(queryParameter.getText()).toContain(name);
+    });
+  };
+
+  this.ifShowingParametersDescription = function (resource, queryParametersDescription) {
+    var queryParameters = this.po.getQueryParametersDescription(resource);
+
+    queryParametersDescription.forEach(function(description, index) {
+      var queryParameter  = queryParameters.get(index);
+      expect(queryParameter.getText()).toContain(description);
     });
   };
 
