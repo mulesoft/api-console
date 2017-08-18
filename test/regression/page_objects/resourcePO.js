@@ -74,8 +74,12 @@ function ResourcesPO () {
     return this.resources.get(index+1).all(by.css('.raml-console-resource-close-btn'));
   };
 
-  this.getQueryParameterDetails = function (index) {
+  this.getQueryParametersDetail = function (index) {
     return this.resources.get(index+1).all(by.css('.raml-console-resource-param-heading'));
+  };
+
+  this.getQueryParametersDescription = function (index) {
+    return this.resources.get(index+1).element(by.id('docs-query-parameters')).all(by.css('.raml-console-marked-content'));
   };
 
   this.getTryItQueryParameterInput = function (resourceIndex, inputIndex) {

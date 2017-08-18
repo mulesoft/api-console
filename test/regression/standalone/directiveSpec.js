@@ -269,6 +269,20 @@ module.exports = function() {
     assert.ifShowingTypesPropertiesInCorrectOrder(0, ['c', 'a', 'b']);
   });
 
+  it('should display query parameters description', function () {
+    // Arrange
+    var assert     = assertions.create('resource');
+    var resourcePo = factory.create('resource');
+
+    // Act
+    browser.get('http://localhost:9000/external-library.html');
+
+    resourcePo.toggleResourceMethod(1, 0);
+
+    var description = 'brand name like BBW VSS LZA';
+    assert.ifShowingParametersDescription(1, [description, description, description]);
+  });
+
   describe('should display form body fields', function () {
     it('should display properties for raml 1.0', function () {
       // Arrange

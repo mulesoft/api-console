@@ -106,6 +106,30 @@
         return methodInfo;
       }
 
+      function expandQueryParameters($scope, methodInfo) {
+        function expandDescriptions(queryParameters) {
+          Object.keys(queryParameters).forEach(function (key) {
+            var param = queryParameters[key][0];
+            var type = param.type ? RAML.Inspector.Types.findType(param.type[0], $scope.types) : undefined;
+            if (!param.description && type && type.description) {
+              param.description = type.description;
+            }
+          });
+        }
+
+        if (methodInfo.queryParameters) {
+          expandDescriptions(methodInfo.queryParameters);
+        }
+        return methodInfo;
+      }
+
+      function expand($scope, methodInfo) {
+        methodInfo = expandBodyExamples($scope, methodInfo);
+        methodInfo = expandQueryParameters($scope, methodInfo);
+
+        return methodInfo;
+      }
+
         return function showResource($scope, resource, $event, $index) {
           var methodInfo        = $index === null ? $scope.methodInfo : resource.methods[$index];
           var oldId             = $rootScope.currentId;
@@ -118,7 +142,7 @@
           $scope.currentMethod           = methodInfo.method;
           $scope.resource                = resource;
 
-          $scope.methodInfo               = expandBodyExamples($scope, methodInfo);
+          $scope.methodInfo               = expand($scope, methodInfo);
           $scope.responseInfo             = getResponseInfo($scope);
           $scope.context                  = new RAML.Services.TryIt.Context($scope.raml.baseUriParameters, resource, $scope.methodInfo, $scope.types);
           $scope.requestUrl               = '';

@@ -1,0 +1,135 @@
+#%RAML 1.0
+title: Stores Data Network API
+types:
+  brandNameType:
+      type: string
+      description: brand name like BBW VSS LZA
+      enum: [
+          "CORP",
+          "BBW",
+          "BPR",
+          "BBC",
+          "VSS",
+          "VSC",
+          "VUK",
+          "VPR",
+          "LZA",
+          "LZU"
+        ]
+      required: true
+  entityTypeType:
+          type: string
+          description: entity type
+          enum:  [
+          "BACKOFFICELOAD",
+          "CMDEXECUTEENTITY",
+          "DIMP",
+          "Parameter",
+          "SOF",
+          "Sample",
+          "TRIGGERMESSAGE",
+          "CENTRALOFFICEDWLOAD",
+          "DIMP",
+          "POSLOG",
+          "EJOURNAL"
+          ]
+          required: true
+  entityNameType:
+            type: string
+            description: entity name
+            enum: [
+              "StoreHierarchyImport",
+              "MerchandiseHierarchyImport",
+              "MerchandiseHierarchyItemImport",
+              "ItemImport",
+              "InitialItemImport",
+              "SeedServiceItemImport",
+              "RedLineItemImport",
+              "PriceImport",
+              "InitialPriceImport",
+              "TaxImport",
+              "EmployeeImport",
+              "ASSOC_PUNCH_GUARD_PARAMS",
+              "HOURS_OF_OPERATION",
+              "RoleSecurityMatrix",
+              "RoleSecurityMatrixInitial",
+              "Parameter",
+              "VPOS",
+              "ParameterRegisters",
+              "ParameterInitial",
+              "VPOSParameterInitial",
+              "ParameterInitialRegisters",
+              "RETRY",
+              "CMDEXECUTEENTITY",
+              "EmployeeForm",
+              "Interface",
+              "TRAFFIC",
+              "ASMA",
+              "ASMU",
+              "PAY",
+              "TA",
+              "TRUEUP",
+              "CERTIFICATION",
+              "CLOCKHISTORY",
+              "CSM_SHIFT",
+              "STOREEVENT",
+              "FINALPAY",
+              "POSLOG",
+              "EJOURNAL"]
+            required: true
+  responseTypeType:
+          description: response type of jms response message if needed (used for batch stuff)
+          enum: [
+          "xml",
+          "map"
+          ]
+          required: false
+  batchIDType:
+          description: batch id 1234 or some such
+          type: string
+          required: true
+  batchSequenceIDType:
+                description: sequence number or EOB for end of batch
+                type: string
+                pattern: (\d+|EOB)
+                required: true
+  processDefinitionIDType:
+                  type: integer
+                  description: process definition id for the data
+                  required: true
+  processInstanceIDType:
+                  type: string
+                  description: unique process instance of the data
+                  required: true
+  configTypeType:
+    type: string
+    description: routing config type DEFAULT
+  configNameType:
+    type: string
+    description: config name to lookup the key
+    example: STORE, BRAND, DISTRICT,REFSITE
+  configKeyType:
+    type: string
+    description: config key like store # or ref site #
+    example: 1234 (STORE), BBW (for Brand), 9971 (refsite)
+  routeToHomeOfficeType:
+      description: does this data need to be sent to homeoffice too (as is Central Office POS App)
+      type: boolean
+      required: false
+  responseQueueType:
+    description: response queue for jms mesage if desired for batch stuff
+    type: string
+    required: false
+  messageEffectiveDateTimeType:
+    description: message effective date at store locale Time Zones are ignored for now
+    type: datetime-only
+    required: false
+  messageExpirationDateTimeType:
+    description: message expiration date at store locale TIme zones are ignored for now
+    type: datetime-only
+    required: false
+  lastSequenceType:
+    type: boolean
+    required: false
+    default: false
+    description: indicates end of batch by setting to true if feasible
