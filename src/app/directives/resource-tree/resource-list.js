@@ -44,7 +44,7 @@
     element.append(resourceHeadingElement(resource, currentId));
     element.append(resourceTypeElement(resource));
     element.append(resourceHeadingFlagElement($scope, resource));
-    element.append(resourceLevelDescriptionElement(resource));
+    element.append(resourceLevelDescriptionElement($scope, $compile, resource));
     element.append(methodListElement($scope, resource, currentId, showResource, resourceId));
     element.append(closeMethodButton($scope, resource, currentId, showResource, resourceId));
 
@@ -68,9 +68,12 @@
     return '';
   }
 
-  function resourceLevelDescriptionElement(resource) {
+  function resourceLevelDescriptionElement($scope, $compile, resource) {
     var element = angular.element('<span class="raml-console-resource-level-description raml-console-marked-content"></span>');
-    element.append(angular.element('<p>' + resource.description + '</p>'));
+    element.attr('markdown-string', resource.description);
+
+    $compile(element)($scope);
+
     return element;
   }
 
