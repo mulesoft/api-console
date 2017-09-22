@@ -373,6 +373,19 @@ module.exports = function() {
       assert.ifDisplayingDescription(2, 'Get Product Info');
     });
 
+    it('should display urls in description for all resources', function () {
+      // Arrange
+      var assert = assertions.create('resource');
+
+      // Act
+      browser.get('http://localhost:9000/descriptions.html');
+
+      //Assert
+      assert.ifDisplayingDescriptionUrl(0, 'http://getproduct');
+      assert.ifDisplayingDescriptionUrl(1, 'http://getproductbyid');
+      assert.ifDisplayingDescriptionUrl(2, 'http://getproductinfo');
+    });
+
     it('should display root description', function () {
       // Arrange
       var assert = assertions.create('resource');

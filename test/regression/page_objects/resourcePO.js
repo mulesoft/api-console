@@ -158,6 +158,14 @@ function ResourcesPO () {
       .element(by.css('.raml-console-resource-level-description'));
   };
 
+  this.getDescriptionUrl = function (resource) {
+    return this.resources.get(resource + 1)
+      .element(by.css('.raml-console-resource-level-description'))
+      .element(by.tagName('p'))
+      .element(by.tagName('a'))
+      .getAttribute('href');
+  };
+
   this.getRootDescription = function () {
     return element(by.css('.raml-console-root-description'));
   };

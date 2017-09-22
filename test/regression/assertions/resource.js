@@ -215,6 +215,12 @@ function Resource (poName) {
     expect(resourceDescription.getText()).toContain(expectedDescription);
   };
 
+  this.ifDisplayingDescriptionUrl = function (resource, expectedDescription) {
+    var url = this.po.getDescriptionUrl(resource);
+
+    expect(url).toContain(expectedDescription);
+  };
+
   this.ifDisplayingRootDescription = function (expectedDescription) {
     var rootDescription = this.po.getRootDescription();
 
