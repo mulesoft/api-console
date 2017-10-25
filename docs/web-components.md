@@ -1,4 +1,4 @@
-# Starting with web components
+# Getting started with web components
 
 Web Components is relatively new specification for the web platform and therefore it is understandable that not all developers know how to use them.
 
@@ -51,21 +51,19 @@ When the element is already registered and it is instantiated and inserted into 
 
 **adoptedCallback** is called when the custom element has been moved into a new document.
 
-## So when an element is ready to be used?
+## So when an element is ready to use?
 
-If you include definition of your element into the source of the web page and register it before application code runs then you can use the element's API right away. When using API console build tools one of the options do exactly that. At the time when browser parser runs JavaScript code of the application (when it suppose to parse RAML or set JavaScript object on the console) all elements are already registered and full API is available.
+If you include definition of your element into the source of the web page and register it before application code runs then you can use the element's API right away. When using API console build tools the default build is a standalone application that contains all dependencies in index page source. At the time when browser parser runs JavaScript code of the application (when it suppose to parse RAML data or set JavaScript object on the console) all elements are already registered and full API is available.
 
-However, even when using our build tools, you can include console elements definition from other file to defer the source code download. In this case you should call element's API differently.
-
+It is possible to include console's sources from an external file (to reduce initial load time, for example). In this
+case web components are not yet registered when running application's JavaScript code.
 Properties can be set whether the element is `HTMLUnknownElement` or defined element. Once the element is upgraded created the `attributeChangedCallback` is called for each set attribute.
 
-Calling element's API methods exposed to external environment (outside shadow DOM) the methods will be `undefined` for `HTMLUnknownElement`. Therefore the application has to wait until the element is upgraded.
-
-In the API console that still works on so called `v0` specification of the web components the application would wait until `WebComponentsReady` event is fired (it is provided by the Polymer library if not supported natively). After the event is fired all element should be registered and upgraded (if already in the DOM).
+Calling element's API methods exposed to external environment (outside shadow DOM) will result with error because at the time the element hasn't been upgraded. Application must wait until `WebComponentsReady` event is fired by the polyfill library. After that event all components are upgraded and ready to use.
 
 ## Creating a web component
 
-There are already a lot of nice tutorials about creating web components so it's redundant. Personally I can suggest Eric Bidelman's [Custom Elements v1: Reusable Web Components](https://developers.google.com/web/fundamentals/architecture/building-components/customelements). It is a good introduction into web components and explanation how to register and use them.
+There are already a lot of good tutorials about creating web components so it's redundant. Personally I can suggest Eric Bidelman's [Custom Elements v1: Reusable Web Components](https://developers.google.com/web/fundamentals/architecture/building-components/customelements). It is a good introduction to web components and explanation how to register and use them.
 
 If you have any question use our issue tracker to contact me. I'll be happy to help you to use the API console.
 

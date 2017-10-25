@@ -2,7 +2,7 @@
 
 The default version of the **API console does not contain the RAML parser**. It is by design to minimize the size of the console and to optimize startup time.
 
-You can however use the console with the RAML parser setting up the build / CLI tools or by adding the dependency manually. **This document describes why the parser has been removed from the core console code and how to use the parser with new console.**
+You can use the console with the RAML parser by setting up the build / CLI tools or by adding the dependency manually. **This document describes why the parser has been removed from the core console code and how to use the parser with new console.**
 
 ## Performance of the API console
 
@@ -44,7 +44,7 @@ You can install parser and enhancer in your project by calling [bower][9] comman
 $ bower install --save advanced-rest-client/raml-json-enhance advanced-rest-client/raml-js-parser
 ```
 
-You can use `package.json` script's declaration for the same command:
+You can use `package.json` script declaration for the same command:
 
 ```json
 "scripts": {
@@ -77,59 +77,32 @@ Also check out our usage guide of the `<api-console>` element in our [element's 
 <api-console></api-console>
 
 <script>
-var parser = document.querySelector('raml-js-parser');
-parser.addEventListener('api-parse-ready', function(e) {
-  var enhacer = document.querySelector('raml-json-enhance');
-  enhacer.json = e.detail.json.specification;
-});
-window.addEventListener('raml-json-enhance-ready', function(e) {
-  // The e.detail.json contains the final JavaScript object
-  var apiConsole = document.querySelector('api-console');
-  apiConsole.raml = e.detail.json;
-});
-// Assuming components are already loaded and registered
-parser.loadApi('https://domain.com/api.raml');
+var MyAPiApp = {
+  init: function() {
+    var parser = document.querySelector('raml-js-parser');
+    parser.addEventListener('api-parse-ready', MyAPiApp._ramlReady);
+    parser.loadApi('https://domain.com/api.raml');
+    window.addEventListener('raml-json-enhance-ready', MyAPiApp._jsonReady);
+  },
+
+  _ramlReady: function(e) {
+    var enhacer = document.querySelector('raml-json-enhance');
+    enhacer.json = e.detail.json.specification;
+  },
+
+  _jsonReady: function(e) {
+    // The e.detail.json contains the final JavaScript object
+    var apiConsole = document.querySelector('api-console');
+    apiConsole.raml = e.detail.json;
+  }
+};
+window.addEventListener('WebComponentsReady', MyAPiApp.init);
 </script>
 ```
 
 The `json` attribute set on `raml-js-parser` element tells the parser that the output should be a JavaScript object instead of the AST.
 
-## Asynchronous environment
-
-Web components are asynchronous by nature. Importing the elements, registering them in the DOM, and finally initializing an element is done asynchronously. Therefore, you can't expect the element to work immediately after loading the page as a typical HTML element does. Consider the following example:
-
-```html
-<link rel="import" href="bower_components/raml-js-parser/raml-js-parser.html">
-<raml-js-parser json></raml-js-parser>
-<script>
-var parser = document.querySelector('raml-js-parser');
-parser.loadApi(apiFileUrl);
-</script>
-```
-
-Running this code as the page loads throws a `TypeError` with the message: `parser.loadApi is not a function`.
-
-At the time of execution of this script block, the browser knows nothing about the `raml-js-parser` element. At this time, the element is an instance of `HTMLUnknownElement`. You can read more about custom elements registration in our [starters guide to web components][2].
-
-The browser has to import the source of the element first, and then the Polymer library has to register custom HTML element called `raml-js-parser`.
-
-To run the code properly you have to listen for the `WebComponentsReady` event. It's fired when the elements are ready to use.
-
-```html
-<link rel="import" href="bower_components/raml-js-parser/raml-js-parser.html">
-<raml-js-parser json></raml-js-parser>
-<script>
-function init() {
-  var parser = document.querySelector('raml-js-parser');
-  parser.loadApi(apiFileUrl);
-};
-window.addEventListener('WebComponentsReady', init);
-</script>
-```
-
-Because of differences between `v0` and `v1` spec of custom elements and fallback provided by the Polymer library read [our guide](api-console-element.md) of how to properly listen for the elements registration event.
-
-### Setting RAML data as an HTML attribute
+### Setting RAML data as a HTML attribute
 
 The basic method for determining what API Console displays is to use the `raml` attribute. The attribute accepts the JavaScript object produced by the parser and the enhancer described above.
 
