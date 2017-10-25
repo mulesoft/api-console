@@ -41,7 +41,9 @@ The following table describes HTML attributes.
 | `manual-navigation` | Disables navigation in the drawer and renders the navigation full screen when requested. Use in the narrow layouts with the `narrow` property. Set the `navigationOpened` property to `true` or `false` to open/close the navigation. | `Boolean` |
 | `navigation-opened` | If set, the `manual-navigation` attribute is set, and the full screen navigation will open/close. | `Boolean` |
 | `bower-location` | If the path to the `bower_components` is different than default (in the root path) then set this attribute to point the location of the folder, including folder name. | `String` |
-| `no-url-editor` | If set, the URL editor is hidden in the Try it panel. The editor is still attached to the DOM but it's invisible to the user. | `Boolean`
+| `no-url-editor` | If set, the URL editor is hidden in the Try it panel. The editor is still attached to the DOM but it's invisible to the user. | `Boolean` |
+| `base-uri` | Used to replace RAML's base URI. Once set it updates the request URL in the request panel (try it). The URL will always contain the same base URL until the attribute is cleared (removed, set to `null`, `undefined` or `false`) | `String`
+
 
 ## Controlling the view
 
