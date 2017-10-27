@@ -1,10 +1,10 @@
+**See live example of the API console in our [demo application].**
+
 # The API Console
 
 MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) documents. In addition to providing documentation, the tool provides the capability for users to try out requests on the fly.
 
 [![API Console](docs/new-console-header.png)](https://mulesoft.github.io/api-console)
-
-**See live example of the API console in our [demo application].**
 
 ## Introduction
 
@@ -15,6 +15,26 @@ The HTML element is built on top of the [Web Components specifications](https://
 The following sections briefly describe how to build and use the console. For more information, see the [docs](docs) directory in this repository.
 
 ## Using the API console
+
+Install our CLI tool globally using `-g` if possible:
+
+```shell
+$ sudo npm install -g api-console-cli
+```
+
+Generate API console from your RAML file:
+
+```shell
+$ api-console build https://domain.com/api.raml # works with local files too
+```
+
+Preview the console:
+
+```shell
+$ api-console serve build/
+```
+
+That's all you need to build the API console for your API. Below we'll describe how to customize the console.
 
 API Console comes in two flavors.
 

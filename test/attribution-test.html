@@ -28,6 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* global fixture, assert, TestHelpers */
   suite('basic', function() {
     var element;
+    this.timeout(20000);
 
     setup(function() {
       element = fixture('basic');
