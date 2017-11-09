@@ -409,10 +409,6 @@
         };
 
         function getRequest($event) {
-          if (!validateForm($scope.form)) {
-            return;
-          }
-
           var url;
           var context         = $scope.context;
           var segmentContexts = resolveSegmentContexts($scope.resource.pathSegments, $scope.context.uriParameters.data());
