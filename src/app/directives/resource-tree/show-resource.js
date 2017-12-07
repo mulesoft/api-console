@@ -107,10 +107,17 @@
       }
 
       function expandQueryParameters($scope, methodInfo) {
+        function getParamTypeRecursively(param) {
+          if (!(param.type && $scope.types)) return
+
+          return Array.isArray(param.type) ? param.type[0] : getParamTypeRecursively(param.type)
+        }
+
         function expandDescriptions(queryParameters) {
           Object.keys(queryParameters).forEach(function (key) {
             var param = queryParameters[key][0];
-            var type = param.type ? RAML.Inspector.Types.findType(param.type[0], $scope.types) : undefined;
+            var paramType = getParamTypeRecursively(param)
+            var type = param.type && $scope.types ? RAML.Inspector.Types.findType(paramType, $scope.types) : undefined;
             if (!param.description && type && type.description) {
               param.description = type.description;
             }
