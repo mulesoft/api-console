@@ -39,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
   <script>
-  /* global fixture, assert, MockInteractions, TestHelpers */
+  /* global fixture, assert */
   suite('basic', function() {
     var element;
     var raml;
@@ -53,18 +53,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         done();
       });
       parser.loadApi(baseUrl + 'test.raml')
-        .then(function(data) {
-          enhancer.json = data.json.specification;
-        })
-        .catch(function(e) {
-          done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
-        });
+      .then(function(data) {
+        enhancer.json = data.json.specification;
+      })
+      .catch(function(e) {
+        done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
+      });
     });
 
     setup(function() {
       element = fixture('basic');
       element.raml = raml;
-      TestHelpers.forceXIfStamp(element);
     });
 
     test('path should be set to summary', function() {
@@ -114,7 +113,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     test('navigationOpened hides main content', function(done) {
       element.manualNavigation = true;
       element.navigationOpened = true;
-      setTimeout(() => {
+      setTimeout(function() {
         var mainPage = Polymer.dom(element.root).querySelector('#mainPages');
         assert.isTrue(mainPage.hasAttribute('hidden'));
         done();
@@ -130,8 +129,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('Handles raml-path-changed event', function() {
-      const newPath = 'resources.0';
-      const event = new CustomEvent('raml-path-changed', {
+      var newPath = 'resources.0';
+      var event = new CustomEvent('raml-path-changed', {
         detail: {
           path: newPath
         },
@@ -140,7 +139,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       element.dispatchEvent(event);
       assert.equal(element.path, newPath);
     });
-
   });
   </script>
 </body>

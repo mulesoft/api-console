@@ -45,7 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </test-fixture>
 
     <script>
-    /* global fixture, assert, MockInteractions, TestHelpers */
+    /* global fixture, assert */
     suite('basic', function() {
       var element;
       var raml;
@@ -56,6 +56,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var enhancer = fixture('enhancer');
         enhancer.addEventListener('raml-json-enhance-ready', function(e) {
           raml = e.detail.json;
+          var block = fixture('basic');
+          var aware = block[1];
+          element = block[0];
+          aware.raml = raml;
           done();
         });
         parser.loadApi(baseUrl + 'test.raml')
@@ -65,14 +69,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .catch(function(e) {
           done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
         });
-      });
-
-      setup(function() {
-        var block = fixture('basic');
-        var aware = block[1];
-        element = block[0];
-        aware.raml = raml;
-        TestHelpers.forceXIfStamp(element);
       });
 
       test('element.raml equals RAML', function() {

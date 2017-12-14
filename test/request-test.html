@@ -47,7 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   suite('basic api-console-request', function() {
     var element;
 
-    setup(function() {
+    suiteSetup(function() {
       element = fixture('basic');
     });
 
@@ -66,9 +66,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   suite('Response handling', function() {
     var element;
-    var response;
 
-    setup(function() {
+    suiteSetup(function() {
       element = fixture('basic');
       element.response = new Response('test', {
         statusCode: 200,
@@ -147,11 +146,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   suite('Proxy settings', function() {
     var element;
-    var event;
+    var ev;
 
     setup(function() {
       element = fixture('proxy');
-      event = new CustomEvent('event', {
+      ev = new CustomEvent('event', {
         bubbles: true,
         cancelable: true,
         detail: {
@@ -161,21 +160,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('Sets proxy to the request URL (event)', function() {
-      element._appendProxy(event);
-      assert.equal(event.detail.url, 'https://domain.com/http://test.domain.com/?param=value');
+      element._appendProxy(ev);
+      assert.equal(ev.detail.url, 'https://domain.com/http://test.domain.com/?param=value');
     });
 
     test('Encodes URL for proxy', function() {
       element.proxyEncodeUrl = true;
-      element._appendProxy(event);
-      assert.equal(event.detail.url,
+      element._appendProxy(ev);
+      assert.equal(ev.detail.url,
         'https://domain.com/http%3A%2F%2Ftest.domain.com%2F%3Fparam%3Dvalue');
     });
   });
 
   suite('Default headers', function() {
     var element;
-    var event;
+    var ev;
 
     setup(function() {
       element = fixture('basic');
@@ -183,7 +182,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         name: 'x-test',
         value: 'x-value'
       }];
-      event = new CustomEvent('event', {
+      ev = new CustomEvent('event', {
         bubbles: true,
         cancelable: true,
         detail: {
@@ -194,20 +193,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('Appends default headers to empty list', function() {
-      element._appendConsoleHeaders(event);
-      assert.equal(event.detail.headers, 'x-test: x-value');
+      element._appendConsoleHeaders(ev);
+      assert.equal(ev.detail.headers, 'x-test: x-value');
     });
 
     test('Appends default headers to not empty list', function() {
-      event.detail.headers = 'Content-Type: test';
-      element._appendConsoleHeaders(event);
-      assert.equal(event.detail.headers, 'Content-Type: test\nx-test: x-value');
+      ev.detail.headers = 'Content-Type: test';
+      element._appendConsoleHeaders(ev);
+      assert.equal(ev.detail.headers, 'Content-Type: test\nx-test: x-value');
     });
 
     test('Replaces headers to default ones', function() {
-      event.detail.headers = 'x-test: error';
-      element._appendConsoleHeaders(event);
-      assert.equal(event.detail.headers, 'x-test: x-value');
+      ev.detail.headers = 'x-test: error';
+      element._appendConsoleHeaders(ev);
+      assert.equal(ev.detail.headers, 'x-test: x-value');
     });
   });
   </script>
