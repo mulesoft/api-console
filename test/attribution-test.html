@@ -25,26 +25,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
   <script>
-  /* global fixture, assert, TestHelpers */
+  /* global fixture, assert, flush */
   suite('basic', function() {
     var element;
     this.timeout(20000);
 
     setup(function() {
       element = fixture('basic');
-      TestHelpers.forceXIfStamp(element);
     });
 
-    test('Attribution logo is rendered', function() {
-      var node = Polymer.dom(element.root).querySelector('.powered-by');
-      assert.ok(node);
+    test('Attribution logo is rendered', function(done) {
+      flush(function() {
+        var node = Polymer.dom(element.root).querySelector('.powered-by');
+        assert.ok(node);
+        done();
+      });
     });
 
     test('Attribution is removed from the DOM', function() {
-      element.noAttribution = true;
-      TestHelpers.forceXIfStamp(element);
-      var node = Polymer.dom(element.root).querySelector('.powered-by');
-      assert.notOk(node);
+      flush(function() {
+        element.noAttribution = true;
+        var node = Polymer.dom(element.root).querySelector('.powered-by');
+        assert.notOk(node);
+      });
     });
   });
   </script>
