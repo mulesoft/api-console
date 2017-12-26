@@ -639,7 +639,8 @@
 
         function getType(param) {
           if ($scope.types) {
-            var rootType = RAML.Inspector.Types.findType(param.type[0], $scope.types);
+            var paramType = RAML.Inspector.Types.getType(param);
+            var rootType = RAML.Inspector.Types.findType(paramType, $scope.types);
             return rootType ? rootType : param;
           } else {
             return param;
@@ -730,6 +731,7 @@
             var originalType = newProperty.type[0];
             newProperty.type = originalType.type;
             newProperty.properties = originalType.properties;
+            newProperty.enum = originalType.enum;
           }
 
           if (newProperty.type[0] === 'array') {
@@ -1421,15 +1423,20 @@
         uploadRequest: '='
       },
       controller: ['$scope', function($scope) {
+        function getNestedParamType(definition) {
+          return !Array.isArray(definition.type) ? getNestedParamType(definition.type)
+            : typeof definition.type[0] === 'object' ? getNestedParamType(definition.type[0]) : definition;
+        }
+
         function getParamType(definition) {
-          var currentType = definition.type[0];
+          var currentType = RAML.Inspector.Types.getType(definition);
           var isNative = RAML.Inspector.Types.isNativeType(currentType);
 
           if (!isNative && $scope.types) {
             var type = RAML.Inspector.Types.findType(currentType, $scope.types);
             return type ? type : definition;
           } else {
-            return definition;
+            return getNestedParamType(definition);
           }
         }
 
@@ -2076,16 +2083,10 @@
       }
 
       function expandQueryParameters($scope, methodInfo) {
-        function getParamTypeRecursively(param) {
-          if (!(param.type && $scope.types)) return
-
-          return Array.isArray(param.type) ? param.type[0] : getParamTypeRecursively(param.type)
-        }
-
         function expandDescriptions(queryParameters) {
           Object.keys(queryParameters).forEach(function (key) {
             var param = queryParameters[key][0];
-            var paramType = getParamTypeRecursively(param)
+            var paramType = RAML.Inspector.Types.getType(param);
             var type = param.type && $scope.types ? RAML.Inspector.Types.findType(paramType, $scope.types) : undefined;
             if (!param.description && type && type.description) {
               param.description = type.description;
@@ -3250,7 +3251,8 @@
         var control         = $ctrl;
 
         if (validation && validation.type) {
-          var declaredType = RAML.Inspector.Types.findType(validation.type[0], $scope.types);
+          var validationType = RAML.Inspector.Types.getType(validation);
+          var declaredType = RAML.Inspector.Types.findType(validationType, $scope.types);
           if (declaredType) { validation = declaredType; }
         }
 
@@ -5011,7 +5013,8 @@ RAML.Inspector = (function() {
   }
 
   function getType(type) {
-    return type.type ? (Array.isArray(type.type) ? type.type[0] : getType(type.type)) : type.type;
+    return !Array.isArray(type.type) ? getType(type.type)
+      : typeof type.type[0] === 'object' ? getType(type.type[0]) : type.type[0];
   }
 
   function mergeType(type, types) {
@@ -5143,6 +5146,7 @@ RAML.Inspector = (function() {
     isSchema:            isSchema,
     findType:            findType,
     findSchema:          findSchema,
+    getType:             getType,
     getTypeInfo:         getTypeInfo,
     getTypeFromTypeInfo: getTypeFromTypeInfo,
     ensureArray:         ensureArray,
@@ -6652,8 +6656,9 @@ RAML.Inspector = (function() {
 
     if (Array.isArray(newConfig.type)) {
       newConfig.type = newConfig.type.map(function (aType) {
-        var newType = aType.replace('[]', '');
-        var parts = aType.split('|');
+        var type = RAML.Inspector.Types.getType(aType);
+        var newType = type.replace('[]', '');
+        var parts = type.split('|');
         if (parts.length > 1) {
           newType = 'union';
           newConfig.unionTypes = parts.map(function (part) {
@@ -7329,8 +7334,9 @@ RAML.Inspector = (function() {
 
     if (Array.isArray(newConfig.type)) {
       newConfig.type = newConfig.type.map(function (aType) {
-        var newType = aType.replace('[]', '');
-        var parts = aType.split('|');
+        var type = RAML.Inspector.Types.getType(aType);
+        var newType = type.replace('[]', '');
+        var parts = type.split('|');
         if (parts.length > 1) {
           newType = 'union';
           newConfig.unionTypes = parts.map(function (part) {

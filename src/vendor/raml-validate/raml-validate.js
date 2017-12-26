@@ -438,8 +438,9 @@
 
     if (Array.isArray(newConfig.type)) {
       newConfig.type = newConfig.type.map(function (aType) {
-        var newType = aType.replace('[]', '');
-        var parts = aType.split('|');
+        var type = RAML.Inspector.Types.getType(aType);
+        var newType = type.replace('[]', '');
+        var parts = type.split('|');
         if (parts.length > 1) {
           newType = 'union';
           newConfig.unionTypes = parts.map(function (part) {

@@ -90,7 +90,8 @@
   }
 
   function getType(type) {
-    return type.type ? (Array.isArray(type.type) ? type.type[0] : getType(type.type)) : type.type;
+    return !Array.isArray(type.type) ? getType(type.type)
+      : typeof type.type[0] === 'object' ? getType(type.type[0]) : type.type[0];
   }
 
   function mergeType(type, types) {
@@ -222,6 +223,7 @@
     isSchema:            isSchema,
     findType:            findType,
     findSchema:          findSchema,
+    getType:             getType,
     getTypeInfo:         getTypeInfo,
     getTypeFromTypeInfo: getTypeFromTypeInfo,
     ensureArray:         ensureArray,

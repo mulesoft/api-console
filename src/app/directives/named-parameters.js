@@ -83,7 +83,8 @@
 
         function getType(param) {
           if ($scope.types) {
-            var rootType = RAML.Inspector.Types.findType(param.type[0], $scope.types);
+            var paramType = RAML.Inspector.Types.getType(param);
+            var rootType = RAML.Inspector.Types.findType(paramType, $scope.types);
             return rootType ? rootType : param;
           } else {
             return param;

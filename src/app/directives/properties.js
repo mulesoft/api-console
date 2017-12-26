@@ -50,6 +50,7 @@
             var originalType = newProperty.type[0];
             newProperty.type = originalType.type;
             newProperty.properties = originalType.properties;
+            newProperty.enum = originalType.enum;
           }
 
           if (newProperty.type[0] === 'array') {

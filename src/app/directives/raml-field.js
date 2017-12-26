@@ -15,15 +15,20 @@
         uploadRequest: '='
       },
       controller: ['$scope', function($scope) {
+        function getNestedParamType(definition) {
+          return !Array.isArray(definition.type) ? getNestedParamType(definition.type)
+            : typeof definition.type[0] === 'object' ? getNestedParamType(definition.type[0]) : definition;
+        }
+
         function getParamType(definition) {
-          var currentType = definition.type[0];
+          var currentType = RAML.Inspector.Types.getType(definition);
           var isNative = RAML.Inspector.Types.isNativeType(currentType);
 
           if (!isNative && $scope.types) {
             var type = RAML.Inspector.Types.findType(currentType, $scope.types);
             return type ? type : definition;
           } else {
-            return definition;
+            return getNestedParamType(definition);
           }
         }
 

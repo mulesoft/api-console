@@ -39,7 +39,8 @@
         var control         = $ctrl;
 
         if (validation && validation.type) {
-          var declaredType = RAML.Inspector.Types.findType(validation.type[0], $scope.types);
+          var validationType = RAML.Inspector.Types.getType(validation);
+          var declaredType = RAML.Inspector.Types.findType(validationType, $scope.types);
           if (declaredType) { validation = declaredType; }
         }
 
