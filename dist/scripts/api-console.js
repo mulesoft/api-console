@@ -7760,7 +7760,7 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "        <p ng-if=\"type.description\" markdown=\"type.description\" class=\"raml-console-marked-content\"></p>\n" +
     "\n" +
     "        <p ng-if=\"type.example !== undefined && showExamples\">\n" +
-    "          <span class=\"raml-console-resource-param-example\"><b>Example:</b> {{type.example}}</span>\n" +
+    "          <p class=\"raml-console-resource-param-example\"><b>Example:</b> {{type.example}}</p>\n" +
     "        </p>\n" +
     "\n" +
     "        <pre ng-if=\"isSchema(type.type[0])\" class=\"raml-console-resource-pre\">\n" +

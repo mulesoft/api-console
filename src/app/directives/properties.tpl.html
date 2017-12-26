@@ -26,7 +26,7 @@
         <p ng-if="type.description" markdown="type.description" class="raml-console-marked-content"></p>
 
         <p ng-if="type.example !== undefined && showExamples">
-          <span class="raml-console-resource-param-example"><b>Example:</b> {{type.example}}</span>
+          <p class="raml-console-resource-param-example"><b>Example:</b> {{type.example}}</p>
         </p>
 
         <pre ng-if="isSchema(type.type[0])" class="raml-console-resource-pre">
