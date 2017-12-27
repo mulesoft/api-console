@@ -32,6 +32,23 @@
           $scope.isType = false;
           $scope.isSchema = false;
 
+          function cleanType(aType) {
+            var cleanedType = {};
+            Object.keys(aType.properties).forEach(function (propertyName) {
+              var property = aType.properties[propertyName];
+              cleanedType[propertyName] = {
+                displayName: property.displayName,
+                required: property.required,
+                type: RAML.Inspector.Types.getType(property)
+              };
+
+              if (property.type[0] === 'array') {
+                cleanedType[propertyName].items = cleanType(property.items);
+              }
+            });
+            return cleanedType;
+          }
+
           if (node.type) {
             node.type = Array.isArray(node.type) ? node.type : [node.type];
             node.type.forEach(function (aType) {
@@ -80,7 +97,16 @@
                 }
               } else {
                 $scope.isSchema = true;
-                $scope.definition = JSON.stringify(aType, null, 2);
+
+                var cleanedProperties = cleanType(aType);
+
+                var cleanedType = {
+                  displayName: aType.displayName,
+                  type: RAML.Inspector.Types.getType(aType),
+                  properties: cleanedProperties
+                };
+
+                $scope.definition = JSON.stringify(cleanedType, null, 2);
               }
             });
           }
