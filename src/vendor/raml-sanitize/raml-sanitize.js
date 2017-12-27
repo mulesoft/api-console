@@ -140,7 +140,7 @@
 
     if (Array.isArray(newConfig.type)) {
       newConfig.type = newConfig.type.map(function (aType) {
-        var type = RAML.Inspector.Types.getType(aType);
+        var type = typeof aType === 'object' ? RAML.Inspector.Types.getType(aType) : aType;
         var newType = type.replace('[]', '');
         var parts = type.split('|');
         if (parts.length > 1) {

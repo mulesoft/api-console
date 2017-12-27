@@ -207,7 +207,7 @@
           if (Array.isArray(schemaCodes)) {
             schemaCodes.forEach(function (response) {
               if (!codes.hasOwnProperty(response.code)) {
-                codes[response.code] = response.code;
+                codes[response.code] = response;
               }
             });
           } else {
@@ -6682,7 +6682,7 @@ RAML.Inspector = (function() {
 
     if (Array.isArray(newConfig.type)) {
       newConfig.type = newConfig.type.map(function (aType) {
-        var type = RAML.Inspector.Types.getType(aType);
+        var type = typeof aType === 'object' ? RAML.Inspector.Types.getType(aType) : aType;
         var newType = type.replace('[]', '');
         var parts = type.split('|');
         if (parts.length > 1) {
@@ -7360,7 +7360,7 @@ RAML.Inspector = (function() {
 
     if (Array.isArray(newConfig.type)) {
       newConfig.type = newConfig.type.map(function (aType) {
-        var type = RAML.Inspector.Types.getType(aType);
+        var type = typeof aType === 'object' ? RAML.Inspector.Types.getType(aType) : aType;
         var newType = type.replace('[]', '');
         var parts = type.split('|');
         if (parts.length > 1) {
