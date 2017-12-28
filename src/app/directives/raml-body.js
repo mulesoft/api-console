@@ -32,21 +32,33 @@
           $scope.isType = false;
           $scope.isSchema = false;
 
-          function cleanType(aType) {
-            var cleanedType = {};
-            Object.keys(aType.properties).forEach(function (propertyName) {
-              var property = aType.properties[propertyName];
-              cleanedType[propertyName] = {
-                displayName: property.displayName,
-                required: property.required,
-                type: RAML.Inspector.Types.getType(property)
-              };
+          function cleanType(type) {
+            var cleanedAttributes = ['properties', 'required', 'items', 'type'];
+            Object.keys(type).forEach(function (attribute) {
+              if (cleanedAttributes.indexOf(attribute) === -1) {
+                delete type[attribute];
+              }
 
-              if (property.type[0] === 'array') {
-                cleanedType[propertyName].items = cleanType(property.items);
+              switch (attribute) {
+                case cleanedAttributes[0]:
+                  Object.keys(type[attribute]).forEach(function (a) {
+                    type[attribute][a] = cleanType(type[attribute][a]);
+                  });
+                  return;
+                case cleanedAttributes[2]:
+                  type[attribute] = cleanType(type[attribute]);
+                  return;
+                case cleanedAttributes[3]:
+                  if (Array.isArray(type[attribute])) {
+                    type[attribute] = type[attribute][0];
+                  } else {
+                    type[attribute] = cleanType(type[attribute]);
+                  }
+                default:
+                  return;
               }
             });
-            return cleanedType;
+            return type;
           }
 
           if (node.type) {
@@ -98,14 +110,7 @@
               } else {
                 $scope.isSchema = true;
 
-                var cleanedProperties = cleanType(aType);
-
-                var cleanedType = {
-                  displayName: aType.displayName,
-                  type: RAML.Inspector.Types.getType(aType),
-                  properties: cleanedProperties
-                };
-
+                var cleanedType = cleanType(aType);
                 $scope.definition = JSON.stringify(cleanedType, null, 2);
               }
             });
