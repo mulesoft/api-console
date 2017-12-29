@@ -54,6 +54,7 @@
                   } else {
                     type[attribute] = cleanType(type[attribute]);
                   }
+                  return;
                 default:
                   return;
               }
