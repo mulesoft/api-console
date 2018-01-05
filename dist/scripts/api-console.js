@@ -1456,6 +1456,10 @@
       },
       controller: ['$scope', function($scope) {
         function getNestedParamType(definition) {
+          if (typeof definition.type === 'string'){
+            return definition;
+          }
+
           return !Array.isArray(definition.type) ? getNestedParamType(definition.type)
             : typeof definition.type[0] === 'object' ? getNestedParamType(definition.type[0]) : definition;
         }
@@ -5045,6 +5049,8 @@ RAML.Inspector = (function() {
   }
 
   function getType(type) {
+    if (typeof type === 'string') { return type; }
+
     return !Array.isArray(type.type) ? getType(type.type)
       : typeof type.type[0] === 'object' ? getType(type.type[0]) : type.type[0];
   }

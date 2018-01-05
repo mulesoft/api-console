@@ -16,6 +16,10 @@
       },
       controller: ['$scope', function($scope) {
         function getNestedParamType(definition) {
+          if (typeof definition.type === 'string'){
+            return definition;
+          }
+
           return !Array.isArray(definition.type) ? getNestedParamType(definition.type)
             : typeof definition.type[0] === 'object' ? getNestedParamType(definition.type[0]) : definition;
         }

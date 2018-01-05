@@ -90,6 +90,8 @@
   }
 
   function getType(type) {
+    if (typeof type === 'string') { return type; }
+
     return !Array.isArray(type.type) ? getType(type.type)
       : typeof type.type[0] === 'object' ? getType(type.type[0]) : type.type[0];
   }
