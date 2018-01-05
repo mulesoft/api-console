@@ -64,7 +64,7 @@ function Resource (poName) {
 
     securitySchemesCount.then(function (count) {
       for (var i = 0; i < count; i++) {
-        expect(schemes.get(i).getInnerHtml()).toBe(expectedSchemes[i]);
+        expect(schemes.get(i).getAttribute('innerHTML')).toBe(expectedSchemes[i]);
       }
     });
   };
@@ -78,7 +78,7 @@ function Resource (poName) {
 
     expect(numberOfHeaders).toBe(expectedNOfHeaders);
     for(var i = 0; i < expectedHeaders.length; i++) {
-      expect(headers.get(i).getInnerHtml()).toContain(expectedHeaders[i]);
+      expect(headers.get(i).getAttribute('innerHTML')).toContain(expectedHeaders[i]);
     }
   };
 

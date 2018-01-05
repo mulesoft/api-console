@@ -39,6 +39,7 @@
     "expect": true,
     "beforeEach": true,
     "afterEach": true,
-    "vkbeautify": true
+    "vkbeautify": true,
+    "ExpectedConditions": true
   }
 }

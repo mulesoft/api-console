@@ -12,7 +12,7 @@ function InitializerPO () {
   };
 
   this.getButtonAt = function (index) {
-    return this.container.all(by.css('.raml-console-meta-button')).get(index).getInnerHtml();
+    return this.container.all(by.css('.raml-console-meta-button')).get(index).getAttribute('innerHTML');
   };
 
   this.getCollepsedForm = function () {

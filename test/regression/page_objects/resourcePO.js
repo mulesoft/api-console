@@ -31,7 +31,7 @@ function ResourcesPO () {
   };
 
   this.getMethodTitleAt = function (resource, method) {
-    return this.getMethodsForResourceAt(resource).get(method).element(by.css('.raml-console-tab-label')).getInnerHtml();
+    return this.getMethodsForResourceAt(resource).get(method).element(by.css('.raml-console-tab-label')).getAttribute('innerHTML');
   };
 
   this.getMethodBtn = function (resource, method) {
@@ -97,6 +97,8 @@ function ResourcesPO () {
 
   this.toggleResourceMethod = function (resource, method) {
     var button = this.getMethodBtn(resource, method);
+    browser.wait(ExpectedConditions.presenceOf(button), 5 * 1000, 'Resource Button should show within 5 seconds');
+    browser.wait(ExpectedConditions.elementToBeClickable(button), 5 * 1000, 'Wait until resource button is clickable');
     button.click();
   };
 
@@ -107,15 +109,22 @@ function ResourcesPO () {
 
   this.toggleCloseMethod = function(resource, method) {
     var button = this.getCloseMethodBtn(resource, method);
+    browser.wait(ExpectedConditions.presenceOf(button), 5 * 1000, 'Method Button should show within 5 seconds');
+    browser.wait(ExpectedConditions.elementToBeClickable(button), 5 * 1000, 'Wait until method button is clickable');
     button.click();
   };
 
   this.getResponseExamples = function (resource) {
-    return this.resources.get(resource+1).element(by.css('.raml-console-hljs pre code'));
+    var response = this.resources.get(resource+1).element(by.css('.raml-console-hljs pre code'));
+    browser.wait(ExpectedConditions.presenceOf(response), 5 * 1000, 'Response examples should be shown');
+    return response;
   };
 
   this.getResponseSchemaExamples = function (resource) {
     var button = this.resources.get(resource+1).element(by.css('.raml-console-schema-body h4 .raml-console-flag'));
+    browser.wait(ExpectedConditions.presenceOf(button), 5 * 1000, 'Button should show within 5 seconds');
+    browser.wait(ExpectedConditions.elementToBeClickable(button), 5 * 1000, 'Wait until button is clickable');
+    button.click();
     button.click();
 
     return this.getResponseExamples(resource);
@@ -123,6 +132,8 @@ function ResourcesPO () {
 
   this.getRequestUrl = function (resource) {
     var requestSection = this.resources.get(resource + 1).element(by.css('.raml-console-sidebar-expand-btn'));
+    browser.wait(ExpectedConditions.presenceOf(requestSection), 5 * 1000, 'RequestSection should show within 5 seconds');
+    browser.wait(ExpectedConditions.elementToBeClickable(requestSection), 5 * 1000, 'Wait until RequestSection is clickable');
     requestSection.click();
 
     return this.resources.get(resource + 1)
