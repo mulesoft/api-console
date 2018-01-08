@@ -23,7 +23,7 @@ after_success:
   - ssh  ${ACCEPTANCE_USER}@${ACCEPTANCE_HOST} mkdir -p ${DIST_DIR}
   - scp -r dist/* ${ACCEPTANCE_USER}@${ACCEPTANCE_HOST}:${DIST_DIR}/
 addons:
-  firefox: "46.0"
+  firefox: "48.0"
 notifications:
   slack: mulesoft:xDxuJW1lgf2uyG529ISR6k4i
 env:
