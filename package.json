@@ -42,7 +42,7 @@
     "grunt-contrib-watch": "~0.6.1",
     "grunt-css-prefix": "~0.2.3",
     "grunt-karma": "~0.12.2",
-    "grunt-protractor-runner": "5.0.0",
+    "grunt-protractor-runner": "4.0.0",
     "jasmine-spec-reporter": "~2.0.0",
     "karma": "^1.7.1",
     "load-grunt-tasks": "~2.0.0",
