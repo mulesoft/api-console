@@ -1,0 +1,69 @@
+<SourceSystemJournalEntry xmlns="http://schema.infor.com/InforOAGIS/2">
+  <JournalEntryHeader>
+    <JournalID accountingEntity="KICT@@1085">CNCR032017061216470302@1085</JournalID>
+    <BaseJournalEntryHeader>
+      <UserArea>
+        <Property>
+          <NameValue name="gfc.FinanceEnterpriseGroup" type="StringType">KICT</NameValue>
+        </Property>
+        <Property>
+          <NameValue name="GeneralLedgerSystemCode" type="StringType">TE</NameValue>
+        </Property>
+        <Koch>
+          <KOCH_CSF>
+            <KICTRunGroup>CNCR032017061216470302|1085</KICTRunGroup>
+          </KOCH_CSF>
+        </Koch>
+      </UserArea>
+      <JournalUsage listID="Cancellation">False</JournalUsage>
+    </BaseJournalEntryHeader>
+  </JournalEntryHeader>
+  <JournalEntryLine sequence="0">
+    <Amount currencyID="USD">-4.60</Amount>
+    <GLAccount>
+      <GLNominalAccount>37110102</GLNominalAccount>
+    </GLAccount>
+    <DimensionCodes>
+      <DimensionCode listID="Finance 3 Dimensions"></DimensionCode>
+      <DimensionCode listID="Finance 4 Dimensions"></DimensionCode>
+      <DimensionCode listID="Finance 5 Dimensions"></DimensionCode>
+      <DimensionCode listID="Projects"></DimensionCode>
+    </DimensionCodes>
+    <UserArea>
+      <Koch>
+        <KOCH_CSF>
+          <KICTTaxJurisdiction></KICTTaxJurisdiction>
+        </KOCH_CSF>
+      </Koch>
+    </UserArea>
+    <SourceAccountingDate>
+      <PostDateTime>2017-06-12T05:00:00.000Z</PostDateTime>
+    </SourceAccountingDate>
+    <Description>T &amp; E Out of Pocket Expense</Description>
+    <ExchangeRateDateTime>2017-06-12T05:00:00.000Z</ExchangeRateDateTime>
+  </JournalEntryLine>
+  <JournalEntryLine sequence="1">
+    <Amount currencyID="USD">4.60</Amount>
+    <GLAccount>
+      <GLNominalAccount>84310100</GLNominalAccount>
+    </GLAccount>
+    <DimensionCodes>
+      <DimensionCode listID="Finance 3 Dimensions"></DimensionCode>
+      <DimensionCode listID="Finance 4 Dimensions"></DimensionCode>
+      <DimensionCode listID="Finance 5 Dimensions">04987</DimensionCode>
+      <DimensionCode listID="Projects"></DimensionCode>
+    </DimensionCodes>
+    <UserArea>
+      <Koch>
+        <KOCH_CSF>
+          <KICTTaxJurisdiction></KICTTaxJurisdiction>
+        </KOCH_CSF>
+      </Koch>
+    </UserArea>
+    <SourceAccountingDate>
+      <PostDateTime>2017-06-12T05:00:00.000Z</PostDateTime>
+    </SourceAccountingDate>
+    <Description>T &amp; E Out of Pocket Expense</Description>
+    <ExchangeRateDateTime>2017-06-12T05:00:00.000Z</ExchangeRateDateTime>
+  </JournalEntryLine>
+</SourceSystemJournalEntry>

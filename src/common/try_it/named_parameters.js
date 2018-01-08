@@ -69,15 +69,18 @@
     if (info) {
       Object.keys(info).map(function (key) {
         if (typeof field === 'undefined' || field === key) {
-          if (typeof info[key][0]['enum'] === 'undefined') {
-            if (info[key][0].type === 'date' && typeof info[key][0].example === 'object') {
-              info[key][0].example = info[key][0].example.toUTCString();
+          var parameter = info[key][0];
+          if (typeof parameter['enum'] === 'undefined') {
+            if (parameter.type === 'date' && typeof parameter.example === 'object') {
+              parameter.example = parameter.example.toUTCString();
             }
 
-            if (info[key][0].example) {
-              that.values[key][0] = info[key][0].example;
-            } else if (info[key][0].examples && info[key][0].examples[0] && info[key][0].examples[0].value) {
-              that.values[key][0] = info[key][0].examples[0].value;
+            if (parameter.example) {
+              that.values[key][0] = parameter.example;
+            } else if (parameter.type === 'boolean' && parameter.hasOwnProperty('example')) {
+              that.values[key][0] = parameter.example;
+            } else if (parameter.examples && parameter.examples[0] && parameter.examples[0].value) {
+              that.values[key][0] = parameter.examples[0].value;
             }
           }
         }

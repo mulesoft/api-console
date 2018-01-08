@@ -1,0 +1,112 @@
+#%RAML 1.0
+baseUri: https://mocksvc.mulesoft.com/mocks/36ccaefb-1ce6-41f1-9567-17ebc4c78ec2
+title: Financial API
+version: 1.0
+
+/APInvoice:
+  displayName: AP Invoice processing
+  post:
+    description: Post AP Invoice to Infor CSF
+    body:
+      application/xml:
+        schema: !include Schemas/SupplierInvoice.xsd
+    responses:
+      201:
+        body:
+          application/json:
+            example: |
+              {
+                "RunGroup" : "CNCR012017092514502320202|3036",
+                "TransactionReference" : "192f0dc0-8d00-11e7-9598-0800200c9a66",
+                "Status" : "Success",
+                "Reason" : "Your AR Invoice has been sent to Infor -- Not Really"
+              }
+
+      400:
+        body:
+          application/json:
+            example: |
+              { 
+                "RunGroup" : "CNCR052017092514502320202|3036",
+                "TransactionReference" : "",
+                "Status" : "Failed",
+                "Reason" : "error message here"
+              }
+                    
+/ARInvoice:
+  displayName: AR Invoice processing
+  post:
+    description: Post AR Invoice to Infor CSF
+    body:
+      application/xml:
+          schema: !include Schemas/Invoice.xsd
+
+    responses: 
+      201:
+        body:
+          application/json:
+            example: |
+              { 
+                "RunGroup" : "CNCR012017092514502320202|3036", 
+                "TransactionReference" : "192f0dc0-8d00-11e7-9598-0800200c9a66",
+                "Status" : "Success",
+                "Reason" : "Your Receivables invoice has been sent to Infor -- Not Really"
+              }
+          
+      400:
+        body:
+          application/json:
+            example: |
+              { 
+                "RunGroup" : "CNCR052017092514502320202|3036",
+                "TransactionReference" : "",
+                "Status" : "Failed",
+                "Reason" : "error message here"
+              }
+                    
+/GLEntries:
+  displayName: GL Journal Entry processing
+  post:
+    description: Post GL Journal Entries to Infor CSF
+    body:
+      application/xml:
+        schema: !include Schemas/SourceSystemJournalEntry.xsd
+        example: !include Examples/SourceSystemJournalEntry.xml
+    
+    responses: 
+      201:
+        body:
+          application/json:
+            example: |
+              { 
+                "RunGroup" : "CNCR052017092514502320202|3036",
+                "TransactionReference" : "192f0dc0-8d00-11e7-9598-0800200c9a66",
+                "Status" : "Success",
+                "Reason" : "Your Journal Entry has been sent to Infor -- Not Really"
+              }
+       
+      400:
+        body:
+          application/json:
+            example: |
+              { 
+                "RunGroup" : "CNCR052017092514502320202|3036",
+                "TransactionReference" : "",
+                "Status" : "Failed",
+                "Reason" : "error message here"
+              }
+                    
+/Ping:
+  displayName: Is Available Check
+  get:
+    description: Checks to see if FinAPI is available or not
+    
+    responses:
+      200:
+        body:
+          text/plain:
+            example: "true"
+      503:
+        body:
+          text/plain:
+            example: "false"            
