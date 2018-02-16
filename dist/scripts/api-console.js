@@ -2101,7 +2101,7 @@
         function expandExamples(body) {
           Object.keys(body).forEach(function (key) {
             var info = body[key];
-            var type = info.type ? RAML.Inspector.Types.findType(info.type[0], $scope.types) : undefined;
+            var type = info.type ? RAML.Inspector.Types.findType(RAML.Inspector.Types.getType(info), $scope.types) : undefined;
             if (!body.example && type && type.example) {
               info.example = type.example;
             }
