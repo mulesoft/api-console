@@ -3073,6 +3073,19 @@
 
         $scope.toggleResponseMetadata = function () {
           $scope.showResponseMetadata = !$scope.showResponseMetadata;
+
+          $timeout(function () {
+            var $editors = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror').toArray();
+
+            $editors.forEach(function (editor) {
+              var cm = editor.CodeMirror;
+              cm.setOption('mode', $scope.response.contentType);
+              cm.refresh();
+            });
+            jQuery('html, body').animate({
+              scrollTop: jQuery('#'+hash).offset().top + 'px'
+            }, 'fast');
+          }, 10);
         };
 
         $scope.isFileBody = function (param) {
