@@ -47,8 +47,9 @@ function Resource (poName) {
     this.po.getTryItGetBtn(resource).click();
 
     var errorMessages = this.po.getTryItErrorMessages(resource);
-    expect(errorMessages.count()).toBe(1);
+    expect(errorMessages.count()).toBe(2);
     expect(errorMessages.get(0).isDisplayed()).toBe(false);
+    expect(errorMessages.get(1).isDisplayed()).toBe(true);
   };
 
   this.ifShowingSecuritySchemes = function (resource, method, expectedSchemes) {
