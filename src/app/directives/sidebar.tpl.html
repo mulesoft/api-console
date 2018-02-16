@@ -139,6 +139,13 @@
                 style="color: red;">
                   Custom Security Schemes are not supported in Try It
               </span>
+              <span
+                class="raml-console-resource-param-instructional"
+                ng-show="digestStrategyError"
+                style="color: red;">
+                  Digest Authentication is not supported in Try It
+              </span>
+
               <div class="raml-console-sidebar-action-group">
                 <button ng-hide="showSpinner" type="submit" class="raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}}" ng-click="tryIt($event)" ng-class="{'raml-console-sidebar-action-force':context.forceRequest}"><span ng-if="context.forceRequest">Force</span> {{methodInfo.method.toUpperCase()}}
                 </button>

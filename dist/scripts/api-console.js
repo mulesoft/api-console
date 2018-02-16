@@ -2798,7 +2798,7 @@
         $scope.setRequestUrl = function() {
           var request = getRequest();
 
-          if (!request) {
+          if (!request || !$scope.requestOptions) {
             return;
           }
 
@@ -2929,7 +2929,9 @@
               $scope.requestOptions = request.toOptions();
             } catch (e) {
               console.error(e);
-              $scope.customStrategyError = true;
+              var isDigestError = e.message.indexOf('Digest Authentication') !== -1;
+              $scope.customStrategyError = !isDigestError;
+              $scope.digestStrategyError = isDigestError;
               $scope.response = {};
 
               $scope.showSpinner = false;
@@ -8474,6 +8476,13 @@ angular.module('ramlConsoleApp').run(['$templateCache', function($templateCache)
     "                style=\"color: red;\">\n" +
     "                  Custom Security Schemes are not supported in Try It\n" +
     "              </span>\n" +
+    "              <span\n" +
+    "                class=\"raml-console-resource-param-instructional\"\n" +
+    "                ng-show=\"digestStrategyError\"\n" +
+    "                style=\"color: red;\">\n" +
+    "                  Digest Authentication is not supported in Try It\n" +
+    "              </span>\n" +
+    "\n" +
     "              <div class=\"raml-console-sidebar-action-group\">\n" +
     "                <button ng-hide=\"showSpinner\" type=\"submit\" class=\"raml-console-sidebar-action raml-console-sidebar-action-{{methodInfo.method}}\" ng-click=\"tryIt($event)\" ng-class=\"{'raml-console-sidebar-action-force':context.forceRequest}\"><span ng-if=\"context.forceRequest\">Force</span> {{methodInfo.method.toUpperCase()}}\n" +
     "                </button>\n" +

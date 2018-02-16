@@ -400,7 +400,7 @@
         $scope.setRequestUrl = function() {
           var request = getRequest();
 
-          if (!request) {
+          if (!request || !$scope.requestOptions) {
             return;
           }
 
@@ -531,7 +531,9 @@
               $scope.requestOptions = request.toOptions();
             } catch (e) {
               console.error(e);
-              $scope.customStrategyError = true;
+              var isDigestError = e.message.indexOf('Digest Authentication') !== -1;
+              $scope.customStrategyError = !isDigestError;
+              $scope.digestStrategyError = isDigestError;
               $scope.response = {};
 
               $scope.showSpinner = false;
