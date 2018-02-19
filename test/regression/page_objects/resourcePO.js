@@ -99,6 +99,7 @@ function ResourcesPO () {
     var button = this.getMethodBtn(resource, method);
     browser.wait(ExpectedConditions.presenceOf(button), 5 * 1000, 'Resource Button should show within 5 seconds');
     browser.wait(ExpectedConditions.elementToBeClickable(button), 5 * 1000, 'Wait until resource button is clickable');
+    // browser.pause(40000);
     button.click();
   };
 
@@ -134,10 +135,14 @@ function ResourcesPO () {
     var requestSection = this.resources.get(resource + 1).element(by.css('.raml-console-sidebar-expand-btn'));
     browser.wait(ExpectedConditions.presenceOf(requestSection), 5 * 1000, 'RequestSection should show within 5 seconds');
     browser.wait(ExpectedConditions.elementToBeClickable(requestSection), 5 * 1000, 'Wait until RequestSection is clickable');
-    requestSection.click();
-
-    return this.resources.get(resource + 1)
-      .element(by.css('.raml-console-sidebar-request-url'));
+    var _this = this;
+    browser.sleep(1000);
+    return browser.executeScript('window.scrollTo(0, window.document.body.offsetHeight);').then(
+      function () {
+        requestSection.click();
+        return _this.resources.get(resource + 1)
+          .element(by.css('.raml-console-sidebar-request-url'));
+      });
   };
 
   this.getResourcePanel = function(resource) {

@@ -41,7 +41,7 @@ module.exports = function() {
     assert.ifResourceNameIsPresentAt('/resource2', 4);
   });
 
-  it('should be able to try it with security schema Pass Through', function () {
+  it('should be able to try it with security schema Pass Through', function (done) {
     // Arrange
     var assert = assertions.create('resource');
 
@@ -49,7 +49,8 @@ module.exports = function() {
     browser.get('http://localhost:9000/directive-security-schema-pass-though.html');
 
     // Assert
-    assert.ifBeAbleToTryIt(0, 0);
+    assert.ifBeAbleToTryIt(0, 0)
+      .then(function(){ done();});
   });
 
   it('should be able to display schema responses information', function () {

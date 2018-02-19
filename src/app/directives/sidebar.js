@@ -675,6 +675,7 @@
 
         $scope.toggleResponseMetadata = function () {
           $scope.showResponseMetadata = !$scope.showResponseMetadata;
+          var hash = 'request_' + resourceId($scope.resource);
 
           $timeout(function () {
             var $editors = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror').toArray();

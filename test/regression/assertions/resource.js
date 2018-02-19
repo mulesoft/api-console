@@ -37,19 +37,26 @@ function Resource (poName) {
     var button = this.po.getMethodBtn(resource, method);
     var schemes, securitySchemesCount;
 
+    browser.actions().mouseMove(button).click();
     button.click();
 
     schemes              = this.po.getSecuritySchemes(resource);
     securitySchemesCount = schemes.count();
     expect(securitySchemesCount).toBe(1);
 
+    const tryItGetBtn = this.po.getTryItGetBtn(resource);
+    var _this = this;
 
-    this.po.getTryItGetBtn(resource).click();
-
-    var errorMessages = this.po.getTryItErrorMessages(resource);
-    expect(errorMessages.count()).toBe(2);
-    expect(errorMessages.get(0).isDisplayed()).toBe(false);
-    expect(errorMessages.get(1).isDisplayed()).toBe(true);
+    browser.sleep(1000);
+    return browser.executeScript('window.scrollTo(0, window.document.body.offsetHeight);console.log("Holaaa")').then(
+      function () {
+        tryItGetBtn.click();
+        var errorMessages = _this.po.getTryItErrorMessages(resource);
+        // browser.pause(30000);
+        expect(errorMessages.count()).toBe(2);
+        expect(errorMessages.get(0).isDisplayed()).toBe(false);
+        expect(errorMessages.get(1).isDisplayed()).toBe(false);
+      });
   };
 
   this.ifShowingSecuritySchemes = function (resource, method, expectedSchemes) {
@@ -172,8 +179,9 @@ function Resource (poName) {
   };
 
   this.ifShowsRequestUrl = function (resource, expectedValue) {
-    var request = this.po.getRequestUrl(resource);
-    expect(request.getText()).toEqual(expectedValue);
+    this.po.getRequestUrl(resource)
+      .then(function(rq){ expect(rq.getText()).toEqual(expectedValue);});
+
   };
 
   this.ifMethodIsOpen = function (resource, isOpen) {
