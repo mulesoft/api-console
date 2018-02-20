@@ -3387,7 +3387,11 @@
           for (var key in expandedType) {
             if (expandedType.hasOwnProperty(key)) {
               if ((key === 'example' || key === 'examples') && valueHasExamples) { continue; }
-              value[key] = expandedType[key];
+              if (key === 'properties') { // can have extra properties
+                value[key] = Object.assign(value.properties, expandedType[key]);
+              } else {
+                value[key] = expandedType[key];
+              }
             }
           }
         }
