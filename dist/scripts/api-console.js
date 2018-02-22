@@ -3292,7 +3292,7 @@
             return value;
           } else {
             clear(control, validationRules[validationId]);
-            return value;
+            return value || null;
           }
         }
 
@@ -3320,7 +3320,7 @@
           type: validation.type || null,
           minLength: validation.minLength || null,
           maxLength: validation.maxLength || null,
-          required: validation.required || null,
+          required: (typeof validation.required === 'boolean') ? validation.required : null,
           'enum': validation['enum'] || null,
           pattern: validation.pattern || null,
           minimum: validation.minimum || null,
@@ -3388,7 +3388,7 @@
             if (expandedType.hasOwnProperty(key)) {
               if ((key === 'example' || key === 'examples') && valueHasExamples) { continue; }
               if (key === 'properties') { // can have extra properties
-                value[key] = Object.assign(value.properties, expandedType[key]);
+                value[key] = Object.assign(value.properties || {}, expandedType[key]);
               } else {
                 value[key] = expandedType[key];
               }
