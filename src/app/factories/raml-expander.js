@@ -27,7 +27,7 @@
             if (expandedType.hasOwnProperty(key)) {
               if ((key === 'example' || key === 'examples') && valueHasExamples) { continue; }
               if (key === 'properties') { // can have extra properties
-                value[key] = Object.assign(value.properties, expandedType[key]);
+                value[key] = Object.assign(value.properties || {}, expandedType[key]);
               } else {
                 value[key] = expandedType[key];
               }
