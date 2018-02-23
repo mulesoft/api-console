@@ -3408,7 +3408,7 @@
       }
 
       function extractArrayType(arrayNode) {
-        if(arrayNode.items.type) { return arrayNode.items.type[0]; }
+        if(arrayNode.items && arrayNode.items.type) { return arrayNode.items.type[0]; }
         return arrayNode.items;
       }
 
