@@ -1,0 +1,273 @@
+[
+  {
+    "@id": "file://demo/array-body/array-body.raml",
+    "@type": [
+      "http://raml.org/vocabularies/document#Document",
+      "http://raml.org/vocabularies/document#Fragment",
+      "http://raml.org/vocabularies/document#Module",
+      "http://raml.org/vocabularies/document#Unit"
+    ],
+    "http://raml.org/vocabularies/document#encodes": [
+      {
+        "@id": "file://demo/array-body/array-body.raml#/web-api",
+        "@type": [
+          "http://schema.org/WebAPI",
+          "http://raml.org/vocabularies/document#RootDomainElement",
+          "http://raml.org/vocabularies/document#DomainElement"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "API body demo"
+          }
+        ],
+        "http://raml.org/vocabularies/http#server": [
+          {
+            "@id": "file://demo/array-body/array-body.raml#/web-api/http%3A%2F%2Ftest.domain.com%2F",
+            "@type": [
+              "http://raml.org/vocabularies/http#Server",
+              "http://raml.org/vocabularies/document#DomainElement"
+            ],
+            "http://raml.org/vocabularies/http#url": [
+              {
+                "@value": "http://test.domain.com/"
+              }
+            ]
+          }
+        ],
+        "http://schema.org/version": [
+          {
+            "@value": "v1"
+          }
+        ],
+        "http://raml.org/vocabularies/http#endpoint": [
+          {
+            "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody",
+            "@type": [
+              "http://raml.org/vocabularies/http#EndPoint",
+              "http://raml.org/vocabularies/document#DomainElement"
+            ],
+            "http://raml.org/vocabularies/http#path": [
+              {
+                "@value": "/arrayBody"
+              }
+            ],
+            "http://www.w3.org/ns/hydra/core#supportedOperation": [
+              {
+                "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get",
+                "@type": [
+                  "http://www.w3.org/ns/hydra/core#Operation",
+                  "http://raml.org/vocabularies/document#DomainElement"
+                ],
+                "http://www.w3.org/ns/hydra/core#method": [
+                  {
+                    "@value": "get"
+                  }
+                ],
+                "http://www.w3.org/ns/hydra/core#returns": [
+                  {
+                    "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200",
+                    "@type": [
+                      "http://raml.org/vocabularies/http#Response",
+                      "http://raml.org/vocabularies/document#DomainElement"
+                    ],
+                    "http://schema.org/name": [
+                      {
+                        "@value": "200"
+                      }
+                    ],
+                    "http://www.w3.org/ns/hydra/core#statusCode": [
+                      {
+                        "@value": "200"
+                      }
+                    ],
+                    "http://raml.org/vocabularies/http#payload": [
+                      {
+                        "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json",
+                        "@type": [
+                          "http://raml.org/vocabularies/http#Payload",
+                          "http://raml.org/vocabularies/document#DomainElement"
+                        ],
+                        "http://raml.org/vocabularies/http#mediaType": [
+                          {
+                            "@value": "application/json"
+                          }
+                        ],
+                        "http://raml.org/vocabularies/http#schema": [
+                          {
+                            "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json/array/schema",
+                            "@type": [
+                              "http://raml.org/vocabularies/shapes#ArrayShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://raml.org/vocabularies/shapes#Shape",
+                              "http://raml.org/vocabularies/document#DomainElement"
+                            ],
+                            "http://raml.org/vocabularies/shapes#items": [
+                              {
+                                "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json/array/schema/recursion",
+                                "@type": [
+                                  "http://raml.org/vocabularies/shapes#RecursiveShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://raml.org/vocabularies/shapes#Shape"
+                                ],
+                                "http://raml.org/vocabularies/shapes#fixPoint": [
+                                  {
+                                    "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/get/200/application/json/array/schema"
+                                  }
+                                ],
+                                "http://raml.org/vocabularies/document#link-target": [
+                                  {
+                                    "@id": "/unresolved"
+                                  }
+                                ],
+                                "http://raml.org/vocabularies/document#link-label": [
+                                  {
+                                    "@value": "AppPerson"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "AppPerson"
+                                  }
+                                ]
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "schema"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post",
+                "@type": [
+                  "http://www.w3.org/ns/hydra/core#Operation",
+                  "http://raml.org/vocabularies/document#DomainElement"
+                ],
+                "http://www.w3.org/ns/hydra/core#method": [
+                  {
+                    "@value": "post"
+                  }
+                ],
+                "http://www.w3.org/ns/hydra/core#expects": [
+                  {
+                    "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request",
+                    "@type": [
+                      "http://raml.org/vocabularies/http#Request",
+                      "http://raml.org/vocabularies/document#DomainElement"
+                    ],
+                    "http://raml.org/vocabularies/http#payload": [
+                      {
+                        "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json",
+                        "@type": [
+                          "http://raml.org/vocabularies/http#Payload",
+                          "http://raml.org/vocabularies/document#DomainElement"
+                        ],
+                        "http://raml.org/vocabularies/http#mediaType": [
+                          {
+                            "@value": "application/json"
+                          }
+                        ],
+                        "http://raml.org/vocabularies/http#schema": [
+                          {
+                            "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema",
+                            "@type": [
+                              "http://raml.org/vocabularies/shapes#ArrayShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://raml.org/vocabularies/shapes#Shape",
+                              "http://raml.org/vocabularies/document#DomainElement"
+                            ],
+                            "http://raml.org/vocabularies/shapes#items": [
+                              {
+                                "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema/recursion",
+                                "@type": [
+                                  "http://raml.org/vocabularies/shapes#RecursiveShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://raml.org/vocabularies/shapes#Shape"
+                                ],
+                                "http://raml.org/vocabularies/shapes#fixPoint": [
+                                  {
+                                    "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema"
+                                  }
+                                ],
+                                "http://raml.org/vocabularies/document#link-target": [
+                                  {
+                                    "@id": "/unresolved"
+                                  }
+                                ],
+                                "http://raml.org/vocabularies/document#link-label": [
+                                  {
+                                    "@value": "AppPerson"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "AppPerson"
+                                  }
+                                ]
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "schema"
+                              }
+                            ],
+                            "http://schema.org/name": [
+                              {
+                                "@value": "My post body"
+                              }
+                            ],
+                            "http://schema.org/description": [
+                              {
+                                "@value": "Default body for the POST method.\n\nThis is description to be rendered as markdown.\n"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "http://raml.org/vocabularies/document#declares": [
+      {
+        "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema/array/null/unresolved",
+        "@type": [
+          "http://raml.org/vocabularies/shapes#RecursiveShape",
+          "http://www.w3.org/ns/shacl#Shape",
+          "http://raml.org/vocabularies/shapes#Shape"
+        ],
+        "http://raml.org/vocabularies/shapes#fixPoint": [
+          {
+            "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema/array/null/unresolved"
+          }
+        ],
+        "http://raml.org/vocabularies/document#link-target": [
+          {
+            "@id": "/unresolved"
+          }
+        ],
+        "http://raml.org/vocabularies/document#link-label": [
+          {
+            "@value": "AppPerson"
+          }
+        ],
+        "http://www.w3.org/ns/shacl#name": [
+          {
+            "@value": "AppPerson"
+          }
+        ]
+      }
+    ]
+  }
+]

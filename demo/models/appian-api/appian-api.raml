@@ -1,0 +1,184 @@
+#%RAML 1.0
+title: Appian API
+version: v1
+baseUri: https://appian4mulesoft.appiancloud.com/suite/webapi/appian_api/{version}
+mediaType: application/json
+securedBy: basic
+
+securitySchemes: 
+  basic:
+    type: Basic Authentication
+    describedBy: 
+      responses: 
+        401:
+          description: Incorrect user name or password
+        404:
+          description: Resource not found or forbidden
+
+traits:
+  pageable:
+    queryParameters:
+      startIndex:
+        description: "Index where the current page begins. It must be greater than zero."
+        default: 1
+        required: false
+        type: integer
+      batchSize:
+        description: "Number of items to return. It must be -1 (indicating all items) or greater."
+        default: 25
+        required: false
+        type: integer
+    responses: 
+      200:
+        body:
+          type: object
+          properties:
+            startIndex: integer
+            batchSize: integer
+            totalCount: integer
+
+types:
+  ProcessModel:
+    type: object
+    properties:
+      id: integer
+      name: string
+      uuid: string
+      description: string
+      createdBy: string
+      urls:
+        type: object
+        properties:
+          self_url: string
+          start_url: string
+          processes_url: string
+  Process:
+    type: object
+    properties:
+      id: integer
+      name: string
+      priority: string
+      status: string
+      startedBy: string
+      startTime: datetime
+      endTime: datetime
+      activeTasks: integer
+      urls:
+        type: object
+        properties:
+          self_url: string
+          start_url: string
+  ProcessVariableList:
+    type: object
+    properties:
+      //: any
+  Task:
+    type: object
+    properties:
+      id: integer
+      name: string
+      from: string
+      received: datetime
+      process: integer
+      priority: string
+      status: string
+      completed: datetime
+      urls:
+        type: object
+        properties:
+          self_url: string
+          process_url: string
+
+/processModels:
+  get:
+    is: [ pageable ]
+    responses:
+      200:
+        body:
+          type: object
+          properties:
+            processModels: ProcessModel[]
+/processModel:
+  /{processModelUuid}:
+    get:
+      responses:
+        200:
+          body:
+            type: object
+            properties:
+              processModel: ProcessModel
+    /start:
+      post:
+        body: 
+          application/json:
+            type: ProcessVariableList
+            example: |
+              {
+                "processVar1": "value1",
+                "processVar2": "value2"
+              }
+        responses:
+          201:
+            description: The process was started successfully
+            headers: 
+              Location:
+                description: The Location of the new resource which was created by the request. The value consists of a single absolute URI.
+            body:
+              type: object
+              properties:
+                processModel: ProcessModel
+                process: Process
+                processVariables: ProcessVariableList
+    /processes:
+      get:
+        responses:
+          200:
+            body:
+              type: object
+              properties:
+                processes: Process[]
+/processes:
+  get:
+    is: [ pageable ]
+    responses:
+      200:
+        body:
+          type: object
+          properties:
+            processes: Process[]
+/process:
+  /{processId}:
+    get:
+      responses:
+        200:
+          body:
+            type: object
+            properties:
+              process: Process
+    /tasks:
+      get:
+        is: [ pageable ]
+        responses:
+          200:
+            body:
+              type: object
+              properties:
+                tasks: Task[]
+/tasks:
+  get:
+    is: [ pageable ]
+    responses:
+      200:
+        body:
+          type: object
+          properties:
+            tasks: Task[]
+/task:
+  /{taskId}:
+    get:
+      responses:
+        200:
+          body:
+            type: object
+            properties:
+              task: Task

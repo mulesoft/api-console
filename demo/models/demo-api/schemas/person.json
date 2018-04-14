@@ -1,0 +1,104 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "id": {
+      "$id": "/properties/id",
+      "type": "string",
+      "title": "The Id Schema ",
+      "default": "",
+      "examples": [
+        "R34fg663H9KW9MMSKISI"
+      ]
+    },
+    "name": {
+      "$id": "/properties/name",
+      "type": "string",
+      "title": "The Name Schema ",
+      "default": "",
+      "examples": [
+        "Pawel Psztyc"
+      ]
+    },
+    "birthday": {
+      "$id": "/properties/birthday",
+      "type": "string",
+      "title": "The Birthday Schema ",
+      "default": "",
+      "examples": [
+        "1983-10-20"
+      ]
+    },
+    "gender": {
+      "$id": "/properties/gender",
+      "type": "string",
+      "title": "The Gender Schema ",
+      "default": "",
+      "examples": [
+        "male"
+      ]
+    },
+    "url": {
+      "$id": "/properties/url",
+      "type": "string",
+      "title": "The Url Schema ",
+      "default": "",
+      "examples": [
+        "https://domain.com/profile/pawel.psztyc"
+      ]
+    },
+    "image": {
+      "$id": "/properties/image",
+      "type": "object",
+      "properties": {
+        "url": {
+          "$id": "/properties/image/properties/url",
+          "type": "string",
+          "title": "The Url Schema ",
+          "default": "",
+          "examples": [
+            "https://domain.com/profile/pawel.psztyc/image"
+          ]
+        },
+        "thumb": {
+          "$id": "/properties/image/properties/thumb",
+          "type": "string",
+          "title": "The Thumb Schema ",
+          "default": "",
+          "examples": [
+            "https://domain.com/profile/pawel.psztyc/image/thumb"
+          ]
+        }
+      }
+    },
+    "tagline": {
+      "$id": "/properties/tagline",
+      "type": "string",
+      "title": "The Tagline Schema ",
+      "default": "",
+      "examples": [
+        "Some text about me."
+      ]
+    },
+    "language": {
+      "$id": "/properties/language",
+      "type": "string",
+      "title": "The Language Schema ",
+      "default": "",
+      "examples": [
+        "en_GB"
+      ]
+    },
+    "etag": {
+      "$id": "/properties/etag",
+      "type": "string",
+      "title": "The Etag Schema ",
+      "default": "",
+      "examples": [
+        "W\\244m4n5kj3gbn2nj4k4n4"
+      ]
+    }
+  }
+}

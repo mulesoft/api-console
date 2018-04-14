@@ -1,0 +1,45 @@
+#%RAML 1.0 Library
+
+types:
+  Org:
+    description: Represents an organization unit.
+    type: object
+    properties:
+      onCall: Alertable # inherits all properties from type `Alertable`
+      Head: Manager # inherits all properties from type `Manager`
+  Person:
+    type: object
+    properties:
+      firstname: string
+      lastname: string
+      title?: string
+      kind: string # may be used to differenciate between classes that extend from `Person`
+    example:
+      firstname: Pawel
+      lastname: Psztyc
+      title: Mr.
+      kind: Manager
+  Phone:
+    type: string
+    pattern: "^[0-9|-]+$" # defines pattern for the content of type `Phone`
+  Manager:
+    type: Person # inherits all properties from type `Person`
+    properties:
+      reports: Person[] # inherits all properties from type `Person`; array type where `[]` is a shortcut
+      phone:  Phone
+      kind:
+        type: string
+        enum: [AcmeManager]
+  Admin:
+    type: Person # inherits all properties from type `Person`
+    properties:
+      kind:
+        type: string
+        enum: [AcmeAdmin]
+      clearanceLevel:
+        enum: [ low, high ]
+  AlertableAdmin:
+    type: Admin # inherits all properties from type `Admin`
+    properties:
+      phone: Phone # inherits all properties from type `Phone`; uses shortcut syntax
+  Alertable: Manager | AlertableAdmin # union type; either a `Manager` or `AlertableAdmin`

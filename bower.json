@@ -39,7 +39,8 @@
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "web-animations-js": "web-animations/web-animations-js#^2.3",
-    "paper-tabs": "PolymerElements/paper-tabs#^2.1.1"
+    "paper-tabs": "PolymerElements/paper-tabs#^2.1.1",
+    "paper-progress": "PolymerElements/paper-progress#^2.1.1"
   },
   "resolutions": {
     "headers-parser-behavior": "2.0.0-preview"

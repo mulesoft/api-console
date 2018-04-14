@@ -1,0 +1,83 @@
+#%RAML 1.0 Trait
+
+# displayName: Paginated
+description: The collection of <<resourcePathName>>.
+usage: |
+  This trait is to be used when the resource is paginated that is the edpoint producses
+  a list of resources in the response.
+  Every paginated response contains a `nextPageToken` property that should be used in pagination
+  to request for next page of the results and `items` which is a list of resources.
+  The `items` property is always defined, even if the response is empty. Therefore the `404`
+  response in this case is not possible. Clients need to handle empty responses by their own.
+  It is crutial that the subsequent requests contain the same set of parameters (like `limit`
+  or `start`) because if this values will change then the `nextPageToken` will be revalidated
+  and pagination will start from the first page.
+queryParameters:
+  limit:
+    type: number
+    description: Limit in the response list
+    maximum: 300
+    minimum: 1
+    example: 100
+    default: 25
+    required: false
+  start:
+    type: number
+    description: The start entry of the list
+    minimum: 0
+    example: 25
+    default: 0
+    required: false
+  nextPageToken:
+    type: string
+    example: CiAKGjBpNDd2Nmp2Zml2cXRwYjBpOXA
+    description: |
+      The `nextPageToken` is a web safe encoded cursor to the next entry in the database.
+      It can be obtained by requesting paginated resource and used in next request to get
+      next results page.
+    pattern: "[a-zA-Z0-9]+"
+    required: false
+responses:
+  200:
+    description: |
+      Paginated response containing a single page of the result.
+      By default one page of the results contains 25 items. You can extend it by setting a
+      `limit` query parameter in your request.
+      When changing parameters while using the `nextPageToken` the `nextPageToken` will be ignored
+      and new query will be performed. Queries with `nextPageToken` should contain the same set
+      of parameters as the first request.
+    body:
+      application/json:
+        type: object
+        properties:
+          items:
+            type: array
+            required: true
+            description: Contains a list of objects for this method.
+            items: <<resourceType>>
+          nextPageToken:
+            type: string
+            required: true
+            example: CiAKGjBpNDd2Nmp2Zml2cXRwYjBpOXA
+            description: |
+              The next page token is a web safe encoded cursor to the next entry in the database.
+              Use it in the next request to obtain next page of the results.
+  400:
+    description: |
+      The error response when one of the parameters is invalid and can't be parsed.
+      Nothing can be done at this time except correcting the request to send valid data.
+    body:
+      application/json:
+        displayName: Invalid
+        type: object
+        properties:
+          error:
+            type: boolean
+            required: true
+            example: true
+            description: Indicate that the response is errored.
+          message:
+            type: string
+            description: The error message associated with the error.
+            example: The `limit` parameter is invalid. Please, provide a number between 1 and 300.
+            required: true

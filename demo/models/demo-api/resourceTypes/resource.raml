@@ -1,0 +1,11 @@
+#%RAML 1.0 DataType
+
+description: |
+  Common properties for all resources returned by the API.
+type: object
+properties:
+  etag:
+    type: string
+    description: |
+      ETag of this resource for caching purposes.
+      __This property will be ignored when creating an object.__

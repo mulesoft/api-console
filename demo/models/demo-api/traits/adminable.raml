@@ -1,0 +1,23 @@
+#%RAML 1.0 Trait
+
+#displayName: Adminable
+description: Use this to mark a resource that can be changed only by users with admin level.
+
+usage: |
+  Some resources can be changed only by users with Admin clerance level. This resources will be
+  marked with the header `X-Admin-Resource` when requesting it. It means that every attemp to
+  update the resource by non-admin user will result with 401 response.
+
+responses:
+  200:
+    headers:
+      X-Amin-Resource:
+        displayName: Admin resource mark header
+        type: boolean
+        default: false
+        description: This header is not set if the resource can be changed by non-admin users.
+  401:
+    description: |
+      The 401 response will be returned when trying to update the resource with
+      non-admin clerance level. Resources that requires admin privileges are marked with
+      `X-Admin-Resource` header when getting the resource.

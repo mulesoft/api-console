@@ -1,0 +1,14 @@
+{
+  "id": "R34fg663H9KW9MMSKISI",
+  "name": "Pawel Psztyc",
+  "birthday": "1983-10-20",
+  "gender": "male",
+  "url": "https://domain.com/profile/pawel.psztyc",
+  "image": {
+    "url": "https://domain.com/profile/pawel.psztyc/image",
+    "thumb": "https://domain.com/profile/pawel.psztyc/image/thumb"
+  },
+  "tagline": "Some text about me.",
+  "language": "en_GB",
+  "etag": "W\\244m4n5kj3gbn2nj4k4n4"
+}

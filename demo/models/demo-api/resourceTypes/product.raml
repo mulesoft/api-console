@@ -1,0 +1,52 @@
+#%RAML 1.0 DataType
+
+displayName: A product resource
+description: A single product representing an item in the store.
+type: !include resource.raml
+properties:
+  id:
+    description: |
+      Product id. It is a UUID of the database record.
+      __This property will be ignored when creating an object.__
+      It will be available when the product is stored in the datastore.
+    pattern: "[0-9a-zA-Z-]+"
+  name:
+    type: string
+    description: Product name
+    example: Acme product - mentol flavor, 500 ml.
+    required: true
+  quantity:
+    type: number
+    description: |
+      The quantity of the product in the one unit of measurement.
+      See `unit` property for more information.
+    example: 500
+    required: true
+  unit:
+    type: string
+    description: The unit of measuremet for the quantity property.
+    example: ml
+    required: true
+  upc:
+    type: string
+    pattern: "[0-9]{12,12}"
+    description: |
+      The Universal Produc Code. It consists of 12 numerical digits. However, because of the
+      integer precision limitation in JavaScript it is represented as a string.
+    example: "042100005264"
+    required: true
+  available:
+    type: boolean
+    description: |
+      Product current availability in the store.
+      Product may be not available but the users still can order it with later delivery date.
+    required: true
+    example: true
+example:
+  id: we2322-4f4f4f-f4f4ff-f4f4ff4
+  name: Acme Product
+  quantity: 200
+  unit: ml
+  upc: "123456789101"
+  available: true
+  etag: "W\sd3deef3rgrgf4r"
