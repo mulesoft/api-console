@@ -17,22 +17,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/test-helpers.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../../raml-js-parser/raml-js-parser.html">
-  <link rel="import" href="../../raml-json-enhance/raml-json-enhance.html">
   <link rel="import" href="../api-console.html">
 </head>
 
 <body>
-  <test-fixture id="parser">
-    <template>
-      <raml-js-parser json></raml-js-parser>
-    </template>
-  </test-fixture>
-  <test-fixture id="enhancer">
-    <template>
-      <raml-json-enhance></raml-json-enhance>
-    </template>
-  </test-fixture>
   <test-fixture id="basic">
     <template>
       <api-console></api-console>
@@ -44,26 +32,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var element;
     var raml;
 
-    suiteSetup(function(done) {
-      var baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
-      var parser = fixture('parser');
-      var enhancer = fixture('enhancer');
-      enhancer.addEventListener('raml-json-enhance-ready', function(e) {
-        raml = e.detail.json;
-        done();
-      });
-      parser.loadApi(baseUrl + 'test.raml')
-      .then(function(data) {
-        enhancer.json = data.json.specification;
-      })
-      .catch(function(e) {
-        done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
-      });
-    });
 
     setup(function() {
       element = fixture('basic');
-      element.raml = raml;
     });
 
     test('path should be set to summary', function() {

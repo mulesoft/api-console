@@ -12,28 +12,32 @@
         "platform": "Windows 10",
         "version": ""
       }, {
-        "browserName": "internet explorer",
+        "browserName": "firefox",
         "platform": "Windows 10",
-        "version": "11.103"
+        "version": "latest-4"
       }, {
         "browserName": "firefox",
         "platform": "Windows 10",
-        "version": "latest-2"
+        "version": "latest"
       }, {
         "browserName": "chrome",
         "platform": "Windows 10",
-        "version": "latest-2"
+        "version": "latest-4"
+      }, {
+        "browserName": "chrome",
+        "platform": "Windows 10",
+        "version": "latest"
       }, {
         "browserName": "safari",
         "platform": "OS X 10.11",
-        "version": "10"
-      }, {
-        "browserName": "safari",
-        "platform": "macOS 10.13",
-        "version": "11.0"
+        "version": "9.0"
       }, {
         "browserName": "safari",
         "platform": "macOS 10.12",
+        "version": "10.1"
+      }, {
+        "browserName": "safari",
+        "platform": "macOS 10.13",
         "version": "11.0"
       }]
     }

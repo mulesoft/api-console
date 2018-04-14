@@ -1,13 +1,4 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
 
 <head>
@@ -16,113 +7,56 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>API Console</title>
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../raml-docs-helpers/raml-docs-parser.html">
-  <link rel="import" href="../../../paper-checkbox/paper-checkbox.html">
-  <link rel="import" href="../../../paper-toggle-button/paper-toggle-button.html">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <script src="../../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="../../../shadycss/apply-shim.html">
+  <link rel="import" href="../../../polymer/lib/elements/custom-style.html">
+  <link rel="import" href="../../../polymer/lib/elements/dom-bind.html">
+  <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../../paper-styles/typography.html">
+  <link rel="import" href="../../../raml-aware/raml-aware.html">
   <link rel="import" href="../../api-console.html">
-  <link rel="import" href="../../../font-roboto/roboto.html">
+  <link rel="import" href="../parser-element/parser-element.html">
 
-  <style is="custom-style">
-  html,
-  body {
-    height: 100%;
-    background-color: #fff;
-  }
-
-  body {
-    margin: 0;
-    font-family: "DIN Pro", "Open Sans", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    @apply(--layout-vertical);
-  }
-
-  #content {
-    @apply(--layout-vertical);
-    @apply(--layout-flex);
-  }
-
-  .wrapper {
-    position: relative;
-    background-color: #fff;
-    @apply(--layout-flex);
-  }
-
-  api-console {
-    background-color: #fff;
-  }
-
-  :root {
-    --paper-checkbox-unchecked-color: #fff;
-    --paper-checkbox-label-color: #fff;
-  }
-
-  .powered-by {
-    @apply --layout-horizontal;
-    @apply --layout-center-center;
-    padding: 12px 0px;
-    border-top: 1px rgba(0,0,0,0.24) solid;
-    margin: 8px 12px 0 12px;
-  }
-
-  a img {
-    text-underline: none;
-  }
-
-  .console-controls {
-    padding: 4px 12px;
-    @apply --layout-horizontal;
-    @apply --layout-center;
-  }
-
-  .console-controls > * {
-    margin-right: 12px;
-  }
-
-  .console-controls paper-toggle-button {
-    cursor: pointer;
-  }
-
-  .console-controls {
-    --paper-toggle-button-checked-button-color: #00A2DF;
-  }
-
-  raml-docs-parser {
-    margin: 4px 12px;
-  }
-  </style>
+  <custom-style>
+    <style is="custom-style" include="demo-pages-shared-styles">
+    html,
+    body {
+      margin: 0;
+      background-color: #fff;
+    }
+    api-console {
+      background-color: #fff;
+    }
+    :root {
+      --paper-checkbox-unchecked-color: #fff;
+      --paper-checkbox-label-color: #fff;
+    }
+    </style>
+  </custom-style>
 </head>
 
 <body unresolved>
-  <template is="dom-bind" id="app">
-    <div id="content">
-      <div class="console-controls">
-        <paper-toggle-button checked="{{parserEnabled}}">Display RAML parser</paper-toggle-button>
-        <paper-toggle-button checked="{{noTryIt}}">No try it</paper-toggle-button>
-        <paper-toggle-button checked="{{narrow}}">Render narrow</paper-toggle-button>
-        <paper-toggle-button checked="{{noAttribution}}">No attribution (see license)</paper-toggle-button>
-      </div>
-      <raml-docs-parser raml="{{raml}}" hidden$="[[!parserEnabled]]" raml-file-url="https://cdn.rawgit.com/advanced-rest-client/echo-advancedrestclient-com/01671154/api/api.raml"></raml-docs-parser>
-      <div class="wrapper">
-        <api-console raml="[[raml]]" append-headers="X-key: my-api-key\nOther-header:value" narrow="[[narrow]]" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]" no-attribution="[[noAttribution]]">
-          <paper-checkbox nav checked="{{manualNavigation}}">Manual navigation</paper-checkbox>
-          <button nav hidden="[[!manualNavigation]]" on-tap="toggleNavigation">Toggle navigation</button>
-        </api-console>
-      </div>
-    </div>
-  </template>
+  <dom-bind id="demo">
+    <template is="dom-bind">
+      <raml-aware raml="{{amfModel}}" scope="demo-model"></raml-aware>
+      <template is="dom-if" if="[[hasData]]">
+        <api-console aware="demo-model" append-headers="X-key: my-api-key\nOther-header:value" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]" no-attribution="[[noAttribution]]"></api-console>
+      </template>
+      <template is="dom-if" if="[[!hasData]]">
+        <parser-element on-amf-changed="_updateAmf"></parser-element>
+      </template>
+    </template>
+  </dom-bind>
   <script>
   (function(scope) {
-    'use strict';
-    scope.parserEnabled = true;
-    scope.toggleNavigation = function() {
-      if (scope.navigationOpened === undefined) {
-        scope.navigationOpened = true;
-      } else {
-        scope.navigationOpened = !scope.navigationOpened;
-      }
+    scope.hasData = false;
+    scope._updateAmf = function(e) {
+      scope.amfModel = e.detail.value;
+      scope.hasData = !!e.detail.value;
     };
-  })(document.querySelector('#app'));
+  })(document.querySelector('#demo'));
   </script>
 </body>
 
