@@ -19,7 +19,34 @@ class ParserService {
    * @param {Object} res
    */
   parseData(req, res) {
-    res.send('ok');
+    const dataType = req.body.dataType;
+    const dataFormat = req.body.dataFormat;
+    const dataValue = req.body.dataValue;
+    let p;
+    switch (dataFormat) {
+      case 'url':
+        p = this.processFile(dataValue, dataType);
+        break;
+      case 'text':
+        p = this.processData(dataValue, dataType);
+        break;
+      default:
+        p = Promise.reject(new Error('Unknown data format'));
+    }
+    p.then((data) => {
+      res.set('Content-Type', 'application/json');
+      res.status(200).send(data);
+    })
+    .catch((cause) => {
+      const m = cause.message || cause.s$1 || 'unknown error';
+      const body = JSON.stringify({
+        error: true,
+        message: m
+      }, null, 2);
+      res.set('Content-Type', 'application/json');
+      res.status(500).send(body);
+      console.error(m);
+    });
   }
   /**
    * Parses file data
@@ -30,7 +57,10 @@ class ParserService {
     const file = req.files[0];
     const dataType = req.body.dataType;
     this.getFileLocation(file)
-    .then((file) => this.processLocalFile(file, dataType))
+    .then((file) => {
+      file = `file://${file}`;
+      return this.processFile(file, dataType);
+    })
     .then((data) => {
       res.set('Content-Type', 'application/json');
       res.status(200).send(data);
@@ -47,20 +77,37 @@ class ParserService {
     });
   }
   /**
-   * Processes locally stored file.
+   * Processes locally oxternally stored file.
    *
    * @param {String} file File location
    * @param {Strnig} from `raml`, `oas` or `amf`
    * @return {Promise}
    */
-  processLocalFile(file, from) {
+  processFile(file, from) {
     let parser;
     switch (from) {
       case 'raml': parser = ramlParser; break;
       case 'oas': parser = openAPIParser; break;
       case 'amf': parser = apiModelParser; break;
     }
-    return parser.parseFileAsync(`file://${file}`)
+    return parser.parseFileAsync(file)
+    .then((doc) => this.generateModel(doc, from));
+  }
+  /**
+   * Processes text content.
+   *
+   * @param {String} data String to parse
+   * @param {Strnig} from `raml`, `oas` or `amf`
+   * @return {Promise}
+   */
+  processData(data, from) {
+    let parser;
+    switch (from) {
+      case 'raml': parser = ramlParser; break;
+      case 'oas': parser = openAPIParser; break;
+      case 'amf': parser = apiModelParser; break;
+    }
+    return parser.parseStringAsync(data)
     .then((doc) => this.generateModel(doc, from));
   }
   /**

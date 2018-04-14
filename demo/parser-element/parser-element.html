@@ -50,23 +50,23 @@ the License.
       Run <code>npm start</code> before you begin. <paper-input class="port" label="Local server port number" value="{{port}}" type="number"></paper-input>
     </p>
     <paper-tabs selected="{{selected}}">
-      <paper-tab>RAML</paper-tab>
+      <paper-tab>RAML 1.0</paper-tab>
       <paper-tab>OpenAPI</paper-tab>
       <paper-tab>API model (AMF)</paper-tab>
     </paper-tabs>
     <iron-pages selected="[[selected]]">
       <section>
         <div class="row">
-          <paper-input label="RAML main file location or zip" type="url" id="ru"></paper-input>
+          <paper-input label="RAML 1.0 main file location or zip" type="url" id="ru"></paper-input>
           <paper-button class="action-button" raised on-click="_ramlUrl">Go</paper-button>
         </div>
         or
         <div class="row">
-          <paper-input label="RAML zip file or single api file" type="file" id="rf"></paper-input>
+          <paper-input label="RAML 1.0 zip file or single api file" type="file" id="rf"></paper-input>
           <paper-button class="action-button" raised on-click="_ramlFile">Go</paper-button>
         </div>
         or
-        <paper-textarea label="RAML text content" id="rt"></paper-textarea>
+        <paper-textarea label="RAML 1.0 text content" id="rt"></paper-textarea>
         <paper-button class="action-button" raised on-click="_ramlText">Go</paper-button>
       </section>
       <section>
