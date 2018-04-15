@@ -12,7 +12,6 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../raml-aware/raml-aware.html">
 <link rel="import" href="../app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../app-layout/app-drawer-layout/app-drawer-layout.html">
@@ -60,6 +59,32 @@ the License.
       width: 177px;
       margin-left: 24px;
     }
+
+    app-drawer-layout:not([narrow]) [drawer-toggle] {
+      display: none;
+    }
+
+    app-toolbar {
+      background-color: var(--api-console-toolbar-background-color, rgba(0,0,0,0.85));
+      color: var(--api-console-toolbar-color, #fff);
+    }
+
+    .extension-banner {
+      @apply --layout-center;
+      display: none;
+      padding: 0 24px;
+      border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
+      margin-bottom: 12px;
+      color: var(--api-console-extension-banner-color, rgba(0,0,0,0.54));
+    }
+
+    .extension-banner[active] {
+      @apply --layout-horizontal;
+    }
+
+    .main-content {
+      margin-left: var(--api-console-main-content-margin-left, 24px);
+    }
     </style>
     <app-drawer-layout>
       <app-drawer slot="drawer">
@@ -80,15 +105,21 @@ the License.
       <app-header-layout>
         <app-header slot="header" fixed condenses effects="waterfall">
           <app-toolbar>
-            <paper-icon-button icon="arc:menu" paper-drawer-toggle hidden$="[[manualNavigation]]"></paper-icon-button>
+            <paper-icon-button icon="arc:menu" drawer-toggle hidden$="[[manualNavigation]]"></paper-icon-button>
             <div main-title>[[apiTitle]]</div>
           </app-toolbar>
         </app-header>
-        <div>
-          <iron-pages selected="[[page]]" attr-for-selected="data-page">
-            <api-documentation data-page="docs" amf-model="[[amfModel]]" handle-navigation-events></api-documentation>
-            <api-request-panel data-page="tryit" amf-model="[[amfModel]]"></api-request-panel>
-          </iron-pages>
+        <div class="main-content">
+          <template is="dom-if" if="[[isRequest]]" restamp="true">
+            <div class="extension-banner" active$="[[extensionBannerActive]]">
+              <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
+              <paper-icon-button icon="arc:close" on-tap="dismissExtensionBanner"></paper-icon-button>
+            </div>
+            <api-request-panel data-page="request" amf-model="[[amfModel]]" narrow="[[narrow]]" no-url-editor="[[noUrlEditor]]" handle-navigation-events></api-request-panel>
+          </template>
+          <template is="dom-if" if="[[isDocs]]" restamp="true">
+            <api-documentation data-page="docs" amf-model="[[amfModel]]" handle-navigation-events no-try-it="[[noTryIt]]" narrow="[[narrow]]" base-uri="[[baseUri]]"></api-documentation>
+          </template>
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -128,19 +159,52 @@ the License.
          *
          * @type {Object|Array}
          */
-        amfModel: Object,
+        amfModel: {
+          type: Object,
+          observer: '_amfModelChanged'
+        },
+        /**
+         * File location of the AMF json/ld model.
+         * When changed it will download data from given location
+         * and assign value to the `amfModel` property.
+         *
+         * ## Example
+         * ```html
+         * <api-console model-location="https://amf-parser/domain.com"></api-console>
+         * ```
+         */
         modelLocation: {
           type: String,
           observer: '_modelLocationChanged'
         },
-        // Currently displayed page. Either `docs` or `request`
+        /**
+         * Currently rendered page. It can be either `docs` or `request`.
+         */
         page: {
           type: String,
           value: 'docs',
           notify: true
         },
+        /**
+         * Computed value (read only), `true` when current page is the
+         * request panel.
+         */
+        isRequest: {
+          type: Boolean,
+          computed: '_computeIsRequest(page)'
+        },
+        /**
+         * Computed value (read only), `true` when current page is the
+         * documentation panel.
+         */
+        isDocs: {
+          type: Boolean,
+          computed: '_computeIsDocs(page)'
+        },
         // If not set or false then the install extension banner will be allowed to be shown.
         noExtensionBanner: Boolean,
+        // When set the extension banner is rendered.
+        extensionBannerActive: Boolean,
         /**
          * Forces the console to send headers defined in this string overriding any used defined
          * header.
@@ -150,6 +214,11 @@ the License.
          */
         appendHeaders: {
           type: String
+        },
+        // If true it will display a narrow layout.
+        narrow: {
+          type: Boolean,
+          notify: true
         },
         /**
          * If set every request made from the console will be proxied by the service provided in this
@@ -238,6 +307,17 @@ the License.
         apiTitle: {
           type: String,
           computed: '_computeApiTitle(webApi)'
+        },
+        /**
+         * If true then current browser is Chrome.
+         * Used to determine if the console should render the extension banner.
+         */
+        isChrome: {
+          type: Boolean,
+          readOnly: true,
+          value: function() {
+            return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+          }
         }
       };
     }
@@ -258,6 +338,11 @@ the License.
       super.disconnectedCallback();
       this.removeEventListener('tryit-requested', this._tryitHandler);
       window.removeEventListener('api-console-extension-installed', this._onExtensionInstalled);
+    }
+
+    ready() {
+      super.ready();
+      this._initExtensionBanner();
     }
 
     _modelLocationChanged(url) {
@@ -302,7 +387,6 @@ the License.
     _tryitHandler() {
       this.page = 'request';
     }
-
     /**
      * Handler for the `amfModel` property change.
      * Sets the `path` to summary.
@@ -360,7 +444,6 @@ the License.
       }
       return enc.find((item) => this._hasType(item, 'http://schema.org/WebAPI'));
     }
-
     /**
      * Computes value of `apiTitle` property.
      *
@@ -369,6 +452,41 @@ the License.
      */
     _computeApiTitle(shape) {
       return this._getValue(shape, 'http://schema.org/name');
+    }
+    /**
+     * Computes value for `isRequest` property.
+     *
+     * @param {?String} page Currently selected page.
+     * @return {Boolean}
+     */
+    _computeIsRequest(page) {
+      return page === 'request';
+    }
+    /**
+     * Computes value for `isDocs` property.
+     *
+     * @param {?String} page Currently selected page.
+     * @return {Boolean}
+     */
+    _computeIsDocs(page) {
+      return page === 'docs';
+    }
+    /**
+     * Renders the extension banner if is Chrome and extension is not detected.
+     */
+    _initExtensionBanner() {
+      if (!this.isChrome || this.noExtensionBanner) {
+        return;
+      }
+      setTimeout(() => {
+        if (!this.noExtensionBanner) {
+          this.extensionBannerActive = true;
+        }
+      });
+    }
+
+    dismissExtensionBanner() {
+      this.extensionBannerActive = false;
     }
   }
   window.customElements.define(ApiConsole.is, ApiConsole);

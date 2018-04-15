@@ -46,7 +46,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --arc-font-display1: {
-    @apply(--arc-font-common-base);
+    @apply --arc-font-common-base;
 
     font-size: 34px;
     font-weight: 400;
@@ -55,7 +55,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --arc-font-headline: {
-    @apply(--arc-font-common-base);
+    @apply --arc-font-common-base;
 
     font-weight: 400;
     letter-spacing: -.012em;
@@ -64,8 +64,8 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --arc-font-title: {
-    @apply(--arc-font-common-base);
-    @apply(--arc-font-common-nowrap);
+    @apply --arc-font-common-base;
+    @apply --arc-font-common-nowrap;
 
     font-weight: 500;
     font-size: 20px;
@@ -73,7 +73,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --arc-font-subhead: {
-    @apply(--arc-font-common-base);
+    @apply --arc-font-common-base;
 
     font-weight: 400;
     font-size: 16px;
@@ -81,7 +81,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --arc-font-body2: {
-    @apply(--arc-font-common-base);
+    @apply --arc-font-common-base;
 
     font-size: 14px;
     font-weight: 500;
@@ -89,7 +89,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --arc-font-body1: {
-    @apply(--arc-font-common-base);
+    @apply --arc-font-common-base;
 
     font-size: 14px;
     font-weight: 400;
@@ -97,8 +97,8 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --arc-font-caption: {
-    @apply(--arc-font-common-base);
-    @apply(--arc-font-common-nowrap);
+    @apply --arc-font-common-base;
+    @apply --arc-font-common-nowrap;
 
     font-size: 12px;
     font-weight: 400;
@@ -107,18 +107,18 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --select-text: {
-    @apply(--arc-font-common-base);
+    @apply --arc-font-common-base;
     -webkit-user-select: text;
     cursor: text;
   };
 
   --arc-link: {
-    @apply(--arc-font-common-base);
+    @apply --arc-font-common-base;
     color: var(--arc-link-color, #00A1DF);
   };
 
   --arc-font-code1: {
-    @apply(--arc-font-common-code);
+    @apply --arc-font-common-code;
 
     font-size: 14px;
     font-weight: 500;
@@ -127,7 +127,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
   /* Mixin applied to all the "missing info" paragraphs. By deafult all elements this kind are the <p> elements. But it may vary. */
   --no-info-message: {
-    @apply(--arc-font-body1);
+    @apply --arc-font-body1;
     font-style: italic;
   };
 
@@ -140,7 +140,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
     /* Mixin applied to all code blocks that highlights schemas / types / etc. All code block uses the `prism-theme-default`. */
   --code-block: {
-    @apply(--arc-font-common-code);
+    @apply --arc-font-common-code;
   };
 
   --arc-code-mirror-background-color: var(--code-mirror-background-color, #f5f2f0);
@@ -155,29 +155,18 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     display: block;
   }
 
-  --code-mirror-wrapper: {
-    display: block;
-    height: 100%;
-  };
-
-  --paper-toolbar-background: var(--arc-toolbar-background, #121314);
-
-  --paper-toolbar-title: {
-    margin-left: 0px;
-  };
-
     /* Paper tabs styling */
-  --paper-tabs-selection-bar-color: var(--arc-tabs-selection-bar-color, --primary-color);
-  --paper-tab-ink: var(--arc-tab-ink-color, --primary-color);
+  --paper-tabs-selection-bar-color: var(--arc-tabs-selection-bar-color, var(--primary-color));
+  --paper-tab-ink: var(--arc-tab-ink-color, var(--primary-color));
   --tabs-selection-width: var(--arc-tabs-selection-width, 2px);
 
   --paper-tabs-selection-bar: {
     border-width: var(--tabs-selection-width);
-    border-color: var(--arc-tabs-selection-bar-border-color, --primary-color);
+    border-color: var(--arc-tabs-selection-bar-border-color, var(--primary-color));
   };
 
   --paper-tabs-content: {
-    @apply(--arc-font-common-base);
+    @apply --arc-font-common-base;
 
     height: calc(100% - var(--tabs-selection-width));
     border-bottom: var(--tabs-selection-width) solid var(--arc-tabs-content-border-bottom-color, rgba(39,47,51,.1));
@@ -189,35 +178,13 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     color: var(--arc-tabs-content-color, rgba(0,0,0,0.78));
   };
 
-    /* Documentaion */
-  --raml-docs-main-content: {
-    margin-bottom: var(--raml-docs-main-content-margin-bottom, 20px);
-  };
-
-    /* Inputs */
-  --paper-input-container-color: var(--arc-input-container-color, rgba(0, 0, 0, 0.24));
-    /* Inline docs */
-  --inline-docs-color: var(--arc-inline-docs-color, rgba(0, 0, 0, 0.32));
-  --raml-request-parameters-editor-docs-color: var(--inline-docs-color);
-  --raml-headers-form-docs-color: var(--inline-docs-color);
-
-  --raml-request-parameters-editor-subheader: {
-    @apply(--arc-font-subhead);
-    @apply(--arc-request-parameters-editor-subheader);
-  };
-
-  /*Table*/
-    /* PATH selector */
-  --raml-docs-tree-item-selected-background: var(--arc-navigation-selected-background-color, rgb(3, 169, 244));
-  --raml-docs-tree-item-selected-color: var(--arc-navigation-selected-color, #fff);
-
     /* Request panel */
-  --raml-request-panel: {
+  --api-request-panel: {
     margin-bottom: 20px;
     max-width: 900px;
     margin-left: 16px;
     margin-right: 12px;
-    @apply(--arc-request-panel);
+    @apply --arc-request-panel;
   };
 
   --response-view: {
@@ -225,86 +192,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     max-width: 900px;
     margin-left: 16px;
     margin-right: 12px;
-    @apply(--arc-response-view);
-  };
-
-  --request-form-panels: {
-    margin: 0 0 12px 16px;
-    @apply(--arc-request-form-panels);
-  };
-
-  --raml-request-url-editor: {
-    @apply(--request-form-panels);
-    @apply(--arc-request-url-editor);
-  };
-
-  --raml-request-parameters-editor: {
-    @apply(--request-form-panels);
-    @apply(--arc-request-parameters-editor);
-  };
-
-  --raml-body-editor-panel: {
-    @apply(--request-form-panels);
-    @apply(--arc-body-editor-panel);
-  };
-
-  --raml-docs-response-panel: {
-    @apply(--arc-docs-response-panel);
-  };
-
-  --raml-docs-method-viewer: {
-    margin-right: 12px;
-    @apply(--arc-docs-method-viewer);
-  };
-
-  --raml-request-headers-editor: {
-    @apply(--request-form-panels);
-    @apply(--arc-request-headers-editor);
-  };
-
-  --authorization-panel: {
-    @apply(--request-form-panels);
-    @apply(--arc-authorization-panel);
-  };
-
-  --raml-documentation-panel: {
-    padding: 0;
-    @apply(--request-form-panels);
-    @apply(--arc-documentation-panel);
-  };
-
-  --raml-summary-view: {
-    @apply(--request-form-panels);
-    margin-right: var(--arc-summary-view-margin-right, 12px);
-    @apply(--arc-summary-view);
-  };
-
-  --raml-path-selector: {
-    overflow: auto;
-    background-color: transparent;
-    @apply(--layout-flex);
-    @apply(--arc-navigation);
-  };
-
-  --raml-docs-response-panel-docs-content: {
-    padding: 8px;
-    margin-left: 0px;
-    @apply(--arc-docs-response-panel-docs-content);
-  };
-
-  /* Documentation panels */
-  --params-table-header-background-color: var(--arc-params-table-header-background-color, #616161);
-  --params-table-subheader-background-color: var(--arc-params-table-subheader-background-color, #EEEEEE);
-  --params-table-row-border-color: var(--arc-params-table-row-border-color, #e0e0e0);
-  --params-table-row-subproperty-border-color: var(--arc-params-table-subproperty-border-color, #e0e0e0);
-  --params-table-header-color: var(--arc-params-table-header-color, #FAFAFA);
-
-  --inline-documentation-color: var(--arc-inline-documentation-color, #1a237e);
-  --raml-headers-form-docs-color: var(--arc-headers-form-docs-color, #1a237e);
-
-  --response-error-view: {
-    margin-top: var(--response-error-view-margin-top, 24px);
-    @apply(--arc-response-error-view);
+    @apply --arc-response-view;
   };
 
   --code-type-text-value-color: #0d47a1;
@@ -315,79 +203,6 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --code-type-link-color: #757575;
   --code-array-index-color: rgba(1, 87, 155, 0.57);
   --code-background-color: #F4F5F6;
-
-  /* max width of the documentation main panel */
-  --raml-docs-main-content-width: 1200px;
-
-  --paper-checkbox-label: {
-    @apply(--arc-font-body1);
-    @apply(--arc-checkbox-label);
-  };
-
-  /* Label of the Type name in the body parameters list view */
-  --docs-body-parameters-table-type-name: {
-    @apply(--arc-font-common-base);
-    font-size: 16px;
-    font-weight: 100;
-    margin: 0;
-    padding: 0;
-    @apply(--arc-parameters-type-name);
-  };
-
-  /* Applied to links in RAML docs */
-  --raml-docs-link: {
-    @apply(--arc-font-body1);
-    @apply(--arc-link);
-  };
-
-  /* buttons */
-  --paper-button: {
-    @apply(--arc-font-common-base);
-    font-size: var(--arc-button-font-size, 14px);
-    @apply(--arc-button);
-  };
-
-  --toggle-button: {
-    @apply(--arc-font-body1);
-    color: var(--arc-toggle-button-color, #6B8A99);
-    margin-right: 0;
-    font-weight: normal;
-    @apply(--arc-toggle-button);
-  };
-
-  --toggle-button-hover: {
-    @apply(--arc-toggle-button-hover);
-  };
-
-  --action-button: {
-    background-color: var(--arc-action-button-background-color, --primary-color);
-    color: var(--primary-action-color, #fff);
-  };
-
-  --action-button-hover: {
-    background-color: var(--arc-action-button-background-color, --primary-color);
-    color: var(--primary-action-color, #fff);
-  };
-
-  --auth-button: {
-    @apply(--arc-font-body1);
-    background-color: var(--arc-auth-button-background-color, #D1344E);
-    color: var(--arc-auth-button-color, #fff);
-    @apply(--arc-auth-button);
-  };
-
-  --raml-docs-resource-viewer-navigation-wide-layout: {
-    background-color: var(--arc-resource-viewer-navigation-wide-layout-background-color, #F4F5F6);
-    margin: 0;
-    border-left: 0;
-    @apply(--arc-resource-viewer-navigation-wide-layout);
-  };
-
-  --sidebar-list-link: {
-    @apply(--arc-font-body1);
-    padding: 10px 12px;
-    @apply(--arc-link);
-  };
 }
 
 </style>
