@@ -12,197 +12,141 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../shadycss/apply-shim.html">
+<link rel="import" href="../polymer/lib/elements/custom-style.html">
 <!--
 The API Console main stylesheet.
-It is a Polymer's custom style element. It will propagate variables and mixins on all elements;
+It is a Polymer's custom style element. It will propagate variables and mixins
+to all elements.
 -->
-<style is="custom-style">
+<custom-style>
+  <style is="custom-style">
+  :root {
+    --primary-color: var(--arc-color-primary, #00709a);
+    --secondary-color: var(--arc-color-secondary, #506773);
+    --primary-background-color: var(--arc-color-primary-background, #fff);
+    --accent-color: var(--arc-accent-color, #cc143c);
 
-:root {
-  --primary-color: var(--arc-color-primary, #00a2df);
-  --secondary-color: var(--arc-color-secondary, #506773);
-  --primary-background-color: var(--arc-color-primary-background, #fff);
-  --accent-color: var(--arc-accent-color, #cc143c);
+    /* THEME */
+    --arc-font-common-base: {
+      font-family: var(--arc-font-family, 'Roboto', 'Noto', sans-serif);
+      -webkit-font-smoothing: antialiased;
+    };
 
-  /* THEME */
-  --arc-font-common-base: {
-    font-family: var(--arc-font-family, 'Roboto', 'Noto', sans-serif);
-    -webkit-font-smoothing: antialiased;
-  };
+    --arc-font-common-code: {
+      font-family: var(--arc-font-family-code, 'Roboto Mono', 'Consolas', 'Menlo', monospace);
+      -webkit-font-smoothing: antialiased;
+    };
 
-  --arc-font-common-code: {
-    font-family: var(--arc-font-family-code, 'Roboto Mono', 'Consolas', 'Menlo', monospace);
-    -webkit-font-smoothing: antialiased;
-  };
+    --arc-font-common-expensive-kerning: {
+      text-rendering: optimizeLegibility;
+    };
 
-  --arc-font-common-expensive-kerning: {
-    text-rendering: optimizeLegibility;
-  };
+    --arc-font-common-nowrap: {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    };
 
-  --arc-font-common-nowrap: {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  };
+    --arc-font-display1: {
+      @apply --arc-font-common-base;
+      font-size: 34px;
+      font-weight: 400;
+      letter-spacing: -.01em;
+      line-height: 40px;
+    };
 
-  --arc-font-display1: {
-    @apply --arc-font-common-base;
+    --arc-font-headline: {
+      @apply --arc-font-common-base;
+      font-weight: 400;
+      letter-spacing: -.012em;
+      font-size: 24px;
+      line-height: 32px;
+    };
 
-    font-size: 34px;
-    font-weight: 400;
-    letter-spacing: -.01em;
-    line-height: 40px;
-  };
+    --arc-font-title: {
+      @apply --arc-font-common-base;
+      @apply --arc-font-common-nowrap;
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 28px;
+    };
 
-  --arc-font-headline: {
-    @apply --arc-font-common-base;
+    --arc-font-subhead: {
+      @apply --arc-font-common-base;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+    };
 
-    font-weight: 400;
-    letter-spacing: -.012em;
-    font-size: 24px;
-    line-height: 32px;
-  };
+    --arc-font-body2: {
+      @apply --arc-font-common-base;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 24px;
+    };
 
-  --arc-font-title: {
-    @apply --arc-font-common-base;
-    @apply --arc-font-common-nowrap;
+    --arc-font-body1: {
+      @apply --arc-font-common-base;
 
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 28px;
-  };
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+    };
 
-  --arc-font-subhead: {
-    @apply --arc-font-common-base;
+    --arc-font-caption: {
+      @apply --arc-font-common-base;
+      @apply --arc-font-common-nowrap;
 
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-  };
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.011em;
+      line-height: 20px;
+    };
 
-  --arc-font-body2: {
-    @apply --arc-font-common-base;
+    --select-text: {
+      @apply --arc-font-common-base;
+      -webkit-user-select: text;
+      cursor: text;
+    };
 
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 24px;
-  };
+    /* Navigation */
+    --api-navigation-list-item-selected-background-color: var(--primary-color);
 
-  --arc-font-body1: {
-    @apply --arc-font-common-base;
+    /* Color of "help" icon in the editors in request panel */
+    --hint-trigger-color: #455A64;
+    --hint-trigger-hover-color: var(--primary-color);
+    --api-form-action-icon-color: var(--primary-color);
+    --api-form-action-icon-hover-color: #3F51B5;
+    --api-form-action-button-color: var(--primary-color);
+    --api-form-action-button-hover-color: #3F51B5;
+    --from-row-action-icon-color: var(--primary-color);
+    --from-row-action-icon-color-hover: #3F51B5;
 
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-  };
+    /* Paper tabs */
+    --paper-tabs-selection-bar-color: var(--primary-color);
+    --tabs-selection-width: 2px;
+    --paper-tabs-selection-bar: {
+      border-width: var(--tabs-selection-width);
+      border-color: var(--primary-color);
+    };
+    --paper-tabs-content: {
+      @apply --arc-font-common-base;
+      height: calc(100% - var(--tabs-selection-width));
+      border-bottom: var(--tabs-selection-width) solid rgba(39,47,51,.1);
+      font-style: normal;
+      color: rgba(0,0,0,0.87);
+    };
+    --paper-tab-content-unselected: {
+      color: rgba(0,0,0,0.78);
+    };
 
-  --arc-font-caption: {
-    @apply --arc-font-common-base;
-    @apply --arc-font-common-nowrap;
-
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.011em;
-    line-height: 20px;
-  };
-
-  --select-text: {
-    @apply --arc-font-common-base;
-    -webkit-user-select: text;
-    cursor: text;
-  };
-
-  --arc-link: {
-    @apply --arc-font-common-base;
-    color: var(--arc-link-color, #00A1DF);
-  };
-
-  --arc-font-code1: {
-    @apply --arc-font-common-code;
-
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-  };
-
-  /* Mixin applied to all the "missing info" paragraphs. By deafult all elements this kind are the <p> elements. But it may vary. */
-  --no-info-message: {
-    @apply --arc-font-body1;
-    font-style: italic;
-  };
-
-    /* Mixin applied to all labels that are form elements */
-  --form-label: {
-    font-weight: 500;
-  };
-
-  --input-line-color:  var(--primary-color);
-
-    /* Mixin applied to all code blocks that highlights schemas / types / etc. All code block uses the `prism-theme-default`. */
-  --code-block: {
-    @apply --arc-font-common-code;
-  };
-
-  --arc-code-mirror-background-color: var(--code-mirror-background-color, #f5f2f0);
-
-  --code-mirror: {
-    background-color: var(--arc-code-mirror-background-color, #f5f2f0);
-  };
-
-  --code-mirror-editor: {
-    background-color: var(--arc-code-mirror-background-color, #f5f2f0);
-    z-index: 0;
-    display: block;
+    /* Authorization panel */
+    --stepper-step-number-background-color: var(--primary-color);
+    /* Paper-autocomplete must be styled to not go under the navigation */
+    --paper-autocomplete: {
+      max-width: calc(100vw - 256px - 48px);
+    };
   }
-
-    /* Paper tabs styling */
-  --paper-tabs-selection-bar-color: var(--arc-tabs-selection-bar-color, var(--primary-color));
-  --paper-tab-ink: var(--arc-tab-ink-color, var(--primary-color));
-  --tabs-selection-width: var(--arc-tabs-selection-width, 2px);
-
-  --paper-tabs-selection-bar: {
-    border-width: var(--tabs-selection-width);
-    border-color: var(--arc-tabs-selection-bar-border-color, var(--primary-color));
-  };
-
-  --paper-tabs-content: {
-    @apply --arc-font-common-base;
-
-    height: calc(100% - var(--tabs-selection-width));
-    border-bottom: var(--tabs-selection-width) solid var(--arc-tabs-content-border-bottom-color, rgba(39,47,51,.1));
-    font-style: normal;
-    color: var(--arc-tabs-content-selected-color, rgba(0,0,0,0.87));
-  };
-
-  --paper-tab-content-unselected: {
-    color: var(--arc-tabs-content-color, rgba(0,0,0,0.78));
-  };
-
-    /* Request panel */
-  --api-request-panel: {
-    margin-bottom: 20px;
-    max-width: 900px;
-    margin-left: 16px;
-    margin-right: 12px;
-    @apply --arc-request-panel;
-  };
-
-  --response-view: {
-    margin-bottom: 20px;
-    max-width: 900px;
-    margin-left: 16px;
-    margin-right: 12px;
-    @apply --arc-response-view;
-  };
-
-  --code-type-text-value-color: #0d47a1;
-  --code-type-number-value-color: #03a9f4;
-  --code-type-boolean-value-color: #0288d1;
-  --code-type-null-value-color: #0288d1;
-  --code-punctuation-value-color: #757575;
-  --code-type-link-color: #757575;
-  --code-array-index-color: rgba(1, 87, 155, 0.57);
-  --code-background-color: #F4F5F6;
-}
-
-</style>
+  </style>
+</custom-style>

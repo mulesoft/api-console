@@ -16,8 +16,9 @@
   <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
   <link rel="import" href="../../../paper-styles/typography.html">
   <link rel="import" href="../../../raml-aware/raml-aware.html">
-  <link rel="import" href="../../api-console.html">
+  <link rel="import" href="../../../paper-icon-button/paper-icon-button.html">
   <link rel="import" href="../../api-console-styles.html">
+  <link rel="import" href="../../api-console.html">
   <link rel="import" href="../parser-element/parser-element.html">
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
@@ -40,7 +41,15 @@
     <template is="dom-bind">
       <raml-aware raml="{{amfModel}}" scope="demo-model"></raml-aware>
       <template is="dom-if" if="[[hasData]]">
-        <api-console aware="demo-model" append-headers="X-key: my-api-key\nOther-header:value" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]" no-attribution="[[noAttribution]]"></api-console>
+        <api-console
+          aware="demo-model"
+          append-headers="X-key: my-api-key\nOther-header:value"
+          manual-navigation="[[manualNavigation]]"
+          navigation-opened="{{navigationOpened}}"
+          no-try-it="[[noTryIt]]"
+          no-attribution="[[noAttribution]]">
+          <paper-icon-button icon="arc:close" slot="toolbar" on-click="_closeApi" title="Select different demo API"></paper-icon-button>
+        </api-console>
       </template>
       <template is="dom-if" if="[[!hasData]]">
         <parser-element on-amf-changed="_updateAmf"></parser-element>
@@ -53,6 +62,10 @@
     scope._updateAmf = function(e) {
       scope.amfModel = e.detail.value;
       scope.hasData = !!e.detail.value;
+    };
+
+    scope._closeApi = function() {
+      scope.hasData = false;
     };
   })(document.querySelector('#demo'));
   </script>
