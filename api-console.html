@@ -177,7 +177,10 @@ the License.
           type: Object,
           observer: '_amfModelChanged'
         },
-        _selectedShape: String,
+        _selectedShape: {
+          type: String,
+          observer: '_selectedChanged'
+        },
         _selectedShapeType: String,
         /**
          * File location of the AMF json/ld model.
@@ -410,6 +413,12 @@ the License.
     _amfModelChanged() {
       this._selectedShape = 'summary';
       this._selectedShapeType = 'summary';
+    }
+
+    _selectedChanged() {
+      if (this.page !== 'docs') {
+        this.page = 'docs';
+      }
     }
     /**
      * Checks if property item has a type.
