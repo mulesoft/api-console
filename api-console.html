@@ -124,14 +124,14 @@ the License.
         </app-header>
         <div class="main-content">
           <slot name="content"></slot>
-          <template is="dom-if" if="[[isRequest]]" restamp="true">
+          <template is="dom-if" if="[[isRequest]]">
             <div class="extension-banner" active$="[[extensionBannerActive]]">
               <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
               <paper-icon-button icon="arc:close" on-click="dismissExtensionBanner"></paper-icon-button>
             </div>
             <api-request-panel data-page="request" amf-model="[[amfModel]]" selected="[[_selectedShape]]" narrow="[[narrow]]" no-url-editor="[[noUrlEditor]]"></api-request-panel>
           </template>
-          <template is="dom-if" if="[[isDocs]]" restamp="true">
+          <template is="dom-if" if="[[isDocs]]">
             <api-documentation data-page="docs" amf-model="[[amfModel]]" selected="[[_selectedShape]]" selected-type="[[_selectedShapeType]]" no-try-it="[[noTryIt]]" narrow="[[narrow]]" base-uri="[[baseUri]]"></api-documentation>
           </template>
         </div>
