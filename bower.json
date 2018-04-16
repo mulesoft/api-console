@@ -40,7 +40,8 @@
     "web-animations-js": "web-animations/web-animations-js#^2.3",
     "paper-tabs": "PolymerElements/paper-tabs#^2.1.1",
     "iron-pages": "PolymerElements/iron-pages#^2.0.0",
-    "paper-progress": "PolymerElements/paper-progress#^2.1.1"
+    "paper-progress": "PolymerElements/paper-progress#^2.1.1",
+    "arc-polyfills": "advanced-rest-client/arc-polyfills#^0.1.11"
   },
   "resolutions": {
     "headers-parser-behavior": "2.0.0-preview"
