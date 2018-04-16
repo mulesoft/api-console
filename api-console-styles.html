@@ -116,12 +116,12 @@ to all elements.
     /* Color of "help" icon in the editors in request panel */
     --hint-trigger-color: #455A64;
     --hint-trigger-hover-color: var(--primary-color);
-    --api-form-action-icon-color: var(--primary-color);
-    --api-form-action-icon-hover-color: #3F51B5;
-    --api-form-action-button-color: var(--primary-color);
-    --api-form-action-button-hover-color: #3F51B5;
-    --from-row-action-icon-color: var(--primary-color);
-    --from-row-action-icon-color-hover: #3F51B5;
+    --api-form-action-icon-color: #455A64;
+    --api-form-action-icon-hover-color: var(--primary-color);
+    --api-form-action-button-color: #455A64;
+    --api-form-action-button-hover-color: var(--primary-color);
+    --from-row-action-icon-color: #455A64;
+    --from-row-action-icon-color-hover: var(--primary-color);
 
     /* Paper tabs */
     --paper-tabs-selection-bar-color: var(--primary-color);
@@ -141,12 +141,51 @@ to all elements.
       color: rgba(0,0,0,0.78);
     };
 
+    /* The request editor */
+    --api-request-editor-send-valid-button: {
+      background-color: var(--primary-color);
+      color: #fff;
+    };
+
+    --api-request-editor-abort-button: {
+      background-color: var(--primary-color);
+      color: #fff;
+    };
+
     /* Authorization panel */
     --stepper-step-number-background-color: var(--primary-color);
+    --authorization-panel: {
+      padding: 8px 12px;
+    };
+
+    /* URL parameters editor */
+    --api-url-params-editor: {
+      padding: 8px 12px;
+    };
+
+    /* Headers editor */
+    --api-headers-editor: {
+      padding: 8px 12px;
+    };
+
+    /* Body editor */
+    --api-body-editor: {
+      padding: 8px 12px;
+    };
+
     /* Paper-autocomplete must be styled to not go under the navigation */
     --paper-autocomplete: {
       max-width: calc(100vw - 256px - 48px);
     };
+
+    /* Type documentation */
+    --property-shape-document: {
+      padding: 12px 0;
+      border-bottom: 1px #CFD8DC dashed;
+    };
+
+    /* Code styling */
+    --code-background-color: #f5f2f0;
   }
   </style>
 </custom-style>
