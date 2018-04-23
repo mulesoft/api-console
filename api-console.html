@@ -140,7 +140,22 @@ the License.
       <raml-aware raml="{{amfModel}}" scope="[[aware]]"></raml-aware>
     </template>
     <paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
+    <!--
+    The components below are optional dependencies. They will not be used until
+    sources of the components are included into AC bundle.
+    This would help build the console and only add a dependency at the build time
+    without statically include the dependency.
 
+    TBD:
+    `xhr-simple-request` component placed here will prohibit application from
+    using `api-request` custom event. If the application uses both this element
+    (by adding it's import file to the build / page) this element would be the
+    first one to handle the event and run the request. Any other listener
+    attached to the console, body or window is called after this one.
+    -->
+    <xhr-simple-request></xhr-simple-request>
+    <oauth1-authorization></oauth1-authorization>
+    <oauth2-authorization></oauth2-authorization>
   </template>
   <script>
   /**
