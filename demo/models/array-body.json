@@ -1,6 +1,6 @@
 [
   {
-    "@id": "file://demo/array-body/array-body.raml",
+    "@id": "file://demo/models/array-body/array-body.raml",
     "@type": [
       "http://raml.org/vocabularies/document#Document",
       "http://raml.org/vocabularies/document#Fragment",
@@ -9,7 +9,7 @@
     ],
     "http://raml.org/vocabularies/document#encodes": [
       {
-        "@id": "file://demo/array-body/array-body.raml#/web-api",
+        "@id": "file://demo/models/array-body/array-body.raml#/web-api",
         "@type": [
           "http://schema.org/WebAPI",
           "http://raml.org/vocabularies/document#RootDomainElement",
@@ -22,7 +22,7 @@
         ],
         "http://raml.org/vocabularies/http#server": [
           {
-            "@id": "file://demo/array-body/array-body.raml#/web-api/http%3A%2F%2Ftest.domain.com%2F",
+            "@id": "file://demo/models/array-body/array-body.raml#/web-api/http%3A%2F%2Ftest.domain.com%2F",
             "@type": [
               "http://raml.org/vocabularies/http#Server",
               "http://raml.org/vocabularies/document#DomainElement"
@@ -41,7 +41,7 @@
         ],
         "http://raml.org/vocabularies/http#endpoint": [
           {
-            "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody",
+            "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody",
             "@type": [
               "http://raml.org/vocabularies/http#EndPoint",
               "http://raml.org/vocabularies/document#DomainElement"
@@ -53,7 +53,7 @@
             ],
             "http://www.w3.org/ns/hydra/core#supportedOperation": [
               {
-                "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get",
+                "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get",
                 "@type": [
                   "http://www.w3.org/ns/hydra/core#Operation",
                   "http://raml.org/vocabularies/document#DomainElement"
@@ -65,7 +65,7 @@
                 ],
                 "http://www.w3.org/ns/hydra/core#returns": [
                   {
-                    "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200",
+                    "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200",
                     "@type": [
                       "http://raml.org/vocabularies/http#Response",
                       "http://raml.org/vocabularies/document#DomainElement"
@@ -82,7 +82,7 @@
                     ],
                     "http://raml.org/vocabularies/http#payload": [
                       {
-                        "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json",
+                        "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json",
                         "@type": [
                           "http://raml.org/vocabularies/http#Payload",
                           "http://raml.org/vocabularies/document#DomainElement"
@@ -94,7 +94,7 @@
                         ],
                         "http://raml.org/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json/array/schema",
+                            "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json/array/schema",
                             "@type": [
                               "http://raml.org/vocabularies/shapes#ArrayShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -103,7 +103,7 @@
                             ],
                             "http://raml.org/vocabularies/shapes#items": [
                               {
-                                "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json/array/schema/recursion",
+                                "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/get/200/application/json/array/schema/recursion",
                                 "@type": [
                                   "http://raml.org/vocabularies/shapes#RecursiveShape",
                                   "http://www.w3.org/ns/shacl#Shape",
@@ -111,7 +111,7 @@
                                 ],
                                 "http://raml.org/vocabularies/shapes#fixPoint": [
                                   {
-                                    "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/get/200/application/json/array/schema"
+                                    "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/get/200/application/json/array/schema"
                                   }
                                 ],
                                 "http://raml.org/vocabularies/document#link-target": [
@@ -144,7 +144,7 @@
                 ]
               },
               {
-                "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post",
+                "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post",
                 "@type": [
                   "http://www.w3.org/ns/hydra/core#Operation",
                   "http://raml.org/vocabularies/document#DomainElement"
@@ -156,14 +156,14 @@
                 ],
                 "http://www.w3.org/ns/hydra/core#expects": [
                   {
-                    "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request",
+                    "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request",
                     "@type": [
                       "http://raml.org/vocabularies/http#Request",
                       "http://raml.org/vocabularies/document#DomainElement"
                     ],
                     "http://raml.org/vocabularies/http#payload": [
                       {
-                        "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json",
+                        "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json",
                         "@type": [
                           "http://raml.org/vocabularies/http#Payload",
                           "http://raml.org/vocabularies/document#DomainElement"
@@ -175,7 +175,7 @@
                         ],
                         "http://raml.org/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema",
+                            "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema",
                             "@type": [
                               "http://raml.org/vocabularies/shapes#ArrayShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -184,7 +184,7 @@
                             ],
                             "http://raml.org/vocabularies/shapes#items": [
                               {
-                                "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema/recursion",
+                                "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema/recursion",
                                 "@type": [
                                   "http://raml.org/vocabularies/shapes#RecursiveShape",
                                   "http://www.w3.org/ns/shacl#Shape",
@@ -192,7 +192,7 @@
                                 ],
                                 "http://raml.org/vocabularies/shapes#fixPoint": [
                                   {
-                                    "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema"
+                                    "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema"
                                   }
                                 ],
                                 "http://raml.org/vocabularies/document#link-target": [
@@ -241,7 +241,7 @@
     ],
     "http://raml.org/vocabularies/document#declares": [
       {
-        "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema/array/null/unresolved",
+        "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema/array/default-array/unresolved",
         "@type": [
           "http://raml.org/vocabularies/shapes#RecursiveShape",
           "http://www.w3.org/ns/shacl#Shape",
@@ -249,7 +249,7 @@
         ],
         "http://raml.org/vocabularies/shapes#fixPoint": [
           {
-            "@id": "file://demo/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema/array/null/unresolved"
+            "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema/array/default-array/unresolved"
           }
         ],
         "http://raml.org/vocabularies/document#link-target": [
