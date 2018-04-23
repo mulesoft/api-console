@@ -1,0 +1,49 @@
+queryParameters:
+  search:
+    displayName: Search
+    type: string
+    description: Filter results that partially match the input with the asset name
+    example: "My example"
+    required: false
+  type:
+    displayName: Type
+    type: string
+    description: Filter results that matches the input with the asset type
+    example: "template"
+    required: false
+    repeat: true
+  domain:
+    displayName: Domain
+    type: string
+    description: Filter results by organization using its domain
+    example: sunday
+    required: false
+    repeat: false
+  organizationId:
+    displayName: Organization Id
+    type: string
+    description: Filter results by organizations. For more than one organization, & organizationId=1& organizationId=2, etc...
+    example: b8886ae1-ba56-40e9-9d6d-92fe4d12758a
+    required: false
+    repeat: true
+  runtimeVersion:
+    displayName: RuntimeVersion
+    example: 3.x
+    description: Filters results by runtime version, allowing partial versions. For example '3.x' will filter in the range [3.0, 4.0)
+    type: string
+    required: false
+    repeat: false
+  offset:
+    displayName: Offset
+    type: number
+    description: The offset specifies the offset of the first row to return
+    example: 1
+    required: false
+    default: 0
+  limit:
+    displayName: Limit
+    type: number
+    description: Amount of objects retrieved in the response
+    example: 10
+    required: false
+    default: 10

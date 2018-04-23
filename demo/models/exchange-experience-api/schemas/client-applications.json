@@ -1,0 +1,86 @@
+{
+  "title": "Client Applications",
+  "type": "array", 
+  "items": {
+    "title": "Client Application",
+    "type": "object", 
+    "properties": {
+      "masterOrganizationId": {
+        "type": "string", 
+        "title": "Master organization id"
+      }, 
+      "id": {
+        "type": "integer", 
+        "title": "Id"
+      }, 
+      "name": {
+        "type": "string", 
+        "title": "Name"
+      }, 
+      "description": {
+        "type": "string", 
+        "title": "Description"
+      }, 
+      "grantTypes": {
+        "type": "array",
+        "title": "Grant Types"
+      }, 
+      "redirectUri": {
+        "type": "array",
+        "title": "Redirect Uri"
+      }, 
+      "contract": {
+        "title": "Contracts",
+        "type": "object", 
+        "properties": {
+          "id": {
+            "type": "integer", 
+            "title": "Id"
+          }, 
+          "status": {
+            "type": "string", 
+            "title": "Status"
+          }, 
+          "tier": {
+            "type": "object", 
+            "properties": {
+              "id": {
+                "type": "integer", 
+                "title": "Id"
+              }, 
+              "name": {
+                "type": "string", 
+                "title": "Name"
+              }, 
+              "description": {
+                "type": ["null", "string"], 
+                "title": "Description"
+              }, 
+              "limits": {
+                "title": "Limits",
+                "type": "array", 
+                "items": {
+                  "type": "object", 
+                  "properties": {
+                    "timePeriodInMilliseconds": {
+                      "type": "integer", 
+                      "title": "Time period in milliseconds"
+                    }, 
+                    "maximumRequests": {
+                      "type": "integer", 
+                      "title": "Maximum requests"
+                    }
+                  }
+                }
+              }, 
+              "status": {
+                "type": "string", 
+                "title": "Status"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

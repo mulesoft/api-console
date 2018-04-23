@@ -1,0 +1,36 @@
+[
+  {
+    "id": 36444,
+    "status": "PENDING",
+    "requestedTier": {
+      "description": null,
+      "id": 14939,
+      "limits": [
+        {
+          "maximumRequests": 1000,
+          "timePeriodInMilliseconds": 60000
+        },
+        {
+          "maximumRequests": 20000,
+          "timePeriodInMilliseconds": 3600000
+        }
+      ],
+      "name": "Gold"
+    }
+  },
+  {
+    "id": 13765,
+    "status": "APPROVED",
+    "tier": {
+      "description": null,
+      "id": 5770,
+      "limits": [
+        {
+          "maximumRequests": 5,
+          "timePeriodInMilliseconds": 60000
+        }
+      ],
+      "name": "Silver"
+    }
+  }
+]

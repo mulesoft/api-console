@@ -1,0 +1,8 @@
+{
+  "name": "name",
+  "types": [
+    "connector",
+    "rest-api"
+  ],
+  "search": "salesforce"
+}

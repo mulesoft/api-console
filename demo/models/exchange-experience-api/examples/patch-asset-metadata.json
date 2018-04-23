@@ -1,0 +1,22 @@
+{
+  "type": "anyType",
+  "name": "anyName",
+  "description": "anyDescription",
+  "isCompleted": true,
+  "tags": [
+    {
+      "value": "Twitter"
+    },
+    {
+      "value": "Finance",
+      "key":   "App"
+    },
+    {
+      "value": "Enterprise IT"
+    },
+    {
+      "value": "HTTP",
+      "key":   "Protocol"
+    }
+  ]
+}

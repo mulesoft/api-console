@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "id", "groupId", "assetId", "productApiVersion", "isPublic", "type", "endpointUri", "name"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "groupId": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "assetId": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "productApiVersion": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "isPublic": {
+      "type": "boolean"
+    },
+    "type": {
+      "enum": ["external", "managed", "mocked"]
+    },
+    "endpointUri": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "organizationId": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "createdBy": {
+      "type": "string"
+    },
+    "createdDate": {
+      "type": "string"
+    },
+    "updatedDate": {
+      "type": "string"
+    }
+  }
+}

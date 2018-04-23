@@ -1,0 +1,361 @@
+{
+  "title": "List of assets",
+  "type" : "array",
+  "items":{
+    "title": "Asset",
+    "type": "object",
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "groupId": {
+        "title": "Group Id",
+        "type": "string"
+      },
+      "assetId": {
+        "title": "Asset Id",
+        "type": "string"
+      },
+      "version": {
+        "title": "Version",
+        "type": "string"
+      },
+      "isPublic": {
+        "title": "isPublic",
+        "type": "boolean"
+      },
+      "productAPIVersion": {
+        "title": "productAPIVersion",
+        "type": "string"
+      },
+      "description": {
+        "title": "Description",
+        "type": "string"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "type": {
+        "title": "Type",
+        "type": "string"
+      },
+      "createdAt": {
+        "title": "Created at date",
+        "type": "string"
+      },
+      "modifiedAt": {
+        "title": "Modified at date",
+        "type": "string"
+      },
+      "runtimeVersion": {
+        "title": "runtimeVersion",
+        "type": "string"
+      },
+      "assetLink": {
+        "title": "assetLink",
+        "type": "string"
+      },
+      "icon": {
+        "title": "Icon",
+        "type": "string"
+      },
+      "status":{
+        "title": "Status",
+        "type": "string"
+      },
+      "rating":{
+        "title": "Rating",
+        "type": "number"
+      },
+      "numberOfRates":{
+        "title": "Number of rates",
+        "type": "integer"
+      },
+      "versions":{
+        "title": "Versions",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "groupId": {
+              "title": "Group Id",
+              "type": "string"
+            },
+            "assetId": {
+              "title": "Asset Id",
+              "type": "string"
+            },
+            "version": {
+              "title": "Version",
+              "type": "string"
+            },
+            "muleVersionId": {
+              "title": "MuleVersion Id",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "tags":{
+        "title": "Tags",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "title": "Value",
+              "type": "string"
+            },
+            "key": {
+              "title": "Key",
+              "type": "string"
+            },
+            "mutable": {
+              "title": "Mutable",
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "dependencies":{
+        "title": "Dependencies",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "groupId": {
+              "title": "Group Id",
+              "type": "string"
+            },
+            "assetId": {
+              "title": "Asset Id",
+              "type": "string"
+            },
+            "version": {
+              "title": "Version",
+              "type": "string"
+            },
+            "muleVersionId": {
+              "title": "MuleVersion Id",
+              "type": "string"
+            },
+            "type": {
+              "title": "Type",
+              "type": "string"
+            },
+            "name": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "files": {
+        "title": "Files",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "classifier": {
+              "title": "classifier",
+              "type": "string"
+            },
+            "packaging": {
+              "title": "packaging",
+              "type": "string"
+            },
+            "externalLink": {
+              "title": "External Link",
+              "type": "string"
+            },
+            "md5": {
+              "title": "md5",
+              "type": "string"
+            },
+            "createdDate": {
+              "title": "created date",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "instances": {
+        "title": "Instances",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "groupId": {
+              "title": "Group Id",
+              "type": "string"
+            },
+            "assetId": {
+              "title": "Asset Id",
+              "type": "string"
+            },
+            "productAPIVersion": {
+              "title": "Product API Version",
+              "type": "string"
+            },
+            "version": {
+              "title": "Version",
+              "type": "string"
+            },
+            "environmentId": {
+              "title": "Environment Id",
+              "type": "string"
+            },
+            "endpointUri": {
+              "title": "Endpoint Uri",
+              "type": "string"
+            },
+            "name": {
+              "title": "Name",
+              "type": "string"
+            },
+            "isPublic": {
+              "title": "Is public",
+              "type": "boolean"
+            },
+            "type": {
+              "title": "Type",
+              "type": "string"
+            },
+            "fullname": {
+              "title": "Full name",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "productAPIVersions": {
+        "title": "Product API Versions",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "productAPIVersion": {
+              "title": "Product API Version",
+              "type": "string"
+            },
+            "versions": {
+              "title": "Versions",
+              "type": "array"
+            }
+          }
+        }
+      },
+      "metadata": {
+        "title":  "Metadata",
+        "type": "object",
+        "properties": {
+          "productApiVersion": {
+            "title": "Product API Version",
+            "type": "string"
+          }
+        }
+      },
+      "createdBy": {
+        "title":  "Created by",
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "lastName": {
+            "title": "Last Name",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "profilePhoto": {
+            "title": "Profile Photo",
+            "type": "string"
+          }
+        }
+      },
+      "permissions": {
+        "title": "Permissions",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "organization": {
+        "title": "Organization",
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "domain": {
+            "title": "Domain",
+            "type": "string"
+          },
+          "createdAt": {
+            "title": "Created at",
+            "type": "string"
+          },
+          "updatedAt": {
+            "title": "Updated at",
+            "type": "string"
+          },
+          "ownerId": {
+            "title": "Owner Id",
+            "type": "string"
+          },
+          "clientId": {
+            "title": "Client ID",
+            "type": "string"
+          },
+          "idprovider_id": {
+            "title": "Provider Id",
+            "type": "string"
+          },
+          "isFederated": {
+            "title": "Is Federated",
+            "type": "boolean"
+          },
+          "parentOrganizationIds": {
+            "title": "Parent Organization ids",
+            "type": "array"
+          },
+          "subOrganizationIds": {
+            "title": "Sub organization Ids",
+            "type": "array"
+          },
+          "tenantOrganizationIds": {
+            "title": "Tentant organization ids",
+            "type": "array"
+          },
+          "isMaster": {
+            "title": "Is master",
+            "type": "boolean"
+          }
+        }
+      }
+    }  
+  }
+}

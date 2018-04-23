@@ -1,0 +1,38 @@
+{
+  "title": "List of users",
+  "type" : "array",
+  "items": {
+    "title": "User",
+    "type": "object",
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "username": {
+        "title": "Username",
+        "type": "string"
+      },
+      "firstName": {
+        "title": "First Name",
+        "type": "string"
+      },
+      "lastName": {
+        "title": "Last Name",
+        "type": "string"
+      },
+      "profilePhoto": {
+        "title": "Profile photo",
+        "type": "string"
+      },
+      "email": {
+        "title":  "Email",
+        "type": "string"
+      },
+      "role": {
+        "title": "Role Name",
+        "type": "string"
+      }
+    }
+  }
+}

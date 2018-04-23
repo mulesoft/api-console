@@ -1,0 +1,14 @@
+{
+  "id": "3defc266-c001-431c-88d2-7cc83928efca",
+  "groupId": "com.mulesoft",
+  "assetId": "salesforce",
+  "productApiVersion": "v1",
+  "environmentId": "1234",
+  "name": "Instance name",
+  "endpointUri": "https://www.yes.com/dog",
+  "createdBy": "e1dd88f8-dG6e-4443-93a1-bd074603e118",
+  "createdDate": "2017-09-22T19:26:00.815Z",
+  "updatedDate": "2017-09-22T19:26:00.815Z",
+  "isPublic": true,
+  "type": "external"
+}

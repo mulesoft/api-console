@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "rating": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30
+    }
+  },
+  "required": [
+    "rating",
+    "text"
+  ]
+}

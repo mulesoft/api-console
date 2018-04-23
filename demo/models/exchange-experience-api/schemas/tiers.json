@@ -1,0 +1,41 @@
+{
+  "title": "Tiers",
+  "type": "array", 
+  "items": {
+    "type": "object", 
+    "properties": {
+      "id": {
+        "type": "integer", 
+        "title": "Id"
+      }, 
+      "name": {
+        "type": "string", 
+        "title": "Name"
+      }, 
+      "description": {
+        "type": ["null", "string"], 
+        "title": "Description"
+      }, 
+      "limits": {
+        "type": "array", 
+        "items": {
+          "type": "object", 
+          "properties": {
+            "timePeriodInMilliseconds": {
+              "type": "integer", 
+              "title": "Time period in milliseconds"
+            }, 
+            "maximumRequests": {
+              "type": "integer", 
+              "title": "Maximum requests"
+            }
+          }
+        }
+      }, 
+      "status": {
+        "type": "string", 
+        "title": "Status"
+      }
+    }
+  }
+}

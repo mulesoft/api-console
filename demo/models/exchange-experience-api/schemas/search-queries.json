@@ -1,0 +1,23 @@
+{
+  "title": "Searcj query",
+  "type": "array", 
+  "items": {
+    "type": "object", 
+    "properties": {
+      "name": {
+        "type": "string",
+        "title": "Name"
+      }, 
+      "types": {
+        "type": "array", 
+        "items": {
+          "type": "string"
+        }
+      }, 
+      "search": {
+        "type": "string",
+        "title": "Search"
+      }
+    }
+  }
+}

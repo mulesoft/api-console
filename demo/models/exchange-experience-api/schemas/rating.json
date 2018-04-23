@@ -1,0 +1,30 @@
+{
+  "title": "Rating",
+  "type": "object", 
+  "properties": {
+    "organizationId": {
+      "type": "string", 
+      "title": "Organizationid"
+    }, 
+    "group": {
+      "type": "string", 
+      "title": "Group"
+    }, 
+    "assetId": {
+      "type": "string", 
+      "title": "Asset id"
+    }, 
+    "version": {
+      "type": "string", 
+      "title": "Version"
+    }, 
+    "rating": {
+      "type": "number", 
+      "title": "Rating"
+    }, 
+    "numberOfRates": {
+      "type": "integer", 
+      "title": "Number of rates"
+    }
+  }
+}

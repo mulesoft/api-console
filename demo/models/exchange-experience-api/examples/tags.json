@@ -1,0 +1,22 @@
+[
+  {
+    "value": "Twitter",
+    "key": "Apps",
+    "mutable": true
+  },
+  {
+    "value": "Finance",
+    "key": "Others",
+    "mutable": true
+  },
+  {
+    "value": "Enterprise IT",
+    "key": "IT",
+    "mutable": true
+  },
+  {
+    "value": "HTTP",
+    "key": "Tech",
+    "mutable": true
+  }
+]

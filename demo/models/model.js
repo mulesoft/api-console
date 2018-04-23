@@ -10,6 +10,7 @@ files.set('demo-api/demo-api.raml', 'RAML 1.0');
 files.set('array-body/array-body.raml', 'RAML 1.0');
 files.set('appian-api/appian-api.raml', 'RAML 1.0');
 files.set('nexmo-sms-api/nexmo-sms-api.raml', 'RAML 1.0');
+files.set('exchange-experience-api/exchange-experience-api.raml', 'RAML 1.0');
 /**
  * Generates json/ld file from parsed document.
  *

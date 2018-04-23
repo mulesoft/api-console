@@ -1,0 +1,18 @@
+{
+  "description": "TestRequestAPIAccess description",
+  "name": "TestRequestAPIAccess",
+  "grantTypes": [
+    "password",
+    "implicit",
+    "client_credentials",
+    "authorization_code",
+    "refresh_token"
+  ],
+  "redirectUri": [
+    "http://localhost:9090",
+    "https://qax.anypoint.mulesoft.com/apiplatform/pingfederateqa/authentication/oauth2.html",
+    "https://qax.anypoint.mulesoft.com/apiplatform/pingfederateqa/admin/authentication/oauth2.html",
+    "https://api-notebook.anypoint.mulesoft.com/authenticate/oauth.html"
+  ],
+  "url": "https://localhost:8080"
+}

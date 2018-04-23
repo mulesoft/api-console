@@ -1,0 +1,11 @@
+[
+  {
+    "id": "4b8c4ccd-c8fd-49ff-aa97-cf434d9d4e97",
+    "username": "fredy",
+    "firstName": "Fred",
+    "lastName": "Sanchez",
+    "profilePhoto": "http://my-photos.com/fredy.jpg",
+    "email": "fredy@wash.com",
+    "role": "admin"
+  }
+]

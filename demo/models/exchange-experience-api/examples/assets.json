@@ -1,0 +1,159 @@
+[
+  {
+    "id": "org.mule.modules/Test-connector-1/1.0.0",
+    "groupId": "org.mule.modules",
+    "assetId": "Test-connector-1",
+    "version": "1.0.0",
+    "isPublic": false,
+    "productAPIVersion": "v1",
+    "description": "My connector test description",
+    "name": "My Anypoint Connector",
+    "type": "connector",
+    "createdAt": "2017-01-25T19:36:45.654Z",
+    "modifiedAt": "2017-01-25T19:36:45.654Z",
+    "runtimeVersion": "v1",
+    "assetLink": "http://www.racing.com.ar",
+    "icon": "http://www.icon.com.ar",
+    "status": "published",
+    "rating": 3.5,
+    "numberOfRates": 2,
+    "versions": [
+      {
+        "id": "org.mule.modules/Test-connector-1/1.0.0",
+        "groupId": "org.mule.modules",
+        "assetId": "Test-connector-1",
+        "version": "1.0.0",
+        "muleVersionId": "3.7"
+      },
+      {
+        "id": "org.mule.modules/Test-connector-1/2.0.0",
+        "groupId": "org.mule.modules",
+        "assetId": "Test-connector-1",
+        "version": "2.0.0",
+        "muleVersionId": "3.7"
+      }
+    ],
+    "tags": [
+      {
+        "key": "Mule",
+        "value": "Connetor",
+        "mutable": true
+      },
+      {
+        "key": "Tech",
+        "value": "Database",
+        "mutable": true
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "org.mule.modules/Test-connector-1/1.0.0",
+        "groupId": "org.mule.modules",
+        "assetId": "Test-connector-1",
+        "version": "1.0.0",
+        "type": "extension",
+        "name": "Mule App"
+      }
+    ],
+    "files": [
+      {
+        "classifier": "oas",
+        "packaging": "yaml",
+        "externalLink": "https://exchange2-asset-manager.s3.amazonaws.com/d83b3280-4ea8-4c3b-a8a2-ec6e589574f4/49a29662-d318-4628-ad79-4828b264add2/carlos-1.0.0-oas.yaml?AWSAccessKeyId=AKIAI5ZXWOH2ORZHJPTQ&Expires=1510926241&Signature=WyEWbW0Ipg0%2FiyMUbBj05zYZ97Y%3D&response-content-disposition=attachment%3B%20filename%3Dcarlos-1.0.0-oas.yaml",
+        "md5": "d2dd14a6cbbb15869105d9755d2f8345",
+        "createdDate": "2017-11-15T14:45:56.592Z"
+      },
+      {
+        "classifier": "fat-raml",
+        "packaging": "zip",
+        "externalLink": "https://exchange2-asset-manager.s3.amazonaws.com/d83b3280-4ea8-4c3b-a8a2-ec6e589574f4/97a76ab9-3639-4002-9b84-bb6b751860d3/carlos-1.0.0-fat-raml.zip?AWSAccessKeyId=AKIAI5ZXWOH2ORZHJPTQ&Expires=1510926241&Signature=xOE%2BHrUE7ssYwYq259LQRdXQveY%3D&response-content-disposition=attachment%3B%20filename%3Dcarlos-1.0.0-raml.zip",
+        "md5": "cc06a35cbb56a7468ba434810972e89a",
+        "createdDate": "2017-11-15T14:45:56.592Z"
+      }
+    ],
+    "instances": [
+      {
+        "id": "mocking-service",
+        "groupId": "f0c9b011-980e-4928-9430-e60e3a97c043.agw",
+        "assetId": "carlos",
+        "productAPIVersion": "v1",
+        "version": "1.0.0",
+        "environmentId": "id",
+        "endpointUri": "https://mocksvc-proxy.anypoint.mulesoft.com/exchange/f0c9b011-980e-4928-9430-e60e3a97c043.agw/carlos/1.0.0",
+        "name": "Mocking Service",
+        "isPublic": true,
+        "type": "mocked",
+        "fullname": "Mocking Service"
+      }
+    ],
+    "productAPIVersions": [
+      {
+        "productAPIVersion": "v1",
+        "versions": [
+          {
+            "id": "f0c9b011-980e-4928-9430-e60e3a97c043.agw/carlos/1.0.0",
+            "groupId": "f0c9b011-980e-4928-9430-e60e3a97c043.agw",
+            "assetId": "carlos",
+            "version": "1.0.0",
+            "organization": {
+              "id": "d83b3280-4ea8-4c3b-a8a2-ec6e589574f4"
+            },
+            "status": "published",
+            "isPublic": false,
+            "createdAt": "2017-11-15T14:45:58.962Z",
+            "assetLink": "",
+            "runtimeVersion": "",
+            "productAPIVersion": "v1",
+            "files": [
+              {
+                "classifier": "oas",
+                "packaging": "yaml",
+                "externalLink": "https://exchange2-asset-manager.s3.amazonaws.com/d83b3280-4ea8-4c3b-a8a2-ec6e589574f4/49a29662-d318-4628-ad79-4828b264add2/carlos-1.0.0-oas.yaml?AWSAccessKeyId=AKIAI5ZXWOH2ORZHJPTQ&Expires=1510926241&Signature=WyEWbW0Ipg0%2FiyMUbBj05zYZ97Y%3D&response-content-disposition=attachment%3B%20filename%3Dcarlos-1.0.0-oas.yaml",
+                "md5": "d2dd14a6cbbb15869105d9755d2f8345",
+                "createdDate": "2017-11-15T14:45:56.592Z"
+              },
+              {
+                "classifier": "fat-raml",
+                "packaging": "zip",
+                "externalLink": "https://exchange2-asset-manager.s3.amazonaws.com/d83b3280-4ea8-4c3b-a8a2-ec6e589574f4/97a76ab9-3639-4002-9b84-bb6b751860d3/carlos-1.0.0-fat-raml.zip?AWSAccessKeyId=AKIAI5ZXWOH2ORZHJPTQ&Expires=1510926241&Signature=xOE%2BHrUE7ssYwYq259LQRdXQveY%3D&response-content-disposition=attachment%3B%20filename%3Dcarlos-1.0.0-raml.zip",
+                "md5": "cc06a35cbb56a7468ba434810972e89a",
+                "createdDate": "2017-11-15T14:45:56.592Z"
+              }
+            ],
+            "type": "rest-api"
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "productApiVersion": "v1"
+    },
+    "createdBy": {
+      "id": "22222a22-2222-22a2-a2aa-2222222222aa",
+      "firstName": "Charlie",
+      "lastName": "Brown",
+      "userName": "Char"
+    },
+    "permissions": [
+      "admin",
+      "edit"
+    ],
+    "organization": {
+      "name": "AGW",
+      "id": "d83b3280-4ea8-4c3b-a8a2-ec6e589574f4",
+      "createdAt": "2017-09-01T19:05:53.528Z",
+      "updatedAt": "2017-11-01T16:56:04.797Z",
+      "ownerId": "6dd2fd2d-9a83-4949-9a3f-72f3a065fef3",
+      "clientId": "a1e5d79e5bf3482fa22e90825b92142c",
+      "domain": "mulesoft-inc",
+      "idprovider_id": "mulesoft",
+      "isFederated": false,
+      "parentOrganizationIds": [
+        "f0c9b011-980e-4928-9430-e60e3a97c043"
+      ],
+      "subOrganizationIds": [],
+      "tenantOrganizationIds": [],
+      "isMaster": false
+    }
+  }
+]

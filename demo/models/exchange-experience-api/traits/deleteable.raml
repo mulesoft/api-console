@@ -1,0 +1,6 @@
+headers:
+  X-Delete-Type:
+    description: |
+      It could be 'soft-delete' or 'hard-delete', that mean the asset will be logical deleted or physical deleted
+      It's supposed to if it is not specified, the type will be 'soft-delete'
+    enum: ['soft-delete', 'hard-delete']

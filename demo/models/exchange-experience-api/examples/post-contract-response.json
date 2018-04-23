@@ -1,0 +1,18 @@
+{
+  "clientId": "314e6d88-4c0f-4259-95e1-2c9b06bffb6c",
+  "clientSecret": "2f17a3df-a5f9-45e8-a8b4-41bd26d89236",
+  "id": 1000,
+  "status": "ACTIVE",
+  "tier": {
+    "description": "est nihil magnam dolore et ipsa nulla omnis\ncupiditate consectetur qui tempore quaerat et consequatur sunt eos enim\nesse quasi et qui quis dolorum",
+    "id": 35,
+    "limits": [
+      {
+        "maximumRequests": 10000000,
+        "timePeriodInMilliseconds": 2592000000
+      }
+    ],
+    "name": "enim 35",
+    "status": "DEPRECATED"
+  }
+}

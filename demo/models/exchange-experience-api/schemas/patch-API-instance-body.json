@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "endpointUri": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "isPublic": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 150
+    }
+  }
+}

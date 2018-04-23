@@ -1,0 +1,12 @@
+{
+  "title": "Page Created",
+  "type": "object",
+  "required": ["pagePath"],
+  "properties": {
+    "pagePath": {
+      "title": "Page Path",
+      "type": "string",
+      "pattern": "[/a-zA-Z0-9\\-\\. ]*"
+    }
+  }
+}

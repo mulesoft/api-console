@@ -1,0 +1,28 @@
+{
+  "title": "Portal",
+  "type": "object",
+  "properties": {
+    "draftStatus": {
+      "title": "DraftStatus",
+      "type": "string",
+      "enum": ["PUBLISHED", "NOT_PUBLISHED"]
+    },
+    "pages":{
+      "title": "Pages",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

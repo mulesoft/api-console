@@ -1,0 +1,5 @@
+{
+  "name": "Production - US",
+  "endpointUri": "http://dog.domain.tld.com/much/doge",
+  "isPublic": true
+}

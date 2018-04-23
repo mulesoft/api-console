@@ -1,0 +1,41 @@
+[
+  {
+    "masterOrganizationId": "40fbc081-bb0d-4aff-9fb7-f3a48fdeb958",
+    "id": 1,
+    "name": "The Amazing Application",
+    "description": "This is the description of The Amazing Application",
+    "grantTypes": [
+      "password",
+      "implicit",
+      "client_credentials",
+      "authorization_code",
+      "refresh_token"
+    ],
+    "redirectUri": [
+      "http://localhost:9090",
+      "https://qax.anypoint.mulesoft.com/apiplatform/pingfederateqa/authentication/oauth2.html",
+      "https://qax.anypoint.mulesoft.com/apiplatform/pingfederateqa/admin/authentication/oauth2.html",
+      "https://api-notebook.anypoint.mulesoft.com/authenticate/oauth.html"
+    ],
+    "contract": {
+      "id": 35885,
+      "status": "APPROVED",
+      "tier": {
+        "id": 1234,
+        "name": "Gold",
+        "description": null,
+        "limits": [
+          {
+            "timePeriodInMilliseconds": 60000,
+            "maximumRequests": 1000
+          },
+          {
+            "maximumRequests": 20000,
+            "timePeriodInMilliseconds": 3600000
+          }
+        ],
+        "status": "ACTIVE"
+      }
+    }
+  }
+]
