@@ -12,6 +12,10 @@
         "platform": "Windows 10",
         "version": ""
       }, {
+        "browserName": "internet explorer",
+        "platform": "Windows 8.1",
+        "version": "11.0"
+      }, {
         "browserName": "firefox",
         "platform": "Windows 10",
         "version": "latest-4"
