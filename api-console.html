@@ -12,6 +12,7 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/render-status.html">
 <link rel="import" href="../raml-aware/raml-aware.html">
 <link rel="import" href="../app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../app-layout/app-drawer-layout/app-drawer-layout.html">
@@ -103,7 +104,7 @@ the License.
           <div>API console</div>
         </app-toolbar>
         <div class="drawer-content-wrapper">
-          <api-navigation amf-model="[[amfModel]]" summary endpoints-opened selected="{{_selectedShape}}" selected-type="{{_selectedShapeType}}"></api-navigation>
+          <api-navigation amf-model="[[amfModel]]" summary endpoints-opened on-api-navigation-selection-changed="_apiNavigationOcurred"></api-navigation>
           <template is="dom-if" if="[[!noAttribution]]">
             <div class="powered-by">
               <a href="https://github.com/mulesoft/api-console" class="attribution" target="_blank">
@@ -192,8 +193,7 @@ the License.
           observer: '_amfModelChanged'
         },
         _selectedShape: {
-          type: String,
-          observer: '_selectedChanged'
+          type: String
         },
         _selectedShapeType: String,
         /**
@@ -440,12 +440,6 @@ the License.
       this._selectedShape = 'summary';
       this._selectedShapeType = 'summary';
     }
-
-    _selectedChanged() {
-      if (this.page !== 'docs') {
-        this.page = 'docs';
-      }
-    }
     /**
      * Checks if property item has a type.
      * @param {Object} model Model item.
@@ -535,9 +529,36 @@ the License.
         }
       });
     }
-
+    /**
+     * Dismisses Chrome extension banner.
+     */
     dismissExtensionBanner() {
       this.extensionBannerActive = false;
+    }
+
+    /**
+     * Handler for the navigation event dispatched by the `api-navigation`
+     * component.
+     * Normally it would set variables using Polymer's data binding. However,
+     * because each change carries quite heavy task of computing the view
+     * it feels more smooth to assign selection after the element is rendered
+     * and not at the same time as the view is rendered.
+     * It seems like foring more reflow events (the app renders empty element
+     * first and then populate the view with data) but general look and feel
+     * with this solution seems more smooth.
+     * It is possible that this behavior will change in future release but for
+     * now it is good enough. (Pawel)
+     *
+     * @param {CustomEvent} e
+     */
+    _apiNavigationOcurred(e) {
+      if (this.page !== 'docs') {
+        this.page = 'docs';
+      }
+      Polymer.RenderStatus.afterNextRender(this, () => {
+        this._selectedShape = e.detail.selected;
+        this._selectedShapeType = e.detail.type;
+      });
     }
   }
   window.customElements.define(ApiConsole.is, ApiConsole);
