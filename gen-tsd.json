@@ -1,7 +1,8 @@
 {
   "excludeFiles": [
     "tasks/*",
-    "demo/*",
+    "demo/**",
+    "docs/**",
     "test/*",
     "index.html",
     "bower_components",

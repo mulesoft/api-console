@@ -588,11 +588,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 178,
+              "line": 179,
               "column": 8
             },
             "end": {
-              "line": 178,
+              "line": 179,
               "column": 21
             }
           },
@@ -607,11 +607,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 189,
+              "line": 190,
               "column": 8
             },
             "end": {
-              "line": 192,
+              "line": 193,
               "column": 9
             }
           },
@@ -628,7 +628,7 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 193,
+              "line": 194,
               "column": 8
             },
             "end": {
@@ -637,9 +637,7 @@
             }
           },
           "metadata": {
-            "polymer": {
-              "observer": "\"_selectedChanged\""
-            }
+            "polymer": {}
           }
         },
         {
@@ -3349,33 +3347,16 @@
           "params": []
         },
         {
-          "name": "_selectedChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 443,
-              "column": 4
-            },
-            "end": {
-              "line": 447,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
           "name": "_hasType",
           "description": "Checks if property item has a type.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 454,
+              "line": 448,
               "column": 4
             },
             "end": {
-              "line": 460,
+              "line": 454,
               "column": 5
             }
           },
@@ -3402,11 +3383,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 467,
+              "line": 461,
               "column": 4
             },
             "end": {
-              "line": 477,
+              "line": 471,
               "column": 5
             }
           },
@@ -3434,11 +3415,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 484,
+              "line": 478,
               "column": 4
             },
             "end": {
-              "line": 496,
+              "line": 490,
               "column": 5
             }
           },
@@ -3461,11 +3442,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 503,
+              "line": 497,
               "column": 4
             },
             "end": {
-              "line": 505,
+              "line": 499,
               "column": 5
             }
           },
@@ -3488,11 +3469,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 512,
+              "line": 506,
               "column": 4
             },
             "end": {
-              "line": 514,
+              "line": 508,
               "column": 5
             }
           },
@@ -3514,11 +3495,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 521,
+              "line": 515,
               "column": 4
             },
             "end": {
-              "line": 523,
+              "line": 517,
               "column": 5
             }
           },
@@ -3540,7 +3521,24 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 527,
+              "line": 521,
+              "column": 4
+            },
+            "end": {
+              "line": 530,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "dismissExtensionBanner",
+          "description": "Dismisses Chrome extension banner.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 534,
               "column": 4
             },
             "end": {
@@ -3552,21 +3550,26 @@
           "params": []
         },
         {
-          "name": "dismissExtensionBanner",
-          "description": "",
-          "privacy": "public",
+          "name": "_apiNavigationOcurred",
+          "description": "Handler for the navigation event dispatched by the `api-navigation`\ncomponent.\nNormally it would set variables using Polymer's data binding. However,\nbecause each change carries quite heavy task of computing the view\nit feels more smooth to assign selection after the element is rendered\nand not at the same time as the view is rendered.\nIt seems like foring more reflow events (the app renders empty element\nfirst and then populate the view with data) but general look and feel\nwith this solution seems more smooth.\nIt is possible that this behavior will change in future release but for\nnow it is good enough. (Pawel)",
+          "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 538,
+              "line": 553,
               "column": 4
             },
             "end": {
-              "line": 540,
+              "line": 561,
               "column": 5
             }
           },
           "metadata": {},
-          "params": []
+          "params": [
+            {
+              "name": "e",
+              "type": "CustomEvent"
+            }
+          ]
         }
       ],
       "staticMethods": [
@@ -4513,11 +4516,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 171,
+          "line": 172,
           "column": 2
         },
         "end": {
-          "line": 541,
+          "line": 562,
           "column": 3
         }
       },
@@ -4530,11 +4533,11 @@
           "description": "`raml-aware` scope property to use.",
           "sourceRange": {
             "start": {
-              "line": 178,
+              "line": 179,
               "column": 8
             },
             "end": {
-              "line": 178,
+              "line": 179,
               "column": 21
             }
           },
@@ -4546,11 +4549,11 @@
           "description": "Generated AMF json/ld model form the API spec.\nThe element assumes the object of the first array item to be a\ntype of `\"http://raml.org/vocabularies/document#Document`\non AMF vocabulary.\n\nIt is only usefult for the element to resolve references.",
           "sourceRange": {
             "start": {
-              "line": 189,
+              "line": 190,
               "column": 8
             },
             "end": {
-              "line": 192,
+              "line": 193,
               "column": 9
             }
           },
@@ -4925,11 +4928,11 @@
           "range": {
             "file": "api-console.html",
             "start": {
-              "line": 120,
+              "line": 121,
               "column": 12
             },
             "end": {
-              "line": 120,
+              "line": 121,
               "column": 40
             }
           }
@@ -4940,11 +4943,11 @@
           "range": {
             "file": "api-console.html",
             "start": {
-              "line": 124,
+              "line": 125,
               "column": 10
             },
             "end": {
-              "line": 124,
+              "line": 125,
               "column": 38
             }
           }
@@ -9116,1370 +9119,6 @@
       },
       "slots": [],
       "tagname": "parser-element"
-    },
-    {
-      "description": "The request and response panel.\n\nThis element renders a view for the request panel (`raml-request-panel`). When\nthe response is ready it will display the response panel (`response-view`).\n\nAdditionally, the `api-console-request` element will display the \"install\nAPI console extension banner\" when the user uses supported browser. The extension\nis to proxt the HTTP request and avoid CORS problems.",
-      "summary": "",
-      "path": "api-console-request.html",
-      "properties": [
-        {
-          "name": "scrollTarget",
-          "type": "HTMLElement",
-          "description": "Main scroll target for the app.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 179,
-              "column": 8
-            },
-            "end": {
-              "line": 179,
-              "column": 33
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "_shouldHaveListener",
-          "type": "boolean",
-          "description": "True if the event listener should be installed.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 76,
-              "column": 4
-            },
-            "end": {
-              "line": 76,
-              "column": 29
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "selectedObject",
-          "type": "Object",
-          "description": "`raml-path-selector` element",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 110,
-              "column": 8
-            },
-            "end": {
-              "line": 113,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "observer": "\"_selectedObjectChanged\""
-            }
-          }
-        },
-        {
-          "name": "narrow",
-          "type": "boolean",
-          "description": "If true it will display a narrow layout.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 115,
-              "column": 8
-            },
-            "end": {
-              "line": 118,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "notify": true
-            }
-          }
-        },
-        {
-          "name": "raml",
-          "type": "Object",
-          "description": "The RAML definition JSON object",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 120,
-              "column": 8
-            },
-            "end": {
-              "line": 120,
-              "column": 20
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "redirectUrl",
-          "type": "string",
-          "description": "OAuth2 redirect URL",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 122,
-              "column": 8
-            },
-            "end": {
-              "line": 122,
-              "column": 27
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "request",
-          "type": "Request",
-          "description": "Created by the transport `Request` object as defined in the Fetch\nAPI spec.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 127,
-              "column": 8
-            },
-            "end": {
-              "line": 127,
-              "column": 24
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "response",
-          "type": "Response",
-          "description": "Created by the transport the `Response` object as defined in the\nFetch API spec.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 132,
-              "column": 8
-            },
-            "end": {
-              "line": 132,
-              "column": 26
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "responseIsXhr",
-          "type": "boolean",
-          "description": "True if the response is made by the Fetch / XHR api.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 134,
-              "column": 8
-            },
-            "end": {
-              "line": 137,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "true"
-        },
-        {
-          "name": "responseError",
-          "type": "Object",
-          "description": "An error object associated with the response when error.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 141,
-              "column": 8
-            },
-            "end": {
-              "line": 141,
-              "column": 29
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "hasResponse",
-          "type": "boolean",
-          "description": "Computed value, true, when the response object is set.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 143,
-              "column": 8
-            },
-            "end": {
-              "line": 146,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "readOnly": true
-            }
-          }
-        },
-        {
-          "name": "loadingTime",
-          "type": "number",
-          "description": "Response full loading time.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 148,
-              "column": 8
-            },
-            "end": {
-              "line": 148,
-              "column": 27
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "timings",
-          "type": "Object",
-          "description": "If the transport method is able to collect detailed information about request timings\nthen this value will be set. It's the `timings` property from the HAR 1.2 spec.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 153,
-              "column": 8
-            },
-            "end": {
-              "line": 153,
-              "column": 23
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "redirectTimings",
-          "type": "Array",
-          "description": "If the transport method is able to collect detailed information about redirects timings\nthen this value will be set. It's a list of `timings` property from the HAR 1.2 spec.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 158,
-              "column": 8
-            },
-            "end": {
-              "line": 158,
-              "column": 30
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "redirects",
-          "type": "Array",
-          "description": "It will be set if the transport method can generate information about redirections.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 162,
-              "column": 8
-            },
-            "end": {
-              "line": 162,
-              "column": 24
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "sourceMessage",
-          "type": "string",
-          "description": "Http message sent to the server.\n\nThis information should be available only in case of advanced HTTP transport.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 168,
-              "column": 8
-            },
-            "end": {
-              "line": 168,
-              "column": 29
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "noExtensionBanner",
-          "type": "boolean",
-          "description": "If true then the install extension banner will be always hidden.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 170,
-              "column": 8
-            },
-            "end": {
-              "line": 170,
-              "column": 34
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "isChrome",
-          "type": "boolean",
-          "description": "/ If true then current browser is Chrome",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 172,
-              "column": 8
-            },
-            "end": {
-              "line": 177,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "appendHeaders",
-          "type": "Array",
-          "description": "Forces the console to send headers defined in this string overriding any used defined\nheader.\nThis should be an array of headers with `name` and `value` keys, e.g.:\n```\n[{\n  name: \"x-token\",\n  value: \"value\"\n}]\n```",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 191,
-              "column": 8
-            },
-            "end": {
-              "line": 191,
-              "column": 28
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "proxy",
-          "type": "string",
-          "description": "If set every request made from the console will be proxied by the service provided in this\nvalue.\nIt will prefix entered URL with the proxy value. so the call to\n`http://domain.com/path/?query=some+value` will become\n`https://proxy.com/path/http://domain.com/path/?query=some+value`\n\nIf the proxy require a to pass the URL as a query parameter define value as follows:\n`https://proxy.com/path/?url=`. In this case be sure to set `proxy-encode-url`\nattribute.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 203,
-              "column": 8
-            },
-            "end": {
-              "line": 203,
-              "column": 21
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "proxyEncodeUrl",
-          "type": "boolean",
-          "description": "If `proxy` is set, it will URL encode the request URL before appending it to the proxy URL.\n`http://domain.com/path/?query=some+value` will become\n`https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 209,
-              "column": 8
-            },
-            "end": {
-              "line": 209,
-              "column": 31
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "bowerLocation",
-          "type": "string",
-          "description": "Location of the `bower_components` folder.\nIt should be a path from server's root path including bower_components.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 214,
-              "column": 8
-            },
-            "end": {
-              "line": 217,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "observer": "\"_updateRedirectUrl\""
-            }
-          }
-        },
-        {
-          "name": "noUrlEditor",
-          "type": "boolean",
-          "description": "Hides the URL editor from the view.\nNote that the editor is still in the DOM. This property just hiddes\nit.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 223,
-              "column": 8
-            },
-            "end": {
-              "line": 223,
-              "column": 28
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "baseUri",
-          "type": "string",
-          "description": "Api's base URI.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 227,
-              "column": 8
-            },
-            "end": {
-              "line": 227,
-              "column": 23
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        }
-      ],
-      "methods": [
-        {
-          "name": "_scrollTargetChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 78,
-              "column": 4
-            },
-            "end": {
-              "line": 103,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "scrollTarget"
-            },
-            {
-              "name": "isAttached"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_scrollHandler",
-          "description": "Runs on every scroll event. Consumer of this behavior may override this\nmethod.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 111,
-              "column": 4
-            },
-            "end": {
-              "line": 111,
-              "column": 47
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_defaultScrollTarget",
-          "description": "The default scroll target. Consumers of this behavior may want to customize\nthe default scroll target.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 119,
-              "column": 4
-            },
-            "end": {
-              "line": 121,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_doc",
-          "description": "Shortcut for the document element",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 128,
-              "column": 4
-            },
-            "end": {
-              "line": 130,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_scrollTop",
-          "description": "Sets the number of pixels that the content of an element is scrolled\nupward.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 166,
-              "column": 4
-            },
-            "end": {
-              "line": 172,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "top"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_scrollLeft",
-          "description": "Sets the number of pixels that the content of an element is scrolled to the\nleft.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 180,
-              "column": 4
-            },
-            "end": {
-              "line": 186,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "left"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "scroll",
-          "description": "Scrolls the content to a particular place.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 196,
-              "column": 4
-            },
-            "end": {
-              "line": 214,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "leftOrOptions",
-              "type": "(number | !{left: number, top: number})",
-              "description": "The left position or scroll options"
-            },
-            {
-              "name": "top",
-              "type": "number=",
-              "description": "The top position"
-            }
-          ],
-          "return": {
-            "type": "void"
-          },
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_scrollTargetWidth",
-          "description": "Gets the width of the scroll target.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 221,
-              "column": 4
-            },
-            "end": {
-              "line": 227,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_scrollTargetHeight",
-          "description": "Gets the height of the scroll target.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 234,
-              "column": 4
-            },
-            "end": {
-              "line": 240,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_isValidScrollTarget",
-          "description": "Returns true if the scroll target is a valid HTMLElement.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 247,
-              "column": 4
-            },
-            "end": {
-              "line": 249,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "return": {
-            "type": "boolean"
-          },
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "_toggleScrollListener",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 251,
-              "column": 4
-            },
-            "end": {
-              "line": 264,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "yes"
-            },
-            {
-              "name": "scrollTarget"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "toggleScrollListener",
-          "description": "Enables or disables the scroll event listener.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html",
-            "start": {
-              "line": 271,
-              "column": 4
-            },
-            "end": {
-              "line": 274,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "yes",
-              "type": "boolean",
-              "description": "True to add the event, False to remove it."
-            }
-          ],
-          "inheritedFrom": "Polymer.IronScrollTargetBehavior"
-        },
-        {
-          "name": "ready",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 234,
-              "column": 6
-            },
-            "end": {
-              "line": 239,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_updateRedirectUrl",
-          "description": "Sets OAuth 2 redirect URL for the authorization panel",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 241,
-              "column": 6
-            },
-            "end": {
-              "line": 251,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "location"
-            }
-          ]
-        },
-        {
-          "name": "_initExtensionBanner",
-          "description": "Shows the extension banner if is Chrome and extension not detected.",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 254,
-              "column": 6
-            },
-            "end": {
-              "line": 262,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_computeHasResponse",
-          "description": "Computes if there is a reponse object.",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 264,
-              "column": 6
-            },
-            "end": {
-              "line": 266,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "response"
-            }
-          ]
-        },
-        {
-          "name": "_apiRequested",
-          "description": "A handler for the API call.\nThis handler will only check if there is authorization required\nand if the user is authorizaed.",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 273,
-              "column": 6
-            },
-            "end": {
-              "line": 287,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ]
-        },
-        {
-          "name": "_appendConsoleHeaders",
-          "description": "Appends headers defined in the `appendHeaders` array.",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 292,
-              "column": 6
-            },
-            "end": {
-              "line": 302,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event",
-              "type": "CustomEvent",
-              "description": "The `api-console-request` event."
-            }
-          ]
-        },
-        {
-          "name": "_appendProxy",
-          "description": "Sets the proxy URL if the `proxy` property is set.",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 307,
-              "column": 6
-            },
-            "end": {
-              "line": 315,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event",
-              "type": "CustomEvent",
-              "description": "The `api-console-request` event."
-            }
-          ]
-        },
-        {
-          "name": "_selectedObjectChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 317,
-              "column": 6
-            },
-            "end": {
-              "line": 321,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_onResponseReady",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 323,
-              "column": 6
-            },
-            "end": {
-              "line": 329,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "dismissExtensionBanner",
-          "description": "Closes the extension install banner",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 331,
-              "column": 6
-            },
-            "end": {
-              "line": 333,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "openInstallExtensionBanner",
-          "description": "Opens the extension install banner",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 335,
-              "column": 6
-            },
-            "end": {
-              "line": 337,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": []
-        }
-      ],
-      "staticMethods": [],
-      "demos": [
-        {
-          "url": "demo/index.html",
-          "description": ""
-        }
-      ],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 99,
-          "column": 12
-        },
-        "end": {
-          "line": 338,
-          "column": 5
-        }
-      },
-      "privacy": "public",
-      "superclass": "HTMLElement",
-      "attributes": [
-        {
-          "name": "scroll-target",
-          "description": "Main scroll target for the app.",
-          "sourceRange": {
-            "start": {
-              "line": 179,
-              "column": 8
-            },
-            "end": {
-              "line": 179,
-              "column": 33
-            }
-          },
-          "metadata": {},
-          "type": "HTMLElement"
-        },
-        {
-          "name": "selected-object",
-          "description": "`raml-path-selector` element",
-          "sourceRange": {
-            "start": {
-              "line": 110,
-              "column": 8
-            },
-            "end": {
-              "line": 113,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "Object"
-        },
-        {
-          "name": "narrow",
-          "description": "If true it will display a narrow layout.",
-          "sourceRange": {
-            "start": {
-              "line": 115,
-              "column": 8
-            },
-            "end": {
-              "line": 118,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "raml",
-          "description": "The RAML definition JSON object",
-          "sourceRange": {
-            "start": {
-              "line": 120,
-              "column": 8
-            },
-            "end": {
-              "line": 120,
-              "column": 20
-            }
-          },
-          "metadata": {},
-          "type": "Object"
-        },
-        {
-          "name": "redirect-url",
-          "description": "OAuth2 redirect URL",
-          "sourceRange": {
-            "start": {
-              "line": 122,
-              "column": 8
-            },
-            "end": {
-              "line": 122,
-              "column": 27
-            }
-          },
-          "metadata": {},
-          "type": "string"
-        },
-        {
-          "name": "request",
-          "description": "Created by the transport `Request` object as defined in the Fetch\nAPI spec.",
-          "sourceRange": {
-            "start": {
-              "line": 127,
-              "column": 8
-            },
-            "end": {
-              "line": 127,
-              "column": 24
-            }
-          },
-          "metadata": {},
-          "type": "Request"
-        },
-        {
-          "name": "response",
-          "description": "Created by the transport the `Response` object as defined in the\nFetch API spec.",
-          "sourceRange": {
-            "start": {
-              "line": 132,
-              "column": 8
-            },
-            "end": {
-              "line": 132,
-              "column": 26
-            }
-          },
-          "metadata": {},
-          "type": "Response"
-        },
-        {
-          "name": "response-is-xhr",
-          "description": "True if the response is made by the Fetch / XHR api.",
-          "sourceRange": {
-            "start": {
-              "line": 134,
-              "column": 8
-            },
-            "end": {
-              "line": 137,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "response-error",
-          "description": "An error object associated with the response when error.",
-          "sourceRange": {
-            "start": {
-              "line": 141,
-              "column": 8
-            },
-            "end": {
-              "line": 141,
-              "column": 29
-            }
-          },
-          "metadata": {},
-          "type": "Object"
-        },
-        {
-          "name": "has-response",
-          "description": "Computed value, true, when the response object is set.",
-          "sourceRange": {
-            "start": {
-              "line": 143,
-              "column": 8
-            },
-            "end": {
-              "line": 146,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "loading-time",
-          "description": "Response full loading time.",
-          "sourceRange": {
-            "start": {
-              "line": 148,
-              "column": 8
-            },
-            "end": {
-              "line": 148,
-              "column": 27
-            }
-          },
-          "metadata": {},
-          "type": "number"
-        },
-        {
-          "name": "timings",
-          "description": "If the transport method is able to collect detailed information about request timings\nthen this value will be set. It's the `timings` property from the HAR 1.2 spec.",
-          "sourceRange": {
-            "start": {
-              "line": 153,
-              "column": 8
-            },
-            "end": {
-              "line": 153,
-              "column": 23
-            }
-          },
-          "metadata": {},
-          "type": "Object"
-        },
-        {
-          "name": "redirect-timings",
-          "description": "If the transport method is able to collect detailed information about redirects timings\nthen this value will be set. It's a list of `timings` property from the HAR 1.2 spec.",
-          "sourceRange": {
-            "start": {
-              "line": 158,
-              "column": 8
-            },
-            "end": {
-              "line": 158,
-              "column": 30
-            }
-          },
-          "metadata": {},
-          "type": "Array"
-        },
-        {
-          "name": "redirects",
-          "description": "It will be set if the transport method can generate information about redirections.",
-          "sourceRange": {
-            "start": {
-              "line": 162,
-              "column": 8
-            },
-            "end": {
-              "line": 162,
-              "column": 24
-            }
-          },
-          "metadata": {},
-          "type": "Array"
-        },
-        {
-          "name": "source-message",
-          "description": "Http message sent to the server.\n\nThis information should be available only in case of advanced HTTP transport.",
-          "sourceRange": {
-            "start": {
-              "line": 168,
-              "column": 8
-            },
-            "end": {
-              "line": 168,
-              "column": 29
-            }
-          },
-          "metadata": {},
-          "type": "string"
-        },
-        {
-          "name": "no-extension-banner",
-          "description": "If true then the install extension banner will be always hidden.",
-          "sourceRange": {
-            "start": {
-              "line": 170,
-              "column": 8
-            },
-            "end": {
-              "line": 170,
-              "column": 34
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "is-chrome",
-          "description": "/ If true then current browser is Chrome",
-          "sourceRange": {
-            "start": {
-              "line": 172,
-              "column": 8
-            },
-            "end": {
-              "line": 177,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "append-headers",
-          "description": "Forces the console to send headers defined in this string overriding any used defined\nheader.\nThis should be an array of headers with `name` and `value` keys, e.g.:\n```\n[{\n  name: \"x-token\",\n  value: \"value\"\n}]\n```",
-          "sourceRange": {
-            "start": {
-              "line": 191,
-              "column": 8
-            },
-            "end": {
-              "line": 191,
-              "column": 28
-            }
-          },
-          "metadata": {},
-          "type": "Array"
-        },
-        {
-          "name": "proxy",
-          "description": "If set every request made from the console will be proxied by the service provided in this\nvalue.\nIt will prefix entered URL with the proxy value. so the call to\n`http://domain.com/path/?query=some+value` will become\n`https://proxy.com/path/http://domain.com/path/?query=some+value`\n\nIf the proxy require a to pass the URL as a query parameter define value as follows:\n`https://proxy.com/path/?url=`. In this case be sure to set `proxy-encode-url`\nattribute.",
-          "sourceRange": {
-            "start": {
-              "line": 203,
-              "column": 8
-            },
-            "end": {
-              "line": 203,
-              "column": 21
-            }
-          },
-          "metadata": {},
-          "type": "string"
-        },
-        {
-          "name": "proxy-encode-url",
-          "description": "If `proxy` is set, it will URL encode the request URL before appending it to the proxy URL.\n`http://domain.com/path/?query=some+value` will become\n`https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`",
-          "sourceRange": {
-            "start": {
-              "line": 209,
-              "column": 8
-            },
-            "end": {
-              "line": 209,
-              "column": 31
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "bower-location",
-          "description": "Location of the `bower_components` folder.\nIt should be a path from server's root path including bower_components.",
-          "sourceRange": {
-            "start": {
-              "line": 214,
-              "column": 8
-            },
-            "end": {
-              "line": 217,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "string"
-        },
-        {
-          "name": "no-url-editor",
-          "description": "Hides the URL editor from the view.\nNote that the editor is still in the DOM. This property just hiddes\nit.",
-          "sourceRange": {
-            "start": {
-              "line": 223,
-              "column": 8
-            },
-            "end": {
-              "line": 223,
-              "column": 28
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "base-uri",
-          "description": "Api's base URI.",
-          "sourceRange": {
-            "start": {
-              "line": 227,
-              "column": 8
-            },
-            "end": {
-              "line": 227,
-              "column": 23
-            }
-          },
-          "metadata": {},
-          "type": "string"
-        }
-      ],
-      "events": [
-        {
-          "type": "CustomEvent",
-          "name": "narrow-changed",
-          "description": "Fired when the `narrow` property changes.",
-          "metadata": {}
-        }
-      ],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": [],
-      "tagname": "api-console-request"
     }
   ],
   "classes": [
