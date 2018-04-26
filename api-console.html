@@ -98,13 +98,13 @@ the License.
       @apply --layout-flex-auto;
     }
     </style>
-    <app-drawer-layout>
+    <app-drawer-layout responsive-width="[[responsiveWidth]]" force-narrow="[[_narrowNavForced]]">
       <app-drawer slot="drawer">
         <app-toolbar>
           <div>API console</div>
         </app-toolbar>
         <div class="drawer-content-wrapper">
-          <api-navigation amf-model="[[amfModel]]" summary endpoints-opened on-api-navigation-selection-changed="_apiNavigationOcurred"></api-navigation>
+          <api-navigation amf-model="[[amfModel]]" summary endpoints-opened on-api-navigation-selection-changed="_apiNavigationOcurred" selected="[[selectedShape]]" selected-type="[[selectedShapeType]]"></api-navigation>
           <template is="dom-if" if="[[!noAttribution]]">
             <div class="powered-by">
               <a href="https://github.com/mulesoft/api-console" class="attribution" target="_blank">
@@ -129,10 +129,10 @@ the License.
               <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
               <paper-icon-button icon="arc:close" on-click="dismissExtensionBanner"></paper-icon-button>
             </div>
-            <api-request-panel data-page="request" amf-model="[[amfModel]]" selected="[[_selectedShape]]" narrow="[[narrow]]" no-url-editor="[[noUrlEditor]]"></api-request-panel>
+            <api-request-panel data-page="request" amf-model="[[amfModel]]" selected="[[selectedShape]]" narrow="[[narrow]]" no-url-editor="[[noUrlEditor]]"></api-request-panel>
           </template>
           <template is="dom-if" if="[[isDocs]]">
-            <api-documentation data-page="docs" amf-model="[[amfModel]]" selected="[[_selectedShape]]" selected-type="[[_selectedShapeType]]" no-try-it="[[noTryIt]]" narrow="[[narrow]]" base-uri="[[baseUri]]" scroll-target="[[scrollTarget]]"></api-documentation>
+            <api-documentation data-page="docs" amf-model="[[amfModel]]" selected="[[selectedShape]]" selected-type="[[selectedShapeType]]" no-try-it="[[noTryIt]]" narrow="[[narrow]]" base-uri="[[baseUri]]" scroll-target="[[scrollTarget]]"></api-documentation>
           </template>
         </div>
       </app-header-layout>
@@ -175,7 +175,13 @@ the License.
     static get properties() {
       return {
         /**
-         * `raml-aware` scope property to use.
+         * You can use `raml-aware` component to pass AMF data to the console.
+         * Raml aware uses monostate pattern to pass the data to any other
+         * instance of the same component and receives updates from them.
+         *
+         * When using `<raml-aware>` set it's `scope` property to some name
+         * and this property to the same name. Once you update `raml` property
+         * on the aware it updates the model in the console.
          */
         aware: String,
         /**
@@ -192,14 +198,47 @@ the License.
           type: Object,
           observer: '_amfModelChanged'
         },
-        _selectedShape: {
-          type: String
-        },
-        _selectedShapeType: String,
         /**
-         * File location of the AMF json/ld model.
-         * When changed it will download data from given location
-         * and assign value to the `amfModel` property.
+         * It is current selection from the navigation represented
+         * as an `@id` property of the AMD json/ld model.
+         *
+         * This property is updated internally when the user performs a navigation.
+         * Change this property (with `selectedShapeType` property if needed)
+         * to force the console to render specific view.
+         *
+         * ## example
+         * ```
+         * file://demo/models/api-name/api.raml#/web-api/end-points/%2Ftest-endpoint
+         * ```
+         */
+        selectedShape: {
+          type: String,
+          notify: true
+        },
+        /**
+         * One of recognizable bby the console types of currently rendered
+         * documentation. It can be one of:
+         *
+         * - summary
+         * - documentation
+         * - type
+         * - security
+         * - endpoint
+         * - method
+         *
+         * Use it with combination of setting `selectedShape` property to control
+         * the view.
+         */
+        selectedShapeType: {
+          type: String,
+          notify: true
+        },
+        /**
+         * Location of the AMF json/ld model. It can be an endpoint that
+         * produces AMF model or a file that contains generated model.
+         *
+         * When changed it download's data from the location
+         * and assigns value to the `amfModel` property.
          *
          * ## Example
          * ```html
@@ -234,25 +273,37 @@ the License.
           type: Boolean,
           computed: '_computeIsDocs(page)'
         },
-        // If not set or false then the install extension banner will be allowed to be shown.
-        noExtensionBanner: Boolean,
-        // When set the extension banner is rendered.
-        extensionBannerActive: Boolean,
         /**
-         * Forces the console to send headers defined in this string overriding any used defined
-         * header.
-         * It can be useful if the console has to send any recognizable string to a server without
-         * user knowing about it.
-         * The headers should be a HTTP headers string.
+         * The API console works with API console extension that proxies
+         * request through Chrome extension's sandbox and eliminates CORS.
+         *
+         * The banner informing a user about the extension is rendered
+         * automatically unless this property is set.
+         */
+        noExtensionBanner: Boolean,
+        /**
+         * When set the extension banner is rendered.
+         */
+        extensionBannerActive: {
+          type: Boolean,
+          readOnly: true
+        },
+        /**
+         * Forces the console to send headers defined in this string overriding
+         * any used defined header.
+         * It can be useful if the console has to send any headers string
+         * to a server without user knowing about it.
+         * The headers should be valid HTTP headers string.
          */
         appendHeaders: {
           type: String
         },
-        // If true it will display a narrow layout.
-        narrow: {
-          type: Boolean,
-          notify: true
-        },
+        /**
+         * If true it forces the console to render narrow layout.
+         * This hides left hand side navigation and some fonts are smaller
+         * (like titles).
+         */
+        narrow: Boolean,
         /**
          * If set every request made from the console will be proxied by the service provided in this
          * value.
@@ -285,17 +336,30 @@ the License.
          * The navigation will cover full screen, hiding the content.
          * This works best with `narrow` layout.
          */
-        manualNavigation: {
-          type: Boolean,
-          reflectToAttribute: true,
-          value: false
-        },
+        manualNavigation: Boolean,
         /**
          * True when navigation is or should be opened.
          */
         navigationOpened: {
           type: Boolean,
           notify: true
+        },
+        /**
+         * A width when the navigation drawer is automatically toggled to narrow
+         * view.
+         * By default it is `640px`.
+         *
+         * To control width of the navigation drawer, set `--app-drawer-width`
+         * CSS variable to requested size.
+         */
+        responsiveWidth: String,
+        /**
+         * Computed value, true when the navigation drawer should be hidden
+         * event with wide layout.
+         */
+        _narrowNavForced: {
+          type: Boolean,
+          computed: '_computeNarrowNavForced(manualNavigation, narrow)'
         },
         /**
          * Location of the `bower_components` folder.
@@ -437,8 +501,8 @@ the License.
      * Sets the `path` to summary.
      */
     _amfModelChanged() {
-      this._selectedShape = 'summary';
-      this._selectedShapeType = 'summary';
+      this.selectedShape = 'summary';
+      this.selectedShapeType = 'summary';
     }
     /**
      * Checks if property item has a type.
@@ -525,7 +589,7 @@ the License.
       }
       setTimeout(() => {
         if (!this.noExtensionBanner) {
-          this.extensionBannerActive = true;
+          this._setExtensionBannerActive(true);
         }
       });
     }
@@ -533,9 +597,8 @@ the License.
      * Dismisses Chrome extension banner.
      */
     dismissExtensionBanner() {
-      this.extensionBannerActive = false;
+      this._setExtensionBannerActive(false);
     }
-
     /**
      * Handler for the navigation event dispatched by the `api-navigation`
      * component.
@@ -556,9 +619,19 @@ the License.
         this.page = 'docs';
       }
       Polymer.RenderStatus.afterNextRender(this, () => {
-        this._selectedShape = e.detail.selected;
-        this._selectedShapeType = e.detail.type;
+        this.selectedShape = e.detail.selected;
+        this.selectedShapeType = e.detail.type;
       });
+    }
+    /**
+     * Computes value of `_narrowNavForced` property.
+     *
+     * @param {Boolean} manualNavigation
+     * @param {Boolean} narrow
+     * @return {Boolean}
+     */
+    _computeNarrowNavForced(manualNavigation, narrow) {
+      return !!(manualNavigation || narrow);
     }
   }
   window.customElements.define(ApiConsole.is, ApiConsole);
