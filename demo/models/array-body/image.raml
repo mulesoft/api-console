@@ -1,0 +1,23 @@
+#%RAML 1.0 DataType
+
+description: |
+  An image object representing an image object strored in the file store.
+  The image can be only included in the response. It has no effect if the Image appear in the
+  request. Endpoint handles image creation on it's own and clients can't process images
+  except of sending image data.
+
+type: object
+properties:
+  url:
+    type: string
+    description: |
+      The URL of the image.
+      To resize the image and crop it to a square, append the query string **?sz=x**, where x is the dimension in pixels of each side.
+  thumb:
+    type: string
+    displayName: Thumbnail
+    description: |
+      An URL to the thumbnail of the image. Thumbnails are 60x60px cropped images of the original image.
+example:
+  url: https://domain.com/profile/pawel.psztyc/image
+  thumb: https://domain.com/profile/pawel.psztyc/image/thumb
