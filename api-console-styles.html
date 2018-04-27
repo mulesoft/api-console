@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Copyright 2018 The Advanced REST client authors <arc@mulesoft.com>
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
 the License at
@@ -27,7 +27,7 @@ to all elements.
     --primary-background-color: var(--arc-color-primary-background, #fff);
     --accent-color: var(--arc-accent-color, #cc143c);
 
-    /* THEME */
+    /* Font definitions user in ARC and API components */
     --arc-font-common-base: {
       font-family: var(--arc-font-family, 'Roboto', 'Noto', sans-serif);
       -webkit-font-smoothing: antialiased;
@@ -158,12 +158,12 @@ to all elements.
     --paper-tabs-content: {
       @apply --arc-font-common-base;
       height: calc(100% - var(--tabs-selection-width));
-      border-bottom: var(--tabs-selection-width) solid rgba(39,47,51,.1);
+      border-bottom: var(--tabs-selection-width) solid rgba(39, 47, 51, .1);
       font-style: normal;
-      color: rgba(0,0,0,0.87);
+      color: rgba(0, 0, 0, 0.87);
     };
     --paper-tab-content-unselected: {
-      color: rgba(0,0,0,0.78);
+      color: rgba(0, 0, 0, 0.78);
     };
 
     /* The request editor */

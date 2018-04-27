@@ -116,7 +116,7 @@
                                 ],
                                 "http://raml.org/vocabularies/document#link-target": [
                                   {
-                                    "@id": "/unresolved"
+                                    "@id": "/"
                                   }
                                 ],
                                 "http://raml.org/vocabularies/document#link-label": [
@@ -192,22 +192,7 @@
                                 ],
                                 "http://raml.org/vocabularies/shapes#fixPoint": [
                                   {
-                                    "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema"
-                                  }
-                                ],
-                                "http://raml.org/vocabularies/document#link-target": [
-                                  {
-                                    "@id": "/unresolved"
-                                  }
-                                ],
-                                "http://raml.org/vocabularies/document#link-label": [
-                                  {
-                                    "@value": "AppPerson"
-                                  }
-                                ],
-                                "http://www.w3.org/ns/shacl#name": [
-                                  {
-                                    "@value": "AppPerson"
+                                    "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema/array/default-array"
                                   }
                                 ]
                               }
@@ -241,7 +226,7 @@
     ],
     "http://raml.org/vocabularies/document#declares": [
       {
-        "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema/array/default-array/unresolved",
+        "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%2FarrayBody/post/request/application/json/array/schema/array/default-array",
         "@type": [
           "http://raml.org/vocabularies/shapes#RecursiveShape",
           "http://www.w3.org/ns/shacl#Shape",
@@ -249,12 +234,12 @@
         ],
         "http://raml.org/vocabularies/shapes#fixPoint": [
           {
-            "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema/array/default-array/unresolved"
+            "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema/array/default-array"
           }
         ],
         "http://raml.org/vocabularies/document#link-target": [
           {
-            "@id": "/unresolved"
+            "@id": "file://demo/models/array-body/array-body.raml#/web-api/end-points/%252FarrayBody/post/request/application/json/array/schema/array/default-array"
           }
         ],
         "http://raml.org/vocabularies/document#link-label": [

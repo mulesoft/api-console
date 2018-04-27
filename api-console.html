@@ -65,6 +65,10 @@ the License.
       display: none;
     }
 
+    app-drawer {
+      z-index: 0;
+    }
+
     app-toolbar {
       background-color: var(--api-console-toolbar-background-color, #000);
       color: var(--api-console-toolbar-color, #fff);
@@ -602,15 +606,6 @@ the License.
     /**
      * Handler for the navigation event dispatched by the `api-navigation`
      * component.
-     * Normally it would set variables using Polymer's data binding. However,
-     * because each change carries quite heavy task of computing the view
-     * it feels more smooth to assign selection after the element is rendered
-     * and not at the same time as the view is rendered.
-     * It seems like foring more reflow events (the app renders empty element
-     * first and then populate the view with data) but general look and feel
-     * with this solution seems more smooth.
-     * It is possible that this behavior will change in future release but for
-     * now it is good enough. (Pawel)
      *
      * @param {CustomEvent} e
      */
@@ -618,10 +613,12 @@ the License.
       if (this.page !== 'docs') {
         this.page = 'docs';
       }
-      Polymer.RenderStatus.afterNextRender(this, () => {
+      if (e.detail.selected !== this.selectedShape) {
         this.selectedShape = e.detail.selected;
+      }
+      if (e.detail.type !== this.selectedShapeType) {
         this.selectedShapeType = e.detail.type;
-      });
+      }
     }
     /**
      * Computes value of `_narrowNavForced` property.

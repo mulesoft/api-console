@@ -479,64 +479,35 @@
                             "http://www.w3.org/ns/shacl#in": [
                               {
                                 "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/type/scalar/schema/list",
-                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+                                "@type": "http://www.w3.org/2000/01/rdf-schema#Seq",
+                                "http://www.w3.org/2000/01/rdf-schema#_1": [
                                   {
                                     "@value": "text"
                                   }
                                 ],
-                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+                                "http://www.w3.org/2000/01/rdf-schema#_2": [
                                   {
-                                    "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/type/scalar/schema/list/list",
-                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                      {
-                                        "@value": "binary"
-                                      }
-                                    ],
-                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                      {
-                                        "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/type/scalar/schema/list/list/list",
-                                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                          {
-                                            "@value": "wappush"
-                                          }
-                                        ],
-                                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                          {
-                                            "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/type/scalar/schema/list/list/list/list",
-                                            "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                              {
-                                                "@value": "unicode"
-                                              }
-                                            ],
-                                            "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                              {
-                                                "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/type/scalar/schema/list/list/list/list/list",
-                                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                                  {
-                                                    "@value": "vcal"
-                                                  }
-                                                ],
-                                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                                  {
-                                                    "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/type/scalar/schema/list/list/list/list/list/list",
-                                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                                      {
-                                                        "@value": "vcard"
-                                                      }
-                                                    ],
-                                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                                      {
-                                                        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
-                                                      }
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "@value": "binary"
+                                  }
+                                ],
+                                "http://www.w3.org/2000/01/rdf-schema#_3": [
+                                  {
+                                    "@value": "wappush"
+                                  }
+                                ],
+                                "http://www.w3.org/2000/01/rdf-schema#_4": [
+                                  {
+                                    "@value": "unicode"
+                                  }
+                                ],
+                                "http://www.w3.org/2000/01/rdf-schema#_5": [
+                                  {
+                                    "@value": "vcal"
+                                  }
+                                ],
+                                "http://www.w3.org/2000/01/rdf-schema#_6": [
+                                  {
+                                    "@value": "vcard"
                                   }
                                 ]
                               }
@@ -1000,44 +971,25 @@
                             "http://www.w3.org/ns/shacl#in": [
                               {
                                 "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/message-class/scalar/schema/list",
-                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+                                "@type": "http://www.w3.org/2000/01/rdf-schema#Seq",
+                                "http://www.w3.org/2000/01/rdf-schema#_1": [
                                   {
                                     "@value": "0"
                                   }
                                 ],
-                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+                                "http://www.w3.org/2000/01/rdf-schema#_2": [
                                   {
-                                    "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/message-class/scalar/schema/list/list",
-                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                      {
-                                        "@value": "1"
-                                      }
-                                    ],
-                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                      {
-                                        "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/message-class/scalar/schema/list/list/list",
-                                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                          {
-                                            "@value": "2"
-                                          }
-                                        ],
-                                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                          {
-                                            "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fsms%2Fjson/post/request/parameter/message-class/scalar/schema/list/list/list/list",
-                                            "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                              {
-                                                "@value": "3"
-                                              }
-                                            ],
-                                            "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                              {
-                                                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "@value": "1"
+                                  }
+                                ],
+                                "http://www.w3.org/2000/01/rdf-schema#_3": [
+                                  {
+                                    "@value": "2"
+                                  }
+                                ],
+                                "http://www.w3.org/2000/01/rdf-schema#_4": [
+                                  {
+                                    "@value": "3"
                                   }
                                 ]
                               }
@@ -2366,34 +2318,20 @@
                             "http://www.w3.org/ns/shacl#in": [
                               {
                                 "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Faccount%2Fnumbers/get/request/parameter/search_pattern/scalar/schema/list",
-                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+                                "@type": "http://www.w3.org/2000/01/rdf-schema#Seq",
+                                "http://www.w3.org/2000/01/rdf-schema#_1": [
                                   {
                                     "@value": "0"
                                   }
                                 ],
-                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+                                "http://www.w3.org/2000/01/rdf-schema#_2": [
                                   {
-                                    "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Faccount%2Fnumbers/get/request/parameter/search_pattern/scalar/schema/list/list",
-                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                      {
-                                        "@value": "1"
-                                      }
-                                    ],
-                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                      {
-                                        "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Faccount%2Fnumbers/get/request/parameter/search_pattern/scalar/schema/list/list/list",
-                                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                          {
-                                            "@value": "2"
-                                          }
-                                        ],
-                                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                          {
-                                            "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "@value": "1"
+                                  }
+                                ],
+                                "http://www.w3.org/2000/01/rdf-schema#_3": [
+                                  {
+                                    "@value": "2"
                                   }
                                 ]
                               }
@@ -3327,34 +3265,20 @@
                             "http://www.w3.org/ns/shacl#in": [
                               {
                                 "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fnumber%2Fsearch/get/request/parameter/search_pattern/scalar/schema/list",
-                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+                                "@type": "http://www.w3.org/2000/01/rdf-schema#Seq",
+                                "http://www.w3.org/2000/01/rdf-schema#_1": [
                                   {
                                     "@value": "0"
                                   }
                                 ],
-                                "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+                                "http://www.w3.org/2000/01/rdf-schema#_2": [
                                   {
-                                    "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fnumber%2Fsearch/get/request/parameter/search_pattern/scalar/schema/list/list",
-                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                      {
-                                        "@value": "1"
-                                      }
-                                    ],
-                                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                      {
-                                        "@id": "file://demo/models/nexmo-sms-api/nexmo-sms-api.raml#/web-api/end-points/%2Fnumber%2Fsearch/get/request/parameter/search_pattern/scalar/schema/list/list/list",
-                                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
-                                          {
-                                            "@value": "2"
-                                          }
-                                        ],
-                                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
-                                          {
-                                            "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "@value": "1"
+                                  }
+                                ],
+                                "http://www.w3.org/2000/01/rdf-schema#_3": [
+                                  {
+                                    "@value": "2"
                                   }
                                 ]
                               }
