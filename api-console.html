@@ -108,7 +108,7 @@ the License.
           <div>API console</div>
         </app-toolbar>
         <div class="drawer-content-wrapper">
-          <api-navigation amf-model="[[amfModel]]" summary endpoints-opened on-api-navigation-selection-changed="_apiNavigationOcurred" selected="[[selectedShape]]" selected-type="[[selectedShapeType]]"></api-navigation>
+          <api-navigation amf-model="[[amfModel]]" summary endpoints-opened on-api-navigation-selection-changed="_apiNavigationOcurred" selected="{{selectedShape}}" selected-type="{{selectedShapeType}}"></api-navigation>
           <template is="dom-if" if="[[!noAttribution]]">
             <div class="powered-by">
               <a href="https://github.com/mulesoft/api-console" class="attribution" target="_blank">
