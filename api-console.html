@@ -623,7 +623,7 @@ the License.
      * @param {CustomEvent} e
      */
     _apiNavigationOcurred(e) {
-      if (this.page !== 'docs') {
+      if (e.detail.passive !== false && this.page !== 'docs') {
         this.page = 'docs';
       }
       if (e.detail.selected !== this.selectedShape) {
