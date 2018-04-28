@@ -643,6 +643,16 @@ the License.
     _computeNarrowNavForced(manualNavigation, narrow) {
       return !!(manualNavigation || narrow);
     }
+    /**
+     * When the console is initialized when being hidden
+     * it may not layout properly. The app drawer layout component
+     * positions elements statically so if the console is hidden it cannot do
+     * this properly. In this case call `resetLayout()` function
+     * when getting the console back from the hidden state.
+     */
+    resetLayout() {
+      this.shadowRoot.querySelector('app-drawer-layout').notifyResize();
+    }
   }
   window.customElements.define(ApiConsole.is, ApiConsole);
   </script>
