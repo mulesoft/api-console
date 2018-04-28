@@ -10,9 +10,19 @@
   <link rel="import" href="../../../polymer/lib/elements/custom-style.html">
   <link rel="import" href="../../../paper-toggle-button/paper-toggle-button.html">
   <link rel="import" href="../../../app-route/app-location.html">
+  <link rel="import" href="../../../xhr-simple-request/xhr-simple-request.html">
+  <link rel="import" href="../../../oauth-authorization/oauth-authorization.html">
+  <link rel="import" href="../../../cryptojs-lib/cryptojs-lib.html">
+  <link rel="import" href="../../../neon-animation/web-animations.html">
+  <link rel="import" href="../../../paper-menu-button/paper-menu-button.html">
+  <link rel="import" href="../../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../../paper-item/paper-item.html">
+  <link rel="import" href="../../../paper-listbox/paper-listbox.html">
+  <link rel="import" href="../../api-console-styles.html">
   <link rel="import" href="../../api-console.html">
+  <link rel="import" href="../parser-element/parser-element.html">
   <custom-style>
-    <style is="custom-style" include="demo-pages-shared-styles">
+    <style is="custom-style">
     html,
     body {
       height: 100%;
@@ -23,41 +33,18 @@
       margin: 0;
       font-family: "DIN Pro", "Open Sans", sans-serif;
       -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-      @apply --layout-vertical;
-    }
-
-    #content {
-      @apply --layout-vertical;
-      @apply --layout-flex;
-    }
-
-    .wrapper {
-      position: relative;
-      background-color: #fff;
-      @apply --layout-flex;
     }
 
     api-console {
       background-color: #fff;
     }
 
-    .console-controls {
-      padding: 4px 12px;
-      @apply --layout-horizontal;
-      @apply --layout-center;
-    }
-
-    .console-controls > * {
-      margin-right: 12px;
-    }
-
-    .console-controls paper-toggle-button {
+    [data-action] {
       cursor: pointer;
     }
 
-    .console-controls {
-      --paper-toggle-button-checked-button-color: #00A2DF;
+    [hidden] {
+      display: none !important;
     }
     </style>
   </custom-style>
@@ -66,16 +53,26 @@
 <body unresolved>
   <app-location use-hash-as-path></app-location>
   <raml-aware scope="demo-model"></raml-aware>
-  <div id="content">
-    <div class="console-controls">
-      <paper-toggle-button data-action="noTryIt">No try it</paper-toggle-button>
-      <paper-toggle-button data-action="narrow">Render narrow</paper-toggle-button>
-      <paper-toggle-button data-action="noAttribution">No attribution (see license)</paper-toggle-button>
-    </div>
-    <div class="wrapper">
-      <api-console aware="demo-model"></api-console>
-    </div>
-  </div>
+  <api-console aware="demo-model" hidden>
+    <paper-menu-button slot="toolbar" dynamic-align>
+      <paper-icon-button icon="arc:menu" slot="dropdown-trigger"></paper-icon-button>
+      <paper-listbox slot="dropdown-content" id="apiList" on-selected-changed="_apiChanged">
+        <paper-item>
+          <paper-toggle-button data-action="noTryIt">No try it</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="narrow">Render narrow</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="noAttribution">No attribution (see license)</paper-toggle-button>
+        </paper-item>
+        <paper-item data-click-action="goBack">Close this API</paper-item>
+      </paper-listbox>
+    </paper-menu-button>
+  </api-console>
+  <parser-element on-amf-changed="_updateAmf" hidden></parser-element>
+
+
   <script src="app.js"></script>
 </body>
 

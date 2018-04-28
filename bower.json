@@ -44,7 +44,8 @@
     "paper-tabs": "PolymerElements/paper-tabs#^2.1.1",
     "iron-pages": "PolymerElements/iron-pages#^2.0.0",
     "paper-progress": "PolymerElements/paper-progress#^2.1.1",
-    "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0"
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0",
+    "paper-menu-button": "PolymerElements/paper-menu-button#^2.1.1"
   },
   "resolutions": {
     "headers-parser-behavior": "2.0.0-preview",
