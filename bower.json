@@ -43,10 +43,12 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "paper-tabs": "PolymerElements/paper-tabs#^2.1.1",
     "iron-pages": "PolymerElements/iron-pages#^2.0.0",
-    "paper-progress": "PolymerElements/paper-progress#^2.1.1"
+    "paper-progress": "PolymerElements/paper-progress#^2.1.1",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0"
   },
   "resolutions": {
-    "headers-parser-behavior": "2.0.0-preview"
+    "headers-parser-behavior": "2.0.0-preview",
+    "api-property-form-item": "2.0.0-preview"
   },
   "ignore": [
     "**/.*",

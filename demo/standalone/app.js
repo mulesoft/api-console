@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2017 The Advanced REST client authors <arc@mulesoft.com>
+ * Copyright 2018 The Advanced REST client authors <arc@mulesoft.com>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
@@ -13,8 +13,8 @@
  */
 
 /**
- * The following script will handle API console routing when using the console as a standalone
- * application.
+ * The following script will handle API console routing when using the c
+ * onsole as a standalone application.
  *
  * It uses native JavaScript APIs so it can be used outside Polymer scope.
  *
@@ -23,12 +23,12 @@
 (function() {
   'use strict';
   // API Console namespace.
-  var apiconsole = {};
+  const apiconsole = {};
   // Namespace for standalone application.
   apiconsole.app = {};
   /**
-   * Initialize event listeners for console's path and page properties and observers
-   * router data change.
+   * Initialize event listeners for console's path and page properties
+   * and observers router data change.
    */
   apiconsole.app.init = function() {
     apiconsole.app.setInitialRouteData();
@@ -40,18 +40,18 @@
   apiconsole.app.setInitialRouteData = function() {
     // sets the initial path for routing from external source.
     // The API console sets default path to `summary` after RAML change.
-    var location = document.querySelector('app-location');
-    var locationPath = location.path;
+    const location = document.querySelector('app-location');
+    const locationPath = location.path;
     if (!locationPath) {
       return;
     }
-    var parsedPath = locationPath.replace(/\-/g, '.');
+    let parsedPath = locationPath.replace(/\-/g, '.');
     if (parsedPath[0] === '/') {
       parsedPath = parsedPath.substr(1);
     }
-    var _route = parsedPath.split('/');
-    var page = _route[0];
-    var path = _route[1];
+    let _route = parsedPath.split('/');
+    let page = _route[0];
+    let path = _route[1];
 
     apiconsole.app.__initialPage = page;
     apiconsole.app.__initialPath = path;
@@ -62,14 +62,16 @@
   apiconsole.app.addParserListeners = function() {
     document.querySelector('raml-docs-parser')
     .addEventListener('raml-ready', function(e) {
-      var apiConsole = document.querySelector('api-console');
+      let apiConsole = document.querySelector('api-console');
       apiConsole.raml = e.detail.raml;
 
-      if (apiconsole.app.__initialPage && apiconsole.app.__initialPage !== apiConsole.page) {
+      if (apiconsole.app.__initialPage &&
+        apiconsole.app.__initialPage !== apiConsole.page) {
         apiconsole.app.pageChanged(apiconsole.app.__initialPage);
         apiconsole.app.__initialPage = undefined;
       }
-      if (apiconsole.app.__initialPath && apiconsole.app.__initialPath !== apiConsole.path) {
+      if (apiconsole.app.__initialPath &&
+        apiconsole.app.__initialPath !== apiConsole.path) {
         apiconsole.app.pathChanged(apiconsole.app.__initialPath);
         apiconsole.app.__initialPath = undefined;
       }
@@ -80,8 +82,8 @@
    * app-location, app-route and api-console.
    */
   apiconsole.app.observeRouteEvents = function() {
-    var apiConsole = document.querySelector('api-console');
-    var location = document.querySelector('app-location');
+    let apiConsole = document.querySelector('api-console');
+    let location = document.querySelector('app-location');
 
     apiConsole.addEventListener('path-changed', apiconsole.app._pathChanged);
     apiConsole.addEventListener('page-changed', apiconsole.app._pageChanged);
@@ -96,9 +98,9 @@
     if (!path) {
       return;
     }
-    var location = document.querySelector('app-location');
-    var parsedPath = path.replace(/\./g, '-');
-    var newPath = '/docs/' + parsedPath;
+    let location = document.querySelector('app-location');
+    let parsedPath = path.replace(/\./g, '-');
+    let newPath = '/docs/' + parsedPath;
     if (newPath !== location.path) {
       location.set('path', newPath);
     }
@@ -109,7 +111,7 @@
   };
   // Called when page change.
   apiconsole.app.pageChanged = function(page) {
-    var apiConsole = document.querySelector('api-console');
+    let apiConsole = document.querySelector('api-console');
     if (apiConsole.page !== page) {
       apiConsole.page = page;
     }
@@ -120,19 +122,19 @@
   };
   // Updates api console path if different than curent URL
   apiconsole.app.routeChanged = function(route) {
-    var locationPath = route.path;
+    let locationPath = route.path;
     if (!locationPath || locationPath === '/') {
       document.querySelector('app-location').set('path', '/docs');
       return;
     }
-    var parsedPath = locationPath.replace(/\-/g, '.');
+    let parsedPath = locationPath.replace(/\-/g, '.');
     if (parsedPath[0] === '/') {
       parsedPath = parsedPath.substr(1);
     }
-    var _route = parsedPath.split('/');
-    var page = _route[0];
-    var path = _route[1];
-    var apiConsole = document.querySelector('api-console');
+    let _route = parsedPath.split('/');
+    let page = _route[0];
+    let path = _route[1];
+    let apiConsole = document.querySelector('api-console');
     if (apiConsole.page !== page) {
       apiConsole.page = page;
     }
@@ -143,17 +145,18 @@
   /**
    * Reads page name and the path from location path.
    *
-   * @param {String} locationPath Current path read from path change event or read fomr the
-   * `app-location` element.
+   * @param {String} locationPath Current path read from path change event or
+   * read fomr the `app-location` element.
+   * @return {Object}
    */
   apiconsole.app._readPagePath = function(locationPath) {
-    var parsedPath = locationPath.replace(/\-/g, '.');
+    let parsedPath = locationPath.replace(/\-/g, '.');
     if (parsedPath[0] === '/') {
       parsedPath = parsedPath.substr(1);
     }
-    var _route = parsedPath.split('/');
-    var page = _route[0];
-    var path = _route[1];
+    let _route = parsedPath.split('/');
+    let page = _route[0];
+    let path = _route[1];
     return {
       page: page,
       path: path
@@ -161,17 +164,19 @@
   };
 
   apiconsole.app.observeConsoleControls = function() {
-    var toggles = document.querySelectorAll('.console-controls paper-toggle-button');
-    for (var i = 0, len = toggles.length; i < len; i++) {
-      toggles[i].addEventListener('checked-changed', apiconsole.app.consoleControlsChanged);
+    let toggles = document.querySelectorAll(
+      '.console-controls paper-toggle-button');
+    for (let i = 0, len = toggles.length; i < len; i++) {
+      toggles[i].addEventListener('checked-changed',
+        apiconsole.app.consoleControlsChanged);
     }
   };
 
   apiconsole.app.consoleControlsChanged = function(e) {
-    var action = e.target.dataset.action;
+    let action = e.target.dataset.action;
     switch (action) {
       case 'parser':
-        var parser = document.querySelector('raml-docs-parser');
+        let parser = document.querySelector('raml-docs-parser');
         if (e.detail.value) {
           parser.removeAttribute('hidden');
         } else {
@@ -181,7 +186,7 @@
       case 'noTryIt':
       case 'narrow':
       case 'noAttribution':
-        var apiConsole = document.querySelector('api-console');
+        let apiConsole = document.querySelector('api-console');
         apiConsole[action] = e.detail.value;
         break;
     }
