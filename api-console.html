@@ -30,7 +30,7 @@ the License.
 <dom-module id="api-console">
   <template>
     <style>
-     :host {
+    :host {
       --app-primary-color: #00A2DF;
       --app-secondary-color: black;
       display: block;
@@ -69,6 +69,10 @@ the License.
       z-index: 0;
     }
 
+    :host([layout-narrow]) app-drawer {
+      z-index: 1;
+    }
+
     app-toolbar {
       background-color: var(--api-console-toolbar-background-color, #000);
       color: var(--api-console-toolbar-color, #fff);
@@ -102,7 +106,7 @@ the License.
       @apply --layout-flex-auto;
     }
     </style>
-    <app-drawer-layout responsive-width="[[responsiveWidth]]" force-narrow="[[_narrowNavForced]]">
+    <app-drawer-layout responsive-width="[[responsiveWidth]]" force-narrow="[[_narrowNavForced]]" narrow="{{layoutNarrow}}">
       <app-drawer slot="drawer">
         <app-toolbar>
           <div>API console</div>
@@ -431,6 +435,15 @@ the License.
           value: function() {
             return window;
           }
+        },
+        /**
+         * True when the main layout element renders in narrow view.
+         * This changes when media query breakpoint has been reached or
+         * when narrow property is set.
+         */
+        layoutNarrow: {
+          type: Boolean,
+          reflectToAttribute: true
         }
       };
     }
