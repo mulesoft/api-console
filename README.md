@@ -2,15 +2,51 @@
 
 # The API Console
 
-MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) documents. In addition to providing documentation, the tool provides the capability for users to try out requests on the fly.
+MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) or OAS (Open API specification) documents. In addition to providing documentation, the tool provides the capability for users to try out requests on the fly.
+
+## API console 5.0 is here!
+
+Great news! Next version of API console is here! It has tons of bug fixes reported for version 4.
+
+### AMF (API modeling framework) support
+
+We worked very hard to deliver first in class solutions for API documentation.
+MuleSoft's AMF allows to parse (almost) any* API document and produces common
+data model. API console works with this model instead of RAML JS parser's. And this
+is great news for every one. Now you can use API console to generate documentation
+for any type of API specification.
+
+\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 1.0, OAS 2.0 and OAS 3.0. It can be extended by defining new vocabulary to support other documentation formats.
+
+### Native support for web components
+
+The application has been recreated from scratch to support so called v1 specification
+of web components. This means not more polyfills (when not required, I am talking to you
+IE user) and less sources. We have successfully reduced size of the API console 3 times:
+from 3 MB in version 3 to 1 MB in current version. It is possible to brake it down to
+smaller bundles and download console's sources on demand. More about it in "Building the console"
+section.
+
+### Redesign
+
+New API console has been tested with users and the redesigned, then tested with used again and then redesigned again to ensure we offer best in class API documentation tools.
+New navigation allows understand structure of the API better and users can navigate
+through the documentation faster.
+
+New documentation page focuses on presenting the information which is the API and not features
+of the app itself. This allows users to learn faster and be more productive.
+
+### Re-build
+
+New build tools allows you to customize the bundle to your needs and possibly reduce size
+of the console even more than default settings. Check out "Building the console" section
+for more information.
 
 [![API Console](docs/new-console-header.png)](https://mulesoft.github.io/api-console)
 
 ## Introduction
 
-In this repository, you can find the source for a single HTML element that represents API Console.
-
-The HTML element is built on top of the [Web Components specifications](https://www.webcomponents.org/introduction) and powered by the [Polymer library](https://www.polymer-project.org/). Familiarity with Polymer isn't necessary to use the console.
+API console is an web application created on top of the [Web Components specifications](https://www.webcomponents.org/introduction) and powered by the [Polymer library](https://www.polymer-project.org/). Familiarity with Polymer isn't necessary to use the console.
 
 The following sections briefly describe how to build and use the console. For more information, see the [docs](docs) directory in this repository.
 
@@ -19,29 +55,22 @@ The following sections briefly describe how to build and use the console. For mo
 Install our CLI tool globally using `-g` if possible:
 
 ```shell
-$ sudo npm install -g api-console-cli
+$ sudo npm install -g raml-cli
 ```
 
-Generate API console from your RAML file:
+Generate API console from your RAML or OAS file:
 
 ```shell
-$ api-console build https://domain.com/api.raml # works with local files too
+$ raml build https://domain.com/api.raml # works with local files too
 ```
 
 Preview the console:
 
 ```shell
-$ api-console serve build/
+$ raml serve build/
 ```
 
 That's all you need to build the API console for your API. Below we'll describe how to customize the console.
-
-API Console comes in two flavors.
-
-* A **standalone web-application**  
-* embeddable **HTML element**  
-
-You can select which one suits your needs.
 
 ### Run as a standalone web-application
 
@@ -49,7 +78,7 @@ Use API Console as a standalone application to display the documentation for you
 
 To build the API Console as a standalone application use one of our [build tools].
 
-### Embed as an HTML element
+### Use API components
 
 The API Console was built on top of the new Web Components specification. When you include sources of the console into your web application it registers a new HTML element, `<api-console>`. You can use this element in the same way as any other element on the page or web application. For example, you can embed the console into your blog post or as a part of a press release. Your users can explore your API without being redirected to another web page.
 
@@ -76,28 +105,6 @@ Finally use the HTML tag:
 See complete documentation about how to import sources into your web page in the [api console element docs]. Also, if you are a developer you can check out [demo application source code].
 
 You can also build API Console as a embeddable HTML element using one of our [build tools].
-
-## Optimization options
-
-API Console displays documentation for RAML documents by performing heavy duty computations to transform RAML data into a JavaScript object. Naturally, this takes time. There are, however, a few options to optimize loading time of API Console, depending on your use case.
-
-### RAML data source
-
-If your API is under active development and changes often, you may want to consider using the RAML file hosted on a server as a data source. The API Console application will then parse RAML file using the RAML JavaScript parser and use the parser output as a data source. Parsing occurs during API Console load time, but during that time, the latest API version is displayed.
-
-Because this use case requires you to include more custom HTML elements it's not suitable for the standalone version. Other options would be a better fit.
-
-### JSON data source
-
-If your API doesn't change often or if you are using our [build tools] in your CI process, using a JSON data source is a good choice. In this case, you can generate a JSON file from the RAML and use it as a data input in the `<api-console>` element.
-
-This option significantly reduces the API Console load time. It is also suitable for both standalone application and the HTML element.
-
-### Inline JSON in the page source
-
-This option gives you the fastest load time but may increase initial page weight. It is the same option as the JSON data source but the JSON data is not kept in separate JSON file. The data is included in the page source as a JavaScript object.
-
-Use this option if your API rarely, or never, changes. Every change to the source RAML file requires regenerating the whole page, which can be automated with our [build tools].
 
 ## API Console configuration options
 
@@ -163,7 +170,7 @@ cd api-console
 
 2. Checkout the latest version.
 ```
-git checkout release/4.0.0
+git checkout 5.0.0-preview
 ```
 
 3. Install [polymer-cli] and [Bower].
@@ -178,7 +185,7 @@ bower install
 
 5. Serve the element.
 ```
-polymer serve --open -p 8080
+polymer serve --open
 ```
 
 The default page is the element's documentation. Switch to demo to see a working example.

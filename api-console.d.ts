@@ -36,7 +36,13 @@ declare namespace MulesoftApps {
   class ApiConsole extends Polymer.Element {
 
     /**
-     * `raml-aware` scope property to use.
+     * You can use `raml-aware` component to pass AMF data to the console.
+     * Raml aware uses monostate pattern to pass the data to any other
+     * instance of the same component and receives updates from them.
+     *
+     * When using `<raml-aware>` set it's `scope` property to some name
+     * and this property to the same name. Once you update `raml` property
+     * on the aware it updates the model in the console.
      */
     aware: string|null|undefined;
 
@@ -49,13 +55,44 @@ declare namespace MulesoftApps {
      * It is only usefult for the element to resolve references.
      */
     amfModel: object|any[]|null;
-    _selectedShape: string|null|undefined;
-    _selectedShapeType: string|null|undefined;
 
     /**
-     * File location of the AMF json/ld model.
-     * When changed it will download data from given location
-     * and assign value to the `amfModel` property.
+     * It is current selection from the navigation represented
+     * as an `@id` property of the AMD json/ld model.
+     *
+     * This property is updated internally when the user performs a navigation.
+     * Change this property (with `selectedShapeType` property if needed)
+     * to force the console to render specific view.
+     *
+     * ## example
+     * ```
+     * file://demo/models/api-name/api.raml#/web-api/end-points/%2Ftest-endpoint
+     * ```
+     */
+    selectedShape: string|null|undefined;
+
+    /**
+     * One of recognizable bby the console types of currently rendered
+     * documentation. It can be one of:
+     *
+     * - summary
+     * - documentation
+     * - type
+     * - security
+     * - endpoint
+     * - method
+     *
+     * Use it with combination of setting `selectedShape` property to control
+     * the view.
+     */
+    selectedShapeType: string|null|undefined;
+
+    /**
+     * Location of the AMF json/ld model. It can be an endpoint that
+     * produces AMF model or a file that contains generated model.
+     *
+     * When changed it download's data from the location
+     * and assigns value to the `amfModel` property.
      *
      * ## Example
      * ```html
@@ -82,26 +119,32 @@ declare namespace MulesoftApps {
     readonly isDocs: boolean|null|undefined;
 
     /**
-     * If not set or false then the install extension banner will be allowed to be shown.
+     * The API console works with API console extension that proxies
+     * request through Chrome extension's sandbox and eliminates CORS.
+     *
+     * The banner informing a user about the extension is rendered
+     * automatically unless this property is set.
      */
     noExtensionBanner: boolean|null|undefined;
 
     /**
      * When set the extension banner is rendered.
      */
-    extensionBannerActive: boolean|null|undefined;
+    readonly extensionBannerActive: boolean|null|undefined;
 
     /**
-     * Forces the console to send headers defined in this string overriding any used defined
-     * header.
-     * It can be useful if the console has to send any recognizable string to a server without
-     * user knowing about it.
-     * The headers should be a HTTP headers string.
+     * Forces the console to send headers defined in this string overriding
+     * any used defined header.
+     * It can be useful if the console has to send any headers string
+     * to a server without user knowing about it.
+     * The headers should be valid HTTP headers string.
      */
     appendHeaders: string|null|undefined;
 
     /**
-     * If true it will display a narrow layout.
+     * If true it forces the console to render narrow layout.
+     * This hides left hand side navigation and some fonts are smaller
+     * (like titles).
      */
     narrow: boolean|null|undefined;
 
@@ -146,6 +189,22 @@ declare namespace MulesoftApps {
      * True when navigation is or should be opened.
      */
     navigationOpened: boolean|null|undefined;
+
+    /**
+     * A width when the navigation drawer is automatically toggled to narrow
+     * view.
+     * By default it is `640px`.
+     *
+     * To control width of the navigation drawer, set `--app-drawer-width`
+     * CSS variable to requested size.
+     */
+    responsiveWidth: string|null|undefined;
+
+    /**
+     * Computed value, true when the navigation drawer should be hidden
+     * event with wide layout.
+     */
+    readonly _narrowNavForced: boolean|null|undefined;
 
     /**
      * Location of the `bower_components` folder.
@@ -198,6 +257,13 @@ declare namespace MulesoftApps {
      * set to this container.
      */
     scrollTarget: object|null|undefined;
+
+    /**
+     * True when the main layout element renders in narrow view.
+     * This changes when media query breakpoint has been reached or
+     * when narrow property is set.
+     */
+    layoutNarrow: boolean|null|undefined;
     ready(): void;
     connectedCallback(): void;
     disconnectedCallback(): void;
@@ -278,17 +344,22 @@ declare namespace MulesoftApps {
     /**
      * Handler for the navigation event dispatched by the `api-navigation`
      * component.
-     * Normally it would set variables using Polymer's data binding. However,
-     * because each change carries quite heavy task of computing the view
-     * it feels more smooth to assign selection after the element is rendered
-     * and not at the same time as the view is rendered.
-     * It seems like foring more reflow events (the app renders empty element
-     * first and then populate the view with data) but general look and feel
-     * with this solution seems more smooth.
-     * It is possible that this behavior will change in future release but for
-     * now it is good enough. (Pawel)
      */
     _apiNavigationOcurred(e: CustomEvent|null): void;
+
+    /**
+     * Computes value of `_narrowNavForced` property.
+     */
+    _computeNarrowNavForced(manualNavigation: Boolean|null, narrow: Boolean|null): Boolean|null;
+
+    /**
+     * When the console is initialized when being hidden
+     * it may not layout properly. The app drawer layout component
+     * positions elements statically so if the console is hidden it cannot do
+     * this properly. In this case call `resetLayout()` function
+     * when getting the console back from the hidden state.
+     */
+    resetLayout(): void;
   }
 }
 
