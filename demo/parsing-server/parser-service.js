@@ -1,5 +1,5 @@
 const tmp = require('tmp');
-const fs = require('tmp');
+const fs = require('fs-extra');
 const Duplex = require('stream').Duplex;
 const unzip = require('unzip');
 const amf = require('amf-client-js');
@@ -169,7 +169,8 @@ class ParserService {
    */
   cleanTempFiles() {
     if (this.tmpobj) {
-      this.tmpobj.removeCallback();
+      fs.emptyDir(this.tmpobj.name)
+      .then(() => this.tmpobj.removeCallback());
     }
   }
 }
