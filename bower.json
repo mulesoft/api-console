@@ -2,9 +2,10 @@
   "name": "api-console",
   "description": "The API console used in RAML platform.",
   "authors": [
+    "Pawel Psztyc",
     "The Advanced REST client authors <arc@mulesoft.com>"
   ],
-  "version": "4.2.1",
+  "version": "5.0.0-preview",
   "keywords": [
     "web-components",
     "polymer",
@@ -27,9 +28,9 @@
     "app-layout": "PolymerElements/app-layout#^2.0.0",
     "app-route": "PolymerElements/app-route#^2.0.0",
     "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
-    "api-navigation": "advanced-rest-client/api-navigation#2.0.0-preview",
-    "api-documentation": "advanced-rest-client/api-documentation#2.0.0-preview",
-    "api-request-panel": "advanced-rest-client/api-request-panel#2.0.0-preview",
+    "api-navigation": "advanced-rest-client/api-navigation#^2.0.0",
+    "api-documentation": "advanced-rest-client/api-documentation#^2.0.0",
+    "api-request-panel": "advanced-rest-client/api-request-panel#^2.0.0",
     "oauth-authorization": "advanced-rest-client/oauth-authorization#^2.0.1",
     "cryptojs-lib": "advanced-rest-client/cryptojs-lib#^0.1.1",
     "web-animations-js": "web-animations/web-animations-js#^2.3",
@@ -46,10 +47,6 @@
     "paper-progress": "PolymerElements/paper-progress#^2.1.1",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0",
     "paper-menu-button": "PolymerElements/paper-menu-button#^2.1.1"
-  },
-  "resolutions": {
-    "headers-parser-behavior": "2.0.0-preview",
-    "api-property-form-item": "2.0.0-preview"
   },
   "ignore": [
     "**/.*",
