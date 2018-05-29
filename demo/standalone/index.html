@@ -27,16 +27,13 @@
     body {
       height: 100%;
       background-color: #fff;
-    }
-
-    body {
       margin: 0;
-      font-family: "DIN Pro", "Open Sans", sans-serif;
-      -webkit-font-smoothing: antialiased;
+      padding: 0;
     }
 
     api-console {
       background-color: #fff;
+      min-height: 100vh;
     }
 
     [data-action] {
@@ -53,7 +50,7 @@
 <body unresolved>
   <app-location use-hash-as-path></app-location>
   <raml-aware scope="demo-model"></raml-aware>
-  <api-console aware="demo-model" hidden>
+  <api-console aware="demo-model" hidden app>
     <paper-menu-button slot="toolbar" dynamic-align>
       <paper-icon-button icon="arc:menu" slot="dropdown-trigger"></paper-icon-button>
       <paper-listbox slot="dropdown-content" id="apiList" on-selected-changed="_apiChanged">
