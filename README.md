@@ -6,43 +6,31 @@ MuleSoft's API Console is a full-fledged API documentation tool that generates m
 
 ## API console 5.0 is here!
 
-Great news! Next version of API console is here! It has tons of bug fixes reported for version 4.
+Great news! Next version of API console is here! The upgrade includes new design, new data model and and build process that allows reduce size of the console.
 
-### AMF (API modeling framework) support
+### AMF (AML Modeling Framework) support
 
-We worked very hard to deliver first in class solutions for API documentation.
-MuleSoft's AMF allows to parse (almost) any* API document and produces common
-data model. API console works with this model instead of RAML JS parser's. And this
-is great news for every one. Now you can use API console to generate documentation
-for any type of API specification.
+We are working very hard to deliver first in class solutions for API documentation.
+MuleSoft's AMF allows to parse any* API document and produces common data model. API console consumes this model instead of RAML JS parser's.
 
-\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 1.0, OAS 2.0 and OAS 3.0. It can be extended by defining new vocabulary to support other documentation formats.
+\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 1.0, OAS 2.0 and OAS 3.0. It can be extended by defining new vocabulary to support other API spec formats.
 
 ### Native support for web components
 
-The application has been recreated from scratch to support so called v1 specification
-of web components. This means not more polyfills (when not required, I am talking to you
-IE user) and less sources. We have successfully reduced size of the API console 3 times:
-from 3 MB in version 3 to 1 MB in current version. It is possible to brake it down to
-smaller bundles and download console's sources on demand. More about it in "Building the console"
-section.
+The application has been recreated from scratch to support so called v1 specification of web components.
+This means no more polyfills and less source code to be downloaded. We reduced size of the API console 2 times! It is possible to brake it down to
+smaller bundles and download console's sources on demand. More about it in "Building the console" section.
 
 ### Redesign
 
 New API console has been tested with users and the redesigned, then tested with used again and then redesigned again to ensure we offer best in class API documentation tools.
-New navigation allows understand structure of the API better and users can navigate
-through the documentation faster.
+New navigation allows understand structure of the API better and users can navigate through the documentation faster.
 
-New documentation page focuses on presenting the information which is the API and not features
-of the app itself. This allows users to learn faster and be more productive.
+New documentation page focuses on presenting the information which is the API and not features of the app itself. This allows users to learn faster and be more productive.
 
 ### Re-build
 
-New build tools allows you to customize the bundle to your needs and possibly reduce size
-of the console even more than default settings. Check out "Building the console" section
-for more information.
-
-[![API Console](docs/new-console-header.png)](https://mulesoft.github.io/api-console)
+New build tools allows you to customize the bundle to your needs and possibly reduce size of the console even more than when using default settings. Check out "Building the console" section for more information.
 
 ## Introduction
 
@@ -55,19 +43,19 @@ The following sections briefly describe how to build and use the console. For mo
 Install our CLI tool globally using `-g` if possible:
 
 ```shell
-$ sudo npm install -g raml-cli
+$ sudo npm install -g api-console-cli
 ```
 
 Generate API console from your RAML or OAS file:
 
 ```shell
-$ raml build https://domain.com/api.raml # works with local files too
+$ api-console build  -a path/to/api.raml -t "RAML 1.0" # works with remote files too
 ```
 
 Preview the console:
 
 ```shell
-$ raml serve build/
+$ api-console serve build/ --open
 ```
 
 That's all you need to build the API console for your API. Below we'll describe how to customize the console.
@@ -98,7 +86,7 @@ Finally use the HTML tag:
 
 ```html
 <body>
-  <api-console raml="{...}"></api-console>
+  <api-console amf-model="{...}"></api-console>
 </body>
 ```
 
@@ -133,9 +121,8 @@ A set of build tools is included to help you create API Console from the RAML fi
 The following build tools are available:
 
 * The `api-console` CLI
-* The node modules
+* Node modules
   * `api-console-builder`
-  * `raml-json-enhance-node`  
 
 Depending on your needs you can choose whether you want to use a CLI tool or a node module.
 
@@ -144,7 +131,7 @@ Build tools can be helpful in the CI process to automate the documentation relea
 ## Theming
 API Console supports theming and comes with a default theme. You can create your own theme. For example, you can tweak the style of the console to match your corporate style guide.
 
-Theming is based on CSS variables and CSS mixins. Basic concepts of using the variables and mixins are described in the [Polymer 1.0 styling] documentation. You can check the [api-console-styles.html](api-console-styles.html) file to see the current theme definition, and then read the [theming documentation] to learn how to create your own theme.
+Theming is based on CSS variables and CSS mixins. Basic concepts of using the variables and mixins are described in the [Polymer 2.0 styling] documentation. You can check the [api-console-styles.html](api-console-styles.html) file to see the current theme definition, and then read the [theming documentation] to learn how to create your own theme.
 
 ## CORS
 
@@ -215,10 +202,10 @@ See the LICENSE.md file for more information.
 [build tools]: docs/build-tools.md
 [configuring the api console]: docs/configuring-api-console.md
 [theming documentation]: docs/theming.md
-[camel cased]: https://en.wikipedia.org/wiki/Camel_case
+[camel case]: https://en.wikipedia.org/wiki/Camel_case
 [polymer-cli]: https://www.polymer-project.org/1.0/docs/tools/polymer-cli
 [Bower]: https://bower.io/
-[Polymer 1.0 styling]: https://www.polymer-project.org/1.0/docs/devguide/styling
+[Polymer 2.0 styling]: https://www.polymer-project.org/2.0/docs/devguide/custom-css-properties
 [the elements catalogue]: https://elements.advancedrestclient.com/
 [bower]: https://bower.io/
 [CORS Wiki]: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
