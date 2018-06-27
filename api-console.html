@@ -167,7 +167,7 @@ the License.
             <api-request-panel data-page="request" amf-model="[[amfModel]]" selected="[[selectedShape]]" narrow="[[narrow]]" no-url-editor="[[noUrlEditor]]"></api-request-panel>
           </template>
           <template is="dom-if" if="[[isDocs]]">
-            <api-documentation data-page="docs" amf-model="[[amfModel]]" selected="[[selectedShape]]" selected-type="[[selectedShapeType]]" no-try-it="[[noTryIt]]" narrow="[[narrow]]" base-uri="[[baseUri]]" scroll-target="[[scrollTarget]]"></api-documentation>
+            <api-documentation data-page="docs" amf-model="[[amfModel]]" selected="[[selectedShape]]" selected-type="[[selectedShapeType]]" no-try-it="[[noTryIt]]" narrow="[[narrow]]" base-uri="[[baseUri]]"></api-documentation>
           </template>
         </div>
       </app-header-layout>
@@ -452,18 +452,6 @@ the License.
           readOnly: true,
           value: function() {
             return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-          }
-        },
-        /**
-         * An element that is a scroll target for the console.
-         * By default it is the `window` object but if the lement is contained
-         * in a containe that has overflow and height set then this should be
-         * set to this container.
-         */
-        scrollTarget: {
-          type: Object,
-          value: function() {
-            return window;
           }
         },
         /**
