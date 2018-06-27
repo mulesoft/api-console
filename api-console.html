@@ -27,6 +27,7 @@ the License.
 <link rel="import" href="../api-request-panel/api-request-panel.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-toast/paper-toast.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
 <dom-module id="api-console">
   <template>
     <style>
@@ -121,7 +122,13 @@ the License.
       right: 0 !important;
       left: 0 !important;
     }
+
+    api-request-panel,
+    api-documentation {
+      max-width: var(--api-console-main-max-width, 900px);
+    }
     </style>
+    <iron-media-query query="(max-width: 740px)" query-matches="{{narrow}}"></iron-media-query>
     <app-drawer-layout responsive-width="[[responsiveWidth]]" force-narrow="[[_narrowNavForced]]" narrow="{{layoutNarrow}}">
       <app-drawer slot="drawer" align="[[drawerAlign]]">
         <template is="dom-if" if="[[!noToolbars]]">
