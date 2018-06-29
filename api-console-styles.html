@@ -171,6 +171,7 @@ to all elements.
     --paper-tab-content-unselected: {
       color: rgba(0, 0, 0, 0.78);
     };
+    --paper-tab-ink: rgb(39, 47, 51);
 
     /* The request editor */
     --api-request-editor-send-valid-button: {
@@ -183,25 +184,27 @@ to all elements.
       color: #fff;
     };
 
+    --request-editor-section-padding: 8px 12px;
+
     /* Authorization panel */
     --stepper-step-number-background-color: var(--primary-color);
     --authorization-panel: {
-      padding: 8px 12px;
+      padding: var(--request-editor-section-padding);
     };
 
     /* URL parameters editor */
     --api-url-params-editor: {
-      padding: 8px 12px;
+      padding: var(--request-editor-section-padding);
     };
 
     /* Headers editor */
     --api-headers-editor: {
-      padding: 8px 12px;
+      padding: var(--request-editor-section-padding);
     };
 
     /* Body editor */
     --api-body-editor: {
-      padding: 8px 12px;
+      padding: var(--request-editor-section-padding);
     };
 
     /* Paper-autocomplete must be styled to not go under the navigation */
@@ -220,7 +223,22 @@ to all elements.
     --code-block: {
       word-wrap: break-word;
     };
+  }
 
+  [narrow] {
+    --narrow-request-editor-section-padding: 0px;
+    --authorization-panel: {
+      padding: var(--narrow-request-editor-section-padding);
+    };
+    --api-headers-editor: {
+      padding: var(--narrow-request-editor-section-padding);
+    };
+    --api-body-editor: {
+      padding: var(--narrow-request-editor-section-padding);
+    };
+    --api-url-params-editor: {
+      padding: var(--narrow-request-editor-section-padding);
+    };
     /* Query / URI parameters documentation styles */
     --api-parameters-document-title-narrow: {
       font-size: 17px;
@@ -246,6 +264,8 @@ to all elements.
     --api-body-document-title-narrow: {
       font-size: 17px;
     };
+
+    --api-console-main-content-margin-top: 12px;
   }
   </style>
 </custom-style>
