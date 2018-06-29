@@ -62,6 +62,15 @@ types:
       - A
       - B
       - C
+  Parent:
+    type: object
+    properties:
+      id: number
+      etag: string
+  Child:
+    type: Parent
+    properties:
+      name: string
 
 resourceTypes:
   ResourceNotFound:
