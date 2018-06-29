@@ -28,6 +28,8 @@ the License.
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-toast/paper-toast.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../api-console-ext-comm/api-console-ext-comm.html">
+
 <dom-module id="api-console">
   <template>
     <style>
@@ -177,6 +179,7 @@ the License.
       <raml-aware raml="{{amfModel}}" scope="[[aware]]"></raml-aware>
     </template>
     <paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
+    <api-console-ext-comm has-extension="{{noExtensionBanner}}"></api-console-ext-comm>
     <!--
     The components below are optional dependencies. They will not be used until
     sources of the components are included into AC bundle.
@@ -316,7 +319,10 @@ the License.
          * The banner informing a user about the extension is rendered
          * automatically unless this property is set.
          */
-        noExtensionBanner: Boolean,
+        noExtensionBanner: {
+          type: Boolean,
+          observer: '_noExtBannerChanged'
+        },
         /**
          * When set the extension banner is rendered.
          */
@@ -498,19 +504,17 @@ the License.
     constructor() {
       super();
       this._tryitHandler = this._tryitHandler.bind(this);
-      this._onExtensionInstalled = this._onExtensionInstalled.bind(this);
     }
 
     connectedCallback() {
       super.connectedCallback();
       this.addEventListener('tryit-requested', this._tryitHandler);
-      window.addEventListener('api-console-extension-installed', this._onExtensionInstalled);
+      this._notifyApicExtension();
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
       this.removeEventListener('tryit-requested', this._tryitHandler);
-      window.removeEventListener('api-console-extension-installed', this._onExtensionInstalled);
     }
 
     ready() {
@@ -548,10 +552,6 @@ the License.
       const message = 'Unable to load API model data. ' + (error.message ? error.message : '');
       this.$.apiLoadErrorToast.text = message;
       this.$.apiLoadErrorToast.opened = true;
-    }
-
-    _onExtensionInstalled() {
-      this.noExtensionBanner = true;
     }
     /**
      * Handler for the `tryit-requested` event. Sets current screen to
@@ -699,6 +699,19 @@ the License.
      */
     resetLayout() {
       this.shadowRoot.querySelector('app-drawer-layout').notifyResize();
+    }
+
+    _notifyApicExtension() {
+      this.dispatchEvent(new CustomEvent('api-console-ready', {
+        bubbles: true,
+        composed: true
+      }));
+    }
+
+    _noExtBannerChanged(value) {
+      if (value && this.extensionBannerActive) {
+        this.extensionBannerActive = false;
+      }
     }
   }
   window.customElements.define(ApiConsole.is, ApiConsole);
