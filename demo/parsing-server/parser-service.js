@@ -1,5 +1,6 @@
 const tmp = require('tmp');
 const fs = require('fs-extra');
+const path = require('path');
 const Duplex = require('stream').Duplex;
 const unzip = require('unzip');
 const amf = require('amf-client-js');
@@ -67,6 +68,7 @@ class ParserService {
       this.cleanTempFiles();
     })
     .catch((cause) => {
+      console.error(cause);
       const body = JSON.stringify({
         error: true,
         message: cause.message
@@ -146,7 +148,10 @@ class ParserService {
           path: this.tmpobj.name
         });
         extractor.on('close', () => {
-          resolve(this.tmpobj.name + '/api.raml');
+          this._removeZipMainFolder(this.tmpobj.name)
+          .then(() => this._findApiFile(this.tmpobj.name))
+          .then((file) => resolve(path.join(this.tmpobj.name, file)))
+          .catch(() => resolve(path.join(this.tmpobj.name, 'api.raml')));
         });
         extractor.on('error', (err) => {
           reject(err);
@@ -172,6 +177,60 @@ class ParserService {
       fs.emptyDir(this.tmpobj.name)
       .then(() => this.tmpobj.removeCallback());
     }
+  }
+
+  /**
+   * The zip may have source files enclosed in a folder.
+   * This will look for a folder in the root path and will copy sources from it.
+   *
+   * @param {String} destination A place where the zip sources has been
+   * extracted.
+   * @return {Promise}
+   */
+  _removeZipMainFolder(destination) {
+    return fs.readdir(destination)
+    .then((files) => {
+      // Clears macos files
+      files = files.filter((item) => item !== '__MACOSX');
+      if (files.length > 1) {
+        return Promise.resolve();
+      }
+      const dirPath = path.join(destination, files[0]);
+      return fs.stat(dirPath)
+      .then((stats) => {
+        if (stats.isDirectory()) {
+          return fs.copy(dirPath, destination);
+        }
+      });
+    });
+  }
+  /**
+   * Finds main API name.
+   * If the `api.raml` is present then it always points to the file.
+   * If not then, if any RAML file exists it points to first raml file.
+   * If not then,it returns `api.raml`
+   * @param {String} destination Path where to look for the files.
+   * @return {Promise<String>}
+   */
+  _findApiFile(destination) {
+    return fs.readdir(destination)
+    .then((items) => {
+      const def = 'api.raml';
+      const _files = [];
+      for (let i = 0; i < items.length; i++) {
+        let lower = items[i].toLowerCase();
+        if (lower === def) {
+          return def;
+        }
+        if (path.extname(lower) === '.raml') {
+          _files.push(items[i]);
+        }
+      }
+      if (_files.length) {
+        return _files[0];
+      }
+      return def;
+    });
   }
 }
 
