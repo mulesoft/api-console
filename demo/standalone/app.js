@@ -131,7 +131,7 @@
 
     apic.addEventListener('api-navigation-selection-changed', apiconsole.app._selectionChanged);
     apic.addEventListener('page-changed', apiconsole.app._pageChanged);
-    // location.addEventListener('route-changed', apiconsole.app._routeChanged);
+    location.addEventListener('route-changed', apiconsole.app._routeChanged);
   };
   // Event handler for the selection change.
   apiconsole.app._selectionChanged = function(e) {
