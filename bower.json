@@ -32,11 +32,12 @@
     "api-documentation": "advanced-rest-client/api-documentation#^2.0.0",
     "api-request-panel": "advanced-rest-client/api-request-panel#^2.0.0",
     "oauth-authorization": "advanced-rest-client/oauth-authorization#^2.0.1",
+    "api-console-ext-comm": "advanced-rest-client/api-console-ext-comm#^2.0.0",
+    "amf-helper-mixin": "advanced-rest-client/amf-helper-mixin#^2.0.1",
     "cryptojs-lib": "advanced-rest-client/cryptojs-lib#^0.1.1",
     "web-animations-js": "web-animations/web-animations-js#^2.3",
     "arc-polyfills": "advanced-rest-client/arc-polyfills#^0.1.11",
-    "api-console-ext-comm": "advanced-rest-client/api-console-ext-comm#^2.0.0",
-    "amf-helper-mixin": "advanced-rest-client/amf-helper-mixin#^2.0.1"
+    "url": "advanced-rest-client/URL#^0.6.1"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
