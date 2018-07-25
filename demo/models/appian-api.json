@@ -31,6 +31,51 @@
               {
                 "@value": "https://appian4mulesoft.appiancloud.com/suite/webapi/appian_api/{version}"
               }
+            ],
+            "http://a.ml/vocabularies/http#variable": [
+              {
+                "@id": "file://demo/models/appian-api/appian-api.raml#/web-api/https%3A%2F%2Fappian4mulesoft.appiancloud.com%2Fsuite%2Fwebapi%2Fappian_api%2F%7Bversion%7D/parameter/version",
+                "@type": [
+                  "http://a.ml/vocabularies/http#Parameter",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://schema.org/name": [
+                  {
+                    "@value": "version"
+                  }
+                ],
+                "http://www.w3.org/ns/hydra/core#required": [
+                  {
+                    "@value": true
+                  }
+                ],
+                "http://a.ml/vocabularies/http#binding": [
+                  {
+                    "@value": "path"
+                  }
+                ],
+                "http://a.ml/vocabularies/http#schema": [
+                  {
+                    "@id": "file://demo/models/appian-api/appian-api.raml#/web-api/https%3A%2F%2Fappian4mulesoft.appiancloud.com%2Fsuite%2Fwebapi%2Fappian_api%2F%7Bversion%7D/parameter/version/scalar/version",
+                    "@type": [
+                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://www.w3.org/ns/shacl#datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "version"
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ],
