@@ -28,6 +28,7 @@ to all elements.
     --secondary-color: var(--arc-color-secondary, #506773);
     --primary-background-color: var(--arc-color-primary-background, #fff);
     --accent-color: var(--arc-accent-color, #cc143c);
+    --error-color: var(--arc-error-color, #dd2c00);
 
     /* Font definitions user in ARC and API components */
     --arc-font-common-base: {
@@ -72,7 +73,7 @@ to all elements.
       @apply --arc-font-common-base;
       @apply --arc-font-common-nowrap;
       font-weight: 500;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 28px;
       word-break: break-all;
     };
@@ -149,7 +150,7 @@ to all elements.
 
     /* Code snippets containers */
     --http-code-snippet-container-highlighted: {
-      background-color: #f5f5f5;
+      background-color: var(--code-background-color);
     };
     --http-code-snippet-line: {
       word-break: break-all;
@@ -190,6 +191,16 @@ to all elements.
       color: #fff;
     };
 
+    --api-request-editor-abort-button-hover: {
+      background-color: var(--primary-color);
+      color: #fff;
+    };
+
+    --api-request-editor-send-invalid-button: {
+      background-color: var(--error-color);
+      color: #fff;
+    };
+
     --request-editor-section-padding: 8px 12px;
 
     /* Authorization panel */
@@ -201,6 +212,14 @@ to all elements.
     /* URL parameters editor */
     --api-url-params-editor: {
       padding: var(--request-editor-section-padding);
+    };
+
+    --api-url-params-editor-editor-subheader: {
+      @apply --arc-font-body2;
+      font-size: 14px;
+      padding: 0.73em 0;
+      margin: 0;
+      margin-right: 12px;
     };
 
     /* Headers editor */
