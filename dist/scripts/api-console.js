@@ -2920,7 +2920,7 @@
               authStrategy.authenticate().then(function(token) {
                 token.sign(request);
                 $scope.requestOptions = request.toOptions();
-                jQuery.ajax(Object.assign(request.toOptions(),{timeout:10000})).then(
+                jQuery.ajax(jQuery.extend(request.toOptions(),{timeout:10000})).then(
                   function(data, textStatus, jqXhr) { handleResponse(jqXhr); },
                   function(jqXhr) { handleResponse(jqXhr); }
                 );
@@ -3388,7 +3388,7 @@
             if (expandedType.hasOwnProperty(key)) {
               if ((key === 'example' || key === 'examples') && valueHasExamples) { continue; }
               if (key === 'properties') { // can have extra properties
-                value[key] = Object.assign(value.properties || {}, expandedType[key]);
+                value[key] = jQuery.extend(value.properties || {}, expandedType[key]);
               } else {
                 value[key] = expandedType[key];
               }
@@ -5315,7 +5315,7 @@ RAML.Inspector = (function() {
               rootProperties = rootType && rootType.properties ? toObjectArray(rootType.properties) : undefined;
             }
 
-            var properties = Object.assign({}, inlineProperties, rootProperties);
+            var properties = jQuery.extend({}, inlineProperties, rootProperties);
             definitions[contentType] = new RAML.Services.TryIt.NamedParameters(properties);
           }
           break;
