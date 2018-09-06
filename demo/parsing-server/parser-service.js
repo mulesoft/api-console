@@ -4,11 +4,25 @@ const path = require('path');
 const Duplex = require('stream').Duplex;
 const unzip = require('unzip');
 const amf = require('amf-client-js');
+const jsonld = require('jsonld');
 
 const generator = amf.Core.generator('AMF Graph', 'application/ld+json');
 const ramlParser = amf.Core.parser('RAML 1.0', 'application/raml');
 const openAPIParser = amf.Core.parser('OAS 2.0', 'application/json');
 const apiModelParser = amf.Core.parser('AMF Graph', 'application/ld+json');
+
+const ldContext = {
+  'raml-http': 'http://a.ml/vocabularies/http#',
+  'shacl': 'http://www.w3.org/ns/shacl#',
+  'raml-shapes': 'http://a.ml/vocabularies/shapes#',
+  'security': 'http://a.ml/vocabularies/security#',
+  'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+  'data': 'http://a.ml/vocabularies/data#',
+  'doc': 'http://a.ml/vocabularies/document#',
+  'schema-org': 'http://schema.org/',
+  'xsd': 'http://www.w3.org/2001/XMLSchema#',
+  'hydra': 'http://www.w3.org/ns/hydra/core#'
+};
 /**
  * AMF demo parser for API console.
  */
@@ -23,13 +37,14 @@ class ParserService {
     const dataType = req.body.dataType;
     const dataFormat = req.body.dataFormat;
     const dataValue = req.body.dataValue;
+    const compactModel = req.body.compactModel;
     let p;
     switch (dataFormat) {
       case 'url':
-        p = this.processFile(dataValue, dataType);
+        p = this.processFile(dataValue, dataType, compactModel);
         break;
       case 'text':
-        p = this.processData(dataValue, dataType);
+        p = this.processData(dataValue, dataType, compactModel);
         break;
       default:
         p = Promise.reject(new Error('Unknown data format'));
@@ -57,10 +72,11 @@ class ParserService {
   parseFiles(req, res) {
     const file = req.files[0];
     const dataType = req.body.dataType;
+    const compactModel = req.body.compactModel;
     this.getFileLocation(file)
     .then((file) => {
       file = `file://${file}`;
-      return this.processFile(file, dataType);
+      return this.processFile(file, dataType, compactModel);
     })
     .then((data) => {
       res.set('Content-Type', 'application/json');
@@ -83,9 +99,10 @@ class ParserService {
    *
    * @param {String} file File location
    * @param {Strnig} from `raml`, `oas` or `amf`
+   * @param {?Boolean} compactModel True to generate compact data model
    * @return {Promise}
    */
-  processFile(file, from) {
+  processFile(file, from, compactModel) {
     let parser;
     switch (from) {
       case 'raml': parser = ramlParser; break;
@@ -93,16 +110,17 @@ class ParserService {
       case 'amf': parser = apiModelParser; break;
     }
     return parser.parseFileAsync(file)
-    .then((doc) => this.generateModel(doc, from));
+    .then((doc) => this.generateModel(doc, from, compactModel));
   }
   /**
    * Processes text content.
    *
    * @param {String} data String to parse
    * @param {Strnig} from `raml`, `oas` or `amf`
+   * @param {?Boolean} compactModel True to generate compact data model
    * @return {Promise}
    */
-  processData(data, from) {
+  processData(data, from, compactModel) {
     let parser;
     switch (from) {
       case 'raml': parser = ramlParser; break;
@@ -110,16 +128,17 @@ class ParserService {
       case 'amf': parser = apiModelParser; break;
     }
     return parser.parseStringAsync(data)
-    .then((doc) => this.generateModel(doc, from));
+    .then((doc) => this.generateModel(doc, from, compactModel));
   }
   /**
    * Generates a model.
    *
    * @param {Object} doc Parsed document
    * @param {Strnig} from `raml`, `oas` or `amf`
+   * @param {?Boolean} compactModel True to generate compact data model
    * @return {Promise}
    */
-  generateModel(doc, from) {
+  generateModel(doc, from, compactModel) {
     let resolver;
     switch (from) {
       case 'raml': resolver = amf.Core.resolver('RAML 1.0'); break;
@@ -128,7 +147,24 @@ class ParserService {
     if (resolver) {
       doc = resolver.resolve(doc, 'editing');
     }
-    return generator.generateString(doc);
+    return generator.generateString(doc)
+    .then((model) => {
+      if (!compactModel) {
+        return model;
+      }
+      return this._compact(model);
+    });
+  }
+
+  _compact(model) {
+    return new Promise((resolve) => {
+      jsonld.compact(JSON.parse(model), ldContext, (err, compacted) => {
+        if (err) {
+          throw err;
+        }
+        resolve(JSON.stringify(compacted));
+      });
+    });
   }
 
   /**

@@ -22,6 +22,7 @@ the License.
 <link rel="import" href="../../../paper-progress/paper-progress.html">
 <link rel="import" href="../../../paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../paper-item/paper-item.html">
+<link rel="import" href="../../../paper-toggle-button/paper-toggle-button.html">
 <dom-module id="parser-element">
   <template>
     <style>
@@ -71,6 +72,9 @@ the License.
     <p class="command-info">
       Run <code>npm start</code> before you begin. <paper-input class="port" label="Local server port number" value="{{port}}" type="number"></paper-input>
     </p>
+    <div class="parsing-options">
+      <paper-toggle-button checked="{{compactModel}}">Generate compact json-ld model</paper-toggle-button>
+    </div>
     <paper-tabs selected="{{selected}}">
       <paper-tab>Predefined models</paper-tab>
       <paper-tab>RAML 1.0</paper-tab>
@@ -81,10 +85,15 @@ the License.
       <section>
         <paper-listbox on-selected-changed="_predefinedApiChanged">
           <paper-item data-src="demo-api.json">Demo api</paper-item>
+          <paper-item data-src="demo-api-compact.json">Demo api - compact model</paper-item>
           <paper-item data-src="array-body.json">Body with array</paper-item>
+          <paper-item data-src="array-body-compact.json">Body with array - compact model</paper-item>
           <paper-item data-src="nexmo-sms-api.json">Nexmo SMS API</paper-item>
+          <paper-item data-src="nexmo-sms-api-compact.json">Nexmo SMS API - compact model</paper-item>
           <paper-item data-src="appian-api.json">Appian API</paper-item>
+          <paper-item data-src="appian-api-compact.json">Appian API - compact model</paper-item>
           <paper-item data-src="exchange-experience-api.json">Exchange experience API</paper-item>
+          <paper-item data-src="exchange-experience-api-compact.json">Exchange experience API - compact model</paper-item>
         </paper-listbox>
       </section>
       <section>
@@ -168,7 +177,8 @@ the License.
           type: Object,
           notify: true
         },
-        loading: Boolean
+        loading: Boolean,
+        compactModel: {type: Boolean, value: true}
       };
     }
 
@@ -179,6 +189,7 @@ the License.
     }
 
     _processText(opts) {
+      opts.compactModel = this.compactModel;
       const body = JSON.stringify(opts);
       this._process(body);
     }
@@ -188,6 +199,7 @@ the License.
       data.set('dataType', opts.dataType);
       data.set('dataFormat', opts.dataFormat);
       data.set('dataValue', opts.dataValue);
+      data.set('compactModel', this.compactModel);
       this._process(data);
     }
 

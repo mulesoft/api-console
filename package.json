@@ -4,8 +4,9 @@
   "license": "CPAL-1.0",
   "description": "The API console used in RAML platform.",
   "devDependencies": {
-    "@polymer/gen-typescript-declarations": "^1.1.1",
-    "amf-client-js": "1.8.0-SNAPSHOT.4",
+    "@api-components/api-model-generator": "^0.1.1",
+    "@polymer/gen-typescript-declarations": "^1.5.1",
+    "amf-client-js": "1.9.0-SNAPSHOT.1",
     "body-parser": "^1.18.2",
     "bower": "^1.8.0",
     "express": "^4.16.3",
@@ -35,5 +36,8 @@
     "url": "https://github.com/mulesoft/api-console/issues",
     "email": "arc@mulesoft.com"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "optionalDependencies": {
+    "jsonld": "^1.0.3"
+  }
 }

@@ -1,0 +1,3001 @@
+{
+  "@context": {
+    "raml-http": "http://a.ml/vocabularies/http#",
+    "shacl": "http://www.w3.org/ns/shacl#",
+    "raml-shapes": "http://a.ml/vocabularies/shapes#",
+    "security": "http://a.ml/vocabularies/security#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "data": "http://a.ml/vocabularies/data#",
+    "doc": "http://a.ml/vocabularies/document#",
+    "schema-org": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "hydra": "http://www.w3.org/ns/hydra/core#"
+  },
+  "@id": "amf://id",
+  "@type": [
+    "doc:Document",
+    "doc:Fragment",
+    "doc:Module",
+    "doc:Unit"
+  ],
+  "doc:declares": [
+    {
+      "@id": "amf://id#1",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "schema-org:name": "InvalidParameters",
+      "shacl:closed": false,
+      "shacl:name": "InvalidParameters",
+      "shacl:property": {
+        "@id": "amf://id#2",
+        "@type": [
+          "shacl:PropertyShape",
+          "shacl:Shape",
+          "raml-shapes:Shape"
+        ],
+        "raml-shapes:range": {
+          "@id": "amf://id#3",
+          "@type": [
+            "shacl:NodeShape",
+            "shacl:Shape",
+            "raml-shapes:Shape",
+            "doc:DomainElement"
+          ],
+          "schema-org:description": "error string",
+          "schema-org:name": "type",
+          "shacl:closed": false,
+          "shacl:name": "type",
+          "shacl:property": []
+        },
+        "shacl:minCount": 0,
+        "shacl:name": "type",
+        "shacl:path": {
+          "@id": "data:type"
+        }
+      }
+    },
+    {
+      "@id": "amf://id#5",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "schema-org:name": "Number",
+      "shacl:closed": false,
+      "shacl:name": "Number",
+      "shacl:property": [
+        {
+          "@id": "amf://id#6",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#7",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Number cost.",
+            "schema-org:name": "cost",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "cost"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "cost",
+          "shacl:path": {
+            "@id": "data:cost"
+          }
+        },
+        {
+          "@id": "amf://id#8",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#9",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "ISO 3166-1 alpha-2 format.",
+            "schema-org:name": "country",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "country"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "country",
+          "shacl:path": {
+            "@id": "data:country"
+          }
+        },
+        {
+          "@id": "amf://id#10",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#11",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Inbound virtual number.",
+            "schema-org:name": "msisdn",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "msisdn"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "msisdn",
+          "shacl:path": {
+            "@id": "data:msisdn"
+          }
+        },
+        {
+          "@id": "amf://id#12",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#13",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Type of number.",
+            "schema-org:name": "type",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "type"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "type",
+          "shacl:path": {
+            "@id": "data:type"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "amf://id#15",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "schema-org:name": "smsResponse_Error",
+      "shacl:closed": false,
+      "shacl:name": "SmsresponseError",
+      "shacl:property": [
+        {
+          "@id": "amf://id#16",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#17",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "raml-shapes:format": "double",
+            "schema-org:description": "Number of parts the message was split into.",
+            "schema-org:name": "message-count",
+            "shacl:datatype": {
+              "@id": "xsd:double"
+            },
+            "shacl:name": "message-count"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "message-count",
+          "shacl:path": {
+            "@id": "data:message-count"
+          }
+        },
+        {
+          "@id": "amf://id#18",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#19",
+            "@type": [
+              "raml-shapes:ArrayShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "raml-shapes:items": {
+              "@id": "amf://id#20",
+              "@type": [
+                "shacl:NodeShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:name": "Message",
+              "shacl:closed": false,
+              "shacl:name": "Message",
+              "shacl:property": [
+                {
+                  "@id": "amf://id#21",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#22",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "raml-shapes:format": "double",
+                    "schema-org:description": "Shows how the SMS send is processing.",
+                    "schema-org:name": "status",
+                    "shacl:datatype": {
+                      "@id": "xsd:double"
+                    },
+                    "shacl:name": "status"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "status",
+                  "shacl:path": {
+                    "@id": "data:status"
+                  }
+                },
+                {
+                  "@id": "amf://id#23",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#24",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "Id of the SMS that was submitted (8 to 16 characters).",
+                    "schema-org:name": "message-id",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "message-id"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "message-id",
+                  "shacl:path": {
+                    "@id": "data:message-id"
+                  }
+                },
+                {
+                  "@id": "amf://id#25",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#26",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "Number your request was sent to.",
+                    "schema-org:name": "to",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "to"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "to",
+                  "shacl:path": {
+                    "@id": "data:to"
+                  }
+                },
+                {
+                  "@id": "amf://id#27",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#28",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "The client-ref you set in the request.",
+                    "schema-org:name": "client-ref",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "client-ref"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "client-ref",
+                  "shacl:path": {
+                    "@id": "data:client-ref"
+                  }
+                },
+                {
+                  "@id": "amf://id#29",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#30",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "Balance in your account. The value is in EUR.",
+                    "schema-org:name": "remaining-balance",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "remaining-balance"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "remaining-balance",
+                  "shacl:path": {
+                    "@id": "data:remaining-balance"
+                  }
+                },
+                {
+                  "@id": "amf://id#31",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#32",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "Amount charged for your request. The value is in EUR.",
+                    "schema-org:name": "message-price",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "message-price"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "message-price",
+                  "shacl:path": {
+                    "@id": "data:message-price"
+                  }
+                },
+                {
+                  "@id": "amf://id#33",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#34",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "Mobile Country Code Mobile Network Code (MCCMNC) for the carrier that to is registered with.",
+                    "schema-org:name": "network",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "network"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "network",
+                  "shacl:path": {
+                    "@id": "data:network"
+                  }
+                },
+                {
+                  "@id": "amf://id#35",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#36",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "If an error occurred, this explains what happened.",
+                    "schema-org:name": "error-text",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "error-text"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "error-text",
+                  "shacl:path": {
+                    "@id": "data:error-text"
+                  }
+                }
+              ]
+            },
+            "schema-org:description": "Contains each message part.",
+            "schema-org:name": "messages",
+            "shacl:name": "messages"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "messages",
+          "shacl:path": {
+            "@id": "data:messages"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "amf://id#39",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "schema-org:name": "common",
+      "shacl:closed": false,
+      "shacl:name": "Common",
+      "shacl:property": [
+        {
+          "@id": "amf://id#40",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#41",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Human readable message.",
+            "schema-org:name": "type",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "type"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "type",
+          "shacl:path": {
+            "@id": "data:type"
+          }
+        },
+        {
+          "@id": "amf://id#42",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#43",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Title of error returned if failed.",
+            "schema-org:name": "error_title",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "error_title"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "error_title",
+          "shacl:path": {
+            "@id": "data:error_title"
+          }
+        },
+        {
+          "@id": "amf://id#44",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#45",
+            "@type": [
+              "shacl:NodeShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "message for invalid parameters",
+            "schema-org:name": "invalid_parameters",
+            "shacl:closed": false,
+            "shacl:name": "invalid_parameters",
+            "shacl:property": {
+              "@id": "amf://id#2",
+              "@type": [
+                "shacl:PropertyShape",
+                "shacl:Shape",
+                "raml-shapes:Shape"
+              ],
+              "raml-shapes:range": {
+                "@id": "amf://id#3",
+                "@type": [
+                  "shacl:NodeShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "schema-org:description": "error string",
+                "schema-org:name": "type",
+                "shacl:closed": false,
+                "shacl:name": "type",
+                "shacl:property": []
+              },
+              "shacl:minCount": 0,
+              "shacl:name": "type",
+              "shacl:path": {
+                "@id": "data:type"
+              }
+            }
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "invalid_parameters",
+          "shacl:path": {
+            "@id": "data:invalid_parameters"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "amf://id#20",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "schema-org:name": "Message",
+      "shacl:closed": false,
+      "shacl:name": "Message",
+      "shacl:property": [
+        {
+          "@id": "amf://id#21",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#22",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "raml-shapes:format": "double",
+            "schema-org:description": "Shows how the SMS send is processing.",
+            "schema-org:name": "status",
+            "shacl:datatype": {
+              "@id": "xsd:double"
+            },
+            "shacl:name": "status"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "status",
+          "shacl:path": {
+            "@id": "data:status"
+          }
+        },
+        {
+          "@id": "amf://id#23",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#24",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Id of the SMS that was submitted (8 to 16 characters).",
+            "schema-org:name": "message-id",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "message-id"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "message-id",
+          "shacl:path": {
+            "@id": "data:message-id"
+          }
+        },
+        {
+          "@id": "amf://id#25",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#26",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Number your request was sent to.",
+            "schema-org:name": "to",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "to"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "to",
+          "shacl:path": {
+            "@id": "data:to"
+          }
+        },
+        {
+          "@id": "amf://id#27",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#28",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The client-ref you set in the request.",
+            "schema-org:name": "client-ref",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "client-ref"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "client-ref",
+          "shacl:path": {
+            "@id": "data:client-ref"
+          }
+        },
+        {
+          "@id": "amf://id#29",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#30",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Balance in your account. The value is in EUR.",
+            "schema-org:name": "remaining-balance",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "remaining-balance"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "remaining-balance",
+          "shacl:path": {
+            "@id": "data:remaining-balance"
+          }
+        },
+        {
+          "@id": "amf://id#31",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#32",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Amount charged for your request. The value is in EUR.",
+            "schema-org:name": "message-price",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "message-price"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "message-price",
+          "shacl:path": {
+            "@id": "data:message-price"
+          }
+        },
+        {
+          "@id": "amf://id#33",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#34",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "Mobile Country Code Mobile Network Code (MCCMNC) for the carrier that to is registered with.",
+            "schema-org:name": "network",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "network"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "network",
+          "shacl:path": {
+            "@id": "data:network"
+          }
+        },
+        {
+          "@id": "amf://id#35",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#36",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "If an error occurred, this explains what happened.",
+            "schema-org:name": "error-text",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "error-text"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "error-text",
+          "shacl:path": {
+            "@id": "data:error-text"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "amf://id#47",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "schema-org:name": "ListNumbersResponse_Error",
+      "shacl:closed": false,
+      "shacl:name": "ListnumbersresponseError",
+      "shacl:property": [
+        {
+          "@id": "amf://id#48",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#49",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "raml-shapes:format": "int32",
+            "schema-org:description": "Result count.",
+            "schema-org:name": "count",
+            "shacl:datatype": {
+              "@id": "xsd:integer"
+            },
+            "shacl:name": "count"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "count",
+          "shacl:path": {
+            "@id": "data:count"
+          }
+        },
+        {
+          "@id": "amf://id#50",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#51",
+            "@type": [
+              "raml-shapes:ArrayShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "raml-shapes:items": {
+              "@id": "amf://id#5",
+              "@type": [
+                "shacl:NodeShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:name": "Number",
+              "shacl:closed": false,
+              "shacl:name": "Number",
+              "shacl:property": [
+                {
+                  "@id": "amf://id#6",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#7",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "Number cost.",
+                    "schema-org:name": "cost",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "cost"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "cost",
+                  "shacl:path": {
+                    "@id": "data:cost"
+                  }
+                },
+                {
+                  "@id": "amf://id#8",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#9",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "ISO 3166-1 alpha-2 format.",
+                    "schema-org:name": "country",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "country"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "country",
+                  "shacl:path": {
+                    "@id": "data:country"
+                  }
+                },
+                {
+                  "@id": "amf://id#10",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#11",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "Inbound virtual number.",
+                    "schema-org:name": "msisdn",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "msisdn"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "msisdn",
+                  "shacl:path": {
+                    "@id": "data:msisdn"
+                  }
+                },
+                {
+                  "@id": "amf://id#12",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#13",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "Type of number.",
+                    "schema-org:name": "type",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "type"
+                  },
+                  "shacl:minCount": 0,
+                  "shacl:name": "type",
+                  "shacl:path": {
+                    "@id": "data:type"
+                  }
+                }
+              ]
+            },
+            "schema-org:description": "List of all numbers.",
+            "schema-org:name": "numbers",
+            "shacl:name": "numbers"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "numbers",
+          "shacl:path": {
+            "@id": "data:numbers"
+          }
+        }
+      ]
+    }
+  ],
+  "doc:encodes": {
+    "@id": "amf://id#57",
+    "@type": [
+      "schema-org:WebAPI",
+      "doc:RootDomainElement",
+      "doc:DomainElement"
+    ],
+    "raml-http:endpoint": [
+      {
+        "@id": "amf://id#58",
+        "@type": [
+          "raml-http:EndPoint",
+          "doc:DomainElement"
+        ],
+        "raml-http:path": "/sms/json",
+        "hydra:supportedOperation": {
+          "@id": "amf://id#59",
+          "@type": [
+            "hydra:Operation",
+            "doc:DomainElement"
+          ],
+          "schema-org:description": "Send an SMS",
+          "schema-org:name": "Send an SMS",
+          "hydra:expects": {
+            "@id": "amf://id#60",
+            "@type": [
+              "raml-http:Request",
+              "doc:DomainElement"
+            ],
+            "raml-http:parameter": [
+              {
+                "@id": "amf://id#61",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_key",
+                "raml-http:schema": {
+                  "@id": "amf://id#62",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Your Nexmo account API key",
+                  "schema-org:name": "API Key",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Your Nexmo account API key",
+                "schema-org:name": "api_key",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#63",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_secret",
+                "raml-http:schema": {
+                  "@id": "amf://id#64",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The API Key's secret",
+                  "schema-org:name": "API Secret",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The API Key's secret",
+                "schema-org:name": "api_secret",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#65",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "from",
+                "raml-http:schema": {
+                  "@id": "amf://id#66",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "An alphanumeric string.",
+                  "schema-org:name": "from",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "An alphanumeric string.",
+                "schema-org:name": "from",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#67",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "to",
+                "raml-http:schema": {
+                  "@id": "amf://id#68",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "International format E.164.",
+                  "schema-org:name": "to",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "International format E.164.",
+                "schema-org:name": "to",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#69",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "text",
+                "raml-http:schema": {
+                  "@id": "amf://id#70",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "SMS body.",
+                  "schema-org:name": "text",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "SMS body.",
+                "schema-org:name": "text",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#71",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "type",
+                "raml-http:schema": {
+                  "@id": "amf://id#72",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Defaults to text.",
+                  "schema-org:name": "type",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:in": {
+                    "@id": "amf://id#72/list",
+                    "@type": "rdfs:Seq",
+                    "rdfs:_1": {
+                      "@id": "amf://id#73",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:string",
+                        "@value": "text"
+                      }
+                    },
+                    "rdfs:_2": {
+                      "@id": "amf://id#74",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:string",
+                        "@value": "binary"
+                      }
+                    },
+                    "rdfs:_3": {
+                      "@id": "amf://id#75",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:string",
+                        "@value": "wappush"
+                      }
+                    },
+                    "rdfs:_4": {
+                      "@id": "amf://id#76",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:string",
+                        "@value": "unicode"
+                      }
+                    },
+                    "rdfs:_5": {
+                      "@id": "amf://id#77",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:string",
+                        "@value": "vcal"
+                      }
+                    },
+                    "rdfs:_6": {
+                      "@id": "amf://id#78",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:string",
+                        "@value": "vcard"
+                      }
+                    }
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Defaults to text.",
+                "schema-org:name": "type",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#79",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "status-report-req",
+                "raml-http:schema": {
+                  "@id": "amf://id#80",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "double",
+                  "schema-org:description": "Set to 1 to enable.",
+                  "schema-org:name": "status-report-req",
+                  "shacl:datatype": {
+                    "@id": "xsd:double"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Set to 1 to enable.",
+                "schema-org:name": "status-report-req",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#81",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "client-ref",
+                "raml-http:schema": {
+                  "@id": "amf://id#82",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "For internal reporting.",
+                  "schema-org:name": "client-ref",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "For internal reporting.",
+                "schema-org:name": "client-ref",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#83",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "vcard",
+                "raml-http:schema": {
+                  "@id": "amf://id#84",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "vCard format.",
+                  "schema-org:name": "vcard",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "vCard format.",
+                "schema-org:name": "vcard",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#85",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "vcal",
+                "raml-http:schema": {
+                  "@id": "amf://id#86",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "vCal format.",
+                  "schema-org:name": "vcal",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "vCal format.",
+                "schema-org:name": "vcal",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#87",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "ttl",
+                "raml-http:schema": {
+                  "@id": "amf://id#88",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "double",
+                  "schema-org:description": "In milliseconds.",
+                  "schema-org:name": "ttl",
+                  "shacl:datatype": {
+                    "@id": "xsd:double"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "In milliseconds.",
+                "schema-org:name": "ttl",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#89",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "callback",
+                "raml-http:schema": {
+                  "@id": "amf://id#90",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Delivery receipt endpoint.",
+                  "schema-org:name": "callback",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Delivery receipt endpoint.",
+                "schema-org:name": "callback",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#91",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "message-class",
+                "raml-http:schema": {
+                  "@id": "amf://id#92",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "int32",
+                  "schema-org:description": "Pick a class.",
+                  "schema-org:name": "message-class",
+                  "shacl:datatype": {
+                    "@id": "xsd:integer"
+                  },
+                  "shacl:in": {
+                    "@id": "amf://id#92/list",
+                    "@type": "rdfs:Seq",
+                    "rdfs:_1": {
+                      "@id": "amf://id#93",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "0"
+                      }
+                    },
+                    "rdfs:_2": {
+                      "@id": "amf://id#94",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "1"
+                      }
+                    },
+                    "rdfs:_3": {
+                      "@id": "amf://id#95",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "2"
+                      }
+                    },
+                    "rdfs:_4": {
+                      "@id": "amf://id#96",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "3"
+                      }
+                    }
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Pick a class.",
+                "schema-org:name": "message-class",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#97",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "udh",
+                "raml-http:schema": {
+                  "@id": "amf://id#98",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Hex encoded UDH.",
+                  "schema-org:name": "udh",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Hex encoded UDH.",
+                "schema-org:name": "udh",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#99",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "protocol-id",
+                "raml-http:schema": {
+                  "@id": "amf://id#100",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Protocol id.",
+                  "schema-org:name": "protocol-id",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Protocol id.",
+                "schema-org:name": "protocol-id",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#101",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "body",
+                "raml-http:schema": {
+                  "@id": "amf://id#102",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Hex encoded binary data.",
+                  "schema-org:name": "body",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Hex encoded binary data.",
+                "schema-org:name": "body",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#103",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "title",
+                "raml-http:schema": {
+                  "@id": "amf://id#104",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:name": "title",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:name": "title",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#105",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "url",
+                "raml-http:schema": {
+                  "@id": "amf://id#106",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Website Url.",
+                  "schema-org:name": "url",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Website Url.",
+                "schema-org:name": "url",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#107",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "validity",
+                "raml-http:schema": {
+                  "@id": "amf://id#108",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "In milliseconds.",
+                  "schema-org:name": "validity",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "In milliseconds.",
+                "schema-org:name": "validity",
+                "hydra:required": false
+              }
+            ]
+          },
+          "hydra:method": "post",
+          "hydra:returns": {
+            "@id": "amf://id#109",
+            "@type": [
+              "raml-http:Response",
+              "doc:DomainElement"
+            ],
+            "raml-http:payload": {
+              "@id": "amf://id#110",
+              "@type": [
+                "raml-http:Payload",
+                "doc:DomainElement"
+              ],
+              "raml-http:mediaType": "text/plain",
+              "raml-http:schema": {
+                "@id": "amf://id#111",
+                "@type": [
+                  "shacl:NodeShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "schema-org:description": "The status and price of your request to Nexmo.",
+                "schema-org:name": "smsResponse_Error",
+                "shacl:closed": false,
+                "shacl:name": "SmsresponseError",
+                "shacl:property": [
+                  {
+                    "@id": "amf://id#18",
+                    "@type": [
+                      "shacl:PropertyShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape"
+                    ],
+                    "raml-shapes:range": {
+                      "@id": "amf://id#19",
+                      "@type": [
+                        "raml-shapes:ArrayShape",
+                        "shacl:Shape",
+                        "raml-shapes:Shape",
+                        "doc:DomainElement"
+                      ],
+                      "raml-shapes:items": {
+                        "@id": "amf://id#20/linked_2",
+                        "@type": [
+                          "shacl:NodeShape",
+                          "shacl:Shape",
+                          "raml-shapes:Shape",
+                          "doc:DomainElement"
+                        ],
+                        "doc:link-label": "Message",
+                        "doc:link-target": {
+                          "@id": "amf://id#20"
+                        }
+                      },
+                      "schema-org:description": "Contains each message part.",
+                      "schema-org:name": "messages",
+                      "shacl:name": "messages"
+                    },
+                    "shacl:minCount": 0,
+                    "shacl:name": "messages",
+                    "shacl:path": {
+                      "@id": "data:messages"
+                    }
+                  },
+                  {
+                    "@id": "amf://id#16",
+                    "@type": [
+                      "shacl:PropertyShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape"
+                    ],
+                    "raml-shapes:range": {
+                      "@id": "amf://id#17",
+                      "@type": [
+                        "raml-shapes:ScalarShape",
+                        "shacl:Shape",
+                        "raml-shapes:Shape",
+                        "doc:DomainElement"
+                      ],
+                      "raml-shapes:format": "double",
+                      "schema-org:description": "Number of parts the message was split into.",
+                      "schema-org:name": "message-count",
+                      "shacl:datatype": {
+                        "@id": "xsd:double"
+                      },
+                      "shacl:name": "message-count"
+                    },
+                    "shacl:minCount": 0,
+                    "shacl:name": "message-count",
+                    "shacl:path": {
+                      "@id": "data:message-count"
+                    }
+                  }
+                ]
+              }
+            },
+            "schema-org:description": "The status and price of your request to Nexmo.",
+            "schema-org:name": "200",
+            "hydra:statusCode": "200"
+          }
+        }
+      },
+      {
+        "@id": "amf://id#113",
+        "@type": [
+          "raml-http:EndPoint",
+          "doc:DomainElement"
+        ],
+        "raml-http:path": "/account/numbers",
+        "hydra:supportedOperation": {
+          "@id": "amf://id#114",
+          "@type": [
+            "hydra:Operation",
+            "doc:DomainElement"
+          ],
+          "schema-org:description": "Retrieve all the inbound numbers associated with your Nexmo account.",
+          "schema-org:name": "List rented numbers",
+          "hydra:expects": {
+            "@id": "amf://id#115",
+            "@type": [
+              "raml-http:Request",
+              "doc:DomainElement"
+            ],
+            "raml-http:parameter": [
+              {
+                "@id": "amf://id#116",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_key",
+                "raml-http:schema": {
+                  "@id": "amf://id#117",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Your Nexmo account API key",
+                  "schema-org:name": "API Key",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Your Nexmo account API key",
+                "schema-org:name": "api_key",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#118",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_secret",
+                "raml-http:schema": {
+                  "@id": "amf://id#119",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The API Key's secret",
+                  "schema-org:name": "API Secret",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The API Key's secret",
+                "schema-org:name": "api_secret",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#120",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "pattern",
+                "raml-http:schema": {
+                  "@id": "amf://id#121",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "double",
+                  "schema-org:description": "Number pattern to search for.",
+                  "schema-org:name": "pattern",
+                  "shacl:datatype": {
+                    "@id": "xsd:double"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Number pattern to search for.",
+                "schema-org:name": "pattern",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#122",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "search_pattern",
+                "raml-http:schema": {
+                  "@id": "amf://id#123",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "int32",
+                  "schema-org:description": "Strategy for matching pattern. Expected values 0 = starts with (default), 1 = anywhere, 2 = ends with.",
+                  "schema-org:name": "Search Pattern",
+                  "shacl:datatype": {
+                    "@id": "xsd:integer"
+                  },
+                  "shacl:in": {
+                    "@id": "amf://id#123/list",
+                    "@type": "rdfs:Seq",
+                    "rdfs:_1": {
+                      "@id": "amf://id#124",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "0"
+                      }
+                    },
+                    "rdfs:_2": {
+                      "@id": "amf://id#125",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "1"
+                      }
+                    },
+                    "rdfs:_3": {
+                      "@id": "amf://id#126",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "2"
+                      }
+                    }
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Strategy for matching pattern. Expected values 0 = starts with (default), 1 = anywhere, 2 = ends with.",
+                "schema-org:name": "search_pattern",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#127",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "index",
+                "raml-http:schema": {
+                  "@id": "amf://id#128",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "double",
+                  "schema-org:description": "The page index. Defaut is 1",
+                  "schema-org:name": "index",
+                  "shacl:datatype": {
+                    "@id": "xsd:double"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The page index. Defaut is 1",
+                "schema-org:name": "index",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#129",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "size",
+                "raml-http:schema": {
+                  "@id": "amf://id#130",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "double",
+                  "schema-org:description": "Default 10 Max 100.",
+                  "schema-org:name": "size",
+                  "shacl:datatype": {
+                    "@id": "xsd:double"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Default 10 Max 100.",
+                "schema-org:name": "size",
+                "hydra:required": false
+              }
+            ]
+          },
+          "hydra:method": "get",
+          "hydra:returns": {
+            "@id": "amf://id#131",
+            "@type": [
+              "raml-http:Response",
+              "doc:DomainElement"
+            ],
+            "raml-http:payload": {
+              "@id": "amf://id#132",
+              "@type": [
+                "raml-http:Payload",
+                "doc:DomainElement"
+              ],
+              "raml-http:mediaType": "application/json",
+              "raml-http:schema": {
+                "@id": "amf://id#47/linked_6",
+                "@type": [
+                  "shacl:NodeShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "doc:link-label": "ListnumbersresponseError",
+                "doc:link-target": {
+                  "@id": "amf://id#47"
+                }
+              }
+            },
+            "schema-org:description": "",
+            "schema-org:name": "200",
+            "hydra:statusCode": "200"
+          }
+        }
+      },
+      {
+        "@id": "amf://id#133",
+        "@type": [
+          "raml-http:EndPoint",
+          "doc:DomainElement"
+        ],
+        "raml-http:path": "/number/search",
+        "hydra:supportedOperation": {
+          "@id": "amf://id#134",
+          "@type": [
+            "hydra:Operation",
+            "doc:DomainElement"
+          ],
+          "schema-org:description": "Retrieve inbound numbers that are available for a given country.",
+          "schema-org:name": "Search for outbound number",
+          "hydra:expects": {
+            "@id": "amf://id#135",
+            "@type": [
+              "raml-http:Request",
+              "doc:DomainElement"
+            ],
+            "raml-http:parameter": [
+              {
+                "@id": "amf://id#136",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_key",
+                "raml-http:schema": {
+                  "@id": "amf://id#137",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Your Nexmo account API key",
+                  "schema-org:name": "API Key",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Your Nexmo account API key",
+                "schema-org:name": "api_key",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#138",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_secret",
+                "raml-http:schema": {
+                  "@id": "amf://id#139",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The API Key's secret",
+                  "schema-org:name": "API Secret",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The API Key's secret",
+                "schema-org:name": "api_secret",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#140",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "country",
+                "raml-http:schema": {
+                  "@id": "amf://id#141",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Code in ISO 3166-1 alpha-2 format.",
+                  "schema-org:name": "country",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Code in ISO 3166-1 alpha-2 format.",
+                "schema-org:name": "country",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#142",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "pattern",
+                "raml-http:schema": {
+                  "@id": "amf://id#143",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "double",
+                  "schema-org:description": "Number pattern to search for.",
+                  "schema-org:name": "pattern",
+                  "shacl:datatype": {
+                    "@id": "xsd:double"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Number pattern to search for.",
+                "schema-org:name": "pattern",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#144",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "search_pattern",
+                "raml-http:schema": {
+                  "@id": "amf://id#145",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "int32",
+                  "schema-org:description": "Strategy for matching pattern. Expected values 0 = starts with (default), 1 = anywhere, 2 = ends with.",
+                  "schema-org:name": "Search Pattern",
+                  "shacl:datatype": {
+                    "@id": "xsd:integer"
+                  },
+                  "shacl:in": {
+                    "@id": "amf://id#145/list",
+                    "@type": "rdfs:Seq",
+                    "rdfs:_1": {
+                      "@id": "amf://id#146",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "0"
+                      }
+                    },
+                    "rdfs:_2": {
+                      "@id": "amf://id#147",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "1"
+                      }
+                    },
+                    "rdfs:_3": {
+                      "@id": "amf://id#148",
+                      "@type": "data:Scalar",
+                      "data:value": {
+                        "@type": "xsd:integer",
+                        "@value": "2"
+                      }
+                    }
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Strategy for matching pattern. Expected values 0 = starts with (default), 1 = anywhere, 2 = ends with.",
+                "schema-org:name": "search_pattern",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#149",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "features",
+                "raml-http:schema": {
+                  "@id": "amf://id#150",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Available features are SMS and VOICE. For both features, use a comma-separated value SMS,VOICE.",
+                  "schema-org:name": "features",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Available features are SMS and VOICE. For both features, use a comma-separated value SMS,VOICE.",
+                "schema-org:name": "features",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#151",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "size",
+                "raml-http:schema": {
+                  "@id": "amf://id#152",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "double",
+                  "schema-org:description": "Default 10.",
+                  "schema-org:name": "size",
+                  "shacl:datatype": {
+                    "@id": "xsd:double"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Default 10.",
+                "schema-org:name": "size",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#153",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "index",
+                "raml-http:schema": {
+                  "@id": "amf://id#154",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "raml-shapes:format": "double",
+                  "schema-org:description": "The page index. Defaut is 1",
+                  "schema-org:name": "index",
+                  "shacl:datatype": {
+                    "@id": "xsd:double"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The page index. Defaut is 1",
+                "schema-org:name": "index",
+                "hydra:required": false
+              }
+            ]
+          },
+          "hydra:method": "get",
+          "hydra:returns": {
+            "@id": "amf://id#155",
+            "@type": [
+              "raml-http:Response",
+              "doc:DomainElement"
+            ],
+            "raml-http:payload": {
+              "@id": "amf://id#156",
+              "@type": [
+                "raml-http:Payload",
+                "doc:DomainElement"
+              ],
+              "raml-http:mediaType": "application/json",
+              "raml-http:schema": {
+                "@id": "amf://id#47/linked_7",
+                "@type": [
+                  "shacl:NodeShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "doc:link-label": "ListnumbersresponseError",
+                "doc:link-target": {
+                  "@id": "amf://id#47"
+                }
+              }
+            },
+            "schema-org:description": "",
+            "schema-org:name": "200",
+            "hydra:statusCode": "200"
+          }
+        }
+      },
+      {
+        "@id": "amf://id#157",
+        "@type": [
+          "raml-http:EndPoint",
+          "doc:DomainElement"
+        ],
+        "raml-http:path": "/number/buy",
+        "hydra:supportedOperation": {
+          "@id": "amf://id#158",
+          "@type": [
+            "hydra:Operation",
+            "doc:DomainElement"
+          ],
+          "schema-org:description": "Request to purchase a specific inbound number.",
+          "schema-org:name": "Buy an inbound number",
+          "hydra:expects": {
+            "@id": "amf://id#159",
+            "@type": [
+              "raml-http:Request",
+              "doc:DomainElement"
+            ],
+            "raml-http:parameter": [
+              {
+                "@id": "amf://id#160",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_key",
+                "raml-http:schema": {
+                  "@id": "amf://id#161",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Your Nexmo account API key",
+                  "schema-org:name": "API Key",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Your Nexmo account API key",
+                "schema-org:name": "api_key",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#162",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_secret",
+                "raml-http:schema": {
+                  "@id": "amf://id#163",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The API Key's secret",
+                  "schema-org:name": "API Secret",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The API Key's secret",
+                "schema-org:name": "api_secret",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#164",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "country",
+                "raml-http:schema": {
+                  "@id": "amf://id#165",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Code in ISO 3166-1 alpha-2 format.",
+                  "schema-org:name": "country",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Code in ISO 3166-1 alpha-2 format.",
+                "schema-org:name": "country",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#166",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "msisdn",
+                "raml-http:schema": {
+                  "@id": "amf://id#167",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "An available inbound virtual number. For example, 447700900000",
+                  "schema-org:name": "msisdn",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "An available inbound virtual number. For example, 447700900000",
+                "schema-org:name": "msisdn",
+                "hydra:required": true
+              }
+            ]
+          },
+          "hydra:method": "post",
+          "hydra:returns": {
+            "@id": "amf://id#168",
+            "@type": [
+              "raml-http:Response",
+              "doc:DomainElement"
+            ],
+            "raml-http:payload": {
+              "@id": "amf://id#169",
+              "@type": [
+                "raml-http:Payload",
+                "doc:DomainElement"
+              ],
+              "raml-http:mediaType": "application/json",
+              "raml-http:schema": {
+                "@id": "amf://id#47/linked_8",
+                "@type": [
+                  "shacl:NodeShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "doc:link-label": "ListnumbersresponseError",
+                "doc:link-target": {
+                  "@id": "amf://id#47"
+                }
+              }
+            },
+            "schema-org:description": "",
+            "schema-org:name": "200",
+            "hydra:statusCode": "200"
+          }
+        }
+      },
+      {
+        "@id": "amf://id#170",
+        "@type": [
+          "raml-http:EndPoint",
+          "doc:DomainElement"
+        ],
+        "raml-http:path": "/number/update",
+        "hydra:supportedOperation": {
+          "@id": "amf://id#171",
+          "@type": [
+            "hydra:Operation",
+            "doc:DomainElement"
+          ],
+          "schema-org:description": "Change the behaviour of a number that you've rented.",
+          "schema-org:name": "Update an inbound number",
+          "hydra:expects": {
+            "@id": "amf://id#172",
+            "@type": [
+              "raml-http:Request",
+              "doc:DomainElement"
+            ],
+            "raml-http:parameter": [
+              {
+                "@id": "amf://id#173",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_key",
+                "raml-http:schema": {
+                  "@id": "amf://id#174",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Your Nexmo account API key",
+                  "schema-org:name": "API Key",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Your Nexmo account API key",
+                "schema-org:name": "api_key",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#175",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_secret",
+                "raml-http:schema": {
+                  "@id": "amf://id#176",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The API Key's secret",
+                  "schema-org:name": "API Secret",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The API Key's secret",
+                "schema-org:name": "api_secret",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#177",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "country",
+                "raml-http:schema": {
+                  "@id": "amf://id#178",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Code in ISO 3166-1 alpha-2 format.",
+                  "schema-org:name": "country",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Code in ISO 3166-1 alpha-2 format.",
+                "schema-org:name": "country",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#179",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "msisdn",
+                "raml-http:schema": {
+                  "@id": "amf://id#180",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "An available inbound virtual number. For example, 447700900000",
+                  "schema-org:name": "msisdn",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "An available inbound virtual number. For example, 447700900000",
+                "schema-org:name": "msisdn",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#181",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "moHttpUrl",
+                "raml-http:schema": {
+                  "@id": "amf://id#182",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "An URL encoded URI to the webhook endpoint endpoint that handles inbound messages. Your webhook endpoint must be active before you make this request, Nexmo makes a GET request to your endpoint and checks that it returns a 200 OK response. Set to empty string to clear.",
+                  "schema-org:name": "moHttpUrl",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "An URL encoded URI to the webhook endpoint endpoint that handles inbound messages. Your webhook endpoint must be active before you make this request, Nexmo makes a GET request to your endpoint and checks that it returns a 200 OK response. Set to empty string to clear.",
+                "schema-org:name": "moHttpUrl",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#183",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "moSmppSysType",
+                "raml-http:schema": {
+                  "@id": "amf://id#184",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The associated system type for your SMPP client. For example inbound",
+                  "schema-org:name": "moSmppSysType",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The associated system type for your SMPP client. For example inbound",
+                "schema-org:name": "moSmppSysType",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#185",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "voiceCallbackType",
+                "raml-http:schema": {
+                  "@id": "amf://id#186",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The voice webhook type. Possible values are sip, tel, vxml (VoiceXML) or app",
+                  "schema-org:name": "voiceCallbackType",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The voice webhook type. Possible values are sip, tel, vxml (VoiceXML) or app",
+                "schema-org:name": "voiceCallbackType",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#187",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "voiceCallbackValue",
+                "raml-http:schema": {
+                  "@id": "amf://id#188",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "A URI for your voiceCallbackType or an Application ID",
+                  "schema-org:name": "voiceCallbackValue",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "A URI for your voiceCallbackType or an Application ID",
+                "schema-org:name": "voiceCallbackValue",
+                "hydra:required": false
+              },
+              {
+                "@id": "amf://id#189",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "voiceStatusCallback",
+                "raml-http:schema": {
+                  "@id": "amf://id#190",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Nexmo sends a request to this webhook endpoint when a call ends.",
+                  "schema-org:name": "voiceStatusCallback",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Nexmo sends a request to this webhook endpoint when a call ends.",
+                "schema-org:name": "voiceStatusCallback",
+                "hydra:required": false
+              }
+            ]
+          },
+          "hydra:method": "post",
+          "hydra:returns": {
+            "@id": "amf://id#191",
+            "@type": [
+              "raml-http:Response",
+              "doc:DomainElement"
+            ],
+            "raml-http:payload": {
+              "@id": "amf://id#192",
+              "@type": [
+                "raml-http:Payload",
+                "doc:DomainElement"
+              ],
+              "raml-http:mediaType": "application/json",
+              "raml-http:schema": {
+                "@id": "amf://id#47/linked_9",
+                "@type": [
+                  "shacl:NodeShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "doc:link-label": "ListnumbersresponseError",
+                "doc:link-target": {
+                  "@id": "amf://id#47"
+                }
+              }
+            },
+            "schema-org:description": "",
+            "schema-org:name": "200",
+            "hydra:statusCode": "200"
+          }
+        }
+      },
+      {
+        "@id": "amf://id#193",
+        "@type": [
+          "raml-http:EndPoint",
+          "doc:DomainElement"
+        ],
+        "raml-http:path": "/number/cancel",
+        "hydra:supportedOperation": {
+          "@id": "amf://id#194",
+          "@type": [
+            "hydra:Operation",
+            "doc:DomainElement"
+          ],
+          "schema-org:description": "Cancel your subscription for a specific inbound number.",
+          "schema-org:name": "Cancel an inbound number",
+          "hydra:expects": {
+            "@id": "amf://id#195",
+            "@type": [
+              "raml-http:Request",
+              "doc:DomainElement"
+            ],
+            "raml-http:parameter": [
+              {
+                "@id": "amf://id#196",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_key",
+                "raml-http:schema": {
+                  "@id": "amf://id#197",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Your Nexmo account API key",
+                  "schema-org:name": "API Key",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Your Nexmo account API key",
+                "schema-org:name": "api_key",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#198",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "api_secret",
+                "raml-http:schema": {
+                  "@id": "amf://id#199",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The API Key's secret",
+                  "schema-org:name": "API Secret",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The API Key's secret",
+                "schema-org:name": "api_secret",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#200",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "country",
+                "raml-http:schema": {
+                  "@id": "amf://id#201",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "Code in ISO 3166-1 alpha-2 format.",
+                  "schema-org:name": "country",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "Code in ISO 3166-1 alpha-2 format.",
+                "schema-org:name": "country",
+                "hydra:required": true
+              },
+              {
+                "@id": "amf://id#202",
+                "@type": [
+                  "raml-http:Parameter",
+                  "doc:DomainElement"
+                ],
+                "raml-http:binding": "query",
+                "raml-http:paramName": "msisdn",
+                "raml-http:schema": {
+                  "@id": "amf://id#203",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The invound virtual number to cancel. For example, 447700900000",
+                  "schema-org:name": "msisdn",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "schema"
+                },
+                "schema-org:description": "The invound virtual number to cancel. For example, 447700900000",
+                "schema-org:name": "msisdn",
+                "hydra:required": true
+              }
+            ]
+          },
+          "hydra:method": "post",
+          "hydra:returns": {
+            "@id": "amf://id#204",
+            "@type": [
+              "raml-http:Response",
+              "doc:DomainElement"
+            ],
+            "raml-http:payload": {
+              "@id": "amf://id#205",
+              "@type": [
+                "raml-http:Payload",
+                "doc:DomainElement"
+              ],
+              "raml-http:mediaType": "application/json",
+              "raml-http:schema": {
+                "@id": "amf://id#47/linked_10",
+                "@type": [
+                  "shacl:NodeShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "doc:link-label": "ListnumbersresponseError",
+                "doc:link-target": {
+                  "@id": "amf://id#47"
+                }
+              }
+            },
+            "schema-org:description": "",
+            "schema-org:name": "200",
+            "hydra:statusCode": "200"
+          }
+        }
+      }
+    ],
+    "raml-http:server": {
+      "@id": "amf://id#206",
+      "@type": [
+        "raml-http:Server",
+        "doc:DomainElement"
+      ],
+      "raml-http:url": "https://rest.nexmo.com",
+      "raml-http:variable": []
+    },
+    "schema-org:documentation": {
+      "@id": "amf://id#207",
+      "@type": [
+        "schema-org:CreativeWork",
+        "doc:DomainElement"
+      ],
+      "schema-org:description": "Nexmo, the Vonage API Platform, enables you to add communications within the context of your applications, including SMS, Voice and Chat.",
+      "schema-org:title": "Nexmo"
+    },
+    "schema-org:name": "Nexmo SMS API",
+    "schema-org:version": "2.0"
+  }
+}

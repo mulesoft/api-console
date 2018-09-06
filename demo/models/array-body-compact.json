@@ -1,0 +1,1540 @@
+{
+  "@context": {
+    "raml-http": "http://a.ml/vocabularies/http#",
+    "shacl": "http://www.w3.org/ns/shacl#",
+    "raml-shapes": "http://a.ml/vocabularies/shapes#",
+    "security": "http://a.ml/vocabularies/security#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "data": "http://a.ml/vocabularies/data#",
+    "doc": "http://a.ml/vocabularies/document#",
+    "schema-org": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "hydra": "http://www.w3.org/ns/hydra/core#"
+  },
+  "@id": "amf://id",
+  "@type": [
+    "doc:Document",
+    "doc:Fragment",
+    "doc:Module",
+    "doc:Unit"
+  ],
+  "doc:declares": [
+    {
+      "@id": "amf://id#1",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "doc:examples": {
+        "@id": "amf://id#2",
+        "@type": [
+          "doc:Example",
+          "doc:DomainElement"
+        ],
+        "doc:strict": true,
+        "doc:structuredValue": {
+          "@id": "amf://id#3",
+          "@type": "data:Object",
+          "data:birthday": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_4",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "1983-10-20"
+            }
+          },
+          "data:gender": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_5",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "male"
+            }
+          },
+          "data:id": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_2",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "R34fg663H9KW9MMSKISI"
+            }
+          },
+          "data:image": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7",
+            "@type": "data:Object",
+            "data:thumb": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7/scalar_9",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "https://domain.com/profile/pawel.psztyc/image/thumb"
+              }
+            },
+            "data:url": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7/scalar_8",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "https://domain.com/profile/pawel.psztyc/image"
+              }
+            }
+          },
+          "data:language": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_11",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "en_GB"
+            }
+          },
+          "data:name": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_3",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "Pawel Psztyc"
+            }
+          },
+          "data:tagline": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_10",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "Some text about me."
+            }
+          },
+          "data:url": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_6",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "https://domain.com/profile/pawel.psztyc"
+            }
+          }
+        },
+        "shacl:raw": "  id: \"R34fg663H9KW9MMSKISI\"\n  name: \"Pawel Psztyc\"\n  birthday: \"1983-10-20\"\n  gender: male\n  url: \"https://domain.com/profile/pawel.psztyc\"\n  image:\n    url: https://domain.com/profile/pawel.psztyc/image\n    thumb: https://domain.com/profile/pawel.psztyc/image/thumb\n  tagline: Some text about me.\n  language: en_GB\n"
+      },
+      "schema-org:description": "An object representing a person in the API.\nThis object will be used in all methods returning a Person or list of people.\n",
+      "schema-org:name": "A person resource",
+      "shacl:closed": false,
+      "shacl:name": "AppPerson",
+      "shacl:property": [
+        {
+          "@id": "amf://id#4",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#5",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "A unique identifier for a person. It is a 32 bit string containing alphanumeric characters.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "id"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "id",
+          "shacl:path": {
+            "@id": "data:id"
+          }
+        },
+        {
+          "@id": "amf://id#6",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#7",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "doc:examples": {
+              "@id": "amf://id#8",
+              "@type": [
+                "doc:Example",
+                "doc:DomainElement"
+              ],
+              "doc:strict": true,
+              "doc:structuredValue": {
+                "@id": "amf://id#9",
+                "@type": "data:Scalar",
+                "data:value": {
+                  "@type": "xsd:string",
+                  "@value": "John Smith"
+                }
+              },
+              "shacl:raw": "John Smith"
+            },
+            "schema-org:description": "Person full name. The input will be rejected if this property is not set while creating new object.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "name",
+            "shacl:pattern": "^[0-9a-zA-Z ]+$"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "name",
+          "shacl:path": {
+            "@id": "data:name"
+          }
+        },
+        {
+          "@id": "amf://id#10",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#11",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The person's date of birth, represented as YYYY-MM-DD.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "birthday"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "birthday",
+          "shacl:path": {
+            "@id": "data:birthday"
+          }
+        },
+        {
+          "@id": "amf://id#12",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#13",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The person's gender. Possible values includes, but are not limited to, the following values:\n* \"male\" - Male gender.\n* \"female\" - Female gender.\n* \"other\" - Other.\n",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "gender?"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "gender",
+          "shacl:path": {
+            "@id": "data:gender"
+          }
+        },
+        {
+          "@id": "amf://id#14",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#15",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The URL of this person's profile.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "url"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "url",
+          "shacl:path": {
+            "@id": "data:url"
+          }
+        },
+        {
+          "@id": "amf://id#16",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#17",
+            "@type": [
+              "shacl:NodeShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "doc:examples": {
+              "@id": "amf://id#18",
+              "@type": [
+                "doc:Example",
+                "doc:DomainElement"
+              ],
+              "doc:strict": true,
+              "doc:structuredValue": {
+                "@id": "amf://id#19",
+                "@type": "data:Object",
+                "data:thumb": {
+                  "@id": "file://demo/models/array-body/image.raml#/shape/example/default-example/object_1/scalar_3",
+                  "@type": "data:Scalar",
+                  "data:value": {
+                    "@type": "xsd:string",
+                    "@value": "https://domain.com/profile/pawel.psztyc/image/thumb"
+                  }
+                },
+                "data:url": {
+                  "@id": "file://demo/models/array-body/image.raml#/shape/example/default-example/object_1/scalar_2",
+                  "@type": "data:Scalar",
+                  "data:value": {
+                    "@type": "xsd:string",
+                    "@value": "https://domain.com/profile/pawel.psztyc/image"
+                  }
+                }
+              },
+              "shacl:raw": "  url: https://domain.com/profile/pawel.psztyc/image\n  thumb: https://domain.com/profile/pawel.psztyc/image/thumb\n"
+            },
+            "schema-org:description": "An image object representing an image object strored in the file store.\nThe image can be only included in the response. It has no effect if the Image appear in the\nrequest. Endpoint handles image creation on it's own and clients can't process images\nexcept of sending image data.\n",
+            "shacl:closed": false,
+            "shacl:name": "amf_inline_type_2",
+            "shacl:property": [
+              {
+                "@id": "amf://id#20",
+                "@type": [
+                  "shacl:PropertyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape"
+                ],
+                "raml-shapes:range": {
+                  "@id": "amf://id#21",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "The URL of the image.\nTo resize the image and crop it to a square, append the query string **?sz=x**, where x is the dimension in pixels of each side.\n",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "url"
+                },
+                "shacl:minCount": 1,
+                "shacl:name": "url",
+                "shacl:path": {
+                  "@id": "data:url"
+                }
+              },
+              {
+                "@id": "amf://id#22",
+                "@type": [
+                  "shacl:PropertyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape"
+                ],
+                "raml-shapes:range": {
+                  "@id": "amf://id#23",
+                  "@type": [
+                    "raml-shapes:ScalarShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "schema-org:description": "An URL to the thumbnail of the image. Thumbnails are 60x60px cropped images of the original image.\n",
+                  "schema-org:name": "Thumbnail",
+                  "shacl:datatype": {
+                    "@id": "xsd:string"
+                  },
+                  "shacl:name": "thumb"
+                },
+                "shacl:minCount": 1,
+                "shacl:name": "thumb",
+                "shacl:path": {
+                  "@id": "data:thumb"
+                }
+              }
+            ]
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "image",
+          "shacl:path": {
+            "@id": "data:image"
+          }
+        },
+        {
+          "@id": "amf://id#25",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#26",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The brief description (tagline) of this person.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "tagline"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "tagline",
+          "shacl:path": {
+            "@id": "data:tagline"
+          }
+        },
+        {
+          "@id": "amf://id#27",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#28",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The user's preferred language for rendering.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "language"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "language",
+          "shacl:path": {
+            "@id": "data:language"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "amf://id#39",
+      "@type": [
+        "raml-shapes:ArrayShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "raml-shapes:items": {
+        "@id": "amf://id#1",
+        "@type": [
+          "shacl:NodeShape",
+          "shacl:Shape",
+          "raml-shapes:Shape",
+          "doc:DomainElement"
+        ],
+        "doc:examples": {
+          "@id": "amf://id#2",
+          "@type": [
+            "doc:Example",
+            "doc:DomainElement"
+          ],
+          "doc:strict": true,
+          "doc:structuredValue": {
+            "@id": "amf://id#3",
+            "@type": "data:Object",
+            "data:birthday": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_4",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "1983-10-20"
+              }
+            },
+            "data:gender": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_5",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "male"
+              }
+            },
+            "data:id": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_2",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "R34fg663H9KW9MMSKISI"
+              }
+            },
+            "data:image": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7",
+              "@type": "data:Object",
+              "data:thumb": {
+                "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7/scalar_9",
+                "@type": "data:Scalar",
+                "data:value": {
+                  "@type": "xsd:string",
+                  "@value": "https://domain.com/profile/pawel.psztyc/image/thumb"
+                }
+              },
+              "data:url": {
+                "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7/scalar_8",
+                "@type": "data:Scalar",
+                "data:value": {
+                  "@type": "xsd:string",
+                  "@value": "https://domain.com/profile/pawel.psztyc/image"
+                }
+              }
+            },
+            "data:language": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_11",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "en_GB"
+              }
+            },
+            "data:name": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_3",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "Pawel Psztyc"
+              }
+            },
+            "data:tagline": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_10",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "Some text about me."
+              }
+            },
+            "data:url": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_6",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "https://domain.com/profile/pawel.psztyc"
+              }
+            }
+          },
+          "shacl:raw": "  id: \"R34fg663H9KW9MMSKISI\"\n  name: \"Pawel Psztyc\"\n  birthday: \"1983-10-20\"\n  gender: male\n  url: \"https://domain.com/profile/pawel.psztyc\"\n  image:\n    url: https://domain.com/profile/pawel.psztyc/image\n    thumb: https://domain.com/profile/pawel.psztyc/image/thumb\n  tagline: Some text about me.\n  language: en_GB\n"
+        },
+        "schema-org:description": "An object representing a person in the API.\nThis object will be used in all methods returning a Person or list of people.\n",
+        "schema-org:name": "A person resource",
+        "shacl:closed": false,
+        "shacl:name": "AppPerson",
+        "shacl:property": [
+          {
+            "@id": "amf://id#4",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#5",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:description": "A unique identifier for a person. It is a 32 bit string containing alphanumeric characters.",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "id"
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "id",
+            "shacl:path": {
+              "@id": "data:id"
+            }
+          },
+          {
+            "@id": "amf://id#6",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#7",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "doc:examples": {
+                "@id": "amf://id#8",
+                "@type": [
+                  "doc:Example",
+                  "doc:DomainElement"
+                ],
+                "doc:strict": true,
+                "doc:structuredValue": {
+                  "@id": "amf://id#9",
+                  "@type": "data:Scalar",
+                  "data:value": {
+                    "@type": "xsd:string",
+                    "@value": "John Smith"
+                  }
+                },
+                "shacl:raw": "John Smith"
+              },
+              "schema-org:description": "Person full name. The input will be rejected if this property is not set while creating new object.",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "name",
+              "shacl:pattern": "^[0-9a-zA-Z ]+$"
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "name",
+            "shacl:path": {
+              "@id": "data:name"
+            }
+          },
+          {
+            "@id": "amf://id#10",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#11",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:description": "The person's date of birth, represented as YYYY-MM-DD.",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "birthday"
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "birthday",
+            "shacl:path": {
+              "@id": "data:birthday"
+            }
+          },
+          {
+            "@id": "amf://id#12",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#13",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:description": "The person's gender. Possible values includes, but are not limited to, the following values:\n* \"male\" - Male gender.\n* \"female\" - Female gender.\n* \"other\" - Other.\n",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "gender?"
+            },
+            "shacl:minCount": 0,
+            "shacl:name": "gender",
+            "shacl:path": {
+              "@id": "data:gender"
+            }
+          },
+          {
+            "@id": "amf://id#14",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#15",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:description": "The URL of this person's profile.",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "url"
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "url",
+            "shacl:path": {
+              "@id": "data:url"
+            }
+          },
+          {
+            "@id": "amf://id#16",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#17",
+              "@type": [
+                "shacl:NodeShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "doc:examples": {
+                "@id": "amf://id#18",
+                "@type": [
+                  "doc:Example",
+                  "doc:DomainElement"
+                ],
+                "doc:strict": true,
+                "doc:structuredValue": {
+                  "@id": "amf://id#19",
+                  "@type": "data:Object",
+                  "data:thumb": {
+                    "@id": "file://demo/models/array-body/image.raml#/shape/example/default-example/object_1/scalar_3",
+                    "@type": "data:Scalar",
+                    "data:value": {
+                      "@type": "xsd:string",
+                      "@value": "https://domain.com/profile/pawel.psztyc/image/thumb"
+                    }
+                  },
+                  "data:url": {
+                    "@id": "file://demo/models/array-body/image.raml#/shape/example/default-example/object_1/scalar_2",
+                    "@type": "data:Scalar",
+                    "data:value": {
+                      "@type": "xsd:string",
+                      "@value": "https://domain.com/profile/pawel.psztyc/image"
+                    }
+                  }
+                },
+                "shacl:raw": "  url: https://domain.com/profile/pawel.psztyc/image\n  thumb: https://domain.com/profile/pawel.psztyc/image/thumb\n"
+              },
+              "schema-org:description": "An image object representing an image object strored in the file store.\nThe image can be only included in the response. It has no effect if the Image appear in the\nrequest. Endpoint handles image creation on it's own and clients can't process images\nexcept of sending image data.\n",
+              "shacl:closed": false,
+              "shacl:name": "amf_inline_type_2",
+              "shacl:property": [
+                {
+                  "@id": "amf://id#20",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#21",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "The URL of the image.\nTo resize the image and crop it to a square, append the query string **?sz=x**, where x is the dimension in pixels of each side.\n",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "url"
+                  },
+                  "shacl:minCount": 1,
+                  "shacl:name": "url",
+                  "shacl:path": {
+                    "@id": "data:url"
+                  }
+                },
+                {
+                  "@id": "amf://id#22",
+                  "@type": [
+                    "shacl:PropertyShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape"
+                  ],
+                  "raml-shapes:range": {
+                    "@id": "amf://id#23",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "schema-org:description": "An URL to the thumbnail of the image. Thumbnails are 60x60px cropped images of the original image.\n",
+                    "schema-org:name": "Thumbnail",
+                    "shacl:datatype": {
+                      "@id": "xsd:string"
+                    },
+                    "shacl:name": "thumb"
+                  },
+                  "shacl:minCount": 1,
+                  "shacl:name": "thumb",
+                  "shacl:path": {
+                    "@id": "data:thumb"
+                  }
+                }
+              ]
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "image",
+            "shacl:path": {
+              "@id": "data:image"
+            }
+          },
+          {
+            "@id": "amf://id#25",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#26",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:description": "The brief description (tagline) of this person.",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "tagline"
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "tagline",
+            "shacl:path": {
+              "@id": "data:tagline"
+            }
+          },
+          {
+            "@id": "amf://id#27",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#28",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:description": "The user's preferred language for rendering.",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "language"
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "language",
+            "shacl:path": {
+              "@id": "data:language"
+            }
+          }
+        ]
+      },
+      "shacl:name": "amf_inline_type_1"
+    },
+    {
+      "@id": "amf://id#17",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "doc:examples": {
+        "@id": "amf://id#18",
+        "@type": [
+          "doc:Example",
+          "doc:DomainElement"
+        ],
+        "doc:strict": true,
+        "doc:structuredValue": {
+          "@id": "amf://id#19",
+          "@type": "data:Object",
+          "data:thumb": {
+            "@id": "file://demo/models/array-body/image.raml#/shape/example/default-example/object_1/scalar_3",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "https://domain.com/profile/pawel.psztyc/image/thumb"
+            }
+          },
+          "data:url": {
+            "@id": "file://demo/models/array-body/image.raml#/shape/example/default-example/object_1/scalar_2",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "https://domain.com/profile/pawel.psztyc/image"
+            }
+          }
+        },
+        "shacl:raw": "  url: https://domain.com/profile/pawel.psztyc/image\n  thumb: https://domain.com/profile/pawel.psztyc/image/thumb\n"
+      },
+      "schema-org:description": "An image object representing an image object strored in the file store.\nThe image can be only included in the response. It has no effect if the Image appear in the\nrequest. Endpoint handles image creation on it's own and clients can't process images\nexcept of sending image data.\n",
+      "shacl:closed": false,
+      "shacl:name": "amf_inline_type_2",
+      "shacl:property": [
+        {
+          "@id": "amf://id#20",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#21",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The URL of the image.\nTo resize the image and crop it to a square, append the query string **?sz=x**, where x is the dimension in pixels of each side.\n",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "url"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "url",
+          "shacl:path": {
+            "@id": "data:url"
+          }
+        },
+        {
+          "@id": "amf://id#22",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#23",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "An URL to the thumbnail of the image. Thumbnails are 60x60px cropped images of the original image.\n",
+            "schema-org:name": "Thumbnail",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "thumb"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "thumb",
+          "shacl:path": {
+            "@id": "data:thumb"
+          }
+        }
+      ]
+    }
+  ],
+  "doc:encodes": {
+    "@id": "amf://id#34",
+    "@type": [
+      "schema-org:WebAPI",
+      "doc:RootDomainElement",
+      "doc:DomainElement"
+    ],
+    "raml-http:endpoint": {
+      "@id": "amf://id#35",
+      "@type": [
+        "raml-http:EndPoint",
+        "doc:DomainElement"
+      ],
+      "raml-http:path": "/arrayBody",
+      "hydra:supportedOperation": [
+        {
+          "@id": "amf://id#36",
+          "@type": [
+            "hydra:Operation",
+            "doc:DomainElement"
+          ],
+          "hydra:method": "get",
+          "hydra:returns": {
+            "@id": "amf://id#37",
+            "@type": [
+              "raml-http:Response",
+              "doc:DomainElement"
+            ],
+            "raml-http:payload": {
+              "@id": "amf://id#38",
+              "@type": [
+                "raml-http:Payload",
+                "doc:DomainElement"
+              ],
+              "raml-http:mediaType": "application/json",
+              "raml-http:schema": {
+                "@id": "amf://id#39/linked_1",
+                "@type": [
+                  "raml-shapes:ArrayShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "doc:link-label": "amf_inline_type_1",
+                "doc:link-target": {
+                  "@id": "amf://id#39"
+                }
+              }
+            },
+            "schema-org:name": "200",
+            "hydra:statusCode": "200"
+          }
+        },
+        {
+          "@id": "amf://id#40",
+          "@type": [
+            "hydra:Operation",
+            "doc:DomainElement"
+          ],
+          "hydra:expects": {
+            "@id": "amf://id#41",
+            "@type": [
+              "raml-http:Request",
+              "doc:DomainElement"
+            ],
+            "raml-http:payload": {
+              "@id": "amf://id#42",
+              "@type": [
+                "raml-http:Payload",
+                "doc:DomainElement"
+              ],
+              "raml-http:mediaType": "application/json",
+              "raml-http:schema": {
+                "@id": "amf://id#43",
+                "@type": [
+                  "raml-shapes:ArrayShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "raml-shapes:items": {
+                  "@id": "amf://id#1/linked_2",
+                  "@type": [
+                    "shacl:NodeShape",
+                    "shacl:Shape",
+                    "raml-shapes:Shape",
+                    "doc:DomainElement"
+                  ],
+                  "doc:link-label": "AppPerson",
+                  "doc:link-target": {
+                    "@id": "amf://id#1"
+                  }
+                },
+                "schema-org:description": "Default body for the POST method.\n\nThis is description to be rendered as markdown.\n",
+                "schema-org:name": "My post body",
+                "shacl:name": "schema"
+              }
+            }
+          },
+          "hydra:method": "post"
+        }
+      ]
+    },
+    "raml-http:server": {
+      "@id": "amf://id#45",
+      "@type": [
+        "raml-http:Server",
+        "doc:DomainElement"
+      ],
+      "raml-http:url": "http://test.domain.com/"
+    },
+    "schema-org:name": "API body demo",
+    "schema-org:version": "v1"
+  },
+  "doc:references": {
+    "@id": "amf://id#32",
+    "@type": [
+      "doc:DataType",
+      "doc:Fragment",
+      "doc:Unit"
+    ],
+    "doc:encodes": {
+      "@id": "amf://id#1",
+      "@type": [
+        "shacl:NodeShape",
+        "shacl:Shape",
+        "raml-shapes:Shape",
+        "doc:DomainElement"
+      ],
+      "doc:examples": {
+        "@id": "amf://id#2",
+        "@type": [
+          "doc:Example",
+          "doc:DomainElement"
+        ],
+        "doc:strict": true,
+        "doc:structuredValue": {
+          "@id": "amf://id#3",
+          "@type": "data:Object",
+          "data:birthday": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_4",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "1983-10-20"
+            }
+          },
+          "data:gender": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_5",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "male"
+            }
+          },
+          "data:id": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_2",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "R34fg663H9KW9MMSKISI"
+            }
+          },
+          "data:image": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7",
+            "@type": "data:Object",
+            "data:thumb": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7/scalar_9",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "https://domain.com/profile/pawel.psztyc/image/thumb"
+              }
+            },
+            "data:url": {
+              "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/object_7/scalar_8",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "https://domain.com/profile/pawel.psztyc/image"
+              }
+            }
+          },
+          "data:language": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_11",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "en_GB"
+            }
+          },
+          "data:name": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_3",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "Pawel Psztyc"
+            }
+          },
+          "data:tagline": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_10",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "Some text about me."
+            }
+          },
+          "data:url": {
+            "@id": "file://demo/models/array-body/app-person.raml#/shape/example/default-example/object_1/scalar_6",
+            "@type": "data:Scalar",
+            "data:value": {
+              "@type": "xsd:string",
+              "@value": "https://domain.com/profile/pawel.psztyc"
+            }
+          }
+        },
+        "shacl:raw": "  id: \"R34fg663H9KW9MMSKISI\"\n  name: \"Pawel Psztyc\"\n  birthday: \"1983-10-20\"\n  gender: male\n  url: \"https://domain.com/profile/pawel.psztyc\"\n  image:\n    url: https://domain.com/profile/pawel.psztyc/image\n    thumb: https://domain.com/profile/pawel.psztyc/image/thumb\n  tagline: Some text about me.\n  language: en_GB\n"
+      },
+      "schema-org:description": "An object representing a person in the API.\nThis object will be used in all methods returning a Person or list of people.\n",
+      "schema-org:name": "A person resource",
+      "shacl:closed": false,
+      "shacl:name": "AppPerson",
+      "shacl:property": [
+        {
+          "@id": "amf://id#4",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#5",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "A unique identifier for a person. It is a 32 bit string containing alphanumeric characters.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "id"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "id",
+          "shacl:path": {
+            "@id": "data:id"
+          }
+        },
+        {
+          "@id": "amf://id#6",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#7",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "doc:examples": {
+              "@id": "amf://id#8",
+              "@type": [
+                "doc:Example",
+                "doc:DomainElement"
+              ],
+              "doc:strict": true,
+              "doc:structuredValue": {
+                "@id": "amf://id#9",
+                "@type": "data:Scalar",
+                "data:value": {
+                  "@type": "xsd:string",
+                  "@value": "John Smith"
+                }
+              },
+              "shacl:raw": "John Smith"
+            },
+            "schema-org:description": "Person full name. The input will be rejected if this property is not set while creating new object.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "name",
+            "shacl:pattern": "^[0-9a-zA-Z ]+$"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "name",
+          "shacl:path": {
+            "@id": "data:name"
+          }
+        },
+        {
+          "@id": "amf://id#10",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#11",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The person's date of birth, represented as YYYY-MM-DD.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "birthday"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "birthday",
+          "shacl:path": {
+            "@id": "data:birthday"
+          }
+        },
+        {
+          "@id": "amf://id#12",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#13",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The person's gender. Possible values includes, but are not limited to, the following values:\n* \"male\" - Male gender.\n* \"female\" - Female gender.\n* \"other\" - Other.\n",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "gender?"
+          },
+          "shacl:minCount": 0,
+          "shacl:name": "gender",
+          "shacl:path": {
+            "@id": "data:gender"
+          }
+        },
+        {
+          "@id": "amf://id#14",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#15",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The URL of this person's profile.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "url"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "url",
+          "shacl:path": {
+            "@id": "data:url"
+          }
+        },
+        {
+          "@id": "amf://id#16",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#17/linked_2",
+            "@type": [
+              "shacl:NodeShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "doc:link-label": "amf_inline_type_2",
+            "doc:link-target": {
+              "@id": "amf://id#17"
+            }
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "image",
+          "shacl:path": {
+            "@id": "data:image"
+          }
+        },
+        {
+          "@id": "amf://id#25",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#26",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The brief description (tagline) of this person.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "tagline"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "tagline",
+          "shacl:path": {
+            "@id": "data:tagline"
+          }
+        },
+        {
+          "@id": "amf://id#27",
+          "@type": [
+            "shacl:PropertyShape",
+            "shacl:Shape",
+            "raml-shapes:Shape"
+          ],
+          "raml-shapes:range": {
+            "@id": "amf://id#28",
+            "@type": [
+              "raml-shapes:ScalarShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "schema-org:description": "The user's preferred language for rendering.",
+            "shacl:datatype": {
+              "@id": "xsd:string"
+            },
+            "shacl:name": "language"
+          },
+          "shacl:minCount": 1,
+          "shacl:name": "language",
+          "shacl:path": {
+            "@id": "data:language"
+          }
+        }
+      ]
+    },
+    "doc:references": {
+      "@id": "amf://id#33",
+      "@type": [
+        "doc:DataType",
+        "doc:Fragment",
+        "doc:Unit"
+      ],
+      "doc:encodes": {
+        "@id": "amf://id#17",
+        "@type": [
+          "shacl:NodeShape",
+          "shacl:Shape",
+          "raml-shapes:Shape",
+          "doc:DomainElement"
+        ],
+        "doc:examples": {
+          "@id": "amf://id#18",
+          "@type": [
+            "doc:Example",
+            "doc:DomainElement"
+          ],
+          "doc:strict": true,
+          "doc:structuredValue": {
+            "@id": "amf://id#19",
+            "@type": "data:Object",
+            "data:thumb": {
+              "@id": "file://demo/models/array-body/image.raml#/shape/example/default-example/object_1/scalar_3",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "https://domain.com/profile/pawel.psztyc/image/thumb"
+              }
+            },
+            "data:url": {
+              "@id": "file://demo/models/array-body/image.raml#/shape/example/default-example/object_1/scalar_2",
+              "@type": "data:Scalar",
+              "data:value": {
+                "@type": "xsd:string",
+                "@value": "https://domain.com/profile/pawel.psztyc/image"
+              }
+            }
+          },
+          "shacl:raw": "  url: https://domain.com/profile/pawel.psztyc/image\n  thumb: https://domain.com/profile/pawel.psztyc/image/thumb\n"
+        },
+        "schema-org:description": "An image object representing an image object strored in the file store.\nThe image can be only included in the response. It has no effect if the Image appear in the\nrequest. Endpoint handles image creation on it's own and clients can't process images\nexcept of sending image data.\n",
+        "shacl:closed": false,
+        "shacl:name": "amf_inline_type_2",
+        "shacl:property": [
+          {
+            "@id": "amf://id#20",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#21",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:description": "The URL of the image.\nTo resize the image and crop it to a square, append the query string **?sz=x**, where x is the dimension in pixels of each side.\n",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "url"
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "url",
+            "shacl:path": {
+              "@id": "data:url"
+            }
+          },
+          {
+            "@id": "amf://id#22",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape"
+            ],
+            "raml-shapes:range": {
+              "@id": "amf://id#23",
+              "@type": [
+                "raml-shapes:ScalarShape",
+                "shacl:Shape",
+                "raml-shapes:Shape",
+                "doc:DomainElement"
+              ],
+              "schema-org:description": "An URL to the thumbnail of the image. Thumbnails are 60x60px cropped images of the original image.\n",
+              "schema-org:name": "Thumbnail",
+              "shacl:datatype": {
+                "@id": "xsd:string"
+              },
+              "shacl:name": "thumb"
+            },
+            "shacl:minCount": 1,
+            "shacl:name": "thumb",
+            "shacl:path": {
+              "@id": "data:thumb"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
