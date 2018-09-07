@@ -1,19 +1,9 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/test-helpers.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
@@ -28,67 +18,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </test-fixture>
   <script>
   /* global fixture, assert */
-  suite('basic', function() {
-    var element;
-    var raml;
-
+  suite('APIC - basics', function() {
+    let element;
 
     setup(function() {
       element = fixture('basic');
     });
 
-    test('path should be set to summary', function() {
-      assert.equal(element.path, 'summary');
-    });
-
-    test('page should be set to docs', function() {
+    test('Default page is docs', function() {
       assert.equal(element.page, 'docs');
     });
 
-    test('selectedObject should equal RAML', function() {
-      assert.deepEqual(element.selectedObject, raml);
-    });
-
-    test('selectedParent is undefined', function() {
-      assert.isNotOk(element.selectedParent);
-    });
-
     test('noExtensionBanner is undefined', function() {
-      assert.isNotOk(element.noExtensionBanner);
+      assert.isFalse(element.noExtensionBanner);
     });
 
-    test('noExtensionBanner is set after extension event is fired', function() {
-      var event = new CustomEvent('api-console-extension-installed', {
-        bubbles: true
-      });
-      document.body.dispatchEvent(event);
-      assert.isTrue(element.noExtensionBanner);
-    });
-
-    test('scrollTarget is defined', function() {
-      assert.isOk(element.scrollTarget);
-    });
-
-    test('Computes attribute headers', function() {
-      var headers = 'Content-Type: application/json\\nX-Test:1';
-      var parsed = [{
-        name: 'Content-Type',
-        value: 'application/json'
-      }, {
-        name: 'X-Test',
-        value: '1'
-      }];
-      assert.deepEqual(element._computeAppendHeaders(headers), parsed);
-    });
-
-    test('navigationOpened hides main content', function(done) {
-      element.manualNavigation = true;
-      element.navigationOpened = true;
-      setTimeout(function() {
-        var mainPage = Polymer.dom(element.root).querySelector('#mainPages');
-        assert.isTrue(mainPage.hasAttribute('hidden'));
-        done();
-      }, 201);
+    test('scrollTarget is undefined', function() {
+      assert.isUndefined(element.scrollTarget);
     });
 
     test('Handles tryit-requested event', function() {
@@ -97,18 +43,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
       element.dispatchEvent(event);
       assert.equal(element.page, 'request');
-    });
-
-    test('Handles raml-path-changed event', function() {
-      var newPath = 'resources.0';
-      var event = new CustomEvent('raml-path-changed', {
-        detail: {
-          path: newPath
-        },
-        bubbles: true
-      });
-      element.dispatchEvent(event);
-      assert.equal(element.path, newPath);
     });
   });
   </script>
