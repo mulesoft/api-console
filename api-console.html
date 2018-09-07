@@ -91,7 +91,9 @@ the License.
       display: none;
       padding: 0 24px;
       border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
+      border-top: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
       margin-bottom: 12px;
+      box-sizing: border-box;
       color: var(--api-console-extension-banner-color, rgba(0,0,0,0.54));
     }
 
@@ -131,8 +133,55 @@ the License.
     api-documentation {
       max-width: var(--api-console-main-max-width, 900px);
     }
+
+    .api-docs {
+      @apply --layout-horizontal;
+    }
+
+    .api-docs api-documentation {
+      @apply --layout-flex;
+    }
+
+    .api-docs api-request-panel {
+      max-width: 600px;
+      margin-left: 12px;
+      background-color: #f8f8f8;
+      padding: 0 12px;
+      box-sizing: border-box;
+      @apply --layout-flex;
+    }
+
+    .method-title-area {
+      @apply --layout-horizontal;
+      @apply --layout-center;
+    }
+
+    .method-title-area,
+    .extension-banner {
+      max-width: var(--api-console-main-max-width, 900px);
+    }
+
+    .method-title {
+      @apply --layout-flex;
+      @apply --arc-font-headline;
+      font-weight: var(--api-method-documentation-title-method-font-weight, 500);
+      text-transform: capitalize;
+      @apply --api-method-documentation-title;
+    }
+
+    :host([narrow]) .method-title-area {
+      margin-bottom: 24px;
+      margin-top: 12px;
+    }
+
+    :host([narrow]) .method-title {
+      font-size: 20px;
+      margin: 0;
+      @apply --api-method-documentation-title-narrow;
+    }
     </style>
     <iron-media-query query="(max-width: 740px)" query-matches="{{narrow}}"></iron-media-query>
+    <iron-media-query query="(min-width: 1500px)" query-matches="{{wideLayout}}"></iron-media-query>
     <app-drawer-layout responsive-width="[[responsiveWidth]]" force-narrow="[[_narrowNavForced]]" narrow="{{layoutNarrow}}">
       <app-drawer slot="drawer" align="[[drawerAlign]]">
         <template is="dom-if" if="[[!noToolbars]]">
@@ -164,14 +213,46 @@ the License.
         <div class="main-content">
           <slot name="content"></slot>
           <template is="dom-if" if="[[isRequest]]">
+            <div class="method-title-area">
+              <h1 class="method-title">[[methodName]]</h1>
+              <div class="method-close-action">
+                <paper-button class="action-button" on-click="closeTryIt" raised>Back to docs</paper-button>
+              </div>
+            </div>
             <div class="extension-banner" active$="[[extensionBannerActive]]">
               <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
               <paper-icon-button icon="arc:close" on-click="dismissExtensionBanner"></paper-icon-button>
             </div>
-            <api-request-panel data-page="request" amf-model="[[amfModel]]" selected="[[selectedShape]]" narrow="[[narrow]]" no-url-editor="[[noUrlEditor]]"></api-request-panel>
+            <api-request-panel
+              amf-model="[[amfModel]]"
+              selected="[[selectedShape]]"
+              narrow="[[narrow]]"
+              no-url-editor="[[noUrlEditor]]"
+              redirect-uri="[[redirectUri]]"
+              scroll-target="[[scrollTarget]]"></api-request-panel>
           </template>
           <template is="dom-if" if="[[isDocs]]">
-            <api-documentation data-page="docs" amf-model="[[amfModel]]" selected="[[selectedShape]]" selected-type="[[selectedShapeType]]" no-try-it="[[noTryIt]]" narrow="[[narrow]]" base-uri="[[baseUri]]"></api-documentation>
+            <section class="api-docs">
+              <api-documentation
+                amf-model="[[amfModel]]"
+                selected="[[selectedShape]]"
+                selected-type="[[selectedShapeType]]"
+                no-try-it="[[_noTryItValue]]"
+                narrow="[[narrow]]"
+                base-uri="[[baseUri]]"
+                inline-methods="[[inlineMethods]]"
+                redirect-uri="[[redirectUri]]"
+                scroll-target="[[scrollTarget]]"></api-documentation>
+              <template is="dom-if" if="[[_renderInlineTyit]]" restamp>
+                <api-request-panel
+                  amf-model="[[amfModel]]"
+                  selected="[[selectedShape]]"
+                  narrow="[[narrow]]"
+                  no-url-editor="[[noUrlEditor]]"
+                  redirect-uri="[[redirectUri]]"
+                  scroll-target="[[scrollTarget]]"></api-request-panel>
+              </template>
+            </section>
           </template>
         </div>
       </app-header-layout>
@@ -273,6 +354,13 @@ the License.
         selectedShapeType: {
           type: String,
           notify: true
+        },
+        /**
+         * Computed value, true if current selection represent a method
+         */
+        isMethod: {
+          type: Boolean,
+          computed: '_computeIsMethod(selectedShapeType)'
         },
         /**
          * Location of the AMF json/ld model. It can be an endpoint that
@@ -414,6 +502,16 @@ the License.
          */
         bowerLocation: String,
         /**
+         * OAuth2 redirect URI.
+         * By default the app uses `bowerLocation` to compute redirect location
+         * URI. If you set this value if has to work with authorization
+         * component meaning it has to pass auth data to the opener window or
+         * top frame.
+         * See documentation for `advanced-rest-client/oauth-authorization`
+         * for API details.
+         */
+        redirectUri: String,
+        /**
          * Hides the URL editor from the view.
          * Note that the editor is still in the DOM. This property just hiddes
          * it.
@@ -435,7 +533,6 @@ the License.
           type: Boolean,
           value: false
         },
-
         /**
          * Computed value of AMF model of a type of `http://schema.org/WebAPI`
          *
@@ -499,7 +596,44 @@ the License.
         app: {
           type: Boolean,
           reflectToAttribute: true
-        }
+        },
+        /**
+         * When true it places try it panel next to rhe documentation panel.
+         * It is set automatically via media queries
+         */
+        wideLayout: Boolean,
+        /**
+         * If set then it renders methods documentation inline with
+         * the endpoint documentation.
+         * When it's not set (or value is `false`, default) then it renders
+         * just a list of methods with links in the documentation panel
+         */
+        inlineMethods: {type: Boolean, value: false},
+
+        _renderInlineTyit: {
+          type: Boolean,
+          computed: '_computeRenderInlineTryIt(wideLayout, isMethod, app, inlineMethods)'
+        },
+
+        _noTryItValue: {
+          type: Boolean,
+          computed: '_computeNoTryItValue(noTryIt, _renderInlineTyit)'
+        },
+
+        /**
+         * Computed value from the method model, name of the method.
+         * It is either a `displayName` or HTTP method name
+         */
+        methodName: {
+          type: String,
+          computed: '_computeMethodName(isMethod, selectedShape, webApi)'
+        },
+        /**
+         * Scroll target used to observe `scroll` events.
+         * Set it to a parent element that is a scroll region (has overflow set)
+         * so the app can handle scrolling properly.
+         */
+        scrollTarget: Object
       };
     }
 
@@ -624,7 +758,7 @@ the License.
      */
     _apiNavigationOcurred(e) {
       if (e.detail.passive !== false && this.page !== 'docs') {
-        this.page = 'docs';
+        this.closeTryIt();
       }
       if (e.detail.selected !== this.selectedShape) {
         this.selectedShape = e.detail.selected;
@@ -632,6 +766,12 @@ the License.
       if (e.detail.type !== this.selectedShapeType) {
         this.selectedShapeType = e.detail.type;
       }
+    }
+    /**
+     * Closes "try it" panel and restores docs view.
+     */
+    closeTryIt() {
+      this.page = 'docs';
     }
     /**
      * Computes value of `_narrowNavForced` property.
@@ -665,6 +805,39 @@ the License.
       if (value && this.extensionBannerActive) {
         this.extensionBannerActive = false;
       }
+    }
+
+    _computeIsMethod(selectedShapeType) {
+      return selectedShapeType === 'method';
+    }
+
+    _computeRenderInlineTryIt(wideLayout, isMethod, app, inlineMethods) {
+      if (!wideLayout || !app || !isMethod || inlineMethods) {
+        return false;
+      }
+      return wideLayout && isMethod;
+    }
+
+    _computeNoTryItValue(noTryIt, renderInlineTyit) {
+      if (renderInlineTyit) {
+        return true;
+      }
+      return noTryIt;
+    }
+
+    _computeMethodName(isMethod, selected, webApi) {
+      if (!isMethod || !selected || !webApi) {
+        return;
+      }
+      const method = this._computeMethodModel(webApi, selected);
+      if (!method) {
+        return;
+      }
+      let name = this._getValue(method, this.ns.schema.schemaName);
+      if (!name) {
+        name = this._getValue(method, this.ns.w3.hydra.core + 'method');
+      }
+      return name;
     }
   }
   window.customElements.define(ApiConsole.is, ApiConsole);
