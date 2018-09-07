@@ -50,7 +50,7 @@
 <body unresolved>
   <app-location use-hash-as-path></app-location>
   <raml-aware scope="demo-model"></raml-aware>
-  <api-console aware="demo-model" hidden app>
+  <api-console aware="demo-model" hidden app redirect-uri="https://auth.advancedrestclient.com/oauth-popup.html">
     <paper-menu-button slot="toolbar" dynamic-align>
       <paper-icon-button icon="arc:menu" slot="dropdown-trigger"></paper-icon-button>
       <paper-listbox slot="dropdown-content" id="apiList" on-selected-changed="_apiChanged">
