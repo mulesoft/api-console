@@ -275,7 +275,7 @@ the License.
     first one to handle the event and run the request. Any other listener
     attached to the console, body or window is called after this one.
     -->
-    <xhr-simple-request></xhr-simple-request>
+    <xhr-simple-request append-headers="[[appendHeaders]]"></xhr-simple-request>
     <oauth1-authorization></oauth1-authorization>
     <oauth2-authorization></oauth2-authorization>
   </template>
@@ -427,9 +427,7 @@ the License.
          * to a server without user knowing about it.
          * The headers should be valid HTTP headers string.
          */
-        appendHeaders: {
-          type: String
-        },
+        appendHeaders: String,
         /**
          * If true it forces the console to render narrow layout.
          * This hides left hand side navigation and some fonts are smaller
