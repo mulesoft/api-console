@@ -791,20 +791,31 @@ the License.
     resetLayout() {
       this.shadowRoot.querySelector('app-drawer-layout').notifyResize();
     }
-
+    /**
+     * Dispatches `api-console-ready` event that is used by APIC extension
+     * so it can initialize itself when handled
+     */
     _notifyApicExtension() {
       this.dispatchEvent(new CustomEvent('api-console-ready', {
         bubbles: true,
         composed: true
       }));
     }
-
+    /**
+     * Controls behavior if the extension banner.
+     * @param {Boolean} value Current value of `noExtensionBanner` property
+     */
     _noExtBannerChanged(value) {
       if (value && this.extensionBannerActive) {
         this.extensionBannerActive = false;
       }
     }
-
+    /**
+     * Computes value of `isMethod` proiperty.
+     * @param {String} selectedShapeType Current value of `selectedShapeType`
+     * property
+     * @return {Boolean} True if current selection represent a method
+     */
     _computeIsMethod(selectedShapeType) {
       return selectedShapeType === 'method';
     }
@@ -822,7 +833,15 @@ the License.
       }
       return noTryIt;
     }
-
+    /**
+     * Computes method name for not-wide view, where the request panel
+     * has close button.
+     * @param {Boolean} isMethod Current state of `isMethod` property
+     * @param {String} selected Curerently selected AMF shape (@id).
+     * @param {Object} webApi Computed AMF WebAPI model.
+     * @return {String|Undefined} Name of current method (verb) as RAML's
+     * `displayName` property or name of the HTTP method.
+     */
     _computeMethodName(isMethod, selected, webApi) {
       if (!isMethod || !selected || !webApi) {
         return;
