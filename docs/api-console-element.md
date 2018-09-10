@@ -10,7 +10,7 @@ When developing an API portal which API console is a part, it's easier to start 
 bower install --save mulesoft/api-console
 ```
 
-2) Import using the console.
+2) Import the console.
 
 ```html
 <!-- Very small library that imports polyfills if needed -->
@@ -29,7 +29,7 @@ bower install --save mulesoft/api-console
 
 ## Production environment
 
-We encourage to use our [build tools](build-tools.md) to generate production read bundles.
+We encourage you to use our [build tools](build-tools.md) to generate production ready bundles.
 
 1) Install the console
 
@@ -51,7 +51,7 @@ builder({
 .catch((cause) => console.log('Build error <\\3', cause.message));
 ```
 
-3) Use import script to detect bundle type to use and import the console
+3) Use import script to detect bundle type to load
 
 ```HTML
 <!doctype html>
@@ -71,6 +71,10 @@ builder({
   </body>
 </html>
 ```
+
+The bundles generator creates `es5-bundle` and `es6-bundle`. The `apic-import.js`
+script decides which one to use depending on browsers capabilities.
+The script also includes `webcomponents-loader.js` to load polyfills if needed.
 
 ## Roadmap notes
 

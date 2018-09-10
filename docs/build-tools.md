@@ -1,9 +1,10 @@
 # API Console build tools
 
-The API console comes with a set of tools to help you create documentation for your API quickly.
+API console comes with a set of tools to help you create documentation for your API quickly.
 
 **Learn more**
-Check out our examples of how to use our build tools in the CI process based on Travis:
+
+Check out our examples of how to use our build tools in CI pipeline with Travis:
 - [Building API Console for GitHub pages on Travis](gh-pages.md)
 - [Rebuilding the api.json file in the CI process](rebuilding-api-json.md)
 
@@ -31,13 +32,13 @@ For more information, see https://github.com/mulesoft-labs/api-console-cli.
 Build API Console from the latest released version and use `path/to/api.raml` file as the data source. The API is a RAML 1.0 spec file.
 
 ```shell
-$ api-console -a path/to/api.raml -t "RAML 1.0"
+$ api-console -t "RAML 1.0" -a path/to/api.raml
 ```
 
 Build API Console from local sources (`--local api-console-release.zip`) that is a zip file of a release.
 
 ```shell
-$ api-console build --local api-console-release.zip -a path/to/api.raml -t "RAML 1.0"
+$ api-console build -t "RAML 1.0" --local api-console-release.zip -a path/to/api.raml
 ```
 
 Full documentation: https://github.com/mulesoft-labs/api-console-cli/blob/master/docs/api-console-build.md
@@ -51,10 +52,10 @@ This is the node module that builds API console from the api-console element eit
 #### Installation
 
 ```shell
-$ sudo npm i -g api-console-builder
+$ npm i --save-dev api-console-builder
 ```
 
-#### Examples
+#### Example
 
 This example builds a standalone application of API Console that uses a specific release version from GitHub as the element source and an API definition from the `api.raml` file.
 

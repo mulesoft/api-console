@@ -13,13 +13,11 @@ Great news! Next version of API console is here! The upgrade includes new design
 We are working very hard to deliver first in class solutions for API documentation.
 MuleSoft's AMF allows to parse any* API document and produces common data model. API console consumes this model instead of RAML JS parser's.
 
-\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 1.0, OAS 2.0 and OAS 3.0. It can be extended by defining new vocabulary to support other API spec formats.
+\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 1.0 and OAS 2.0. It can be extended by defining new vocabulary to support other API spec formats.
 
 ### Native support for web components
 
-The application has been recreated from scratch to support so called v1 specification of web components.
-This means no more polyfills and less source code to be downloaded. We reduced size of the API console 2 times! It is possible to brake it down to
-smaller bundles and download console's sources on demand. More about it in "Building the console" section.
+API console now support final version of web components specification. This mean no more polyfills and less source code to be downloaded.
 
 ### Redesign
 
@@ -30,7 +28,7 @@ New documentation page focuses on presenting the information which is the API an
 
 ### Re-build
 
-New build tools allows you to customize the bundle to your needs and possibly reduce size of the console even more than when using default settings. Check out "Building the console" section for more information.
+New [build tools](build tools) allows you to customize the bundle to your needs and possibly reduce size of the console even more than when using default settings. Check out "Building the console" section for more information.
 
 ## Introduction
 
@@ -49,7 +47,7 @@ $ sudo npm install -g api-console-cli
 Generate API console from your RAML or OAS file:
 
 ```shell
-$ api-console build  -a path/to/api.raml -t "RAML 1.0" # works with remote files too
+$ api-console build -t "RAML 1.0" -a path/to/api.raml # works with remote files too
 ```
 
 Preview the console:
@@ -58,19 +56,21 @@ Preview the console:
 $ api-console serve build/ --open
 ```
 
-That's all you need to build the API console for your API. Below we'll describe how to customize the console.
-
 ### Run as a standalone web-application
 
-Use API Console as a standalone application to display the documentation for your API as a web page. The application supports [Deep linking][deep linking], which allows you to share a link to a particular part of your API documentation. You can find a basic example of the standalone application on our [demo application] web page.
+Recommended way of using API console is to build a standalone application that can be served from your server. Generated sources with `api-console-cli` is production ready bundle of the console ready to be served to your users. The application supports [Deep linking][deep linking], which allows you to share a link to a particular part of your API documentation. You can find a basic example of the standalone application on our [demo application] web page.
 
-To build the API Console as a standalone application use one of our [build tools].
+To build the API Console as a standalone application use our [build tools].
 
-### Use API components
+### Using API components
 
-The API Console was built on top of the new Web Components specification. When you include sources of the console into your web application it registers a new HTML element, `<api-console>`. You can use this element in the same way as any other element on the page or web application. For example, you can embed the console into your blog post or as a part of a press release. Your users can explore your API without being redirected to another web page.
+This is advanced option for developers to embed the console or one of it's components into existing web page.
 
-First, use [bower] to install the console and its dependencies:
+API console is a web component. This mean it can be used in any web environments (browser, Chrome frame, Electron app etc). Also it can be mixed with any framework as it does not reference other frameworks.
+
+This version of the console still works with `bower` as a dependency manager as it works with HTML imports. Next version will work with ES6 module imports which supports npm as a dependency management system.
+
+First, use [Bower] to install the console and its dependencies:
 
 ```bash
 $ bower install --save mulesoft/api-console
@@ -86,7 +86,7 @@ Finally use the HTML tag:
 
 ```html
 <body>
-  <api-console amf-model="{...}"></api-console>
+  <api-console narrow amf-model="{...}"></api-console>
 </body>
 ```
 
@@ -197,7 +197,7 @@ See the LICENSE.md file for more information.
 
 [deep linking]: https://en.wikipedia.org/wiki/Deep_linking
 [demo application]: https://mulesoft.github.io/api-console
-[demo application source code]: demo/api.html
+[demo application source code]: demo/standalone/index.html
 [api console element docs]: docs/api-console-element.md
 [build tools]: docs/build-tools.md
 [configuring the api console]: docs/configuring-api-console.md
@@ -207,6 +207,5 @@ See the LICENSE.md file for more information.
 [Bower]: https://bower.io/
 [Polymer 2.0 styling]: https://www.polymer-project.org/2.0/docs/devguide/custom-css-properties
 [the elements catalogue]: https://elements.advancedrestclient.com/
-[bower]: https://bower.io/
 [CORS Wiki]: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
 [CORS guideline]: docs/cors.md

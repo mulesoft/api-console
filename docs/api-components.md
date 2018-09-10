@@ -1,6 +1,8 @@
 # Using API components
 
-API console is a shell application that puts other components together in a
+This documentation is for advanced use
+
+API console is a shell application that puts web components together in a
 single application. Three main UI regions of the API console are:
 
 - Navigation (api-navigation)
@@ -9,8 +11,8 @@ single application. Three main UI regions of the API console are:
 - Model propagation helper (raml-aware) as an optional dependency.
 
 In some cases you may need to use the components separately to customize the
-experience even more with your environment. This document describes how to use
-separate components to work together as in the API console.
+experience with your environment. This document describes how to use
+API components to work together as in the API console.
 
 ## Installation
 
@@ -18,8 +20,7 @@ The fastest way is to use regular installation and build process as described in
 [api-console-element.md](api-console-element.md) and [build-tools.md](build-tools.md)
 documents.
 
-To reduce size of generated bundle by removing layout dependencies used in the
-`api-console` element as the element itself install basic dependencies
+The base installation can be handled with the following command:
 
 ```
 $ bower i --save advanced-rest-client/api-navigation advanced-rest-client/api-documentation advanced-rest-client/api-request-panel advanced-rest-client/raml-aware
@@ -82,7 +83,7 @@ window.addEventListener('WebComponentsReady', () => app.loadApiModel('api-model.
 
 ### Code walkthrough
 
-In first code block main dependencies of the API console components has been loaded into the
+In first code block main dependencies of the API console has been loaded into the
 application using HTML imports.
 You may skip any of the components if you are not planning to use it.
 
@@ -109,7 +110,7 @@ fetch('./' + modelFile)
 });
 ```
 
-As you may noticed the `aside` element is hidden from the view. It's because the the time of loading the console there's no appropriate context to render this element. By default the documentation component renders "Try it" button next to HTTP method documentation. When the user request to try the endpoint the panel dispatches `tryit-requested` event. This is the right time to render the panel:
+As you may noticed the `aside` element is hidden from the view. It's because at the time of loading the console there's no appropriate context to render this element. By default the documentation component renders "Try it" button next to HTTP method documentation. When the user request to try the endpoint the component dispatches `tryit-requested` custom event. This is the right time to render the panel:
 
 ```html
 <script>
@@ -121,7 +122,7 @@ document.body.querySelector('api-documentation').addEventListener('tryit-request
 ```
 
 Both `api-documentation` and `api-request-panel` support the same API property: `handle-navigation-events`.
-It enables both elements to listen for navigation events dispatched by `api-navigation` and update
+It enables elements to listen for navigation events dispatched by `api-navigation` and update
 the view automatically. If for any reason you would like to do it manually observe the
 `api-navigation-selection-changed` event and update the state of the components:
 
@@ -143,8 +144,8 @@ window.addEventListener('api-navigation-selection-changed', (e) => {
 
 ## Optional but useful dependencies
 
-Parts of the logic is optional for API console. Things like OAuth 1 or 2 authorization, handling the request or support for cryptography is not included by default.
-If you application already support similar logic if better to use it and reduce size of the final build.
+Parts of the logic is optional for API console. Things like OAuth 1 and 2 authorization, handling the request, or support for cryptography is not included by default.
+If you application already support similar logic it's better to use your application's logic and reduce size of the final build.
 This optional dependencies are:
 
 - advanced-rest-client/xhr-simple-request - Uses XHR object to make a request
@@ -152,7 +153,7 @@ This optional dependencies are:
 - advanced-rest-client/cryptojs-lib - Crypto library that is used by authorization logic
 - advanced-rest-client/web-animations-js - At the time of writing this article Web Animations API is not implemented in any browser and the app uses this API for dropdowns.
 
-If you having CORS problems or you already support logic for transporting a test request handle `api-request` as described in [api-request-editor](https://github.com/advanced-rest-client/api-request-editor/blob/stage/api-request-editor.html#L228) docs.
+If you having CORS problems or you already support logic for transporting the request handle `api-request` and `api-response` custom events as described in [api-request-editor](https://github.com/advanced-rest-client/api-request-editor/blob/stage/api-request-editor.html#L228) docs.
 
 To manually handle OAuth 2 authorization listen for `oauth2-token-requested` event as described in  [oauth2-authorization](https://github.com/advanced-rest-client/oauth-authorization/blob/stage/oauth2-authorization.html#L32).
 
@@ -181,7 +182,7 @@ Crypto JS and Web Animations polyfills do not have custom element and just need 
 
 ## Production environment
 
-API console build tools does not allow custom builds like this.
-Try [Polymer build npm module](https://github.com/Polymer/tools/tree/master/packages/build) or to generate a bundle.
+API console build tools only allows to create standalone and embeddable builds with predefined configuration.
+Try [Polymer build npm module](https://github.com/Polymer/tools/tree/master/packages/build) to generate own bundle.
 API console builder uses polymer build under the hood with predefined build process. See [builder.js](https://github.com/mulesoft-labs/api-console-builder/blob/master/lib/builder.js) file for implementation details.
 You can also contact us using issue tracker to get help.
