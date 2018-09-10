@@ -89,7 +89,6 @@ the License.
     .extension-banner {
       @apply --layout-center;
       display: none;
-      padding: 0 24px;
       border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
       border-top: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
       margin-bottom: 12px;
@@ -136,16 +135,17 @@ the License.
 
     .api-docs {
       @apply --layout-horizontal;
+      overflow: auto;
     }
 
     .api-docs api-documentation {
       @apply --layout-flex;
     }
 
-    .api-docs api-request-panel {
+    .api-docs .inline-request {
       max-width: 600px;
       margin-left: 12px;
-      background-color: #f8f8f8;
+      background-color: var(--apic-tryint-wide-background-color, #f8f8f8);
       padding: 0 12px;
       box-sizing: border-box;
       @apply --layout-flex;
@@ -246,13 +246,19 @@ the License.
                 redirect-uri="[[redirectUri]]"
                 scroll-target="[[scrollTarget]]"></api-documentation>
               <template is="dom-if" if="[[_renderInlineTyit]]" restamp>
-                <api-request-panel
-                  amf-model="[[amfModel]]"
-                  selected="[[selectedShape]]"
-                  narrow="[[narrow]]"
-                  no-url-editor="[[noUrlEditor]]"
-                  redirect-uri="[[redirectUri]]"
-                  scroll-target="[[scrollTarget]]"></api-request-panel>
+                <div class="inline-request">
+                  <div class="extension-banner" active$="[[extensionBannerActive]]">
+                    <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
+                    <paper-icon-button icon="arc:close" on-click="dismissExtensionBanner"></paper-icon-button>
+                  </div>
+                  <api-request-panel
+                    amf-model="[[amfModel]]"
+                    selected="[[selectedShape]]"
+                    narrow="[[narrow]]"
+                    no-url-editor="[[noUrlEditor]]"
+                    redirect-uri="[[redirectUri]]"
+                    scroll-target="[[scrollTarget]]"></api-request-panel>
+                </div>
               </template>
             </section>
           </template>
@@ -295,7 +301,7 @@ the License.
    * @appliesMixin ApiElements.AmfHelperMixin
    */
   class ApiConsole extends ApiElements.AmfHelperMixin(Polymer.Element) {
-    static get is() { return 'api-console'; }
+    static get is() {return 'api-console';}
     static get properties() {
       return {
         /**
