@@ -38,7 +38,8 @@
     "web-animations-js": "web-animations/web-animations-js#^2.3",
     "arc-polyfills": "advanced-rest-client/arc-polyfills#^0.1.11",
     "url": "advanced-rest-client/URL#^0.6.1",
-    "xhr-simple-request": "advanced-rest-client/xhr-simple-request#^2.0.0"
+    "xhr-simple-request": "advanced-rest-client/xhr-simple-request#^2.0.0",
+    "api-console-default-theme": "advanced-rest-client/api-console-default-theme#5.0.0-preview"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
