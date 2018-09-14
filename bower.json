@@ -22,7 +22,7 @@
     "jszip": "~2.0.0",
     "marked": "~0.3.1",
     "raml-client-generator": "~0.0.7",
-    "raml-1-parser": "https://github.com/raml-org/raml-js-parser-2/releases/download/1.1.45/raml-1-parser.zip",
+    "raml-1-parser": "https://github.com/raml-org/raml-js-parser-2/releases/download/1.1.46/raml-1-parser.zip",
     "resolve-url": "~0.2.1",
     "slug": "~0.8.0",
     "velocity": "~1.1.0",
