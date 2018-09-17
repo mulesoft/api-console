@@ -214,7 +214,7 @@
       var checkInValue = values.find(function (value) {
         return value.toLowerCase() === check
       });
-      return checkInValue ? true : false;
+      return !!checkInValue;
     }
   };
 
