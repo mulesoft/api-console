@@ -51,7 +51,7 @@
   <app-location use-hash-as-path></app-location>
   <raml-aware scope="demo-model"></raml-aware>
   <api-console aware="demo-model" hidden app redirect-uri="https://auth.advancedrestclient.com/oauth-popup.html">
-    <paper-menu-button slot="toolbar" dynamic-align>
+    <paper-menu-button slot="toolbar" dynamic-align id="demoMenu">
       <paper-icon-button icon="arc:menu" slot="dropdown-trigger"></paper-icon-button>
       <paper-listbox slot="dropdown-content" id="apiList" on-selected-changed="_apiChanged">
         <paper-item>
@@ -62,6 +62,12 @@
         </paper-item>
         <paper-item>
           <paper-toggle-button data-action="noAttribution">No attribution (see license)</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="manualNavigation">Manual navigation</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="navigationOpened">Navigation opened</paper-toggle-button>
         </paper-item>
         <paper-item data-click-action="goBack">Close this API</paper-item>
       </paper-listbox>

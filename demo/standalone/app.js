@@ -238,6 +238,8 @@
       case 'noTryIt':
       case 'narrow':
       case 'noAttribution':
+      case 'manualNavigation':
+      case 'navigationOpened':
         let apiConsole = document.querySelector('api-console');
         apiConsole[action] = e.detail.value;
         break;
@@ -248,6 +250,7 @@
         dataElement.removeAttribute('hidden');
         break;
     }
+    document.getElementById('demoMenu').opened = false;
   };
 
   // Notifys user when something went wrong...

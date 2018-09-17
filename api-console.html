@@ -185,7 +185,7 @@ the License.
       <iron-media-query query="(min-width: 1500px)" query-matches="{{wideLayout}}"></iron-media-query>
     </template>
     <app-drawer-layout responsive-width="[[responsiveWidth]]" force-narrow="[[_narrowNavForced]]" narrow="{{layoutNarrow}}">
-      <app-drawer slot="drawer" align="[[drawerAlign]]">
+      <app-drawer slot="drawer" align="[[drawerAlign]]" opened="[[navigationOpened]]">
         <template is="dom-if" if="[[!noToolbars]]">
           <app-toolbar>
             <div>API console</div>
