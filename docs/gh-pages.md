@@ -6,17 +6,9 @@ This example shows how to use Travis-CI to push API Console with the API documen
 
 ## Overview
 
-[docs/gh-pages/.travis.yml](gh-pages/.travis.yml) file contains a set of directives that Travis understands and executes. This file contains a minimal setup for the API console generation but you can change it.
+[docs/gh-pages/.travis.yml](gh-pages/.travis.yml) file contains a set of directives that Travis understands and executes. This file contains a minimal setup for the API console generation.
 
-First, Travis installs node dependencies, which in this case is the
-[api-console-builder](https://www.npmjs.com/package/api-console-builder) module as defined in the [docs/gh-pages/package.json](gh-pages/package.json) file:
-
-```yaml
-before_script:
-- npm install
-```
-
-Next, Travis executes [docs/gh-pages/deploy.sh](gh-pages/deploy.sh) that processes your private key associated with a GitHub account, as discussed below. Finally, Travis checks out the latest version of your API, creates the console, and publishes the console in `gh-pages` branch.
+Travis executes [docs/gh-pages/deploy.sh](gh-pages/deploy.sh) that processes your private key associated with a GitHub account, as discussed below. Finally, Travis checks out the latest version of your API, creates the console, and publishes the console in `gh-pages` branch.
 
 ```yaml
 script: bash ./deploy.sh
@@ -44,7 +36,7 @@ If you already have generated keys, go to step 5.
 ```
   Enter a file in which to save the key (/Users/you/.ssh/id_rsa): /Users/you/.ssh/gh-travis_rsa
 ```
-  We use this filename in the build script.  
+  We use this filename in the build script.
 
 4. Do _not_ set a password. When Travis runs the script there's no way to respond to a password prompt. Consequently, do not use this key for any other purpose. Doing so would be unsafe. Also, keep the key in a location that nobody can access.
 

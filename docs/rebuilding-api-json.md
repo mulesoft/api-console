@@ -2,8 +2,6 @@
 
 Building API Console with the option to generate external JSON (the api.json file) simplifies updating the documentation.
 
-API Console provides you with the [raml-json-enhance-node](https://www.npmjs.com/package/raml-json-enhance-node) module or a CLI command to generate only the JSON file from RAML. This example shows how to regenerate your `api.json` file with Travis CI.
-
 ## Overview
 
 Scripts described in this document run when the master branch of your repository changes. Scripts generate an `api.json` file and puts it into your `gh-pages` branch, without regenerating the API Console from sources.

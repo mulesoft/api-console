@@ -1,6 +1,6 @@
 # Styling the API Console
 
-Theming is based on [CSS variables] and CSS mixins. Basic concepts of using the variables and mixins are described in [Polymer 1.0 styling] documentation.
+Theming is based on [CSS variables] and CSS mixins. Basic concepts of using the variables and mixins are described in [Polymer 2.0 styling] documentation.
 
 The CSS mixins are not standardized and therefore require additional libraries for support. Polymer has its own implementation of CSS mixins.
 
@@ -94,9 +94,9 @@ This code just copies contents from `sourceStyles` file to `destinationStyles` f
 
 The `api-console` must either be explicitly sized, or contained by an explicitly
 sized parent. The parent container also has to be positioned relatively
-(`position: relative` CSS property). "Explicitly sized" means the container either has an explicit CSS height property set via a class or inline style, or the size is 
+(`position: relative` CSS property). "Explicitly sized" means the container either has an explicit CSS height property set via a class or inline style, or the size is
 set by the layout in some other way, such as the flex layout or absolute positioning.
 
 [CSS variables]: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
-[Polymer 1.0 styling]: https://www.polymer-project.org/1.0/docs/devguide/styling
+[Polymer 2.0 styling]: https://www.polymer-project.org/1.0/docs/devguide/styling
 [build tools]: build-tools.md

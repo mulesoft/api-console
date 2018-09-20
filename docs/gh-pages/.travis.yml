@@ -1,8 +1,6 @@
 language: node_js
 node_js:
 - stable
-before_script:
-- npm install
 script: bash ./deploy.sh
 before_install:
 # Will be filled by travis CLI command
