@@ -4,7 +4,7 @@
   "authors": [
     "The Advanced REST client authors <arc@mulesoft.com>"
   ],
-  "version": "4.2.2",
+  "version": "4.2.3",
   "keywords": [
     "web-components",
     "polymer",
@@ -44,7 +44,8 @@
     "paper-header-panel": "PolymerElements/paper-header-panel#^1.1.7",
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
     "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.1",
-    "headers-parser-behavior": "advanced-rest-client/headers-parser-behavior#^0.1.1"
+    "headers-parser-behavior": "advanced-rest-client/headers-parser-behavior#^0.1.1",
+    "marked": "markedjs/marked#^0.5.0"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#1.0.0",
@@ -71,5 +72,8 @@
     "tasks",
     "demo",
     "docs"
-  ]
+  ],
+  "resolutions": {
+    "marked": "^0.5.0"
+  }
 }
