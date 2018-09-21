@@ -4,7 +4,7 @@
   "authors": [
     "The Advanced REST client authors <arc@mulesoft.com>"
   ],
-  "version": "4.2.1",
+  "version": "4.2.2",
   "keywords": [
     "web-components",
     "polymer",
@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#1.0.0",
-    "web-component-tester": "^6.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
     "paper-styles": "polymerelements/paper-styles#^1.0.2",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
     "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.4.0",
