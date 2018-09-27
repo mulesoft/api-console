@@ -35,7 +35,7 @@
     apiconsole.app.observeRouteEvents();
     apiconsole.app.observeConsoleControls();
     apiconsole.app.observeAmfParser();
-    let dataElement = document.querySelector('parser-element');
+    const dataElement = document.querySelector('parser-element');
     dataElement.removeAttribute('hidden');
   };
   /**
@@ -106,7 +106,9 @@
     e.target.setAttribute('hidden', true);
     let apic = document.querySelector('api-console');
     apic.removeAttribute('hidden');
-
+    if (apic.resetSelection) {
+      apic.resetSelection();
+    }
     requestAnimationFrame(() => {
       apic.resetLayout();
       if (apiconsole.app.__initialType && apiconsole.app.__initialSelected) {

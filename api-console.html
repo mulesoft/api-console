@@ -338,10 +338,7 @@ the License.
          *
          * @type {Object|Array}
          */
-        amfModel: {
-          type: Object,
-          observer: '_amfModelChanged'
-        },
+        amfModel: Object,
         /**
          * It is current selection from the navigation represented
          * as an `@id` property of the AMD json/ld model.
@@ -752,10 +749,12 @@ the License.
       this.page = 'request';
     }
     /**
-     * Handler for the `amfModel` property change.
-     * Sets the `path` to summary.
+     * Resets current selection to "summary" page
      */
-    _amfModelChanged() {
+    resetSelection() {
+      if (this.page !== 'docs') {
+        this.page = 'docs';
+      }
       this.selectedShapeType = 'summary';
       this.selectedShape = 'summary';
     }
