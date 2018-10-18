@@ -1,0 +1,34 @@
+[
+  {
+    "@id": "",
+    "@type": [
+      "doc:ExternalFragment",
+      "doc:Fragment",
+      "doc:Unit"
+    ],
+    "doc:encodes": [
+      {
+        "@id": "#1",
+        "@type": [
+          "doc:ExternalDomainElement",
+          "doc:DomainElement"
+        ],
+        "doc:raw": [
+          {
+            "@value": ""
+          }
+        ],
+        "raml-http:mediaType": [
+          {
+            "@value": "application/raml+yaml"
+          }
+        ]
+      }
+    ],
+    "@context": {
+      "@base": "amf://id",
+      "raml-http": "http://a.ml/vocabularies/http#",
+      "doc": "http://a.ml/vocabularies/document#"
+    }
+  }
+]

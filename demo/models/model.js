@@ -10,6 +10,7 @@ files.set('apic-80/apic-80.raml', 'RAML 1.0');
 files.set('apic-83/apic-83.raml', 'RAML 1.0');
 files.set('apic-84/apic-84.raml', 'RAML 1.0');
 files.set('facets/facets.raml', 'RAML 1.0');
+files.set('apic-130/apic-130.raml', 'RAML 0.8');
 
 generator(files, {
   src: 'demo/models/',
