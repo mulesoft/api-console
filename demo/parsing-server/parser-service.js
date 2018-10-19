@@ -7,6 +7,7 @@ const amf = require('amf-client-js');
 
 const generator = amf.Core.generator('AMF Graph', 'application/ld+json');
 const ramlParser = amf.Core.parser('RAML 1.0', 'application/raml');
+const ramlParser8 = amf.Core.parser('RAML 0.8', 'application/raml');
 const openAPIParser = amf.Core.parser('OAS 2.0', 'application/json');
 const apiModelParser = amf.Core.parser('AMF Graph', 'application/ld+json');
 
@@ -90,9 +91,11 @@ class ParserService {
     let parser;
     switch (from) {
       case 'raml': parser = ramlParser; break;
+      case 'raml8': parser = ramlParser8; break;
       case 'oas': parser = openAPIParser; break;
       case 'amf': parser = apiModelParser; break;
     }
+    console.log('Processing', file, ', format', from);
     return parser.parseFileAsync(file)
     .then((doc) => this.generateModel(doc, from));
   }
@@ -107,6 +110,7 @@ class ParserService {
     let parser;
     switch (from) {
       case 'raml': parser = ramlParser; break;
+      case 'raml8': parser = ramlParser8; break;
       case 'oas': parser = openAPIParser; break;
       case 'amf': parser = apiModelParser; break;
     }
@@ -124,6 +128,7 @@ class ParserService {
     let resolver;
     switch (from) {
       case 'raml': resolver = amf.Core.resolver('RAML 1.0'); break;
+      case 'raml8': resolver = amf.Core.resolver('RAML 0.8'); break;
       case 'oas': resolver = amf.Core.resolver('OAS 2.0'); break;
     }
     if (resolver) {

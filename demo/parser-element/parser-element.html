@@ -75,6 +75,7 @@ the License.
     <paper-tabs selected="{{selected}}">
       <paper-tab>Predefined models</paper-tab>
       <paper-tab>RAML 1.0</paper-tab>
+      <paper-tab>RAML 0.8</paper-tab>
       <paper-tab>OpenAPI</paper-tab>
       <paper-tab>API model (AMF)</paper-tab>
     </paper-tabs>
@@ -110,6 +111,20 @@ the License.
         or
         <paper-textarea label="RAML 1.0 text content" id="rt"></paper-textarea>
         <paper-button class="action-button" raised on-click="_ramlText">Go</paper-button>
+      </section>
+      <section>
+        <div class="row">
+          <paper-input label="RAML 0.8 main file location or zip" type="url" id="r8u"></paper-input>
+          <paper-button class="action-button" raised on-click="_raml8Url">Go</paper-button>
+        </div>
+        or
+        <div class="row">
+          <paper-input label="RAML 0.8 zip file or single api file" type="file" id="r8f"></paper-input>
+          <paper-button class="action-button" raised on-click="_raml8File">Go</paper-button>
+        </div>
+        or
+        <paper-textarea label="RAML 0.8 text content" id="r8t"></paper-textarea>
+        <paper-button class="action-button" raised on-click="_raml8Text">Go</paper-button>
       </section>
       <section>
         <div class="row">
@@ -254,6 +269,20 @@ the License.
       this._processText(opts);
     }
 
+    _raml8Url() {
+      const value = this.$.r8u.value;
+      if (!value) {
+        this._error('Please, provide a value for the data location');
+        return;
+      }
+      const opts = {
+        dataType: 'raml8',
+        dataFormat: 'url',
+        dataValue: value
+      };
+      this._processText(opts);
+    }
+
     _ramlFile() {
       const value = this.$.rf.inputElement.inputElement.files[0];
       if (!value) {
@@ -268,6 +297,20 @@ the License.
       this._processFile(opts);
     }
 
+    _raml8File() {
+      const value = this.$.r8f.inputElement.inputElement.files[0];
+      if (!value) {
+        this._error('Please, select file first');
+        return;
+      }
+      const opts = {
+        dataType: 'raml8',
+        dataFormat: 'file',
+        dataValue: value
+      };
+      this._processFile(opts);
+    }
+
     _ramlText() {
       const value = this.$.rt.value;
       if (!value) {
@@ -276,6 +319,20 @@ the License.
       }
       const opts = {
         dataType: 'raml',
+        dataFormat: 'text',
+        dataValue: value
+      };
+      this._processText(opts);
+    }
+
+    _raml8Text() {
+      const value = this.$.r8t.value;
+      if (!value) {
+        this._error('Please, provide a RAML data first');
+        return;
+      }
+      const opts = {
+        dataType: 'raml8',
         dataFormat: 'text',
         dataValue: value
       };
