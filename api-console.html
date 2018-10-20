@@ -490,7 +490,7 @@ the License.
          */
         manualNavigation: Boolean,
         /**
-         * True when navigation is or should be opened.
+         * True when navigation is opened.
          */
         navigationOpened: {
           type: Boolean,
@@ -709,7 +709,13 @@ the License.
       super.ready();
       this._initExtensionBanner();
     }
-
+    /**
+     * Loads model from a file described in `modelLocation` property.
+     * This function is called automatically when the value of the property
+     * change.
+     *
+     * @param {String} url Model location
+     */
     _modelLocationChanged(url) {
       if (!url) {
         return;
@@ -811,7 +817,8 @@ the License.
      * @param {CustomEvent} e
      */
     _apiNavigationOcurred(e) {
-      if (e.detail.passive !== false && this.page !== 'docs') {
+      const isPassive = e.detail.passive === true;
+      if (!isPassive && this.page !== 'docs') {
         this.closeTryIt();
       }
       if (e.detail.selected !== this.selectedShape) {

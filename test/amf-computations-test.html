@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../../raml-aware/raml-aware.html">
+    <link rel="import" href="../api-console.html">
+    <script src="amf-loader.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="Basic">
+      <template>
+        <api-console></api-console>
+      </template>
+    </test-fixture>
+
+    <script>
+    /* global AmfLoader */
+    [
+      ['Regular model', false],
+      ['Compact model', true]
+    ].forEach((item) => {
+      suite('Automatic computations - ' + item[0], function() {
+        let element;
+        let amf;
+        suiteSetup(() => {
+          return AmfLoader.load(item[1])
+          .then((data) => {
+            amf = data;
+          });
+        });
+
+        setup(() => {
+          element = fixture('Basic');
+          element.amfModel = amf;
+        });
+
+        test('webApi is computed', function() {
+          assert.typeOf(element.webApi, 'object');
+        });
+
+        test('apiTitle is computed', function() {
+          assert.typeOf(element.apiTitle, 'string');
+        });
+      });
+    });
+    </script>
+  </body>
+</html>

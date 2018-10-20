@@ -11,38 +11,262 @@
 </head>
 
 <body>
-  <test-fixture id="basic">
+  <test-fixture id="Basic">
     <template>
       <api-console></api-console>
     </template>
   </test-fixture>
+
+  <test-fixture id="RequestView">
+    <template>
+      <api-console page="request"></api-console>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="Narrow">
+    <template>
+      <api-console narrow></api-console>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="ManualNavigation">
+    <template>
+      <api-console manual-navigation></api-console>
+    </template>
+  </test-fixture>
+
   <script>
   /* global fixture, assert */
   suite('APIC - basics', function() {
     let element;
-
     setup(function() {
-      element = fixture('basic');
+      element = fixture('Basic');
     });
 
     test('Default page is docs', function() {
       assert.equal(element.page, 'docs');
     });
 
-    test('noExtensionBanner is undefined', function() {
+    test('isRequest is computed', () => {
+      assert.isFalse(element.isRequest);
+    });
+
+    test('isDocs is computed', () => {
+      assert.isTrue(element.isDocs);
+    });
+
+    test('noExtensionBanner is false by default', function() {
       assert.isFalse(element.noExtensionBanner);
     });
 
-    test('scrollTarget is undefined', function() {
-      assert.isUndefined(element.scrollTarget);
+    test('extensionBannerActive is not initally set', function() {
+      assert.isUndefined(element.extensionBannerActive);
+    });
+
+    test('extensionBannerActive is eventually set', function(done) {
+      if (!element.isChrome) {
+        done();
+        return;
+      }
+      setTimeout(() => {
+        assert.isTrue(element.extensionBannerActive);
+        done();
+      }, 32);
     });
 
     test('Handles tryit-requested event', function() {
-      var event = new CustomEvent('tryit-requested', {
+      const e = new CustomEvent('tryit-requested', {
         bubbles: true
       });
-      element.dispatchEvent(event);
+      element.dispatchEvent(e);
       assert.equal(element.page, 'request');
+    });
+
+    test('dismissExtensionBanner() sets extensionBannerActive', () => {
+      element.dismissExtensionBanner();
+      assert.isFalse(element.extensionBannerActive);
+    });
+  });
+
+  suite('resetSelection()', () => {
+    test('Resets page to "docs"', () => {
+      const element = fixture('RequestView');
+      element.resetSelection();
+      assert.equal(element.page, 'docs');
+    });
+
+    test('Resets selectedShape"', () => {
+      const element = fixture('Basic');
+      element.selectedShape = 'amf://#1';
+      element.resetSelection();
+      assert.equal(element.selectedShape, 'summary');
+    });
+
+    test('Resets selectedShapeType"', () => {
+      const element = fixture('Basic');
+      element.selectedShapeType = 'type';
+      element.resetSelection();
+      assert.equal(element.selectedShapeType, 'summary');
+    });
+  });
+
+  suite('_computeIsRequest()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    test('Returns "true" when argument is "request"', () => {
+      const result = element._computeIsRequest('request');
+      assert.isTrue(result);
+    });
+
+    test('Returns "false" when argument is "docs"', () => {
+      const result = element._computeIsRequest('docs');
+      assert.isFalse(result);
+    });
+  });
+
+  suite('_computeIsDocs()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    test('Returns "true" when argument is "docs"', () => {
+      const result = element._computeIsDocs('docs');
+      assert.isTrue(result);
+    });
+
+    test('Returns "false" when argument is "request"', () => {
+      const result = element._computeIsDocs('request');
+      assert.isFalse(result);
+    });
+  });
+
+  suite('_computeIsMethod()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    test('Returns "true" when argument is "method"', () => {
+      const result = element._computeIsMethod('method');
+      assert.isTrue(result);
+    });
+
+    test('Returns "false" when argument is not "method"', () => {
+      const result = element._computeIsMethod('endpoint');
+      assert.isFalse(result);
+    });
+  });
+
+  suite('_apiNavigationOcurred()', () => {
+    let element;
+    const SEL_ID = 'test-id';
+    const SEL_TYPE = 'test-type';
+    setup(function() {
+      element = fixture('RequestView');
+    });
+
+    test('Closes request panel', () => {
+      element._apiNavigationOcurred({
+        detail: {
+          selected: SEL_ID,
+          type: SEL_TYPE
+        }
+      });
+      assert.equal(element.page, 'docs');
+    });
+
+    test('Do not closes request panel when passive navigation', () => {
+      element.selectedShape = SEL_ID;
+      element.selectedShapeType = SEL_TYPE;
+      element.page = 'request';
+      element._apiNavigationOcurred({
+        detail: {
+          selected: SEL_ID,
+          type: SEL_TYPE,
+          passive: true
+        }
+      });
+      assert.equal(element.page, 'request');
+    });
+
+    test('Sets selectedShape', () => {
+      element._apiNavigationOcurred({
+        detail: {
+          selected: SEL_ID,
+          type: SEL_TYPE
+        }
+      });
+      assert.equal(element.selectedShape, SEL_ID);
+    });
+
+    test('Sets selectedShapeType', () => {
+      element._apiNavigationOcurred({
+        detail: {
+          selected: SEL_ID,
+          type: SEL_TYPE
+        }
+      });
+      assert.equal(element.selectedShapeType, SEL_TYPE);
+    });
+  });
+
+  suite('_computeNarrowNavForced()', () => {
+    test('Returns true when 1st argument is set', () => {
+      const element = fixture('Basic');
+      const result = element._computeNarrowNavForced(true);
+      assert.isTrue(result);
+    });
+
+    test('Returns true when 2nd argument is set', () => {
+      const element = fixture('Basic');
+      const result = element._computeNarrowNavForced(undefined, true);
+      assert.isTrue(result);
+    });
+
+    test('Returns true when both arguments are true', () => {
+      const element = fixture('Basic');
+      const result = element._computeNarrowNavForced(true, true);
+      assert.isTrue(result);
+    });
+
+    test('Returns false when both arguments are false', () => {
+      const element = fixture('Basic');
+      const result = element._computeNarrowNavForced(false, false);
+      assert.isFalse(result);
+    });
+
+    test('Computes _narrowNavForced when narrow argument is set', () => {
+      const element = fixture('Narrow');
+      assert.isTrue(element._narrowNavForced);
+    });
+
+    test('Computes _narrowNavForced when manual-navigation argument is set', () => {
+      const element = fixture('ManualNavigation');
+      assert.isTrue(element._narrowNavForced);
+    });
+  });
+
+  suite('_notifyApicExtension()', () => {
+    test('Dispatches api-console-ready custom event (automatically)', (done) => {
+      document.body.addEventListener('api-console-ready', function f() {
+        document.body.removeEventListener('api-console-ready', f);
+        done();
+      });
+      fixture('Basic');
+    });
+
+    test('api-console-ready custom event bubbles', (done) => {
+      const element = fixture('Basic');
+      element.addEventListener('api-console-ready', function f(e) {
+        element.removeEventListener('api-console-ready', f);
+        assert.isTrue(e.bubbles);
+        done();
+      });
+      element._notifyApicExtension();
     });
   });
   </script>
