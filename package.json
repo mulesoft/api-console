@@ -22,7 +22,7 @@
     "The Advanced REST client authors <arc@mulesoft.com>"
   ],
   "scripts": {
-    "lint": "polymer lint api-documentation.html",
+    "lint": "polymer lint api-console.html",
     "test-sauce": "polymer test --plugin sauce --job-name \"api-console:local-test\"",
     "test": "polymer test --plugin local",
     "update-types": "gen-typescript-declarations --deleteExisting --outDir .",
