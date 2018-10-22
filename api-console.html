@@ -297,7 +297,7 @@ the License.
     first one to handle the event and run the request. Any other listener
     attached to the console, body or window is called after this one.
     -->
-    <xhr-simple-request append-headers="[[appendHeaders]]"></xhr-simple-request>
+    <xhr-simple-request append-headers="[[appendHeaders]]" proxy="[[proxy]]" proxy-encode-url="[[proxyEncodeUrl]]"></xhr-simple-request>
     <oauth1-authorization></oauth1-authorization>
     <oauth2-authorization></oauth2-authorization>
   </template>
