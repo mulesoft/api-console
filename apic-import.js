@@ -76,19 +76,4 @@
     document.head.appendChild(link);
     link.onload = bundleLoaded;
   }
-  // STyles should be imported as the last resource.
-  var imports = [
-    '/api-console-styles.html'
-  ];
-  for (var i = 0, len = imports.length; i < len; i++) {
-    var polyfillSrc = moduleRoot + imports[i];
-    var pscript = document.createElement('link');
-    pscript.setAttribute('rel', 'import');
-    pscript.setAttribute('href', polyfillSrc);
-    if (document.readyState === 'loading') {
-      document.write(pscript.outerHTML);
-    } else {
-      document.head.appendChild(pscript);
-    }
-  }
 })();
