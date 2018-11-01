@@ -379,16 +379,6 @@
                   "http://www.w3.org/ns/shacl#Shape",
                   "http://a.ml/vocabularies/shapes#Shape"
                 ],
-                "http://a.ml/vocabularies/document#link-target": [
-                  {
-                    "@id": "amf://id#13"
-                  }
-                ],
-                "http://a.ml/vocabularies/document#link-label": [
-                  {
-                    "@value": ""
-                  }
-                ],
                 "http://www.w3.org/ns/shacl#name": [
                   {
                     "@value": "url"
@@ -400,7 +390,7 @@
                     "@type": "http://www.w3.org/2000/01/rdf-schema#Seq",
                     "http://www.w3.org/2000/01/rdf-schema#_1": [
                       {
-                        "@id": "amf://id#14",
+                        "@id": "amf://id#13",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],

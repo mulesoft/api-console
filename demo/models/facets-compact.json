@@ -9,7 +9,7 @@
     ],
     "doc:encodes": [
       {
-        "@id": "#5",
+        "@id": "#3",
         "@type": [
           "schema-org:WebAPI",
           "doc:RootDomainElement",
@@ -22,7 +22,7 @@
         ],
         "sourcemaps:sources": [
           {
-            "@id": "#5/source-map",
+            "@id": "#3/source-map",
             "@type": [
               "sourcemaps:SourceMap"
             ],
@@ -30,7 +30,7 @@
               {
                 "sourcemaps:element": [
                   {
-                    "@value": "amf://id#5"
+                    "@value": "amf://id#3"
                   }
                 ],
                 "sourcemaps:value": [
@@ -56,7 +56,7 @@
               {
                 "sourcemaps:element": [
                   {
-                    "@value": "amf://id#5"
+                    "@value": "amf://id#3"
                   }
                 ],
                 "sourcemaps:value": [
@@ -273,7 +273,7 @@
             "@type": [
               "sourcemaps:SourceMap"
             ],
-            "sourcemaps:resolved-link": [
+            "sourcemaps:declared-element": [
               {
                 "sourcemaps:element": [
                   {
@@ -282,21 +282,7 @@
                 ],
                 "sourcemaps:value": [
                   {
-                    "@value": "amf://id#2"
-                  }
-                ]
-              }
-            ],
-            "sourcemaps:type-property-lexical-info": [
-              {
-                "sourcemaps:element": [
-                  {
-                    "@value": "amf://id#1"
-                  }
-                ],
-                "sourcemaps:value": [
-                  {
-                    "@value": "[(5,4)-(5,8)]"
+                    "@value": ""
                   }
                 ]
               }
@@ -339,7 +325,7 @@
                 ]
               }
             ],
-            "sourcemaps:declared-element": [
+            "sourcemaps:type-property-lexical-info": [
               {
                 "sourcemaps:element": [
                   {
@@ -348,7 +334,7 @@
                 ],
                 "sourcemaps:value": [
                   {
-                    "@value": ""
+                    "@value": "[(5,4)-(5,8)]"
                   }
                 ]
               }
@@ -357,7 +343,7 @@
         ]
       },
       {
-        "@id": "#3",
+        "@id": "#2",
         "@type": [
           "raml-shapes:ScalarShape",
           "shacl:Shape",
@@ -533,34 +519,20 @@
         ],
         "sourcemaps:sources": [
           {
-            "@id": "#3/source-map",
+            "@id": "#2/source-map",
             "@type": [
               "sourcemaps:SourceMap"
             ],
-            "sourcemaps:inherited-shapes": [
+            "sourcemaps:declared-element": [
               {
                 "sourcemaps:element": [
                   {
-                    "@value": "amf://id#3"
+                    "@value": "amf://id#2"
                   }
                 ],
                 "sourcemaps:value": [
                   {
-                    "@value": "amf://id#4"
-                  }
-                ]
-              }
-            ],
-            "sourcemaps:type-property-lexical-info": [
-              {
-                "sourcemaps:element": [
-                  {
-                    "@value": "amf://id#3"
-                  }
-                ],
-                "sourcemaps:value": [
-                  {
-                    "@value": "[(10,4)-(10,8)]"
+                    "@value": ""
                   }
                 ]
               }
@@ -581,7 +553,7 @@
               {
                 "sourcemaps:element": [
                   {
-                    "@value": "amf://id#3"
+                    "@value": "amf://id#2"
                   }
                 ],
                 "sourcemaps:value": [
@@ -603,16 +575,16 @@
                 ]
               }
             ],
-            "sourcemaps:declared-element": [
+            "sourcemaps:type-property-lexical-info": [
               {
                 "sourcemaps:element": [
                   {
-                    "@value": "amf://id#3"
+                    "@value": "amf://id#2"
                   }
                 ],
                 "sourcemaps:value": [
                   {
-                    "@value": ""
+                    "@value": "[(10,4)-(10,8)]"
                   }
                 ]
               }

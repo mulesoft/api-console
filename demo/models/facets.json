@@ -9,7 +9,7 @@
     ],
     "http://a.ml/vocabularies/document#encodes": [
       {
-        "@id": "amf://id#5",
+        "@id": "amf://id#3",
         "@type": [
           "http://schema.org/WebAPI",
           "http://a.ml/vocabularies/document#RootDomainElement",
@@ -133,7 +133,7 @@
         ]
       },
       {
-        "@id": "amf://id#3",
+        "@id": "amf://id#2",
         "@type": [
           "http://a.ml/vocabularies/shapes#ScalarShape",
           "http://www.w3.org/ns/shacl#Shape",

@@ -879,16 +879,6 @@
                   "shacl:Shape",
                   "raml-shapes:Shape"
                 ],
-                "doc:link-target": [
-                  {
-                    "@id": "#13"
-                  }
-                ],
-                "doc:link-label": [
-                  {
-                    "@value": ""
-                  }
-                ],
                 "shacl:name": [
                   {
                     "@value": "url"
@@ -900,7 +890,7 @@
                     "@type": "rdfs:Seq",
                     "rdfs:_1": [
                       {
-                        "@id": "#14",
+                        "@id": "#13",
                         "@type": [
                           "data:Scalar"
                         ],
@@ -912,7 +902,7 @@
                         ],
                         "sourcemaps:sources": [
                           {
-                            "@id": "#14/source-map",
+                            "@id": "#13/source-map",
                             "@type": [
                               "sourcemaps:SourceMap"
                             ],
@@ -920,7 +910,7 @@
                               {
                                 "sourcemaps:element": [
                                   {
-                                    "@value": "amf://id#14"
+                                    "@value": "amf://id#13"
                                   }
                                 ],
                                 "sourcemaps:value": [
@@ -951,7 +941,7 @@
                         ],
                         "sourcemaps:value": [
                           {
-                            "@value": "amf://id#13"
+                            "@value": "amf://id#14"
                           }
                         ]
                       }
