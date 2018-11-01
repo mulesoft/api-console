@@ -1,5 +1,5 @@
 'use strict';
-/*jshint esnext:true, node:true */
+/* jshint esnext:true, node:true */
 const fs = require('fs');
 const http = require('http');
 const basicAuth = require('basic-auth');
@@ -36,7 +36,7 @@ app.use(function(req, res, next) {
     });
   });
   req.busboy.on('field', function(fieldname, val
-    /*, fieldnameTruncated, valTruncated, encoding, mimetype*/
+    /* fieldnameTruncated, valTruncated, encoding, mimetype */
   ) {
     console.log('Field [' + fieldname + ']: value: ' + val);
   });
@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
 
 app.use('/ntlm', ntlm({
   debug: function() {
-    var args = Array.prototype.slice.apply(arguments);
+    const args = Array.prototype.slice.apply(arguments);
     console.log.apply(null, args);
   }
 }));
@@ -62,7 +62,7 @@ class TestServer {
   }
 
   basicAuth(req, res, next) {
-    var user = basicAuth(req);
+    const user = basicAuth(req);
     if (!user || !user.name || !user.pass) {
       return this.unauthorized(res);
     }
@@ -75,6 +75,9 @@ class TestServer {
 
   /**
    * To be called when the user is not basic authenticated.
+   *
+   * @param {Object} res
+   * @return {Object}
    */
   unauthorized(res) {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required (test:test)');
@@ -82,7 +85,7 @@ class TestServer {
   }
 
   createServer() {
-    var httpServer = http.createServer(app);
+    const httpServer = http.createServer(app);
     httpServer.listen(this.post, () => {
       console.log('HTTP started (' + this.post + ').');
     });
@@ -147,37 +150,37 @@ class TestServer {
 
   _setJson() {
     app.get('/json', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/json1.json', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/json1.json', 'utf8');
       // res.status(200).send('OK');
       res.set('Content-Type', 'application/json');
       res.send(json);
     });
     app.get('/json/2', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/json2.json', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/json2.json', 'utf8');
       // res.status(200).send('OK');
       res.set('Content-Type', 'application/json');
       res.send(json);
     });
     app.get('/json/3', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/quicker-response-export.json', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/quicker-response-export.json', 'utf8');
       // res.status(200).send('OK');
       res.set('Content-Type', 'application/json');
       res.send(json);
     });
     app.get('/json/4', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/slow-response-export.json', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/slow-response-export.json', 'utf8');
       // res.status(200).send('OK');
       res.set('Content-Type', 'application/json');
       res.send(json);
     });
     app.get('/json/error', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/json1.json', 'utf8');
+      let json = fs.readFileSync('./tasks/test-data/json1.json', 'utf8');
       res.set('Content-Type', 'application/json');
       json = '[Eroor]: An error occured' + json;
       res.send(json);
     });
     app.get('/json/html', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/json1.json', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/json1.json', 'utf8');
       res.set('Content-Type', 'text/html');
       res.send(json);
     });
@@ -185,22 +188,22 @@ class TestServer {
 
   _setXML() {
     app.get('/xml', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/xml1.xml', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/xml1.xml', 'utf8');
       res.set('Content-Type', 'application/xml');
       res.send(json);
     });
     app.get('/xml2', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/xml2.xml', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/xml2.xml', 'utf8');
       res.set('Content-Type', 'application/xml');
       res.send(json);
     });
     app.get('/xml3', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/xml3.xml', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/xml3.xml', 'utf8');
       res.set('Content-Type', 'application/xml');
       res.send(json);
     });
     app.get('/xml4', (req, res) => {
-      var json = fs.readFileSync('./tasks/test-data/xml4.xml', 'utf8');
+      const json = fs.readFileSync('./tasks/test-data/xml4.xml', 'utf8');
       res.set('Content-Type', 'application/xml');
       res.send(json);
     });
@@ -209,15 +212,15 @@ class TestServer {
   uuid() {
     // jscs:disable
     /* jshint ignore:start */
-    var lut = [];
-    for (var i = 0; i < 256; i++) {
+    const lut = [];
+    for (let i = 0; i < 256; i++) {
       lut[i] = (i < 16 ? '0' : '') + (i).toString(16);
     }
-    var fn = function() {
-      var d0 = Math.random() * 0xffffffff | 0;
-      var d1 = Math.random() * 0xffffffff | 0;
-      var d2 = Math.random() * 0xffffffff | 0;
-      var d3 = Math.random() * 0xffffffff | 0;
+    const fn = function() {
+      const d0 = Math.random() * 0xffffffff | 0;
+      const d1 = Math.random() * 0xffffffff | 0;
+      const d2 = Math.random() * 0xffffffff | 0;
+      const d3 = Math.random() * 0xffffffff | 0;
       return lut[d0 & 0xff] + lut[d0 >> 8 & 0xff] + lut[d0 >> 16 & 0xff] +
         lut[d0 >> 24 & 0xff] + '-' + lut[d1 & 0xff] + lut[d1 >> 8 & 0xff] + '-' +
         lut[d1 >> 16 & 0x0f | 0x40] + lut[d1 >> 24 & 0xff] + '-' + lut[d2 & 0x3f | 0x80] +
@@ -230,18 +233,18 @@ class TestServer {
   }
 
   _setCookie() {
-    //set random cookies
+    // set random cookies
     app.get('/cookies/random', (req, res) => {
-      var Chance = require('chance');
-      var chance = new Chance();
-      for (var i = 0; i < 10; i++) {
-        var value = chance.string({
+      const Chance = require('chance');
+      const chance = new Chance();
+      for (let i = 0; i < 10; i++) {
+        const value = chance.string({
           length: chance.integer({
             min: 10,
             max: 100
           })
         });
-        var opts = {};
+        const opts = {};
         if (chance.bool()) {
           opts.expires = 0;
         }
@@ -263,30 +266,30 @@ class TestServer {
       res.set('Content-Type', 'text/html');
       res.send('<h1>Cookies are set</h1>');
     });
-    //set cookies getting param keys as cookie name and param value as cookie value.
+    // set cookies getting param keys as cookie name and param value as cookie value.
     app.get('/cookies/set', (req, res) => {
       let params = req.query;
       console.log('Dumping params');
       console.log(params);
-      for (let key in params) {
+      Object.keys(params).forEach((key) => {
         res.cookie(key, params[key], {
           path: '/'
         });
-      }
+      });
       res.redirect('/cookies');
     });
-    //delete cookies getting param keys as cookie name and param value as cookie value.
+    // delete cookies getting param keys as cookie name and param value as cookie value.
     app.get('/cookies/delete', (req, res) => {
       let params = req.query;
-      for (let key in params) {
+      Object.keys(params).forEach((key) => {
         res.cookie(key, params[key], {
           path: '/',
           maxAge: -86400000
         });
-      }
+      });
       res.redirect('/cookies');
     });
-    //list cookies
+    // list cookies
     app.get('/cookies', function(req, res) {
       let resp = {
         cookies: req.cookies
@@ -298,7 +301,7 @@ class TestServer {
 
   _setPost() {
     app.post('/', upload.array(), (req, res) => {
-      var response = Object.assign({}, {
+      const response = Object.assign({}, {
         'body': req.body,
         'query': req.query
       });
@@ -386,7 +389,6 @@ class TestServer {
         res.redirect(url);
       }
     });
-
   }
 
   _setErrors() {
@@ -400,8 +402,8 @@ class TestServer {
 
   _setEmptyResponses() {
     app.all('/empty', (req, res) => {
-      var defaultStatus = 200;
-      var status = req.params.status;
+      const defaultStatus = 200;
+      let status = req.params.status;
       if (status) {
         status = Number(status);
         if (status !== status) {
@@ -436,9 +438,9 @@ class TestServer {
     });
     app.post('/ntlm', (req, res) => {
       res.status(200);
-      var response = Object.assign({}, {
-        'body': req.body,
-        'query': req.query,
+      const response = Object.assign({}, {
+        body: req.body,
+        query: req.query,
         headers: req.headers
       });
       console.log(req.body, req.query);
@@ -452,9 +454,9 @@ class TestServer {
 
   _seStatusCodes() {
     app.get('/status', (req, res) => {
-      let params = req.query;
+      const params = req.query;
       let status = params.status ? parseInt(params.status) : 200;
-      let statusText = params.text || 200;
+      const statusText = params.text || 200;
       if (status !== status) {
         status = 200;
       }
