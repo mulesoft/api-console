@@ -43,7 +43,7 @@ apic.amfModel = model;
 
 Type: **string**
 
-Uses [raml-aware] element, with `scope` attribute set to the value of this attribute. See [Passing RAML data](passing-raml-data.md) documentation for more information.
+Uses [raml-aware][] element, with `scope` attribute set to the value of this attribute. See [Passing RAML data](passing-raml-data.md) documentation for more information.
 
 ```html
 <raml-aware scope="my-api"></raml-aware>
@@ -60,7 +60,7 @@ aware.raml = model;
 
 Type: **String**
 
-Currently selected object. See section [Controlling the view ](#controlling-the-view) section below for more information.
+Currently selected object. See section [Controlling the view](#controlling-the-view) section below for more information.
 
 ```javascript
 const apic = document.querySelector('api-console');
@@ -75,14 +75,14 @@ Currently selected object type.
 
 It can be one of:
 
-- `summary` - API summary view
-- `documentation` - RAML's documentation node
-- `type` - Model documentation (type, schema)
-- `security` - Security scheme documentation
-- `endpoint` - Endpoint documentation
-- `method` - Method documentation
+-   `summary` - API summary view
+-   `documentation` - RAML's documentation node
+-   `type` - Model documentation (type, schema)
+-   `security` - Security scheme documentation
+-   `endpoint` - Endpoint documentation
+-   `method` - Method documentation
 
-See section [Controlling the view ](#controlling-the-view) section below for more information.
+See section [Controlling the view](#controlling-the-view) section below for more information.
 
 ```javascript
 const apic = document.querySelector('api-console');
@@ -96,7 +96,7 @@ Type: **String**
 Location of the file with gfenerated AMF model to automatically download when this value change.
 This can be used to optimise startup time by not producing AMF model from your API spec each time the console is opened.
 
-The [build tools] allows you to generate this file for you when building production ready console.
+The [build tools][] allows you to generate this file for you when building production ready console.
 
 ```html
 <api-console model-location="static/api/api-model.json"></api-console>
@@ -128,7 +128,7 @@ The request URL is added to the end of the proxy string. Use with combination wi
 
 This sends the request to the proxy service that would look like this:
 
-https://api.service.proxy/?u=https://api.domain.com/endpoint
+`https://api.service.proxy/?u=https://api.domain.com/endpoint`
 
 #### proxy-encode-url
 
@@ -142,7 +142,7 @@ To be used when `proxy` is set. The value appended to the proxy URL is url encod
 
 This sends the request to the proxy service that would look like this:
 
-https://api.service.proxy/?u=https%3A%2F%2Fapi.domain.com%2Fendpoint
+`https://api.service.proxy/?u=https%3A%2F%2Fapi.domain.com%2Fendpoint`
 
 #### manual-navigation
 
@@ -238,7 +238,7 @@ Type: **Boolean**
 
 When set it renders API console as a standalone application.
 Setting this option adds automation like handling media queries and sets mobile friendly styles.
-This attribute is set automatically when using our [build tools].
+This attribute is set automatically when using our [build tools][].
 
 ```html
 <api-console app></api-console>
@@ -397,12 +397,12 @@ The `page` property displays top level pages as documentation or try it screen. 
 
 The `selectedShape` property can have the following values:
 
-- `summary` - Summary of the API spec
-- `docs` - Documentation included in the spec
-- `type` - Type
-- `resource` - Endpoint documentation
-- `method` - Method
-- `security` - Security scheme documentation
+-   `summary` - Summary of the API spec
+-   `docs` - Documentation included in the spec
+-   `type` - Type
+-   `resource` - Endpoint documentation
+-   `method` - Method
+-   `security` - Security scheme documentation
 
 Normally API console passes `selectedShape` and `selectedShapeType` values from `api-navigation` to `api-documentation` and `api-request-panel` when navigation occurred. However it can be set programmatically to control the view.
 

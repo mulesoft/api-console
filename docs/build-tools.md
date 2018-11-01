@@ -5,8 +5,8 @@ API console comes with a set of tools to help you create documentation for your 
 **Learn more**
 
 Check out our examples of how to use our build tools in CI pipeline with Travis:
-- [Building API Console for GitHub pages on Travis](gh-pages.md)
-- [Rebuilding the api.json file in the CI process](rebuilding-api-json.md)
+-   [Building API Console for GitHub pages on Travis](gh-pages.md)
+-   [Rebuilding the api.json file in the CI process](rebuilding-api-json.md)
 
 ## CLI
 
@@ -18,14 +18,16 @@ Install the CLI tool globally using `-g` if possible.
 $ sudo npm install -g api-console-cli
 ```
 
+Note, `sudo` is not required on Windows.
+
 If you can't perform the global installation for some reason, then omit `-g` and run the command prefixing `api-console-cli` with `./node_modules/.bin/`.
 
 ### Features
 
-- build - Builds the api console application optimized for production.
-- generate-json - Regenerates the JSON file that can be used as a data source in the console.
+-   build - Builds the api console application optimized for production.
+-   generate-json - Regenerates the JSON file that can be used as a data source in the console.
 
-For more information, see https://github.com/mulesoft-labs/api-console-cli.
+For more information, see [api-console-cli](https://github.com/mulesoft-labs/api-console-cli) page.
 
 ### Examples
 
@@ -35,13 +37,13 @@ Build API Console from the latest released version and use `path/to/api.raml` fi
 $ api-console -t "RAML 1.0" -a path/to/api.raml
 ```
 
-Build API Console from local sources (`--local api-console-release.zip`) that is a zip file of a release.
+Build API Console from local sources (`--local api-console-release.zip`) which is a zip file of a release.
 
 ```shell
 $ api-console build -t "RAML 1.0" --local api-console-release.zip -a path/to/api.raml
 ```
 
-Full documentation: https://github.com/mulesoft-labs/api-console-cli/blob/master/docs/api-console-build.md
+Full documentation: [github.com/mulesoft-labs/api-console-cli/blob/master/docs/api-console-build.md](https://github.com/mulesoft-labs/api-console-cli/blob/master/docs/api-console-build.md)
 
 ## Node
 
@@ -65,7 +67,7 @@ const builder = require('api-console-builder');
 builder({
   api: 'path/to/api.raml',
   apiType: 'RAML 1.0',
-  tagName: '5.0.0-preview',
+  tagName: '5.0.0-preview-1',
   destination: './api-console-bundles'
 })
 .then(() => console.log('Build complete <3'))

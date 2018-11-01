@@ -11,7 +11,7 @@ builder({
   // note that the deploy.sh script will clone the repo to api/ folder.
   api: 'api/api.raml',
   apiType: 'RAML 1.0',
-  tagName: '5.0.0-preview' // builds the console from specific version
+  tagName: '5.0.0-preview-1' // builds the console from specific version
 })
 .then(() => {
   console.log('Build complete');

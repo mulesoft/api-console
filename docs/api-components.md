@@ -5,10 +5,10 @@ This documentation is for advanced use
 API console is a shell application that puts web components together in a
 single application. Three main UI regions of the API console are:
 
-- Navigation (api-navigation)
-- Documentation (api-documentation)
-- Request panel (api-request-panel)
-- Model propagation helper (raml-aware) as an optional dependency.
+-   Navigation (api-navigation)
+-   Documentation (api-documentation)
+-   Request panel (api-request-panel)
+-   Model propagation helper (raml-aware) as an optional dependency.
 
 In some cases you may need to use the components separately to customize the
 experience with your environment. This document describes how to use
@@ -148,10 +148,10 @@ Parts of the logic is optional for API console. Things like OAuth 1 and 2 author
 If you application already support similar logic it's better to use your application's logic and reduce size of the final build.
 This optional dependencies are:
 
-- advanced-rest-client/xhr-simple-request - Uses XHR object to make a request
-- advanced-rest-client/oauth-authorization - Support for OAuth authorization
-- advanced-rest-client/cryptojs-lib - Crypto library that is used by authorization logic
-- advanced-rest-client/web-animations-js - At the time of writing this article Web Animations API is not implemented in any browser and the app uses this API for dropdowns.
+-   advanced-rest-client/xhr-simple-request - Uses XHR object to make a request
+-   advanced-rest-client/oauth-authorization - Support for OAuth authorization
+-   advanced-rest-client/cryptojs-lib - Crypto library that is used by authorization logic
+-   advanced-rest-client/web-animations-js - At the time of writing this article Web Animations API is not implemented in any browser and the app uses this API for dropdowns.
 
 If you having CORS problems or you already support logic for transporting the request handle `api-request` and `api-response` custom events as described in [api-request-editor](https://github.com/advanced-rest-client/api-request-editor/blob/stage/api-request-editor.html#L228) docs.
 

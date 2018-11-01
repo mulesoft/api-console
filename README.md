@@ -1,4 +1,4 @@
-**See live example of the API console in our [demo application].**
+__See live example of the API console in our [demo application][].__
 
 # The API Console
 
@@ -28,7 +28,7 @@ New documentation page focuses on presenting the information which is the API an
 
 ### Re-build
 
-New [build tools](build tools) allows you to customize the bundle to your needs and possibly reduce size of the console even more than when using default settings. Check out "Building the console" section for more information.
+New [build tools][] allows you to customize the bundle to your needs and possibly reduce size of the console even more than when using default settings. Check out "Building the console" section for more information.
 
 ## Introduction
 
@@ -58,9 +58,9 @@ $ api-console serve build/ --open
 
 ### Run as a standalone web-application
 
-Recommended way of using API console is to build a standalone application that can be served from your server. Generated sources with `api-console-cli` is production ready bundle of the console ready to be served to your users. The application supports [Deep linking][deep linking], which allows you to share a link to a particular part of your API documentation. You can find a basic example of the standalone application on our [demo application] web page.
+Recommended way of using API console is to build a standalone application that can be served from your server. Generated sources with `api-console-cli` is production ready bundle of the console ready to be served to your users. The application supports [Deep linking][deep linking], which allows you to share a link to a particular part of your API documentation. You can find a basic example of the standalone application on our [demo application][] web page.
 
-To build the API Console as a standalone application use our [build tools].
+To build the API Console as a standalone application use our [build tools][].
 
 ### Using API components
 
@@ -70,7 +70,7 @@ API console is a web component. This mean it can be used in any web environments
 
 This version of the console still works with `bower` as a dependency manager as it works with HTML imports. Next version will work with ES6 module imports which supports npm as a dependency management system.
 
-First, use [Bower] to install the console and its dependencies:
+First, use [Bower][] to install the console and its dependencies:
 
 ```bash
 $ bower install --save mulesoft/api-console
@@ -90,13 +90,13 @@ Finally use the HTML tag:
 </body>
 ```
 
-See complete documentation about how to import sources into your web page in the [api console element docs]. Also, if you are a developer you can check out [demo application source code].
+See complete documentation about how to import sources into your web page in the [api console element docs][]. Also, if you are a developer you can check out [demo application source code][].
 
-You can also build API Console as a embeddable HTML element using one of our [build tools].
+You can also build API Console as a embeddable HTML element using one of our [build tools][].
 
 ## API Console configuration options
 
-Configuration options differ from the previous version. Because API Console is a (custom) HTML element its configuration is based on HTML attributes. You can pass values as an attribute value, or use a boolean option by simply setting the attribute. Configuration from JavaScript code is based on setting a JavaScript property as the attribute name on the element. If the attribute name contains dashes then make the property name [camel case].
+Configuration options differ from the previous version. Because API Console is a (custom) HTML element its configuration is based on HTML attributes. You can pass values as an attribute value, or use a boolean option by simply setting the attribute. Configuration from JavaScript code is based on setting a JavaScript property as the attribute name on the element. If the attribute name contains dashes then make the property name [camel case][].
 
 Example:
 
@@ -112,7 +112,7 @@ console.narrow = true;
 console.appendHeaders = 'x-api-key: 1234';
 ```
 
-See the full list of API Console configuration options in the [configuring the api console] document.
+See the full list of API Console configuration options in the [configuring the api console][] document.
 
 ## Build tools
 
@@ -120,57 +120,58 @@ A set of build tools is included to help you create API Console from the RAML fi
 
 The following build tools are available:
 
-* The `api-console` CLI
-* Node modules
-  * `api-console-builder`
+*   The API console CLI
+*   Node modules
+    *   `api-console-builder`
+    *   `amf-client-js`
 
 Depending on your needs you can choose whether you want to use a CLI tool or a node module.
 
-Build tools can be helpful in the CI process to automate the documentation release cycle. See the [build tools] documentation for more information and build strategies.
+Build tools can be helpful in the CI process to automate the documentation release cycle. See the [build tools][] documentation for more information and build strategies.
 
 ## Theming
 API Console supports theming and comes with a default theme. You can create your own theme. For example, you can tweak the style of the console to match your corporate style guide.
 
-Theming is based on CSS variables and CSS mixins. Basic concepts of using the variables and mixins are described in the [Polymer 2.0 styling] documentation. You can check the [api-console-styles.html](api-console-styles.html) file to see the current theme definition, and then read the [theming documentation] to learn how to create your own theme.
+Theming is based on CSS variables and CSS mixins. Basic concepts of using the variables and mixins are described in the [Polymer 2.0 styling][] documentation. You can check the [api-console-styles.html](api-console-styles.html) file to see the current theme definition, and then read the [theming documentation][] to learn how to create your own theme.
 
 ## CORS
 
-Cross-origin resource sharing (CORS) allows sharing resources from one domain to other domains. Browsers block all requests to other domains but with a special set of headers authors can allow other domains to request a resource. For more information, see the [CORS Wiki].
+Cross-origin resource sharing (CORS) allows sharing resources from one domain to other domains. Browsers block all requests to other domains but with a special set of headers authors can allow other domains to request a resource. For more information, see the [CORS Wiki][].
 
 If your API does not allow CORS and you hosting your API documentation in different domain then API Console won't be able to make a request to an endpoint. API Console currently supports 3 ways of dealing with this issue:
 
-- by installing the **API Console Chrome extension**
-- by setting up a **proxy server**
-- by handling HTTP requests from the hosting application
+-   by installing the __API Console Chrome extension__
+-   by setting up a __proxy server__
+-   by handling HTTP requests from the hosting application
 
-Read our [CORS guideline] for more information about each of these solutions.
+Read our [CORS guideline][] for more information about each of these solutions.
 
 ## Preview and development
 
 The API Console is a custom element that serves as a shell element for other custom web components. To develop the API Console most probably you'd have to develop one of over a hundred other web components that creates the console. All the elements are described in [the elements catalog][the elements catalogue].
 
-1. Clone the element.
+1.  Clone the element.
 ```
 git clone https://github.com/mulesoft/api-console.git
 cd api-console
 ```
 
-2. Checkout the latest version.
+2.  Checkout the latest version.
 ```
 git checkout 5.0.0-preview
 ```
 
-3. Install [polymer-cli] and [Bower].
+3.  Install [polymer-cli][] and [Bower][].
 ```
 sudo npm install -g bower polymer-cli
 ```
 
-4. Install dependencies.
+4.  Install dependencies.
 ```
 bower install
 ```
 
-5. Serve the element.
+5.  Serve the element.
 ```
 polymer serve --open
 ```
@@ -187,7 +188,7 @@ See CONTRIBUTING.md for description of how to file issue report of feature reque
 
 ### Contributor's Agreement
 
-To contribute source code to this repository, read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following these instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43
+To contribute source code to this repository, read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following these instructions: [api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43](https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43)
 
 ## License
 

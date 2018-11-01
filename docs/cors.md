@@ -43,4 +43,4 @@ The proxy URL won't be visible by the user. The user can't do anything to change
 When the user runs the request from the "try it" screen, API Console fires the `api-request` [custom event](https://developer.mozilla.org/en/docs/Web/API/CustomEvent). If your application can handle the transport (by providing a proxy, for example), listen for this event, and cancel it by calling `event.preventDefault()`. If the event is cancelled, API Console listens for the `api-response` custom
 event that should contain response details. Otherwise, the console uses the build in fallback function to get the resource using Fetch API / XHR.
 
-See https://github.com/advanced-rest-client/api-components-api/blob/master/docs/api-request-and-response.md for detailed documentation of the request events.
+See [github.com/advanced-rest-client/api-components-api/blob/master/docs/api-request-and-response.md](https://github.com/advanced-rest-client/api-components-api/blob/master/docs/api-request-and-response.md) for detailed documentation of the request events.
