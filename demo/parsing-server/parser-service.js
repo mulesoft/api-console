@@ -59,7 +59,7 @@ class ParserService {
   parseFiles(req, res) {
     const file = req.files[0];
     const dataType = req.body.dataType;
-    this.getFileLocation(file)
+    this.getFileLocation(file, dataType)
     .then((file) => {
       file = `file://${file}`;
       return this.processFile(file, dataType);
@@ -88,13 +88,15 @@ class ParserService {
    * @return {Promise}
    */
   processFile(file, from) {
-    let parser;
+    let type;
     switch (from) {
-      case 'raml': parser = ramlParser; break;
-      case 'raml8': parser = ramlParser8; break;
-      case 'oas': parser = openAPIParser; break;
-      case 'amf': parser = apiModelParser; break;
+      case 'raml': type = 'RAML 1.0'; break;
+      case 'raml8': type = 'RAML 0.8'; break;
+      case 'oas': type = 'OAS 2.0'; break;
+      case 'amf': type = 'AMF Graph'; break;
     }
+    console.log('Parsing API');
+    const parser = amf.Core.parser(type, 'application/yaml');
     console.log('Processing', file, ', format', from);
     return parser.parseFileAsync(file)
     .then((doc) => this.generateModel(doc, from));
@@ -125,6 +127,7 @@ class ParserService {
    * @return {Promise}
    */
   generateModel(doc, from) {
+    console.log('Generating model');
     let resolver;
     switch (from) {
       case 'raml': resolver = amf.Core.resolver('RAML 1.0'); break;
@@ -142,9 +145,10 @@ class ParserService {
    * Gets file contents
    *
    * @param {Object} file
+   * @param {String} dataType Expected data type.
    * @return {Promise}
    */
-  getFileLocation(file) {
+  getFileLocation(file, dataType) {
     this.tmpobj = tmp.dirSync();
     return new Promise((resolve, reject) => {
       if (file.mimetype === 'application/zip') {
@@ -156,7 +160,7 @@ class ParserService {
         });
         extractor.on('close', () => {
           this._removeZipMainFolder(this.tmpobj.name)
-          .then(() => this._findApiFile(this.tmpobj.name))
+          .then(() => this._findApiFile(this.tmpobj.name, dataType))
           .then((file) => resolve(path.join(this.tmpobj.name, file)))
           .catch(() => resolve(path.join(this.tmpobj.name, 'api.raml')));
         });
@@ -217,26 +221,38 @@ class ParserService {
    * If not then, if any RAML file exists it points to first raml file.
    * If not then,it returns `api.raml`
    * @param {String} destination Path where to look for the files.
+   * @param {String} dataType API data type.
    * @return {Promise<String>}
    */
-  _findApiFile(destination) {
+  _findApiFile(destination, dataType) {
     return fs.readdir(destination)
     .then((items) => {
-      const def = 'api.raml';
+      const defs = [];
+      const exts = [];
+      if (dataType === 'raml' || dataType === 'raml8') {
+        defs[defs.length] = 'api.raml';
+        exts[exts.length] = '.raml';
+      }
+      if (dataType === 'oas') {
+        defs[defs.length] = 'api.yaml';
+        defs[defs.length] = 'api.json';
+        exts[exts.length] = '.json';
+        exts[exts.length] = '.yaml';
+      }
       const _files = [];
       for (let i = 0; i < items.length; i++) {
         let lower = items[i].toLowerCase();
-        if (lower === def) {
-          return def;
+        if (defs.indexOf(lower) !== -1) {
+          return items[i];
         }
-        if (path.extname(lower) === '.raml') {
+        if (exts.indexOf(path.extname(lower)) !== -1) {
           _files.push(items[i]);
         }
       }
       if (_files.length) {
         return _files[0];
       }
-      return def;
+      return defs[0];
     });
   }
 }
