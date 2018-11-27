@@ -2,8 +2,8 @@ language: node_js
 node_js: 8
 sudo: required
 before_script:
-- npm install -g polymer-cli
-- polymer install --variants
+- npm install -g polymer-cli istanbul wct-istanbub
+- polymer install
 addons:
   firefox: latest
   apt:

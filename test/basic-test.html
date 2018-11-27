@@ -7,6 +7,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/test-helpers.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
   <link rel="import" href="../api-console.html">
 </head>
 
@@ -267,6 +268,169 @@
         done();
       });
       element._notifyApicExtension();
+    });
+  });
+
+  suite('_modelLocationChanged()', () => {
+    let element;
+    let xhr;
+    let requests;
+    setup(() => {
+      requests = [];
+      element = fixture('Basic');
+    });
+
+    suiteSetup(() => {
+      xhr = sinon.useFakeXMLHttpRequest();
+      xhr.onCreate = function(xhr) {
+        requests.push(xhr);
+      };
+    });
+
+    suiteTeardown(() => {
+      xhr.restore();
+    });
+
+    test('Do nothing when no argument', () => {
+      element._modelLocationChanged();
+      assert.equal(requests.length, 0);
+    });
+
+    test('Downloads model from remote location', () => {
+      element._modelLocationChanged('apip.json');
+      assert.equal(requests.length, 1);
+      requests[0].respond(200, {
+        'Content-Type': 'application/json'},
+        '[{"@context":{}, "@id": "","@type": []}]');
+      assert.typeOf(element.amfModel, 'array');
+    });
+
+    test('Calls _apiLoadErrorHandler() when url is invalid', () => {
+      const callback = sinon.spy(element, '_apiLoadErrorHandler');
+      element._modelLocationChanged('error.json');
+      requests[0].respond(404, {
+        'Content-Type': 'text/plain'},
+        'nothing');
+      assert.isTrue(callback.called);
+    });
+  });
+
+  suite('_apiLoadEndHandler()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+    });
+
+    test('Sets amfModel property', () => {
+      element._apiLoadEndHandler({
+        response: '[{"@context":{}, "@id": "","@type": []}]'
+      });
+      assert.typeOf(element.amfModel, 'array');
+    });
+
+    test('Calles _apiLoadErrorHandler when response is not valid', () => {
+      const callback = sinon.spy(element, '_apiLoadErrorHandler');
+      element._apiLoadEndHandler({
+        response: '[{"@context":'
+      });
+      assert.isTrue(callback.called);
+    });
+  });
+
+  suite('_apiLoadErrorHandler()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+    });
+
+    test('Sets message on the toast', () => {
+      element._apiLoadErrorHandler(new Error('test'));
+      assert.typeOf(element.$.apiLoadErrorToast.text, 'string');
+    });
+
+    test('The toast is opened', () => {
+      element._apiLoadErrorHandler(new Error('test'));
+      assert.isTrue(element.$.apiLoadErrorToast.opened);
+    });
+  });
+
+  suite('resetLayout()', () => {
+    let element;
+    setup((done) => {
+      element = fixture('Basic');
+      flush(() => done());
+    });
+
+    test('Resets layout', () => {
+      element.resetLayout();
+      // no error is thrown
+    });
+  });
+
+  suite('_noExtBannerChanged()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+      element._setExtensionBannerActive(true);
+    });
+
+    test('Sets extensionBannerActive to false', () => {
+      element._noExtBannerChanged(true);
+      assert.isFalse(element.extensionBannerActive);
+    });
+
+    test('Does nothing if argument is false', () => {
+      element._noExtBannerChanged(false);
+      assert.isTrue(element.extensionBannerActive);
+    });
+  });
+
+  suite('_computeRenderInlineTryIt()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+    });
+
+    test('Return false whem no "wideLayout"', () => {
+      const result = element._computeRenderInlineTryIt(false);
+      assert.isFalse(result);
+    });
+
+    test('Return false whem no "isMethod"', () => {
+      const result = element._computeRenderInlineTryIt(true, true, false);
+      assert.isFalse(result);
+    });
+
+    test('Return false whem no "app"', () => {
+      const result = element._computeRenderInlineTryIt(true, false, true);
+      assert.isFalse(result);
+    });
+
+    test('Return false whem "inlineMethods"', () => {
+      const result = element._computeRenderInlineTryIt(true, true, true, true);
+      assert.isFalse(result);
+    });
+
+    test('Return true to inline methods', () => {
+      const result = element._computeRenderInlineTryIt(true, true, true, false);
+      assert.isTrue(result);
+    });
+  });
+
+  suite('_computeNoTryItValue()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+    });
+
+    test('Returns true when renderInlineTyit', () => {
+      const result = element._computeNoTryItValue(false, true);
+      assert.isTrue(result);
+    });
+
+    test('Returns value io noTryIt', () => {
+      const result = element._computeNoTryItValue(false);
+      assert.isFalse(result);
     });
   });
   </script>

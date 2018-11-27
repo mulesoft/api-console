@@ -13,8 +13,8 @@
         "version": ""
       }, {
         "browserName": "internet explorer",
-        "platform": "Windows 8.1",
-        "version": "11.0"
+        "platform": "Windows 10",
+        "version": "11.285"
       }, {
         "browserName": "firefox",
         "platform": "Windows 10",
@@ -44,6 +44,26 @@
         "platform": "macOS 10.13",
         "version": "11.1"
       }]
+    },
+    "istanbub": {
+      "dir": "./coverage",
+      "reporters": ["text-summary", "lcov"],
+      "include": [
+        "**/*.html"
+      ],
+      "exclude": [
+        "**/test/**",
+        "**/demo/**",
+        "**/tasks/**"
+      ],
+      "thresholds": {
+        "global": {
+          "statements": 80,
+          "branches": 80,
+          "functions": 90,
+          "lines": 80
+        }
+      }
     }
   }
 }

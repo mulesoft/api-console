@@ -724,13 +724,12 @@ the License.
       xhr.addEventListener('error', (error) => this._apiLoadErrorHandler(error));
       xhr.addEventListener('loadend', () => this._apiLoadEndHandler(xhr));
       xhr.open('GET', url, true);
-      try {
-        xhr.send();
-      } catch (e) {
-        this._apiLoadErrorHandler(e);
-      }
+      xhr.send();
     }
-
+    /**
+     * Called by `_modelLocationChanged` when model data are read from remote location.
+     * @param {XMLHttpRequest} xhr
+     */
     _apiLoadEndHandler(xhr) {
       let data;
       try {
@@ -870,7 +869,7 @@ the License.
      */
     _noExtBannerChanged(value) {
       if (value && this.extensionBannerActive) {
-        this.extensionBannerActive = false;
+        this._setExtensionBannerActive(false);
       }
     }
     /**
