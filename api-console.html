@@ -740,7 +740,10 @@ the License.
       }
       this.set('amfModel', data);
     }
-
+    /**
+     * Called by `_modelLocationChanged` when error occurred when getting API data.
+     * @param {Error} error
+     */
     _apiLoadErrorHandler(error) {
       const message = 'Unable to load API model data. ' + (error.message ? error.message : '');
       this.$.apiLoadErrorToast.text = message;
@@ -881,7 +884,15 @@ the License.
     _computeIsMethod(selectedShapeType) {
       return selectedShapeType === 'method';
     }
-
+    /**
+     * Computes value for `_renderInlineTyit` property.
+     * @param {Boolean} wideLayout
+     * @param {Boolean} isMethod
+     * @param {Boolean} app
+     * @param {Boolean} inlineMethods
+     * @return {Boolean} True if is wideLayout, it is a method, it is the app
+     * and when inlineMethods is not set.
+     */
     _computeRenderInlineTryIt(wideLayout, isMethod, app, inlineMethods) {
       if (!wideLayout || !app || !isMethod || inlineMethods) {
         return false;
