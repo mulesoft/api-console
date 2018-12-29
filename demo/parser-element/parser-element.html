@@ -140,14 +140,15 @@ the License.
         <paper-textarea label="OpenAPI text content" id="ot"></paper-textarea>
         <paper-button class="action-button" raised on-click="_oasText">Go</paper-button>
       </section>
+
       <section>
         <div class="row">
-          <paper-input label="AMF main file location or zip" type="url" id="au"></paper-input>
+          <paper-input label="AMF model file location" type="url" id="au"></paper-input>
           <paper-button class="action-button" raised on-click="_amfUrl">Go</paper-button>
         </div>
         or
         <div class="row">
-          <paper-input label="AMF zip file or single api file" type="file" id="af"></paper-input>
+          <paper-input label="AMF model file" type="file" accept=".json,application/json" id="af"></paper-input>
           <paper-button class="action-button" raised on-click="_amfFile">Go</paper-button>
         </div>
         or
@@ -176,10 +177,12 @@ the License.
    * @memberof ApiElements
    */
   class ParserElement extends Polymer.Element {
-    static get is() { return 'parser-element'; }
+    static get is() {
+      return 'parser-element';
+    }
     static get properties() {
       return {
-        selected:{
+        selected: {
           type: Number,
           value: 0
         },
@@ -387,12 +390,7 @@ the License.
         this._error('Please, provide a value for the data location');
         return;
       }
-      const opts = {
-        dataType: 'amf',
-        dataFormat: 'url',
-        dataValue: value
-      };
-      this._processText(opts);
+      this._processDownloadModel(value);
     }
 
     _amfFile() {
@@ -401,12 +399,7 @@ the License.
         this._error('Please, select file first');
         return;
       }
-      const opts = {
-        dataType: 'amf',
-        dataFormat: 'file',
-        dataValue: value
-      };
-      this._processFile(opts);
+      this._processAmfFile(value);
     }
 
     _amfText() {
@@ -431,19 +424,49 @@ the License.
     }
 
     _loadFile(file) {
-      this.loading = true;
       const url = '../models/' + file;
-      const xhr = new XMLHttpRequest();
-      xhr.addEventListener('error', () => {
-        this._error('Request error. File not found.');
+      this._processDownloadModel(url);
+    }
+
+    _processDownloadModel(modelLocation) {
+      this.loading = true;
+      this._downloadFile(modelLocation)
+      .then((data) => {
+        this.loading = false;
+        this._setAmfValue(data);
+      })
+      .catch((cause) => {
+        this.loading = false;
+        this._error(cause.message);
       });
-      xhr.addEventListener('load', (e) => this._setAmfValue(e.target.response));
-      xhr.open('GET', url, true);
-      try {
-        xhr.send();
-      } catch (e) {
-        this._error(e.message);
-      }
+    }
+
+    _downloadFile(fileLocation) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', (e) => resolve(e.target.response));
+        xhr.addEventListener('error', () => reject(new Error('Unable to download ' + fileLocation)));
+        xhr.open('GET', fileLocation, true);
+        try {
+          xhr.send();
+        } catch (e) {
+          reject(new Error(e.message));
+        }
+      });
+    }
+
+    _processAmfFile(file) {
+      this.loading = true;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.loading = false;
+        this._setAmfValue(e.target.result);
+      };
+      reader.onerror = () => {
+        this.loading = false;
+        this._error('Unable to read the file');
+      };
+      reader.readAsText(file);
     }
   }
   window.customElements.define(ParserElement.is, ParserElement);
