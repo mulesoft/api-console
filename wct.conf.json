@@ -12,10 +12,6 @@
         "platform": "Windows 10",
         "version": ""
       }, {
-        "browserName": "internet explorer",
-        "platform": "Windows 10",
-        "version": "11.285"
-      }, {
         "browserName": "firefox",
         "platform": "Windows 10",
         "version": "latest-4"
@@ -31,10 +27,6 @@
         "browserName": "chrome",
         "platform": "Windows 10",
         "version": "latest"
-      }, {
-        "browserName": "safari",
-        "platform": "OS X 10.11",
-        "version": "9.0"
       }, {
         "browserName": "safari",
         "platform": "macOS 10.12",
