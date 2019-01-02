@@ -242,6 +242,7 @@
       case 'noAttribution':
       case 'manualNavigation':
       case 'navigationOpened':
+      case 'noExtensionBanner':
         let apiConsole = document.querySelector('api-console');
         apiConsole[action] = e.detail.value;
         break;
