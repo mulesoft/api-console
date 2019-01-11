@@ -4,6 +4,8 @@ __See live example of the API console in our [demo application][].__
 
 MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) or OAS (Open API specification) documents. In addition to providing documentation, the tool provides the capability for users to try out requests on the fly.
 
+![API console design](docs/APIC-main-promo.png)
+
 ## API console 5.0 is here!
 
 Great news! Next version of API console is here! The upgrade includes new design, new data model and and build process that allows reduce size of the console.
@@ -13,11 +15,7 @@ Great news! Next version of API console is here! The upgrade includes new design
 We are working very hard to deliver first in class solutions for API documentation.
 MuleSoft's AMF allows to parse any* API document and produces common data model. API console consumes this model instead of RAML JS parser's.
 
-\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 1.0 and OAS 2.0. It can be extended by defining new vocabulary to support other API spec formats.
-
-### Native support for web components
-
-API console now support final version of web components specification. This mean no more polyfills and less source code to be downloaded.
+\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 2.0 and OAS 3.0. It can be extended by defining new vocabulary to support other API spec formats.
 
 ### Redesign
 
@@ -156,24 +154,24 @@ git clone https://github.com/mulesoft/api-console.git
 cd api-console
 ```
 
-2.  Checkout the latest version.
-```
-git checkout 5.0.0-preview
-```
-
-3.  Install [polymer-cli][] and [Bower][].
+2.  Install [polymer-cli][] and [Bower][].
 ```
 sudo npm install -g bower polymer-cli
 ```
 
-4.  Install dependencies.
+3.  Install dependencies.
 ```
-bower install
+bower install && npm i
 ```
 
-5.  Serve the element.
+4.  Serve the element.
 ```
 polymer serve --open
+```
+
+5. If you are planning to parse own RAML/OAS file then additionally run this command to run AMF parsing service for the demo page:
+```
+npm staret
 ```
 
 The default page is the element's documentation. Switch to demo to see a working example.

@@ -243,6 +243,7 @@
       case 'manualNavigation':
       case 'navigationOpened':
       case 'noExtensionBanner':
+      case 'inlineMethods':
         let apiConsole = document.querySelector('api-console');
         apiConsole[action] = e.detail.value;
         break;

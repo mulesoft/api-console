@@ -34,10 +34,10 @@ the License.
   <template>
     <style>
     :host {
-      --app-primary-color: #00A2DF;
-      --app-secondary-color: black;
+      --app-primary-color: var(--api-console-primary-color, #00A2DF);
+      --app-secondary-color: var(--api-console-secondary-color, black);
       display: block;
-      background-color: var(--primary-background-color, transparent);
+      background-color: var(--api-console-primary-background-color, var(--primary-background-color, transparent));
       @apply --arc-font-body1;
     }
 
@@ -84,7 +84,7 @@ the License.
     }
 
     :host([layout-narrow]) app-drawer {
-      z-index: 1;
+      z-index: var(--api-console-drawer-zindex, 1);
     }
 
     app-toolbar {
@@ -141,7 +141,7 @@ the License.
 
     api-request-panel,
     api-documentation {
-      max-width: var(--api-console-main-max-width, 900px);
+      max-width: var(--api-console-main-max-width, 1600px);
     }
 
     .api-docs {
@@ -190,6 +190,10 @@ the License.
       margin: 0;
       @apply --api-method-documentation-title-narrow;
     }
+
+    .store-link {
+      @apply --arc-link;
+    }
     </style>
     <template is="dom-if" if="[[app]]" restamp="true">
       <iron-media-query query="(max-width: 740px)" query-matches="{{narrow}}"></iron-media-query>
@@ -233,7 +237,7 @@ the License.
               </div>
             </div>
             <div class="extension-banner" active$="[[extensionBannerActive]]">
-              <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
+              <p>For better experience install API console extension. Get it from <a target="_blank" class="store-link" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
               <paper-icon-button icon="arc:close" on-click="dismissExtensionBanner"></paper-icon-button>
             </div>
             <api-request-panel
@@ -266,7 +270,7 @@ the License.
               <template is="dom-if" if="[[_renderInlineTyit]]" restamp>
                 <div class="inline-request">
                   <div class="extension-banner" active$="[[extensionBannerActive]]">
-                    <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
+                    <p>For better experience install API console extension. Get it from <a target="_blank" class="store-link" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
                     <paper-icon-button icon="arc:close" on-click="dismissExtensionBanner"></paper-icon-button>
                   </div>
                   <api-request-panel
