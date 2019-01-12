@@ -56,8 +56,8 @@
       assert.isTrue(element.isDocs);
     });
 
-    test('noExtensionBanner is false by default', function() {
-      assert.isFalse(element.noExtensionBanner);
+    test('noExtensionBanner is not set by default', function() {
+      assert.isUndefined(element.noExtensionBanner);
     });
 
     test('extensionBannerActive is not initally set', function() {

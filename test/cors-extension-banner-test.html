@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../../raml-aware/raml-aware.html">
+    <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
+    <link rel="import" href="../api-console.html">
+    <script src="amf-loader.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="Basic">
+      <template>
+        <api-console></api-console>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="NoExtension">
+      <template>
+        <api-console no-extension-banner></api-console>
+      </template>
+    </test-fixture>
+
+    <script>
+    suite('Declarative use', () => {
+      test('extensionBannerActive is eventually set', (done) => {
+        const element = fixture('NoExtension');
+        element.page = 'request';
+        flush(() => {
+          assert.isUndefined(element.extensionBannerActive);
+          done();
+        });
+      });
+
+      test('The extension banner is not visible', (done) => {
+        const element = fixture('NoExtension');
+        element.page = 'request';
+        flush(() => {
+          const node = element.shadowRoot.querySelector('.extension-banner');
+          const result = getComputedStyle(node).display.trim();
+          assert.equal(result, 'none');
+          done();
+        });
+      });
+    });
+
+    suite('Banner flow', () => {
+      let element;
+      setup(() => {
+        element = fixture('Basic');
+        element.page = 'request';
+      });
+
+      test('extensionBannerActive is set', (done) => {
+        if (!element.isChrome) {
+          done();
+          return;
+        }
+        flush(() => {
+          assert.isTrue(element.extensionBannerActive);
+          done();
+        });
+      });
+
+      test('Renders extension banner', (done) => {
+        if (!element.isChrome) {
+          done();
+          return;
+        }
+        flush(() => {
+          const node = element.shadowRoot.querySelector('.extension-banner');
+          const result = getComputedStyle(node).display.trim();
+          assert.notEqual(result, 'none');
+          done();
+        });
+      });
+
+      test('The banner is hidden when extension is detected', (done) => {
+        if (!element.isChrome) {
+          done();
+          return;
+        }
+        window.postMessage({
+          'api-console-payload': 'init',
+          'api-console-extension': true
+        }, location.origin);
+        flush(() => {
+          assert.isUndefined(element.extensionBannerActive);
+          const node = element.shadowRoot.querySelector('.extension-banner');
+          const result = getComputedStyle(node).display.trim();
+          assert.equal(result, 'none');
+          done();
+        });
+      });
+    });
+    </script>
+  </body>
+</html>

@@ -298,7 +298,7 @@ the License.
       <raml-aware raml="{{amfModel}}" scope="[[aware]]"></raml-aware>
     </template>
     <paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
-    <api-console-ext-comm has-extension="{{noExtensionBanner}}"></api-console-ext-comm>
+    <api-console-ext-comm has-extension="{{_hasApicCorsExtension}}"></api-console-ext-comm>
     <!--
     The components below are optional dependencies. They will not be used until
     sources of the components are included into AC bundle.
@@ -454,6 +454,7 @@ the License.
           type: Boolean,
           readOnly: true
         },
+        _hasApicCorsExtension: {type: Boolean, observer: '_hasCorsExtensionChanged'},
         /**
          * Forces the console to send headers defined in this string overriding
          * any used defined header.
@@ -816,7 +817,7 @@ the License.
         return;
       }
       setTimeout(() => {
-        if (!this.noExtensionBanner) {
+        if (!this.noExtensionBanner && !this._hasApicCorsExtension) {
           this._setExtensionBannerActive(true);
         }
       });
@@ -886,6 +887,11 @@ the License.
      * @param {Boolean} value Current value of `noExtensionBanner` property
      */
     _noExtBannerChanged(value) {
+      if (value && this.extensionBannerActive) {
+        this._setExtensionBannerActive(false);
+      }
+    }
+    _hasCorsExtensionChanged(value) {
       if (value && this.extensionBannerActive) {
         this._setExtensionBannerActive(false);
       }

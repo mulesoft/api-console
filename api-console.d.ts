@@ -141,6 +141,7 @@ declare namespace MulesoftApps {
      * When set the extension banner is rendered.
      */
     readonly extensionBannerActive: boolean|null|undefined;
+    _hasApicCorsExtension: boolean|null|undefined;
 
     /**
      * Forces the console to send headers defined in this string overriding
@@ -473,6 +474,7 @@ declare namespace MulesoftApps {
      * @param value Current value of `noExtensionBanner` property
      */
     _noExtBannerChanged(value: Boolean|null): void;
+    _hasCorsExtensionChanged(value: any): void;
 
     /**
      * Computes value of `isMethod` proiperty.
