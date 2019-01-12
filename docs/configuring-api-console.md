@@ -93,8 +93,8 @@ apic.selectedShapeType = 'summary';
 
 Type: **String**
 
-Location of the file with gfenerated AMF model to automatically download when this value change.
-This can be used to optimise startup time by not producing AMF model from your API spec each time the console is opened.
+Location of the file with generated AMF model to automatically download when this value change.
+This can be used to optimise start up time by not producing AMF model from your API spec each time the console is opened.
 
 The [build tools][] allows you to generate this file for you when building production ready console.
 
@@ -148,8 +148,8 @@ This sends the request to the proxy service that would look like this:
 
 Type: **Boolean**
 
-Disables navigation support in the UI. When set the navigation has to be supported programatically.
-Use in the narrow layouts with the `narrow` attribute. Set `navigation-opened` property to `true` or `false` to controll the navigation.
+Disables navigation support in the UI. When set the navigation has to be supported programmatically.
+Use in the narrow layouts with the `narrow` attribute. Set `navigation-opened` property to `true` or `false` to control the navigation.
 
 ```html
 <api-console manual-navigation narrow></api-console>
@@ -163,7 +163,7 @@ apic.navigationOpened = true;
 
 Type: **Element**
 
-Some documentation components (like endpoint documentation) uses this property to controll the scroll position.
+Some documentation components (like endpoint documentation) uses this property to control the scroll position.
 By default it uses `window` object. When API console is used inside a scroll area use the area element.
 
 ```html
@@ -173,7 +173,7 @@ By default it uses `window` object. When API console is used inside a scroll are
 ```
 
 Note: API console won't recognize string value as an ID of a parent element. You have to
-pass this value programatically.
+pass this value programmatically.
 
 #### bower-location
 
@@ -182,7 +182,7 @@ Type: **String**
 If the path to `bower_components` folder is different than default (in the root path)
 then set this attribute to point the location of the folder, including folder name.
 This is used to compute location of OAuth2 authorization popup dialog.
-You can also set `redirect-uri` attribute to point oauth dialog directly.
+You can also set `redirect-uri` attribute to point OAuth dialog directly.
 
 ```html
 <api-console bower-location="static/api-console/bower_components/"></api-console>
@@ -370,6 +370,14 @@ Prohibits rendering documentation (the icon and the description) in request edit
 
 ```html
 <api-console no-docs></api-console>
+```
+
+#### no-extension-banner
+
+Stops the CORS extension banner message to render in the request panel.
+
+```html
+<api-console no-extension-banner></api-console>
 ```
 
 #### events-target
