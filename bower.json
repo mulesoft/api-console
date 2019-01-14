@@ -61,5 +61,8 @@
     "tasks",
     "demo",
     "docs"
-  ]
+  ],
+  "resolutions": {
+    "marked": "^0.5.0"
+  }
 }
