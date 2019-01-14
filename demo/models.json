@@ -1,0 +1,12 @@
+{
+  "models/demo-api/demo-api.raml": "RAML 1.0",
+  "models/array-body/array-body.raml": "RAML 1.0",
+  "models/appian-api/appian-api.raml": "RAML 1.0",
+  "models/nexmo-sms-api/nexmo-sms-api.raml": "RAML 1.0",
+  "models/exchange-experience-api/exchange-experience-api.raml": "RAML 0.8",
+  "models/apic-80/apic-80.raml": "RAML 1.0",
+  "models/apic-83/apic-83.raml": "RAML 1.0",
+  "models/apic-84/apic-84.raml": "RAML 1.0",
+  "models/facets/facets.raml": "RAML 1.0",
+  "models/apic-130/apic-130.raml": "RAML 0.8"
+}
