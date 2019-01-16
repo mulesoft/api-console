@@ -7,10 +7,11 @@
 
  const RAML_SOURCE = 'api/api.raml';
  const API_OUTPUT = 'api.json';
+ const API_TYPE = 'RAML 1.0';
 
  amf.Core.init()
  .then(() => {
-   const parser = amf.Core.parser('RAML 1.0', 'application/yaml');
+   const parser = amf.Core.parser(API_TYPE, 'application/yaml');
    return parser.parseFileAsync(`file://${RAML_SOURCE}`);
  })
  .then((doc) => {
@@ -29,7 +30,7 @@
  })
  .then((doc) => {
    // Assuming RAML 1.0 but it can be RAM 08, OAS 2.0, or OAS 3.0
-   const resolver = amf.Core.resolver('RAML 1.0');
+   const resolver = amf.Core.resolver(API_TYPE);
    doc = resolver.resolve(doc, 'editing');
    // the `editing` is special case of producing AMF model for API console.
    const opts = amf.render.RenderOptions().withSourceMaps.withCompactUris;

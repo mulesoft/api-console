@@ -54,7 +54,7 @@ This is the node module that builds API console from the api-console element eit
 #### Installation
 
 ```shell
-$ npm i --save-dev api-console-builder
+$ npm i --save-dev @api-components/api-console-builder
 ```
 
 #### Example

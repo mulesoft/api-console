@@ -10,6 +10,6 @@
     "build-console": "node build.js"
   },
   "dependencies": {
-    "api-console-builder": "^1.0.0"
+    "amf-client-js": "^3.0.2"
   }
 }

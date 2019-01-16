@@ -42,9 +42,8 @@ bower install --save mulesoft/api-console
 ```javascript
 const builder = require('api-console-builder');
 builder({
-  tagName: '5.0.0-preview',
   embedded: true,
-  themeFile: './my-theme.html',
+  themeFile: './my-theme.html', // optional
   destination: './public/api-console/'
 })
 .then(() => console.log('Build complete <3'))
@@ -59,6 +58,7 @@ builder({
   <head>
     <script>
     window.apic = {
+      // This is optional, default to `/` path.
       basePath: '/public/api-console/'
     };
     </script>
