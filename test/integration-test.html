@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../../raml-aware/raml-aware.html">
+    <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
+    <link rel="import" href="../api-console.html">
+    <script src="amf-loader.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="Basic">
+      <template>
+        <api-console summary></api-console>
+      </template>
+    </test-fixture>
+
+    <script>
+    /* global AmfLoader */
+    [
+      ['Regular model', false],
+      ['Compact model', true]
+    ].forEach((item) => {
+      suite('Automatic computations - ' + item[0], function() {
+        let element;
+        let amf;
+        suiteSetup(() => {
+          return AmfLoader.load(item[1])
+          .then((data) => {
+            amf = data;
+          });
+        });
+
+        suite('Navigating the console', () => {
+          setup((done) => {
+            element = fixture('Basic');
+            element.amfModel = amf;
+            element.selectedShape = '';
+            element.selectedShapeType = '';
+            flush(() => done());
+          });
+
+          test('Calls _apiNavigationOcurred() function', function() {
+            const spy = sinon.spy(element, '_apiNavigationOcurred');
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item.operation');
+            node.click();
+            assert.isTrue(spy.called);
+            assert.equal(spy.args[0][0].type, 'api-navigation-selection-changed');
+          });
+
+          test('Selectes endpoint shape', () => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item.operation[data-shape="endpoint"]');
+            const shapeId = node.dataset.apiId;
+            node.click();
+            assert.equal(element.selectedShape, shapeId);
+            assert.equal(element.selectedShapeType, 'endpoint');
+          });
+
+          test('Renders documentation for an endpoint', (done) => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item.operation[data-shape="endpoint"]');
+            node.click();
+            flush(() => {
+              const docs = element.shadowRoot.querySelector('api-documentation');
+              const doc = docs.shadowRoot.querySelector('api-endpoint-documentation');
+              assert.ok(doc, 'api-endpoint-documentation is rendered');
+              assert.typeOf(doc.endpoint, 'object', 'Endpoint property is set');
+              assert.isTrue(element.amfModel === doc.amfModel, 'AMF model is set');
+              done();
+            });
+          });
+
+          test('Selectes method shape', () => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item.operation[data-shape="method"]');
+            const shapeId = node.dataset.apiId;
+            node.click();
+            assert.equal(element.selectedShape, shapeId);
+            assert.equal(element.selectedShapeType, 'method');
+          });
+
+          test('Renders documentation for a method', (done) => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item.operation[data-shape="method"]');
+            node.click();
+            flush(() => {
+              const docs = element.shadowRoot.querySelector('api-documentation');
+              const doc = docs.shadowRoot.querySelector('api-method-documentation');
+              assert.ok(doc, 'api-method-documentation is rendered');
+              assert.typeOf(doc.endpoint, 'object', 'Endpoint property is set');
+              assert.typeOf(doc.method, 'object', 'Method property is set');
+              assert.isTrue(element.amfModel === doc.amfModel, 'AMF model is set');
+              done();
+            });
+          });
+
+          test('Selectes sumamry', () => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item.summary');
+            node.click();
+            assert.equal(element.selectedShape, 'summary');
+            assert.equal(element.selectedShapeType, 'summary');
+          });
+
+          test('Renders documentation for a method', (done) => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item.summary');
+            node.click();
+            flush(() => {
+              const docs = element.shadowRoot.querySelector('api-documentation');
+              const doc = docs.shadowRoot.querySelector('api-summary');
+              assert.ok(doc, 'api-summary is rendered');
+              assert.isTrue(element.amfModel === doc.amfModel, 'AMF model is set');
+              done();
+            });
+          });
+
+          test('Selectes documentation shape', () => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item[data-shape="documentation"]');
+            const shapeId = node.dataset.apiId;
+            node.click();
+            assert.equal(element.selectedShape, shapeId);
+            assert.equal(element.selectedShapeType, 'documentation');
+          });
+
+          test('Renders documentation for an endpoint', (done) => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item[data-shape="documentation"]');
+            node.click();
+            flush(() => {
+              const docs = element.shadowRoot.querySelector('api-documentation');
+              const doc = docs.shadowRoot.querySelector('api-documentation-document');
+              assert.ok(doc, 'api-documentation-document is rendered');
+              assert.typeOf(doc.apiDocument, 'object', 'apiDocument property is set');
+              assert.isTrue(element.amfModel === doc.amfModel, 'AMF model is set');
+              done();
+            });
+          });
+
+          test('Selectes type shape', () => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item[data-shape="type"]');
+            const shapeId = node.dataset.apiId;
+            node.click();
+            assert.equal(element.selectedShape, shapeId);
+            assert.equal(element.selectedShapeType, 'type');
+          });
+
+          test('Renders documentation for an endpoint', (done) => {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item[data-shape="type"]');
+            node.click();
+            flush(() => {
+              const docs = element.shadowRoot.querySelector('api-documentation');
+              const doc = docs.shadowRoot.querySelector('api-type-documentation');
+              assert.ok(doc, 'api-type-documentation is rendered');
+              assert.typeOf(doc.type, 'object', 'type property is set');
+              assert.isTrue(element.amfModel === doc.amfModel, 'AMF model is set');
+              done();
+            });
+          });
+        });
+
+        suite('Try it', () => {
+          setup((done) => {
+            element = fixture('Basic');
+            element.amfModel = amf;
+            element.selectedShape = '';
+            element.selectedShapeType = '';
+            flush(() => done());
+          });
+
+          function selectMethod(element) {
+            const nav = element.shadowRoot.querySelector('api-navigation');
+            const node = nav.shadowRoot.querySelector('.list-item.operation[data-shape="method"]');
+            node.click();
+          }
+
+          test('By default render method documentation', (done) => {
+            selectMethod(element);
+            flush(() => {
+              assert.isTrue(element.isDocs, 'isDocs is true');
+              assert.isFalse(element.isRequest, 'isRequest is false');
+              assert.ok(element.shadowRoot.querySelector('api-documentation'), 'Docs are rendered');
+              assert.notOk(element.shadowRoot.querySelector('api-request-panel'), 'Request is not rendered');
+              done();
+            });
+          });
+
+          test('Renders request on demand', (done) => {
+            selectMethod(element);
+            element.dispatchEvent(new CustomEvent('tryit-requested'));
+            flush(() => {
+              assert.equal(element.page, 'request');
+              assert.isFalse(element.isDocs, 'isDocs is false');
+              assert.isTrue(element.isRequest, 'isRequest is true');
+              const doc = element.shadowRoot.querySelector('.api-docs');
+              assert.equal(doc.style.display.trim(), 'none', 'Docs is not rendered');
+              assert.ok(element.shadowRoot.querySelector('api-request-panel'), 'Request is rendered');
+              done();
+            });
+          });
+        });
+      });
+    });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "customization": {
+    "home": {
+      "heroImage": "",
+      "welcomeTitle": "Welcome to the Portal",
+      "welcomeText": "content",
+      "textColor": "#000000"
+    }
+  }
+}

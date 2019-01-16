@@ -1,0 +1,225 @@
+[
+{
+"@id": "amf://id",
+"@type": [
+"http://a.ml/vocabularies/document#Document",
+"http://a.ml/vocabularies/document#Fragment",
+"http://a.ml/vocabularies/document#Module",
+"http://a.ml/vocabularies/document#Unit"
+],
+"http://a.ml/vocabularies/document#encodes": [
+{
+"@id": "amf://id#3",
+"@type": [
+"http://schema.org/WebAPI",
+"http://a.ml/vocabularies/document#RootDomainElement",
+"http://a.ml/vocabularies/document#DomainElement"
+],
+"http://schema.org/name": [
+{
+"@value": "API with Types"
+}
+]
+}
+],
+"http://a.ml/vocabularies/document#declares": [
+{
+"@id": "amf://id#1",
+"@type": [
+"http://a.ml/vocabularies/shapes#ScalarShape",
+"http://www.w3.org/ns/shacl#Shape",
+"http://a.ml/vocabularies/shapes#Shape",
+"http://a.ml/vocabularies/document#DomainElement"
+],
+"http://www.w3.org/ns/shacl#datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#date"
+}
+],
+"http://www.w3.org/ns/shacl#name": [
+{
+"@value": "CustomDate"
+}
+],
+"http://a.ml/vocabularies/shapes#customShapePropertyDefinitions": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/CustomDate/property/onlyFutureDates%3F",
+"@type": [
+"http://www.w3.org/ns/shacl#PropertyShape",
+"http://www.w3.org/ns/shacl#Shape",
+"http://a.ml/vocabularies/shapes#Shape"
+],
+"http://www.w3.org/ns/shacl#path": [
+{
+"@id": "http://a.ml/vocabularies/data#onlyFutureDates"
+}
+],
+"http://a.ml/vocabularies/shapes#range": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/CustomDate/property/onlyFutureDates%3F/scalar/onlyFutureDates%3F",
+"@type": [
+"http://a.ml/vocabularies/shapes#ScalarShape",
+"http://www.w3.org/ns/shacl#Shape",
+"http://a.ml/vocabularies/shapes#Shape",
+"http://a.ml/vocabularies/document#DomainElement"
+],
+"http://www.w3.org/ns/shacl#datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#boolean"
+}
+],
+"http://www.w3.org/ns/shacl#name": [
+{
+"@value": "onlyFutureDates?"
+}
+]
+}
+],
+"http://www.w3.org/ns/shacl#minCount": [
+{
+"@value": 0
+}
+],
+"http://www.w3.org/ns/shacl#name": [
+{
+"@value": "onlyFutureDates"
+}
+]
+},
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays",
+"@type": [
+"http://www.w3.org/ns/shacl#PropertyShape",
+"http://www.w3.org/ns/shacl#Shape",
+"http://a.ml/vocabularies/shapes#Shape"
+],
+"http://www.w3.org/ns/shacl#path": [
+{
+"@id": "http://a.ml/vocabularies/data#noHolidays"
+}
+],
+"http://a.ml/vocabularies/shapes#range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/scalar/noHolidays",
+"@type": [
+"http://a.ml/vocabularies/shapes#ScalarShape",
+"http://www.w3.org/ns/shacl#Shape",
+"http://a.ml/vocabularies/shapes#Shape",
+"http://a.ml/vocabularies/document#DomainElement"
+],
+"http://www.w3.org/ns/shacl#datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#boolean"
+}
+],
+"http://www.w3.org/ns/shacl#name": [
+{
+"@value": "noHolidays"
+}
+]
+}
+],
+"http://www.w3.org/ns/shacl#minCount": [
+{
+"@value": 1
+}
+],
+"http://www.w3.org/ns/shacl#name": [
+{
+"@value": "noHolidays"
+}
+]
+}
+]
+},
+{
+"@id": "amf://id#2",
+"@type": [
+"http://a.ml/vocabularies/shapes#ScalarShape",
+"http://www.w3.org/ns/shacl#Shape",
+"http://a.ml/vocabularies/shapes#Shape",
+"http://a.ml/vocabularies/document#DomainElement"
+],
+"http://www.w3.org/ns/shacl#datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#date"
+}
+],
+"http://www.w3.org/ns/shacl#name": [
+{
+"@value": "PossibleMeetingDate"
+}
+],
+"http://a.ml/vocabularies/shapes#customShapeProperties": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/shapeExtension",
+"@type": [
+"http://a.ml/vocabularies/http#ShapeExtension",
+"http://a.ml/vocabularies/document#DomainElement"
+],
+"http://a.ml/vocabularies/document#definedBy": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays",
+"@type": [
+"http://www.w3.org/ns/shacl#PropertyShape",
+"http://www.w3.org/ns/shacl#Shape",
+"http://a.ml/vocabularies/shapes#Shape"
+],
+"http://www.w3.org/ns/shacl#path": [
+{
+"@id": "http://a.ml/vocabularies/data#noHolidays"
+}
+],
+"http://a.ml/vocabularies/shapes#range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/scalar/noHolidays",
+"@type": [
+"http://a.ml/vocabularies/shapes#ScalarShape",
+"http://www.w3.org/ns/shacl#Shape",
+"http://a.ml/vocabularies/shapes#Shape",
+"http://a.ml/vocabularies/document#DomainElement"
+],
+"http://www.w3.org/ns/shacl#datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#boolean"
+}
+],
+"http://www.w3.org/ns/shacl#name": [
+{
+"@value": "noHolidays"
+}
+]
+}
+],
+"http://www.w3.org/ns/shacl#minCount": [
+{
+"@value": 1
+}
+],
+"http://www.w3.org/ns/shacl#name": [
+{
+"@value": "noHolidays"
+}
+]
+}
+],
+"http://a.ml/vocabularies/document#extension": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/extension/noHolidays/scalar_1",
+"@type": [
+"http://a.ml/vocabularies/data#Scalar"
+],
+"http://a.ml/vocabularies/data#value": [
+{
+"@value": "true",
+"@type": "http://www.w3.org/2001/XMLSchema#boolean"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+]

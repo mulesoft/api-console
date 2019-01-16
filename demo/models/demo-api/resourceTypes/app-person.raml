@@ -1,0 +1,49 @@
+#%RAML 1.0 DataType
+
+displayName: A person resource
+description: |
+  An object representing a person in the API.
+  This object will be used in all methods returning a Person or list of people.
+
+type: !include resource.raml
+example:
+  id: "R34fg663H9KW9MMSKISI"
+  name: "Pawel Psztyc"
+  birthday: "1983-10-20"
+  gender: male
+  url: "https://domain.com/profile/pawel.psztyc"
+  image:
+    url: https://domain.com/profile/pawel.psztyc/image
+    thumb: https://domain.com/profile/pawel.psztyc/image/thumb
+  tagline: Some text about me.
+  language: en_GB
+  etag: "W\\244m4n5kj3gbn2nj4k4n4"
+properties:
+  id:
+    description: A unique identifier for a person. It is a 32 bit string containing alphanumeric characters.
+  name:
+    required: true
+    example: John Smith
+    description: Person full name. The input will be rejected if this property is not set while creating new object.
+    type: string
+    pattern: "[0-9a-zA-Z ]+"
+  birthday:
+    type: string
+    description: The person's date of birth, represented as YYYY-MM-DD.
+  gender?:
+    type: string
+    description: |
+      The person's gender. Possible values includes, but are not limited to, the following values:
+      * "male" - Male gender.
+      * "female" - Female gender.
+      * "other" - Other.
+  url:
+    type: string
+    description: The URL of this person's profile.
+  image: !include image.raml
+  tagline:
+    type: string
+    description: The brief description (tagline) of this person.
+  language:
+    type: string
+    description: The user's preferred language for rendering.

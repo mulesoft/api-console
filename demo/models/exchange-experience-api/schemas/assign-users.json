@@ -1,0 +1,19 @@
+{
+  "title": "List of user assignments",
+  "type" : "array",
+  "items": {
+    "title": "User assignment",
+    "type": "object",
+    "required": ["userId", "role"],
+    "properties": {
+      "userId": {
+        "title": "User Id",
+        "type": "string"
+      },
+      "role": {
+        "title": "Role Name",
+        "type": "string"
+      }
+    }
+  }
+}

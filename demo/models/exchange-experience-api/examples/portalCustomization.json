@@ -1,0 +1,20 @@
+{
+  "customization": {
+      "home": {
+        "heroImage": "",
+        "welcomeTitle": "Welcome to the Portal",
+        "welcomeText": "content",
+        "textColor": "#000000"
+      }
+    },
+  "pages": [
+    {
+      "path": "home.md",
+      "name": "Home page"
+    },
+    {
+      "path": "/examples/example.md",
+      "name": "Example Page"
+    }
+  ]
+}

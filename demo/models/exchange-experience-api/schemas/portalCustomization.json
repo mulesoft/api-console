@@ -1,0 +1,52 @@
+{
+  "title": "Portal Customization",
+  "type": "object",
+  "required": ["customization","pages"],
+  "properties": {
+    "customization": {
+      "title": "customization",
+      "type": "object",
+      "properties": {
+        "home": {
+          "title": "home",
+          "type": "object",
+          "properties": {
+            "heroImage": {
+              "title": "heroImage",
+              "type": "string"
+            },
+            "welcomeTitle": {
+              "title": "welcomeTitle",
+              "type": "string"
+            },
+            "welcomeText": {
+              "title": "welcomeText",
+              "type": "string"
+            },
+            "textColor": {
+              "title": "textColor",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "pages":{
+      "title": "Pages",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

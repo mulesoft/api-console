@@ -1,51 +1,43 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/test-helpers.js"></script>
+  <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
   <link rel="import" href="../api-console.html">
 </head>
 <body>
-  <test-fixture id="basic">
+
+  <test-fixture id="Basic">
     <template>
       <api-console></api-console>
     </template>
   </test-fixture>
+
+  <test-fixture id="NoAttr">
+    <template>
+      <api-console no-attribution></api-console>
+    </template>
+  </test-fixture>
+
   <script>
-  /* global fixture, assert, flush */
-  suite('basic', function() {
-    var element;
-    this.timeout(20000);
-
-    setup(function() {
-      element = fixture('basic');
-    });
-
+  suite('Attribution', function() {
     test('Attribution logo is rendered', function(done) {
+      const element = fixture('Basic');
       flush(function() {
-        var node = Polymer.dom(element.root).querySelector('.powered-by');
+        const node = element.shadowRoot.querySelector('.powered-by');
         assert.ok(node);
         done();
       });
     });
 
     test('Attribution is removed from the DOM', function() {
+      const element = fixture('NoAttr');
       flush(function() {
-        element.noAttribution = true;
-        var node = Polymer.dom(element.root).querySelector('.powered-by');
+        const node = element.shadowRoot.querySelector('.powered-by');
         assert.notOk(node);
       });
     });

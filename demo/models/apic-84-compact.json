@@ -1,0 +1,2472 @@
+[
+{
+"@id": "",
+"@type": [
+"doc:Document",
+"doc:Fragment",
+"doc:Module",
+"doc:Unit"
+],
+"doc:encodes": [
+{
+"@id": "#19",
+"@type": [
+"schema-org:WebAPI",
+"doc:RootDomainElement",
+"doc:DomainElement"
+],
+"schema-org:name": [
+{
+"@value": "test-facets"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#19/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:source-vendor": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#19"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "RAML 1.0"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "schema-org:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(2,0)-(4,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#19"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(2,0)-(36,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"doc:declares": [
+{
+"@id": "#1",
+"@type": [
+"shacl:NodeShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:closed": [
+{
+"@value": true
+}
+],
+"shacl:property": [
+{
+"@id": "#2",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#url"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "#3",
+"@type": [
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:name": [
+{
+"@value": "uri"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#3/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:resolved-link": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "amf://id#4"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(7,11)-(7,14)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "url"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#2/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#2"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(7,6)-(8,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "#5",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#%2F%5Evalue(Coding%7CString)%24%2F"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "#6",
+"@type": [
+"raml-shapes:UnionShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"raml-shapes:anyOf": [
+{
+"@id": "#7",
+"@type": [
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:name": [
+{
+"@value": "Coding"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#7/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#7"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,32)-(8,47)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "#8",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#6/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#6"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,6)-(9,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 0
+}
+],
+"raml-shapes:patternName": [
+{
+"@value": "^value(Coding|String)$"
+}
+],
+"shacl:name": [
+{
+"@value": "/^value(Coding|String)$/"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#5/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#5"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,6)-(9,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:name": [
+{
+"@value": "USCoreExtensionNested"
+}
+],
+"raml-shapes:customShapePropertyDefinitions": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#itemConstraints"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints",
+"@type": [
+"raml-shapes:ArrayShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"raml-shapes:items": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items",
+"@type": [
+"shacl:NodeShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:closed": [
+{
+"@value": false
+}
+],
+"shacl:property": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#property"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/scalar/property",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": [
+{
+"@value": "property"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/scalar/property/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:synthesized-field": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/scalar/property"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/scalar/property"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(14,12)-(15,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "property"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(14,12)-(15,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#value"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/scalar/value",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": [
+{
+"@value": "value"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/scalar/value/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:synthesized-field": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/scalar/value"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/scalar/value"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(15,12)-(16,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "value"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(15,12)-(16,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#cardinality"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/scalar/cardinality",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": [
+{
+"@value": "cardinality"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/scalar/cardinality/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:synthesized-field": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/scalar/cardinality"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/scalar/cardinality"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(16,12)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "cardinality"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(16,12)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:name": [
+{
+"@value": "items"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:property"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(13,10)-(17,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(12,8)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:name": [
+{
+"@value": "itemConstraints"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(11,8)-(11,12)]"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(10,6)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "itemConstraints"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(10,6)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#1/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:resolved-link": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "amf://id#9"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(5,2)-(5,23)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(5,2)-(17,0)]"
+}
+]
+}
+],
+"sourcemaps:declared-element": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": ""
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "#10",
+"@type": [
+"shacl:NodeShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:closed": [
+{
+"@value": false
+}
+],
+"shacl:property": [
+{
+"@id": "#11",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#url"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "#12",
+"@type": [
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:name": [
+{
+"@value": "url"
+}
+],
+"shacl:in": [
+{
+"@id": "#12/list",
+"@type": "rdfs:Seq",
+"rdfs:_1": [
+{
+"@id": "#13",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#13/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#13"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(21,15)-(21,75)]"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#12/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:inherited-shapes": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#12"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "amf://id#14"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:in"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(21,8)-(22,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#12"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(20,14)-(20,17)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "url"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#11/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#11"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(19,6)-(22,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "#15",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#extension"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "#16",
+"@type": [
+"raml-shapes:ArrayShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"raml-shapes:items": [
+{
+"@id": "#17",
+"@type": [
+"shacl:NodeShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:closed": [
+{
+"@value": true
+}
+],
+"shacl:property": [
+{
+"@id": "#2",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#url"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "#3",
+"@type": [
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:name": [
+{
+"@value": "uri"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#3/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:resolved-link": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "amf://id#4"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(7,11)-(7,14)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "url"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#2/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#2"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(7,6)-(8,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "#5",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#%2F%5Evalue(Coding%7CString)%24%2F"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "#6",
+"@type": [
+"raml-shapes:UnionShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"raml-shapes:anyOf": [
+{
+"@id": "#7",
+"@type": [
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:name": [
+{
+"@value": "Coding"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#7/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#7"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,32)-(8,47)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "#8",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#6/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#6"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,6)-(9,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 0
+}
+],
+"raml-shapes:patternName": [
+{
+"@value": "^value(Coding|String)$"
+}
+],
+"shacl:name": [
+{
+"@value": "/^value(Coding|String)$/"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#5/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#5"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,6)-(9,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:name": [
+{
+"@value": "items"
+}
+],
+"raml-shapes:customShapeProperties": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/shapeExtension",
+"@type": [
+"raml-http:ShapeExtension",
+"doc:DomainElement"
+],
+"doc:definedBy": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#itemConstraints"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints",
+"@type": [
+"raml-shapes:ArrayShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"raml-shapes:items": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items",
+"@type": [
+"shacl:NodeShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:closed": [
+{
+"@value": false
+}
+],
+"shacl:property": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#property"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/scalar/property",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": [
+{
+"@value": "property"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/scalar/property/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:synthesized-field": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/scalar/property"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/scalar/property"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(14,12)-(15,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "property"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/property"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(14,12)-(15,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#value"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/scalar/value",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": [
+{
+"@value": "value"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/scalar/value/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:synthesized-field": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/scalar/value"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/scalar/value"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(15,12)-(16,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "value"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/value"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(15,12)-(16,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#cardinality"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/scalar/cardinality",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": [
+{
+"@value": "cardinality"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/scalar/cardinality/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:synthesized-field": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/scalar/cardinality"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/scalar/cardinality"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(16,12)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "cardinality"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/property/cardinality"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(16,12)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:name": [
+{
+"@value": "items"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:property"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(13,10)-(17,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/items/items"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(12,8)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:name": [
+{
+"@value": "itemConstraints"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(11,8)-(11,12)]"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/array/itemConstraints"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(10,6)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "itemConstraints"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/itemConstraints"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(10,6)-(17,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"doc:extension": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1",
+"@type": [
+"data:Array",
+"rdf:Seq"
+],
+"rdf:member": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2",
+"@type": [
+"data:Object"
+],
+"data:cardinality": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_5",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "0..5",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_5/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_5"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(29,27)-(29,31)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"data:property": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_3",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "url",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_3/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(27,24)-(27,27)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"data:value": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_4",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "ombCategory",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_4/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/scalar_4"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(28,21)-(28,32)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:data-node-properties": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "cardinality->[(29,14)-(30,0)]#property->[(27,14)-(28,0)]#value->[(28,14)-(29,0)]"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(27,14)-(30,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6",
+"@type": [
+"data:Object"
+],
+"data:cardinality": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_9",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "0..*",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_9/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_9"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(32,27)-(32,31)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"data:property": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_7",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "url",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_7/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_7"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(30,24)-(30,27)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"data:value": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_8",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "detailed",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_8/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/scalar_8"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(31,21)-(31,29)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:data-node-properties": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "cardinality->[(32,14)-(33,0)]#property->[(30,14)-(31,0)]#value->[(31,14)-(32,0)]"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(30,14)-(33,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10",
+"@type": [
+"data:Object"
+],
+"data:cardinality": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_13",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "1..1",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_13/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_13"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(35,27)-(35,31)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"data:property": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_11",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "url",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_11/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_11"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(33,24)-(33,27)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"data:value": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_12",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "text",
+"@type": "xsd:string"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_12/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/scalar_12"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(34,21)-(34,25)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:data-node-properties": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "cardinality->[(35,14)-(36,0)]#property->[(33,14)-(34,0)]#value->[(34,14)-(35,0)]"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(33,14)-(36,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"data:pos0": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_2"
+}
+],
+"data:pos1": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_6"
+}
+],
+"data:pos2": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/object_10"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/extension/itemConstraints/array_1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(26,26)-(36,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/shapeExtension/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/apic-84/apic-84.raml#/declarations/types/USCoreRaceExtension/property/extension/array/extension/items/shapeExtension"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(26,10)-(36,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#17/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:inherited-shapes": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#17"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "amf://id#18"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#17"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(24,8)-(36,0)]"
+}
+]
+}
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#17"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(25,10)-(25,14)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:name": [
+{
+"@value": "extension"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#16/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#16"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(23,8)-(23,12)]"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#16"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(22,6)-(36,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "extension"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#15/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#15"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(22,6)-(36,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:name": [
+{
+"@value": "USCoreRaceExtension"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#10/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:declared-element": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#10"
+}
+],
+"sourcemaps:value": [
+{
+"@value": ""
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(17,2)-(17,21)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#10"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(17,2)-(36,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"@context": {
+"@base": "amf://id",
+"raml-http": "http://a.ml/vocabularies/http#",
+"raml-shapes": "http://a.ml/vocabularies/shapes#",
+"shacl": "http://www.w3.org/ns/shacl#",
+"data": "http://a.ml/vocabularies/data#",
+"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+"doc": "http://a.ml/vocabularies/document#",
+"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+"sourcemaps": "http://a.ml/vocabularies/document-source-maps#",
+"schema-org": "http://schema.org/",
+"xsd": "http://www.w3.org/2001/XMLSchema#"
+}
+}
+]

@@ -1,8 +1,9 @@
 # API Console documentation
 
 Select a topic
--   [Starting guide to web components](web-components.md)
+-   [A beginners guide to web components](web-components.md)
 -   [API Console element documentation](api-console-element.md)
+-   [Using API components (separate components)](api-components.md)
 -   [API Console build tools](build-tools.md)
 -   [API Console configuration options](configuring-api-console.md)
 -   [Building API Console for GitHub pages on Travis](gh-pages.md)

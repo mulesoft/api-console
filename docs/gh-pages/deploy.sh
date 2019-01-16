@@ -9,7 +9,7 @@ chmod 600 gh-travis_rsa
 eval `ssh-agent -s`
 ssh-add gh-travis_rsa
 
-# Just an example, you can build the console for any branch. We will buil for master only.
+# Just an example, you can build the console for any branch. We will build it for master only.
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
     echo "Skipping deploy."
     exit 0
@@ -20,7 +20,7 @@ REPO=`git config remote.origin.url`
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 SHA=`git rev-parse --verify HEAD`
 
-# Cclone the repo a foler. We'll use api/ as a working dir.
+# Clone the repo to current location. We'll use "api/" as a working dir.
 git clone $REPO api
 
 # Build the console out of the latest API release.

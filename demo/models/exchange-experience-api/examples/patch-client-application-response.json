@@ -1,0 +1,22 @@
+{
+  "description": "TestRequestAPIAccess description",
+  "name": "TestRequestAPIAccess",
+  "grantTypes": [
+    "password",
+    "implicit",
+    "client_credentials",
+    "authorization_code",
+    "refresh_token"
+  ],
+  "redirectUri": [
+    "http://localhost:9090",
+    "https://qax.anypoint.mulesoft.com/apiplatform/pingfederateqa/authentication/oauth2.html",
+    "https://qax.anypoint.mulesoft.com/apiplatform/pingfederateqa/admin/authentication/oauth2.html",
+    "https://api-notebook.anypoint.mulesoft.com/authenticate/oauth.html"
+  ],
+  "url": "https://localhost:8080",
+  "masterOrganizationId": "2f17a3df-a5f9-45e8-a8b4-41bd26d89236",
+  "clientId": "49670e55b98b4ad2be0b6fc20d2cafa2",
+  "clientSecret": "0fD00492a2554e5f9857598Dbd675472",
+  "id": 3
+}

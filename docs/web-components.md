@@ -22,16 +22,15 @@ hide any properties that the hosting application shouldn't use.
 
 See the specification here: [shadow dom](https://w3c.github.io/webcomponents/spec/shadow/)
 
-### HTML imports
-
-The spec defines how to import custom element to the web site or application. This specification is most controversial because some vendors (Microsoft, Mozilla) won't implement it in their browsers until they don't agree of how this specification relates to ES6 module imports. Therefore for now you have to use a polyfill library called
-[webcomponents.js](https://github.com/webcomponents/webcomponentsjs). This polyfill provides backward compatibility for most of specifications for web components.
-
-Specification: [HTML imports](https://w3c.github.io/webcomponents/spec/imports/)
-
 ### HTML template
 
 Allows to declare a HTML fragments that are not used during the page load but can be instantiated anytime later. This way you can include a lot of HTML structure without adding it to the DOM. This specification is heavily used in the Polymer library where you can create an element defining it's markup in the element definition but it is unused until the element is actually registered and attached to the DOM.
+
+
+### Imports
+
+This version of the console still works with original HTML imports specification implemented in Chrome only. Currently all browsers already implemented ES6 module imports which works with web components. However, this version of the console won't support it at the time. ES6 modules imports will be supported with next major release.
+
 
 ## Custom element lifecycle callbacks
 

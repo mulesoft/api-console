@@ -1,0 +1,29 @@
+[
+  {
+    "@id": "amf://id",
+    "@type": [
+      "http://a.ml/vocabularies/document#ExternalFragment",
+      "http://a.ml/vocabularies/document#Fragment",
+      "http://a.ml/vocabularies/document#Unit"
+    ],
+    "http://a.ml/vocabularies/document#encodes": [
+      {
+        "@id": "amf://id#1",
+        "@type": [
+          "http://a.ml/vocabularies/document#ExternalDomainElement",
+          "http://a.ml/vocabularies/document#DomainElement"
+        ],
+        "http://a.ml/vocabularies/document#raw": [
+          {
+            "@value": ""
+          }
+        ],
+        "http://a.ml/vocabularies/http#mediaType": [
+          {
+            "@value": "application/raml+yaml"
+          }
+        ]
+      }
+    ]
+  }
+]

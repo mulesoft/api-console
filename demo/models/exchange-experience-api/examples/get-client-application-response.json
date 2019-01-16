@@ -1,0 +1,11 @@
+{
+  "id": 59453,
+  "name": "TestRequestAPIAccess",
+  "description": "TestRequestAPIAccess description",
+  "url": "http://localhost:8080",
+  "redirectUri": ["http://localhost:9090"],
+  "clientId": "904ca48597f54f6a9ed98ab9f4bcbb85",
+  "clientSecret": "2D1921aEbC6847D1ADc329603E4c5dC1",
+  "masterOrganizationId": "68ef9520-24e9-4cf2-b2f5-620025690913",
+  "grantTypes": []
+}

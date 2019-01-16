@@ -1,0 +1,22 @@
+[
+  {
+    "from": {
+      "uid": "a7917e3c-4abf-11e7-a919-92ebcb67fe33",
+      "name": "Pawel Psztyc",
+      "email": "bea3d5e8-4abf-11e7-a919-92ebcb67fe33-em-vbc@domain.com"
+    },
+    "message": "This is an example message. Hello.",
+    "timestamp": 1496757380,
+    "attachements": [
+      "https://attc.domain.com/01332c24-4ac0-11e7-a919-92ebcb67fe33"
+    ]
+  }, {
+    "from": {
+      "uid": "15e64d90-4ac0-11e7-a919-92ebcb67fe33",
+      "name": "John Doe",
+      "email": "220ce9bc-4abf-11e7-a919-92ebcb67fe33-oa-vbc@domain.com"
+    },
+    "message": "Howdy?",
+    "timestamp": 1496757498
+  }
+]

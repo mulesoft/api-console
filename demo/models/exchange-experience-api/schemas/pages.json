@@ -1,0 +1,17 @@
+{
+  "title": "Pages", 
+  "type": "array", 
+  "items": {
+    "type": "object", 
+    "properties": {
+      "path": {
+        "type": "string", 
+        "title": "Path"
+      }, 
+      "name": {
+        "type": "string", 
+        "title": "Name"
+      }
+    }
+  }
+}

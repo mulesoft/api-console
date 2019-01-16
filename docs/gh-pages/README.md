@@ -32,14 +32,14 @@ You will need to generate and add SSH key to your repository and to your project
 
 If you already have generated key, go to step 5.
 
-1. Open terminal
-2. Execute following command, replacing email with your GitHub email address.
+1.  Open terminal
+2.  Execute following command, replacing email with your GitHub email address.
 
 ```
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
 
-3. When prompted for location, change file name to `gh-travis_rsa`
+3.  When prompted for location, change file name to `gh-travis_rsa`
 
 ```
 Enter a file in which to save the key (/Users/you/.ssh/id_rsa): /Users/you/.ssh/gh-travis_rsa
@@ -47,21 +47,21 @@ Enter a file in which to save the key (/Users/you/.ssh/id_rsa): /Users/you/.ssh/
 
 We will use this filename in the build script
 
-4. Do not set password! When Travis runs the script there's no way to enter the password when prompted. Because of that do not use this key anywhere else. It wouldn't be safe. Also, keep the key safe so no one can access it.
+4.  Do not set password! When Travis runs the script there's no way to enter the password when prompted. Because of that do not use this key anywhere else. It wouldn't be safe. Also, keep the key safe so no one can access it.
 
-5. Add generated key to your repository as described in [GitHub help pages](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/). Remember that you're adding **public key** (gh-travis_rsa.pub), not the private key.
+5.  Add generated key to your repository as described in [GitHub help pages](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/). Remember that you're adding __public key__ (gh-travis_rsa.pub), not the private key.
 
-**Well done!** Last thing to do is to add encrypted key to your repository. We will use [Travis CLI](https://github.com/travis-ci/travis.rb).
+__Well done!__ Last thing to do is to add encrypted key to your repository. We will use [Travis CLI](https://github.com/travis-ci/travis.rb).
 
-6. Copy the key to your project's location (follwing assumes that you are performing this steps in project's location)
+6.  Copy the key to your project's location (follwing assumes that you are performing this steps in project's location)
 
 ```
 cp ~/.ssh/gh-travis_rsa ./
 ```
 
-6. Install Travis CLI as described in [installation guide](https://github.com/travis-ci/travis.rb#installation) if you haven't done that already.
+6.  Install Travis CLI as described in [installation guide](https://github.com/travis-ci/travis.rb#installation) if you haven't done that already.
 
-7. Now, use Travis CLI to add encrypted key to your repository:
+7.  Now, use Travis CLI to add encrypted key to your repository:
 
 ```
 travis encrypt-file gh-travis_rsa --add
@@ -75,7 +75,7 @@ before_install:
   -in gh-travis_rsa.enc -out gh-travis_rsa -d
 ```
 
-8. **Remove unencrypted key from your project**
+8.  __Remove unencrypted key from your project__
 
 ```
 rm gh-travis_rsa
@@ -91,7 +91,7 @@ The `deploy.sh` script will setup generated and decoded key in the container so 
 
 The script will clone the repository into the `api/` folder. This folder will serve as a source of the API spec and later to publish the console. Next, it will call the `build.js` which contains a script that will generate the API console using a node module.
 
-**Note:** Instead of calling another script (`build.js`) you may use the api-console CLI tool.
+__Note:__ Instead of calling another script (`build.js`) you may use the api-console CLI tool.
 
 When new API console is ready, and build output is waiting in the `build/` directory (as defined in `build.js` script) the script will checkout `gh-pages` branch in the `api/` directory where the repository was cloned.
 After removing its content (which is the old version of the console and the documentation) it will copy content from `build/` to `api/` directory. That is, to `gh-pages`.

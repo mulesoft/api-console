@@ -1,0 +1,66 @@
+{
+  "title": "Review",
+  "type": "object", 
+  "properties": {
+    "id": {
+      "type": "string", 
+      "title": "Id"
+    }, 
+    "userId": {
+      "type": "string", 
+      "title": "User Id"
+    }, 
+    "version": {
+      "type": "string", 
+      "title": "Version"
+    }, 
+    "organizationId": {
+      "type": "string", 
+      "title": "Organization Id"
+    }, 
+    "rating": {
+      "type": "integer", 
+      "title": "Rating"
+    }, 
+    "text": {
+      "type": "string", 
+      "title": "Text"
+    }, 
+    "createdDate": {
+      "type": "string", 
+      "title": "Created date"
+    }, 
+    "updatedDate": {
+      "type": "string", 
+      "title": "Updated date"
+    }, 
+    "comments": {
+      "type": "array", 
+      "items": {
+        "type": "object", 
+        "properties": {
+          "id": {
+            "type": "string", 
+            "title": "Id"
+          }, 
+          "userId": {
+            "type": "string", 
+            "title": "User id"
+          }, 
+          "comment": {
+            "type": "string", 
+            "title": "Comment"
+          }, 
+          "createdDate": {
+            "type": "string", 
+            "title": "Created date"
+          }, 
+          "updatedDate": {
+            "type": "string", 
+            "title": "Updated date"
+          }
+        }
+      }
+    }
+  }
+}

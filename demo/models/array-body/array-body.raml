@@ -1,0 +1,23 @@
+#%RAML 1.0
+title: API body demo
+version: v1
+baseUri: http://test.domain.com/
+
+/arrayBody:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: AppPerson[]
+  post:
+    body:
+      application/json:
+        description: |
+          Default body for the POST method.
+
+          This is description to be rendered as markdown.
+        displayName: My post body
+        type: AppPerson[]
+types:
+  AppPerson: !include app-person.raml

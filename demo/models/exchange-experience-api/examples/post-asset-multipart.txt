@@ -1,0 +1,29 @@
+------WebKitFormBoundaryTjIAeJhWzfnFLKzF
+Content-Disposition: form-data; name="organizationId"
+
+c44be829-3d89-4b70-80be-277b7633bc5a
+------WebKitFormBoundaryTjIAeJhWzfnFLKzF
+Content-Disposition: form-data; name="groupId"
+
+c44be829-3d89-4b70-80be-277b7633bc5a
+------WebKitFormBoundaryTjIAeJhWzfnFLKzF
+Content-Disposition: form-data; name="assetId"
+
+http-api
+------WebKitFormBoundaryTjIAeJhWzfnFLKzF
+Content-Disposition: form-data; name="version"
+
+1.0.0
+------WebKitFormBoundaryTjIAeJhWzfnFLKzF
+Content-Disposition: form-data; name="name"
+
+HTTP API
+------WebKitFormBoundaryTjIAeJhWzfnFLKzF
+Content-Disposition: form-data; name="classifier"
+
+http
+------WebKitFormBoundaryTjIAeJhWzfnFLKzF
+Content-Disposition: form-data; name="apiVersion"
+
+v1
+------WebKitFormBoundaryTjIAeJhWzfnFLKzF--

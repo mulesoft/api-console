@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>API Console</title>
+  <script src="../../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="../../../shadycss/apply-shim.html">
+  <link rel="import" href="../../../polymer/lib/elements/custom-style.html">
+  <link rel="import" href="../../../paper-toggle-button/paper-toggle-button.html">
+  <link rel="import" href="../../../app-route/app-location.html">
+  <link rel="import" href="../../../xhr-simple-request/xhr-simple-request.html">
+  <link rel="import" href="../../../oauth-authorization/oauth-authorization.html">
+  <link rel="import" href="../../../cryptojs-lib/cryptojs-lib.html">
+  <link rel="import" href="../../../neon-animation/web-animations.html">
+  <link rel="import" href="../../../paper-menu-button/paper-menu-button.html">
+  <link rel="import" href="../../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../../paper-item/paper-item.html">
+  <link rel="import" href="../../../paper-listbox/paper-listbox.html">
+  <link rel="import" href="../../api-console.html">
+  <link rel="import" href="../parser-element/parser-element.html">
+  <link rel="import" href="apic-theme-file.html">
+  <custom-style>
+    <style is="custom-style">
+    html,
+    body {
+      height: 100%;
+      background-color: #e5e5e5;
+      margin: 0;
+      padding: 0;
+    }
+
+    api-console {
+      min-height: 100vh;
+    }
+
+    [data-action] {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    parser-element {
+      background-color: #607D8B;
+    }
+    </style>
+  </custom-style>
+</head>
+
+<body unresolved>
+  <app-location use-hash-as-path></app-location>
+  <raml-aware scope="demo-model"></raml-aware>
+  <api-console aware="demo-model" hidden app redirect-uri="https://auth.advancedrestclient.com/oauth-popup.html">
+    <paper-menu-button slot="toolbar" dynamic-align id="demoMenu">
+      <paper-icon-button icon="arc:menu" slot="dropdown-trigger"></paper-icon-button>
+      <paper-listbox slot="dropdown-content" id="apiList" on-selected-changed="_apiChanged">
+        <paper-item>
+          <paper-toggle-button data-action="noTryIt">No try it</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="narrow">Render narrow</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="noAttribution">No attribution (see license)</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="manualNavigation">Manual navigation</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="navigationOpened">Navigation opened</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="noExtensionBanner">No extension banner</paper-toggle-button>
+        </paper-item>
+        <paper-item>
+          <paper-toggle-button data-action="inlineMethods">Render Try It inline with method documentation</paper-toggle-button>
+        </paper-item>
+        <paper-item data-click-action="goBack">Close this API</paper-item>
+      </paper-listbox>
+    </paper-menu-button>
+  </api-console>
+  <parser-element on-amf-changed="_updateAmf" hidden></parser-element>
+
+
+  <script src="app.js"></script>
+</body>
+
+</html>

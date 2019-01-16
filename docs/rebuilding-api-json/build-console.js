@@ -2,15 +2,15 @@
  * This file builds the API console
  */
 const builder = require('api-console-builder');
-const fs = require('fs');
 
 builder({
-  src: 'https://github.com/mulesoft/api-console/archive/release/4.0.0.zip',
-  dest: 'build',
-  raml: 'YOUR RAML FILE LOCATION OR URL',
-  verbose: false,
-  jsCompilationLevel: 'SIMPLE',
-  useJson: true // will generate api.json file
+  verbose: true,
+  destination: 'build', // Optional, default to "build"
+  // note that the deploy.sh script will clone the repo to api/ folder.
+  api: 'YOUR RAML FILE LOCATION OR URL',
+  apiType: 'API TYPE EG RAML 1.0',
+  tagName: '5.0.0-preview-1', // builds the console from specific version
+  embedded: false // default is false
 })
 .then(() => {
   console.log('Build complete');

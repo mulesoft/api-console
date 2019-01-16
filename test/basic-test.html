@@ -1,143 +1,436 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/test-helpers.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../../raml-js-parser/raml-js-parser.html">
-  <link rel="import" href="../../raml-json-enhance/raml-json-enhance.html">
+  <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
   <link rel="import" href="../api-console.html">
 </head>
 
 <body>
-  <test-fixture id="parser">
-    <template>
-      <raml-js-parser json></raml-js-parser>
-    </template>
-  </test-fixture>
-  <test-fixture id="enhancer">
-    <template>
-      <raml-json-enhance></raml-json-enhance>
-    </template>
-  </test-fixture>
-  <test-fixture id="basic">
+  <test-fixture id="Basic">
     <template>
       <api-console></api-console>
     </template>
   </test-fixture>
+
+  <test-fixture id="RequestView">
+    <template>
+      <api-console page="request"></api-console>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="Narrow">
+    <template>
+      <api-console narrow></api-console>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="ManualNavigation">
+    <template>
+      <api-console manual-navigation></api-console>
+    </template>
+  </test-fixture>
+
   <script>
   /* global fixture, assert */
-  suite('basic', function() {
-    var element;
-    var raml;
-
-    suiteSetup(function(done) {
-      var baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
-      var parser = fixture('parser');
-      var enhancer = fixture('enhancer');
-      enhancer.addEventListener('raml-json-enhance-ready', function(e) {
-        raml = e.detail.json;
-        done();
-      });
-      parser.loadApi(baseUrl + 'test.raml')
-      .then(function(data) {
-        enhancer.json = data.json.specification;
-      })
-      .catch(function(e) {
-        done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
-      });
-    });
-
+  suite('APIC - basics', function() {
+    let element;
     setup(function() {
-      element = fixture('basic');
-      element.raml = raml;
+      element = fixture('Basic');
     });
 
-    test('path should be set to summary', function() {
-      assert.equal(element.path, 'summary');
-    });
-
-    test('page should be set to docs', function() {
+    test('Default page is docs', function() {
       assert.equal(element.page, 'docs');
     });
 
-    test('selectedObject should equal RAML', function() {
-      assert.deepEqual(element.selectedObject, raml);
+    test('isRequest is computed', () => {
+      assert.isFalse(element.isRequest);
     });
 
-    test('selectedParent is undefined', function() {
-      assert.isNotOk(element.selectedParent);
+    test('isDocs is computed', () => {
+      assert.isTrue(element.isDocs);
     });
 
-    test('noExtensionBanner is undefined', function() {
-      assert.isNotOk(element.noExtensionBanner);
+    test('noExtensionBanner is not set by default', function() {
+      assert.isUndefined(element.noExtensionBanner);
     });
 
-    test('noExtensionBanner is set after extension event is fired', function() {
-      var event = new CustomEvent('api-console-extension-installed', {
-        bubbles: true
-      });
-      document.body.dispatchEvent(event);
-      assert.isTrue(element.noExtensionBanner);
+    test('extensionBannerActive is not initally set', function() {
+      assert.isUndefined(element.extensionBannerActive);
     });
 
-    test('scrollTarget is defined', function() {
-      assert.isOk(element.scrollTarget);
-    });
-
-    test('Computes attribute headers', function() {
-      var headers = 'Content-Type: application/json\\nX-Test:1';
-      var parsed = [{
-        name: 'Content-Type',
-        value: 'application/json'
-      }, {
-        name: 'X-Test',
-        value: '1'
-      }];
-      assert.deepEqual(element._computeAppendHeaders(headers), parsed);
-    });
-
-    test('navigationOpened hides main content', function(done) {
-      element.manualNavigation = true;
-      element.navigationOpened = true;
-      setTimeout(function() {
-        var mainPage = Polymer.dom(element.root).querySelector('#mainPages');
-        assert.isTrue(mainPage.hasAttribute('hidden'));
+    test('extensionBannerActive is eventually set', function(done) {
+      if (!element.isChrome) {
         done();
-      }, 201);
+        return;
+      }
+      setTimeout(() => {
+        assert.isTrue(element.extensionBannerActive);
+        done();
+      }, 32);
     });
 
     test('Handles tryit-requested event', function() {
-      var event = new CustomEvent('tryit-requested', {
+      const e = new CustomEvent('tryit-requested', {
         bubbles: true
       });
-      element.dispatchEvent(event);
+      element.dispatchEvent(e);
       assert.equal(element.page, 'request');
     });
 
-    test('Handles raml-path-changed event', function() {
-      var newPath = 'resources.0';
-      var event = new CustomEvent('raml-path-changed', {
+    test('dismissExtensionBanner() sets extensionBannerActive', () => {
+      element.dismissExtensionBanner();
+      assert.isFalse(element.extensionBannerActive);
+    });
+  });
+
+  suite('resetSelection()', () => {
+    test('Resets page to "docs"', () => {
+      const element = fixture('RequestView');
+      element.resetSelection();
+      assert.equal(element.page, 'docs');
+    });
+
+    test('Resets selectedShape"', () => {
+      const element = fixture('Basic');
+      element.selectedShape = 'amf://#1';
+      element.resetSelection();
+      assert.equal(element.selectedShape, 'summary');
+    });
+
+    test('Resets selectedShapeType"', () => {
+      const element = fixture('Basic');
+      element.selectedShapeType = 'type';
+      element.resetSelection();
+      assert.equal(element.selectedShapeType, 'summary');
+    });
+  });
+
+  suite('_computeIsRequest()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    test('Returns "true" when argument is "request"', () => {
+      const result = element._computeIsRequest('request');
+      assert.isTrue(result);
+    });
+
+    test('Returns "false" when argument is "docs"', () => {
+      const result = element._computeIsRequest('docs');
+      assert.isFalse(result);
+    });
+  });
+
+  suite('_computeIsDocs()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    test('Returns "true" when argument is "docs"', () => {
+      const result = element._computeIsDocs('docs');
+      assert.isTrue(result);
+    });
+
+    test('Returns "false" when argument is "request"', () => {
+      const result = element._computeIsDocs('request');
+      assert.isFalse(result);
+    });
+  });
+
+  suite('_computeIsMethod()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    test('Returns "true" when argument is "method"', () => {
+      const result = element._computeIsMethod('method');
+      assert.isTrue(result);
+    });
+
+    test('Returns "false" when argument is not "method"', () => {
+      const result = element._computeIsMethod('endpoint');
+      assert.isFalse(result);
+    });
+  });
+
+  suite('_apiNavigationOcurred()', () => {
+    let element;
+    const SEL_ID = 'test-id';
+    const SEL_TYPE = 'test-type';
+    setup(function() {
+      element = fixture('RequestView');
+    });
+
+    test('Closes request panel', () => {
+      element._apiNavigationOcurred({
         detail: {
-          path: newPath
-        },
-        bubbles: true
+          selected: SEL_ID,
+          type: SEL_TYPE
+        }
       });
-      element.dispatchEvent(event);
-      assert.equal(element.path, newPath);
+      assert.equal(element.page, 'docs');
+    });
+
+    test('Do not closes request panel when passive navigation', () => {
+      element.selectedShape = SEL_ID;
+      element.selectedShapeType = SEL_TYPE;
+      element.page = 'request';
+      element._apiNavigationOcurred({
+        detail: {
+          selected: SEL_ID,
+          type: SEL_TYPE,
+          passive: true
+        }
+      });
+      assert.equal(element.page, 'request');
+    });
+
+    test('Sets selectedShape', () => {
+      element._apiNavigationOcurred({
+        detail: {
+          selected: SEL_ID,
+          type: SEL_TYPE
+        }
+      });
+      assert.equal(element.selectedShape, SEL_ID);
+    });
+
+    test('Sets selectedShapeType', () => {
+      element._apiNavigationOcurred({
+        detail: {
+          selected: SEL_ID,
+          type: SEL_TYPE
+        }
+      });
+      assert.equal(element.selectedShapeType, SEL_TYPE);
+    });
+  });
+
+  suite('_computeNarrowNavForced()', () => {
+    test('Returns true when 1st argument is set', () => {
+      const element = fixture('Basic');
+      const result = element._computeNarrowNavForced(true);
+      assert.isTrue(result);
+    });
+
+    test('Returns true when 2nd argument is set', () => {
+      const element = fixture('Basic');
+      const result = element._computeNarrowNavForced(undefined, true);
+      assert.isTrue(result);
+    });
+
+    test('Returns true when both arguments are true', () => {
+      const element = fixture('Basic');
+      const result = element._computeNarrowNavForced(true, true);
+      assert.isTrue(result);
+    });
+
+    test('Returns false when both arguments are false', () => {
+      const element = fixture('Basic');
+      const result = element._computeNarrowNavForced(false, false);
+      assert.isFalse(result);
+    });
+
+    test('Computes _narrowNavForced when narrow argument is set', () => {
+      const element = fixture('Narrow');
+      assert.isTrue(element._narrowNavForced);
+    });
+
+    test('Computes _narrowNavForced when manual-navigation argument is set', () => {
+      const element = fixture('ManualNavigation');
+      assert.isTrue(element._narrowNavForced);
+    });
+  });
+
+  suite('_notifyApicExtension()', () => {
+    test('Dispatches api-console-ready custom event (automatically)', (done) => {
+      document.body.addEventListener('api-console-ready', function f() {
+        document.body.removeEventListener('api-console-ready', f);
+        done();
+      });
+      fixture('Basic');
+    });
+
+    test('api-console-ready custom event bubbles', (done) => {
+      const element = fixture('Basic');
+      element.addEventListener('api-console-ready', function f(e) {
+        element.removeEventListener('api-console-ready', f);
+        assert.isTrue(e.bubbles);
+        done();
+      });
+      element._notifyApicExtension();
+    });
+  });
+
+  suite('_modelLocationChanged()', () => {
+    let element;
+    let xhr;
+    let requests;
+    setup(() => {
+      requests = [];
+      element = fixture('Basic');
+    });
+
+    suiteSetup(() => {
+      xhr = sinon.useFakeXMLHttpRequest();
+      xhr.onCreate = function(xhr) {
+        requests.push(xhr);
+      };
+    });
+
+    suiteTeardown(() => {
+      xhr.restore();
+    });
+
+    test('Do nothing when no argument', () => {
+      element._modelLocationChanged();
+      assert.equal(requests.length, 0);
+    });
+
+    test('Downloads model from remote location', () => {
+      element._modelLocationChanged('apip.json');
+      assert.equal(requests.length, 1);
+      requests[0].respond(200, {
+        'Content-Type': 'application/json'},
+        '[{"@context":{}, "@id": "","@type": []}]');
+      assert.typeOf(element.amfModel, 'array');
+    });
+
+    test('Calls _apiLoadErrorHandler() when url is invalid', () => {
+      const callback = sinon.spy(element, '_apiLoadErrorHandler');
+      element._modelLocationChanged('error.json');
+      requests[0].respond(404, {
+        'Content-Type': 'text/plain'},
+        'nothing');
+      assert.isTrue(callback.called);
+    });
+  });
+
+  suite('_apiLoadEndHandler()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+    });
+
+    test('Sets amfModel property', () => {
+      element._apiLoadEndHandler({
+        response: '[{"@context":{}, "@id": "","@type": []}]'
+      });
+      assert.typeOf(element.amfModel, 'array');
+    });
+
+    test('Calles _apiLoadErrorHandler when response is not valid', () => {
+      const callback = sinon.spy(element, '_apiLoadErrorHandler');
+      element._apiLoadEndHandler({
+        response: '[{"@context":'
+      });
+      assert.isTrue(callback.called);
+    });
+  });
+
+  suite('_apiLoadErrorHandler()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+    });
+
+    test('Sets message on the toast', () => {
+      element._apiLoadErrorHandler(new Error('test'));
+      assert.typeOf(element.$.apiLoadErrorToast.text, 'string');
+    });
+
+    test('The toast is opened', () => {
+      element._apiLoadErrorHandler(new Error('test'));
+      assert.isTrue(element.$.apiLoadErrorToast.opened);
+    });
+  });
+
+  suite('resetLayout()', () => {
+    let element;
+    setup((done) => {
+      element = fixture('Basic');
+      flush(() => done());
+    });
+
+    test('Resets layout', () => {
+      element.resetLayout();
+      // no error is thrown
+    });
+  });
+
+  suite('_noExtBannerChanged()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+      element._setExtensionBannerActive(true);
+    });
+
+    test('Sets extensionBannerActive to false', () => {
+      element._noExtBannerChanged(true);
+      assert.isFalse(element.extensionBannerActive);
+    });
+
+    test('Does nothing if argument is false', () => {
+      element._noExtBannerChanged(false);
+      assert.isTrue(element.extensionBannerActive);
+    });
+  });
+
+  suite('_computeRenderInlineTryIt()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+    });
+
+    test('Return false whem no "wideLayout"', () => {
+      const result = element._computeRenderInlineTryIt(false);
+      assert.isFalse(result);
+    });
+
+    test('Return false whem no "isMethod"', () => {
+      const result = element._computeRenderInlineTryIt(true, true, false);
+      assert.isFalse(result);
+    });
+
+    test('Return false whem no "app"', () => {
+      const result = element._computeRenderInlineTryIt(true, false, true);
+      assert.isFalse(result);
+    });
+
+    test('Return false whem "inlineMethods"', () => {
+      const result = element._computeRenderInlineTryIt(true, true, true, true);
+      assert.isFalse(result);
+    });
+
+    test('Return true to inline methods', () => {
+      const result = element._computeRenderInlineTryIt(true, true, true, false);
+      assert.isTrue(result);
+    });
+  });
+
+  suite('_computeNoTryItValue()', () => {
+    let element;
+    setup(() => {
+      element = fixture('Basic');
+    });
+
+    test('Returns true when renderInlineTyit', () => {
+      const result = element._computeNoTryItValue(false, true);
+      assert.isTrue(result);
+    });
+
+    test('Returns value io noTryIt', () => {
+      const result = element._computeNoTryItValue(false);
+      assert.isFalse(result);
     });
   });
   </script>

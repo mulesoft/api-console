@@ -1,0 +1,35 @@
+#%RAML 1.0
+title: test-facets
+
+types:
+  USCoreExtensionNested:
+    properties:
+      url: uri
+      /^value(Coding|String)$/: Coding | string
+    facets:
+      itemConstraints:
+        type: array
+        items:
+          properties:
+            property:
+            value:
+            cardinality:
+  USCoreRaceExtension:
+    properties:
+      url:
+        type: uri
+        enum: [http://hl7.org/fhir/us/core/StructureDefinition/us-core-race]
+      extension:
+        type: array
+        items:
+          type: USCoreExtensionNested
+          itemConstraints:
+            - property: url
+              value: ombCategory
+              cardinality: 0..5
+            - property: url
+              value: detailed
+              cardinality: 0..*
+            - property: url
+              value: text
+              cardinality: 1..1

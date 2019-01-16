@@ -1,0 +1,1069 @@
+#%RAML 0.8
+title: exchange-xapi
+version: v1
+mediaType: application/json
+baseUri: https://anypoint.mulesoft.com/exchange/api/v1
+
+traits:
+  - searchable: !include traits/searchable.raml
+  - deleteable: !include traits/deleteable.raml
+  - pagePoster:
+      description: |
+          Creates an empty page for a draft version. Remember that:
+          - A page cannot be moved/created to/in a path that already contains another page with the same name.
+      headers:
+        x-move-source:
+          type: string
+          description: |
+            This header is used when you want to rename or move an existing page.
+            `x-move-source` specifies the path of the page or folder that wants to be moved, the source.
+            The request body property `path` will be the destination.
+          example: "/examples/"
+      body:
+        schema: !include schemas/pageCreate.json
+        example: !include examples/pageCreate.json
+
+securitySchemes:
+  - oauth_2_0: !include securitySchemes/oauth2.raml
+
+resourceTypes:
+  - assets:
+      usage: Use this resourceType to represent a collection of assets
+      description: A collection of assets
+      get:
+        is: [ searchable ]
+        securedBy: [oauth_2_0]
+        description: Get a paginated set of assets
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/assets.json
+                example: !include examples/assets.json
+
+  - portal:
+      usage: Use this resourceType to represent an asset portal
+      description: An Asset portal
+      get:
+        securedBy: [oauth_2_0]
+        description: Get an asset portal
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/portal.json
+                example: !include examples/portal.json
+
+  - page:
+      usage: Use this resourceType to represent any single page
+      description: A single asset page
+      get:
+        securedBy: [oauth_2_0]
+        description: Get a particular page
+        responses:
+          200:
+            body:
+              text/html:
+                example: !include examples/page.html
+              text/markdown:
+                example: !include examples/page.md
+              application/json:
+                example: !include examples/page.json
+
+  - editablePage:
+      type: page
+      usage: when edition is needed
+      put:
+        securedBy: [oauth_2_0]
+        description: Update a page for a <<type>> portal
+        body:
+          text/markdown:
+            example: !include examples/page.md
+        responses:
+          204:
+            description: Page updated
+      delete:
+        securedBy: [oauth_2_0]
+        description: Delete a page of a <<type>> portal
+        responses:
+          204:
+            description: Page deleted
+
+  - pages:
+      usage: Use this resourceType to represent a collection of pages
+      description: A collection of pages
+      get:
+        securedBy: [oauth_2_0]
+        description: Get a list of pages
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/pages.json
+                schema: !include schemas/pages.json
+
+  - users:
+      usage: Use this resourceType to represent a collection of users
+      description: A collection of pages
+      get:
+        securedBy: [oauth_2_0]
+        description: Get users for an organization
+        queryParameters:
+          search:
+            displayName: Search
+            type: string
+            description: Filter results that partially match the input with the asset name
+            example: "My example"
+          limit:
+            displayName: Limit
+            type: number
+            description: Amount of objects retrieved in the response
+            example: 10
+          offset:
+            displayName: Offset
+            type: number
+            description: The offset specifies the offset of the first row to return
+            example: 1
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/users.json
+                example: !include examples/users.json
+
+  - reviews:
+      usage: Use this resourceType to represent a collection of asset reviews
+      description: A collection of asset reviews
+      get:
+        securedBy: [oauth_2_0]
+        description: Get a list of reviews
+        queryParameters:
+          includeComments:
+            displayName: IncludeComments
+            type: boolean
+            description: Indicates to include comments or not in reviews
+            example: false
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/reviews.json
+                example: !include examples/reviews.json
+      post:
+        securedBy: [oauth_2_0]
+        description: Creates a new asset review
+        body:
+          application/json:
+            schema:  !include schemas/post-review-body.json
+            example: !include examples/post-review-body.json
+        responses:
+          201:
+            body:
+              application/json:
+                schema: !include schemas/review.json
+                example: !include examples/review.json
+
+  - review:
+      usage: Use this resourceType to represent any single review
+      description: A single asset review
+      patch:
+        securedBy: [oauth_2_0]
+        description: Edit an asset review
+        body:
+          application/json:
+            schema:  !include schemas/patch-review-body.json
+            example: !include examples/patch-review-body.json
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/review.json
+      delete:
+        securedBy: [oauth_2_0]
+        description: Deletes an specific asset review.
+        responses:
+          204:
+            description: Review deleted
+
+  - rating:
+      usage: Use this resourceType to represent the rating of an asset
+      description: Rating of asset
+      get:
+        securedBy: [oauth_2_0]
+        description: Get the asset rating
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/rating.json
+                example: !include examples/rating.json
+
+  - comments:
+      usage: Use this resourceType to represent a collection of an asset review comments
+      description: A collection of asset review comments
+      post:
+        securedBy: [oauth_2_0]
+        description: Creates a new review comment.
+        body:
+          application/json:
+            schema:  !include schemas/post-review-comment-body.json
+            example: !include examples/post-review-comment-body.json
+        responses:
+          201:
+            body:
+              application/json:
+                example: !include examples/review-comment.json
+
+  - comment:
+      usage: Use this resourceType to represent the comment of an asset review
+      description: A single asset review comment
+      patch:
+        securedBy: [oauth_2_0]
+        description: Edit a comment
+        body:
+          application/json:
+            schema:  !include schemas/patch-review-comment-body.json
+            example: !include examples/patch-review-comment-body.json
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/review-comment.json
+      delete:
+        securedBy: [oauth_2_0]
+        description: Deletes an specific asset review comment.
+        responses:
+          204:
+            description: comment deleted
+
+  - assetUsers:
+      usage: Use this resourceType to represent a collection of users assigned to an asset
+      description: A collection of assigned asset users
+      get:
+        securedBy: [oauth_2_0]
+        description: Get users assigned to the asset
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/asset-users.json
+                example: !include examples/asset-users.json
+      put:
+        securedBy: [oauth_2_0]
+        description: Assign users to an asset
+        body:
+            schema: !include schemas/assign-users.json
+            example: !include examples/assign-users.json
+        responses:
+          204:
+            description: User assigned to the asset
+
+  - clientApplications:
+      usage: Use this resourceType to represent a collection of client applications
+      description: A collection of client applications
+      get:
+        securedBy: [oauth_2_0]
+        description: List of client applications
+        queryParameters:
+          # these parameters were imported from consumersV1.raml from api-platform-api
+          includeContractsForApiVersion:
+            type: integer
+            description: This field is used to filter by API version
+          sort:
+            description: Property to sort by
+            type: string
+          ascending:
+            description: Order for sorting
+            type: boolean
+          query:
+            description: Search criteria
+            type: string
+          offset:
+            description: The offset specifies the offset of the first row to return.
+            type: number
+          limit:
+            description: Amount of objects retrieved in the response.
+            type: number
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/client-applications.json
+                example: !include examples/client-applications.json
+      post:
+        securedBy: [oauth_2_0]
+        description: Adds a client application
+        body:
+          application/json:
+            example: !include examples/post-client-application-body.json
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/post-client-application-response.json
+
+  - contractCollection:
+      usage: Use this resourceType to represent a contract collection
+      description: A collection of contracts
+      get:
+        securedBy: [oauth_2_0]
+        description: Retrieves a list of applications with contracts with the application
+        queryParameters:
+          includeContractsForApiVersion:
+            type: integer
+            description: This field is used to filter by API version
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/contracts.json
+                example: !include examples/contracts.json
+      post:
+        securedBy: [oauth_2_0]
+        description: Creates new contract between an API version and the application.
+        body:
+          application/json:
+            example: !include examples/post-contract.json
+        responses:
+          201:
+            body:
+              application/json:
+                schema: !include schemas/contract.json
+                example: !include examples/post-contract-response.json
+
+  - tiers:
+      usage: Use this resourceType to represent tiers
+      description: Tiers
+      get:
+        securedBy: [oauth_2_0]
+        description: Retrieves a list of tiers
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/tiers.json
+                example: !include examples/tiers.json
+
+  - queries:
+      usage: Use this resourceType to represent saved search queries
+      description: Saved search queries
+      get:
+        securedBy: [oauth_2_0]
+        description: Get saved searches queries
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/search-queries.json
+                example: !include examples/search-queries.json
+      post:
+        securedBy: [oauth_2_0]
+        description: Create a new query by organization
+        body:
+          application/json:
+            schema: !include schemas/create-search-query.json
+            example: !include examples/search-query.json
+        responses:
+          201:
+            body:
+              application/json:
+                example: !include examples/search-query.json
+
+  - query:
+      usage: Use this resourceType to represent a saved search query
+      description: A saved search query
+      patch:
+        securedBy: [oauth_2_0]
+        description: Put a saved search query
+        body:
+          application/json:
+            schema: !include schemas/update-search-query.json
+            example: !include examples/search-query.json
+        responses:
+          201:
+            body:
+              application/json:
+                example: !include examples/search-query.json
+      delete:
+        securedBy: [oauth_2_0]
+        description: Delete the query
+        responses:
+          204:
+            description: Saved search query deleted
+
+
+/ping:
+  displayName: Ping
+  description: Check API status
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "status": "ok"
+              }
+
+/health:
+  displayName: Health
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/health-response.json
+
+/profile:
+  displayName: Profile
+  description: User profile
+  get:
+    securedBy: [oauth_2_0]
+    description: Get user profile
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/profile.json
+
+/organizations/{organizationId}:
+  displayName: Organizations
+  description: Organizations by id
+  uriParameters:
+    organizationId:
+      description: Id of an organization
+      type: string
+      maxLength: 36
+      pattern: ^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$
+      example: "e9326910-756d-abe0-e69e-a71d05412a6d"
+
+  /queries:
+    displayName: Queries
+    type: queries
+
+    /{queryId}:
+      displayName: Query
+      type: query
+
+  /assets/{groupId}/{assetId}:
+    description: Assets by group and asset id
+    displayName: Group Asset
+    delete:
+      securedBy: [oauth_2_0]
+      is: [ deleteable ]
+      description: Delete asset
+      responses:
+        204:
+          description: Asset deleted
+        409:
+          description: There were conflicts while deleting
+
+    /public:
+      description: Public assets
+      displayName: Public
+      get:
+        securedBy: [oauth_2_0]
+        description: Return the public asset versions
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/public-versions.json
+      put:
+        securedBy: [oauth_2_0]
+        description: Set the public asset versions
+        body:
+          application/json:
+            schema: !include schemas/public-versions.json
+            example: !include examples/public-versions.json
+
+    /users:
+      description: Users
+      displayName: Users
+      type: assetUsers
+
+    /productApiVersion/{productApiVersion}:
+      description: Assets by product API version
+      displayName: API Version
+      uriParameters:
+        productApiVersion:
+          description: The id of the productApiVersion
+          type: string
+          example: "v1"
+
+      /instances:
+        displayName: Instances
+        description: A collection of available environments for a product API version
+
+        /{apiId}/tiers:
+          displayName: Tiers
+          description: A collection of the available SLA Tiers for a given environmentId/apiId
+          type: tiers
+          uriParameters:
+            apiId:
+              description: The id of the API
+              type: integer
+
+        /external:
+          description: External instances
+          displayName: External
+          post:
+            securedBy: [oauth_2_0]
+            description: Creates a new external API instance
+            body:
+              application/json:
+                schema: !include schemas/post-API-instance-body.json
+                example: !include examples/post-API-instance-body.json
+            responses:
+              201:
+                body:
+                  application/json:
+                    schema: !include schemas/API-instance.json
+                    example: !include examples/API-instance.json
+          /{id}:
+            description: A single instance
+            displayName: Id
+            uriParameters:
+              id:
+                description: Id of the external instance
+                type: string
+                pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                example: 7a7190da-29f3-451a-b2b2-ebd6f7e1f8ea
+            patch:
+              securedBy: [oauth_2_0]
+              description: Updates an existing external API instance
+              body:
+                application/json:
+                  schema: !include schemas/patch-API-instance-body.json
+                  example: !include examples/patch-API-instance-body.json
+              responses:
+                404:
+                  description: External instance not found
+                204:
+                  description: External instance updated
+            delete:
+              securedBy: [oauth_2_0]
+              description: Deletes an existing external API instance
+              responses:
+                404:
+                  description: External instance not found
+                204:
+                  description: External instance deleted
+        /managed:
+          /{id}:
+            description: A single managed instance
+            displayName: Managed
+            uriParameters:
+              id:
+                description: Id of the managed instance
+                type: string
+                example: '9897'
+            patch:
+              securedBy: [oauth_2_0]
+              description: Updates an existing managed API instance
+              body:
+                application/json:
+                  schema: !include schemas/patch-API-instance-body.json
+                  example: !include examples/patch-API-instance-body.json
+              responses:
+                204:
+                  description: Managed instance updated
+                404:
+                  description: External instance not found
+
+    /reviews/search:
+      description: Reviews search
+      displayName: Reviews Search
+      post:
+        securedBy: [oauth_2_0]
+        queryParameters:
+          includeComments:
+            description: Include comments for reviews
+            type: boolean
+        description: Search for asset versions reviews
+        body:
+          application/json:
+            schema: !include schemas/post-search-versions-reviews-body.json
+            example: !include examples/post-search-versions-reviews-result-body.json
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/reviews.json
+    /{version}:
+      description: Asset version
+      displayName: Version
+      delete:
+        securedBy: [oauth_2_0]
+        is: [ deleteable ]
+        description: Delete asset version
+        responses:
+          204:
+            description: Asset version deleted
+          409:
+            description: There were conflicts while deleting
+      /metadata:
+        description: Asset metadata
+        displayName: Metadata
+        patch:
+          securedBy: [oauth_2_0]
+          description: Update metadata
+          responses:
+            204:
+              description: Metadata updated
+          body:
+            application/json:
+              schema:  !include schemas/metadata.json
+              example: !include examples/patch-asset-metadata.json
+      /tags:
+        description: Asset tags
+        displayName: Tags
+        put:
+          securedBy: [oauth_2_0]
+          description: Update tags
+          responses:
+            204:
+              description: Tags updated
+          body:
+            application/json:
+              schema:  !include schemas/tags.json
+              example: !include examples/tags.json
+
+      /portal:
+        description: Asset portal
+        displayName: Portal
+        type: portal
+        patch:
+          description: Publish draft version
+          responses:
+            204:
+              description: Portal updated
+            404:
+              description: Portal does not exist
+            409:
+              description: There were conflicts while publishing
+
+        /pages:
+          displayName: Pages
+          type: pages
+          /{+pagePath}:
+              displayName: Page
+              type: page
+
+        /draft:
+          description: Asset portal draft
+          displayName: Portal Draft
+          type: portal
+
+          /pages:
+            displayName: Pages
+            type: pages
+            post:
+              securedBy: [oauth_2_0]
+              is: [pagePoster]
+              responses:
+                201:
+                  description: Page created.
+                409:
+                  description: "Page already exists"
+
+            /{+pagePath}:
+              description: A single page path
+              displayName: Page path
+              get:
+                securedBy: [oauth_2_0]
+                description: Get pages for an specific version of an asset
+              type: {editablePage: {type: "version of an asset"}}
+
+      /reviews:
+        displayName: Reviews
+        type: reviews
+
+        /{reviewId}:
+          displayName: Review
+          type: review
+          uriParameters:
+            reviewId:
+              description: Id of the review. It is a UUID.
+              type: string
+              pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              example: 7a7190da-29f3-451a-b2b2-ebd6f7e1f8ea
+
+          /comments:
+            displayName: Comments
+            type: comments
+
+            /{commentId}:
+              displayName: Comment
+              type: comment
+              uriParameters:
+                commentId:
+                  description: Id of the review comment. It is a UUID.
+                  type: string
+                  example: 7a7190da-29f3-451a-b2b2-ebd6f7e1f8ea
+                  pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+
+      /rating:
+        description: Asset rating
+        displayName: Rating
+        type: rating
+      /status:
+        description: Asset status
+        displayName: Status
+        put:
+          securedBy: [oauth_2_0]
+          description: Upserts asset's status.
+          body:
+            application/json:
+              schema: !include schemas/assetStatus.json
+              example: !include examples/assetStatus.json
+          responses:
+            204:
+              description: Asset status successfully updated
+
+  /groups:
+    description: Organization groups
+    displayName: Groups
+    get:
+      securedBy: [oauth_2_0]
+      description: Get eligible groupId's for given organizationId
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                [{
+                  "groupId": "obtained-group-id"
+                }]
+
+/assets:
+  displayName: Assets
+  type: assets
+
+  post:
+    securedBy: [oauth_2_0]
+    description: Upload an asset. Its required to respect the order of the fields described
+    body:
+      multipart/form-data:
+        formParameters:
+          organizationId:
+            description: The target organization where the asset will be uploaded
+            required: true
+            type: string
+          groupId:
+            description: The groupId for the asset
+            required: true
+            type: string
+          assetId:
+            description: The assetId for the asset
+            required: true
+            type: string
+          version:
+            description: The version for the asset
+            required: true
+            type: string
+          name:
+            description: The name of the asset
+            required: true
+            type: string
+          classifier:
+            description: The classifier of the file that will be uploaded, it can be one of oas, wsdl, custom or http
+            required: true
+            type: string
+          apiVersion:
+            description: API version for when uploading an OAS or an HTTP
+            type: string
+          assetLink:
+            description: A link for an external source
+            type: string
+          asset:
+            description: The file to be uploaded
+            required: true
+            type: file
+    responses:
+      201:
+        description: Asset created
+
+  /{groupId}/{assetId}:
+    description: Assets by group and asset id
+    displayName: Group Asset
+    uriParameters:
+      groupId:
+        description: Id of group
+        type: string
+      assetId:
+        description: Id of asset
+        type: string
+    get:
+      securedBy: [oauth_2_0]
+      description: Get a particular asset by its id
+      responses:
+        200:
+          body:
+            application/json:
+              schema: !include schemas/asset.json
+              example: !include examples/asset.json
+
+    /users:
+      description: Asset users
+      displayName: Users
+      type: assetUsers
+
+    /reviews/search:
+      description: Reviews search
+      displayName: Reviews Search
+      post:
+        securedBy: [oauth_2_0]
+        description: Search for asset versions reviews
+        queryParameters:
+          includeComments:
+            description: Include comments for reviews
+            type: boolean
+        body:
+          application/json:
+            schema: !include schemas/post-search-versions-reviews-body.json
+            example: !include examples/post-search-versions-reviews-result-body.json
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/reviews.json
+
+    /productAPIVersion/{productAPIVersion}:
+      description: Assets by product API version
+      displayName: API Version
+      uriParameters:
+        productAPIVersion:
+          description: The id of the productAPIVersion
+          type: string
+      get:
+        securedBy: [oauth_2_0]
+        description: Get the lastest version of the productAPIVersion
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/asset.json
+
+  /{groupId}/{assetId}/{version}:
+    description: Asset version
+    displayName: Version
+    uriParameters:
+      groupId:
+        description: Id of group
+        type: string
+      assetId:
+        description: Id of asset
+        type: string
+      version:
+        description: The id of the version
+        type: string
+    get:
+      securedBy: [oauth_2_0]
+      description: Get a particular version by its Id
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/asset.json
+
+    /reviews:
+      displayName: Reviews
+      type: reviews
+
+      /{reviewId}:
+        displayName: Review
+        type: review
+        uriParameters:
+          reviewId:
+            description: Id of the review. It is a UUID.
+            type: string
+            pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            example: 7a7190da-29f3-451a-b2b2-ebd6f7e1f8ea
+
+        /comments:
+          displayName: Comments
+          type: comments
+
+          /{commentId}:
+            displayName: Comment
+            type: comment
+            uriParameters:
+              commentId:
+                description: Id of the review comment. It is a UUID.
+                type: string
+                example: 7a7190da-29f3-451a-b2b2-ebd6f7e1f8ea
+                pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            patch:
+              securedBy: [oauth_2_0]
+              description: Edit a comment
+              body:
+                application/json:
+                  schema:  !include schemas/patch-review-comment-body.json
+                  example: !include examples/patch-review-comment-body.json
+              responses:
+                200:
+                  body:
+                    application/json:
+                      example: !include examples/review-comment.json
+            delete:
+              securedBy: [oauth_2_0]
+              description: Deletes an specific asset's review comment.
+              responses:
+                204:
+                  description: comment deleted
+
+    /tags:
+      description: Asset tags
+      displayName: Tags
+      put:
+        securedBy: [oauth_2_0]
+        description: Update tags
+        responses:
+          204:
+            description: Tags updated.
+        body:
+          application/json:
+            schema:  !include schemas/tags.json
+            example: !include examples/tags.json
+
+/organizations/{organizationDomain}:
+  description: Organizations by domain
+  displayName: Organizations by domain
+  uriParameters:
+    organizationDomain:
+      description: Domain of a master organization
+      type: string
+      maxLength: 255
+      example: some-domain
+
+  /assets:
+    displayName: Assets
+    type: assets
+
+    /{groupId}/{assetId}:
+      description: Assets by group and asset id
+      displayName: Group Asset
+      uriParameters:
+        groupId:
+          description: Id of group
+          type: string
+        assetId:
+          description: Id of asset
+          type: string
+      get:
+        securedBy: [oauth_2_0]
+        description: Get a particular asset by its id
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include schemas/asset.json
+                example: !include examples/asset.json
+
+      /{version}:
+        description: Asset version
+        displayName: Version
+        uriParameters:
+          version:
+            description: Version of Asset
+            type: string
+        get:
+          securedBy: [oauth_2_0]
+          description: Get a particular asset by its id
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: !include schemas/asset.json
+                  example: !include examples/asset.json
+
+      /productAPIVersion/{productAPIVersion}:
+        description: Assets by product API version
+        displayName: API Version
+        uriParameters:
+          productAPIVersion:
+            description: API version of Asset
+            type: string
+        get:
+          securedBy: [oauth_2_0]
+          description: Get a particular asset by its id
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: !include schemas/asset.json
+                  example: !include examples/asset.json
+
+  /portal:
+    description: Asset portal
+    displayName: Portal
+    get:
+      securedBy: [oauth_2_0]
+      description: Get a custom portal
+      responses:
+        200:
+          body:
+            example: !include examples/portalCustomization.json
+    patch:
+      securedBy: [oauth_2_0]
+      description: Publish draft portal customization. Empty body
+      responses:
+        204:
+          description: Portal updated
+        404:
+          description: Custom portal does not exist
+        409:
+          description: There were conflicts while publishing
+
+    /pages/{+pageName}:
+      displayName: Page
+      type: page
+
+    /draft:
+      description: Draft portal
+      displayName: Draft
+      delete:
+        securedBy: [oauth_2_0]
+        description: Deletes the draft portal
+        responses:
+          204:
+            description: Draft portal deleted
+          404:
+            description: Draft does not exist
+      get:
+        securedBy: [oauth_2_0]
+        description: Get a custom portal
+        responses:
+          200:
+            body:
+              example: !include examples/portalCustomization.json
+          404:
+            description: "Custom Portal does not exist"
+      put:
+        securedBy: [oauth_2_0]
+        description: Update custom portal
+        responses:
+          204:
+            description: "custom portal updated"
+          422:
+            description: "Customization Data is invalid"
+        body:
+          application/json:
+            example: !include examples/portalCustomizationUpdate.json
+      /pages:
+        displayName: Pages
+        post:
+          securedBy: [oauth_2_0]
+          is: [pagePoster]
+          responses:
+            201:
+              description: Page created.
+            409:
+              description: "Page already exists"
+            422:
+              description: "Maximum page quantity exceeded"
+        /{+pageName}:
+          description: A single portal page
+          displayName: Page
+          type: {editablePage: {type: "custom draft"}}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../../raml-aware/raml-aware.html">
+    <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
+    <link rel="import" href="../api-console.html">
+    <script src="amf-loader.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="Basic">
+      <template>
+        <api-console></api-console>
+      </template>
+    </test-fixture>
+
+    <script>
+    /* global AmfLoader */
+    [
+      ['Regular model', false],
+      ['Compact model', true]
+    ].forEach((item) => {
+      suite('Automatic computations - ' + item[0], function() {
+        let element;
+        let amf;
+        suiteSetup(() => {
+          return AmfLoader.load(item[1])
+          .then((data) => {
+            amf = data;
+          });
+        });
+
+        suite('Basics', () => {
+          setup(() => {
+            element = fixture('Basic');
+            element.amfModel = amf;
+          });
+
+          test('webApi is computed', function() {
+            assert.typeOf(element.webApi, 'object');
+          });
+
+          test('apiTitle is computed', function() {
+            assert.typeOf(element.apiTitle, 'string');
+          });
+        });
+
+        suite('_computeMethodName', () => {
+          let webApi;
+          let id;
+          setup(() => {
+            element = fixture('Basic');
+            element.amfModel = amf;
+            webApi = element._computeWebApi(amf);
+            const endpoint = element._computeEndpointByPath(webApi, '/people');
+            const opKey = element._getAmfKey(element.ns.w3.hydra.supportedOperation);
+            const op = endpoint[opKey][0];
+            id = op['@id'];
+          });
+
+          test('Returns undefined when no isMethod', () => {
+            const result = element._computeMethodName(false, id, webApi);
+            assert.isUndefined(result);
+          });
+
+          test('Returns undefined when no selected', () => {
+            const result = element._computeMethodName(true, undefined, webApi);
+            assert.isUndefined(result);
+          });
+
+          test('Returns undefined when no webApi', () => {
+            const result = element._computeMethodName(true, id);
+            assert.isUndefined(result);
+          });
+
+          test('Returns undefined when unknown selection', () => {
+            const result = element._computeMethodName(true, 'non-existing', webApi);
+            assert.isUndefined(result);
+          });
+
+          test('Returns method name', () => {
+            const result = element._computeMethodName(true, id, webApi);
+            assert.equal(result, 'List people');
+          });
+        });
+      });
+    });
+    </script>
+  </body>
+</html>

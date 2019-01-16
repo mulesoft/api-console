@@ -1,0 +1,11 @@
+{
+  "excludeFiles": [
+    "tasks/*",
+    "demo/**",
+    "docs/**",
+    "test/*",
+    "index.html",
+    "bower_components",
+    "node_modules"
+  ]
+}

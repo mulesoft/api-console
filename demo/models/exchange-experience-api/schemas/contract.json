@@ -1,0 +1,49 @@
+{
+  "title": "Contract",
+  "type": "object", 
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "Id"
+    }, 
+    "status": {
+      "type": "string",
+      "title": "Status"
+    }, 
+    "requestedTier": {
+      "title": "Requested Tier",
+      "type": "object", 
+      "properties": {
+        "description": {
+          "type": "null", 
+          "title": "Description"
+        }, 
+        "id": {
+          "type": "integer",
+          "title": "Id"
+        }, 
+        "limits": {
+          "title": "Limits",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "maximumRequests": {
+                "type": "integer",
+                "title": "Maximum requests"
+              }, 
+              "timePeriodInMilliseconds": {
+                "type": "integer",
+                "title": "Timeperiod in milliseconds"
+              }
+            }
+          }
+        }, 
+        "name": {
+          "type": "string",
+          "title": "Name"
+        }
+      }
+    }
+  }
+}

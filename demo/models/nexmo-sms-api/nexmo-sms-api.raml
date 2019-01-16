@@ -1,0 +1,487 @@
+#%RAML 1.0
+title: Nexmo SMS API
+version: 2.0
+baseUri: https://rest.nexmo.com
+baseUriParameters: {}
+documentation:
+- title: Nexmo
+  content: Nexmo, the Vonage API Platform, enables you to add communications within the context of your applications, including SMS, Voice and Chat.
+types:
+  Message:
+    displayName: Message
+    type: object
+    properties:
+      status:
+        required: false
+        displayName: status
+        description: Shows how the SMS send is processing.
+        type: number
+        format: double
+      message-id:
+        required: false
+        displayName: message-id
+        description: Id of the SMS that was submitted (8 to 16 characters).
+        type: string
+      to:
+        required: false
+        displayName: to
+        description: Number your request was sent to.
+        type: string
+      client-ref:
+        required: false
+        displayName: client-ref
+        description: The client-ref you set in the request.
+        type: string
+      remaining-balance:
+        required: false
+        displayName: remaining-balance
+        description: Balance in your account. The value is in EUR.
+        type: string
+      message-price:
+        required: false
+        displayName: message-price
+        description: Amount charged for your request. The value is in EUR.
+        type: string
+      network:
+        required: false
+        displayName: network
+        description: Mobile Country Code Mobile Network Code (MCCMNC) for the carrier that to is registered with.
+        type: string
+      error-text:
+        required: false
+        displayName: error-text
+        description: If an error occurred, this explains what happened.
+        type: string
+  Number:
+    displayName: Number
+    type: object
+    properties:
+      cost:
+        required: false
+        displayName: cost
+        description: Number cost.
+        type: string
+      country:
+        required: false
+        displayName: country
+        description: ISO 3166-1 alpha-2 format.
+        type: string
+      msisdn:
+        required: false
+        displayName: msisdn
+        description: Inbound virtual number.
+        type: string
+      type:
+        required: false
+        displayName: type
+        description: Type of number.
+        type: string
+  Common:
+    displayName: common
+    type: object
+    properties:
+      type:
+        required: false
+        displayName: type
+        description: Human readable message.
+        type: string
+      error_title:
+        required: false
+        displayName: error_title
+        description: Title of error returned if failed.
+        type: string
+      invalid_parameters:
+        required: false
+        displayName: invalid_parameters
+        description: message for invalid parameters
+        type: InvalidParameters
+  InvalidParameters:
+    displayName: InvalidParameters
+    type: object
+    properties:
+      type:
+        required: false
+        displayName: type
+        description: error string
+        type: object
+  SmsresponseError:
+    displayName: smsResponse_Error
+    type: object
+    properties:
+      message-count:
+        required: false
+        displayName: message-count
+        description: Number of parts the message was split into.
+        type: number
+        format: double
+      messages:
+        required: false
+        displayName: messages
+        description: Contains each message part.
+        type: array
+        items:
+          type: Message
+  ListnumbersresponseError:
+    displayName: ListNumbersResponse_Error
+    type: object
+    properties:
+      count:
+        required: false
+        displayName: count
+        description: Result count.
+        type: integer
+        format: int32
+      numbers:
+        required: false
+        displayName: numbers
+        description: List of all numbers.
+        type: array
+        items:
+          type: Number
+/sms/json:
+  post:
+    displayName: Send an SMS
+    description: Send an SMS
+    queryParameters:
+      api_key:
+        required: true
+        displayName: API Key
+        description: Your Nexmo account API key
+        type: string
+      api_secret:
+        required: true
+        displayName: API Secret
+        description: The API Key's secret
+        type: string
+      from:
+        required: true
+        displayName: from
+        description: An alphanumeric string.
+        type: string
+      to:
+        required: true
+        displayName: to
+        description: International format E.164.
+        type: string
+      text:
+        required: true
+        displayName: text
+        description: SMS body.
+        type: string
+      type:
+        required: false
+        displayName: type
+        description: Defaults to text.
+        type: string
+        enum:
+        - text
+        - binary
+        - wappush
+        - unicode
+        - vcal
+        - vcard
+      status-report-req:
+        required: false
+        displayName: status-report-req
+        description: Set to 1 to enable.
+        type: number
+        format: double
+      client-ref:
+        required: false
+        displayName: client-ref
+        description: For internal reporting.
+        type: string
+      vcard:
+        required: false
+        displayName: vcard
+        description: vCard format.
+        type: string
+      vcal:
+        required: false
+        displayName: vcal
+        description: vCal format.
+        type: string
+      ttl:
+        required: false
+        displayName: ttl
+        description: In milliseconds.
+        type: number
+        format: double
+      callback:
+        required: false
+        displayName: callback
+        description: Delivery receipt endpoint.
+        type: string
+      message-class:
+        required: false
+        displayName: message-class
+        description: Pick a class.
+        type: integer
+        format: int32
+        enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      udh:
+        required: false
+        displayName: udh
+        description: Hex encoded UDH.
+        type: string
+      protocol-id:
+        required: false
+        displayName: protocol-id
+        description: Protocol id.
+        type: string
+      body:
+        required: false
+        displayName: body
+        description: Hex encoded binary data.
+        type: string
+      title:
+        required: false
+        displayName: title
+        type: string
+      url:
+        required: false
+        displayName: url
+        description: Website Url.
+        type: string
+      validity:
+        required: false
+        displayName: validity
+        description: In milliseconds.
+        type: string
+    responses:
+      200:
+        description: The status and price of your request to Nexmo.
+        body:
+          text/plain:
+            description: The status and price of your request to Nexmo.
+            type: SmsresponseError
+/account/numbers:
+  get:
+    displayName: List rented numbers
+    description: Retrieve all the inbound numbers associated with your Nexmo account.
+    queryParameters:
+      api_key:
+        required: true
+        displayName: API Key
+        description: Your Nexmo account API key
+        type: string
+      api_secret:
+        required: true
+        displayName: API Secret
+        description: The API Key's secret
+        type: string
+      pattern:
+        required: false
+        displayName: pattern
+        description: Number pattern to search for.
+        type: number
+        format: double
+      search_pattern:
+        required: false
+        displayName: Search Pattern
+        description: Strategy for matching pattern. Expected values 0 = starts with (default), 1 = anywhere, 2 = ends with.
+        type: integer
+        format: int32
+        enum:
+        - 0
+        - 1
+        - 2
+      index:
+        required: false
+        displayName: index
+        description: The page index. Defaut is 1
+        type: number
+        format: double
+      size:
+        required: false
+        displayName: size
+        description: Default 10 Max 100.
+        type: number
+        format: double
+    responses:
+      200:
+        description: ''
+        body:
+          application/json:
+            type: ListnumbersresponseError
+/number/search:
+  get:
+    displayName: Search for outbound number
+    description: Retrieve inbound numbers that are available for a given country.
+    queryParameters:
+      api_key:
+        required: true
+        displayName: API Key
+        description: Your Nexmo account API key
+        type: string
+      api_secret:
+        required: true
+        displayName: API Secret
+        description: The API Key's secret
+        type: string
+      country:
+        required: true
+        displayName: country
+        description: Code in ISO 3166-1 alpha-2 format.
+        type: string
+      pattern:
+        required: false
+        displayName: pattern
+        description: Number pattern to search for.
+        type: number
+        format: double
+      search_pattern:
+        required: false
+        displayName: Search Pattern
+        description: Strategy for matching pattern. Expected values 0 = starts with (default), 1 = anywhere, 2 = ends with.
+        type: integer
+        format: int32
+        enum:
+        - 0
+        - 1
+        - 2
+      features:
+        required: false
+        displayName: features
+        description: Available features are SMS and VOICE. For both features, use a comma-separated value SMS,VOICE.
+        type: string
+      size:
+        required: false
+        displayName: size
+        description: Default 10.
+        type: number
+        format: double
+      index:
+        required: false
+        displayName: index
+        description: The page index. Defaut is 1
+        type: number
+        format: double
+    responses:
+      200:
+        description: ''
+        body:
+          application/json:
+            type: ListnumbersresponseError
+/number/buy:
+  post:
+    displayName: Buy an inbound number
+    description: Request to purchase a specific inbound number.
+    queryParameters:
+      api_key:
+        required: true
+        displayName: API Key
+        description: Your Nexmo account API key
+        type: string
+      api_secret:
+        required: true
+        displayName: API Secret
+        description: The API Key's secret
+        type: string
+      country:
+        required: true
+        displayName: country
+        description: Code in ISO 3166-1 alpha-2 format.
+        type: string
+      msisdn:
+        required: true
+        displayName: msisdn
+        description: An available inbound virtual number. For example, 447700900000
+        type: string
+    responses:
+      200:
+        description: ''
+        body:
+          application/json:
+            type: ListnumbersresponseError
+/number/update:
+  post:
+    displayName: Update an inbound number
+    description: Change the behaviour of a number that you've rented.
+    queryParameters:
+      api_key:
+        required: true
+        displayName: API Key
+        description: Your Nexmo account API key
+        type: string
+      api_secret:
+        required: true
+        displayName: API Secret
+        description: The API Key's secret
+        type: string
+      country:
+        required: true
+        displayName: country
+        description: Code in ISO 3166-1 alpha-2 format.
+        type: string
+      msisdn:
+        required: true
+        displayName: msisdn
+        description: An available inbound virtual number. For example, 447700900000
+        type: string
+      moHttpUrl:
+        required: false
+        displayName: moHttpUrl
+        description: An URL encoded URI to the webhook endpoint endpoint that handles inbound messages. Your webhook endpoint must be active before you make this request, Nexmo makes a GET request to your endpoint and checks that it returns a 200 OK response. Set to empty string to clear.
+        type: string
+      moSmppSysType:
+        required: false
+        displayName: moSmppSysType
+        description: The associated system type for your SMPP client. For example inbound
+        type: string
+      voiceCallbackType:
+        required: false
+        displayName: voiceCallbackType
+        description: The voice webhook type. Possible values are sip, tel, vxml (VoiceXML) or app
+        type: string
+      voiceCallbackValue:
+        required: false
+        displayName: voiceCallbackValue
+        description: A URI for your voiceCallbackType or an Application ID
+        type: string
+      voiceStatusCallback:
+        required: false
+        displayName: voiceStatusCallback
+        description: Nexmo sends a request to this webhook endpoint when a call ends.
+        type: string
+    responses:
+      200:
+        description: ''
+        body:
+          application/json:
+            type: ListnumbersresponseError
+/number/cancel:
+  post:
+    displayName: Cancel an inbound number
+    description: Cancel your subscription for a specific inbound number.
+    queryParameters:
+      api_key:
+        required: true
+        displayName: API Key
+        description: Your Nexmo account API key
+        type: string
+      api_secret:
+        required: true
+        displayName: API Secret
+        description: The API Key's secret
+        type: string
+      country:
+        required: true
+        displayName: country
+        description: Code in ISO 3166-1 alpha-2 format.
+        type: string
+      msisdn:
+        required: true
+        displayName: msisdn
+        description: The invound virtual number to cancel. For example, 447700900000
+        type: string
+    responses:
+      200:
+        description: ''
+        body:
+          application/json:
+            type: ListnumbersresponseError

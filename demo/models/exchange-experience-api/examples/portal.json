@@ -1,0 +1,13 @@
+{
+  "draftStatus": "PUBLISHED",
+  "pages": [
+    {
+      "path": "home.md",
+      "name": "Home page"
+    },
+    {
+      "path": "/examples/example.md",
+      "name": "Example Page"
+    }
+  ]
+}

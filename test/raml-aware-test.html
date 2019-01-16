@@ -1,43 +1,18 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
-    <script src="../../iron-test-helpers/test-helpers.js"></script>
-    <script src="../../iron-test-helpers/mock-interactions.js"></script>
-
-    <link rel="import" href="../../raml-js-parser/raml-js-parser.html">
-    <link rel="import" href="../../raml-json-enhance/raml-json-enhance.html">
+    <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
     <link rel="import" href="../../raml-aware/raml-aware.html">
     <link rel="import" href="../api-console.html">
+    <script src="amf-loader.js"></script>
   </head>
   <body>
 
-    <test-fixture id="parser">
-      <template>
-        <raml-js-parser json></raml-js-parser>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="enhancer">
-      <template>
-        <raml-json-enhance></raml-json-enhance>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="basic">
+    <test-fixture id="Aware">
       <template>
         <api-console aware="raml"></api-console>
         <raml-aware scope="raml"></raml-aware>
@@ -45,40 +20,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </test-fixture>
 
     <script>
-    /* global fixture, assert */
-    suite('basic', function() {
-      var element;
-      var raml;
+    /* global AmfLoader */
+    suite('RAML aware', function() {
+      let element;
+      let aware;
+      let amf;
+      suiteSetup(() => {
+        return AmfLoader.load()
+        .then((data) => {
+          amf = data;
+        });
+      });
 
-      suiteSetup(function(done) {
-        var baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
-        var parser = fixture('parser');
-        var enhancer = fixture('enhancer');
-        enhancer.addEventListener('raml-json-enhance-ready', function(e) {
-          raml = e.detail.json;
-          var block = fixture('basic');
-          var aware = block[1];
-          element = block[0];
-          aware.raml = raml;
+      setup(() => {
+        const nodes = fixture('Aware');
+        element = nodes[0];
+        aware = nodes[1];
+        aware.raml = amf;
+      });
+
+      test('Inserts raml-aware into shadow DOM', function(done) {
+        flush(() => {
+          const node = element.shadowRoot.querySelector('raml-aware');
+          assert.ok(node);
           done();
         });
-        parser.loadApi(baseUrl + 'test.raml')
-        .then(function(data) {
-          enhancer.json = data.json.specification;
-        })
-        .catch(function(e) {
-          done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
+      });
+
+      test('amfModel is propagated', function(done) {
+        flush(() => {
+          assert.typeOf(element.amfModel, 'array');
+          done();
         });
       });
-
-      test('element.raml equals RAML', function() {
-        assert.deepEqual(element.raml, raml);
-      });
-
-      test('selectedObject should equal RAML', function() {
-        assert.deepEqual(element.selectedObject, raml);
-      });
-
     });
     </script>
 

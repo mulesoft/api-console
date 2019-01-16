@@ -1,14 +1,21 @@
-# Using the API Console HTML element
+# Using the API Console as a HTML element
 
-1) Install the console as a dependency of your project. We use [bower][bower] for this. Bower also installs dependencies of the console.
+## Development environment
+
+When developing an API portal which API console is a part, it's easier to start with source files that the build. With sources it's faster to identify specific component in the developer tools.
+
+1) Install the console as a dependency of your project. Use [bower][bower] for this.
 
 ```
-bower install --save mulesoft/api-console#release/4.0.0
+bower install --save mulesoft/api-console
 ```
 
-2) Import the console to your page. For the element to be recognized by the browser as a new HTML element, you have to include it in the page source.
+2) Import the console.
 
 ```html
+<!-- Very small library that imports polyfills if needed -->
+<script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+<!-- Sources of the console -->
 <link rel="import" href="bower_components/api-console/api-console.html">
 ```
 
@@ -16,98 +23,65 @@ bower install --save mulesoft/api-console#release/4.0.0
 
 ```html
 <body>
-  <api-console raml="{...}"></api-console>
+  <api-console amf-model="{...}"></api-console>
 </body>
 ```
 
-To pass RAML data to the element, see the [Passing the RAML data](passing-raml-data.md) section.
+## Production environment
 
-For a complete list of available configuration options for the `api-console` element, see the [configuring the API Console](configuring-api-console.md) document.
+We encourage you to use our [build tools](build-tools.md) to generate production ready bundles.
 
-## Setup polyfills
+1) Install the console
 
-Web components are based on four new specifications (Custom elements, shadow DOM, HTML imports, and HTML template) that are not fully supported in old browsers, such as IE. Also, browser vendors are still discussing the HTML imports specification, so it's [not yet implemented](http://caniuse.com/#feat=imports) in Edge and Firefox.
+```
+bower install --save mulesoft/api-console
+```
 
-If you plan to target these browsers you should include a polyfill for Web Components. The following polyfill library is already included into your project, assuming you have installed the element using [bower][bower]:
+2) Generate build bundles
 
-`bower_components/webcomponentsjs/webcomponents-lite.min.js`
+```javascript
+const builder = require('api-console-builder');
+builder({
+  tagName: '5.0.0-preview',
+  embedded: true,
+  themeFile: './my-theme.html',
+  destination: './public/api-console/'
+})
+.then(() => console.log('Build complete <3'))
+.catch((cause) => console.log('Build error <\\3', cause.message));
+```
 
-## Full web app example
+3) Use import script to detect bundle type to load
 
-```html
+```HTML
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-    <title>My API documentation</title>
     <script>
-      // Load webcomponentsjs polyfill if browser does not support native Web Components
-      (function() {
-        'use strict';
-        var onload = function() {
-          // For native Imports, manually fire WebComponentsReady so user code
-          // can use the same code path for native and polyfill'd imports.
-          if (!window.HTMLImports) {
-            document.dispatchEvent(
-              new CustomEvent('WebComponentsReady', {bubbles: true})
-            );
-          }
-        };
-
-        var webComponentsSupported = (
-          'registerElement' in document &&
-          'import' in document.createElement('link') &&
-          'content' in document.createElement('template')
-        );
-
-        if (!webComponentsSupported) {
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
-          script.onload = onload;
-          document.head.appendChild(script);
-        } else {
-          onload();
-        }
-      })();
+    window.apic = {
+      basePath: '/public/api-console/'
+    };
     </script>
-    <link rel="import" href="/bower_components/api-console/api-console.html">
+    <script src="bower_components/api-console/apic-import.js"></script>
   </head>
-<body>
-  <api-console></api-console>
-  <script>
-  function fetchApiData() {
-    // api.json contains cached results of parsing the RAML spec.
-    return fetch('./api.json')
-    .then(function(response) {
-      if (response.ok) {
-        return response.json();
-      }
-    });
-  }
-
-  function notifyInitError(message) {
-    alert('No API for you this time. ' + message);
-  }
-
-  function init() {
-    fetchApiData()
-    .then(function(json) {
-      if (json) {
-        var apiConsole = document.querySelector('api-console');
-        apiConsole.json = json;
-      } else {
-        notifyInitError('Data not available.');
-      }
-    })
-    .catch(function(cause) {
-      notifyInitError(cause.message);
-    })
-  };
-  init();
-  </script>
-</body>
+  <body>
+    ...
+    <api-console amf-model="{...}"></api-console>
+    ...
+  </body>
 </html>
 ```
+
+The bundles generator creates `es5-bundle` and `es6-bundle`. The `apic-import.js`
+script decides which one to use depending on browsers capabilities.
+The script also includes `webcomponents-loader.js` to load polyfills if needed.
+
+## Roadmap notes
+
+HTML imports is abandoned specification of web components. Preferred way is to
+use ES6 modules imports. This version of the console won't use it as the tooling
+set at the moment of development of this version of the console is rather non existing.
+
+Next release will be hosted on NPM only and will use modules syntax.
+
 [bower]: https://bower.io/

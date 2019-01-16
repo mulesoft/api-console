@@ -1,0 +1,23 @@
+#%RAML 1.0 DataType
+
+type: object
+description: |
+  Message sent by a user object. This represents a message in user's sent folder.
+properties:
+  email:
+    type: string
+    description: Receiver email address. It's a virtual email address assigned to this user. Messages sent to this address will be rerouted to user's original address.
+  message:
+    type: string
+    description: Message body
+  timestamp:
+    type: integer
+    description: Message sent timestamp as a Uxin timestamp.
+  attachements:
+    type: string[]
+    description: List of URLs to the attachments
+    required: false
+  important:
+    type: boolean
+    description: True if the message should be marked as an important.
+    required: false

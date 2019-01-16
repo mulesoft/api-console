@@ -1,0 +1,21 @@
+[
+  {
+    "id": "0fcd1f70-6181-49f9-98e1-bce958bb391d",
+    "userId": "Test-connector-1",
+    "version": "1.0.0",
+    "organizationId": "cccdb637d-9c15-4237-5341-c87c0s82c4f2",
+    "rating": 5,
+    "text": "Hey, this is a review",
+    "createdDate": "2016-07-15T17:33:36.542Z",
+    "updatedDate": "2016-07-15T17:33:36.542Z",
+    "comments": [
+      {
+        "id": "e47b5e4c-ea78-4f21-9d78-398762667cdd",
+        "userId": "0fcd1f70-6181-49f9-98e1-bce958bb391d",
+        "comment": "Hey, this is a comment for the review",
+        "createdDate": "2016-07-15T17:33:36.542Z",
+        "updatedDate": "2016-07-15T17:33:36.542Z"
+      }
+    ]
+  }
+]

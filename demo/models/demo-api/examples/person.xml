@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource error="false" type="AppPerson">
+  <id>Qawer63J73HJ6khjswuqyq62382jG21s</id>
+  <name>John Smith</name>
+  <birthday>1990-10-12</birthday>
+  <gender>male</gender>
+  <url>https://www.domain.com/people/Qawer63J73HJ6khjswuqyq62382jG21s</url>
+  <image>
+    <url>https://www.domain.com/people/Qawer63J73HJ6khjswuqyq62382jG21s/image</url>
+    <thumb>https://www.domain.com/people/Qawer63J73HJ6khjswuqyq62382jG21s/image/thumb</thumb>
+  </image>
+  <tagline>Hi, I'm John!</tagline>
+  <language>en_US</language>
+</resource>

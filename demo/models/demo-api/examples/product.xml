@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource error="false" type="Product">
+  <id>f2f7933a-a9ce-11e6-80f5-76304dec7eb7</id>
+  <name>Acme product - mentol flavor, 500 ml.</name>
+  <quantity>500</quantity>
+  <unit>ml</unit>
+  <upc>042100005264</upc>
+  <available>true</available>
+</resource>

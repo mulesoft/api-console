@@ -1,0 +1,608 @@
+[
+{
+"@id": "",
+"@type": [
+"doc:Document",
+"doc:Fragment",
+"doc:Module",
+"doc:Unit"
+],
+"doc:encodes": [
+{
+"@id": "#3",
+"@type": [
+"schema-org:WebAPI",
+"doc:RootDomainElement",
+"doc:DomainElement"
+],
+"schema-org:name": [
+{
+"@value": "API with Types"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#3/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:source-vendor": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "RAML 1.0"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "schema-org:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(2,0)-(3,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(2,0)-(12,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"doc:declares": [
+{
+"@id": "#1",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#date"
+}
+],
+"shacl:name": [
+{
+"@value": "CustomDate"
+}
+],
+"raml-shapes:customShapePropertyDefinitions": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/CustomDate/property/onlyFutureDates%3F",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#onlyFutureDates"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/CustomDate/property/onlyFutureDates%3F/scalar/onlyFutureDates%3F",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#boolean"
+}
+],
+"shacl:name": [
+{
+"@value": "onlyFutureDates?"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/CustomDate/property/onlyFutureDates%3F/scalar/onlyFutureDates%3F/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/facets/facets.raml#/declarations/types/scalar/CustomDate/property/onlyFutureDates%3F/scalar/onlyFutureDates%3F"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(7,6)-(8,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 0
+}
+],
+"shacl:name": [
+{
+"@value": "onlyFutureDates"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/CustomDate/property/onlyFutureDates%3F/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/facets/facets.raml#/declarations/types/scalar/CustomDate/property/onlyFutureDates%3F"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(7,6)-(8,0)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#noHolidays"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/scalar/noHolidays",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#boolean"
+}
+],
+"shacl:name": [
+{
+"@value": "noHolidays"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/scalar/noHolidays/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/scalar/noHolidays"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,6)-(9,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "noHolidays"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,6)-(9,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#1/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:declared-element": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": ""
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(4,2)-(4,12)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(4,2)-(9,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:datatype"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(5,4)-(6,0)]"
+}
+]
+}
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(5,4)-(5,8)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "#2",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#date"
+}
+],
+"shacl:name": [
+{
+"@value": "PossibleMeetingDate"
+}
+],
+"raml-shapes:customShapeProperties": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/shapeExtension",
+"@type": [
+"raml-http:ShapeExtension",
+"doc:DomainElement"
+],
+"doc:definedBy": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#noHolidays"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/scalar/noHolidays",
+"@type": [
+"raml-shapes:ScalarShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#boolean"
+}
+],
+"shacl:name": [
+{
+"@value": "noHolidays"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/scalar/noHolidays/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/scalar/noHolidays"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,6)-(9,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 1
+}
+],
+"shacl:name": [
+{
+"@value": "noHolidays"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "http://a.ml/vocabularies#document/shape_extension/property/noHolidays"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,6)-(9,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"doc:extension": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/extension/noHolidays/scalar_1",
+"@type": [
+"data:Scalar"
+],
+"data:value": [
+{
+"@value": "true",
+"@type": "xsd:boolean"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/extension/noHolidays/scalar_1/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/extension/noHolidays/scalar_1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(11,16)-(11,20)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/shapeExtension/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/shapeExtension"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(11,4)-(12,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#2/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:declared-element": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#2"
+}
+],
+"sourcemaps:value": [
+{
+"@value": ""
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(9,2)-(9,21)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#2"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(9,2)-(12,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:datatype"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(10,4)-(11,0)]"
+}
+]
+}
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#2"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(10,4)-(10,8)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"@context": {
+"@base": "amf://id",
+"raml-http": "http://a.ml/vocabularies/http#",
+"shacl": "http://www.w3.org/ns/shacl#",
+"raml-shapes": "http://a.ml/vocabularies/shapes#",
+"data": "http://a.ml/vocabularies/data#",
+"doc": "http://a.ml/vocabularies/document#",
+"sourcemaps": "http://a.ml/vocabularies/document-source-maps#",
+"schema-org": "http://schema.org/",
+"xsd": "http://www.w3.org/2001/XMLSchema#"
+}
+}
+]
