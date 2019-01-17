@@ -58,7 +58,7 @@ And finally your `api-console-acme-theme.html` file:
 ```html
 <custom-style>
   <style>
-  :root {
+  html {
     /* Style definition goes here */
   }
   </style>
@@ -143,7 +143,7 @@ Most of the components contains styling section in the documentaiton page. Find 
 Using this documentation you can find the following definitions to style the element:
 
 ```css
-:root {
+html {
   --api-method-documentation-url-font-size: 14px;
   --api-method-documentation-url-background-color: red;
   --api-method-documentation-url-font-color: yellow;
