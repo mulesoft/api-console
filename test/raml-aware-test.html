@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="../../web-component-tester/browser.js"></script>
-    <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
-    <link rel="import" href="../../raml-aware/raml-aware.html">
-    <link rel="import" href="../api-console.html">
-    <script src="amf-loader.js"></script>
+    <script src="../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../wct-browser-legacy/browser.js"></script>
+    <script type="module" src="../../arc-polyfills/arc-polyfills.js"></script>
+    <script type="module" src="../../raml-aware/raml-aware.js"></script>
+    <script type="module" src="../api-console.js"></script>
+    <script src="./amf-loader.js"></script>
   </head>
   <body>
 
@@ -19,42 +19,45 @@
       </template>
     </test-fixture>
 
-    <script>
-    /* global AmfLoader */
-    suite('RAML aware', function() {
-      let element;
-      let aware;
-      let amf;
-      suiteSetup(() => {
-        return AmfLoader.load()
-        .then((data) => {
-          amf = data;
-        });
-      });
-
-      setup(() => {
-        const nodes = fixture('Aware');
-        element = nodes[0];
-        aware = nodes[1];
-        aware.raml = amf;
-      });
-
-      test('Inserts raml-aware into shadow DOM', function(done) {
-        flush(() => {
-          const node = element.shadowRoot.querySelector('raml-aware');
-          assert.ok(node);
-          done();
-        });
-      });
-
-      test('amfModel is propagated', function(done) {
-        flush(() => {
-          assert.typeOf(element.amfModel, 'array');
-          done();
-        });
-      });
+    <script type="module">
+import '../../arc-polyfills/arc-polyfills.js';
+import '../../raml-aware/raml-aware.js';
+import '../api-console.js';
+/* global AmfLoader */
+suite('RAML aware', function() {
+  let element;
+  let aware;
+  let amf;
+  suiteSetup(() => {
+    return AmfLoader.load()
+    .then((data) => {
+      amf = data;
     });
-    </script>
+  });
+
+  setup(() => {
+    const nodes = fixture('Aware');
+    element = nodes[0];
+    aware = nodes[1];
+    aware.raml = amf;
+  });
+
+  test('Inserts raml-aware into shadow DOM', function(done) {
+    flush(() => {
+      const node = element.shadowRoot.querySelector('raml-aware');
+      assert.ok(node);
+      done();
+    });
+  });
+
+  test('amfModel is propagated', function(done) {
+    flush(() => {
+      assert.typeOf(element.amfModel, 'array');
+      done();
+    });
+  });
+});
+</script>
 
   </body>
 </html>

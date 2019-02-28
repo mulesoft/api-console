@@ -59,7 +59,7 @@
   }
 
   var script = document.createElement('script');
-  var src = moduleRoot + '/bower_components/webcomponentsjs/webcomponents-loader.js';
+  var src = moduleRoot + '/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js';
   script.src = src;
   document.head.appendChild(script);
 

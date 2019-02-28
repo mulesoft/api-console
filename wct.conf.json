@@ -3,45 +3,59 @@
   "plugins": {
     "local": {
       "disabled": true,
-      "browsers": ["chrome", "firefox"]
+      "browsers": [
+        "chrome",
+        "firefox"
+      ]
     },
     "sauce": {
       "disabled": true,
-      "browsers": [{
-        "browserName": "microsoftedge",
-        "platform": "Windows 10",
-        "version": ""
-      }, {
-        "browserName": "firefox",
-        "platform": "Windows 10",
-        "version": "latest-4"
-      }, {
-        "browserName": "firefox",
-        "platform": "Windows 10",
-        "version": "latest"
-      }, {
-        "browserName": "chrome",
-        "platform": "Windows 10",
-        "version": "latest-4"
-      }, {
-        "browserName": "chrome",
-        "platform": "Windows 10",
-        "version": "latest"
-      }, {
-        "browserName": "safari",
-        "platform": "macOS 10.12",
-        "version": "10.1"
-      }, {
-        "browserName": "safari",
-        "platform": "macOS 10.13",
-        "version": "11.1"
-      }]
+      "browsers": [
+        {
+          "browserName": "microsoftedge",
+          "platform": "Windows 10",
+          "version": ""
+        },
+        {
+          "browserName": "firefox",
+          "platform": "Windows 10",
+          "version": "latest-4"
+        },
+        {
+          "browserName": "firefox",
+          "platform": "Windows 10",
+          "version": "latest"
+        },
+        {
+          "browserName": "chrome",
+          "platform": "Windows 10",
+          "version": "latest-4"
+        },
+        {
+          "browserName": "chrome",
+          "platform": "Windows 10",
+          "version": "latest"
+        },
+        {
+          "browserName": "safari",
+          "platform": "macOS 10.12",
+          "version": "10.1"
+        },
+        {
+          "browserName": "safari",
+          "platform": "macOS 10.13",
+          "version": "11.1"
+        }
+      ]
     },
-    "istanbub": {
+    "@advanced-rest-client/wct-istanbub": {
       "dir": "./coverage",
-      "reporters": ["text-summary", "lcov"],
+      "reporters": [
+        "text-summary",
+        "lcov"
+      ],
       "include": [
-        "**/*.html"
+        "**/*.js"
       ],
       "exclude": [
         "**/test/**",

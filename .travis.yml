@@ -1,26 +1,23 @@
 language: node_js
 node_js: 8
 sudo: required
-before_script:
-- npm install -g polymer-cli istanbul wct-istanbub
-- polymer install
+before_script: npm install -g polymer-cli @advanced-rest-client/wct-istanbub
 addons:
   firefox: latest
   apt:
     sources:
-    - google-chrome
+      - google-chrome
     packages:
-    - google-chrome-stable
+      - google-chrome-stable
   sauce_connect: true
 script:
-- npm run lint
-- xvfb-run polymer test --plugin local
-- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test --plugin sauce --job-name
-  "api-console:${TRAVIS_BRANCH}" --build-number=${TRAVIS_BUILD_NUMBER}; fi
+  - npm run lint
+  - xvfb-run polymer test --module-resolution=node --npm --plugin local
+  - 'if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test --module-resolution=node --npm --plugin sauce --job-name "api-console:${TRAVIS_BRANCH}" --build-number=${TRAVIS_BUILD_NUMBER}; fi'
 cache:
   directories:
-  - node_modules
+    - node_modules
 env:
   global:
-  - secure: JMRvm+Pj3mTEcrhFNZTnKShuHISqGX+mR4ICFwWT8zEKF/mMosRQsVBf7xVc5DXB0x3CxjP/CauVG98/0AktVwmP1sEp0g+FFePFzux+VzvDbmynX3kkpgS82Sq11Rp6YnYb85pLjCMUG6pKCNkp8XMkcW7IX9c9AYrRgsXmQEY=
-  - secure: fZzj04OSXUCcScIxxjsqFIyZ+RE22fAVDG/qx73sU9BqjvhOLrUFsxYVOcYARgBfzNuf3c0mB5GI//hyIRfAFCgx6bqYG8erN/VoryPBREnN5fGvR/AkrFzJeJ/2AlcHpXqWyQnlLXZwfUb1RBidYYzhEUAfEso0AyMoWJzgFQs=
+    - secure: JMRvm+Pj3mTEcrhFNZTnKShuHISqGX+mR4ICFwWT8zEKF/mMosRQsVBf7xVc5DXB0x3CxjP/CauVG98/0AktVwmP1sEp0g+FFePFzux+VzvDbmynX3kkpgS82Sq11Rp6YnYb85pLjCMUG6pKCNkp8XMkcW7IX9c9AYrRgsXmQEY=
+    - secure: fZzj04OSXUCcScIxxjsqFIyZ+RE22fAVDG/qx73sU9BqjvhOLrUFsxYVOcYARgBfzNuf3c0mB5GI//hyIRfAFCgx6bqYG8erN/VoryPBREnN5fGvR/AkrFzJeJ/2AlcHpXqWyQnlLXZwfUb1RBidYYzhEUAfEso0AyMoWJzgFQs=

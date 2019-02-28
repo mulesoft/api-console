@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-  <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../iron-test-helpers/test-helpers.js"></script>
-  <link rel="import" href="../../arc-polyfills/arc-polyfills.html">
-  <link rel="import" href="../api-console.html">
+  <script src="../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../wct-browser-legacy/browser.js"></script>
+  <script src="../../@polymer/iron-test-helpers/test-helpers.js" type="module"></script>
+  <script type="module" src="../../arc-polyfills/arc-polyfills.js"></script>
+  <script type="module" src="../api-console.js"></script>
 </head>
 <body>
 
@@ -23,26 +23,28 @@
     </template>
   </test-fixture>
 
-  <script>
-  suite('Attribution', function() {
-    test('Attribution logo is rendered', function(done) {
-      const element = fixture('Basic');
-      flush(function() {
-        const node = element.shadowRoot.querySelector('.powered-by');
-        assert.ok(node);
-        done();
-      });
-    });
-
-    test('Attribution is removed from the DOM', function() {
-      const element = fixture('NoAttr');
-      flush(function() {
-        const node = element.shadowRoot.querySelector('.powered-by');
-        assert.notOk(node);
-      });
+  <script type="module">
+import '../../arc-polyfills/arc-polyfills.js';
+import '../api-console.js';
+suite('Attribution', function() {
+  test('Attribution logo is rendered', function(done) {
+    const element = fixture('Basic');
+    flush(function() {
+      const node = element.shadowRoot.querySelector('.powered-by');
+      assert.ok(node);
+      done();
     });
   });
-  </script>
+
+  test('Attribution is removed from the DOM', function() {
+    const element = fixture('NoAttr');
+    flush(function() {
+      const node = element.shadowRoot.querySelector('.powered-by');
+      assert.notOk(node);
+    });
+  });
+});
+</script>
 </body>
 
 </html>
