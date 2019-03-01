@@ -12,6 +12,7 @@ License for the specific language governing permissions and limitations under
 the License.
 */
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {setPassiveTouchGestures, setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 import '@polymer/polymer/lib/utils/render-status.js';
 import '@api-components/raml-aware/raml-aware.js';
@@ -31,6 +32,10 @@ import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@api-components/api-console-ext-comm/api-console-ext-comm.js';
 import {AmfHelperMixin} from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
+setPassiveTouchGestures(true);
+if (window.APIC && window.APIC.rootPath) {
+  setRootPath(window.APIC.rootPath);
+}
 /* eslint-disable max-len */
 /**
  * # The API Console

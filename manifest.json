@@ -1,0 +1,9 @@
+{
+  "name": "API Console",
+  "short_name": "APIC",
+  "description": "Documentation for the API",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#3f51b5",
+  "background_color": "#3f51b5"
+}

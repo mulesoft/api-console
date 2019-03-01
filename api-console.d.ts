@@ -5,28 +5,20 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   api-console.html
+ *   api-console.js
  */
 
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../polymer/types/lib/utils/render-status.d.ts" />
-/// <reference path="../raml-aware/raml-aware.d.ts" />
-/// <reference path="../app-layout/app-drawer/app-drawer.d.ts" />
-/// <reference path="../app-layout/app-drawer-layout/app-drawer-layout.d.ts" />
-/// <reference path="../app-layout/app-header/app-header.d.ts" />
-/// <reference path="../app-layout/app-header-layout/app-header-layout.d.ts" />
-/// <reference path="../app-layout/app-scroll-effects/app-scroll-effects.d.ts" />
-/// <reference path="../app-layout/app-toolbar/app-toolbar.d.ts" />
-/// <reference path="../app-route/app-location.d.ts" />
-/// <reference path="../app-route/app-route.d.ts" />
-/// <reference path="../api-navigation/api-navigation.d.ts" />
-/// <reference path="../api-documentation/api-documentation.d.ts" />
-/// <reference path="../api-request-panel/api-request-panel.d.ts" />
-/// <reference path="../paper-icon-button/paper-icon-button.d.ts" />
-/// <reference path="../paper-toast/paper-toast.d.ts" />
-/// <reference path="../iron-media-query/iron-media-query.d.ts" />
-/// <reference path="../api-console-ext-comm/api-console-ext-comm.d.ts" />
-/// <reference path="../amf-helper-mixin/amf-helper-mixin.d.ts" />
+
+// tslint:disable:variable-name Describing an API that's defined elsewhere.
+// tslint:disable:no-any describes the API as best we are able today
+
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+
+import {setPassiveTouchGestures, setRootPath} from '@polymer/polymer/lib/utils/settings.js';
+
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+
+import {AmfHelperMixin} from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
 
 declare namespace MulesoftApps {
 
@@ -37,7 +29,7 @@ declare namespace MulesoftApps {
    * The RAML Console allows browsing of API documentation and in-browser testing of API methods.
    */
   class ApiConsole extends
-    ApiElements.AmfHelperMixin(
+    AmfHelperMixin(
     Object) {
 
     /**
@@ -508,6 +500,9 @@ declare namespace MulesoftApps {
   }
 }
 
-interface HTMLElementTagNameMap {
-  "api-console": MulesoftApps.ApiConsole;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "api-console": MulesoftApps.ApiConsole;
+  }
 }

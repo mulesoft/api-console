@@ -6,23 +6,16 @@ MuleSoft's API Console is a full-fledged API documentation tool that generates m
 
 ![API console design](docs/APIC-main-promo.png)
 
-## API console 5.0 is here!
+## API console 6.0 is here!
 
-Great news! Next version of API console is here! The upgrade includes new design, new data model and and build process that allows reduce size of the console.
+Version 6 comes with ES6 module imports support! No more Bower and HTML imports :) See changelog for full list of changes.
 
 ### AMF (AML Modeling Framework) support
 
 We are working very hard to deliver first in class solutions for API documentation.
 MuleSoft's AMF allows to parse any* API document and produces common data model. API console consumes this model instead of RAML JS parser's.
 
-\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 2.0 and OAS 3.0. It can be extended by defining new vocabulary to support other API spec formats.
-
-### Redesign
-
-New API console has been tested with users and the redesigned, then tested with used again and then redesigned again to ensure we offer best in class API documentation tools.
-New navigation allows understand structure of the API better and users can navigate through the documentation faster.
-
-New documentation page focuses on presenting the information which is the API and not features of the app itself. This allows users to learn faster and be more productive.
+\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 2.0 and OAS 3.0 (in beta). It can be extended by defining new vocabulary to support other API spec formats.
 
 ### Re-build
 

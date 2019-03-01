@@ -2,8 +2,12 @@
   "excludeFiles": [
     "demo/**",
     "docs/**",
-    "test/*",
+    "test/**",
+    "build/**",
     "index.html",
-    "node_modules"
+    "node_modules",
+    "entrypoint.html",
+    "service-worker.js",
+    "sw-precache-config.js"
   ]
 }

@@ -11,20 +11,19 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-
-import '../../../@polymer/paper-tabs/paper-tabs.js';
-import '../../../@polymer/paper-tabs/paper-tab.js';
-import '../../../@polymer/iron-pages/iron-pages.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/paper-input/paper-textarea.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../@polymer/paper-toast/paper-toast.js';
-import '../../../@polymer/paper-progress/paper-progress.js';
-import '../../../@polymer/paper-listbox/paper-listbox.js';
-import '../../../@polymer/paper-item/paper-item.js';
-import '../../../@polymer/paper-toggle-button/paper-toggle-button.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+import '@polymer/paper-tabs/paper-tabs.js';
+import '@polymer/paper-tabs/paper-tab.js';
+import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-progress/paper-progress.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
 /**
  * The UI for parsing server running locally.
  *
