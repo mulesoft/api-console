@@ -31,7 +31,7 @@ To access a property using JavaScript, omit any hypens in the attribute name and
 
 Type: **Object**
 
-Generated AMF json/ld model form the API spec. See [Passing RAML data](passing-raml-data.md) documentation for more information.
+Generated AMF json/ld model form the API spec. See [Passing API data](passing-api-data.md) documentation for more information.
 
 ```javascript
 const model = await downloadModel();
@@ -43,7 +43,7 @@ apic.amfModel = model;
 
 Type: **string**
 
-Uses [raml-aware][] element, with `scope` attribute set to the value of this attribute. See [Passing RAML data](passing-raml-data.md) documentation for more information.
+Uses [raml-aware][] element, with `scope` attribute set to the value of this attribute. See [Passing API data](passing-api-data.md) documentation for more information.
 
 ```html
 <raml-aware scope="my-api"></raml-aware>
@@ -76,7 +76,7 @@ Currently selected object type.
 It can be one of:
 
 -   `summary` - API summary view
--   `documentation` - RAML's documentation node
+-   `documentation` - RAML's API documentation node
 -   `type` - Model documentation (type, schema)
 -   `security` - Security scheme documentation
 -   `endpoint` - Endpoint documentation
