@@ -8,6 +8,6 @@ Select a topic
 -   [API Console configuration options](configuring-api-console.md)
 -   [Building API Console for GitHub pages on Travis](gh-pages.md)
 -   [Handling CORS](cors.md)
--   [Passing RAML to the API Console](passing-raml-data.md)
+-   [Passing API data to the API Console](passing-api-data.md)
 -   [Rebuilding the api.json file in the CI process](rebuilding-api-json.md)
 -   [Styling the API Console](theming.md)
