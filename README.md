@@ -45,7 +45,7 @@ $ sudo npm install -g api-console-cli
 Generate API console from your RAML or OAS file:
 
 ```shell
-$ api-console build -t "RAML 1.0" -a path/to/api.raml # works with remote files too
+$ NODE_OPTIONS=--max_old_space_size=2048 api-console build -t "RAML 1.0" -a path/to/api.raml # works with remote files too
 ```
 
 Preview the console:
