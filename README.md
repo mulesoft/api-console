@@ -8,29 +8,31 @@ MuleSoft's API Console is a full-fledged API documentation tool that generates m
 
 ## API console 5.0 is here!
 
-Great news! Next version of API console is here! The upgrade includes new design, new data model and and build process that allows reduce size of the console.
+Great news! The next version of API console is here! The upgrade includes new design, new data model and and build process that allows to reduce the size of the console.
 
 ### AMF (AML Modeling Framework) support
 
 We are working very hard to deliver first in class solutions for API documentation.
-MuleSoft's AMF allows to parse any* API document and produces common data model. API console consumes this model instead of RAML JS parser's.
 
-\* Currently AMF supports RAML 0.8, RAML 1.0, OAS 2.0 and OAS 3.0. It can be extended by defining new vocabulary to support other API spec formats.
+MuleSoft's AMF allows to parse any* API document and produces common data model. API console consumes this model instead of RAML JS parsers.
+
+\* Currently, AMF supports RAML 0.8, RAML 1.0, OAS 2.0 and OAS 3.0. It can be extended by defining new vocabularies to support other API spec formats.
 
 ### Redesign
 
-New API console has been tested with users and the redesigned, then tested with used again and then redesigned again to ensure we offer best in class API documentation tools.
-New navigation allows understand structure of the API better and users can navigate through the documentation faster.
+The new API console has undergone several rounds of testing and redesign to ensure that we offer best in class API documentation tools.
 
-New documentation page focuses on presenting the information which is the API and not features of the app itself. This allows users to learn faster and be more productive.
+The revamped navigation allows to better understand the structure of the API, and users can navigate through the documentation faster.
 
-### Re-build
+The new documentation pages focus on presenting the API and not features of the app itself. This allows users to learn faster and be more productive.
 
-New [build tools][] allows you to customize the bundle to your needs and possibly reduce size of the console even more than when using default settings. Check out "Building the console" section for more information.
+### Rebuild
+
+New [build tools][] allows you to customize the bundle to your needs and possibly reduce the size of the console even more than when using default settings. Check out the "Building the console" section for more information.
 
 ## Introduction
 
-API console is an web application created on top of the [Web Components specifications](https://www.webcomponents.org/introduction) and powered by the [Polymer library](https://www.polymer-project.org/). Familiarity with Polymer isn't necessary to use the console.
+API console is a web application created on top of the [Web Components specifications](https://www.webcomponents.org/introduction) and powered by the [Polymer library](https://www.polymer-project.org/). Familiarity with Polymer isn't necessary to use the console.
 
 The following sections briefly describe how to build and use the console. For more information, see the [docs](docs) directory in this repository.
 
@@ -62,11 +64,11 @@ To build the API Console as a standalone application use our [build tools][].
 
 ### Using API components
 
-This is advanced option for developers to embed the console or one of it's components into existing web page.
+This is an advanced option for developers to embed the console or one of its components into existing web page.
 
-API console is a web component. This mean it can be used in any web environments (browser, Chrome frame, Electron app etc). Also it can be mixed with any framework as it does not reference other frameworks.
+API console is a web component. This mean it can be used in any web environments (browser, Chrome frame, Electron app, etc.). Also, it can be mixed with any framework, as it does not reference other frameworks.
 
-This version of the console still works with `bower` as a dependency manager as it works with HTML imports. Next version will work with ES6 module imports which supports npm as a dependency management system.
+This version of the console still works with `bower` as a dependency manager, as it works with HTML imports. Next version will work with ES6 module imports, which supports npm as a dependency management system.
 
 First, use [Bower][] to install the console and its dependencies:
 
@@ -88,13 +90,13 @@ Finally use the HTML tag:
 </body>
 ```
 
-See complete documentation about how to import sources into your web page in the [api console element docs][]. Also, if you are a developer you can check out [demo application source code][].
+See the complete documentation on how to import sources into your web page in the [api console element docs][]. Also, if you are a developer check out the [demo application source code][].
 
-You can also build API Console as a embeddable HTML element using one of our [build tools][].
+You can also build API Console as an embeddable HTML element using one of our [build tools][].
 
 ## API Console configuration options
 
-Configuration options differ from the previous version. Because API Console is a (custom) HTML element its configuration is based on HTML attributes. You can pass values as an attribute value, or use a boolean option by simply setting the attribute. Configuration from JavaScript code is based on setting a JavaScript property as the attribute name on the element. If the attribute name contains dashes then make the property name [camel case][].
+Configuration options differ from the previous version. Because API Console is a (custom) HTML element, its configuration is based on HTML attributes. You can pass values as an attribute value, or use a boolean option by simply setting the attribute. Configuration from JavaScript code is based on setting a JavaScript property as the attribute name on the element. If the attribute name contains dashes, then convert the property name to [camel case][].
 
 Example:
 
@@ -110,11 +112,11 @@ console.narrow = true;
 console.appendHeaders = 'x-api-key: 1234';
 ```
 
-See the full list of API Console configuration options in the [configuring the api console][] document.
+See the full list of API Console configuration options in [configuring the api console][].
 
 ## Build tools
 
-A set of build tools is included to help you create API Console from the RAML file. Build tools are configured to produce a production optimized version of API Console. The build tools can generate both standalone and embeddable version of the console. You can also configure data source strategy (RAML, JSON or inline JSON as a data source).
+A set of build tools is included to help you create API Console from the API specification file. Build tools are configured to produce a production optimized version of API Console. The build tools can generate both standalone and embeddable version of the console. You can also configure the data source strategy (RAML, JSON, or inline JSON as a data source).
 
 The following build tools are available:
 
@@ -123,9 +125,9 @@ The following build tools are available:
     *   `api-console-builder`
     *   `amf-client-js`
 
-Depending on your needs you can choose whether you want to use a CLI tool or a node module.
+Depending on your needs, you can choose whether you want to use a CLI tool or a node module.
 
-Build tools can be helpful in the CI process to automate the documentation release cycle. See the [build tools][] documentation for more information and build strategies.
+Build tools can be helpful in the CI process to automate documentation release cycles. See the [build tools][] documentation for more information and build strategies.
 
 ## Theming
 API Console supports theming and comes with a default theme. You can create your own theme. For example, you can tweak the style of the console to match your corporate style guide.
@@ -136,7 +138,7 @@ Theming is based on CSS variables and CSS mixins. Basic concepts of using the va
 
 Cross-origin resource sharing (CORS) allows sharing resources from one domain to other domains. Browsers block all requests to other domains but with a special set of headers authors can allow other domains to request a resource. For more information, see the [CORS Wiki][].
 
-If your API does not allow CORS and you hosting your API documentation in different domain then API Console won't be able to make a request to an endpoint. API Console currently supports 3 ways of dealing with this issue:
+If your API does not allow CORS and you are hosting your API documentation in different domain, API Console won't be able to make a request to an endpoint. API Console currently supports three ways of dealing with this issue:
 
 -   by installing the __API Console Chrome extension__
 -   by setting up a __proxy server__
@@ -146,7 +148,7 @@ Read our [CORS guideline][] for more information about each of these solutions.
 
 ## Preview and development
 
-The API Console is a custom element that serves as a shell element for other custom web components. To develop the API Console most probably you'd have to develop one of over a hundred other web components that creates the console. All the elements are described in [the elements catalog][the elements catalogue].
+The API Console is a custom element that serves as a shell element for other custom web components. All the elements are described in [the elements catalog][the elements catalogue].
 
 1.  Clone the element.
 ```
@@ -169,7 +171,7 @@ bower install && npm i
 polymer serve --open
 ```
 
-5. If you are planning to parse own RAML/OAS file then additionally run this command to run AMF parsing service for the demo page:
+5. If you are planning to parse your own RAML/OAS file, run this command to run AMF parsing service for the demo page:
 ```
 npm staret
 ```
