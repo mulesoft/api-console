@@ -173,7 +173,7 @@ polymer serve --open
 
 5. If you are planning to parse your own RAML/OAS file, run this command to run AMF parsing service for the demo page:
 ```
-npm staret
+npm start
 ```
 
 The default page is the element's documentation. Switch to demo to see a working example.
