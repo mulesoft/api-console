@@ -4,9 +4,9 @@
   "license": "CPAL-1.0",
   "description": "The API console used in RAML platform.",
   "devDependencies": {
-    "@api-components/api-model-generator": "^0.1.10",
+    "@api-components/api-model-generator": "^0.1.11",
     "@polymer/gen-typescript-declarations": "^1.6.1",
-    "amf-client-js": "3.0.2",
+    "amf-client-js": "3.1.9",
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "fs-extra": "^6.0.0",
