@@ -19,6 +19,16 @@
     this.selected = this.contentTypes[0];
 
     var definitions = this.definitions = {};
+
+    function merge() {
+      for (var i = 1; i < arguments.length; i++) {
+        for (var prop in arguments[i]) {
+          arguments[0][prop] = arguments[i][prop];
+        }
+      }
+      return arguments[0];
+    }
+
     this.contentTypes.forEach(function(contentType) {
       var definition = contentTypes[contentType] || {};
 
@@ -49,7 +59,7 @@
               rootProperties = rootType && rootType.properties ? toObjectArray(rootType.properties) : undefined;
             }
 
-            var properties = Object.assign({}, inlineProperties, rootProperties);
+            var properties = merge({}, inlineProperties, rootProperties);
             definitions[contentType] = new RAML.Services.TryIt.NamedParameters(properties);
           }
           break;
