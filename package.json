@@ -12,7 +12,7 @@
     "fs-extra": "^6.0.1",
     "multer": "^1.4.1",
     "tmp": "0.0.33",
-    "unzip": "^0.1.11"
+    "unzipper": "^0.9.15"
   },
   "private": true,
   "main": "api-console.html",

@@ -2,7 +2,7 @@ const tmp = require('tmp');
 const fs = require('fs-extra');
 const path = require('path');
 const Duplex = require('stream').Duplex;
-const unzip = require('unzip');
+const unzipper = require('unzipper');
 const amf = require('amf-client-js');
 
 const generator = amf.Core.generator('AMF Graph', 'application/ld+json');
@@ -155,9 +155,7 @@ class ParserService {
         let stream = new Duplex();
         stream.push(file.buffer);
         stream.push(null);
-        const extractor = unzip.Extract({
-          path: this.tmpobj.name
-        });
+        const extractor = unzipper.Extract({path: this.tmpobj.name});
         extractor.on('close', () => {
           this._removeZipMainFolder(this.tmpobj.name)
           .then(() => this._findApiFile(this.tmpobj.name, dataType))
