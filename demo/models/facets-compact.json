@@ -461,7 +461,9 @@
 {
 "@id": "file://demo/models/facets/facets.raml#/declarations/types/scalar/PossibleMeetingDate/extension/noHolidays/scalar_1",
 "@type": [
-"data:Scalar"
+"data:Scalar",
+"data:Node",
+"doc:DomainElement"
 ],
 "data:value": [
 {
