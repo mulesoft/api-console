@@ -164,6 +164,11 @@ module.exports = function (grunt) {
       vendor: {
         src:  '<%= src.jsVendor %>',
         dest: '<%= distdir %>/scripts/<%= pkg.name %>-vendor.js'
+      },
+
+      polyfill: {
+        src:  'src/common/polyfills/string-polyfills.js',
+        dest: '<%= distdir %>/scripts/<%= pkg.name %>-polyfills.js'
       }
     },
 
