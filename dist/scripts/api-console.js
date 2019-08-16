@@ -2882,6 +2882,9 @@
           $scope.responseDetails = false;
           $scope.response        = {};
 
+          var mockingServiceDetector = /(?:(?:mocksvc\.[a-z\.]*)|(?:[a-z]+\.anypoint\.))mulesoft\.com\/.*mocks\/([0-9a-zA-Z-]+)(\/(.+))?/;
+          var mockingService2Detector = /(?:(?:[a-z.]*anypoint\.mulesoft\.com)|(?:localhost:3000))\/mocking\/api\/v1\/links\/([0-9a-zA-Z-]+)(\/(.*))?$/;
+
           if (!$scope.context.forceRequest) {
             jQuery($event.currentTarget).closest('form').find('.ng-invalid').first().focus();
           }
@@ -2889,6 +2892,15 @@
           if($scope.context.forceRequest || validateForm($scope.form)) {
             var context = $scope.context;
             var request = getRequest($event);
+            var requestOptions = request.toOptions();
+
+            if (mockingServiceDetector.exec(requestOptions.baseUrl)) {
+              request.header('x-origin', 'API Designer');
+            }
+
+            if (mockingService2Detector.exec(requestOptions.baseUrl)) {
+              request.header('MS2-Origin', 'API Designer');
+            }
 
             if (context.bodyContent) {
               request.header('Content-Type', context.bodyContent.selected);
