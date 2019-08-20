@@ -484,8 +484,8 @@
           $scope.responseDetails = false;
           $scope.response        = {};
 
-          var mockingServiceDetector = /(?:(?:mocksvc\.[a-z\.]*)|(?:[a-z]+\.anypoint\.))mulesoft\.com\/.*mocks\/([0-9a-zA-Z-]+)(\/(.+))?/;
-          var mockingService2Detector = /(?:(?:[a-z.]*anypoint\.mulesoft\.com)|(?:localhost:3000))\/mocking\/api\/v1\/links\/([0-9a-zA-Z-]+)(\/(.*))?$/;
+          var mockingServiceDetector = /(?:mocksvc\.[a-z\.]*)mulesoft\.com(\/(.*))?/;
+          var mockingService2Detector = /(?:(?:[a-z.]*anypoint\.mulesoft\.com)|(?:localhost:3000))\/mocking\/api\/v1(\/(.*))?$/;
 
           if (!$scope.context.forceRequest) {
             jQuery($event.currentTarget).closest('form').find('.ng-invalid').first().focus();
