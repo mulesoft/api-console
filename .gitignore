@@ -55,5 +55,4 @@ $RECYCLE.BIN/
 .nfs*
 
 node_modules
-build
 coverage

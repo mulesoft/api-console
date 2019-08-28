@@ -11,10 +11,8 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {setPassiveTouchGestures, setRootPath} from '@polymer/polymer/lib/utils/settings.js';
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
-import '@polymer/polymer/lib/utils/render-status.js';
+import { html, css, LitElement } from 'lit-element';
+import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
 import '@api-components/raml-aware/raml-aware.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
@@ -27,16 +25,15 @@ import '@polymer/app-route/app-route.js';
 import '@api-components/api-navigation/api-navigation.js';
 import '@api-components/api-documentation/api-documentation.js';
 import '@api-components/api-request-panel/api-request-panel.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
+import '@anypoint-web-components/anypoint-button/anypoint-button.js';
+import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@api-components/api-console-ext-comm/api-console-ext-comm.js';
-import {AmfHelperMixin} from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
-setPassiveTouchGestures(true);
-if (window.APIC && window.APIC.rootPath) {
-  setRootPath(window.APIC.rootPath);
-}
-/* eslint-disable max-len */
+import attributionTpl from './attribution-template.js';
+
+export const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 /**
  * # The API Console
  *
@@ -44,20 +41,14 @@ if (window.APIC && window.APIC.rootPath) {
  * The RAML Console allows browsing of API documentation and in-browser testing of API methods.
  *
  * @customElement
- * @polymer
  * @demo demo/index.html
  * @memberof MulesoftApps
  * @appliesMixin AmfHelperMixin
  */
-class ApiConsole extends AmfHelperMixin(PolymerElement) {
-  static get template() {
-    return html`<style>
-    :host {
-      --app-primary-color: var(--api-console-primary-color, #00A2DF);
-      --app-secondary-color: var(--api-console-secondary-color, black);
+class ApiConsole extends AmfHelperMixin(LitElement) {
+  static get styles() {
+    return css`:host {
       display: block;
-      background-color: var(--api-console-primary-background-color, var(--primary-background-color, transparent));
-      @apply --arc-font-body1;
     }
 
     :host([app]) {
@@ -69,8 +60,9 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
     }
 
     .nav-content {
-      @apply --layout-horizontal;
-      @apply --layout-center;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
 
     .powered-by {
@@ -112,7 +104,7 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
     }
 
     .extension-banner {
-      @apply --layout-center;
+      align-items: center;
       display: none;
       border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
       border-top: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
@@ -122,7 +114,8 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
     }
 
     .extension-banner[active] {
-      @apply --layout-horizontal;
+      display: flex;
+      flex-direction: row;
     }
 
     .main-content {
@@ -133,8 +126,8 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
 
     .drawer-content-wrapper {
       max-height: calc(100% - 64px);
-      /* overflow: auto; */
-      @apply --layout-vertical;
+      display: flex;
+      flex-direction: column;
       background-color: var(--api-console-menu-background-color, inherit);
       color: var(--api-console-menu-color);
       height: 100%;
@@ -144,7 +137,7 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
       background-color: var(--api-console-menu-background-color, inherit);
       color: var(--api-console-menu-color);
       --paper-tab-content-unselected_-_color: var(--api-console-menu-tabs-color-unselected);
-      @apply --layout-flex-auto;
+      flex: 1 1 auto;
     }
 
     :host(:not([app])) app-drawer-layout {
@@ -164,12 +157,13 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
     }
 
     .api-docs {
-      @apply --layout-horizontal;
+      display: flex;
+      flex-direction: row;
       overflow: auto;
     }
 
     .api-docs api-documentation {
-      @apply --layout-flex;
+      flex: 1;
     }
 
     .api-docs .inline-request {
@@ -178,12 +172,13 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
       background-color: var(--apic-tryint-wide-background-color, #f8f8f8);
       padding: 0 12px;
       box-sizing: border-box;
-      @apply --layout-flex;
+      flex: 1;
     }
 
     .method-title-area {
-      @apply --layout-horizontal;
-      @apply --layout-center;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
 
     .method-title-area,
@@ -192,11 +187,12 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
     }
 
     .method-title {
-      @apply --layout-flex;
-      @apply --arc-font-headline;
-      font-weight: var(--api-method-documentation-title-method-font-weight, 500);
+      flex: 1;
+      font-size: var(--arc-font-headline-font-size);
+      font-weight: var(--arc-font-headline-font-weight);
+      letter-spacing: var(--arc-font-headline-letter-spacing);
+      line-height: var(--arc-font-headline-line-height);
       text-transform: capitalize;
-      @apply --api-method-documentation-title;
     }
 
     :host([narrow]) .method-title-area {
@@ -207,82 +203,218 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
     :host([narrow]) .method-title {
       font-size: 20px;
       margin: 0;
-      @apply --api-method-documentation-title-narrow;
     }
 
-    .store-link {
-      @apply --arc-link;
+    .store-link {}`;
+  }
+
+  _mediaQueriesTemplate() {
+    if (!this.app) {
+      return;
     }
-    </style>
-    <template is="dom-if" if="[[app]]" restamp="true">
-      <iron-media-query query="(max-width: 740px)" query-matches="{{narrow}}"></iron-media-query>
-      <iron-media-query query="(min-width: 1500px)" query-matches="{{wideLayout}}"></iron-media-query>
-    </template>
-    <app-drawer-layout responsive-width="[[responsiveWidth]]" force-narrow="[[_narrowNavForced]]" narrow="{{layoutNarrow}}">
-      <app-drawer slot="drawer" align="[[drawerAlign]]" opened="[[navigationOpened]]">
-        <template is="dom-if" if="[[!noToolbars]]">
-          <app-toolbar>
-            <div>API console</div>
-          </app-toolbar>
-        </template>
-        <div class="drawer-content-wrapper">
-          <api-navigation amf-model="[[amfModel]]" summary="" endpoints-opened="" on-api-navigation-selection-changed="_apiNavigationOcurred" selected="{{selectedShape}}" selected-type="{{selectedShapeType}}"></api-navigation>
-          <template is="dom-if" if="[[!noAttribution]]">
-            <div class="powered-by">
-              <a href="https://github.com/mulesoft/api-console" class="attribution" target="_blank" tabindex="-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 818.9 148"><defs><style>.cls-1{}.cls-2{font-size:60px;font-family:OpenSans, Open Sans;}</style></defs><path class="cls-1" d="M436.08,12.57a61.79,61.79,0,1,0,62.08,61.79A62,62,0,0,0,436.08,12.57Zm0,118.8a56.63,56.63,0,1,1,56.63-56.63A56.63,56.63,0,0,1,436.09,131.36Z"></path><path class="cls-1" d="M420.34,102.08a28.4,28.4,0,0,1-15.87-25.84,29.25,29.25,0,0,1,4.89-16.29l20.42,30.43h12.34l20.42-30.43a29.25,29.25,0,0,1,4.89,16.29,28.55,28.55,0,0,1-14,24.87l3.93,15.06a46.47,46.47,0,0,0,2.45-81.29L436.08,71.47,412.6,34.75A46.47,46.47,0,0,0,416.45,117Z"></path><polygon class="cls-1" points="544.97 80.8 529.71 48.31 521.79 48.31 521.79 100.53 529.71 100.53 529.71 65.62 542.03 91.08 547.9 91.08 559.93 65.62 559.93 100.53 567.85 100.53 567.85 48.31 559.93 48.31 544.97 80.8"></polygon><path class="cls-1" d="M597.61,86c0,5.73-3.53,8.29-7.7,8.29s-7.48-2.5-7.48-8.29V63.34h-7.48V87.11c0,4.19.88,7.71,3.74,10.5a12.93,12.93,0,0,0,9.17,3.37,13.28,13.28,0,0,0,9.9-4.18v3.74h7.34V63.34h-7.48Z"></path><path class="cls-1" d="M619.75,89.83V48.31h-7.48v42c0,5.51,3.08,10.27,10.2,10.27h4.62V94.16h-3.3C620.77,94.16,619.75,92.68,619.75,89.83Z"></path><path class="cls-1" d="M645.07,62.91c-9.54,0-15.77,7-15.77,19,0,14.16,7.41,19.07,16.73,19.07,6.53,0,10.12-2,13.93-5.79L655.2,90.7a11.08,11.08,0,0,1-9,3.81c-6.09,0-9.46-4-9.46-10.41h24.13V80.8C660.85,70.24,655.05,62.91,645.07,62.91Zm-8.36,16a11.79,11.79,0,0,1,1-5.06,7.77,7.77,0,0,1,7.41-4.69,7.66,7.66,0,0,1,7.34,4.69,11.62,11.62,0,0,1,1,5.06Z"></path><path class="cls-1" d="M697.78,74.93c-2.2-2-4.91-3.15-9.76-3.89l-5.94-.88a11.67,11.67,0,0,1-5.87-2.42,6.24,6.24,0,0,1-2-4.84c0-4.62,3.37-8.15,9.54-8.15,4.4,0,8.14,1,11.37,4l5.06-5c-4.47-4.18-9.31-5.94-16.21-5.94-10.86,0-17.46,6.23-17.46,15.33,0,4.25,1.25,7.55,3.82,10,2.27,2.12,5.64,3.59,9.9,4.18l6.16.89c3.09.44,4.4,1,5.73,2.2a7,7,0,0,1,2.05,5.43c0,5.06-4,8-10.78,8-5.36,0-9.54-1.17-13.35-5l-5.28,5.21c5,5.06,10.64,6.9,18.48,6.9C694.18,101,702,95.25,702,85.65,702,81.16,700.63,77.43,697.78,74.93Z"></path><path class="cls-1" d="M721.76,62.91a14.88,14.88,0,0,0-11.08,4.4c-3.52,3.66-4.4,8.36-4.4,14.6s.88,11,4.4,14.67a14.88,14.88,0,0,0,11.08,4.4,15,15,0,0,0,11.15-4.4c3.52-3.66,4.4-8.36,4.4-14.67s-.88-10.94-4.4-14.6A15,15,0,0,0,721.76,62.91Zm5.5,29.19a7.65,7.65,0,0,1-5.5,2.2,7.44,7.44,0,0,1-5.42-2.2c-2.28-2.27-2.57-6.17-2.57-10.2s.29-7.92,2.57-10.2a7.39,7.39,0,0,1,5.42-2.13,7.6,7.6,0,0,1,5.5,2.13c2.27,2.27,2.57,6.16,2.57,10.2S729.54,89.83,727.27,92.1Z"></path><path class="cls-1" d="M744.88,58.29V64h-4.26v5.73h4.26v30.81h7.48V69.73h7.41V64h-7.41V58.65c0-2.71,1.31-4.33,4.1-4.33h3.31V47.94h-4.7C748.1,47.94,744.88,52.93,744.88,58.29Z"></path><path class="cls-1" d="M776.12,52.71h-7.48V64h-4.26v5.73h4.26V90.19c0,5.36,3.22,10.35,10.19,10.35h4.47V94.16h-3.08c-2.78,0-4.11-1.62-4.11-4.33V69.73h7.19V64h-7.19Z"></path><path class="cls-1" d="M792.58,58.48a4,4,0,0,0-2.14-2.11,4.11,4.11,0,0,0-3.11,0,4.07,4.07,0,0,0-1.29.84,4,4,0,0,0-.87,1.26,3.86,3.86,0,0,0-.32,1.58,3.94,3.94,0,0,0,.32,1.6,4,4,0,0,0,.87,1.28,4,4,0,0,0,1.29.84,4.19,4.19,0,0,0,3.11,0,3.92,3.92,0,0,0,1.28-.84,4.1,4.1,0,0,0,.87-1.28,4,4,0,0,0,.32-1.6A3.86,3.86,0,0,0,792.58,58.48Zm-.66,2.94a3.34,3.34,0,0,1-.7,1.09,3.25,3.25,0,0,1-1,.72,3.19,3.19,0,0,1-1.3.26,3.24,3.24,0,0,1-2.36-1,3.35,3.35,0,0,1-.7-1.09,3.64,3.64,0,0,1-.25-1.37,3.54,3.54,0,0,1,.25-1.34,3.26,3.26,0,0,1,3.06-2.06,3.21,3.21,0,0,1,1.3.26,3.26,3.26,0,0,1,1.74,1.8,3.52,3.52,0,0,1,.25,1.34A3.62,3.62,0,0,1,791.92,61.42Z"></path><path class="cls-1" d="M790.42,60a1.14,1.14,0,0,0,.35-.93,1.23,1.23,0,0,0-.4-1,1.92,1.92,0,0,0-1.24-.33h-1.81v4.68H788v-2h.77l1.28,2h.78l-1.34-2.07A1.59,1.59,0,0,0,790.42,60Zm-1.61-.19H788V58.32h1l.37,0a1,1,0,0,1,.33.1.63.63,0,0,1,.24.21A.68.68,0,0,1,790,59a.79.79,0,0,1-.1.43.61.61,0,0,1-.27.23,1.19,1.19,0,0,1-.39.09Z"></path><text class="cls-2" transform="translate(19 91.93)">Powered by</text></svg>
-              </a>
-            </div>
-          </template>
-        </div>
+    return html`
+    <iron-media-query
+      query="(max-width: 740px)"
+      @query-matches-changed="${this._narrowHandler}"></iron-media-query>
+    <iron-media-query
+      query="(min-width: 1500px)"
+      @query-matches-changed="${this._wideLayoutHandler}"></iron-media-query>`;
+  }
+
+  _drawerToolbarTemplate() {
+    if (this.noToolbars) {
+      return '';
+    }
+    return html`<app-toolbar>
+      <div>API console</div>
+    </app-toolbar>`;
+  }
+
+  _navigationTemplate() {
+    const { amf, noAttribution } = this;
+    return html`<div class="drawer-content-wrapper">
+      <api-navigation
+        .amf="${amf}"
+        summary
+        endpointsopened
+        @api-navigation-selection-changed="${this._apiNavigationOcurred}"
+        @selected-changed="${this._selectedHandler}"
+        @selectedtype-changed="${this._selectedTypeHandler}"></api-navigation>
+      ${noAttribution ? '' : attributionTpl}
+    </div>`;
+  }
+
+  _contentToolbarTemplate() {
+    if (this.noToolbars) {
+      return '';
+    }
+    const {
+      manualNavigation,
+      apiTitle
+    } = this;
+    return html`<app-header
+      slot="header"
+      fixed
+      condenses
+      effects="waterfall">
+      <app-toolbar>
+        <anypoint-icon-button drawer-toggle ?hidden="${manualNavigation}">
+          <iron-icon icon="arc:menu"></iron-icon>
+        </anypoint-icon-button>
+        <div main-title>${apiTitle}</div>
+        <slot name="toolbar"></slot>
+      </app-toolbar>
+    </app-header>`;
+  }
+
+  _getContentTemplate() {
+    switch (this.page) {
+      case 'docs': return this._getDocsTemplate();
+      case 'request': return this._getRequestTemplate();
+      default: return '';
+    }
+  }
+
+  _bannerMessage() {
+    return html`
+    <div class="extension-banner" ?active="${this._extensionBannerActive}">
+      <p>
+        For better experience install API console extension.
+        Get it from <a target="_blank"
+          class="store-link"
+          href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">
+          Chrome Web Store
+        </a>
+      </p>
+      <anypoint-icon-button
+        aria-label="Activate to close the message"
+        @click="${this.dismissExtensionBanner}">
+        <iron-icon icon="arc:close"></iron-icon>
+      </anypoint-icon-button>
+    </div>`;
+  }
+
+  _getRequestTemplate() {
+    const {
+      methodName,
+      legacy
+    } = this;
+    return html`
+    <div class="method-title-area">
+      <h1 class="method-title">${methodName}</h1>
+      <div class="method-close-action">
+        <anypoint-button
+          class="action-button"
+          ?legacy="${legacy}"
+          @click="closeTryIt"
+          emphasis="medium">Back to docs</anypoint-button>
+      </div>
+    </div>
+    ${this._bannerMessage()}
+    ${this._requestPanelTemplate()}
+    `;
+  }
+
+  _requestPanelTemplate() {
+    const {
+      legacy,
+      outlined,
+      amf,
+      selectedShape,
+      narrow,
+      noUrlEditor,
+      scrollTarget,
+      allowCustom,
+      allowDisableParams,
+      allowHideOptional,
+      redirectUri,
+      eventsTarget,
+      baseUri,
+      noDocs
+    } = this;
+    return html`<api-request-panel
+      .amf="${amf}"
+      .selected="${selectedShape}"
+      ?narrow="${narrow}"
+      ?outlined="${outlined}"
+      ?legacy="${legacy}"
+      .noUrlEditor="${noUrlEditor}"
+      .redirectUri="${redirectUri}"
+      .scrollTarget="${scrollTarget}"
+      .allowCustom="${allowCustom}"
+      .allowDisableParams="${allowDisableParams}"
+      .allowHideOptional="${allowHideOptional}"
+      .baseUri="${baseUri}"
+      .noDocs="${noDocs}"
+      .eventsTarget="${eventsTarget}"></api-request-panel>`;
+  }
+
+  _getDocsTemplate() {
+    const {
+      inlineMethods,
+      legacy,
+      outlined,
+      noTryit,
+      amf,
+      selectedShape,
+      selectedShapeType,
+      narrow,
+      scrollTarget,
+      redirectUri,
+      baseUri,
+      _renderInlineTyit
+    } = this;
+    return html`<section class="api-docs">
+      <api-documentation
+        .amf="${amf}"
+        .selected="${selectedShape}"
+        .selectedType="${selectedShapeType}"
+        ?narrow="${narrow}"
+        ?legacy="${legacy}"
+        ?outlined="${outlined}"
+        .inlineMethods="${inlineMethods}"
+        .scrollTarget="${scrollTarget}"
+        .noTryIt="${noTryit}"
+        .baseUri="${baseUri}"
+        .redirectUri="${redirectUri}"
+        .scrollTarget="${scrollTarget}"></api-documentation>
+      ${_renderInlineTyit ? html`<div class="inline-request">
+        ${this._bannerMessage()}
+        ${this._requestPanelTemplate()}
+      </div>` : ''}
+    </section>`;
+  }
+
+  render() {
+    const {
+      responsiveWidth,
+      _narrowNavForced,
+      layoutNarrow,
+      drawerAlign,
+      navigationOpened,
+      aware
+    } = this;
+    return html`
+    ${aware ? html`<raml-aware .scope="${aware}" @api-changed="${this._apiChanged}"></raml-aware>` : ''}
+    ${this._mediaQueriesTemplate()}
+    <app-drawer-layout
+      .responsiveWidth="${responsiveWidth}"
+      ?force-narrow="${_narrowNavForced}"
+      ?narrow="${layoutNarrow}">
+      <app-drawer slot="drawer" .align="${drawerAlign}" .opened="${navigationOpened}">
+        ${this._drawerToolbarTemplate()}
+        ${this._navigationTemplate()}
       </app-drawer>
       <app-header-layout>
-        <template is="dom-if" if="[[!noToolbars]]">
-          <app-header slot="header" fixed="" condenses="" effects="waterfall">
-            <app-toolbar>
-              <paper-icon-button icon="arc:menu" drawer-toggle="" hidden\$="[[manualNavigation]]"></paper-icon-button>
-              <div main-title="">[[apiTitle]]</div>
-              <slot name="toolbar"></slot>
-            </app-toolbar>
-          </app-header>
-        </template>
+        ${this._contentToolbarTemplate()}
         <div class="main-content">
           <slot name="content"></slot>
-          <template is="dom-if" if="[[isRequest]]">
-            <div class="method-title-area">
-              <h1 class="method-title">[[methodName]]</h1>
-              <div class="method-close-action">
-                <paper-button class="action-button" on-click="closeTryIt" raised="">Back to docs</paper-button>
-              </div>
-            </div>
-            <div class="extension-banner" active\$="[[extensionBannerActive]]">
-              <p>For better experience install API console extension. Get it from <a target="_blank" class="store-link" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
-              <paper-icon-button icon="arc:close" on-click="dismissExtensionBanner"></paper-icon-button>
-            </div>
-            <api-request-panel amf-model="[[amfModel]]" selected="[[selectedShape]]" narrow="[[narrow]]" no-url-editor="[[noUrlEditor]]" redirect-uri="[[redirectUri]]" scroll-target="[[scrollTarget]]" allow-custom="[[allowCustom]]" allow-disable-params="[[allowDisableParams]]" allow-hide-optional="[[allowHideOptional]]" bower-location="[[bowerLocation]]" base-uri="[[baseUri]]" no-docs="[[noDocs]]" events-target="[[eventsTarget]]"></api-request-panel>
-          </template>
-          <template is="dom-if" if="[[isDocs]]">
-            <section class="api-docs">
-              <api-documentation amf-model="[[amfModel]]" selected="[[selectedShape]]" selected-type="[[selectedShapeType]]" no-try-it="[[_noTryItValue]]" narrow="[[narrow]]" base-uri="[[baseUri]]" inline-methods="[[inlineMethods]]" redirect-uri="[[redirectUri]]" scroll-target="[[scrollTarget]]"></api-documentation>
-              <template is="dom-if" if="[[_renderInlineTyit]]" restamp="">
-                <div class="inline-request">
-                  <div class="extension-banner" active\$="[[extensionBannerActive]]">
-                    <p>For better experience install API console extension. Get it from <a target="_blank" class="store-link" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
-                    <paper-icon-button icon="arc:close" on-click="dismissExtensionBanner"></paper-icon-button>
-                  </div>
-                  <api-request-panel amf-model="[[amfModel]]" selected="[[selectedShape]]" narrow="[[narrow]]" no-url-editor="[[noUrlEditor]]" redirect-uri="[[redirectUri]]" scroll-target="[[scrollTarget]]" allow-custom="[[allowCustom]]" allow-disable-params="[[allowDisableParams]]" allow-hide-optional="[[allowHideOptional]]" bower-location="[[bowerLocation]]" base-uri="[[baseUri]]" no-docs="[[noDocs]]" events-target="[[eventsTarget]]"></api-request-panel>
-                </div>
-              </template>
-            </section>
-          </template>
+          ${this._getContentTemplate()}
         </div>
       </app-header-layout>
     </app-drawer-layout>
-    <template is="dom-if" if="[[aware]]">
-      <raml-aware raml="{{amfModel}}" scope="[[aware]]"></raml-aware>
-    </template>
     <paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
-    <api-console-ext-comm has-extension="{{_hasApicCorsExtension}}"></api-console-ext-comm>
+    <api-console-ext-comm @has-extension-changed="${this._hasExtensionHandler}"></api-console-ext-comm>
     <!--
     The components below are optional dependencies. They will not be used until
     sources of the components are included into AC bundle.
@@ -296,7 +428,10 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
     first one to handle the event and run the request. Any other listener
     attached to the console, body or window is called after this one.
     -->
-    <xhr-simple-request append-headers="[[appendHeaders]]" proxy="[[proxy]]" proxy-encode-url="[[proxyEncodeUrl]]"></xhr-simple-request>
+    <xhr-simple-request
+      .appendHeaders="${this.appendHeaders}"
+      .proxy="${this.proxy}"
+      .proxyEncodeUrl="${this.proxyEncodeUrl}"></xhr-simple-request>
     <oauth1-authorization></oauth1-authorization>
     <oauth2-authorization></oauth2-authorization>`;
   }
@@ -312,18 +447,7 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * and this property to the same name. Once you update `raml` property
        * on the aware it updates the model in the console.
        */
-      aware: String,
-      /**
-       * Generated AMF json/ld model form the API spec.
-       * The element assumes the object of the first array item to be a
-       * type of `"http://raml.org/vocabularies/document#Document`
-       * on AMF vocabulary.
-       *
-       * It is only usefult for the element to resolve references.
-       *
-       * @type {Object|Array}
-       */
-      amfModel: Object,
+      aware: { type: String },
       /**
        * It is current selection from the navigation represented
        * as an `@id` property of the AMD json/ld model.
@@ -337,10 +461,7 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * file://demo/models/api-name/api.raml#/web-api/end-points/%2Ftest-endpoint
        * ```
        */
-      selectedShape: {
-        type: String,
-        notify: true
-      },
+      selectedShape: { type: String },
       /**
        * One of recognizable bby the console types of currently rendered
        * documentation. It can be one of:
@@ -355,17 +476,11 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * Use it with combination of setting `selectedShape` property to control
        * the view.
        */
-      selectedShapeType: {
-        type: String,
-        notify: true
-      },
+      selectedShapeType: { type: String },
       /**
        * Computed value, true if current selection represent a method
        */
-      isMethod: {
-        type: Boolean,
-        computed: '_computeIsMethod(selectedShapeType)'
-      },
+      _isMethod: { type: Boolean },
       /**
        * Location of the AMF json/ld model. It can be an endpoint that
        * produces AMF model or a file that contains generated model.
@@ -378,34 +493,11 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * <api-console model-location="https://amf-parser/domain.com"></api-console>
        * ```
        */
-      modelLocation: {
-        type: String,
-        observer: '_modelLocationChanged'
-      },
+      modelLocation: { type: String },
       /**
        * Currently rendered page. It can be either `docs` or `request`.
        */
-      page: {
-        type: String,
-        value: 'docs',
-        notify: true
-      },
-      /**
-       * Computed value (read only), `true` when current page is the
-       * request panel.
-       */
-      isRequest: {
-        type: Boolean,
-        computed: '_computeIsRequest(page)'
-      },
-      /**
-       * Computed value (read only), `true` when current page is the
-       * documentation panel.
-       */
-      isDocs: {
-        type: Boolean,
-        computed: '_computeIsDocs(page)'
-      },
+      page: { type: String },
       /**
        * The API console works with API console extension that proxies
        * request through Chrome extension's sandbox and eliminates CORS.
@@ -413,18 +505,13 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * The banner informing a user about the extension is rendered
        * automatically unless this property is set.
        */
-      noExtensionBanner: {
-        type: Boolean,
-        observer: '_noExtBannerChanged'
-      },
+      noExtensionBanner: { type: Boolean },
       /**
        * When set the extension banner is rendered.
        */
-      extensionBannerActive: {
-        type: Boolean,
-        readOnly: true
-      },
-      _hasApicCorsExtension: {type: Boolean, observer: '_hasCorsExtensionChanged'},
+      _extensionBannerActive: { type: Boolean },
+
+      _hasApicCorsExtension: { type: Boolean },
       /**
        * Forces the console to send headers defined in this string overriding
        * any used defined header.
@@ -432,16 +519,13 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * to a server without user knowing about it.
        * The headers should be valid HTTP headers string.
        */
-      appendHeaders: String,
+      appendHeaders: { type: String },
       /**
        * If true it forces the console to render narrow layout.
        * This hides left hand side navigation and some fonts are smaller
        * (like titles).
        */
-      narrow: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
+      narrow: { type: Boolean, reflect: true },
       /**
        * If set every request made from the console will be proxied by the service provided in this
        * value.
@@ -453,20 +537,20 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * `https://proxy.com/path/?url=`. In this case be sure to set `proxy-encode-url`
        * attribute.
        */
-      proxy: String,
+      proxy: { type: String },
       /**
        * If `proxy` is set, it will URL encode the request URL before appending it to the proxy URL.
        * `http://domain.com/path/?query=some+value` will become
        * `https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`
        */
-      proxyEncodeUrl: Boolean,
+      proxyEncodeUrl: { type: Boolean },
       /**
        * If set then the API console hide the "try it" button from the
        * method documentation view. The request and response panels still will
        * be available, but to enter this section you'll have to do it
        * programatically.
        */
-      noTryIt: Boolean,
+      noTryIt: { type: Boolean },
       /**
        * If set, the open navigation button will be always hidden.
        * The left hand side navigation will be hidden until `navigationOpened`
@@ -474,14 +558,11 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * The navigation will cover full screen, hiding the content.
        * This works best with `narrow` layout.
        */
-      manualNavigation: Boolean,
+      manualNavigation: { type: Boolean },
       /**
        * True when navigation is opened.
        */
-      navigationOpened: {
-        type: Boolean,
-        notify: true
-      },
+      navigationOpened: { type: Boolean },
       /**
        * A width when the navigation drawer is automatically toggled to narrow
        * view.
@@ -490,20 +571,17 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * To control width of the navigation drawer, set `--app-drawer-width`
        * CSS variable to requested size.
        */
-      responsiveWidth: String,
+      responsiveWidth: { type: String },
       /**
        * Computed value, true when the navigation drawer should be hidden
        * event with wide layout.
        */
-      _narrowNavForced: {
-        type: Boolean,
-        computed: '_computeNarrowNavForced(manualNavigation, narrow)'
-      },
+      _narrowNavForced: { type: Boolean },
       /**
        * Location of the `bower_components` folder.
        * It should be a path from server's root path including bower_components.
        */
-      bowerLocation: String,
+      bowerLocation: { type: String },
       /**
        * OAuth2 redirect URI.
        * By default the app uses `bowerLocation` to compute redirect location
@@ -513,65 +591,36 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        * See documentation for `advanced-rest-client/oauth-authorization`
        * for API details.
        */
-      redirectUri: String,
+      redirectUri: { type: String },
       /**
        * Hides the URL editor from the view.
        * Note that the editor is still in the DOM. This property just hiddes
        * it.
        */
-      noUrlEditor: Boolean,
+      noUrlEditor: { type: Boolean },
       /**
        * A base URI for the API. To be set if RAML spec is missing `baseUri`
        * declaration and this produces invalid URL input. This information
        * is passed to the URL editor that prefixes the URL with `baseUri` value
        * if passed URL is a relative URL.
        */
-      baseUri: String,
+      baseUri: { type: String },
       /**
        * Removes the "Powered by Mulesoft" attribution from the main navigation.
        * The use of this feature must be in accordance with all licensing
        * and copyright protections required by the use of this software
        */
-      noAttribution: {
-        type: Boolean,
-        value: false
-      },
-      /**
-       * Computed value of AMF model of a type of `http://schema.org/WebAPI`
-       *
-       * @type {Object}
-       */
-      webApi: {
-        type: Object,
-        computed: '_computeWebApi(amfModel)'
-      },
+      noAttribution: { type: Boolean },
       /**
        * Computed title of the API
        */
-      apiTitle: {
-        type: String,
-        computed: '_computeApiTitle(webApi)'
-      },
-      /**
-       * If true then current browser is Chrome.
-       * Used to determine if the console should render the extension banner.
-       */
-      isChrome: {
-        type: Boolean,
-        readOnly: true,
-        value: function() {
-          return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-        }
-      },
+      apiTitle: { type: String },
       /**
        * True when the main layout element renders in narrow view.
        * This changes when media query breakpoint has been reached or
        * when narrow property is set.
        */
-      layoutNarrow: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
+      layoutNarrow: { type: Boolean, reflect: true },
       /**
        * An alignment of the layout drawer.
        * Possible values are:
@@ -580,14 +629,11 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        *
        * Default to "start".
        */
-      drawerAlign: String,
+      drawerAlign: { type: String },
       /**
        * If set the top toolbars are not rendered.
        */
-      noToolbars: {
-        type: Boolean,
-        value: false
-      },
+      noToolbars: { type: Boolean },
       /**
        * By default API console renders itself as an embeddable
        * web component that has changed behavior of main layout elements
@@ -596,72 +642,60 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
        *
        * Note, this option is experimental and mey be removed.
        */
-      app: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
+      app: { type: Boolean, reflect: true },
       /**
        * When true it places try it panel next to the documentation panel.
        * It is set automatically via media queries
        */
-      wideLayout: Boolean,
+      wideLayout: { type: Boolean },
       /**
        * If set then it renders methods documentation inline with
        * the endpoint documentation.
        * When it's not set (or value is `false`, default) then it renders
        * just a list of methods with links in the documentation panel
        */
-      inlineMethods: {type: Boolean, value: false},
+      inlineMethods: { type: Boolean, value: false },
 
-      _renderInlineTyit: {
-        type: Boolean,
-        computed: '_computeRenderInlineTryIt(wideLayout, isMethod, app, inlineMethods)'
-      },
+      _renderInlineTyit: { type: Boolean },
 
-      _noTryItValue: {
-        type: Boolean,
-        computed: '_computeNoTryItValue(noTryIt, _renderInlineTyit)'
-      },
+      _noTryItValue: { type: Boolean },
 
       /**
        * Computed value from the method model, name of the method.
        * It is either a `displayName` or HTTP method name
        */
-      methodName: {
-        type: String,
-        computed: '_computeMethodName(isMethod, selectedShape, webApi)'
-      },
+      methodName: { type: String },
       /**
        * Scroll target used to observe `scroll` events.
        * Set it to a parent element that is a scroll region (has overflow set)
        * so the app can handle scrolling properly.
        */
-      scrollTarget: Object,
+      scrollTarget: { type: Object },
       /**
        * Option passed to the try it panel.
        * When set it allows to disable parameters in an editor (headers,
        * query parameters). Disabled parameter won't be used with a test call
        * but won't be removed from the UI.
        */
-      allowDisableParams: Boolean,
+      allowDisableParams: { type: Boolean },
       /**
        * Option passed to the try it panel.
        * When set, editors renders "add custom" button that allows to define
        * custom parameters next to API spec defined.
        */
-      allowCustom: Boolean,
+      allowCustom: { type: Boolean },
       /**
        * Option passed to the try it panel.
        * Enables auto hiding of optional properties (like query parameters
        * or headers) and renders a checkbox to render optional items in the
        * editor view.
        */
-       allowHideOptional: Boolean,
+       allowHideOptional: { type: Boolean },
        /**
         * Prohibits rendering documentation (the icon and the
         * description) in request editors.
         */
-       noDocs: Boolean,
+       noDocs: { type: Boolean },
        /**
         * A HTML element used to listen for events on.
         * If you use one than more API console elements on single page
@@ -671,29 +705,191 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
         * by the request panel will be handled by other instances of the console.
         * @type {Element}
         */
-       eventsTarget: Object
+       eventsTarget: { type: Object }
     };
+  }
+
+  get selectedShape() {
+    return this._selectedShape;
+  }
+
+  set selectedShape(value) {
+    const old = this._selectedShape;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._selectedShape = value;
+    this.requestUpdate('selectedShape', old);
+    this.methodName = this._computeMethodName(value, this.webApi);
+  }
+
+  get selectedShapeType() {
+    return this._selectedShapeType;
+  }
+
+  set selectedShapeType(value) {
+    const old = this._selectedShapeType;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._selectedShapeType = value;
+    this._isMethod = value === 'method';
+    this.requestUpdate('selectedShapeType', old);
+  }
+
+  get modelLocation() {
+    return this._modelLocation;
+  }
+
+  set modelLocation(value) {
+    const old = this._modelLocation;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._modelLocation = value;
+    this._modelLocationChanged(value);
+  }
+
+  get noExtensionBanner() {
+    return this._noExtensionBanner;
+  }
+
+  set noExtensionBanner(value) {
+    const old = this._noExtensionBanner;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._noExtensionBanner = value;
+    this._noExtBannerChanged(value);
+  }
+
+  get inlineMethods() {
+    return this._inlineMethods;
+  }
+
+  set inlineMethods(value) {
+    const old = this._inlineMethods;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._inlineMethods = value;
+    this._updateRenderInlineTyit();
+  }
+
+  get wideLayout() {
+    return this._wideLayout;
+  }
+
+  set wideLayout(value) {
+    const old = this._wideLayout;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._wideLayout = value;
+    this._updateRenderInlineTyit();
+  }
+
+  get app() {
+    return this._app;
+  }
+
+  set app(value) {
+    const old = this._app;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._app = value;
+    this._updateRenderInlineTyit();
+  }
+
+  get narrow() {
+    return this._narrow;
+  }
+
+  set narrow(value) {
+    const old = this._narrow;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._narrow = value;
+    this._narrowNavForced = this._computeNarrowNavForced(this.manualNavigation, value);
+  }
+
+  get manualNavigation() {
+    return this._manualNavigation;
+  }
+
+  set manualNavigation(value) {
+    const old = this._manualNavigation;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._manualNavigation = value;
+    this._narrowNavForced = this._computeNarrowNavForced(value, this.narrow);
   }
 
   constructor() {
     super();
     this._tryitHandler = this._tryitHandler.bind(this);
+
+    this.page = 'docs';
   }
 
   connectedCallback() {
-    super.connectedCallback();
+    if (super.connectedCallback) {
+      super.connectedCallback();
+    }
     this.addEventListener('tryit-requested', this._tryitHandler);
     this._notifyApicExtension();
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback();
+    if (super.disconnectedCallback) {
+      super.disconnectedCallback();
+    }
     this.removeEventListener('tryit-requested', this._tryitHandler);
   }
 
-  ready() {
-    super.ready();
+  firstUpdated() {
     this._initExtensionBanner();
+  }
+
+  _updateRenderInlineTyit() {
+    const value = this._computeRenderInlineTryIt(this.wideLayout, this.app, this.inlineMethods);
+    this._renderInlineTyit = value;
+    this._noTryItValue = this._computeNoTryItValue(this.noTryIt, value);
+  }
+
+  __amfChanged() {
+    if (this.__amfProcessingDebouncer) {
+      return;
+    }
+    this.__amfProcessingDebouncer = true;
+    setTimeout(() => this._processModelChange());
+  }
+
+  _processModelChange() {
+    this.__amfProcessingDebouncer = false;
+
+    let { amf } = this;
+    if (!amf) {
+      return;
+    }
+    if (amf instanceof Array) {
+      amf = amf[0];
+    }
+    const webApi = this.webApi = this._computeWebApi(amf);
+    this.apiTitle = this._computeApiTitle(webApi);
+    this.methodName = this._computeMethodName(this.selectedShape, webApi);
   }
   /**
    * Loads model from a file described in `modelLocation` property.
@@ -724,7 +920,7 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
       this._apiLoadErrorHandler(e);
       return;
     }
-    this.set('amfModel', data);
+    this.amf = data;
   }
   /**
    * Called by `_modelLocationChanged` when error occurred when getting API data.
@@ -732,8 +928,9 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
    */
   _apiLoadErrorHandler(error) {
     const message = 'Unable to load API model data. ' + (error.message ? error.message : '');
-    this.$.apiLoadErrorToast.text = message;
-    this.$.apiLoadErrorToast.opened = true;
+    const toast = this.shadowRoot.querySelector('#apiLoadErrorToast');
+    toast.text = message;
+    toast.opened = true;
   }
   /**
    * Handler for the `tryit-requested` event. Sets current screen to
@@ -762,33 +959,15 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
     return this._getValue(shape, this.ns.schema.schemaName);
   }
   /**
-   * Computes value for `isRequest` property.
-   *
-   * @param {?String} page Currently selected page.
-   * @return {Boolean}
-   */
-  _computeIsRequest(page) {
-    return page === 'request';
-  }
-  /**
-   * Computes value for `isDocs` property.
-   *
-   * @param {?String} page Currently selected page.
-   * @return {Boolean}
-   */
-  _computeIsDocs(page) {
-    return page === 'docs';
-  }
-  /**
    * Renders the extension banner if is Chrome and extension is not detected.
    */
   _initExtensionBanner() {
-    if (!this.isChrome || this.noExtensionBanner) {
+    if (!isChrome || this.noExtensionBanner) {
       return;
     }
     setTimeout(() => {
       if (!this.noExtensionBanner && !this._hasApicCorsExtension) {
-        this._setExtensionBannerActive(true);
+        this._extensionBannerActive = true;
       }
     });
   }
@@ -796,7 +975,7 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
    * Dismisses Chrome extension banner.
    */
   dismissExtensionBanner() {
-    this._setExtensionBannerActive(false);
+    this._extensionBannerActive = false;
   }
   /**
    * Handler for the navigation event dispatched by the `api-navigation`
@@ -857,38 +1036,28 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
    * @param {Boolean} value Current value of `noExtensionBanner` property
    */
   _noExtBannerChanged(value) {
-    if (value && this.extensionBannerActive) {
-      this._setExtensionBannerActive(false);
+    if (value && this._extensionBannerActive) {
+      this._extensionBannerActive = false;
     }
   }
   _hasCorsExtensionChanged(value) {
-    if (value && this.extensionBannerActive) {
-      this._setExtensionBannerActive(false);
+    if (value && this._extensionBannerActive) {
+      this._extensionBannerActive = false;
     }
-  }
-  /**
-   * Computes value of `isMethod` proiperty.
-   * @param {String} selectedShapeType Current value of `selectedShapeType`
-   * property
-   * @return {Boolean} True if current selection represent a method
-   */
-  _computeIsMethod(selectedShapeType) {
-    return selectedShapeType === 'method';
   }
   /**
    * Computes value for `_renderInlineTyit` property.
    * @param {Boolean} wideLayout
-   * @param {Boolean} isMethod
    * @param {Boolean} app
    * @param {Boolean} inlineMethods
    * @return {Boolean} True if is wideLayout, it is a method, it is the app
    * and when inlineMethods is not set.
    */
-  _computeRenderInlineTryIt(wideLayout, isMethod, app, inlineMethods) {
-    if (!wideLayout || !app || !isMethod || inlineMethods) {
+  _computeRenderInlineTryIt(wideLayout, app, inlineMethods) {
+    if (!wideLayout || !app || inlineMethods) {
       return false;
     }
-    return wideLayout && isMethod;
+    return wideLayout;
   }
 
   _computeNoTryItValue(noTryIt, renderInlineTyit) {
@@ -900,14 +1069,13 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
   /**
    * Computes method name for not-wide view, where the request panel
    * has close button.
-   * @param {Boolean} isMethod Current state of `isMethod` property
    * @param {String} selected Curerently selected AMF shape (@id).
    * @param {Object} webApi Computed AMF WebAPI model.
    * @return {String|Undefined} Name of current method (verb) as RAML's
    * `displayName` property or name of the HTTP method.
    */
-  _computeMethodName(isMethod, selected, webApi) {
-    if (!isMethod || !selected || !webApi) {
+  _computeMethodName(selected, webApi) {
+    if (!selected || !webApi) {
       return;
     }
     let method;
@@ -924,6 +1092,31 @@ class ApiConsole extends AmfHelperMixin(PolymerElement) {
       name = this._getValue(method, this.ns.w3.hydra.core + 'method');
     }
     return name;
+  }
+
+  _narrowHandler(e) {
+    this.narrow = e.detail.value;
+  }
+
+  _wideLayoutHandler(e) {
+    this.wideLayout = e.detail.value;
+  }
+
+  _apiChanged(e) {
+    this.amf = e.detail.value;
+  }
+
+  _selectedHandler(e) {
+    this.selectedShape = e.detail.value;
+  }
+
+  _selectedTypeHandler(e) {
+    this.selectedShapeType = e.detail.value;
+  }
+
+  _hasExtensionHandler(e) {
+    this._hasApicCorsExtension = e.detail.value;
+    this._hasCorsExtensionChanged(e.detail.value);
   }
 }
 window.customElements.define('api-console', ApiConsole);

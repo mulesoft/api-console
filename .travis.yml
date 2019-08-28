@@ -1,19 +1,15 @@
 language: node_js
-node_js: 8
+node_js: stable
 sudo: required
-before_script: npm install -g polymer-cli @advanced-rest-client/wct-istanbub
 addons:
-  firefox: latest
   apt:
     sources:
-      - google-chrome
+    - google-chrome
     packages:
-      - google-chrome-stable
-  sauce_connect: true
+    - google-chrome-stable
 script:
-  - npm run lint
-  - xvfb-run polymer test --module-resolution=node --npm --plugin local
-  - 'if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test --module-resolution=node --npm --plugin sauce --job-name "api-console:${TRAVIS_BRANCH}" --build-number=${TRAVIS_BUILD_NUMBER}; fi'
+- npm test
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run test:sl; fi
 cache:
   directories:
     - node_modules

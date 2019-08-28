@@ -4,48 +4,73 @@
   <meta charset="utf-8">
   <title>API Console demo</title>
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-
-  <script src="../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script src="../../web-animations-js/web-animations-next.min.js"></script>
-
-  <script type="module" src="../../@webcomponents/shadycss/entrypoints/apply-shim.js"></script>
-  <script type="module" src="../../@polymer/polymer/lib/elements/custom-style.js"></script>
-  <script type="module" src="../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-  <script type="module" src="../../@polymer/paper-styles/typography.js"></script>
-  <script type="module" src="../../@polymer/paper-styles/shadow.js"></script>
-
-  <custom-style>
-    <style is="custom-style" include="demo-pages-shared-styles">
-    .vertical-section-container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 24px;
-      margin-top: 40px;
-      @apply --shadow-elevation-2dp;
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 15px;
+      color: #424242;
+      height: 100%;
     }
 
     h1 {
-      @apply --paper-font-display1;
+      font-size: 112px;
+      font-weight: 300;
+      letter-spacing: -.044em;
+      line-height: 120px;
+      color: #fff;
+      box-sizing: border-box;
+      margin: 0;
     }
 
-    dd {
-      margin-bottom: 20px;
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 63%;
+      background-color: #2196F3;
+      background: linear-gradient(167deg, rgba(33,150,243,1) 46%, rgba(3,169,244,1) 100%);
+      box-shadow: 0 0 8px 0 rgba(0,0,0,.08),
+                  0 0 15px 0 rgba(0,0,0,.02),
+                  0 0 20px 4px rgba(0,0,0,.06);
     }
-    </style>
-  </custom-style>
+
+    main {
+      max-width: 700px;
+      margin: 80px auto;
+    }
+
+    .list-item {
+      margin: 24px 0;
+    }
+
+    .list-item p {
+      margin: 4px 0;
+      font-size: 1.05rem;
+    }
+  </style>
 </head>
 <body>
-  <div class="vertical-section-container centered">
+  <header>
     <h1>API console demo pages</h1>
-    <dl>
-      <dt><a href="element/index.html">element/index.html</a></dt>
-      <dd>API console as a Polymer powered web component</dd>
-      <dt><a href="standalone/index.html">standalone/index.html</a></dt>
-      <dd>API console as a standalone application using native platform</dd>
-      <dt><a href="themed/index.html">themed/index.html</a></dt>
-      <dd>API console with custom theme</dd>
-    </dl>
-  </div>
+  </header>
+
+  <main class="centered">
+    <div class="list-item">
+      <p>API console as a web component</p>
+      <a href="element/index.html">element/index.html</a>
+    </div>
+    <div class="list-item">
+      <p>API console as a standalone application</p>
+      <a href="standalone/index.html">standalone/index.html</a>
+    </div>
+    <div class="list-item">
+      <p>API console with custom theme</p>
+      <a href="element/themed.html">element/themed.html</a>
+    </div>
+  </main>
 </body>
 
 </html>
