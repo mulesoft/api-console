@@ -1,0 +1,1 @@
+Google Drive is a file storage and synchronization service created and managed by Google. It allows users to store documents in the cloud, share files, and edit documents with collaborators. Google Drive encompasses Google Docs, Sheets and Slides, an office suite that permits collaborative editing of documents, spreadsheets, presentations, drawings, forms, and more.

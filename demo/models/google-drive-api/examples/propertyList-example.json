@@ -1,0 +1,13 @@
+{
+  "kind": "drive#propertyList",
+  "etag": "\"LbWe7Ybz7gmJtEmo4LFBfsRw3MM/9YXpHrwrvG9Q0Dxxvs1mrmtpsw8\"",
+  "selfLink": "https://www.googleapis.com/drive/v2/files/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/properties",
+  "items": [{
+    "kind": "drive#property",
+    "etag": "\"LbWe7Ybz7gmJtEmo4LFBfsRw3MM/9yGD9cs1TBjhL0-_UdlnJlKhQ6I\"",
+    "selfLink": "https://www.googleapis.com/drive/v2/files/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/properties/propertyKey?visibility=PRIVATE",
+    "key": "propertyKey",
+    "visibility": "PRIVATE",
+    "value": "property value"
+  }]
+}

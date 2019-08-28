@@ -1,0 +1,17 @@
+{
+  "kind": "drive#permissionList",
+  "etag": "\"LbWe7Ybz7gmJtEmo4LFBfsRw3MM/MoUfb6FPjM-RROYNDTetfILYyGU\"",
+  "selfLink": "https://www.googleapis.com/drive/v2/files/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/permissions",
+  "items": [{
+    "kind": "drive#permission",
+    "etag": "\"LbWe7Ybz7gmJtEmo4LFBfsRw3MM/yvUEdrglooOzkLQA04vr6yw-3oo\"",
+    "id": "99999999998604565116",
+    "selfLink": "https://www.googleapis.com/drive/v2/files/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/permissions/99999999998604565116",
+    "name": "Paweł Psztyć",
+    "emailAddress": "jarrodek@gmail.com",
+    "domain": "gmail.com",
+    "role": "owner",
+    "type": "user",
+    "photoLink": "https://lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr8Y/YmMhVu8Ol-I/s64/photo.jpg"
+  }]
+}

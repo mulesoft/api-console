@@ -147,22 +147,17 @@ git clone https://github.com/mulesoft/api-console.git
 cd api-console
 ```
 
-2.  Install [polymer-cli][] and [Bower][].
-```
-sudo npm install -g bower polymer-cli
-```
-
-3.  Install dependencies.
+2.  Install dependencies.
 ```
 bower install && npm i
 ```
 
-4.  Serve the element.
+3.  Start local server.
 ```
-polymer serve --open
+npm start
 ```
 
-5. If you are planning to parse own RAML/OAS file then additionally run this command to run AMF parsing service for the demo page:
+4. If you are planning to parse own RAML/OAS file then additionally run this command to run AMF parsing service for the demo page:
 ```
 npm staret
 ```

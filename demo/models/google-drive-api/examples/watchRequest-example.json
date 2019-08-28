@@ -1,0 +1,7 @@
+{
+  "id" : "01234567-89ab-cdef-0123456789ab" ,
+  "expiration" : "1426325213000" ,
+  "token" : "a2a3rf342" ,
+  "type" : "web_hook" ,
+  "address" : "https://mydomain.com/notifications"
+}

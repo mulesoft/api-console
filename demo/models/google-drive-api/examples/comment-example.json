@@ -1,0 +1,42 @@
+{
+  "kind": "drive#comment",
+  "commentId": "AAAABGvGYkY",
+  "createdDate": "2017-01-26T22:27:04.655Z",
+  "modifiedDate": "2017-01-26T22:27:31.702Z",
+  "author": {
+    "kind": "drive#user",
+    "displayName": "John Doe",
+    "picture": {
+      "url": "//lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr8Y/YmMhVu8Ol-I/s96-k-no/photo.jpg"
+    },
+    "isAuthenticatedUser": true
+  },
+  "htmlContent": "Test comment",
+  "content": "Test comment",
+  "deleted": false,
+  "status": "open",
+  "context": {
+    "type": "text/html",
+    "value": "Hello"
+  },
+  "anchor": "kix.o11n7hdrivuh",
+  "fileId": "s7ggG6jZv5szIQL8Y5Ug-Iw",
+  "fileTitle": "Dummy file",
+  "replies": [{
+    "kind": "drive#commentReply",
+    "replyId": "AAAABGvGYkc",
+    "createdDate": "2017-01-26T22:27:31.702Z",
+    "modifiedDate": "2017-01-26T22:27:31.702Z",
+    "author": {
+      "kind": "drive#user",
+      "displayName": "John Doe",
+      "picture": {
+        "url": "//lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr8Y/YmMhVu8Ol-I/s96-k-no/photo.jpg"
+      },
+      "isAuthenticatedUser": true
+    },
+    "htmlContent": "This is the reply",
+    "content": "This is the reply",
+    "deleted": false
+  }]
+}

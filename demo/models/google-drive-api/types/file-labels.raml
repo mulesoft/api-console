@@ -1,0 +1,35 @@
+#%RAML 1.0 DataType
+
+displayName: Labels
+description: A group of labels for the file.
+
+uses:
+  Annotations: ../libraries/annotations.raml
+
+properties:
+  starred:
+    type: boolean
+    required: false
+    description: Whether this file is starred by the user
+    example: true
+  hidden:
+    (Annotations.deprecated):
+    type: boolean
+    required: false
+    description: Deprecated
+    example: true
+  trashed:
+    type: boolean
+    required: false
+    description: Whether this file has been trashed. This label applies to all users accessing the file; however, only owners are allowed to see and untrash files.
+    example: true
+  restricted:
+    type: boolean
+    required: false
+    description: Whether viewers and commenters are prevented from downloading, printing, and copying this file.
+    example: true
+  viewed:
+    type: boolean
+    required: false
+    description: Whether this file has been viewed by this user.
+    example: true

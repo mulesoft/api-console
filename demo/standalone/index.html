@@ -1,114 +1,75 @@
 <!doctype html>
-<html>
+<html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>API Console</title>
-
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script src="../../../web-animations-js/web-animations-next.min.js"></script>
-
-  <script type="module" src="../../../@webcomponents/shadycss/entrypoints/apply-shim.js"></script>
-  <script type="module" src="../../../@polymer/polymer/lib/elements/custom-style.js"></script>
-  <script type="module" src="../../../@polymer/paper-toggle-button/paper-toggle-button.js"></script>
-  <script type="module" src="../../../@polymer/app-route/app-location.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/xhr-simple-request/xhr-simple-request.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/oauth-authorization/oauth1-authorization.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/oauth-authorization/oauth2-authorization.js"></script>
-  <script type="module" src="../../../@polymer/paper-menu-button/paper-menu-button.js"></script>
-  <script type="module" src="../../../@polymer/paper-icon-button/paper-icon-button.js"></script>
-  <script type="module" src="../../../@polymer/paper-item/paper-item.js"></script>
-  <script type="module" src="../../../@polymer/paper-listbox/paper-listbox.js"></script>
-  <script type="module" src="../../../@api-components/api-console-default-theme/api-console-default-theme.js"></script>
-  <script type="module" src="../../api-console.js"></script>
-  <script type="module" src="../parser-element/parser-element.js"></script>
-
-  <!-- CodeMirror support, cannot be imported as a ES6 module -->
-  <script src="../../../jsonlint/lib/jsonlint.js"></script>
-  <script src="../../../codemirror/lib/codemirror.js"></script>
-  <script src="../../../codemirror/addon/mode/loadmode.js"></script>
-  <script src="../../../codemirror/mode/meta.js"></script>
-  <script src="../../../codemirror/mode/javascript/javascript.js"></script>
-  <script src="../../../codemirror/mode/xml/xml.js"></script>
-  <script src="../../../codemirror/mode/htmlmixed/htmlmixed.js"></script>
-  <script src="../../../codemirror/addon/lint/lint.js"></script>
-  <script src="../../../codemirror/addon/lint/json-lint.js"></script>
-  <script src="../../../@advanced-rest-client/code-mirror-hint/headers-addon.js"></script>
-  <script src="../../../@advanced-rest-client/code-mirror-hint/show-hint.js"></script>
-  <script src="../../../@advanced-rest-client/code-mirror-hint/hint-http-headers.js"></script>
+  <title>API Console standalone application demo</title>
+  <script src="../../node_modules/web-animations-js/web-animations.min.js"></script>
+  <script src="../../node_modules/web-animations-js/web-animations-next.min.js"></script>
+  <script src="../../node_modules/cryptojslib/components/core.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/sha1.js"></script>
+  <script src="../../node_modules/cryptojslib/components/enc-base64-min.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/md5.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/hmac-sha1.js"></script>
+  <script src="../../node_modules/jsrsasign/lib/jsrsasign-rsa-min.js"></script>
+  <!--
+  Previously this was included into the compoennt.
+  Since compoennts are ES6 modules this libraries cannot be loaded into
+  the component as they do not export anything and won't set global variable.
+  -->
+  <script src="../../node_modules/jsonlint/lib/jsonlint.js"></script>
+  <script src="../../node_modules/codemirror/lib/codemirror.js"></script>
+  <script src="../../node_modules/codemirror/addon/mode/loadmode.js"></script>
+  <script src="../../node_modules/codemirror/mode/meta.js"></script>
+  <script src="../../node_modules/codemirror/mode/javascript/javascript.js"></script>
+  <script src="../../node_modules/codemirror/mode/xml/xml.js"></script>
+  <script src="../../node_modules/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+  <script src="../../node_modules/codemirror/addon/lint/lint.js"></script>
+  <script src="../../node_modules/codemirror/addon/lint/json-lint.js"></script>
+  <!--
+  From the inside of a web component it is hard to determine where
+  scripts are actually located. This should be set if the page won't load all possible
+  scripts at run time. The component will download the "mode" from this location.
+  -->
   <script>
   /* global CodeMirror */
-  CodeMirror.modeURL = '../../../codemirror/mode/%N/%N.js';
+  CodeMirror.modeURL = '../../node_modules/codemirror/mode/%N/%N.js';
   </script>
-  <!-- Authorization panel libraries, cannot be imported as a ES6 module -->
-  <script src="../../../cryptojslib/components/core.js"></script>
-  <script src="../../../cryptojslib/rollups/sha1.js"></script>
-  <script src="../../../cryptojslib/components/enc-base64-min.js"></script>
-  <script src="../../../cryptojslib/rollups/md5.js"></script>
-  <script src="../../../cryptojslib/rollups/hmac-sha1.js"></script>
-  <script src="../../../jsrsasign/lib/jsrsasign-rsa-min.js"></script>
-  <custom-style>
-    <style is="custom-style">
-    html,
-    body {
-      height: 100%;
-      background-color: #fff;
-      margin: 0;
-      padding: 0;
-    }
 
-    api-console {
-      background-color: #fff;
-      min-height: 100vh;
-    }
+  <link rel="stylesheet" type="text/css" crossorigin="anonymous" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic">
+  <link rel="stylesheet" type="text/css" href="../api-console-master-styles.css">
+  <style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    font-size: 15px;
+    color: #424242;
+    height: 100%;
+  }
 
-    [data-action] {
-      cursor: pointer;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
-    </style>
-  </custom-style>
+  .api-dropdown {
+    --anypoint-dropdown-menu-background-color: #1c2831;
+    --anypoint-dropdown-menu-label-color: #fff;
+  }
+  </style>
 </head>
 
-<body unresolved>
-  <app-location use-hash-as-path></app-location>
-  <raml-aware scope="demo-model"></raml-aware>
-  <api-console aware="demo-model" hidden app redirect-uri="https://auth.advancedrestclient.com/oauth-popup.html">
-    <paper-menu-button slot="toolbar" dynamic-align id="demoMenu">
-      <paper-icon-button icon="arc:menu" slot="dropdown-trigger"></paper-icon-button>
-      <paper-listbox slot="dropdown-content" id="apiList" on-selected-changed="_apiChanged">
-        <paper-item>
-          <paper-toggle-button data-action="noTryIt">No try it</paper-toggle-button>
-        </paper-item>
-        <paper-item>
-          <paper-toggle-button data-action="narrow">Render narrow</paper-toggle-button>
-        </paper-item>
-        <paper-item>
-          <paper-toggle-button data-action="noAttribution">No attribution (see license)</paper-toggle-button>
-        </paper-item>
-        <paper-item>
-          <paper-toggle-button data-action="manualNavigation">Manual navigation</paper-toggle-button>
-        </paper-item>
-        <paper-item>
-          <paper-toggle-button data-action="navigationOpened">Navigation opened</paper-toggle-button>
-        </paper-item>
-        <paper-item>
-          <paper-toggle-button data-action="noExtensionBanner">No extension banner</paper-toggle-button>
-        </paper-item>
-        <paper-item>
-          <paper-toggle-button data-action="inlineMethods">Render Try It inline with method documentation</paper-toggle-button>
-        </paper-item>
-        <paper-item data-click-action="goBack">Close this API</paper-item>
-      </paper-listbox>
-    </paper-menu-button>
+<body>
+  <api-console aware="demo-model" app redirect-uri="https://auth.advancedrestclient.com/oauth-popup.html">
+    <anypoint-dropdown-menu slot="toolbar" aria-label="Select an API from the available options" nolabelfloat id="apisDropdown" class="api-dropdown">
+      <label slot="label">Select an API</label>
+      <anypoint-listbox slot="dropdown-content" id="apiList">
+        <anypoint-item data-value="google-drive-api">Google Drive API</anypoint-item>
+        <anypoint-item data-value="httpbin">HTTPbin API</anypoint-item>
+        <anypoint-item data-value="demo-api">Demo API</anypoint-item>
+        <anypoint-item data-value="exchange-experience-api">Exchange Experience API</anypoint-item>
+      </anypoint-listbox>
+      </paper-menu-button>
   </api-console>
-  <parser-element on-amf-changed="_updateAmf" hidden></parser-element>
-
-  <script src="./app.js"></script>
+  <script type="module" src="./app.js" async></script>
 </body>
 
 </html>

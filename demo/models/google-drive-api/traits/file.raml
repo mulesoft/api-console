@@ -1,0 +1,33 @@
+#%RAML 1.0 Trait
+
+queryParameters:
+  convert:
+    type: boolean
+    required: false
+    description: |
+      Whether to convert this file to the corresponding Google Docs format. (Default: false)
+    default: false
+  ocr:
+    type: boolean
+    required: false
+    description: |
+      Whether to attempt OCR on .jpg, .png, .gif, or .pdf uploads. (Default: false)
+    default: false
+  ocrLanguage:
+    type: string
+    required: false
+    description: If ocr is true, hints at the language to use. Valid values are BCP 47 codes.
+  pinned:
+    type: boolean
+    required: false
+    description: |
+      Whether to pin the head revision of the uploaded file. A file can have a maximum of 200 pinned revisions. (Default: false)
+    default: false
+  timedTextLanguage:
+    type: string
+    required: false
+    description: The language of the timed text.
+  timedTextTrackName:
+      type: string
+      required: false
+      description: The timed text track name.

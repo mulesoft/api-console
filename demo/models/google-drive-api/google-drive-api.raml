@@ -1,0 +1,1118 @@
+#%RAML 1.0
+title: Google Drive
+version: v2
+baseUri: https://www.googleapis.com/drive/{version}
+mediaType: application/json
+securitySchemes:
+  oauth_2_0: !include securitySchemes/oauth_2_0.raml
+resourceTypes:
+  standardRequest: !include /types/standard-request.raml
+traits:
+  results: !include traits/results.raml
+  visibility: !include traits/visibility.raml
+  file: !include traits/file.raml
+uses:
+  AppLib: libraries/app-lib.raml
+  ParentLib: libraries/parent-lib.raml
+  ChildLib:  libraries/child-lib.raml
+  WatchLib: libraries/watch-lib.raml
+  DriveFile: libraries/file-lib.raml
+  PermissionLib: libraries/permission-lib.raml
+  RevisionLib: libraries/revision-lib.raml
+  AboutLib: libraries/about-lib.raml
+  CommentLib: libraries/comment-lib.raml
+  Properties: libraries/properties-lib.raml
+types:
+  TeamDrive: !include types/team-drive.raml
+  TeamDriveList: !include types/team-drive-list.raml
+securedBy: [ oauth_2_0 ]
+documentation:
+  - title: Headline
+    content: !include docs/api/headline.md
+  - title: Upload files
+    content: !include docs/upload-files.md
+  - title: Search for file
+    content: !include docs/search-for-file.md
+/files:
+  type: standardRequest
+  displayName: Files
+  post:
+    securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.apps.readonly"] } ]
+    is: [ file , visibility ]
+    displayName: Insert
+    description: |
+      Insert a new file.
+      This method supports an /upload URI and accepts uploaded media with the following characteristics:
+
+      - Maximum file size: 5120GB
+      - Accepted Media MIME types: */*
+
+      Note: Apps creating shortcuts with files.insert must specify the MIME type `application/vnd.google-apps.drive-sdk`.
+
+      Apps should specify a file extension in the title property when inserting files with the API. For example, an operation to insert a JPEG file should specify something like `"title": "cat.jpg"` in the metadata.
+
+      Subsequent GET requests include the read-only fileExtension property populated with the extension originally specified in the title property. When a Google Drive user requests to download a file, or when the file is downloaded through the sync client, Drive builds a full filename (with extension) based on the title. In cases where the extension is missing, Google Drive attempts to determine the extension based on the file's MIME type.
+
+      ### HTTP request
+
+      This method provides media upload functionality through two separate URIs. For more details, see the document on media upload.
+
+      - Upload URI, for media upload requests: `POST https://www.googleapis.com/upload/drive/v2/files`
+      - Metadata URI, for metadata-only requests: `POST https://www.googleapis.com/drive/v2/files`
+    headers:
+      X-Upload-Content-Type:
+        description: |
+          Set to the media MIME type of the upload data to be transferred in subsequent requests.
+          Don't use it if `uploadType` queryParameter is set.
+        example: image/jpeg
+      X-Upload-Content-Length:
+        type: integer
+        description: Set to the number of bytes of upload data to be transferred in subsequent requests.  If the length is unknown at the time of this request, you can omit this header.
+        example: 8000000
+    queryParameters:
+      uploadType:
+        description: |
+          The type of upload request to the /upload URI. Acceptable values are:
+
+          - **media** - Simple upload. Upload the media only, without any metadata.
+          - **multipart** - Multipart upload. Upload both the media and its metadata, in a single request.
+          - **resumable** - Resumable upload. Upload the file in a resumable fashion, using a series of at least two requests where the first request includes the metadata.
+        required: true
+        example: multipart
+      visibility:
+        type: string
+        description: |
+          The visibility of the new file. This parameter is only relevant when convert=false.
+
+          Acceptable values are:
+          - **DEFAULT**: The visibility of the new file is determined by the user's default visibility/sharing policies. (default)
+          - **PRIVATE**: The new file will be visible to only the owner.
+        example: DEFAULT
+        enum: [DEFAULT, PRIVATE]
+    body:
+      application/json:
+        type: DriveFile.DriveFileCreate
+        example: !include examples/newFileRequest-example.json
+    responses:
+      201:
+        body:
+          application/json:
+            type: DriveFile.DriveFile
+            example: !include examples/file-example.json
+  get:
+    displayName: list
+    description: |
+      Lists the user's files. Try it now or see an example.
+
+      Requests with `files.list` accept the `q` parameter, which is a search query combining one or more search terms. For more information, see Search for files.
+
+      Note: Note: This method returns all files by default. This includes files with trashed=true in the results. Use the trashed=false query parameter to filter these from the results.
+    queryParameters:
+      corpus:
+        description: |
+          The body of items (files/documents) to which the query applies.
+
+          Acceptable values are:
+          -**DEFAULT**: The items that the user has accessed.
+          - **DOMAIN**: Items shared to the user's domain.
+        example: DOMAIN
+        type: string
+        required: false
+      maxResults:
+        description: |
+          Maximum number of files to return. Acceptable values are `0` to `1000`, inclusive.
+          (Default: 100)
+        type: integer
+        default: 100
+        example: 25
+        minimum: 0
+        maximum: 1000
+        required: false
+      orderBy:
+        type: string
+        description: |
+          A comma-separated list of sort keys.
+          Valid keys are `createdDate`, `folder`, `lastViewedByMeDate`, `modifiedByMeDate`, `modifiedDate`, `quotaBytesUsed`, `recency`, `sharedWithMeDate`, `starred`, and `title`.
+          Each key sorts ascending by default, but may be reversed with the `desc` modifier.
+          Example usage: `?orderBy=folder,modifiedDate desc,title`.
+
+          Please note that there is a current limitation for users with approximately one million files in which the requested sort order is ignored.
+        example: orderBy=folder,modifiedDate desc,title
+        required: false
+      pageToken:
+        description: Page token for files.
+        required: false
+      q:
+        type: string
+        required: false
+        description: |
+          Query string for searching files.
+          See [Searching for files](docs/searching-for-files.md) for more information about supported fields and operations.
+      spaces:
+        type: string
+        required: false
+        description: A comma-separated list of spaces to query. Supported values are `drive`, `appDataFolder` and `photos`.
+    responses:
+      200:
+        body:
+          application/json:
+            type: DriveFile.DriveFileList
+            example: !include examples/fileList-example.json
+  /{fileId}:
+    displayName: Get file
+    type: standardRequest
+    uriParameters:
+      fileId:
+        type: string
+        description: The ID for the file in question.
+    get:
+      description: "Gets a file's metadata by ID."
+      queryParameters:
+        acknowledgeAbuse:
+          description: "Whether the user is acknowledging the risk of downloading known malware or other abusive files. (Default: false)"
+          type: boolean
+          default: false
+          example: false
+          required: false
+        projection:
+          type: string
+          required: false
+          description: |
+            This parameter is deprecated and has no function.
+
+            Acceptable values are:
+            "BASIC": Deprecated
+            "FULL": Deprecated
+        revisionId:
+          required: false
+          type: string
+          description: Specifies the Revision ID that should be downloaded. Ignored unless alt=media is specified.
+        updateViewedDate:
+          description: "Whether to update the view date after successfully retrieving the file. (Default: false)"
+          type: boolean
+          default: false
+          example: true
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: DriveFile.DriveFile
+              example: !include examples/file-example.json
+    patch:
+      is: [ file ]
+      description: Updates file metadata. This method supports patch semantics.
+      queryParameters:
+        addParents:
+          required: false
+          type: string
+          description: Comma-separated list of parent IDs to add.
+        modifiedDateBehavior:
+          type: string
+          required: false
+          description: |
+            Determines the behavior in which modifiedDate is updated. This overrides setModifiedDate.
+
+            Acceptable values are:
+            - "fromBody": Set modifiedDate to the value provided in the body of the request. No change if no value was provided.
+            - "fromBodyIfNeeded": Set modifiedDate to the value provided in the body of the request depending on other contents of the update.
+            - "fromBodyOrNow": Set modifiedDate to the value provided in the body of the request, or to the current time if no value was provided.
+            - "noChange": Maintain the previous value of modifiedDate.
+            - "now": Set modifiedDate to the current time.
+            - "nowIfNeeded": Set modifiedDate to the current time depending on contents of the update.
+        newRevision:
+          description: "Whether a blob upload should create a new revision. If false, the blob data in the current head revision is replaced. If true or not set, a new blob is created as head revision, and previous revisions are preserved (causing increased use of the user's data storage quota). (Default: true)"
+          type: boolean
+          default: true
+          example: true
+          required: false
+        removeParents:
+          description: Comma-separated list of parent IDs to remove.
+          required: false
+        setModifiedDate:
+          description: "Whether to set the modified date with the supplied modified date. (Default: false)"
+          type: boolean
+          default: false
+          example: true
+          required: false
+        updateViewedDate:
+          description: "Whether to update the view date after successfully updating the file. (Default: true)"
+          type: boolean
+          default: false
+          example: true
+          required: false
+      body:
+        application/json:
+          type: DriveFile.DriveFile
+          example: !include examples/file-example.json
+      responses:
+        200:
+          description: |
+            By default, this responds with a Files resource in the response body.
+            If you provide the URL parameter alt=media, then it will respond with the file contents
+            in the response body. Downloading content with alt=media only works if the content
+            is stored in Drive, so it does not work for shortcuts. Also, it currently does
+            not support exporting Google Docs; use exportLinks from the Files resource instead.
+            See also Download Files.
+          body:
+            application/json:
+              type: DriveFile.DriveFile
+              example: !include examples/file-example.json
+    put:
+      is: [ file ]
+      description: Updates file metadata and/or content.
+      headers:
+        X-Upload-Content-Type:
+          description: Set to the media MIME type of the upload data to be transferred in subsequent requests.
+          example: image/jpeg
+        X-Upload-Content-Length:
+          description: Set to the number of bytes of upload data to be transferred in subsequent requests.  If the length is unknown at the time of this request, you can omit this header.
+          example: "8000000"
+      queryParameters:
+        uploadType:
+          description: |
+            The type of upload request to the /upload URI. Acceptable values are:
+            media - Simple upload. Upload the media only, without any metadata.
+            multipart - Multipart upload. Upload both the media and its metadata, in a single request.
+            resumable - Resumable upload. Upload the file in a resumable fashion, using a series of at least two requests where the first request includes the metadata.
+          required: true
+          example: multipart
+        addParents:
+          description: Comma-separated list of parent IDs to add.
+          required: false
+        newRevision:
+          description: "Whether a blob upload should create a new revision. If false, the blob data in the current head revision is replaced. If true or not set, a new blob is created as head revision, and previous revisions are preserved (causing increased use of the user's data storage quota). (Default: true)"
+          type: boolean
+          default: true
+          example: true
+          required: false
+        removeParents:
+          description: Comma-separated list of parent IDs to remove.
+          required: false
+        setModifiedDate:
+          description: "Whether to set the modified date with the supplied modified date. (Default: false)"
+          type: boolean
+          default: false
+          example: true
+          required: false
+        updateViewedDate:
+          description: "Whether to update the view date after successfully updating the file. (Default: true)"
+          type: boolean
+          default: false
+          example: true
+          required: false
+      body:
+        application/json:
+          type: DriveFile.DriveFileCreate
+          example: !include examples/newFileRequest-example.json
+      responses:
+        200:
+          body:
+            application/json:
+              type: DriveFile.DriveFile
+              example: !include examples/file-example.json
+    delete:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata"] } ]
+      description: Permanently deletes a file by ID. Skips the trash. The currently authenticated user must own the file.
+      responses:
+        200:
+          description: If successful, this method returns an empty response body.
+    /copy:
+      post:
+        is: [ visibility, file ]
+        securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.apps.readonly", "https://www.googleapis.com/auth/drive.photos.readonly"] } ]
+        description: Creates a copy of the specified file.
+        body:
+          application/json:
+            type: DriveFile.DriveFileCreate
+            example: !include examples/newFileRequest-example.json
+        responses:
+          201:
+            description: If successful, this method returns a Files resource in the response body.
+            body:
+              application/json:
+                type: DriveFile.DriveFile
+                example: !include examples/file-example.json
+    /touch:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.apps.readonly", "https://www.googleapis.com/auth/drive.metadata"] } ]
+      post:
+        description: "Set the file's updated time to the current server time."
+        body:
+          application/json:
+            description: Do not supply a request body with this method.
+        responses:
+          200:
+            body:
+              application/json:
+                type: DriveFile.DriveFile
+                example: !include examples/file-example.json
+    /trash:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.apps.readonly", "https://www.googleapis.com/auth/drive.metadata"] } ]
+      post:
+        description: Moves a file to the trash. The currently authenticated user must own the file.
+        body:
+          application/json:
+            description: Do not supply a request body with this method.
+        responses:
+          200:
+            body:
+              application/json:
+                type: DriveFile.DriveFile
+                example: !include examples/file-example.json
+    /untrash:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.apps.readonly"] } ]
+      post:
+        description: Restores a file from the trash.
+        responses:
+          200:
+            description: If successful, this method returns a Files resource in the response body.
+            body:
+              application/json:
+                type: DriveFile.DriveFile
+                example: !include examples/file-example.json
+    /parents:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/drive.metadata.readonly", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.metadata", "https://www.googleapis.com/auth/drive.photos.readonly"] } ]
+      get:
+        description: "Lists a file's parents."
+        body:
+          application/json:
+            description: Do not supply a request body with this method.
+        responses:
+          200:
+            body:
+              application/json:
+                type: ParentLib.ParentList
+                # type: ParentLib.ParentList
+                example: !include examples/parentList-example.json
+      post:
+        description: Adds a parent folder for a file.
+        body:
+          application/json:
+            type: ParentLib.Parent
+            example: !include examples/parentReference-example.json
+        responses:
+          201:
+            body:
+              application/json:
+                type: ParentLib.Parent
+                example: !include examples/parentReference-example.json
+      /{parentId}:
+        uriParameters:
+          parentId:
+            type: string
+            description: The ID of the parent.
+        get:
+          description: Gets a specific parent reference.
+          responses:
+            200:
+              body:
+                application/json:
+                  type: ParentLib.Parent
+                  example: !include examples/parentReference-example.json
+        delete:
+          description: Removes a parent from a file.
+          responses:
+            204:
+    /permissions:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/drive.metadata.readonly", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.metadata", "https://www.googleapis.com/auth/drive.photos.readonly"] } ]
+      get:
+        description: "Lists a file's permissions."
+        responses:
+          200:
+            body:
+              application/json:
+                type: PermissionLib.PermissionList
+                example: !include examples/permissionList-example.json
+      post:
+        description: |
+          Inserts a permission for a file.
+
+          Warning: Concurrent permissions operations on the same file are not supported; only the last update is applied.
+        queryParameters:
+          emailMessage:
+            description: A custom message to include in notification emails.
+            required: false
+          sendNotificationEmails:
+            description: "Whether to send notification emails when sharing to users or groups. This parameter is ignored and an email is sent if the role is owner. (Default: true)"
+            type: boolean
+            default: true
+            example: false
+            required: false
+        body:
+          application/json:
+            type: PermissionLib.PermissionInsert
+            example: !include examples/permissionRequest-example.json
+        responses:
+          201:
+            body:
+              application/json:
+                type: PermissionLib.Permission
+                example: !include examples/permission-example.json
+      /{permissionId}:
+        uriParameters:
+          permissionId:
+            type: string
+            description: The ID for the permission.
+        get:
+          description: Gets a permission by ID.
+          responses:
+            200:
+              body:
+                application/json:
+                  type: PermissionLib.Permission
+                  example: !include examples/permission-example.json
+        put:
+          securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file"] } ]
+          description: |
+            Updates a permission.
+
+            **Warning**: Concurrent permissions operations on the same file are not supported; only the last update is applied.
+          queryParameters:
+            transferOwnership:
+              description: "Whether changing a role to 'owner' should also downgrade the current owners to writers. (Default: false)"
+              type: boolean
+              default: false
+              example: false
+              required: false
+            removeExpiration:
+              type: boolean
+              default: false
+              example: false
+              description: Whether to remove the expiration date.
+              required: false
+          body:
+            application/json:
+              type: PermissionLib.PermissionInsert
+              example: !include examples/permissionUpdateRequest-example.json
+          responses:
+            200:
+              body:
+                application/json:
+                  type: PermissionLib.Permission
+                  example: !include examples/permission-example.json
+        delete:
+          securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file"] } ]
+          description: |
+            Deletes a permission from a file.
+
+            Warning: Concurrent permissions operations on the same file are not supported; only the last update is applied.
+          responses:
+            204:
+        patch:
+          securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file"] } ]
+          description: |
+            Updates a permission. This method supports patch semantics.
+
+            **Warning**: Concurrent permissions operations on the same file are not supported; only the last update is applied.
+          queryParameters:
+            transferOwnership:
+              description: "Whether changing a role to 'owner' should also downgrade the current owners to writers. (Default: false)"
+              type: boolean
+              default: false
+              example: false
+              required: false
+            removeExpiration:
+              type: boolean
+              default: false
+              example: false
+              description: Whether to remove the expiration date.
+              required: false
+          body:
+            application/json:
+              type: PermissionLib.PermissionInsert
+              example: !include examples/permissionUpdateRequest-example.json
+          responses:
+            200:
+              body:
+                application/json:
+                  type: PermissionLib.Permission
+                  example: !include examples/permission-example.json
+    /revisions:
+      get:
+        securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/drive.metadata.readonly", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.metadata", "https://www.googleapis.com/auth/drive.photos.readonly"] } ]
+        description: "Lists a file's revisions."
+        responses:
+          200:
+            body:
+              application/json:
+                type: RevisionLib.RevisionList
+                example: !include examples/revisionList-example.json
+      /{revisionId}:
+        uriParameters:
+          revisionId:
+            type: string
+            description: The ID of the revision.
+        get:
+          securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/drive.metadata.readonly", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.metadata", "https://www.googleapis.com/auth/drive.photos.readonly"] } ]
+          description: Gets a specific revision.
+          responses:
+            200:
+              body:
+                application/json:
+                  type: RevisionLib.Revision
+                  example: !include examples/revision-example.json
+        put:
+          securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata"] } ]
+          description: Updates a revision.
+          body:
+            application/json:
+              type: RevisionLib.RevisionInsert
+              example: !include examples/revisionUpdateRequest-example.json
+          responses:
+            200:
+              body:
+                application/json:
+                  type: RevisionLib.Revision
+                  example: !include examples/revision-example.json
+        delete:
+          securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata"] } ]
+          description: Removes a revision.
+          responses:
+            204:
+        patch:
+          securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.appdata"] } ]
+          description: Updates a revision. This method supports patch semantics.
+          body:
+            application/json:
+              type: RevisionLib.Revision
+              example: !include examples/revision-example.json
+          responses:
+            200:
+              body:
+                application/json:
+                  type: RevisionLib.Revision
+                  example: !include examples/revision-example.json
+    /comments:
+      get:
+        is: [ results ]
+        description: Lists a file's comments.
+        queryParameters:
+          updatedMin:
+            type: datetime
+            required: false
+            description: Only discussions that were updated after this timestamp will be returned. Formatted as an RFC 3339 timestamp.
+        responses:
+          200:
+            body:
+              application/json:
+                type: CommentLib.CommentList
+                example: !include examples/commentList-example.json
+      post:
+        description: Creates a new comment on the given file.
+        body:
+          application/json:
+            type: CommentLib.CommentWritable
+            example: !include examples/commentCreateRequest-example.json
+        responses:
+          201:
+            body:
+              application/json:
+                type: CommentLib.Comment
+                example: !include examples/comment-example.json
+      /{commentId}:
+        uriParameters:
+          commentId:
+            type: string
+            description: The ID of the comment.
+        get:
+          description: Gets a comment by ID.
+          queryParameters:
+            includeDeleted:
+              description: "If set, this will succeed when retrieving a deleted comment, and will include any deleted replies. (Default: false)"
+              type: boolean
+              default: false
+              example: true
+              required: false
+          responses:
+            200:
+              body:
+                application/json:
+                  type: CommentLib.Comment
+                  example: !include examples/comment-example.json
+        put:
+          body:
+            application/json:
+              type: CommentLib.CommentWritable
+              example: !include examples/commentCreateRequest-example.json
+          responses:
+            200:
+              body:
+                application/json:
+                  type: CommentLib.Comment
+                  example: !include examples/comment-example.json
+        delete:
+          description: Deletes a comment.
+          responses:
+            204:
+        patch:
+          description: Updates an existing comment. This method supports patch semantics.
+          body:
+            application/json:
+              type: CommentLib.CommentWritable
+              example: !include examples/commentCreateRequest-example.json
+          responses:
+            200:
+              body:
+                application/json:
+                  type: CommentLib.Comment
+                  example: !include examples/comment-example.json
+        /replies:
+          get:
+            is: [ results ]
+            description: Lists all of the replies to a comment.
+            responses:
+              200:
+                body:
+                  application/json:
+                    type: CommentLib.ReplyList
+                    example: !include examples/commentReplyList-example.json
+          post:
+            description: Creates a new reply to the given comment.
+            body:
+              application/json:
+                type: CommentLib.ReplyWritable
+                example: !include examples/commentReplyRequest-example.json
+            responses:
+              201:
+                description: ""
+                body:
+                  application/json:
+                    type: CommentLib.Reply
+                    example: !include examples/commentReply-example.json
+          /{replyId}:
+            uriParameters:
+              replyId:
+                type: string
+                description: The ID of the reply.
+            get:
+              description: Gets a reply.
+              queryParameters:
+                includeDeleted:
+                  description: "If set, this will succeed when retrieving a deleted reply. (Default: false)"
+                  type: boolean
+                  default: false
+                  example: true
+                  required: false
+              responses:
+                200:
+                  body:
+                    application/json:
+                      type: CommentLib.Reply
+                      example: !include examples/commentReply-example.json
+            put:
+              description: Updates an existing reply.
+              body:
+                application/json:
+                  type: CommentLib.ReplyWritable
+                  example: !include examples/commentReplyRequest-example.json
+              responses:
+                200:
+                  body:
+                    application/json:
+                      type: CommentLib.Reply
+                      example: !include examples/commentReply-example.json
+            delete:
+              description: Deletes a reply.
+              responses:
+                204:
+            patch:
+              description: Updates an existing reply. This method supports patch semantics.
+              body:
+                application/json:
+                  type: CommentLib.ReplyWritable
+                  example: !include examples/commentReplyRequest-example.json
+              responses:
+                200:
+                  body:
+                    application/json:
+                      type: CommentLib.Reply
+                      example: !include examples/commentReply-example.json
+    /realtime:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"] } ]
+      get:
+        description: Exports the contents of the Realtime API data model associated with this file as JSON.
+        queryParameters:
+          revision:
+            description: The revision of the Realtime API data model to export. Revisions start at 1 (the initial empty data model) and are incremented with each change. If this parameter is excluded, the most recent data model will be returned.
+            type: integer
+            example: 5
+            required: false
+        responses:
+          200:
+            body:
+              application/json:
+      put:
+        displayName: update
+        description: |
+          Overwrites the Realtime API data model associated with this file with the provided JSON data model.
+
+          This method supports an /upload URI and accepts uploaded media with the following characteristics:
+
+          - **Maximum file size**: 10MB
+          - **Accepted Media MIME** types: */*
+        queryParameters:
+          uploadType:
+            description: |
+              The type of upload request to the /upload URI. Acceptable values are:
+
+              - **media** - Simple upload. Upload the media data.
+              - **resumable** - Resumable upload. Upload the file in a resumable fashion, using a series of at least two requests.
+            required: true
+            type: string
+            enum: [media, resumable]
+            example: media
+          baseRevision:
+            type: string
+            required: false
+            description: The revision of the model to diff the uploaded model against. If set, the uploaded model is diffed against the provided revision and those differences are merged with any changes made to the model after the provided revision. If not set, the uploaded model replaces the current model on the server.
+    /properties:
+      get:
+        description: "Lists a file's properties."
+        responses:
+          200:
+            body:
+              application/json:
+                type: Properties.PropertyList
+                example: !include examples/propertyList-example.json
+      post:
+        description: Adds a property to a file.
+        body:
+          application/json:
+            type: Properties.Property
+            example: !include examples/property-example.json
+        responses:
+          201:
+            body:
+              application/json:
+                type: Properties.Property
+                example: !include examples/property-example.json
+      /{propertyKey}:
+        uriParameters:
+          propertyKey:
+            type: string
+            description: The key of the property.
+        get:
+          is: [ visibility ]
+          description: Gets a property by its key.
+          responses:
+            200:
+              body:
+                application/json:
+                  type: Properties.Property
+                  example: !include examples/property-example.json
+        put:
+          is: [ visibility ]
+          description: Updates a property.
+          body:
+            application/json:
+              type: Properties.Property
+              example: !include examples/property-example.json
+          responses:
+            200:
+              body:
+                application/json:
+                  type: Properties.Property
+                  example: !include examples/property-example.json
+        delete:
+          is: [ visibility ]
+          description: Deletes a property.
+          responses:
+            204:
+        patch:
+          is: [ visibility ]
+          description: Updates a property. This method supports patch semantics.
+          body:
+            application/json:
+              type: Properties.Property
+              example: !include examples/property-example.json
+          responses:
+            200:
+              body:
+                application/json:
+                  type: Properties.Property
+                  example: !include examples/property-example.json
+  /trash:
+    delete:
+      description: "Permanently deletes all of the user's trashed files."
+      responses:
+        204:
+  /{folderId}/children:
+    post:
+      description: Inserts a file into a folder.
+      body:
+        application/json:
+          type: ChildLib.Child
+          example: !include examples/childReference-example.json
+      responses:
+        201:
+          body:
+            application/json:
+              type: ChildLib.Child
+              example: !include examples/childReference-example.json
+    get:
+      description: "Lists a folder's children. To list all children of the root folder, use the alias root for the folderId value."
+      queryParameters:
+        maxResults:
+          description: "Maximum number of children to return. Acceptable values are 0 to 1000, inclusive. (Default: 100)"
+          type: integer
+          default: 100
+          example: 25
+          required: false
+        pageToken:
+          description: Page token for children.
+          required: false
+        q:
+          description: Query string for searching children. See Searching for files for more information about supported fields and operations.
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: ChildLib.ChildrenList
+              example: !include examples/childList-example.json
+    /{childId}:
+      delete:
+        description: Removes a child from a folder.
+        responses:
+          204:
+      get:
+        description: Gets a specific child reference.
+        responses:
+          200:
+            body:
+              application/json:
+                type: ChildLib.ChildrenList
+                example: !include examples/childList-example.json
+/about:
+  displayName: About
+  get:
+    securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/drive.metadata.readonly", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.metadata", "https://www.googleapis.com/auth/drive.photos.readonly"] } ]
+    description: Gets the information about the current user along with Drive API settings.
+    queryParameters:
+      includeSubscribed:
+        description: |
+          When calculating the number of remaining change IDs, whether to include public files the user has opened and shared files.
+          When set to false, this counts only change IDs for owned files and any shared or public files that the user has explicitly
+          added to a folder they own. (Default: true)
+        type: boolean
+        default: true
+        example: true
+        required: false
+      maxChangeIdCount:
+        description: Maximum number of remaining change IDs to count
+        type: integer
+        example: 700000
+        required: false
+      startChangeId:
+        description: Change ID to start counting from when calculating number of remaining change IDs
+        type: integer
+        example: 700000
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: AboutLib.About
+            example: !include examples/about-example.json
+/changes:
+  displayName: Changes
+  securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/drive.metadata.readonly", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.metadata", "https://www.googleapis.com/auth/drive.photos.readonly"] } ]
+  get:
+    is: [ results ]
+    description: Lists the changes for a user.
+    queryParameters:
+      includeSubscribed:
+        description: |
+          Whether to include public files the user has opened and shared files.
+          When set to false, the list only includes owned files plus any shared or public
+          files the user has explicitly added to a folder they own.
+        type: boolean
+        default: true
+        example: true
+        required: false
+      startChangeId:
+        description: Change ID to start listing changes from.
+        type: integer
+        example: 700000
+        required: false
+      spaces:
+        type: string
+        required: false
+        description: |
+          A comma-separated list of spaces to query. Supported values are:
+
+          - **drive**
+          - **appDataFolder**
+          - **photos**
+    responses:
+      200:
+        body:
+          application/json:
+            type: WatchLib.ChangeList
+            example: !include examples/changeList-example.json
+  /{changeId}:
+    uriParameters:
+      changeId:
+        type: string
+        description: The ID of the change.
+    get:
+      description: Gets a specific change.
+      responses:
+        200:
+          body:
+            application/json:
+              type: WatchLib.Change
+              example: !include examples/change-example.json
+  /watch:
+    post:
+      queryParameters:
+        spaces:
+          type: string
+          required: false
+          description: |
+            A comma-separated list of spaces to query. Supported values are:
+
+            - **drive**
+            - **appDataFolder**
+            - **photos**
+      description: "Watch for all changes to a user's Drive."
+      body:
+        application/json:
+          type: WatchLib.Watch
+          example: !include examples/watchRequest-example.json
+      responses:
+        201:
+          body:
+            application/json:
+              type: WatchLib.WatchResponse
+              example: !include examples/channel-example.json
+/permissionIds/{email}:
+  uriParameters:
+    email:
+      type: string
+      description: The email address for which to return a permission ID
+  get:
+    securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/drive.metadata.readonly", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.apps.readonly", "https://www.googleapis.com/auth/drive.metadata", "https://www.googleapis.com/auth/drive.photos.readonly"] } ]
+    description: Returns the permission ID for an email address.
+    responses:
+      200:
+        body:
+          application/json:
+            type: PermissionLib.PermissionId
+            example: !include examples/permissionId-example.json
+/apps:
+  displayName: Apps
+  get:
+    description: "Lists a user's installed apps."
+    queryParameters:
+      appFilterExtensions:
+        required: false
+        type: string
+        description: A comma-separated list of file extensions for open with filtering. All apps within the given app query scope which can open any of the given file extensions will be included in the response. If appFilterMimeTypes are provided as well, the result is a union of the two resulting app lists.
+      appFilterMimeTypes:
+        required: false
+        description: A comma-separated list of MIME types for open with filtering. All apps within the given app query scope which can open any of the given MIME types will be included in the response. If appFilterExtensions are provided as well, the result is a union of the two resulting app lists.
+      languageCode:
+        description: A language or locale code, as defined by BCP 47, with some extensions from the Unicode LDML format.
+        example: fr
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: AppLib.AppList
+            example: !include examples/app-list-example.json
+  /{appId}:
+    uriParameters:
+      appId:
+        type: string
+        description: The ID of the app.
+    get:
+      description: Gets a specific app.
+      responses:
+        200:
+          body:
+            application/json:
+              type: AppLib.App
+              example: !include examples/app-example.json
+/channels/stop:
+  post:
+    description: |
+      Stop watching for changes to a resource.
+      If successful, this method returns an empty response body.
+    body:
+      application/json:
+        type: !include types/channels-stop.raml
+        example: !include examples/stopWatchingRequest-example.json
+    responses:
+      201:
+/teamdrives:
+  displayName: Teamdrives
+  post:
+    displayName: insert
+    description: Creates a new Team Drive.
+    securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive"] } ]
+    queryParameters:
+      requestId:
+        type: string
+        required: true
+        description: |
+          An ID, such as a random UUID, which uniquely identifies this user's request for idempotent creation of a Team Drive.
+          A repeated request by the same user and with the same request ID will avoid creating duplicates by attempting to create the same Team Drive.
+          If the Team Drive already exists a 409 error will be returned.
+    body:
+      application/json:
+        type: TeamDrive
+    responses:
+      200:
+        body:
+          application/json:
+            type: TeamDrive
+      409:
+        description: If the Team Drive already exists.
+  get:
+    securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.readonly"] } ]
+    displayName: list
+    description: Lists the user's Team Drives.
+    queryParameters:
+      maxResults:
+        type: integer
+        description: Maximum number of Team Drives to return.
+        minimum: 1
+        maximum: 100
+        default: 10
+      pageToken:
+        type: string
+        description: Page token for Team Drives.
+    responses:
+      200:
+        body:
+          application/json:
+            type: TeamDriveList
+  /{teamDriveId}:
+    uriParameters:
+      teamDriveId:
+        description: The ID of the Team Drive
+    delete:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive"] } ]
+      description: |
+        Permanently deletes a Team Drive for which the user is an organizer. The Team Drive cannot contain any untrashed items.
+    get:
+      description: Gets a Team Drive's metadata by ID.
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.readonly"] } ]
+      responses:
+        200:
+          body:
+            application/json:
+              type: TeamDrive
+    put:
+      securedBy: [ oauth_2_0: { scopes: ["https://www.googleapis.com/auth/drive"] } ]
+      description: Updates a Team Drive's metadata
+      body:
+        application/json:
+          type: TeamDrive
+      responses:
+        200:
+          body:
+            application/json:
+              type: TeamDrive

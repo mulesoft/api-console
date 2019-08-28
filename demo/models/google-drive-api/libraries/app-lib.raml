@@ -1,0 +1,134 @@
+#%RAML 1.0 Library
+
+types:
+  Icon: !include ../types/icon.raml
+  App:
+    type: object
+    properties:
+      kind:
+        type: string
+        required: false
+        description: This is always drive#app.
+        enum: [drive#app]
+      id:
+        type: string
+        required: false
+        description: The ID of the app.
+      name:
+        type: string
+        required: false
+        description: The name of the app.
+      objectType:
+        type: string
+        required: false
+        description: The type of object this app creates (e.g. Chart). If empty, the app name should be used instead.
+      supportsCreate:
+        type: boolean
+        required: false
+        description: Whether this app supports creating new objects.
+      supportsImport:
+        type: boolean
+        required: false
+        description: Whether this app supports importing Google Docs.
+      installed:
+        type: boolean
+        required: false
+        description: Whether the app is installed.
+      authorized:
+        type: boolean
+        required: false
+        description: Whether the app is authorized to access data on the user's Drive.
+      useByDefault:
+        type: boolean
+        required: false
+        description: Whether the app is selected as the default handler for the types it supports.
+      productUrl:
+        type: string
+        required: false
+        description: A link to the product listing for this app.
+      productId:
+        type: string
+        required: false
+        description: The ID of the product listing for this app.
+      primaryMimeTypes:
+        type: array
+        items: string
+        required: false
+        description: The list of primary mime types.
+      secondaryMimeTypes:
+        type: array
+        items: string
+        description: The list of secondary mime types.
+        required: false
+      primaryFileExtensions:
+        type: array
+        required: false
+        items: string
+        description: The list of primary file extensions.
+      secondaryFileExtensions:
+        type: array
+        required: false
+        items: string
+        description: The list of secondary file extensions.
+      icons:
+        type: Icon[]
+        required: false
+        description: The various icons for the app.
+      shortDescription:
+        type: string
+        required: false
+        description: A short description of the app.
+      longDescription:
+        type: string
+        required: false
+        description: A long description of the app.
+      openUrlTemplate:
+        type: string
+        required: false
+        description: |
+          The template url for opening files with this app. The template will contain
+          `{ids}` and/or `{exportIds}` to be replaced by the actual file ids.
+          See Open Files for the full documentation.
+      supportsMultiOpen:
+        type: boolean
+        required: false
+        description: Whether this app supports opening more than one file.
+      supportsOfflineCreate:
+        type: boolean
+        required: false
+        description: Whether this app supports creating new files when offline
+      hasDriveWideScope:
+        type: boolean
+        required: false
+        description: Whether the app has drive-wide scope. An app with drive-wide scope can access all files in the user's drive.
+      createUrl:
+        type: string
+        required: false
+        description: The url to create a new file with this app.
+      createInFolderTemplate:
+        type: string
+        required: false
+        description: |
+          The template url to create a new file with this app in a given folder.
+          The template will contain `{folderId}` to be replaced by the folder to create the new file in.
+  AppList:
+    type: object
+    description: Resource returned by the API when requesting list of files.
+    properties:
+      kind:
+        type: string
+        default: drive#appList
+        enum: [drive#appList]
+        description: This is always drive#appList.
+      etag:
+        type: string
+        description: The ETag of the list.
+      selfLink:
+        type: string
+        description: A link back to this list.
+      items:
+        type: App[]
+        description: The actual list of apps.
+      defaultAppIds:
+        type: string[]
+        description: List of app IDs that the user has specified to use by default. The list is in reverse-priority order (lowest to highest).

@@ -1,0 +1,29 @@
+{
+  "id": "string",
+  "title" : "My file to insert" ,
+  "description" : "This is a test file to be inserted to my Google Drive folder",
+  "indexableText": {
+    "text": "Test upload"
+  },
+  "mimeType": "application/json",
+  "labels" : {
+    "starred" : false,
+    "hidden" : false,
+    "trashed" : false,
+    "restricted" : false,
+    "viewed" : false
+  } ,
+  "modifiedDate" : "2002-10-02T10:00:00-05:00",
+  "lastViewedByMeDate" :"2002-10-02T15:00:00Z",
+  "markedViewedByMeDate" : "2002-10-02T15:00:00.05Z",
+  "writersCanShare" : false,
+  "parents" : [
+    {
+      "kind" : "drive#parentReference",
+      "id" : "string" ,
+      "selfLink" : "string" ,
+      "parentLink" : "string" ,
+      "isRoot" : true
+    }
+  ]
+}

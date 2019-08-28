@@ -1,0 +1,11 @@
+#%RAML 1.0 DataType
+
+properties: 
+  source:
+    type: string
+    description: The content type to convert from.
+    required: true
+  targets:
+    description: The possible content types to convert to.
+    type: string[]
+    required: true

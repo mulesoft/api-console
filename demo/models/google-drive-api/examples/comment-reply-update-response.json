@@ -1,0 +1,18 @@
+{
+  "kind": "drive#commentReply",
+  "replyId": "AAAABGvGYko",
+  "createdDate": "2017-01-26T22:44:06.410Z",
+  "modifiedDate": "2017-01-26T22:44:06.410Z",
+  "author": {
+    "kind": "drive#user",
+    "displayName": "John Doe",
+    "picture": {
+      "url": "//lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr8Y/YmMhVu8Ol-I/s96-k-no/photo.jpg"
+    },
+    "isAuthenticatedUser": true
+  },
+  "htmlContent": "Another replty",
+  "content": "Another replty",
+  "deleted": false,
+  "verb": "reopen"
+}

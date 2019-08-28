@@ -1,0 +1,8 @@
+{
+  "kind": "api#channel",
+  "id": "01234567-89ab-cdef-0123456789ab",
+  "resourceId": "o3hgv1538sdjfh",
+  "resourceUri": "https://www.googleapis.com/drive/v2/files/o3hgv1538sdjfh",
+  "token": "target=myApp-myFilesChannelDest",
+  "expiration": 1426325213000
+}

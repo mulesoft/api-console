@@ -1,0 +1,145 @@
+#%RAML 1.0 Library
+
+types:
+  User: !include ../types/user.raml
+  ReplyWritable:
+    properties:
+      content:
+        type: string
+        required: false
+        description: |
+          The plain text content used to create this reply.
+          This is not HTML safe and should only be used as a starting point to make edits to a
+          reply's content. This field is required on inserts if no verb is specified (resolve/reopen).
+      verb:
+        required: false
+        description: |
+          The action this reply performed to the parent comment. When creating a new reply this is the action to be perform to the parent comment. Possible values are:
+
+          - **resolve** - To resolve a comment.
+          - **reopen** - To reopen (un-resolve) a comment.
+  Reply:
+    type: ReplyWritable
+    properties:
+      kind:
+        type: string
+        description: This is always drive#commentReply.
+        default: drive#commentReply
+        enum: [drive#commentReply]
+      replyId:
+        description: The ID of the reply.
+      createdDate:
+        type: datetime
+        description: The date when this comment was first created.
+      modifiedDate:
+        type: datetime
+        description: The date when this comment or any of its replies were last modified.
+      author:
+        type: User
+        description: The user who wrote this comment.
+      htmlContent:
+        description: HTML formatted content for this reply.
+      deleted:
+        description: Whether this reply has been deleted. If a reply has been deleted the content will be cleared and this will only represent a reply that once existed.
+        type: boolean
+  CommentWritable:
+    properties:
+      content:
+        description: The plain text content used to create this comment. This is not HTML safe and should only be used as a starting point to make edits to a comment's content.
+      context:
+        description: The context of the file which is being commented on.
+        type: object
+        properties:
+          type:
+            type: string
+            description: The MIME type of the context snippet.
+          value:
+            type: string
+            description: Data representation of the segment of the file being commented on. In the case of a text file for example, this would be the actual text that the comment is about.
+  Comment:
+    type: CommentWritable
+    properties:
+      kind:
+        type: string
+        description: This is always drive#comment.
+        default: drive#comment
+        enum: [drive#comment]
+      selfLink:
+        description: A link back to this comment.
+        required: false
+      commentId:
+        description: The ID of the comment.
+      createdDate:
+        type: datetime
+        description: The date when this comment was first created.
+      modifiedDate:
+        type: datetime
+        description: The date when this comment or any of its replies were last modified.
+      author:
+        type: User
+        description: The user who wrote this comment.
+      htmlContent:
+        description: HTML formatted content for this comment.
+      deleted:
+        description: Whether this comment has been deleted. If a comment has been deleted the content will be cleared and this will only represent a comment that once existed.
+        type: boolean
+      status:
+        description: |
+          The status of this comment. Status can be changed by posting a reply to a comment with the desired status.
+
+          - **open** - The comment is still open.
+          - **resolved** - The comment has been resolved by one of its replies.
+      anchor:
+        description: A region of the document represented as a JSON string. See anchor documentation for details on how to define and interpret anchor properties.
+      fileId:
+        description: The file which this comment is addressing.
+      fileTitle:
+        description: The title of the file which this comment is addressing.
+      replies:
+        type: Reply[]
+        description: Replies to this post.
+  CommentList:
+    properties:
+      kind:
+        type: string
+        default: drive#commentList
+        enum: [drive#commentList]
+        description: This is always drive#commentList.
+      nextPageToken:
+        type: string
+        required: false
+        description: The token to use to request the next page of results.
+      selfLink:
+        type: string
+        description: A link back to this list.
+      nextLink:
+        type: string
+        required: false
+        description: A link to the next page of comments.
+      items:
+        type: Comment[]
+        required: false
+        description: The actual list of comments.
+  ReplyList:
+    properties:
+      kind:
+        type: string
+        default: drive#commentReplyList
+        enum: [drive#commentReplyList]
+        description: This is always drive#commentReplyList.
+      nextPageToken:
+        type: string
+        description: The token to use to request the next page of results.
+        required: false
+      selfLink:
+        type: string
+        description: A link back to this list.
+      nextLink:
+        type: string
+        description: A link to the next page of comments.
+        required: false
+      items:
+        type: array
+        required: false
+        description: The actual list of reply.
+        items: Reply

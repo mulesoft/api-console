@@ -52,7 +52,11 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
     }
 
     :host([app]) {
-      min-height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
 
     *[hidden] {
@@ -86,20 +90,20 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
       display: none;
     }
 
-    app-drawer {
+    /* app-drawer {
       z-index: 0;
-    }
+    } */
 
-    :host(:not([app])) app-drawer {
+    /* :host(:not([app])) app-drawer {
       position: absolute;
-    }
+    } */
 
-    :host([layout-narrow]) app-drawer {
+    /* :host([layout-narrow]) app-drawer {
       z-index: var(--api-console-drawer-zindex, 1);
-    }
+    } */
 
     app-toolbar {
-      background-color: var(--api-console-toolbar-background-color, #000);
+      background-color: var(--api-console-toolbar-background-color, #283640); /* #2196f3 */
       color: var(--api-console-toolbar-color, #fff);
     }
 
@@ -129,27 +133,23 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
       display: flex;
       flex-direction: column;
       background-color: var(--api-console-menu-background-color, inherit);
-      color: var(--api-console-menu-color);
       height: 100%;
     }
 
     api-navigation {
-      background-color: var(--api-console-menu-background-color, inherit);
-      color: var(--api-console-menu-color);
-      --paper-tab-content-unselected_-_color: var(--api-console-menu-tabs-color-unselected);
       flex: 1 1 auto;
     }
 
-    :host(:not([app])) app-drawer-layout {
+    /* :host(:not([app])) app-drawer-layout {
       min-height: inherit;
       overflow: hidden;
-    }
+    } */
 
-    :host(:not([app])) app-header {
+    /* :host(:not([app])) app-header {
       position: absolute;
       right: 0 !important;
       left: 0 !important;
-    }
+    } */
 
     api-request-panel,
     api-documentation {
@@ -169,7 +169,10 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
     .api-docs .inline-request {
       max-width: 600px;
       margin-left: 12px;
-      background-color: var(--apic-tryint-wide-background-color, #f8f8f8);
+      background-color: var(--apic-tryint-wide-background-color, transparent);
+      border-left-width: 1px;
+      border-left-color: var(--apic-tryint-wide-border-color, #e5e5e5);
+      border-left-style: solid;
       padding: 0 12px;
       box-sizing: border-box;
       flex: 1;
@@ -254,8 +257,7 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
     } = this;
     return html`<app-header
       slot="header"
-      fixed
-      condenses
+      reveals
       effects="waterfall">
       <app-toolbar>
         <anypoint-icon-button drawer-toggle ?hidden="${manualNavigation}">
@@ -354,7 +356,7 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
       inlineMethods,
       legacy,
       outlined,
-      noTryit,
+      _noTryItValue,
       amf,
       selectedShape,
       selectedShapeType,
@@ -373,8 +375,7 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
         ?legacy="${legacy}"
         ?outlined="${outlined}"
         .inlineMethods="${inlineMethods}"
-        .scrollTarget="${scrollTarget}"
-        .noTryIt="${noTryit}"
+        .noTryIt="${_noTryItValue}"
         .baseUri="${baseUri}"
         .redirectUri="${redirectUri}"
         .scrollTarget="${scrollTarget}"></api-documentation>
@@ -400,12 +401,13 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
     <app-drawer-layout
       .responsiveWidth="${responsiveWidth}"
       ?force-narrow="${_narrowNavForced}"
-      ?narrow="${layoutNarrow}">
+      ?narrow="${layoutNarrow}"
+      fullbleed>
       <app-drawer slot="drawer" .align="${drawerAlign}" .opened="${navigationOpened}">
         ${this._drawerToolbarTemplate()}
         ${this._navigationTemplate()}
       </app-drawer>
-      <app-header-layout>
+      <app-header-layout has-scrolling-region>
         ${this._contentToolbarTemplate()}
         <div class="main-content">
           <slot name="content"></slot>
@@ -736,6 +738,7 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
     }
     this._selectedShapeType = value;
     this._isMethod = value === 'method';
+    this._updateRenderInlineTyit();
     this.requestUpdate('selectedShapeType', old);
   }
 
@@ -842,6 +845,7 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
     this._tryitHandler = this._tryitHandler.bind(this);
 
     this.page = 'docs';
+    this.drawerAlign = 'left';
   }
 
   connectedCallback() {
@@ -864,7 +868,7 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   _updateRenderInlineTyit() {
-    const value = this._computeRenderInlineTryIt(this.wideLayout, this.app, this.inlineMethods);
+    const value = this._computeRenderInlineTryIt(this.wideLayout, this._isMethod, this.app, this.inlineMethods);
     this._renderInlineTyit = value;
     this._noTryItValue = this._computeNoTryItValue(this.noTryIt, value);
   }
@@ -984,16 +988,13 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
    * @param {CustomEvent} e
    */
   _apiNavigationOcurred(e) {
-    const isPassive = e.detail.passive === true;
+    const { selected, type, passive } = e.detail;
+    const isPassive = passive === true;
     if (!isPassive && this.page !== 'docs') {
       this.closeTryIt();
     }
-    if (e.detail.selected !== this.selectedShape) {
-      this.selectedShape = e.detail.selected;
-    }
-    if (e.detail.type !== this.selectedShapeType) {
-      this.selectedShapeType = e.detail.type;
-    }
+    this.selectedShape = selected;
+    this.selectedShapeType = type;
   }
   /**
    * Closes "try it" panel and restores docs view.
@@ -1048,13 +1049,14 @@ class ApiConsole extends AmfHelperMixin(LitElement) {
   /**
    * Computes value for `_renderInlineTyit` property.
    * @param {Boolean} wideLayout
+   * @param {Boolean} isMethod
    * @param {Boolean} app
    * @param {Boolean} inlineMethods
    * @return {Boolean} True if is wideLayout, it is a method, it is the app
    * and when inlineMethods is not set.
    */
-  _computeRenderInlineTryIt(wideLayout, app, inlineMethods) {
-    if (!wideLayout || !app || inlineMethods) {
+  _computeRenderInlineTryIt(wideLayout, isMethod, app, inlineMethods) {
+    if (!wideLayout || !app || !isMethod ||inlineMethods) {
       return false;
     }
     return wideLayout;

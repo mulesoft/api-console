@@ -1,0 +1,470 @@
+{
+  "kind": "drive#about",
+  "etag": "\"CHXJyqSTqQN6k2cni3iCrLmxCRE/CJNorAI8wKpANsLwX5GAPdH9IPQ\"",
+  "selfLink": "https://www.googleapis.com/drive/v2/about",
+  "name": "John Doe",
+  "user": {
+    "kind": "drive#user",
+    "displayName": "John Doe",
+    "picture": {
+      "url": "https://lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/BBBAAABCr5Y/YoMhXu8Ol-I/s64/photo.jpg"
+    },
+    "isAuthenticatedUser": true,
+    "permissionId": "91796993228604565116",
+    "emailAddress": "john.doe@gmail.com"
+  },
+  "quotaBytesTotal": "124554051584",
+  "quotaBytesUsed": "2064607222",
+  "quotaBytesUsedAggregate": "100222740716",
+  "quotaBytesUsedInTrash": "481018653",
+  "quotaType": "LIMITED",
+  "quotaBytesByService": [{
+      "serviceName": "DRIVE",
+      "bytesUsed": "2063190593"
+    },
+    {
+      "serviceName": "GMAIL",
+      "bytesUsed": "3334049823"
+    },
+    {
+      "serviceName": "PHOTOS",
+      "bytesUsed": "94824083671"
+    }
+  ],
+  "largestChangeId": "1360600",
+  "rootFolderId": "0ADpy9PK_RiBOUk9PVA",
+  "domainSharingPolicy": "allowed",
+  "permissionId": "91796993228604565116",
+  "importFormats": [{
+      "source": "application/x-vnd.oasis.opendocument.presentation",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "text/tab-separated-values",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "image/jpeg",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "image/bmp",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "image/gif",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-excel.sheet.macroenabled.12",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-powerpoint.presentation.macroenabled.12",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-word.template.macroenabled.12",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "image/pjpeg",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.google-apps.script+text/plain",
+      "targets": [
+        "application/vnd.google-apps.script"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-excel",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "application/vnd.sun.xml.writer",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-word.document.macroenabled.12",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-powerpoint.slideshow.macroenabled.12",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "text/rtf",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "text/plain",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.oasis.opendocument.spreadsheet",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "application/x-vnd.oasis.opendocument.spreadsheet",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "image/png",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/x-vnd.oasis.opendocument.text",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/msword",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/pdf",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/json",
+      "targets": [
+        "application/vnd.google-apps.script"
+      ]
+    },
+    {
+      "source": "application/x-msmetafile",
+      "targets": [
+        "application/vnd.google-apps.drawing"
+      ]
+    },
+    {
+      "source": "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-powerpoint",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-excel.template.macroenabled.12",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "image/x-bmp",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/rtf",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.openxmlformats-officedocument.presentationml.template",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "image/x-png",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "text/html",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.oasis.opendocument.text",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "application/vnd.google-apps.script+json",
+      "targets": [
+        "application/vnd.google-apps.script"
+      ]
+    },
+    {
+      "source": "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "application/vnd.ms-powerpoint.template.macroenabled.12",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "text/csv",
+      "targets": [
+        "application/vnd.google-apps.spreadsheet"
+      ]
+    },
+    {
+      "source": "application/vnd.oasis.opendocument.presentation",
+      "targets": [
+        "application/vnd.google-apps.presentation"
+      ]
+    },
+    {
+      "source": "image/jpg",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    },
+    {
+      "source": "text/richtext",
+      "targets": [
+        "application/vnd.google-apps.document"
+      ]
+    }
+  ],
+  "exportFormats": [{
+      "source": "application/vnd.google-apps.form",
+      "targets": [
+        "application/zip"
+      ]
+    },
+    {
+      "source": "application/vnd.google-apps.document",
+      "targets": [
+        "application/rtf",
+        "application/vnd.oasis.opendocument.text",
+        "text/html",
+        "application/pdf",
+        "application/epub+zip",
+        "application/zip",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "text/plain"
+      ]
+    },
+    {
+      "source": "application/vnd.google-apps.drawing",
+      "targets": [
+        "image/svg+xml",
+        "image/png",
+        "application/pdf",
+        "image/jpeg"
+      ]
+    },
+    {
+      "source": "application/vnd.google-apps.spreadsheet",
+      "targets": [
+        "application/x-vnd.oasis.opendocument.spreadsheet",
+        "text/tab-separated-values",
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "text/csv",
+        "application/zip",
+        "application/vnd.oasis.opendocument.spreadsheet"
+      ]
+    },
+    {
+      "source": "application/vnd.google-apps.script",
+      "targets": [
+        "application/vnd.google-apps.script+json"
+      ]
+    },
+    {
+      "source": "application/vnd.google-apps.presentation",
+      "targets": [
+        "application/vnd.oasis.opendocument.presentation",
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "text/plain"
+      ]
+    }
+  ],
+  "additionalRoleInfo": [{
+      "type": "application/vnd.google-apps.drawing",
+      "roleSets": [{
+        "primaryRole": "reader",
+        "additionalRoles": [
+          "commenter"
+        ]
+      }]
+    },
+    {
+      "type": "application/vnd.google-apps.document",
+      "roleSets": [{
+        "primaryRole": "reader",
+        "additionalRoles": [
+          "commenter"
+        ]
+      }]
+    },
+    {
+      "type": "application/vnd.google-apps.presentation",
+      "roleSets": [{
+        "primaryRole": "reader",
+        "additionalRoles": [
+          "commenter"
+        ]
+      }]
+    },
+    {
+      "type": "*",
+      "roleSets": [{
+        "primaryRole": "reader",
+        "additionalRoles": [
+          "commenter"
+        ]
+      }]
+    },
+    {
+      "type": "application/vnd.google-apps.spreadsheet",
+      "roleSets": [{
+        "primaryRole": "reader",
+        "additionalRoles": [
+          "commenter"
+        ]
+      }]
+    },
+    {
+      "type": "application/vnd.google-apps.*",
+      "roleSets": []
+    }
+  ],
+  "features": [{
+      "featureName": "ocr"
+    },
+    {
+      "featureName": "translation",
+      "featureRate": 2.0
+    }
+  ],
+  "maxUploadSizes": [{
+      "type": "application/vnd.google-apps.document",
+      "size": "10485760"
+    },
+    {
+      "type": "application/vnd.google-apps.spreadsheet",
+      "size": "104857600"
+    },
+    {
+      "type": "application/vnd.google-apps.presentation",
+      "size": "104857600"
+    },
+    {
+      "type": "application/vnd.google-apps.drawing",
+      "size": "2097152"
+    },
+    {
+      "type": "application/pdf",
+      "size": "5242880000000"
+    },
+    {
+      "type": "*",
+      "size": "5242880000000"
+    }
+  ],
+  "isCurrentAppInstalled": true,
+  "languageCode": "en-US",
+  "folderColorPalette": [
+    "#ac725e",
+    "#d06b64",
+    "#f83a22",
+    "#fa573c",
+    "#ff7537",
+    "#ffad46",
+    "#fad165",
+    "#fbe983",
+    "#b3dc6c",
+    "#7bd148",
+    "#16a765",
+    "#42d692",
+    "#92e1c0",
+    "#9fe1e7",
+    "#9fc6e7",
+    "#4986e7",
+    "#9a9cff",
+    "#b99aff",
+    "#a47ae2",
+    "#cd74e6",
+    "#f691b2",
+    "#cca6ac",
+    "#cabdbf",
+    "#8f8f8f"
+  ]
+}

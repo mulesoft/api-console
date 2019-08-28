@@ -1,0 +1,48 @@
+#%RAML 1.0 DataType
+
+displayName: File
+description: A type to be used when a new file to be created. 
+uses: 
+  BaseTypes: !include base-types.raml
+properties: 
+  id:
+    type: string
+    description: The ID of the file.
+  title:
+    type: string
+    description: The title of the file. Used to identify file or folder name.
+  mimeType:
+    type: string
+    description: |
+      The MIME type of the file. This is only mutable on update when uploading new content. 
+      This field can be left blank, and the mimetype will be determined from the uploaded content's MIME type.
+  description:
+    type: string
+    description: A short description of the file.
+  labels:
+    type: !include file-labels.raml
+  modifiedDate:
+    type: datetime
+    description: Last time this file was modified by anyone (formatted RFC 3339 timestamp). This is only mutable on update when the setModifiedDate parameter is set.
+  lastViewedByMeDate:
+    type: datetime
+    description: Last time this file was viewed by the user (formatted RFC 3339 timestamp).
+  markedViewedByMeDate:
+    type: datetime
+    description: Deprecated
+  parents:
+    type: array
+    items: [BaseTypes.Resource]
+  indexableText:
+    type: object
+    description: Indexable text attributes for the file. This property can only be written, and is not returned by files.get. For more information, see Custom thumbnails and indexable text.
+    properties:
+      text:
+        type: string
+        description: The text to be indexed for this file.
+  originalFilename: 
+    type: string
+    description: The original filename of the uploaded content if available, or else the original value of the title field. `This is only available for files with binary content in Drive.`
+  writersCanShare:
+    type: boolean
+    description: Whether writers can share the document with other users.

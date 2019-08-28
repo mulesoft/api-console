@@ -1,0 +1,25 @@
+#%RAML 1.0 SecurityScheme
+
+description: |
+  Google recommend using OAuth 2.0 to authorize requests.
+type: OAuth 2.0
+describedBy:
+  headers:
+    Authorization:
+      required: false
+      description: |
+        Used to send a valid OAuth 2 access token. Don't use it with `access_token` query parameter.
+  queryParameters:
+    access_token:
+      required: false
+      description: |
+        Used to send a valid OAuth 2 access token. Don't use it with `Authorization` header.
+  responses:
+    401:
+      description: |
+        Authorization error.
+settings:
+  authorizationUri: https://accounts.google.com/o/oauth2/auth
+  accessTokenUri: https://accounts.google.com/o/oauth2/token
+  authorizationGrants: [ implicit, authorization_code ]
+  scopes: [ "https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive.apps.readonly", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.metadata.readonly", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/drive.scripts", "https://www.googleapis.com/auth/drive.photos.readonly", "https://www.googleapis.com/auth/drive.metadata" ]

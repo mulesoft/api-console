@@ -1,0 +1,28 @@
+#%RAML 1.0 DataType
+
+displayName: Resource
+description: A reference to a file's parent.
+type: object
+properties:
+  kind:
+    type: string
+    required: false
+    description: This is always drive#parentReference.
+    enum: [drive#parentReference]
+    default: drive#parentReference
+  id:
+    type: string
+    description: The ID of the parent
+    required: false
+  selfLink:
+    type: string
+    description: A link back to this reference
+    required: false
+  parentLink:
+    type: string
+    description: A link to the parent
+    required: false
+  isRoot:
+    type: boolean
+    description: Whether or not the parent is the root folder.
+    required: false

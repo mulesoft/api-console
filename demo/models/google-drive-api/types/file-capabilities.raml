@@ -1,0 +1,69 @@
+#%RAML 1.0 DataType
+
+type: object
+
+properties:
+  canAddChildren:
+    type: boolean
+    description: Whether the current user can add children to this folder. This is always false when the item is not a folder.
+    required: false
+  canComment:
+    type: boolean
+    description: Whether the current user can comment on the file.
+    required: false
+  canCopy:
+    type: boolean
+    description: Whether the file can be copied by the current user. For a Team Drive item, whether non-folder descendants of this item, or this item itself if it is not a folder, can be copied.
+    required: false
+  canDelete:
+    type: boolean
+    description: Whether the file can be deleted by the current user.
+    required: false
+  canDownload:
+    type: boolean
+    description: Whether the file can be downloaded by the current user.
+    required: false
+  canEdit:
+    type: boolean
+    description: Whether the file can be edited by the current user.
+    required: false
+  canListChildren:
+    type: boolean
+    description: Whether the current user can list the children of this folder. This is always false when the item is not a folder.
+    required: false
+  canMoveItemIntoTeamDrive:
+    type: boolean
+    description: Whether the current user can move this item into a Team Drive. If the item is in a Team Drive, this field is equivalent to canMoveTeamDriveItem.
+    required: false
+  canMoveTeamDriveItem:
+    type: boolean
+    description: Whether the current user can move this Team Drive item by changing its parent. Note that a request to change the parent for this item may still fail depending on the new parent that is being added. Only populated for Team Drive files.
+    required: false
+  canReadRevisions:
+    type: boolean
+    description: Whether the current user has read access to the Revisions resource of the file. For a Team Drive item, whether revisions of non-folder descendants of this item, or this item itself if it is not a folder, can be read.
+    required: false
+  canReadTeamDrive:
+    type: boolean
+    description: Whether the current user has read access to the Team Drive to which this file belongs. Only populated for Team Drive files.
+    required: false
+  canRemoveChildren:
+    type: boolean
+    description: Whether the current user can remove children from this folder. This is always false when the item is not a folder.
+    required: false
+  canRename:
+    type: boolean
+    description: Whether the file can be renamed by the current user.
+    required: false
+  canShare:
+    type: boolean
+    description: Whether the file's sharing settings can be modified by the current user.
+    required: false
+  canTrash:
+    type: boolean
+    description: Whether the file can be trashed by the current user.
+    required: false
+  canUntrash:
+    type: boolean
+    description: Whether the file can be restored from the trash by the current user.
+    required: false
