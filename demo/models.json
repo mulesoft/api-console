@@ -4,5 +4,6 @@
   "models/nexmo-sms-api/nexmo-sms-api.raml": "RAML 1.0",
   "models/exchange-experience-api/exchange-experience-api.raml": "RAML 0.8",
   "models/google-drive-api/google-drive-api.raml": "RAML 1.0",
-  "models/httpbin/httpbin.json": ["OAS 2.0", "application/json"]
+  "models/httpbin/httpbin.json": ["OAS 2.0", "application/json"],
+  "models/data-type-tragment/data-type-tragment.raml": "RAML 1.0"
 }
