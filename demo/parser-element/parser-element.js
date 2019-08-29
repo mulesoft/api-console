@@ -11,17 +11,13 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
-import '@polymer/iron-pages/iron-pages.js';
-import '@polymer/paper-input/paper-input.js';
-import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/paper-progress/paper-progress.js';
-import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 /**
@@ -86,7 +82,8 @@ class ParserElement extends PolymerElement {
     }
     </style>
     <p class="command-info">
-      Run <code>npm start</code> before you begin. <paper-input class="port" label="Local server port number" value="{{port}}" type="number"></paper-input>
+      Run <code>npm start</code> before you begin.
+      <paper-input class="port" label="Local server port number" value="{{port}}" type="number"></paper-input>
     </p>
     <paper-tabs selected="{{selected}}">
       <paper-tab>Predefined models</paper-tab>
@@ -107,7 +104,6 @@ class ParserElement extends PolymerElement {
           <paper-item data-src="appian-api.json">Appian API</paper-item>
           <paper-item data-src="appian-api-compact.json">Appian API - compact model</paper-item>
           <paper-item data-src="exchange-experience-api.json">Exchange experience API</paper-item>
-          <paper-item data-src="exchange-experience-api-compact.json">Exchange experience API - compact model</paper-item>
           <paper-item data-src="apic-80-compact.json">APIC-80 (issue)</paper-item>
           <paper-item data-src="apic-83-compact.json">APIC-83 (issue)</paper-item>
           <paper-item data-src="apic-84-compact.json">APIC-84 (issue)</paper-item>
@@ -223,7 +219,7 @@ class ParserElement extends PolymerElement {
 
   _process(body) {
     this.loading = true;
-    const url = `http://127.0.0.1:${this.port}/api/parse`;
+    const url = `http://${location.hostname}:${this.port}/api/parse`;
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('error', () => {
       this._error('Request error. Did you ran server?');

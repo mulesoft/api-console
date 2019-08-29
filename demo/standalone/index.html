@@ -58,18 +58,7 @@
 </head>
 
 <body>
-  <api-console aware="demo-model" app redirect-uri="https://auth.advancedrestclient.com/oauth-popup.html">
-    <anypoint-dropdown-menu slot="toolbar" aria-label="Select an API from the available options" nolabelfloat id="apisDropdown" class="api-dropdown">
-      <label slot="label">Select an API</label>
-      <anypoint-listbox slot="dropdown-content" id="apiList">
-        <anypoint-item data-value="google-drive-api">Google Drive API</anypoint-item>
-        <anypoint-item data-value="httpbin">HTTPbin API</anypoint-item>
-        <anypoint-item data-value="demo-api">Demo API</anypoint-item>
-        <anypoint-item data-value="exchange-experience-api">Exchange Experience API</anypoint-item>
-        <anypoint-item data-value="data-type-tragment">RAML data type fragment</anypoint-item>
-      </anypoint-listbox>
-      </paper-menu-button>
-  </api-console>
+  <div id="demo"></div>
   <script type="module" src="./app.js" async></script>
 </body>
 

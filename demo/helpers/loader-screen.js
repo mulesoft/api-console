@@ -27,6 +27,14 @@ class LoaderScreen extends LitElement {
       background: #fff;
       display: flex;
     }
+
+    @media (max-width: 1200px) {
+      h1 {
+        font-size: 54px;
+        text-align: center;
+        margin: 0 24px;
+        line-height: 64px;
+      }
     `;
   }
 

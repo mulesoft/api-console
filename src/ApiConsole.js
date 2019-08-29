@@ -159,6 +159,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       display: flex;
       flex-direction: row;
       overflow: auto;
+      margin-top: 12px;
     }
 
     .api-docs api-documentation {
