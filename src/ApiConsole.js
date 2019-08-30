@@ -184,7 +184,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
     .method-title-area,
     .extension-banner {
-      max-width: var(--api-console-main-max-width, 900px);
+      max-width: var(--api-console-main-max-width, 1600px);
     }
 
     .method-title {
