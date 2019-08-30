@@ -502,10 +502,10 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * The API console works with API console extension that proxies
        * request through Chrome extension's sandbox and eliminates CORS.
        *
-       * The banner informing a user about the extension is rendered
-       * automatically unless this property is set.
+       * When this is set it enables this feature and renders installation banner
+       * when currrent browser profile does not have extension installed.
        */
-      noExtensionBanner: { type: Boolean },
+      allowExtensionBanner: { type: Boolean },
       /**
        * When set the extension banner is rendered.
        */
@@ -754,18 +754,18 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this._modelLocationChanged(value);
   }
 
-  get noExtensionBanner() {
-    return this._noExtensionBanner;
+  get allowExtensionBanner() {
+    return this._allowExtensionBanner;
   }
 
-  set noExtensionBanner(value) {
-    const old = this._noExtensionBanner;
+  set allowExtensionBanner(value) {
+    const old = this._allowExtensionBanner;
     /* istanbul ignore if */
     if (old === value) {
       return;
     }
-    this._noExtensionBanner = value;
-    this._noExtBannerChanged(value);
+    this._allowExtensionBanner = value;
+    this._allowExtensionBannerChanged(value);
   }
 
   get inlineMethods() {
@@ -964,11 +964,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
    * Renders the extension banner if is Chrome and extension is not detected.
    */
   _initExtensionBanner() {
-    if (!isChrome || this.noExtensionBanner) {
+    if (!isChrome || !this.allowExtensionBanner) {
       return;
     }
     setTimeout(() => {
-      if (!this.noExtensionBanner && !this._hasApicCorsExtension) {
+      if (this.allowExtensionBanner && !this._hasApicCorsExtension) {
         this._extensionBannerActive = true;
       }
     });
@@ -1032,10 +1032,10 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
   /**
    * Controls behavior if the extension banner.
-   * @param {Boolean} value Current value of `noExtensionBanner` property
+   * @param {Boolean} value Current value of `allowExtensionBanner` property
    */
-  _noExtBannerChanged(value) {
-    if (value && this._extensionBannerActive) {
+  _allowExtensionBannerChanged(value) {
+    if (!value && this._extensionBannerActive) {
       this._extensionBannerActive = false;
     }
   }

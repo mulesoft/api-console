@@ -43,6 +43,7 @@ npm start
 -   Removed any reference to CSS mixins (the `@apply` function). All styling options are now defined via CSS variables. Any styles defined for previous version of API console won't work.
 -   Minimised use of icons in favour of regular buttons with labels.
 -   This release contains tones of bug fixes and improvements reported by the community and our customers ❤
+-   The Chrome proxy extension banner is not rendered by default. Set `allowExtensionBanner` property to initialize the console with the extension support.
 
 Try this version of API console with your API and report an issue if anything is out of ordinary. We and the rest of the community will be grateful.
 
