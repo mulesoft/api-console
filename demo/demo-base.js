@@ -148,7 +148,7 @@ export class DemoBase {
   }
 
   _setAmfModel(model, old) {
-    const apic = document.querySelector('api-console');
+    const apic = document.querySelector('api-console,api-console-app');
     apic.amf = model;
     if (old) {
       apic.selectedShape = 'summary';

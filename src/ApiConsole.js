@@ -46,14 +46,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   static get styles() {
     return css`:host {
       display: block;
-    }
-
-    :host([app]) {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      position: relative;
+      overflow: hidden;
     }
 
     *[hidden] {
@@ -83,27 +77,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       fill: var(--api-console-menu-color, #424143);
     }
 
-    app-drawer-layout:not([narrow]) [drawer-toggle] {
-      display: none;
-    }
-
-    /* app-drawer {
-      z-index: 0;
-    } */
-
-    /* :host(:not([app])) app-drawer {
-      position: absolute;
-    } */
-
-    /* :host([layout-narrow]) app-drawer {
-      z-index: var(--api-console-drawer-zindex, 1);
-    } */
-
-    app-toolbar {
-      background-color: var(--api-console-toolbar-background-color, #283640); /* #2196f3 */
-      color: var(--api-console-toolbar-color, #fff);
-    }
-
     .extension-banner {
       align-items: center;
       display: none;
@@ -123,6 +96,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       margin-left: var(--api-console-main-content-margin-left, 24px);
       margin-right: var(--api-console-main-content-margin-right, 24px);
       margin-top: var(--api-console-main-content-margin-top, 0px);
+      position: relative;
     }
 
     .drawer-content-wrapper {
@@ -206,63 +180,43 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       margin: 0;
     }
 
-    .store-link {}`;
-  }
-
-  _mediaQueriesTemplate() {
-    if (!this.app) {
-      return;
+    .nav-drawer {
+      width: var(--app-drawer-width, 256px);
+      display: block;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background-color: #fff;
+      transform: translateX(-100%);
+      transform-origin: top right;
+      transition: transform 0.3s cubic-bezier(0.74, 0.03, 0.3, 0.97);
+      position: absolute;
     }
-    return html`
-    <iron-media-query
-      query="(max-width: 740px)"
-      @query-matches-changed="${this._narrowHandler}"></iron-media-query>
-    <iron-media-query
-      query="(min-width: 1500px)"
-      @query-matches-changed="${this._wideLayoutHandler}"></iron-media-query>`;
-  }
 
-  _drawerToolbarTemplate() {
-    if (this.noToolbars) {
-      return '';
+    :host([navigationopened]) .nav-drawer {
+      transform: translateX(0);
+      box-shadow: var(--anypoiont-dropdown-shaddow);
     }
-    return html`<app-toolbar>
-      <div>API console</div>
-    </app-toolbar>`;
-  }
 
-  _navigationTemplate() {
-    const { amf, noAttribution } = this;
-    return html`<div class="drawer-content-wrapper">
-      <api-navigation
-        .amf="${amf}"
-        summary
-        endpointsopened
-        @api-navigation-selection-changed="${this._apiNavigationOcurred}"></api-navigation>
-      ${noAttribution ? '' : attributionTpl}
-    </div>`;
-  }
+    .nav-scrim {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
 
-  _contentToolbarTemplate() {
-    if (this.noToolbars) {
-      return '';
+      transition-property: opacity;
+      -webkit-transform: translateZ(0);
+      transform:  translateZ(0);
+
+      opacity: 0;
+      background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));
     }
-    const {
-      manualNavigation,
-      apiTitle
-    } = this;
-    return html`<app-header
-      slot="header"
-      reveals
-      effects="waterfall">
-      <app-toolbar>
-        <anypoint-icon-button drawer-toggle ?hidden="${manualNavigation}">
-          <iron-icon icon="arc:menu"></iron-icon>
-        </anypoint-icon-button>
-        <div main-title>${apiTitle}</div>
-        <slot name="toolbar"></slot>
-      </app-toolbar>
-    </app-header>`;
+
+    :host([navigationopened]) .nav-scrim {
+      opacity: 1;
+    }
+    `;
   }
 
   _getContentTemplate() {
@@ -271,25 +225,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       case 'request': return this._getRequestTemplate();
       default: return '';
     }
-  }
-
-  _bannerMessage() {
-    return html`
-    <div class="extension-banner" ?active="${this._extensionBannerActive}">
-      <p>
-        For better experience install API console extension.
-        Get it from <a target="_blank"
-          class="store-link"
-          href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">
-          Chrome Web Store
-        </a>
-      </p>
-      <anypoint-icon-button
-        aria-label="Activate to close the message"
-        @click="${this.dismissExtensionBanner}">
-        <iron-icon icon="arc:close"></iron-icon>
-      </anypoint-icon-button>
-    </div>`;
   }
 
   _getRequestTemplate() {
@@ -384,56 +319,67 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     </section>`;
   }
 
-  render() {
-    const {
-      responsiveWidth,
-      _narrowNavForced,
-      layoutNarrow,
-      drawerAlign,
-      navigationOpened,
-      aware
-    } = this;
-    return html`
-    ${aware ? html`<raml-aware .scope="${aware}" @api-changed="${this._apiChanged}"></raml-aware>` : ''}
-    ${this._mediaQueriesTemplate()}
-    <app-drawer-layout
-      .responsiveWidth="${responsiveWidth}"
-      ?force-narrow="${_narrowNavForced}"
-      ?narrow="${layoutNarrow}"
-      fullbleed>
-      <app-drawer slot="drawer" .align="${drawerAlign}" .opened="${navigationOpened}">
-        ${this._drawerToolbarTemplate()}
-        ${this._navigationTemplate()}
-      </app-drawer>
-      <app-header-layout has-scrolling-region>
-        ${this._contentToolbarTemplate()}
-        <div class="main-content">
-          <slot name="content"></slot>
-          ${this._getContentTemplate()}
-        </div>
-      </app-header-layout>
-    </app-drawer-layout>
-    <paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
-    <api-console-ext-comm @has-extension-changed="${this._hasExtensionHandler}"></api-console-ext-comm>
-    <!--
-    The components below are optional dependencies. They will not be used until
-    sources of the components are included into AC bundle.
-    This would help build the console and only add a dependency at the build time
-    without statically include the dependency.
+  _navigationTemplate() {
+    const { amf, noAttribution } = this;
+    return html`<div class="drawer-content-wrapper">
+      <api-navigation
+        .amf="${amf}"
+        summary
+        endpointsopened
+        @api-navigation-selection-changed="${this._apiNavigationOcurred}"></api-navigation>
+      ${noAttribution ? '' : attributionTpl}
+    </div>`;
+  }
 
-    TBD:
-    xhr-simple-request component placed here will prohibit application from
-    using api-request custom event. If the application uses both this element
-    (by adding it's import file to the build / page) this element would be the
-    first one to handle the event and run the request. Any other listener
-    attached to the console, body or window is called after this one.
-    -->
+  _navigationDrawerTemplate() {
+    return html`
+    ${this.navigationOpened ? html`<div class="nav-scrim"></div>` : ''}
+    <div class="nav-drawer">
+    ${this._navigationTemplate()}
+    </div>
+    `;
+  }
+
+  _mainContentTemplate() {
+    return html`
+    <div class="main-content">
+      ${this._getContentTemplate()}
+    </div>
+    ${this._navigationDrawerTemplate()}`;
+  }
+  /**
+   * The components below are optional dependencies. They will not be used until
+   * sources of the components are included into AC bundle.
+   * This would help build the console and only add a dependency at the build time
+   * without statically include the dependency.
+   *
+   * TBD:
+   * xhr-simple-request component placed here will prohibit application from
+   * using api-request custom event. If the application uses both this element
+   * (by adding it's import file to the build / page) this element would be the
+   * first one to handle the event and run the request. Any other listener
+   * attached to the console, body or window is called after this one.
+   *
+   * @return {TemplateResult}
+   */
+  _helpersTemplate() {
+    return html`<paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
+    <api-console-ext-comm @has-extension-changed="${this._hasExtensionHandler}"></api-console-ext-comm>
     <xhr-simple-request
       .appendHeaders="${this.appendHeaders}"
       .proxy="${this.proxy}"
       .proxyEncodeUrl="${this.proxyEncodeUrl}"></xhr-simple-request>
     <oauth1-authorization></oauth1-authorization>
     <oauth2-authorization></oauth2-authorization>`;
+  }
+
+  render() {
+    const { aware } = this;
+    return html`
+    ${aware ? html`<raml-aware .scope="${aware}" @api-changed="${this._apiChanged}"></raml-aware>` : ''}
+    ${this._mainContentTemplate()}
+    ${this._helpersTemplate()}
+    `;
   }
 
   static get properties() {
@@ -552,42 +498,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        */
       noTryIt: { type: Boolean },
       /**
-       * If set, the open navigation button will be always hidden.
-       * The left hand side navigation will be hidden until `navigationOpened`
-       * property is set.
-       * The navigation will cover full screen, hiding the content.
-       * This works best with `narrow` layout.
-       */
-      manualNavigation: { type: Boolean },
-      /**
        * True when navigation is opened.
        */
-      navigationOpened: { type: Boolean },
-      /**
-       * A width when the navigation drawer is automatically toggled to narrow
-       * view.
-       * By default it is `640px`.
-       *
-       * To control width of the navigation drawer, set `--app-drawer-width`
-       * CSS variable to requested size.
-       */
-      responsiveWidth: { type: String },
-      /**
-       * Computed value, true when the navigation drawer should be hidden
-       * event with wide layout.
-       */
-      _narrowNavForced: { type: Boolean },
-      /**
-       * Location of the `bower_components` folder.
-       * It should be a path from server's root path including bower_components.
-       */
-      bowerLocation: { type: String },
+      navigationOpened: { type: Boolean, reflect: true },
       /**
        * OAuth2 redirect URI.
-       * By default the app uses `bowerLocation` to compute redirect location
-       * URI. If you set this value if has to work with authorization
-       * component meaning it has to pass auth data to the opener window or
-       * top frame.
        * See documentation for `advanced-rest-client/oauth-authorization`
        * for API details.
        */
@@ -612,54 +527,12 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        */
       noAttribution: { type: Boolean },
       /**
-       * Computed title of the API
-       */
-      apiTitle: { type: String },
-      /**
-       * True when the main layout element renders in narrow view.
-       * This changes when media query breakpoint has been reached or
-       * when narrow property is set.
-       */
-      layoutNarrow: { type: Boolean, reflect: true },
-      /**
-       * An alignment of the layout drawer.
-       * Possible values are:
-       * - start
-       * - end
-       *
-       * Default to "start".
-       */
-      drawerAlign: { type: String },
-      /**
-       * If set the top toolbars are not rendered.
-       */
-      noToolbars: { type: Boolean },
-      /**
-       * By default API console renders itself as an embeddable
-       * web component that has changed behavior of main layout elements
-       * (menu drawer and main view). When this option is set it renders
-       * layout elements in it's static positions instead relative.
-       *
-       * Note, this option is experimental and mey be removed.
-       */
-      app: { type: Boolean, reflect: true },
-      /**
-       * When true it places try it panel next to the documentation panel.
-       * It is set automatically via media queries
-       */
-      wideLayout: { type: Boolean },
-      /**
        * If set then it renders methods documentation inline with
        * the endpoint documentation.
        * When it's not set (or value is `false`, default) then it renders
        * just a list of methods with links in the documentation panel
        */
       inlineMethods: { type: Boolean, value: false },
-
-      _renderInlineTyit: { type: Boolean },
-
-      _noTryItValue: { type: Boolean },
-
       /**
        * Computed value from the method model, name of the method.
        * It is either a `displayName` or HTTP method name
@@ -732,22 +605,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.methodName = this._computeMethodName(value, this.webApi);
   }
 
-  get selectedShapeType() {
-    return this._selectedShapeType;
-  }
-
-  set selectedShapeType(value) {
-    const old = this._selectedShapeType;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this._selectedShapeType = value;
-    this._isMethod = value === 'method';
-    this._updateRenderInlineTyit();
-    this.requestUpdate('selectedShapeType', old);
-  }
-
   get modelLocation() {
     return this._modelLocation;
   }
@@ -762,48 +619,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this._modelLocationChanged(value);
   }
 
-  get allowExtensionBanner() {
-    return this._allowExtensionBanner;
-  }
-
-  set allowExtensionBanner(value) {
-    const old = this._allowExtensionBanner;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this._allowExtensionBanner = value;
-    this._allowExtensionBannerChanged(value);
-  }
-
-  get inlineMethods() {
-    return this._inlineMethods;
-  }
-
-  set inlineMethods(value) {
-    const old = this._inlineMethods;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this._inlineMethods = value;
-    this._updateRenderInlineTyit();
-  }
-
-  get wideLayout() {
-    return this._wideLayout;
-  }
-
-  set wideLayout(value) {
-    const old = this._wideLayout;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this._wideLayout = value;
-    this._updateRenderInlineTyit();
-  }
-
   get app() {
     return this._app;
   }
@@ -816,34 +631,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     }
     this._app = value;
     this._updateRenderInlineTyit();
-  }
-
-  get narrow() {
-    return this._narrow;
-  }
-
-  set narrow(value) {
-    const old = this._narrow;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this._narrow = value;
-    this._narrowNavForced = this._computeNarrowNavForced(this.manualNavigation, value);
-  }
-
-  get manualNavigation() {
-    return this._manualNavigation;
-  }
-
-  set manualNavigation(value) {
-    const old = this._manualNavigation;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this._manualNavigation = value;
-    this._narrowNavForced = this._computeNarrowNavForced(value, this.narrow);
   }
 
   get oauth2clientId() {
@@ -903,12 +690,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this._initExtensionBanner();
   }
 
-  _updateRenderInlineTyit() {
-    const value = this._computeRenderInlineTryIt(this.wideLayout, this._isMethod, this.app, this.inlineMethods);
-    this._renderInlineTyit = value;
-    this._noTryItValue = this._computeNoTryItValue(this.noTryIt, value);
-  }
-
   __amfChanged() {
     if (this.__amfProcessingDebouncer) {
       return;
@@ -928,7 +709,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       amf = amf[0];
     }
     const webApi = this.webApi = this._computeWebApi(amf);
-    this.apiTitle = this._computeApiTitle(webApi);
     this.methodName = this._computeMethodName(this.selectedShape, webApi);
   }
   /**
@@ -990,15 +770,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.selectedShape = 'summary';
   }
   /**
-   * Computes value of `apiTitle` property.
-   *
-   * @param {Object} shape Shape of AMF model.
-   * @return {String|undefined} Description if defined.
-   */
-  _computeApiTitle(shape) {
-    return this._getValue(shape, this.ns.schema.schemaName);
-  }
-  /**
    * Renders the extension banner if is Chrome and extension is not detected.
    */
   _initExtensionBanner() {
@@ -1039,26 +810,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.page = 'docs';
   }
   /**
-   * Computes value of `_narrowNavForced` property.
-   *
-   * @param {Boolean} manualNavigation
-   * @param {Boolean} narrow
-   * @return {Boolean}
-   */
-  _computeNarrowNavForced(manualNavigation, narrow) {
-    return !!(manualNavigation || narrow);
-  }
-  /**
-   * When the console is initialized when being hidden
-   * it may not layout properly. The app drawer layout component
-   * positions elements statically so if the console is hidden it cannot do
-   * this properly. In this case call `resetLayout()` function
-   * when getting the console back from the hidden state.
-   */
-  resetLayout() {
-    this.shadowRoot.querySelector('app-drawer-layout').notifyResize();
-  }
-  /**
    * Dispatches `api-console-ready` event that is used by APIC extension
    * so it can initialize itself when handled
    */
@@ -1068,41 +819,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       composed: true
     }));
   }
-  /**
-   * Controls behavior if the extension banner.
-   * @param {Boolean} value Current value of `allowExtensionBanner` property
-   */
-  _allowExtensionBannerChanged(value) {
-    if (!value && this._extensionBannerActive) {
-      this._extensionBannerActive = false;
-    }
-  }
+
   _hasCorsExtensionChanged(value) {
     if (value && this._extensionBannerActive) {
       this._extensionBannerActive = false;
     }
-  }
-  /**
-   * Computes value for `_renderInlineTyit` property.
-   * @param {Boolean} wideLayout
-   * @param {Boolean} isMethod
-   * @param {Boolean} app
-   * @param {Boolean} inlineMethods
-   * @return {Boolean} True if is wideLayout, it is a method, it is the app
-   * and when inlineMethods is not set.
-   */
-  _computeRenderInlineTryIt(wideLayout, isMethod, app, inlineMethods) {
-    if (!wideLayout || !app || !isMethod ||inlineMethods) {
-      return false;
-    }
-    return wideLayout;
-  }
-
-  _computeNoTryItValue(noTryIt, renderInlineTyit) {
-    if (renderInlineTyit) {
-      return true;
-    }
-    return noTryIt;
   }
   /**
    * Computes method name for not-wide view, where the request panel
@@ -1132,25 +853,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     return name;
   }
 
-  _narrowHandler(e) {
-    this.narrow = e.detail.value;
-  }
-
-  _wideLayoutHandler(e) {
-    this.wideLayout = e.detail.value;
-  }
-
   _apiChanged(e) {
     this.amf = e.detail.value;
   }
-
-  // _selectedHandler(e) {
-  //   this.selectedShape = e.detail.value;
-  // }
-  //
-  // _selectedTypeHandler(e) {
-  //   this.selectedShapeType = e.detail.value;
-  // }
 
   _hasExtensionHandler(e) {
     this._hasApicCorsExtension = e.detail.value;

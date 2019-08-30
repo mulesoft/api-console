@@ -1,142 +1,88 @@
 <!doctype html>
-<html>
+<html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>API Console</title>
-
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script src="../../../web-animations-js/web-animations-next.min.js"></script>
-
-  <script type="module" src="../../../@webcomponents/shadycss/entrypoints/apply-shim.js"></script>
-  <script type="module" src="../../../@polymer/polymer/lib/elements/custom-style.js"></script>
-  <script type="module" src="../../../@polymer/polymer/lib/elements/dom-bind.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
-  <script type="module" src="../../../@polymer/paper-styles/typography.js"></script>
-  <script type="module" src="../../../@api-components/raml-aware/raml-aware.js"></script>
-  <script type="module" src="../../../@polymer/paper-icon-button/paper-icon-button.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/xhr-simple-request/xhr-simple-request.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/oauth-authorization/oauth1-authorization.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/oauth-authorization/oauth2-authorization.js"></script>
-  <script type="module" src="../../../@api-components/api-console-default-theme/api-console-default-theme.js"></script>
-  <script type="module" src="../../api-console.js"></script>
-  <script type="module" src="../parser-element/parser-element.js"></script>
-
-  <!-- CodeMirror support, cannot be imported as a ES6 module -->
-  <script src="../../../jsonlint/lib/jsonlint.js"></script>
-  <script src="../../../codemirror/lib/codemirror.js"></script>
-  <script src="../../../codemirror/addon/mode/loadmode.js"></script>
-  <script src="../../../codemirror/mode/meta.js"></script>
-  <script src="../../../codemirror/mode/javascript/javascript.js"></script>
-  <script src="../../../codemirror/mode/xml/xml.js"></script>
-  <script src="../../../codemirror/mode/htmlmixed/htmlmixed.js"></script>
-  <script src="../../../codemirror/addon/lint/lint.js"></script>
-  <script src="../../../codemirror/addon/lint/json-lint.js"></script>
-  <script src="../../../@advanced-rest-client/code-mirror-hint/headers-addon.js"></script>
-  <script src="../../../@advanced-rest-client/code-mirror-hint/show-hint.js"></script>
-  <script src="../../../@advanced-rest-client/code-mirror-hint/hint-http-headers.js"></script>
+  <title>API Console element demo</title>
+  <script src="../../node_modules/web-animations-js/web-animations.min.js"></script>
+  <script src="../../node_modules/web-animations-js/web-animations-next.min.js"></script>
+  <script src="../../node_modules/cryptojslib/components/core.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/sha1.js"></script>
+  <script src="../../node_modules/cryptojslib/components/enc-base64-min.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/md5.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/hmac-sha1.js"></script>
+  <script src="../../node_modules/jsrsasign/lib/jsrsasign-rsa-min.js"></script>
+  <!--
+  Previously this was included into the compoennt.
+  Since compoennts are ES6 modules this libraries cannot be loaded into
+  the component as they do not export anything and won't set global variable.
+  -->
+  <script src="../../node_modules/jsonlint/lib/jsonlint.js"></script>
+  <script src="../../node_modules/codemirror/lib/codemirror.js"></script>
+  <script src="../../node_modules/codemirror/addon/mode/loadmode.js"></script>
+  <script src="../../node_modules/codemirror/mode/meta.js"></script>
+  <script src="../../node_modules/codemirror/mode/javascript/javascript.js"></script>
+  <script src="../../node_modules/codemirror/mode/xml/xml.js"></script>
+  <script src="../../node_modules/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+  <script src="../../node_modules/codemirror/addon/lint/lint.js"></script>
+  <script src="../../node_modules/codemirror/addon/lint/json-lint.js"></script>
+  <!--
+  From the inside of a web component it is hard to determine where
+  scripts are actually located. This should be set if the page won't load all possible
+  scripts at run time. The component will download the "mode" from this location.
+  -->
   <script>
   /* global CodeMirror */
-  CodeMirror.modeURL = '../../../codemirror/mode/%N/%N.js';
+  CodeMirror.modeURL = '../../node_modules/codemirror/mode/%N/%N.js';
   </script>
-  <!-- Authorization panel libraries, cannot be imported as a ES6 module -->
-  <script src="../../../cryptojslib/components/core.js"></script>
-  <script src="../../../cryptojslib/rollups/sha1.js"></script>
-  <script src="../../../cryptojslib/components/enc-base64-min.js"></script>
-  <script src="../../../cryptojslib/rollups/md5.js"></script>
-  <script src="../../../cryptojslib/rollups/hmac-sha1.js"></script>
-  <script src="../../../jsrsasign/lib/jsrsasign-rsa-min.js"></script>
 
-  <custom-style>
-    <style is="custom-style" include="demo-pages-shared-styles">
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #F0F4C3;
-    }
+  <link rel="stylesheet" type="text/css" crossorigin="anonymous" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic">
+  <link rel="stylesheet" type="text/css" href="../api-console-master-styles.css">
+  <style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    font-size: 15px;
+    color: #424242;
+    height: 100%;
+  }
 
-    :root {
-      --paper-checkbox-unchecked-color: #fff;
-      --paper-checkbox-label-color: #fff;
-    }
+  .api-dropdown {
+    --anypoint-dropdown-menu-background-color: #1c2831;
+    --anypoint-dropdown-menu-label-color: #fff;
+  }
 
-    api-console {
-      min-height: calc(100vh - 140px);
-      background-color: #fff;
-    }
+  h1 {
+    font-size: 34px;
+    font-weight: 200;
+    line-height: 28px;
+    box-sizing: border-box;
+    margin: 0;
+    flex: 1;
+  }
 
-    .apic-container {
-      position: relative;
-      max-width: 700px;
-      margin: 0px auto;
-    }
+  .demo-section {
+    width: 60%;
+    margin: 40px auto;
+  }
 
-    header {
-      max-width: 700px;
-      margin: 0 auto;
-    }
+  .wrapper {
+    position: relative;
+  }
 
-    h1 {
-      @apply --paper-font-display1;
-    }
-
-    [unresolved] .loader {
-      display: block;
-    }
-
-    .loader {
-      max-width: 700px;
-      margin: 0 auto;
-      display: none;
-    }
-    </style>
-  </custom-style>
+  .header {
+    display: flex;
+    align-items: center;;
+  }
+  </style>
 </head>
 
-<body unresolved>
-  <div class="loader">
-    <p>Loading the console</p>
-  </div>
-  <dom-bind id="demo">
-    <template is="dom-bind">
-      <raml-aware raml="{{amfModel}}" scope="demo-model"></raml-aware>
-      <xhr-simple-request></xhr-simple-request>
-      <oauth1-authorization></oauth1-authorization>
-      <oauth2-authorization></oauth2-authorization>
-      <template is="dom-if" if="[[hasData]]">
-        <header>
-          <h1>API console as a custom component</h1>
-          <p class="info">
-            This API console uses custom styling, has navigation on the right hand side and has top toolbars removed from the view.
-          </p>
-        </header>
-        <div class="apic-container">
-          <api-console aware="demo-model" append-headers="X-key: my-api-key\nOther-header:value" manual-navigation="[[manualNavigation]]" navigation-opened="{{navigationOpened}}" no-try-it="[[noTryIt]]" no-attribution="[[noAttribution]]" drawer-align="end" no-toolbars="">
-            <paper-icon-button icon="arc:close" slot="toolbar" on-click="_closeApi" title="Select different demo API"></paper-icon-button>
-          </api-console>
-        </div>
-      </template>
-      <template is="dom-if" if="[[!hasData]]">
-        <parser-element on-amf-changed="_updateAmf"></parser-element>
-      </template>
-    </template>
-  </dom-bind>
-  <script>
-  (function(scope) {
-    scope.hasData = false;
-    scope._updateAmf = function(e) {
-      scope.amfModel = e.detail.value;
-      scope.hasData = !!e.detail.value;
-    };
-
-    scope._closeApi = function() {
-      scope.hasData = false;
-    };
-  })(document.querySelector('#demo'));
-  </script>
+<body>
+  <div id="demo"></div>
+  <script type="module" src="./app.js" async></script>
 </body>
 
 </html>

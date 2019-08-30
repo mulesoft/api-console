@@ -16,8 +16,9 @@ class ApicApplication extends DemoBase {
       ['demo-api', 'Demo API']
     ];
   }
+
   demoTemplate() {
-    return html`<api-console
+    return html`<api-console-app
       app
       redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
       oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com">
@@ -28,7 +29,7 @@ class ApicApplication extends DemoBase {
         @click="${this.openApiSelector}">
         <iron-icon icon="arc:more-vert"></iron-icon>
       </anypoint-icon-button>
-    </api-console>
+    </api-console-app>
     ${this.apiSelectorTemplate()}
     `;
   }
