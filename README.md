@@ -10,6 +10,7 @@ This branch is in active development and most probably changes daily. Update you
 ```
 git clone https://github.com/mulesoft/api-console.git
 cd api-console
+git checkout 6.0.0-preview
 ```
 
 2.  Install dependencies.
@@ -25,21 +26,22 @@ npm start
 ## Changelog (so far)
 
 -   Upgrade to final web components specification: replacing HTML imports with JavaScript modules
--   Replacing Polymer with super lightweight, almost native, `LitElement`. This triggers a series of changes
+-   Replacing Polymer with super lightweight, almost native, `LitElement`. This triggers a series of changes:
     -   All dash-case attributes are now "no-dash", lowercase, web style attributes. For example old `redirect-uri` is now `redirecturi`. This is true for all properties used as HTML attribute. Properties names are the same.
     -   New templating engine. API Console now uses `lit-html` which is performant HTML templating system.
     -   Build process will be completely different. It is not yet ready, stay tuned.
 -   Redesigned base input controls. API console now uses own, material design based, basic UI input controls. It comes with 3 predefined styles:
-    -   **Default** - Material design filled state
-    -   **Outlined** - Material design outlined state controlled by `outlined` attribute
+    -   **Default** - Material design filled style
+    -   **Outlined** - Material design outlined state controlled by `outlined` style
     -   **Anypoint** - Compatibility layer with the Anypoint platform. Controlled by `compatibility` attribute
--   The request panel (aka try it) is now only renders editors that corresponds to the API data model. This means that, for example, if headers are not defined for given operation then headers panel is not rendered. Also, dropped support for tabs view for the editors and they are stacked now.
+-   The request panel (aka try it) now only renders editors that corresponds to the API data model. This means that, for example, if headers are not defined for given operation then headers panel is not rendered.
+-   Dropped support for tabs view for the editors in the request panel and they are stacked now.
 -   Code mirror dependency requires some additional libraries that won't work inside JavaScript module. This means that those libraries have to be included into the web application before initializing the element. See `Code Mirror changes` section below
 -   API Console is now WCAG compliant. All components used to build the console passed [axe-core](https://github.com/dequelabs/axe-core) tests and therefore are fully accessible.
 -   The application and the component are now split into separate components. Use `api-console` for embedding the console inside existing web application and `api-console-app` for creating stand alone application.
 -   New demo pages. Preview the console with `npm start` command (run inside cloned repository) to see API console with various scenarios and configuration options.
 -   Removed any reference to CSS mixins (the `@apply` function). All styling options are now defined via CSS variables. Any styles defined for previous version of API console won't work.
--   Minimised use of icons in favour regular buttons with labels.
+-   Minimised use of icons in favour of regular buttons with labels.
 -   This release contains tones of bug fixes and improvements reported by the community and our customers ❤
 
 Try this version of API console with your API and report an issue if anything is out of ordinary. We and the rest of the community will be grateful.
