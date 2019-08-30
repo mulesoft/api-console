@@ -36,7 +36,7 @@
     "@api-components/api-console-default-theme": "^3.0.0-preview.2",
     "@api-components/api-console-ext-comm": "^3.0.0",
     "@api-components/api-documentation": "^3.0.0",
-    "@api-components/api-navigation": "^3.0.5",
+    "@api-components/api-navigation": "^3.1.0",
     "@api-components/api-request-panel": "^3.0.0",
     "@api-components/raml-aware": "^3.0.0",
     "@polymer/app-layout": "^3.1.0",
