@@ -3,7 +3,7 @@ import { createConfig, startServer } from 'es-dev-server';
 import { demoApi } from './api.js';
 
 const config = createConfig({
-  // port: 8082,
+  port: 8001,
   watch: true,
   nodeResolve: true,
   appIndex: 'demo/index.html',
@@ -14,4 +14,5 @@ const config = createConfig({
     demoApi
   ]
 });
+config.openBrowser = true;
 startServer(config);

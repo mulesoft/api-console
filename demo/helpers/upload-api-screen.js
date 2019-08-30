@@ -52,12 +52,6 @@ class UploadApiScreen extends LitElement {
       font-size: 1.2rem;
     }
 
-    .intro {
-      margin: 40px 0;
-      font-size: 1.5rem;
-      color: #616161;
-    }
-
     code {
       background-color: #FFF8E1;
     }
@@ -171,10 +165,6 @@ class UploadApiScreen extends LitElement {
   render() {
     return html`
       <h1>Upload own API</h1>
-      <p class="intro">
-        <b>Before you begin</b>
-        run <code>npm run start:devserver</code> in the console to run API parsing server.
-      </p>
       <section role="main">
         <p class="drop-welcome">Drop your API file here</p>
         <p class="accept-info">

@@ -15,7 +15,7 @@ export class DemoBase {
     ]);
 
     this._selectApi = this._selectApi.bind(this);
-    this._processApiFile = this._processApiFile.bind(this);
+    this._processApiFileUpload = this._processApiFileUpload.bind(this);
   }
 
   get loading() {
@@ -156,11 +156,22 @@ export class DemoBase {
         body: value
       });
       const data = await response.json();
-      console.log(data);
+      if (response.status === 200) {
+        this.model = JSON.parse(data.data.api);
+      } else if (response.status === 300) {
+        this._requestSelectApi(data.data);
+      } else {
+        this.notifyError(data.message);
+      }
     } catch (e) {
       this.notifyError(e.message);
     }
     this.loading = false;
+  }
+
+  _requestSelectApi(data) {
+    const { key, candidates } = data;
+    console.log(key, candidates);
   }
 
   firstRendered() {}
