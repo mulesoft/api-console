@@ -20,8 +20,6 @@ import '@polymer/app-layout/app-header/app-header.js';
 import '@polymer/app-layout/app-header-layout/app-header-layout.js';
 import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '@polymer/app-route/app-location.js';
-import '@polymer/app-route/app-route.js';
 import '@api-components/api-navigation/api-navigation.js';
 import '@api-components/api-documentation/api-documentation.js';
 import '@api-components/api-request-panel/api-request-panel.js';

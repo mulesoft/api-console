@@ -82,13 +82,18 @@ export class ApiParser {
   }
 
   async readIncommingMessage(request) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let message;
       request.on('data', (chunk) => {
-        if (message) {
-          message = Buffer.concat(message, chunk);
-        } else {
-          message = chunk;
+        try {
+          if (message) {
+            message = Buffer.concat([message, chunk]);
+          } else {
+            message = chunk;
+          }
+        } catch (e) {
+          reject(e);
+          throw e;
         }
       });
 

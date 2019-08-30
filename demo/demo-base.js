@@ -2,20 +2,29 @@ import { html, render } from 'lit-html';
 import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
 import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
+import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@polymer/paper-toast/paper-toast.js';
 import './helpers/loader-screen.js';
 import './helpers/upload-api-screen.js';
+import './helpers/api-file-selector.js';
+import './helpers/api-selector.js';
 const apiCache = new WeakMap();
 
 export class DemoBase {
   constructor() {
     this.allowUpload = true;
     this.initObservableProperties([
-      'hasUploader'
+      'hasUploader',
+      'hasApiFileSelector',
+      'apiSelectorOpened'
     ]);
 
     this._selectApi = this._selectApi.bind(this);
     this._processApiFileUpload = this._processApiFileUpload.bind(this);
+    this._apiHandidateHandler = this._apiHandidateHandler.bind(this);
+    this.openApiSelector = this.openApiSelector.bind(this);
+    this._apiSelectorOpenedHandler = this._apiSelectorOpenedHandler.bind(this);
+    this._uploadHandler = this._uploadHandler.bind(this);
   }
 
   get loading() {
@@ -46,7 +55,7 @@ export class DemoBase {
       return;
     }
     this._model = value;
-    this._setAmfModel(value);
+    this._setAmfModel(value, old);
   }
 
   /**
@@ -90,7 +99,7 @@ export class DemoBase {
   }
 
   selectFirstApi() {
-    const listbox = document.getElementById('apiList');
+    const listbox = document.querySelector('#apiList,api-selector');
     if (!listbox) {
       return;
     }
@@ -98,6 +107,7 @@ export class DemoBase {
   }
 
   _selectApi(e) {
+    this.apiSelectorOpened = false;
     const node = e.target.selectedItem;
     if (!node) {
       return;
@@ -137,11 +147,13 @@ export class DemoBase {
     this.loading = false;
   }
 
-  _setAmfModel(model) {
+  _setAmfModel(model, old) {
     const apic = document.querySelector('api-console');
     apic.amf = model;
-    apic.selectedShape = 'summary';
-    apic.selectedShapeType = 'summary';
+    if (old) {
+      apic.selectedShape = 'summary';
+      apic.selectedShapeType = 'summary';
+    }
   }
 
   async _processApiFileUpload(e) {
@@ -171,7 +183,41 @@ export class DemoBase {
 
   _requestSelectApi(data) {
     const { key, candidates } = data;
-    console.log(key, candidates);
+    this.apiCandidates = candidates;
+    this.candidatesKey = key;
+    this.hasApiFileSelector = true;
+  }
+
+  _apiHandidateHandler(e) {
+    const file = e.detail;
+    const key = this.candidatesKey;
+    this.candidatesKey = undefined;
+    this.apiCandidates = undefined;
+    this.hasApiFileSelector = false;
+    this._processCandidates(file, key);
+  }
+
+  async _processCandidates(file, key) {
+    this.loading = true;
+    const body = JSON.stringify({
+      key,
+      file
+    });
+    try {
+      const response = await fetch('/api/parse/candidate', {
+        method: 'POST',
+        body
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        this.model = JSON.parse(data.data.api);
+      } else {
+        this.notifyError(data.message);
+      }
+    } catch (e) {
+      this.notifyError(e.message);
+    }
+    this.loading = false;
   }
 
   firstRendered() {}
@@ -198,8 +244,35 @@ export class DemoBase {
     </anypoint-dropdown-menu>`;
   }
 
+  apiSelectorTemplate() {
+    const items = this.apis;
+    if (!items) {
+      return '';
+    }
+    const result = items.map(([file, label]) => html`<anypoint-item data-src="${file}">${label}</anypoint-item>`);
+    return html`<api-selector
+      ?opened="${this.apiSelectorOpened}"
+      @opened-changed="${this._apiSelectorOpenedHandler}"
+      @select="${this._selectApi}"
+      @upload="${this._uploadHandler}">
+    ${result}
+    </api-selector>`;
+  }
+
+  _uploadHandler() {
+    this.openUploader();
+  }
+
   openUploader() {
     this.hasUploader = true;
+  }
+
+  openApiSelector() {
+    this.apiSelectorOpened = true;
+  }
+
+  _apiSelectorOpenedHandler(e) {
+    this.apiSelectorOpened = e.detail.value;
   }
 
   render() {
@@ -223,6 +296,11 @@ export class DemoBase {
       content = html`Implement <code>_render()</code> function`;
     } else if (this.hasUploader) {
       content = html`<upload-api-screen @select="${this._processApiFileUpload}"></upload-api-screen>`;
+    } else if (this.hasApiFileSelector) {
+      const items = this.apiCandidates;
+      content = html`<api-file-selector @candidate-selected="${this._apiHandidateHandler}">
+      ${items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+      </api-file-selector>`;
     } else {
       content = this.demoTemplate();
     }

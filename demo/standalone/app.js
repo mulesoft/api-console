@@ -15,12 +15,21 @@ class ApicApplication extends DemoBase {
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API']
     ];
-    // this.hasUploader = true;
   }
   demoTemplate() {
-    return html`<api-console aware="demo-model" app redirect-uri="https://auth.advancedrestclient.com/oauth-popup.html">
-      ${this.menuSelectorTemplate()}
-    </api-console>`;
+    return html`<api-console
+      app
+      redirect-uri="https://auth.advancedrestclient.com/oauth-popup.html">
+      <anypoint-icon-button
+        slot="toolbar"
+        aria-label="Activate to open API selection menu"
+        title="Open API selection menu"
+        @click="${this.openApiSelector}">
+        <iron-icon icon="arc:more-vert"></iron-icon>
+      </anypoint-icon-button>
+    </api-console>
+    ${this.apiSelectorTemplate()}
+    `;
   }
 
   firstRendered() {
@@ -31,3 +40,4 @@ class ApicApplication extends DemoBase {
 const demo = new ApicApplication();
 demo.initialize();
 demo.render();
+window.demo = demo;
