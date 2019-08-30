@@ -705,7 +705,15 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
         * by the request panel will be handled by other instances of the console.
         * @type {Element}
         */
-       eventsTarget: { type: Object }
+       eventsTarget: { type: Object },
+       /**
+        * A default Client ID to set on the OAuth 2 authorization panel
+        */
+       oauth2clientId: { type: String },
+       /**
+        * A default Client Secret to set on the OAuth 2 authorization panel
+        */
+       oauth2clientSecret: { type: String }
     };
   }
 
@@ -836,6 +844,36 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     }
     this._manualNavigation = value;
     this._narrowNavForced = this._computeNarrowNavForced(value, this.narrow);
+  }
+
+  get oauth2clientId() {
+    return this._oauth2clientId;
+  }
+
+  set oauth2clientId(value) {
+    const old = this._oauth2clientId;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._oauth2clientId = value;
+    // No need to pass the valu via binding system because the auth method
+    // uses session storage to restore user values between the screens
+    sessionStorage.setItem('auth.methods.latest.client_id', value);
+  }
+
+  get oauth2clientSecret() {
+    return this._oauth2clientSecret;
+  }
+
+  set oauth2clientSecret(value) {
+    const old = this._oauth2clientSecret;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._oauth2clientSecret = value;
+    sessionStorage.setItem('auth.methods.latest.client_secret', value);
   }
 
   constructor() {
