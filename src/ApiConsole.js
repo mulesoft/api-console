@@ -304,7 +304,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
         <anypoint-button
           class="action-button"
           ?legacy="${legacy}"
-          @click="closeTryIt"
+          @click="${this.closeTryIt}"
           emphasis="medium">Back to docs</anypoint-button>
       </div>
     </div>
