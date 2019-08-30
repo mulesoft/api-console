@@ -39,7 +39,8 @@ export class ApiConsoleApp extends ApiConsole {
     }, '', url);
   }
 
-  async __amfChanged() {
+  async __amfChanged(amf) {
+    super.__amfChanged(amf);
     await this.updateComplete;
     if (window.history.state) {
       this._onRoute(window.history);
