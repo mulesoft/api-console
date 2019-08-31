@@ -44,6 +44,7 @@ npm start
 -   Minimised use of icons in favour of regular buttons with labels.
 -   This release contains tones of bug fixes and improvements reported by the community and our customers ❤
 -   The Chrome proxy extension banner is not rendered by default. Set `allowExtensionBanner` property to initialize the console with the extension support.
+-   Added configuration option to set a static OAuth 2 client ID and secret for the application. This way it is easier to demo an API by providing demo client id.
 
 Try this version of API console with your API and report an issue if anything is out of ordinary. We and the rest of the community will be grateful.
 
