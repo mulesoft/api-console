@@ -2,6 +2,7 @@ import { html } from 'lit-html';
 import '@anypoint-web-components/anypoint-dropdown/anypoint-dropdown.js';
 import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
 import '@anypoint-web-components/anypoint-item/anypoint-item.js';
+import '@anypoint-web-components/anypoint-styles/colors.js';
 import '../../api-console.js';
 import { DemoBase } from '../demo-base.js';
 

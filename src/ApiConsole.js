@@ -175,7 +175,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _getRequestTemplate() {
     const {
       methodName,
-      legacy
+      compatibility
     } = this;
     return html`
     <div class="method-title-area">
@@ -183,7 +183,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       <div class="method-close-action">
         <anypoint-button
           class="action-button"
-          ?legacy="${legacy}"
+          ?legacy="${compatibility}"
           @click="${this.closeTryIt}"
           emphasis="medium">Back to docs</anypoint-button>
       </div>
@@ -195,7 +195,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
   _requestPanelTemplate() {
     const {
-      legacy,
+      compatibility,
       outlined,
       amf,
       selectedShape,
@@ -215,7 +215,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .selected="${selectedShape}"
       ?narrow="${narrow}"
       ?outlined="${outlined}"
-      ?legacy="${legacy}"
+      ?legacy="${compatibility}"
       .noUrlEditor="${noUrlEditor}"
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
@@ -230,7 +230,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _apiDocumentationTemplate() {
     const {
       inlineMethods,
-      legacy,
+      compatibility,
       outlined,
       _noTryItValue,
       amf,
@@ -246,7 +246,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .selected="${selectedShape}"
       .selectedType="${selectedShapeType}"
       ?narrow="${narrow}"
-      ?legacy="${legacy}"
+      ?legacy="${compatibility}"
       ?outlined="${outlined}"
       .inlineMethods="${inlineMethods}"
       .noTryIt="${_noTryItValue}"
@@ -524,7 +524,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        /**
         * A default Client Secret to set on the OAuth 2 authorization panel
         */
-       oauth2clientSecret: { type: String }
+       oauth2clientSecret: { type: String },
+       /**
+       * Enables compatibility with Anypoint components.
+       */
+      compatibility: { type: Boolean }
     };
   }
 

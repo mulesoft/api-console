@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>Themed API Console demo</title>
+  <script src="../../node_modules/web-animations-js/web-animations.min.js"></script>
+  <script src="../../node_modules/web-animations-js/web-animations-next.min.js"></script>
+  <script src="../../node_modules/cryptojslib/components/core.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/sha1.js"></script>
+  <script src="../../node_modules/cryptojslib/components/enc-base64-min.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/md5.js"></script>
+  <script src="../../node_modules/cryptojslib/rollups/hmac-sha1.js"></script>
+  <script src="../../node_modules/jsrsasign/lib/jsrsasign-rsa-min.js"></script>
+  <!--
+  Previously this was included into the compoennt.
+  Since compoennts are ES6 modules this libraries cannot be loaded into
+  the component as they do not export anything and won't set global variable.
+  -->
+  <script src="../../node_modules/jsonlint/lib/jsonlint.js"></script>
+  <script src="../../node_modules/codemirror/lib/codemirror.js"></script>
+  <script src="../../node_modules/codemirror/addon/mode/loadmode.js"></script>
+  <script src="../../node_modules/codemirror/mode/meta.js"></script>
+  <script src="../../node_modules/codemirror/mode/javascript/javascript.js"></script>
+  <script src="../../node_modules/codemirror/mode/xml/xml.js"></script>
+  <script src="../../node_modules/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+  <script src="../../node_modules/codemirror/addon/lint/lint.js"></script>
+  <script src="../../node_modules/codemirror/addon/lint/json-lint.js"></script>
+  <!--
+  From the inside of a web component it is hard to determine where
+  scripts are actually located. This should be set if the page won't load all possible
+  scripts at run time. The component will download the "mode" from this location.
+  -->
+  <script>
+  /* global CodeMirror */
+  CodeMirror.modeURL = '../../node_modules/codemirror/mode/%N/%N.js';
+  </script>
+  <link rel="stylesheet" type="text/css" href="./dark-theme.css">
+  <style>
+  html, body {
+    
+  }
+  </style>
+</head>
+
+<body>
+  <div id="demo"></div>
+  <script type="module" src="./dark.js" async></script>
+</body>
+
+</html>
