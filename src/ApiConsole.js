@@ -54,10 +54,58 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       display: none !important;
     }
 
-    .nav-content {
+    .nav-drawer {
+      width: var(--app-drawer-width, 256px);
+      display: block;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background-color: #fff;
+      transform: translateX(-100%);
+      transform-origin: top right;
+      transition: transform 0.3s cubic-bezier(0.74, 0.03, 0.3, 0.97);
+      height: 100%;
+      position: absolute;
+      z-index: 2;
+    }
+
+    :host([navigationopened]) .nav-drawer {
+      transform: translateX(0);
+      box-shadow: var(--anypoiont-dropdown-shaddow);
+    }
+
+    .nav-scrim {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      height: 100%;
+      position: absolute;
+      z-index: 1;
+
+      transition-property: opacity;
+      -webkit-transform: translateZ(0);
+      transform:  translateZ(0);
+
+      opacity: 0;
+      background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));
+    }
+
+    :host([navigationopened]) .nav-scrim {
+      opacity: 1;
+    }
+
+    .drawer-content-wrapper {
       display: flex;
-      flex-direction: row;
-      align-items: center;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    api-navigation {
+      flex: 1;
+      overflow: auto;
     }
 
     .powered-by {
@@ -75,79 +123,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       width: 177px;
       margin-left: 24px;
       fill: var(--api-console-menu-color, #424143);
-    }
-
-    .extension-banner {
-      align-items: center;
-      display: none;
-      border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
-      border-top: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
-      margin-bottom: 12px;
-      box-sizing: border-box;
-      color: var(--api-console-extension-banner-color, rgba(0,0,0,0.54));
-    }
-
-    .extension-banner[active] {
-      display: flex;
-      flex-direction: row;
-    }
-
-    .main-content {
-      margin-left: var(--api-console-main-content-margin-left, 24px);
-      margin-right: var(--api-console-main-content-margin-right, 24px);
-      margin-top: var(--api-console-main-content-margin-top, 0px);
-      position: relative;
-    }
-
-    .drawer-content-wrapper {
-      max-height: calc(100% - 64px);
-      display: flex;
-      flex-direction: column;
-      background-color: var(--api-console-menu-background-color, inherit);
-      height: 100%;
-    }
-
-    api-navigation {
-      flex: 1 1 auto;
-    }
-
-    /* :host(:not([app])) app-drawer-layout {
-      min-height: inherit;
-      overflow: hidden;
-    } */
-
-    /* :host(:not([app])) app-header {
-      position: absolute;
-      right: 0 !important;
-      left: 0 !important;
-    } */
-
-    api-request-panel,
-    api-documentation {
-      max-width: var(--api-console-main-max-width, 1600px);
-    }
-
-    .api-docs {
-      display: flex;
-      flex-direction: row;
-      overflow: auto;
-      margin-top: 12px;
-    }
-
-    .api-docs api-documentation {
-      flex: 1;
-    }
-
-    .api-docs .inline-request {
-      max-width: 600px;
-      margin-left: 12px;
-      background-color: var(--apic-tryint-wide-background-color, transparent);
-      border-left-width: 1px;
-      border-left-color: var(--apic-tryint-wide-border-color, #e5e5e5);
-      border-left-style: solid;
-      padding: 0 12px;
-      box-sizing: border-box;
-      flex: 1;
     }
 
     .method-title-area {
@@ -180,52 +155,22 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       margin: 0;
     }
 
-    .nav-drawer {
-      width: var(--app-drawer-width, 256px);
-      display: block;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      background-color: #fff;
-      transform: translateX(-100%);
-      transform-origin: top right;
-      transition: transform 0.3s cubic-bezier(0.74, 0.03, 0.3, 0.97);
-      position: absolute;
-    }
-
-    :host([navigationopened]) .nav-drawer {
-      transform: translateX(0);
-      box-shadow: var(--anypoiont-dropdown-shaddow);
-    }
-
-    .nav-scrim {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-
-      transition-property: opacity;
-      -webkit-transform: translateZ(0);
-      transform:  translateZ(0);
-
-      opacity: 0;
-      background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));
-    }
-
-    :host([navigationopened]) .nav-scrim {
-      opacity: 1;
+    .main-content {
+      overflow: auto;
+      height: 100%;
     }
     `;
   }
 
-  _getContentTemplate() {
+  _getPageTemplate() {
     switch (this.page) {
-      case 'docs': return this._getDocsTemplate();
+      case 'docs': return this._apiDocumentationTemplate();
       case 'request': return this._getRequestTemplate();
       default: return '';
     }
   }
+
+  _bannerMessage() {}
 
   _getRequestTemplate() {
     const {
@@ -282,7 +227,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .eventsTarget="${eventsTarget}"></api-request-panel>`;
   }
 
-  _getDocsTemplate() {
+  _apiDocumentationTemplate() {
     const {
       inlineMethods,
       legacy,
@@ -294,29 +239,22 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       narrow,
       scrollTarget,
       redirectUri,
-      baseUri,
-      _renderInlineTyit
+      baseUri
     } = this;
-    return html`<section class="api-docs">
-      <api-documentation
-        .amf="${amf}"
-        .selected="${selectedShape}"
-        .selectedType="${selectedShapeType}"
-        ?narrow="${narrow}"
-        ?legacy="${legacy}"
-        ?outlined="${outlined}"
-        .inlineMethods="${inlineMethods}"
-        .noTryIt="${_noTryItValue}"
-        .baseUri="${baseUri}"
-        .redirectUri="${redirectUri}"
-        .scrollTarget="${scrollTarget}"
-        @api-navigation-selection-changed="${this._apiNavigationOcurred}"
-        @tryit-requested="${this._tryitHandler}"></api-documentation>
-      ${_renderInlineTyit ? html`<div class="inline-request">
-        ${this._bannerMessage()}
-        ${this._requestPanelTemplate()}
-      </div>` : ''}
-    </section>`;
+    return html`<api-documentation
+      .amf="${amf}"
+      .selected="${selectedShape}"
+      .selectedType="${selectedShapeType}"
+      ?narrow="${narrow}"
+      ?legacy="${legacy}"
+      ?outlined="${outlined}"
+      .inlineMethods="${inlineMethods}"
+      .noTryIt="${_noTryItValue}"
+      .baseUri="${baseUri}"
+      .redirectUri="${redirectUri}"
+      .scrollTarget="${scrollTarget}"
+      @api-navigation-selection-changed="${this._apiNavigationOcurred}"
+      @tryit-requested="${this._tryitHandler}"></api-documentation>`;
   }
 
   _navigationTemplate() {
@@ -333,7 +271,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
   _navigationDrawerTemplate() {
     return html`
-    ${this.navigationOpened ? html`<div class="nav-scrim"></div>` : ''}
+    ${this.navigationOpened ? html`<div class="nav-scrim" @click="${this._closeDrawer}"></div>` : ''}
     <div class="nav-drawer">
     ${this._navigationTemplate()}
     </div>
@@ -343,7 +281,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _mainContentTemplate() {
     return html`
     <div class="main-content">
-      ${this._getContentTemplate()}
+      ${this._getPageTemplate()}
     </div>
     ${this._navigationDrawerTemplate()}`;
   }
@@ -860,5 +798,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _hasExtensionHandler(e) {
     this._hasApicCorsExtension = e.detail.value;
     this._hasCorsExtensionChanged(e.detail.value);
+  }
+
+  _closeDrawer() {
+    this.navigationOpened = false;
   }
 }

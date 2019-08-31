@@ -29,7 +29,9 @@ class ApicApplication extends DemoBase {
           @click="${this.toggleConsoleMenu}">
           <iron-icon icon="arc:menu"></iron-icon>
         </anypoint-icon-button>
+
         <h1>API Console as an element</h1>
+
         <anypoint-icon-button
           aria-label="Activate to open API selection menu"
           title="Open API selection menu"
@@ -38,16 +40,24 @@ class ApicApplication extends DemoBase {
         </anypoint-icon-button>
       </div>
 
-      <div class="wrapper">
-        <api-console
-          redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
-          oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com">
-        </api-console>
-      </div>
+      <api-console
+        redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
+        oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com">
+      </api-console>
 
-      ${this.apiSelectorTemplate()}
-    <section>
+      <div class="footer">
+        Brought to you with ❤ by MuleSoft. A Salesforce company.
+      </div>
+    </section>
+    ${this.apiSelectorTemplate()}
     `;
+  }
+
+  _setAmfModel(model) {
+    const apic = document.querySelector('api-console');
+    apic.amf = model;
+    apic.selectedShape = 'summary';
+    apic.selectedShapeType = 'summary';
   }
 
   firstRendered() {

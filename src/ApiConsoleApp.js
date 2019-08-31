@@ -21,21 +21,84 @@ export class ApiConsoleApp extends ApiConsole {
         display: none;
       }
 
-      /* app-drawer {
-        z-index: 0;
-      } */
-
-      /* :host(:not([app])) app-drawer {
-        position: absolute;
-      } */
-
-      /* :host([layout-narrow]) app-drawer {
-        z-index: var(--api-console-drawer-zindex, 1);
-      } */
-
       app-toolbar {
         background-color: var(--api-console-toolbar-background-color, #283640); /* #2196f3 */
         color: var(--api-console-toolbar-color, #fff);
+      }
+
+      .extension-banner {
+        align-items: center;
+        display: none;
+        border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
+        border-top: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+        color: var(--api-console-extension-banner-color, rgba(0,0,0,0.54));
+      }
+
+      .extension-banner[active] {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .extension-banner {
+        max-width: var(--api-console-main-max-width, 1600px);
+      }
+
+      .nav-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .main-content {
+        margin-left: var(--api-console-main-content-margin-left, 24px);
+        margin-right: var(--api-console-main-content-margin-right, 24px);
+        margin-top: var(--api-console-main-content-margin-top, 0px);
+        position: relative;
+        /* Overrides values from the element */
+        overflow: initial;
+        height: initial;
+      }
+
+      .drawer-content-wrapper {
+        max-height: calc(100% - 64px);
+        display: flex;
+        flex-direction: column;
+        background-color: var(--api-console-menu-background-color, inherit);
+        height: 100%;
+      }
+
+      api-navigation {
+        flex: 1 1 auto;
+      }
+
+      api-request-panel,
+      api-documentation {
+        max-width: var(--api-console-main-max-width, 1600px);
+      }
+
+      .api-docs {
+        display: flex;
+        flex-direction: row;
+        overflow: auto;
+        margin-top: 12px;
+      }
+
+      .api-docs api-documentation {
+        flex: 1;
+      }
+
+      .api-docs .inline-request {
+        max-width: 600px;
+        margin-left: 12px;
+        background-color: var(--apic-tryint-wide-background-color, transparent);
+        border-left-width: 1px;
+        border-left-color: var(--apic-tryint-wide-border-color, #e5e5e5);
+        border-left-style: solid;
+        padding: 0 12px;
+        box-sizing: border-box;
+        flex: 1;
       }
       `
     ];
@@ -152,7 +215,7 @@ export class ApiConsoleApp extends ApiConsole {
 
   constructor() {
     super();
-    this.responsiveWidth = '640px';
+    this.responsiveWidth = '900px';
   }
 
   _updateRenderInlineTyit() {
@@ -262,6 +325,16 @@ export class ApiConsoleApp extends ApiConsole {
     </div>`;
   }
 
+  _apiDocumentationTemplate() {
+    return html`<section class="api-docs">
+    ${super._apiDocumentationTemplate()}
+    ${this._renderInlineTyit ? html`<div class="inline-request">
+      ${this._bannerMessage()}
+      ${this._requestPanelTemplate()}
+    </div>` : ''}
+    </section>`;
+  }
+
   _mainContentTemplate() {
     const {
       responsiveWidth,
@@ -283,14 +356,16 @@ export class ApiConsoleApp extends ApiConsole {
         ${this._contentToolbarTemplate()}
         <div class="main-content">
           <slot name="content"></slot>
-          ${this._getContentTemplate()}
+          ${this._getPageTemplate()}
         </div>
       </app-header-layout>
     </app-drawer-layout>`;
   }
 
   connectedCallback() {
-    super.connectedCallback();
+    if (super.connectedCallback) {
+      super.connectedCallback();
+    }
     window.addEventListener('popstate', this._onRoute.bind(this));
   }
 

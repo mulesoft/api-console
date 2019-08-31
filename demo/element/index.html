@@ -55,27 +55,48 @@
     --anypoint-dropdown-menu-label-color: #fff;
   }
 
+  .demo-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 60%;
+  }
+
   h1 {
     font-size: 34px;
     font-weight: 200;
     line-height: 28px;
     box-sizing: border-box;
-    margin: 0;
+    margin: 0 0 0 12px;
     flex: 1;
   }
 
-  .demo-section {
-    width: 60%;
-    margin: 40px auto;
+  api-console {
+    flex: 1;
+    overflow: auto;
+  }
+
+  #demo {
+    height: 100%;
   }
 
   .wrapper {
     position: relative;
+    height: calc(100% - 100px);
   }
 
   .header {
     display: flex;
-    align-items: center;;
+    align-items: center;
+    margin: 20px 0;
+  }
+
+  .footer {
+    padding: 20px 0;
+    font-size: 1rem;
+    text-align: center;
+    color: #9E9E9E;
   }
   </style>
 </head>
