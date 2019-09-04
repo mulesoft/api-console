@@ -5,6 +5,7 @@ html {
   --secondary-color: var(--anypoint-color-secondary);
   --primary-background-color: var(--anypoint-color-tertiary);
   --accent-color: var(--anypoint-color-primary);
+  --error-color: var(--anypoint-color-danger);
 
   --arc-font-body1-font-size: var(--font-body-font-size);
   --arc-font-body1-font-weight: var(--font-body-font-weight);
