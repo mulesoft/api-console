@@ -14,20 +14,12 @@ the License.
 import { html, css, LitElement } from 'lit-element';
 import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
 import '@api-components/raml-aware/raml-aware.js';
-import '@polymer/app-layout/app-drawer/app-drawer.js';
-import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
-import '@polymer/app-layout/app-header/app-header.js';
-import '@polymer/app-layout/app-header-layout/app-header-layout.js';
-import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
-import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@api-components/api-navigation/api-navigation.js';
 import '@api-components/api-documentation/api-documentation.js';
 import '@api-components/api-request-panel/api-request-panel.js';
-import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-toast/paper-toast.js';
-import '@polymer/iron-media-query/iron-media-query.js';
 import '@api-components/api-console-ext-comm/api-console-ext-comm.js';
 import attributionTpl from './attribution-template.js';
 
@@ -303,12 +295,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _helpersTemplate() {
     return html`<paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
     <api-console-ext-comm @has-extension-changed="${this._hasExtensionHandler}"></api-console-ext-comm>
-    <xhr-simple-request
-      .appendHeaders="${this.appendHeaders}"
-      .proxy="${this.proxy}"
-      .proxyEncodeUrl="${this.proxyEncodeUrl}"></xhr-simple-request>
-    <oauth1-authorization></oauth1-authorization>
-    <oauth2-authorization></oauth2-authorization>`;
+    `;
   }
 
   render() {
@@ -397,37 +384,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
       _hasApicCorsExtension: { type: Boolean },
       /**
-       * Forces the console to send headers defined in this string overriding
-       * any used defined header.
-       * It can be useful if the console has to send any headers string
-       * to a server without user knowing about it.
-       * The headers should be valid HTTP headers string.
-       */
-      appendHeaders: { type: String },
-      /**
        * If true it forces the console to render narrow layout.
        * This hides left hand side navigation and some fonts are smaller
        * (like titles).
        */
       narrow: { type: Boolean, reflect: true },
-      /**
-       * If set every request made from the console will be proxied by the service provided in this
-       * value.
-       * It will prefix entered URL with the proxy value. so the call to
-       * `http://domain.com/path/?query=some+value` will become
-       * `https://proxy.com/path/http://domain.com/path/?query=some+value`
-       *
-       * If the proxy require a to pass the URL as a query parameter define value as follows:
-       * `https://proxy.com/path/?url=`. In this case be sure to set `proxy-encode-url`
-       * attribute.
-       */
-      proxy: { type: String },
-      /**
-       * If `proxy` is set, it will URL encode the request URL before appending it to the proxy URL.
-       * `http://domain.com/path/?query=some+value` will become
-       * `https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`
-       */
-      proxyEncodeUrl: { type: Boolean },
       /**
        * If set then the API console hide the "try it" button from the
        * method documentation view. The request and response panels still will

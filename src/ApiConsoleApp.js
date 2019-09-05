@@ -1,8 +1,16 @@
 import { ApiConsole } from './ApiConsole.js';
 import { html, css } from 'lit-element';
+import '@polymer/app-layout/app-drawer/app-drawer.js';
+import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
+import '@polymer/app-layout/app-header/app-header.js';
+import '@polymer/app-layout/app-header-layout/app-header-layout.js';
+import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
+import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
 import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
+import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
+import '@polymer/iron-media-query/iron-media-query.js';
 
 export class ApiConsoleApp extends ApiConsole {
   static get styles() {
@@ -148,6 +156,32 @@ export class ApiConsoleApp extends ApiConsole {
        * It is set automatically via media queries
        */
       wideLayout: { type: Boolean },
+      /**
+       * Forces the console to send headers defined in this string overriding
+       * any used defined header.
+       * It can be useful if the console has to send any headers string
+       * to a server without user knowing about it.
+       * The headers should be valid HTTP headers string.
+       */
+      appendHeaders: { type: String },
+      /**
+       * If set every request made from the console will be proxied by the service provided in this
+       * value.
+       * It will prefix entered URL with the proxy value. so the call to
+       * `http://domain.com/path/?query=some+value` will become
+       * `https://proxy.com/path/http://domain.com/path/?query=some+value`
+       *
+       * If the proxy require a to pass the URL as a query parameter define value as follows:
+       * `https://proxy.com/path/?url=`. In this case be sure to set `proxy-encode-url`
+       * attribute.
+       */
+      proxy: { type: String },
+      /**
+       * If `proxy` is set, it will URL encode the request URL before appending it to the proxy URL.
+       * `http://domain.com/path/?query=some+value` will become
+       * `https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`
+       */
+      proxyEncodeUrl: { type: Boolean },
 
       _renderInlineTyit: { type: Boolean },
 
@@ -360,6 +394,25 @@ export class ApiConsoleApp extends ApiConsole {
         </div>
       </app-header-layout>
     </app-drawer-layout>`;
+  }
+
+  /**
+   * The components below are optional dependencies. They will not be used until
+   * sources of the components are included into AC bundle.
+   * This would help build the console and only add a dependency at the build time
+   * without statically include the dependency.
+   *
+   * @return {TemplateResult}
+   */
+  _helpersTemplate() {
+    return html`
+    ${super._helpersTemplate()}
+    <xhr-simple-request
+      .appendHeaders="${this.appendHeaders}"
+      .proxy="${this.proxy}"
+      .proxyEncodeUrl="${this.proxyEncodeUrl}"></xhr-simple-request>
+    <oauth1-authorization></oauth1-authorization>
+    <oauth2-authorization></oauth2-authorization>`;
   }
 
   connectedCallback() {

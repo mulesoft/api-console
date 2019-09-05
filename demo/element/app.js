@@ -3,6 +3,9 @@ import '@anypoint-web-components/anypoint-dropdown/anypoint-dropdown.js';
 import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
 import '@anypoint-web-components/anypoint-item/anypoint-item.js';
 import '@anypoint-web-components/anypoint-styles/colors.js';
+import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
+import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
+import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '../../api-console.js';
 import { DemoBase } from '../demo-base.js';
 
@@ -45,6 +48,10 @@ class ApicApplication extends DemoBase {
         redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
         oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com">
       </api-console>
+
+      <xhr-simple-request></xhr-simple-request>
+      <oauth1-authorization></oauth1-authorization>
+      <oauth2-authorization></oauth2-authorization>
 
       <div class="footer">
         Brought to you with ❤ by MuleSoft. A Salesforce company.
