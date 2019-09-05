@@ -1,6 +1,10 @@
 coverage/
 test/
 demo/
+build/
+dist/
+docs/
+demo/
 gen-tsd.json
 CONTRIBUTING.md
 .travis.yml
@@ -12,3 +16,6 @@ commitlint.*
 .*
 *.config.*
 prettier.config.js
+sw-precache-config.js
+service-worker.js
+apic-import.js
