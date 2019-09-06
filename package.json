@@ -32,7 +32,7 @@
     "@advanced-rest-client/oauth-authorization": "^3.0.1",
     "@advanced-rest-client/xhr-simple-request": "^3.0.0",
     "@anypoint-web-components/anypoint-button": "^1.0.7",
-    "@api-components/amf-helper-mixin": "^3.1.6",
+    "@api-components/amf-helper-mixin": "^3.1.7",
     "@api-components/api-console-default-theme": "^3.0.0-preview.2",
     "@api-components/api-console-ext-comm": "^3.0.0",
     "@api-components/api-documentation": "^3.0.1",
