@@ -250,6 +250,7 @@ export class ApiConsoleApp extends ApiConsole {
   constructor() {
     super();
     this.responsiveWidth = '900px';
+    this.allowHideOptional = true;
   }
 
   _updateRenderInlineTyit() {
