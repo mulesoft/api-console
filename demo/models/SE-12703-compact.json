@@ -1,0 +1,1065 @@
+[
+{
+"@id": "",
+"@type": [
+"doc:Document",
+"doc:Fragment",
+"doc:Module",
+"doc:Unit"
+],
+"doc:encodes": [
+{
+"@id": "#6",
+"@type": [
+"schema-org:WebAPI",
+"doc:RootDomainElement",
+"doc:DomainElement"
+],
+"schema-org:name": [
+{
+"@value": "oas-mule-test"
+}
+],
+"schema-org:description": [
+{
+"@value": "A sample API"
+}
+],
+"raml-http:server": [
+{
+"@id": "#7",
+"@type": [
+"raml-http:Server",
+"doc:DomainElement"
+],
+"raml-http:url": [
+{
+"@value": "localhost:3000/"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#7/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:host-lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:url"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(6,0)-(7,0)]"
+}
+]
+}
+],
+"sourcemaps:synthesized-field": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#7"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+}
+],
+"sourcemaps:base-path-lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:url"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(7,0)-(8,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"raml-http:accepts": [
+{
+"@value": "application/json; charset=utf-8"
+}
+],
+"raml-http:contentType": [
+{
+"@value": "application/json; charset=utf-8"
+}
+],
+"schema-org:version": [
+{
+"@value": "7.0.11"
+}
+],
+"raml-http:endpoint": [
+{
+"@id": "#8",
+"@type": [
+"raml-http:EndPoint",
+"doc:DomainElement"
+],
+"raml-http:path": [
+{
+"@value": "/user/{id}"
+}
+],
+"hydra:supportedOperation": [
+{
+"@id": "#9",
+"@type": [
+"hydra:Operation",
+"doc:DomainElement"
+],
+"hydra:method": [
+{
+"@value": "get"
+}
+],
+"raml-http:accepts": [
+{
+"@value": "application/json; charset=utf-8"
+}
+],
+"raml-http:contentType": [
+{
+"@value": "application/json; charset=utf-8"
+}
+],
+"hydra:expects": [
+{
+"@id": "#10",
+"@type": [
+"raml-http:Request",
+"doc:DomainElement"
+],
+"raml-http:payload": [],
+"raml-http:uriParameter": [
+{
+"@id": "#11",
+"@type": [
+"raml-http:Parameter",
+"doc:DomainElement"
+],
+"schema-org:name": [
+{
+"@value": "id"
+}
+],
+"raml-http:paramName": [
+{
+"@value": "id"
+}
+],
+"hydra:required": [
+{
+"@value": true
+}
+],
+"raml-http:binding": [
+{
+"@value": "path"
+}
+],
+"raml-http:schema": [
+{
+"@id": "#12",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#integer"
+}
+],
+"shacl:name": [
+{
+"@value": "schema"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#12/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#12"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(31,10)-(31,14)]"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:datatype"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(31,10)-(32,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#12"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(28,10)-(32,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#11/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:schema"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(28,10)-(32,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "hydra:required"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(30,10)-(31,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "schema-org:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(28,10)-(29,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#11"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(28,10)-(32,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:paramName"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(28,10)-(29,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:binding"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(29,10)-(30,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#10/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:uriParameter"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(27,6)-(32,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"hydra:returns": [
+{
+"@id": "#13",
+"@type": [
+"raml-http:Response",
+"doc:DomainElement"
+],
+"schema-org:name": [
+{
+"@value": "200"
+}
+],
+"schema-org:description": [
+{
+"@value": "user object"
+}
+],
+"hydra:statusCode": [
+{
+"@value": "200"
+}
+],
+"raml-http:payload": [
+{
+"@id": "#14",
+"@type": [
+"raml-http:Payload",
+"doc:DomainElement"
+],
+"raml-http:mediaType": [
+{
+"@value": "application/json; charset=utf-8"
+}
+],
+"raml-http:schema": [
+{
+"@id": "#5/linked_3",
+"@type": [
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"doc:link-target": [
+{
+"@id": "#5"
+}
+],
+"doc:link-label": [
+{
+"@value": "User"
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#13/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "schema-org:description"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(34,10)-(35,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#13"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(33,8)-(37,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#9/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "hydra:returns"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(32,6)-(37,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#9"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(26,4)-(37,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#8/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#8"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(25,2)-(37,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#6/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:source-vendor": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#6"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "OAS 2.0"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:endpoint"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(24,6)-(37,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:contentType"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(8,0)-(10,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "schema-org:description"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(4,2)-(5,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#6"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(1,0)-(37,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "schema-org:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(3,2)-(4,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "raml-http:accepts"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(10,0)-(13,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "schema-org:version"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(5,2)-(6,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"doc:declares": [
+{
+"@id": "#1",
+"@type": [
+"shacl:NodeShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:closed": [
+{
+"@value": false
+}
+],
+"shacl:property": [
+{
+"@id": "#2",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#name"
+}
+],
+"raml-shapes:range": [
+{
+"@id": "#3",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": [
+{
+"@value": "name"
+}
+],
+"doc:examples": [
+{
+"@id": "#4",
+"@type": [
+"doc:Example",
+"doc:DomainElement"
+],
+"doc:strict": [
+{
+"@value": true
+}
+],
+"doc:structuredValue": [
+{
+"@id": "#4",
+"@type": [
+"data:Scalar",
+"data:Node",
+"doc:DomainElement"
+],
+"data:value": [
+{
+"@value": "sebastian"
+}
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"schema-org:name": [
+{
+"@value": "scalar_1"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#4/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#4"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(19,17)-(19,26)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:raw": [
+{
+"@value": "sebastian"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#4/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:synthesized-field": [
+{
+"sourcemaps:element": [
+{
+"@value": "doc:strict"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:raw"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(19,17)-(19,26)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#4"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(19,17)-(19,26)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "doc:structuredValue"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(19,17)-(19,26)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#3/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(18,8)-(18,12)]"
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:datatype"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(18,8)-(19,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#3"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(17,6)-(20,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"shacl:minCount": [
+{
+"@value": 0
+}
+],
+"shacl:name": [
+{
+"@value": "name"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#2/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#2"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(17,6)-(20,0)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"doc:recursive": [
+{
+"@value": true
+}
+],
+"shacl:name": [
+{
+"@value": "NewUser"
+}
+],
+"sourcemaps:sources": [
+{
+"@id": "#1/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:declared-element": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": ""
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(14,2)-(14,9)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(14,2)-(20,0)]"
+}
+]
+}
+],
+"sourcemaps:type-property-lexical-info": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#1"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(15,4)-(15,8)]"
+}
+]
+}
+]
+}
+]
+},
+{
+"@id": "#5",
+"@type": [
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"doc:recursive": [
+{
+"@value": true
+}
+],
+"shacl:name": [
+{
+"@value": "User"
+}
+],
+"shacl:and": [
+[
+{
+"@id": "#1/linked_3",
+"@type": [
+"shacl:NodeShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"doc:link-target": [
+{
+"@id": "#1"
+}
+],
+"doc:link-label": [
+{
+"@value": "NewUser"
+}
+]
+}
+]
+],
+"sourcemaps:sources": [
+{
+"@id": "#5/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:declared-element": [
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#5"
+}
+],
+"sourcemaps:value": [
+{
+"@value": ""
+}
+]
+}
+],
+"sourcemaps:lexical": [
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:and"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(21,10)-(24,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "amf://id#5"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(20,2)-(24,0)]"
+}
+]
+},
+{
+"sourcemaps:element": [
+{
+"@value": "shacl:name"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "[(20,2)-(20,6)]"
+}
+]
+}
+]
+}
+]
+}
+],
+"@context": {
+"@base": "amf://id",
+"raml-http": "http://a.ml/vocabularies/http#",
+"shacl": "http://www.w3.org/ns/shacl#",
+"raml-shapes": "http://a.ml/vocabularies/shapes#",
+"data": "http://a.ml/vocabularies/data#",
+"doc": "http://a.ml/vocabularies/document#",
+"sourcemaps": "http://a.ml/vocabularies/document-source-maps#",
+"schema-org": "http://schema.org/",
+"hydra": "http://www.w3.org/ns/hydra/core#"
+}
+}
+]

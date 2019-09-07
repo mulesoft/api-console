@@ -13,7 +13,8 @@ class ApicApplication extends DemoBase {
       ['httpbin', 'HTTPbin API'],
       ['exchange-experience-api', 'Exchange Experience API'],
       ['data-type-fragment', 'RAML data type fragment'],
-      ['demo-api', 'Demo API']
+      ['demo-api', 'Demo API'],
+      ['SE-12703', 'OAS allOf body']
     ];
   }
 

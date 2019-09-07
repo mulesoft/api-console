@@ -1,0 +1,36 @@
+swagger: "2.0"
+info:
+  title: oas-mule-test
+  description: A sample API
+  version: 7.0.11
+host: localhost:3000
+basePath: /
+produces:
+  - 'application/json; charset=utf-8'
+consumes:
+  - 'application/json; charset=utf-8'
+
+definitions:
+  NewUser:
+    type: object
+    properties:
+      name:
+        type: string
+        example: sebastian
+  User:
+    allOf:
+      - $ref: '#/definitions/NewUser'
+
+paths:
+  /user/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: user object
+          schema:
+            $ref: '#/definitions/User'
