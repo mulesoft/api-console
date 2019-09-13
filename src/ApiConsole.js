@@ -58,7 +58,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       transition: transform 0.3s cubic-bezier(0.74, 0.03, 0.3, 0.97);
       height: 100%;
       position: absolute;
-      z-index: 2;
+      z-index: 5;
     }
 
     :host([navigationopened]) .nav-drawer {
@@ -72,15 +72,12 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       right: 0;
       bottom: 0;
       left: 0;
-
       height: 100%;
       position: absolute;
-      z-index: 1;
-
+      z-index: 4;
       transition-property: opacity;
       -webkit-transform: translateZ(0);
       transform:  translateZ(0);
-
       opacity: 0;
       background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));
     }
