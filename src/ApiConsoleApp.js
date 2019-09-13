@@ -4,7 +4,6 @@ import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
 import '@polymer/app-layout/app-header-layout/app-header-layout.js';
-import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
 import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
@@ -23,6 +22,7 @@ export class ApiConsoleApp extends ApiConsole {
         left: 0;
         right: 0;
         bottom: 0;
+        overflow: scroll;
       }
 
       app-drawer-layout:not([narrow]) [drawer-toggle] {
@@ -328,9 +328,8 @@ export class ApiConsoleApp extends ApiConsole {
       apiTitle
     } = this;
     return html`<app-header
-      slot="header"
-      reveals
-      effects="waterfall">
+      fixed
+      slot="header">
       <app-toolbar>
         <anypoint-icon-button drawer-toggle ?hidden="${manualNavigation}">
           <iron-icon drawer-toggle icon="arc:menu"></iron-icon>
@@ -387,7 +386,7 @@ export class ApiConsoleApp extends ApiConsole {
         ${this._drawerToolbarTemplate()}
         ${this._navigationTemplate()}
       </app-drawer>
-      <app-header-layout has-scrolling-region>
+      <app-header-layout>
         ${this._contentToolbarTemplate()}
         <div class="main-content">
           <slot name="content"></slot>
