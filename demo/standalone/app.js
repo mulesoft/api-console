@@ -14,7 +14,8 @@ class ApicApplication extends DemoBase {
       ['exchange-experience-api', 'Exchange Experience API'],
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API'],
-      ['SE-12703', 'OAS allOf body']
+      ['SE-12703', 'OAS allOf body'],
+      ['APIC-262', 'Example value type']
     ];
   }
 
