@@ -1,5 +1,11 @@
 __See live example of the API console in our [demo application][].__
 
+# Version 6.0.0 preview is now open
+
+You are welcome to try API Console version 6 now! It comes with complete code base redesign, use of final Web Components specification and new design for the API request panel. Try it by following instructions in [6.0.0 release branch](https://github.com/mulesoft/api-console/tree/6.0.0-preview).
+
+Don't forget to give us your feedback!
+
 # The API Console
 
 MuleSoft's API Console is a full-fledged API documentation tool that generates mobile-friendly web documentation based on RAML (Restful API Modeling Language) or OAS (Open API specification) documents. In addition to providing documentation, the tool provides the capability for users to try out requests on the fly.
