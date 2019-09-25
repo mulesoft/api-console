@@ -15,7 +15,8 @@ class ApicApplication extends DemoBase {
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API'],
       ['SE-12703', 'OAS allOf body'],
-      ['APIC-262', 'Example value type']
+      ['APIC-262', 'Example value type'],
+      ['console-445', 'Multipart request']
     ];
   }
 

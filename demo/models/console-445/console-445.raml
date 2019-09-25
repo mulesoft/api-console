@@ -1,0 +1,13 @@
+#%RAML 1.0
+version: v1
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/0afa22b8-792b-4b7a-a0d7-b6a9a0e6e600/ #
+title: ExampleRAML
+
+/upload:
+  post:
+    body:
+      multipart/form-data:
+        properties:
+          file:
+            required: false
+            type: file

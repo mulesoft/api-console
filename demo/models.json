@@ -7,5 +7,6 @@
   "models/httpbin/httpbin.json": ["OAS 2.0", "application/json"],
   "models/data-type-fragment/data-type-fragment.raml": "RAML 1.0",
   "models/SE-12703/SE-12703.yaml": ["OAS 2.0", "application/yaml"],
-  "models/APIC-262/APIC-262.raml": "RAML 1.0"
+  "models/APIC-262/APIC-262.raml": "RAML 1.0",
+  "models/console-445/console-445.raml": "RAML 1.0"
 }
