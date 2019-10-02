@@ -310,8 +310,10 @@ export class AmfService {
         this._killParser();
       }
     }
+    const env = Object.assign({ NODE_OPTIONS: '--max-old-space-size=4096' }, process.env);
     const options = {
-      execArgv: []
+      execArgv: [],
+      env
     };
     this._parserProc = fork(`${__dirname}/amf-parser.js`, options);
     this._parserProc.on('exit', () => {
