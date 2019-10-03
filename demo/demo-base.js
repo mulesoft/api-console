@@ -2,7 +2,6 @@ import { html, render } from 'lit-html';
 import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
 import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
-import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@polymer/paper-toast/paper-toast.js';
 import './helpers/loader-screen.js';
 import './helpers/upload-api-screen.js';

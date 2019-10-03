@@ -6,6 +6,8 @@ import '@anypoint-web-components/anypoint-styles/colors.js';
 import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
 import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
+import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
+import { moreVert, menu } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 import '../../api-console.js';
 import { DemoBase } from '../demo-base.js';
 
@@ -30,8 +32,9 @@ class ApicApplication extends DemoBase {
         <anypoint-icon-button
           aria-label="Activate to open API console menu"
           title="Open API console menu"
-          @click="${this.toggleConsoleMenu}">
-          <iron-icon icon="arc:menu"></iron-icon>
+          @click="${this.toggleConsoleMenu}"
+        >
+          <span class="icon">${menu}</span>
         </anypoint-icon-button>
 
         <h1>API Console as an element</h1>
@@ -39,8 +42,9 @@ class ApicApplication extends DemoBase {
         <anypoint-icon-button
           aria-label="Activate to open API selection menu"
           title="Open API selection menu"
-          @click="${this.openApiSelector}">
-          <iron-icon icon="arc:more-vert"></iron-icon>
+          @click="${this.openApiSelector}"
+        >
+          <span class="icon">${moreVert}</span>
         </anypoint-icon-button>
       </div>
 

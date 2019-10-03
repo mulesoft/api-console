@@ -2,7 +2,7 @@ import { html, css, LitElement } from 'lit-element';
 import { AnypointMenuMixin } from '@anypoint-web-components/anypoint-menu-mixin/anypoint-menu-mixin.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
-import '@polymer/iron-icon/iron-icon.js';
+import { close, addCircleOutline } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 
 class ApiSelector extends AnypointMenuMixin(LitElement) {
   static get styles() {
@@ -38,6 +38,13 @@ class ApiSelector extends AnypointMenuMixin(LitElement) {
 
     .upload {
       width: 100%;
+    }
+
+    .icon {
+      display: inlink-block;
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
     }
     `;
   }
@@ -85,12 +92,13 @@ class ApiSelector extends AnypointMenuMixin(LitElement) {
         <div class="title">Select API</div>
         <anypoint-icon-button
           aria-label="Activate to close the API menu"
-          @click="${this.close}">
-          <iron-icon icon="arc:close"></iron-icon>
+          @click="${this.close}"
+        >
+          <span class="icon">${close}</span>
         </anypoint-icon-button>
       </div>
       <anypoint-button @click="${this._uploadHandler}" class="upload">
-        <iron-icon icon="arc:add-circle-outline"></iron-icon>
+        <span class="icon">${addCircleOutline}</span>
         Upload an API
       </anypoint-button>
       <section>
