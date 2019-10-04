@@ -71,7 +71,23 @@ types:
     type: Parent
     properties:
       name: string
-
+  MultipartPerson:
+    properties:
+      name:
+        type: string
+        description: Name of the person
+      email:
+        type: string
+      image:
+        type: file
+        fileTypes: ['image/jpeg', 'image/png']
+      age:
+        type: number
+        description: Age of the person.
+      optParam:
+        type: number
+        required: false
+        description: Age of the person.
 resourceTypes:
   ResourceNotFound:
     get:
@@ -447,3 +463,8 @@ documentation:
         description: |
           This demonstrates a body as an Array
         type: AppPerson[]
+/multipart:
+  post:
+    body:
+      multipart/form-data:
+        type: MultipartPerson
