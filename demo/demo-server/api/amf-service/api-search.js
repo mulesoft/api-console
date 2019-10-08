@@ -134,9 +134,9 @@ export class ApiSearch {
         contentType: 'application/json'
       };
     }
-    const oasMatch = data.match(/openapi|swagger(?:\s*)?:(?:\s*)"?(\d\.\d*)"?/im);
+    const oasMatch = data.match(/openapi|swagger(?:\s*)?:(?:\s*)("|')?(\d\.\d*)("|')?/im);
     if (oasMatch) {
-      const v = oasMatch[1].trim();
+      const v = oasMatch[2].trim();
       return {
         type: `OAS ${v}`,
         contentType: 'application/yaml'
