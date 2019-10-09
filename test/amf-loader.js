@@ -8,11 +8,11 @@ window.customElements.define('helper-element', HelperElement);
 
 const helper = new HelperElement();
 
-AmfLoader.load = async function(fileName, compact) {
+AmfLoader.load = async function(compact, fileName) {
   compact = compact ? '-compact' : '';
   fileName = fileName || 'demo-api';
   const file = `${fileName}${compact}.json`;
-  const url = location.protocol + '//' + location.host + '/base/demo/'+ file;
+  const url = location.protocol + '//' + location.host + '/base/demo/models/'+ file;
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', (e) => {
@@ -34,6 +34,11 @@ AmfLoader.load = async function(fileName, compact) {
     xhr.open('GET', url);
     xhr.send();
   });
+};
+
+AmfLoader.lookupWebApi = function(model, endpoint) {
+  helper.amf = model;
+  return helper._computeWebApi(model);
 };
 
 AmfLoader.lookupEndpoint = function(model, endpoint) {

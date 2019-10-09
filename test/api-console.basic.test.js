@@ -19,6 +19,10 @@ describe('<api-console>', function() {
     return (await fixture(`<api-console page="request"></api-console>`));
   }
 
+  async function noAttributionFixture() {
+    return (await fixture(`<api-console noattribution></api-console>`));
+  }
+
   describe('RAML aware', () => {
     it('Adds raml-aware to the DOM if aware is set', async () => {
       const element = await awareFixture();
@@ -92,6 +96,22 @@ describe('<api-console>', function() {
       document.body.addEventListener('api-console-ready', spy);
       await basicFixture();
       assert.isTrue(spy.called);
+    });
+  });
+
+  describe('_hasCorsExtensionChanged()', () => {
+    it('resets _extensionBannerActive', async () => {
+      const element = await basicFixture();
+      element._extensionBannerActive = true;
+      element._hasCorsExtensionChanged(true);
+      assert.isFalse(element._extensionBannerActive);
+    });
+
+    it('keeps current state when false argument', async () => {
+      const element = await basicFixture();
+      element._extensionBannerActive = true;
+      element._hasCorsExtensionChanged(false);
+      assert.isTrue(element._extensionBannerActive);
     });
   });
 
@@ -207,6 +227,20 @@ describe('<api-console>', function() {
     it('The toast is opened', () => {
       element._apiLoadErrorHandler(new Error('test'));
       assert.isTrue(element.shadowRoot.querySelector('#apiLoadErrorToast').opened);
+    });
+  });
+
+  describe('Attribution', function() {
+    it('Attribution logo is rendered', async () => {
+      const element = await basicFixture();
+      const node = element.shadowRoot.querySelector('.powered-by');
+      assert.ok(node);
+    });
+
+    it('Attribution is removed from the DOM', async () => {
+      const element = await noAttributionFixture();
+      const node = element.shadowRoot.querySelector('.powered-by');
+      assert.notOk(node);
     });
   });
 });
