@@ -15,7 +15,6 @@ class ApicApplication extends DemoBase {
     this.apis = [
       ['google-drive-api', 'Google Drive API'],
       ['httpbin', 'HTTPbin API'],
-      ['exchange-experience-api', 'Exchange Experience API'],
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API']
     ];
