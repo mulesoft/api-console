@@ -172,7 +172,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       <div class="method-close-action">
         <anypoint-button
           class="action-button"
-          ?legacy="${compatibility}"
+          ?compatibility="${compatibility}"
           @click="${this.closeTryIt}"
           emphasis="medium">Back to docs</anypoint-button>
       </div>
@@ -204,7 +204,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .selected="${selectedShape}"
       ?narrow="${narrow}"
       ?outlined="${outlined}"
-      ?legacy="${compatibility}"
+      ?compatibility="${compatibility}"
       .noUrlEditor="${noUrlEditor}"
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
@@ -235,7 +235,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .selected="${selectedShape}"
       .selectedType="${selectedShapeType}"
       ?narrow="${narrow}"
-      ?legacy="${compatibility}"
+      ?compatibility="${compatibility}"
       ?outlined="${outlined}"
       .inlineMethods="${inlineMethods}"
       .noTryIt="${_noTryItValue}"
