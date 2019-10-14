@@ -10,6 +10,7 @@ import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@polymer/iron-media-query/iron-media-query.js';
+import { menu, close } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 
 export class ApiConsoleApp extends ApiConsole {
   static get styles() {
@@ -107,6 +108,13 @@ export class ApiConsoleApp extends ApiConsole {
         padding: 0 12px;
         box-sizing: border-box;
         flex: 1;
+      }
+
+      .icon {
+        fill: currentColor;
+        width: 24px;
+        height: 24px;
+        display: block;
       }
       `
     ];
@@ -325,14 +333,19 @@ export class ApiConsoleApp extends ApiConsole {
   _contentToolbarTemplate() {
     const {
       manualNavigation,
-      apiTitle
+      apiTitle,
+      compatibility
     } = this;
     return html`<app-header
       fixed
       slot="header">
       <app-toolbar>
-        <anypoint-icon-button drawer-toggle ?hidden="${manualNavigation}">
-          <iron-icon drawer-toggle icon="arc:menu"></iron-icon>
+        <anypoint-icon-button
+          drawer-toggle
+          ?hidden="${manualNavigation}"
+          ?compatibility="${compatibility}"
+        >
+          <span drawer-toggle class="icon">${menu}</span>
         </anypoint-icon-button>
         <div main-title>${apiTitle}</div>
         <slot name="toolbar"></slot>
@@ -353,8 +366,9 @@ export class ApiConsoleApp extends ApiConsole {
       </p>
       <anypoint-icon-button
         aria-label="Activate to close the message"
-        @click="${this.dismissExtensionBanner}">
-        <iron-icon icon="arc:close"></iron-icon>
+        @click="${this.dismissExtensionBanner}"
+      >
+        <span class="icon">${close}</span>
       </anypoint-icon-button>
     </div>`;
   }
@@ -482,7 +496,7 @@ export class ApiConsoleApp extends ApiConsole {
    * @return {String|undefined} Description if defined.
    */
   _computeApiTitle(shape) {
-    return this._getValue(shape, this.ns.schema.schemaName);
+    return this._getValue(shape, this.ns.aml.vocabularies.core.name);
   }
 
   _narrowHandler(e) {

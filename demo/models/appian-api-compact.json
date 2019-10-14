@@ -11,50 +11,50 @@
 {
 "@id": "#97",
 "@type": [
-"schema-org:WebAPI",
+"apiContract:WebAPI",
 "doc:RootDomainElement",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "Appian API"
 }
 ],
-"raml-http:server": [
+"apiContract:server": [
 {
 "@id": "#230",
 "@type": [
-"raml-http:Server",
+"apiContract:Server",
 "doc:DomainElement"
 ],
-"raml-http:url": [
+"core:urlTemplate": [
 {
 "@value": "https://appian4mulesoft.appiancloud.com/suite/webapi/appian_api/{version}"
 }
 ],
-"raml-http:variable": [
+"apiContract:variable": [
 {
 "@id": "#231",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "version"
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": true
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "path"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#232",
 "@type": [
@@ -110,7 +110,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:url"
+"@value": "core:urlTemplate"
 }
 ],
 "sourcemaps:value": [
@@ -138,85 +138,85 @@
 ]
 }
 ],
-"raml-http:accepts": [
+"apiContract:accepts": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:contentType": [
+"apiContract:contentType": [
 {
 "@value": "application/json"
 }
 ],
-"schema-org:version": [
+"core:version": [
 {
 "@value": "v1"
 }
 ],
-"raml-http:endpoint": [
+"apiContract:endpoint": [
 {
 "@id": "#98",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/processModels"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#99",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "get"
 }
 ],
-"hydra:expects": [
+"apiContract:expects": [
 {
 "@id": "#111",
 "@type": [
-"raml-http:Request",
+"apiContract:Request",
 "doc:DomainElement"
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#112",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "startIndex"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "startIndex"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Index where the current page begins. It must be greater than zero."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": false
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "query"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#113",
 "@type": [
@@ -236,7 +236,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Index where the current page begins. It must be greater than zero."
 }
@@ -259,7 +259,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -329,7 +329,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -389,7 +389,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -401,7 +401,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -425,7 +425,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:required"
+"@value": "apiContract:required"
 }
 ],
 "sourcemaps:value": [
@@ -441,35 +441,35 @@
 {
 "@id": "#115",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "batchSize"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "batchSize"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Number of items to return. It must be -1 (indicating all items) or greater."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": false
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "query"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#116",
 "@type": [
@@ -489,7 +489,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Number of items to return. It must be -1 (indicating all items) or greater."
 }
@@ -512,7 +512,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -582,7 +582,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -642,7 +642,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -654,7 +654,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -678,7 +678,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:required"
+"@value": "apiContract:required"
 }
 ],
 "sourcemaps:value": [
@@ -692,7 +692,7 @@
 ]
 }
 ],
-"raml-http:payload": [],
+"apiContract:payload": [],
 "sourcemaps:sources": [
 {
 "@id": "#111/source-map",
@@ -703,7 +703,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:parameter"
+"@value": "apiContract:parameter"
 }
 ],
 "sourcemaps:value": [
@@ -729,36 +729,36 @@
 ]
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#100",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "200"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "200"
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#101",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#102",
 "@type": [
@@ -1264,7 +1264,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -1276,7 +1276,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -1286,24 +1286,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -1318,7 +1318,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1346,20 +1346,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -1374,7 +1374,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1424,7 +1424,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -1436,7 +1436,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -1508,7 +1508,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -1560,10 +1560,10 @@
 {
 "@id": "#119",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/processModel"
 }
@@ -1594,56 +1594,56 @@
 {
 "@id": "#120",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/processModel/{processModelUuid}"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#121",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "get"
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#122",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "200"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "200"
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#123",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#124",
 "@type": [
@@ -1840,7 +1840,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -1852,7 +1852,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -1862,24 +1862,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -1894,7 +1894,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1922,20 +1922,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -1950,7 +1950,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2000,7 +2000,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -2012,7 +2012,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -2084,7 +2084,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -2110,34 +2110,34 @@
 ]
 }
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#126",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "processModelUuid"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "processModelUuid"
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": true
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "path"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#127",
 "@type": [
@@ -2223,46 +2223,46 @@
 {
 "@id": "#128",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/processModel/{processModelUuid}/start"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#129",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "post"
 }
 ],
-"hydra:expects": [
+"apiContract:expects": [
 {
 "@id": "#130",
 "@type": [
-"raml-http:Request",
+"apiContract:Request",
 "doc:DomainElement"
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#47",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#43/linked_5",
 "@type": [
@@ -2332,61 +2332,61 @@
 ]
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#131",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "201"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The process was started successfully"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "201"
 }
 ],
-"raml-http:header": [
+"apiContract:header": [
 {
 "@id": "#132",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "Location"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "Location"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The Location of the new resource which was created by the request. The value consists of a single absolute URI."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": true
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "header"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#133",
 "@type": [
@@ -2406,7 +2406,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The Location of the new resource which was created by the request. The value consists of a single absolute URI."
 }
@@ -2421,7 +2421,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2457,7 +2457,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -2481,7 +2481,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2495,19 +2495,19 @@
 ]
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#134",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#135",
 "@type": [
@@ -2819,7 +2819,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:header"
+"@value": "apiContract:header"
 }
 ],
 "sourcemaps:value": [
@@ -2843,7 +2843,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2864,7 +2864,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -2876,7 +2876,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -2886,24 +2886,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -2918,7 +2918,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2946,20 +2946,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -2974,7 +2974,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3024,7 +3024,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -3036,7 +3036,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -3108,7 +3108,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -3134,34 +3134,34 @@
 ]
 }
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#139",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "processModelUuid"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "processModelUuid"
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": true
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "path"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#140",
 "@type": [
@@ -3247,56 +3247,56 @@
 {
 "@id": "#141",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/processModel/{processModelUuid}/processes"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#142",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "get"
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#143",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "200"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "200"
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#144",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#145",
 "@type": [
@@ -3532,7 +3532,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -3544,7 +3544,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -3554,24 +3554,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -3586,7 +3586,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3614,20 +3614,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -3642,7 +3642,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3692,7 +3692,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -3704,7 +3704,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -3776,7 +3776,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -3802,34 +3802,34 @@
 ]
 }
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#148",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "processModelUuid"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "processModelUuid"
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": true
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "path"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#149",
 "@type": [
@@ -3915,66 +3915,66 @@
 {
 "@id": "#150",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/processes"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#151",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "get"
 }
 ],
-"hydra:expects": [
+"apiContract:expects": [
 {
 "@id": "#163",
 "@type": [
-"raml-http:Request",
+"apiContract:Request",
 "doc:DomainElement"
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#164",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "startIndex"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "startIndex"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Index where the current page begins. It must be greater than zero."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": false
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "query"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#165",
 "@type": [
@@ -3994,7 +3994,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Index where the current page begins. It must be greater than zero."
 }
@@ -4017,7 +4017,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -4087,7 +4087,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4147,7 +4147,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -4159,7 +4159,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4183,7 +4183,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:required"
+"@value": "apiContract:required"
 }
 ],
 "sourcemaps:value": [
@@ -4199,35 +4199,35 @@
 {
 "@id": "#167",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "batchSize"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "batchSize"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Number of items to return. It must be -1 (indicating all items) or greater."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": false
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "query"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#168",
 "@type": [
@@ -4247,7 +4247,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Number of items to return. It must be -1 (indicating all items) or greater."
 }
@@ -4270,7 +4270,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -4340,7 +4340,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4400,7 +4400,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -4412,7 +4412,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4436,7 +4436,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:required"
+"@value": "apiContract:required"
 }
 ],
 "sourcemaps:value": [
@@ -4450,7 +4450,7 @@
 ]
 }
 ],
-"raml-http:payload": [],
+"apiContract:payload": [],
 "sourcemaps:sources": [
 {
 "@id": "#163/source-map",
@@ -4461,7 +4461,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:parameter"
+"@value": "apiContract:parameter"
 }
 ],
 "sourcemaps:value": [
@@ -4487,36 +4487,36 @@
 ]
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#152",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "200"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "200"
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#153",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#154",
 "@type": [
@@ -5022,7 +5022,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -5034,7 +5034,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -5044,24 +5044,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -5076,7 +5076,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5104,20 +5104,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -5132,7 +5132,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5182,7 +5182,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -5194,7 +5194,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -5266,7 +5266,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -5318,10 +5318,10 @@
 {
 "@id": "#170",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/process"
 }
@@ -5352,56 +5352,56 @@
 {
 "@id": "#171",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/process/{processId}"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#172",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "get"
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#173",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "200"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "200"
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#174",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#175",
 "@type": [
@@ -5598,7 +5598,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -5610,7 +5610,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -5620,24 +5620,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -5652,7 +5652,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5680,20 +5680,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -5708,7 +5708,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5758,7 +5758,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -5770,7 +5770,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -5842,7 +5842,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -5868,34 +5868,34 @@
 ]
 }
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#177",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "processId"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "processId"
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": true
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "path"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#178",
 "@type": [
@@ -5981,66 +5981,66 @@
 {
 "@id": "#179",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/process/{processId}/tasks"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#180",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "get"
 }
 ],
-"hydra:expects": [
+"apiContract:expects": [
 {
 "@id": "#192",
 "@type": [
-"raml-http:Request",
+"apiContract:Request",
 "doc:DomainElement"
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#193",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "startIndex"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "startIndex"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Index where the current page begins. It must be greater than zero."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": false
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "query"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#194",
 "@type": [
@@ -6060,7 +6060,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Index where the current page begins. It must be greater than zero."
 }
@@ -6083,7 +6083,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -6153,7 +6153,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6213,7 +6213,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -6225,7 +6225,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6249,7 +6249,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:required"
+"@value": "apiContract:required"
 }
 ],
 "sourcemaps:value": [
@@ -6265,35 +6265,35 @@
 {
 "@id": "#196",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "batchSize"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "batchSize"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Number of items to return. It must be -1 (indicating all items) or greater."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": false
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "query"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#197",
 "@type": [
@@ -6313,7 +6313,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Number of items to return. It must be -1 (indicating all items) or greater."
 }
@@ -6336,7 +6336,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -6406,7 +6406,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6466,7 +6466,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -6478,7 +6478,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6502,7 +6502,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:required"
+"@value": "apiContract:required"
 }
 ],
 "sourcemaps:value": [
@@ -6516,7 +6516,7 @@
 ]
 }
 ],
-"raml-http:payload": [],
+"apiContract:payload": [],
 "sourcemaps:sources": [
 {
 "@id": "#192/source-map",
@@ -6527,7 +6527,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:parameter"
+"@value": "apiContract:parameter"
 }
 ],
 "sourcemaps:value": [
@@ -6553,36 +6553,36 @@
 ]
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#181",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "200"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "200"
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#182",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#183",
 "@type": [
@@ -7088,7 +7088,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -7100,7 +7100,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -7110,24 +7110,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -7142,7 +7142,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7170,20 +7170,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -7198,7 +7198,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7248,7 +7248,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -7260,7 +7260,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -7332,7 +7332,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -7358,34 +7358,34 @@
 ]
 }
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#199",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "processId"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "processId"
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": true
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "path"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#200",
 "@type": [
@@ -7471,66 +7471,66 @@
 {
 "@id": "#201",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/tasks"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#202",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "get"
 }
 ],
-"hydra:expects": [
+"apiContract:expects": [
 {
 "@id": "#214",
 "@type": [
-"raml-http:Request",
+"apiContract:Request",
 "doc:DomainElement"
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#215",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "startIndex"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "startIndex"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Index where the current page begins. It must be greater than zero."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": false
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "query"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#216",
 "@type": [
@@ -7550,7 +7550,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Index where the current page begins. It must be greater than zero."
 }
@@ -7573,7 +7573,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -7643,7 +7643,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7703,7 +7703,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -7715,7 +7715,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7739,7 +7739,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:required"
+"@value": "apiContract:required"
 }
 ],
 "sourcemaps:value": [
@@ -7755,35 +7755,35 @@
 {
 "@id": "#218",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "batchSize"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "batchSize"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Number of items to return. It must be -1 (indicating all items) or greater."
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": false
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "query"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#219",
 "@type": [
@@ -7803,7 +7803,7 @@
 "@value": "schema"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Number of items to return. It must be -1 (indicating all items) or greater."
 }
@@ -7826,7 +7826,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -7896,7 +7896,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7956,7 +7956,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:schema"
+"@value": "raml-shapes:schema"
 }
 ],
 "sourcemaps:value": [
@@ -7968,7 +7968,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7992,7 +7992,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:required"
+"@value": "apiContract:required"
 }
 ],
 "sourcemaps:value": [
@@ -8006,7 +8006,7 @@
 ]
 }
 ],
-"raml-http:payload": [],
+"apiContract:payload": [],
 "sourcemaps:sources": [
 {
 "@id": "#214/source-map",
@@ -8017,7 +8017,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:parameter"
+"@value": "apiContract:parameter"
 }
 ],
 "sourcemaps:value": [
@@ -8043,36 +8043,36 @@
 ]
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#203",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "200"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "200"
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#204",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#205",
 "@type": [
@@ -8578,7 +8578,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -8590,7 +8590,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -8600,24 +8600,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -8632,7 +8632,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8660,20 +8660,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -8688,7 +8688,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8738,7 +8738,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -8750,7 +8750,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -8822,7 +8822,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -8874,10 +8874,10 @@
 {
 "@id": "#221",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/task"
 }
@@ -8908,56 +8908,56 @@
 {
 "@id": "#222",
 "@type": [
-"raml-http:EndPoint",
+"apiContract:EndPoint",
 "doc:DomainElement"
 ],
-"raml-http:path": [
+"apiContract:path": [
 {
 "@value": "/task/{taskId}"
 }
 ],
-"hydra:supportedOperation": [
+"apiContract:supportedOperation": [
 {
 "@id": "#223",
 "@type": [
-"hydra:Operation",
+"apiContract:Operation",
 "doc:DomainElement"
 ],
-"hydra:method": [
+"apiContract:method": [
 {
 "@value": "get"
 }
 ],
-"hydra:returns": [
+"apiContract:returns": [
 {
 "@id": "#224",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "200"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "200"
 }
 ],
-"raml-http:payload": [
+"apiContract:payload": [
 {
 "@id": "#225",
 "@type": [
-"raml-http:Payload",
+"apiContract:Payload",
 "doc:DomainElement"
 ],
-"raml-http:mediaType": [
+"core:mediaType": [
 {
 "@value": "application/json"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#226",
 "@type": [
@@ -9154,7 +9154,7 @@
 "security:ParametrizedSecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -9166,7 +9166,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -9176,24 +9176,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -9208,7 +9208,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9236,20 +9236,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -9264,7 +9264,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9314,7 +9314,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -9326,7 +9326,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -9398,7 +9398,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:returns"
+"@value": "apiContract:returns"
 }
 ],
 "sourcemaps:value": [
@@ -9424,34 +9424,34 @@
 ]
 }
 ],
-"raml-http:parameter": [
+"apiContract:parameter": [
 {
 "@id": "#228",
 "@type": [
-"raml-http:Parameter",
+"apiContract:Parameter",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "taskId"
 }
 ],
-"raml-http:paramName": [
+"apiContract:paramName": [
 {
 "@value": "taskId"
 }
 ],
-"hydra:required": [
+"apiContract:required": [
 {
 "@value": true
 }
 ],
-"raml-http:binding": [
+"apiContract:binding": [
 {
 "@value": "path"
 }
 ],
-"raml-http:schema": [
+"raml-shapes:schema": [
 {
 "@id": "#229",
 "@type": [
@@ -9545,7 +9545,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:contentType"
+"@value": "apiContract:contentType"
 }
 ],
 "sourcemaps:value": [
@@ -9557,7 +9557,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:accepts"
+"@value": "apiContract:accepts"
 }
 ],
 "sourcemaps:value": [
@@ -9571,7 +9571,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:version"
+"@value": "core:version"
 }
 ],
 "sourcemaps:value": [
@@ -9583,7 +9583,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:accepts"
+"@value": "apiContract:accepts"
 }
 ],
 "sourcemaps:value": [
@@ -9595,7 +9595,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -9619,7 +9619,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:server"
+"@value": "apiContract:server"
 }
 ],
 "sourcemaps:value": [
@@ -9631,7 +9631,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "raml-http:contentType"
+"@value": "apiContract:contentType"
 }
 ],
 "sourcemaps:value": [
@@ -9657,6 +9657,11 @@
 ]
 }
 ]
+}
+],
+"doc:version": [
+{
+"@value": "2.0.0"
 }
 ],
 "doc:declares": [
@@ -11746,11 +11751,11 @@
 "@value": "ProcessVariableList"
 }
 ],
-"doc:examples": [
+"apiContract:examples": [
 {
 "@id": "#44",
 "@type": [
-"doc:Example",
+"apiContract:Example",
 "doc:DomainElement"
 ],
 "doc:strict": [
@@ -11784,7 +11789,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_2"
 }
@@ -11831,7 +11836,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_3"
 }
@@ -11860,7 +11865,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_1"
 }
@@ -11927,7 +11932,7 @@
 ]
 }
 ],
-"shacl:raw": [
+"doc:raw": [
 {
 "@value": "{\n  \"processVar1\": \"value1\",\n  \"processVar2\": \"value2\"\n}\n"
 }
@@ -11956,7 +11961,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "shacl:raw"
+"@value": "doc:raw"
 }
 ],
 "sourcemaps:value": [
@@ -13154,11 +13159,11 @@
 {
 "@id": "#73",
 "@type": [
-"doc:Trait",
+"apiContract:Trait",
 "doc:AbstractDeclaration",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "pageable"
 }
@@ -13205,7 +13210,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_4"
 }
@@ -13252,7 +13257,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_5"
 }
@@ -13299,7 +13304,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#boolean"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_6"
 }
@@ -13346,7 +13351,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_7"
 }
@@ -13375,7 +13380,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_3"
 }
@@ -13478,7 +13483,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_9"
 }
@@ -13525,7 +13530,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#integer"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_10"
 }
@@ -13572,7 +13577,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#boolean"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_11"
 }
@@ -13619,7 +13624,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_12"
 }
@@ -13648,7 +13653,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_8"
 }
@@ -13725,7 +13730,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_2"
 }
@@ -13820,7 +13825,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_16"
 }
@@ -13875,7 +13880,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_18"
 }
@@ -13922,7 +13927,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_19"
 }
@@ -13969,7 +13974,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_20"
 }
@@ -13998,7 +14003,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_17"
 }
@@ -14063,7 +14068,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_15"
 }
@@ -14116,7 +14121,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_14"
 }
@@ -14157,7 +14162,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_13"
 }
@@ -14198,7 +14203,7 @@
 ]
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "object_1"
 }
@@ -14280,7 +14285,7 @@
 "security:SecurityScheme",
 "doc:DomainElement"
 ],
-"security:name": [
+"core:name": [
 {
 "@value": "basic"
 }
@@ -14290,24 +14295,24 @@
 "@value": "Basic Authentication"
 }
 ],
-"hydra:response": [
+"apiContract:response": [
 {
 "@id": "#95",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "401"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Incorrect user name or password"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "401"
 }
@@ -14322,7 +14327,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -14350,20 +14355,20 @@
 {
 "@id": "#96",
 "@type": [
-"raml-http:Response",
+"apiContract:Response",
 "doc:DomainElement"
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "404"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Resource not found or forbidden"
 }
 ],
-"hydra:statusCode": [
+"apiContract:statusCode": [
 {
 "@value": "404"
 }
@@ -14378,7 +14383,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -14428,7 +14433,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "hydra:response"
+"@value": "apiContract:response"
 }
 ],
 "sourcemaps:value": [
@@ -14440,7 +14445,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "security:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -14480,15 +14485,14 @@
 ],
 "@context": {
 "@base": "amf://id",
-"raml-http": "http://a.ml/vocabularies/http#",
 "shacl": "http://www.w3.org/ns/shacl#",
 "raml-shapes": "http://a.ml/vocabularies/shapes#",
 "security": "http://a.ml/vocabularies/security#",
 "data": "http://a.ml/vocabularies/data#",
 "doc": "http://a.ml/vocabularies/document#",
-"sourcemaps": "http://a.ml/vocabularies/document-source-maps#",
-"schema-org": "http://schema.org/",
-"hydra": "http://www.w3.org/ns/hydra/core#"
+"apiContract": "http://a.ml/vocabularies/apiContract#",
+"core": "http://a.ml/vocabularies/core#",
+"sourcemaps": "http://a.ml/vocabularies/document-source-maps#"
 }
 }
 ]

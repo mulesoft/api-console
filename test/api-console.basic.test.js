@@ -197,11 +197,11 @@ describe('<api-console>', function() {
       element = await basicFixture();
     });
 
-    it('Sets amfModel property', () => {
+    it('Sets amf property', () => {
       element._apiLoadEndHandler({
         response: '[{"@context":{}, "@id": "","@type": []}]'
       });
-      assert.typeOf(element.amfModel, 'array');
+      assert.typeOf(element.amf, 'array');
     });
 
     it('Calles _apiLoadErrorHandler when response is not valid', () => {

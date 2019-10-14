@@ -4,6 +4,12 @@ This is a preview of the next version of API Console. Feel free to try it out an
 
 This branch is in active development and most probably changes daily. Update your branch regularly when previewing the next version.
 
+## Version compatibility
+
+As of version 6.0.0-preview.16, API Console only works with AMF model version 2 (AMF parser >= 4.0.0).
+For compatibility use any previous version. Note that support for previous versions has been dropped
+and this is only version with active development.
+
 ## Preview and development
 
 1.  Clone the element.

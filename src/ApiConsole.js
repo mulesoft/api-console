@@ -18,7 +18,6 @@ import '@api-components/api-navigation/api-navigation.js';
 import '@api-components/api-documentation/api-documentation.js';
 import '@api-components/api-request-panel/api-request-panel.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
-import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '@api-components/api-console-ext-comm/api-console-ext-comm.js';
 import attributionTpl from './attribution-template.js';
@@ -746,9 +745,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     if (!method) {
       return;
     }
-    let name = this._getValue(method, this.ns.schema.schemaName);
+    let name = this._getValue(method, this.ns.aml.vocabularies.core.name);
     if (!name) {
-      name = this._getValue(method, this.ns.w3.hydra.core + 'method');
+      name = this._getValue(method, this.ns.aml.vocabularies.apiContract.method);
     }
     return name;
   }

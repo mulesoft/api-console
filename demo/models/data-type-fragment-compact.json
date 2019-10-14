@@ -2,7 +2,7 @@
 {
 "@id": "",
 "@type": [
-"doc:DataType",
+"raml-shapes:DataTypeFragment",
 "doc:Fragment",
 "doc:Unit"
 ],
@@ -55,7 +55,7 @@
 "@value": "kind"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The type of file. This is always drive#file."
 }
@@ -78,7 +78,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -148,7 +148,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -264,7 +264,7 @@
 "@value": "id"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The ID of the file."
 }
@@ -293,7 +293,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -409,7 +409,7 @@
 "@value": "etag"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "ETag of the file."
 }
@@ -438,7 +438,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -554,7 +554,7 @@
 "@value": "selfLink"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A link back to this file."
 }
@@ -583,7 +583,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -699,7 +699,7 @@
 "@value": "webContentLink"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A link for downloading the content of the file in a browser using cookie based authentication.\nIn cases where the content is shared publicly, the content can be downloaded without any credentials.\n"
 }
@@ -728,7 +728,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -844,7 +844,7 @@
 "@value": "webViewLink"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A link only available on public folders for viewing their static web assets (HTML, CSS, JS, etc)\nvia Google Drive's Website Hosting.\n"
 }
@@ -873,7 +873,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -989,7 +989,7 @@
 "@value": "alternateLink"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A link for opening the file in a relevant Google editor or viewer."
 }
@@ -1018,7 +1018,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1134,7 +1134,7 @@
 "@value": "embedLink"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A link for embedding the file."
 }
@@ -1163,7 +1163,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1280,7 +1280,7 @@
 "@value": "openWithLinks"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A map of the id of each of the user's apps to a link to open this file with that app.\nOnly populated when the drive.apps.readonly scope is used.\n"
 }
@@ -1309,7 +1309,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1413,7 +1413,7 @@
 "@value": "defaultOpenWithLink"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A link to open this file with the user's default app for this file. Only populated when the drive.apps.readonly scope is used."
 }
@@ -1442,7 +1442,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1558,7 +1558,7 @@
 "@value": "iconLink"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A link to the file's icon"
 }
@@ -1587,7 +1587,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1703,7 +1703,7 @@
 "@value": "thumbnailLink"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A short-lived link to the file's thumbnail. Typically lasts on the order of hours."
 }
@@ -1732,7 +1732,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1848,7 +1848,7 @@
 "@value": "title"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The title of the file. Used to identify file or folder name."
 }
@@ -1877,7 +1877,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -1993,7 +1993,7 @@
 "@value": "mimeType"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The MIME type of the file. This is only mutable on update when uploading new content.\nThis field can be left blank, and the mimetype will be determined from the uploaded content's MIME type.\n"
 }
@@ -2022,7 +2022,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2138,7 +2138,7 @@
 "@value": "description"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A short description of the file."
 }
@@ -2167,7 +2167,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2283,7 +2283,7 @@
 "@value": "createdDate"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Create time for this file (formatted RFC 3339 timestamp)"
 }
@@ -2312,7 +2312,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2428,7 +2428,7 @@
 "@value": "modifiedDate"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Last time this file was modified by anyone (formatted RFC 3339 timestamp). This is only mutable on update when the setModifiedDate parameter is set."
 }
@@ -2457,7 +2457,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2573,7 +2573,7 @@
 "@value": "modifiedByMeDate"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Last time this file was modified by the user (formatted RFC 3339 timestamp). Note that setting modifiedDate will also update the modifiedByMe date for the user which set the date."
 }
@@ -2602,7 +2602,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2718,7 +2718,7 @@
 "@value": "lastViewedByMeDate"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Last time this file was viewed by the user (formatted RFC 3339 timestamp)."
 }
@@ -2747,7 +2747,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -2863,7 +2863,7 @@
 "@value": "markedViewedByMeDate"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Deprecated"
 }
@@ -2892,7 +2892,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3008,7 +3008,7 @@
 "@value": "sharedWithMeDate"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Time at which this file was shared with the user (formatted RFC 3339 timestamp)."
 }
@@ -3037,7 +3037,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3153,7 +3153,7 @@
 "@value": "version"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A monotonically increasing version number for the file. This reflects every change made to the file on the server, even those not visible to the requesting user."
 }
@@ -3182,7 +3182,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3299,12 +3299,12 @@
 "@value": "sharingUser"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "SharingUser"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "User that shared the item with the current user, if available."
 }
@@ -3333,7 +3333,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3357,7 +3357,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -3449,7 +3449,7 @@
 "@value": "downloadUrl"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "An URL to download the content of the file."
 }
@@ -3478,7 +3478,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3595,7 +3595,7 @@
 "@value": "exportLinks"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Links for exporting Google Docs to specific formats.\nThe key in the object is a mapping from export format to URL\n"
 }
@@ -3624,7 +3624,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3757,7 +3757,7 @@
 "@value": "text"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The text to be indexed for this file."
 }
@@ -3786,7 +3786,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3863,7 +3863,7 @@
 "@value": "indexableText"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Indexable text attributes for the file. This property can only be written, and is not returned by files.get. For more information, see Custom thumbnails and indexable text."
 }
@@ -3892,7 +3892,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -3996,7 +3996,7 @@
 "@value": "originalFilename"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The original filename of the uploaded content if available, or else the original value of the title field. `This is only available for files with binary content in Drive.`"
 }
@@ -4025,7 +4025,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4141,7 +4141,7 @@
 "@value": "fileExtension"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The final component of fullFileExtension with trailing text that does not appear to be part of the extension removed. This field is only populated for files with content stored in Drive; it is not populated for Google Docs or shortcut files."
 }
@@ -4170,7 +4170,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4286,7 +4286,7 @@
 "@value": "md5Checksum"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "An MD5 checksum for the content of this file. This field is only populated for files with content stored in Drive; it is not populated for Google Docs or shortcut files."
 }
@@ -4315,7 +4315,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4431,7 +4431,7 @@
 "@value": "fileSize"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The size of the file in bytes. This field is only populated for files with content stored in Drive; it is not populated for Google Docs or shortcut files."
 }
@@ -4460,7 +4460,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4576,7 +4576,7 @@
 "@value": "quotaBytesUsed"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The number of quota bytes used by this file."
 }
@@ -4605,7 +4605,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4760,7 +4760,7 @@
 "@value": "ownerNames"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Name(s) of the owner(s) of this file."
 }
@@ -4789,7 +4789,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -4893,7 +4893,7 @@
 "@value": "ownedByMe"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether the file is owned by the current user. Not populated for Team Drive files."
 }
@@ -4922,7 +4922,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5038,7 +5038,7 @@
 "@value": "canComment"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether the current user can comment on the file.\n\n**Deprecated: use capabilities/canComment.**\n"
 }
@@ -5067,7 +5067,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5183,7 +5183,7 @@
 "@value": "shareable"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether the file's sharing settings can be modified by the current user.\n\n**Deprecated: use capabilities/canShare.**\n"
 }
@@ -5212,7 +5212,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5328,7 +5328,7 @@
 "@value": "lastModifyingUserName"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Name of the last user to modify this file"
 }
@@ -5357,7 +5357,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5485,7 +5485,7 @@
 "@value": "spaces"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The list of spaces which contain the file.\nSupported values are `drive`, `appDataFolder` and `photos`.\n"
 }
@@ -5514,7 +5514,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5618,7 +5618,7 @@
 "@value": "canReadRevisions"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether the current user has read access to the Revisions resource of the file.\n\n**Deprecated: use capabilities/canReadRevisions.**\n"
 }
@@ -5647,7 +5647,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5763,7 +5763,7 @@
 "@value": "isAppAuthorized"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether the file was created or opened by the requesting app."
 }
@@ -5792,7 +5792,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -5908,7 +5908,7 @@
 "@value": "hasThumbnail"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether this file has a thumbnail."
 }
@@ -5937,7 +5937,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6053,7 +6053,7 @@
 "@value": "thumbnailVersion"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The thumbnail version for use in thumbnail cache invalidation.\nThe actual type is long but in the API is represented as a string.\n"
 }
@@ -6082,7 +6082,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6198,7 +6198,7 @@
 "@value": "hasAugmentedPermissions"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether any users are granted file access directly on this file.\nThis field is only populated for Team Drive files.\n"
 }
@@ -6227,7 +6227,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6343,7 +6343,7 @@
 "@value": "teamDriveId"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "ID of the Team Drive the file resides in."
 }
@@ -6372,7 +6372,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6489,7 +6489,7 @@
 "@value": "capabilities"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Capabilities the current user has on the file. Each capability corresponds to a fine-grained action that a user may take."
 }
@@ -6518,7 +6518,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6651,7 +6651,7 @@
 "@value": "kind"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "This is always drive#user."
 }
@@ -6674,7 +6674,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -6725,7 +6725,7 @@
 "@id": "http://www.w3.org/2001/XMLSchema#string"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "scalar_1"
 }
@@ -6833,7 +6833,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -6925,7 +6925,7 @@
 "@value": "displayName"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "A plain text displayable name for this user."
 }
@@ -6954,7 +6954,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7163,7 +7163,7 @@
 "@value": "isAuthenticatedUser"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether this user is the same as the authenticated user for whom the request was made."
 }
@@ -7192,7 +7192,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7296,7 +7296,7 @@
 "@value": "permissionId"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The user's ID as visible in the permissions collection."
 }
@@ -7325,7 +7325,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7429,7 +7429,7 @@
 "@value": "emailAddress"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The email address of the user. This field is returned only if the last modifying user is an owner of the file, the requesting user is an owner or can modify the file, or if the last modifying user's email address is visible."
 }
@@ -7458,7 +7458,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7535,7 +7535,7 @@
 "@value": "lastModifyingUser"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The last user to modify this file"
 }
@@ -7564,7 +7564,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7669,7 +7669,7 @@
 "@value": "trashingUser"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "If the file has been explicitly trashed, the user who trashed it. Only populated for Team Drive files."
 }
@@ -7698,7 +7698,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7802,7 +7802,7 @@
 "@value": "trashedDate"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The time that the item was trashed (formatted RFC 3339 timestamp). Only populated for Team Drive files."
 }
@@ -7831,7 +7831,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -7947,7 +7947,7 @@
 "@value": "editable"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether the file can be edited by the current user."
 }
@@ -7976,7 +7976,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8080,7 +8080,7 @@
 "@value": "copyable"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether the file can be copied by the current user."
 }
@@ -8109,7 +8109,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8213,7 +8213,7 @@
 "@value": "writersCanShare"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether writers can share the document with other users"
 }
@@ -8242,7 +8242,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8346,7 +8346,7 @@
 "@value": "shared"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether the file has been shared"
 }
@@ -8375,7 +8375,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8479,7 +8479,7 @@
 "@value": "explicitlyTrashed"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether this file has been explicitly trashed, as opposed to recursively trashed."
 }
@@ -8508,7 +8508,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8612,7 +8612,7 @@
 "@value": "appDataContents"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether this file is in the Application Data folder."
 }
@@ -8641,7 +8641,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8745,7 +8745,7 @@
 "@value": "headRevisionId"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The ID of the file's head revision. This field is only populated for files with content stored in Drive; it is not populated for Google Docs or shortcut files."
 }
@@ -8774,7 +8774,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -8890,7 +8890,7 @@
 "@value": "folderColorRgb"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Folder color as an RGB hex string if the file is a folder. The list of supported colors is available in the folderColorPalette field of the About resource. If an unsupported color is specified, it will be changed to the closest color in the palette."
 }
@@ -8919,7 +8919,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9069,7 +9069,7 @@
 "@value": "width"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The width of the image in pixels."
 }
@@ -9098,7 +9098,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9231,7 +9231,7 @@
 "@value": "height"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The height of the image in pixels."
 }
@@ -9260,7 +9260,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9388,7 +9388,7 @@
 "@value": "rotation"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The rotation in clockwise degrees from the image's original orientation."
 }
@@ -9417,7 +9417,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9562,7 +9562,7 @@
 "@value": "latitude"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The latitude stored in the image."
 }
@@ -9591,7 +9591,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9707,7 +9707,7 @@
 "@value": "longitude"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The longitude stored in the image."
 }
@@ -9736,7 +9736,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9852,7 +9852,7 @@
 "@value": "altitude"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The altitude stored in the image."
 }
@@ -9881,7 +9881,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -9970,7 +9970,7 @@
 "@value": "location"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Geographic location information stored in the image."
 }
@@ -9999,7 +9999,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -10103,7 +10103,7 @@
 "@value": "date"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The date and time the photo was taken (EXIF format timestamp)."
 }
@@ -10132,7 +10132,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -10248,7 +10248,7 @@
 "@value": "cameraMake"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The make of the camera used to create the photo."
 }
@@ -10277,7 +10277,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -10393,7 +10393,7 @@
 "@value": "cameraModel"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The model of the camera used to create the photo."
 }
@@ -10422,7 +10422,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -10543,7 +10543,7 @@
 "@value": "exposureTime"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The length of the exposure, in seconds."
 }
@@ -10572,7 +10572,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -10705,7 +10705,7 @@
 "@value": "aperture"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The aperture used to create the photo (f-number)."
 }
@@ -10734,7 +10734,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -10862,7 +10862,7 @@
 "@value": "flashUsed"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Whether a flash was used to create the photo."
 }
@@ -10891,7 +10891,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -11012,7 +11012,7 @@
 "@value": "focalLength"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The focal length used to create the photo, in millimeters."
 }
@@ -11041,7 +11041,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -11174,7 +11174,7 @@
 "@value": "isoSpeed"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The ISO speed used to create the photo."
 }
@@ -11203,7 +11203,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -11331,7 +11331,7 @@
 "@value": "meteringMode"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The metering mode used to create the photo."
 }
@@ -11360,7 +11360,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -11476,7 +11476,7 @@
 "@value": "sensor"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The type of sensor used to create the photo."
 }
@@ -11505,7 +11505,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -11621,7 +11621,7 @@
 "@value": "exposureMode"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The exposure mode used to create the photo."
 }
@@ -11650,7 +11650,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -11766,7 +11766,7 @@
 "@value": "colorSpace"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The color space of the photo."
 }
@@ -11795,7 +11795,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -11911,7 +11911,7 @@
 "@value": "whiteBalance"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The white balance mode used to create the photo."
 }
@@ -11940,7 +11940,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -12056,7 +12056,7 @@
 "@value": "exposureBias"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The exposure bias of the photo (APEX value)."
 }
@@ -12085,7 +12085,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -12201,7 +12201,7 @@
 "@value": "maxApertureValue"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The smallest f-number of the lens at the focal length used to create the photo (APEX value)."
 }
@@ -12230,7 +12230,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -12351,7 +12351,7 @@
 "@value": "subjectDistance"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The distance to the subject of the photo, in meters."
 }
@@ -12380,7 +12380,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -12508,7 +12508,7 @@
 "@value": "lens"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The lens used to create the photo."
 }
@@ -12537,7 +12537,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -12626,7 +12626,7 @@
 "@value": "imageMediaMetadata"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Metadata about image media. This will only be present for image types, and its contents will depend on what can be parsed from the image content."
 }
@@ -12655,7 +12655,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -12793,7 +12793,7 @@
 "@value": "width"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The width of the video in pixels."
 }
@@ -12822,7 +12822,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -12955,7 +12955,7 @@
 "@value": "height"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The height of the video in pixels."
 }
@@ -12984,7 +12984,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -13117,7 +13117,7 @@
 "@value": "durationMillis"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "The duration of the video in milliseconds."
 }
@@ -13146,7 +13146,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -13247,7 +13247,7 @@
 "@value": "videoMediaMetadata"
 }
 ],
-"schema-org:description": [
+"core:description": [
 {
 "@value": "Metadata about video media. This will only be present for video types."
 }
@@ -13276,7 +13276,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:description"
+"@value": "core:description"
 }
 ],
 "sourcemaps:value": [
@@ -13353,7 +13353,7 @@
 "@value": "type"
 }
 ],
-"schema-org:name": [
+"core:name": [
 {
 "@value": "Drive File"
 }
@@ -13382,7 +13382,7 @@
 {
 "sourcemaps:element": [
 {
-"@value": "schema-org:name"
+"@value": "core:name"
 }
 ],
 "sourcemaps:value": [
@@ -13422,6 +13422,11 @@
 ]
 }
 ],
+"doc:version": [
+{
+"@value": "2.0.0"
+}
+],
 "sourcemaps:sources": [
 {
 "@id": "#/source-map",
@@ -13446,13 +13451,13 @@
 ],
 "@context": {
 "@base": "amf://id",
-"raml-shapes": "http://a.ml/vocabularies/shapes#",
 "shacl": "http://www.w3.org/ns/shacl#",
+"raml-shapes": "http://a.ml/vocabularies/shapes#",
 "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
 "data": "http://a.ml/vocabularies/data#",
 "doc": "http://a.ml/vocabularies/document#",
-"sourcemaps": "http://a.ml/vocabularies/document-source-maps#",
-"schema-org": "http://schema.org/"
+"core": "http://a.ml/vocabularies/core#",
+"sourcemaps": "http://a.ml/vocabularies/document-source-maps#"
 }
 }
 ]

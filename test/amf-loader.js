@@ -49,9 +49,9 @@ AmfLoader.lookupEndpoint = function(model, endpoint) {
 
 AmfLoader.lookupOperation = function(model, endpoint, operation) {
   const endPoint = AmfLoader.lookupEndpoint(model, endpoint, operation);
-  const opKey = helper._getAmfKey(helper.ns.w3.hydra.supportedOperation);
+  const opKey = helper._getAmfKey(helper.ns.aml.vocabularies.apiContract.supportedOperation);
   const ops = helper._ensureArray(endPoint[opKey]);
-  return ops.find((item) => helper._getValue(item, helper.ns.w3.hydra.core + 'method') === operation);
+  return ops.find((item) => helper._getValue(item, helper.ns.aml.vocabularies.apiContract.method) === operation);
 };
 
 AmfLoader.lookupPayload = function(model, endpoint, operation) {
@@ -62,15 +62,15 @@ AmfLoader.lookupPayload = function(model, endpoint, operation) {
 
 AmfLoader.lookupEndpointOperation = function(model, endpoint, operation) {
   const endPoint = AmfLoader.lookupEndpoint(model, endpoint, operation);
-  const opKey = helper._getAmfKey(helper.ns.w3.hydra.supportedOperation);
+  const opKey = helper._getAmfKey(helper.ns.aml.vocabularies.apiContract.supportedOperation);
   const ops = helper._ensureArray(endPoint[opKey]);
-  const op = ops.find((item) => helper._getValue(item, helper.ns.w3.hydra.core + 'method') === operation);
+  const op = ops.find((item) => helper._getValue(item, helper.ns.aml.vocabularies.apiContract.method) === operation);
   return [endPoint, op];
 };
 
 AmfLoader.lookupSecurity = function(model, name) {
   helper.amf = model;
-  const webApi = helper._hasType(model, helper.ns.raml.vocabularies.document + 'Document') ?
+  const webApi = helper._hasType(model, helper.ns.aml.vocabularies.document.Document) ?
     helper._computeWebApi(model) :
     model;
   const declares = helper._computeDeclares(webApi) || [];
@@ -78,11 +78,11 @@ AmfLoader.lookupSecurity = function(model, name) {
     if (item instanceof Array) {
       item = item[0];
     }
-    const result = helper._getValue(item, helper.ns.raml.vocabularies.security + 'name') === name;
+    const result = helper._getValue(item, helper.ns.aml.vocabularies.core.name) === name;
     if (result) {
       return result;
     }
-    return helper._getValue(item, helper.ns.schema.displayName) === name;
+    return helper._getValue(item, helper.ns.aml.vocabularies.security.name) === name;
   });
   if (result instanceof Array) {
     result = result[0];
@@ -90,7 +90,7 @@ AmfLoader.lookupSecurity = function(model, name) {
   if (!result) {
     const references = helper._computeReferences(model) || [];
     for (let i = 0, len = references.length; i < len; i++) {
-      if (!helper._hasType(references[i], helper.ns.raml.vocabularies.document + 'Module')) {
+      if (!helper._hasType(references[i], helper.ns.aml.vocabularies.document.Module)) {
         continue;
       }
       result = AmfLoader.lookupSecurity(references[i], name);
@@ -104,7 +104,7 @@ AmfLoader.lookupSecurity = function(model, name) {
 
 AmfLoader.lookupType = function(model, name) {
   helper.amf = model;
-  const webApi = helper._hasType(model, helper.ns.raml.vocabularies.document + 'Document') ?
+  const webApi = helper._hasType(model, helper.ns.aml.vocabularies.document.Document) ?
     helper._computeWebApi(model) :
     model;
   const declares = helper._computeDeclares(webApi) || [];
@@ -112,7 +112,7 @@ AmfLoader.lookupType = function(model, name) {
     if (item instanceof Array) {
       item = item[0];
     }
-    return helper._getValue(item, helper.ns.w3.shacl.name + 'name') === name;
+    return helper._getValue(item, helper.ns.w3.shacl.name) === name;
   });
   if (result instanceof Array) {
     result = result[0];
@@ -120,7 +120,7 @@ AmfLoader.lookupType = function(model, name) {
   if (!result) {
     const references = helper._computeReferences(model) || [];
     for (let i = 0, len = references.length; i < len; i++) {
-      if (!helper._hasType(references[i], helper.ns.raml.vocabularies.document + 'Module')) {
+      if (!helper._hasType(references[i], helper.ns.aml.vocabularies.document.Module)) {
         continue;
       }
       result = AmfLoader.lookupType(references[i], name);
@@ -135,13 +135,13 @@ AmfLoader.lookupType = function(model, name) {
 AmfLoader.lookupDocumentation = function(model, name) {
   helper.amf = model;
   const webApi = helper._computeWebApi(model);
-  const key = helper._getAmfKey(helper.ns.schema.doc);
+  const key = helper._getAmfKey(helper.ns.aml.vocabularies.core.documentation);
   const docs = helper._ensureArray(webApi[key]);
   return docs.find((item) => {
     if (item instanceof Array) {
       item = item[0];
     }
-    return helper._getValue(item, helper.ns.schema.title) === name;
+    return helper._getValue(item, helper.ns.aml.vocabularies.core.title) === name;
   });
 };
 
@@ -150,6 +150,6 @@ AmfLoader.lookupEncodes = function(model) {
     model = model[0];
   }
   helper.amf = model;
-  const key = helper._getAmfKey(helper.ns.raml.vocabularies.document + 'encodes');
+  const key = helper._getAmfKey(helper.ns.aml.vocabularies.document.encodes);
   return helper._ensureArray(model[key]);
 };
