@@ -51,10 +51,24 @@ npm start
 -   This release contains tones of bug fixes and improvements reported by the community and our customers ❤
 -   The Chrome proxy extension banner is not rendered by default. Set `allowExtensionBanner` property to initialize the console with the extension support.
 -   Added configuration option to set a static OAuth 2 client ID and secret for the application. This way it is easier to demo an API by providing demo client id.
+-   Added markdown sanitization
+-   Now XML schemas and examples are propertly rendered.
+-   Huge XML schemas are now not syntax highlighted (above 10K characters) as it causes the browser to hang.
 
 Try this version of API console with your API and report an issue if anything is out of ordinary. We and the rest of the community will be grateful.
 
-### Code Mirror changes
+## Known issues
+
+-   OAS' API Key authorization is not supported.
+-   RAML's queryString property is not supported in documentation and try it.
+-   XML serialization sometimes includes unexpected elements (amf_inline_type_*)
+-   Sometimes types are duplicated in navigation
+-   When endpoints in the API spec are out of order the navigation renders them incorrectly
+-   Complext annotations (multiple properties with values) are not correctly rendered
+-   RAML's regexp propertires of a type are not supported
+-   The console is unable to generate examples other that JSON/XML
+
+## Code Mirror changes
 
 **Note, the request panel won't run without this dependencies.**
 
@@ -85,8 +99,7 @@ CodeMirror.modeURL = 'node_modules/codemirror/mode/%N/%N.js';
 
 You may want to add this dependencies to your build configuration to include it into the bundle.
 
-
-### Dependencies for OAuth1 and Digest authorization methods
+## Dependencies for OAuth1 and Digest authorization methods
 
 For the same reasons as for CodeMirror this dependencies are required for OAuth1 and Digest authorization panels to work.
 
