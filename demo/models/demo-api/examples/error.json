@@ -1,0 +1,10 @@
+{
+  "error": true,
+  "description": "The parameter date is required",
+  "code": 112,
+  "location": {
+    "parameter": "date",
+    "providedValue": "10/24/2019",
+    "expectedValue": "2019-10-24"
+  }
+}

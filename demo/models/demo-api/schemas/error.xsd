@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="error">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="description" type="xs:string"></xs:element>
+        <xs:element name="code" type="xs:number"></xs:element>
+        <xs:element name="location">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="parameter" type="xs:string"></xs:element>
+              <xs:element name="providedValue" type="xs:string"></xs:element>
+              <xs:element name="expectedValue" type="xs:string"></xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="error" type="xs:boolean" use="required"></xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

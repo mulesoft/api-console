@@ -235,6 +235,16 @@ documentation:
           application/xml:
             type: !include schemas/person.xsd
             example: !include examples/person.xml
+      400:
+        description: |
+          Client error
+        body:
+          application/json:
+            schema: !include schemas/error.json
+            example: !include examples/error.json
+          application/xml:
+            type: !include schemas/error.xsd
+            example: !include examples/error.xml
   /{personId}:
     securedBy: x-custom
     type: ResourceNotFound
