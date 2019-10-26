@@ -54,6 +54,7 @@ npm start
 -   Added markdown sanitization
 -   Now XML schemas and examples are propertly rendered.
 -   Huge XML schemas are now not syntax highlighted (above 10K characters) as it causes the browser to hang.
+-   XML examples are now properly formatted and RAML type name is properly resolved (instead of `<model>` element)
 
 Try this version of API console with your API and report an issue if anything is out of ordinary. We and the rest of the community will be grateful.
 
