@@ -110,5 +110,10 @@
   },
   "engines": {
     "node": ">=10.0.0"
+  },
+  "remarkConfig": {
+    "settings": {
+      "spacedTable": "padded"
+    }
   }
 }
