@@ -18,7 +18,8 @@ class ApicApplication extends DemoBase {
       ['SE-12703', 'OAS allOf body'],
       ['APIC-262', 'Example value type'],
       ['console-445', 'Multipart request'],
-      ['demo-api-v4', 'AMF v4']
+      ['demo-api-v4', 'AMF v4'],
+      ['APIC-319', 'APIC-319'],
     ];
   }
 

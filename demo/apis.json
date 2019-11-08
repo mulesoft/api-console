@@ -1,0 +1,15 @@
+{
+  "models/demo-api/demo-api.raml": "RAML 1.0",
+  "models/appian-api/appian-api.raml": "RAML 1.0",
+  "models/nexmo-sms-api/nexmo-sms-api.raml": "RAML 1.0",
+  "models/google-drive-api/google-drive-api.raml": "RAML 1.0",
+  "models/httpbin/httpbin.json": ["OAS 2.0", "application/json"],
+  "models/data-type-fragment/data-type-fragment.raml": "RAML 1.0",
+  "models/SE-12703/SE-12703.yaml": ["OAS 2.0", "application/yaml"],
+  "models/APIC-319/APIC-319.yaml": ["OAS 2.0", "application/yaml"],
+  "models/APIC-262/APIC-262.raml": "RAML 1.0",
+  "models/console-445/console-445.raml": "RAML 1.0",
+  "models/apic-80/apic-80.raml": "RAML 1.0",
+  "models/apic-83/apic-83.raml": "RAML 1.0",
+  "models/apic-130/apic-130.raml": "RAML 1.0"
+}
