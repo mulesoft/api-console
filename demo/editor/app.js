@@ -5,6 +5,7 @@ import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '@anypoint-web-components/anypoint-styles/colors.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '../../api-console.js';
+import { menu } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 
 const SOURCE_KEY = 'api.source';
 
@@ -14,6 +15,7 @@ class ApicApplication {
       'source',
       'amfModel',
       'loading',
+      'navigationOpened',
     ]);
     const storedSource = localStorage.getItem(SOURCE_KEY);
     this.source = storedSource || `#%RAML 1.0
@@ -38,6 +40,8 @@ protocols: [HTTP, HTTPS]
           displayName: Not found response`;
 
     this._sourceChnaged = this._sourceChnaged.bind(this);
+    this.toggleNavigation = this.toggleNavigation.bind(this);
+    this._navigationClosed = this._navigationClosed.bind(this);
     this._updateModel();
   }
 
@@ -127,11 +131,20 @@ protocols: [HTTP, HTTPS]
     node.opened = true;
   }
 
+  toggleNavigation() {
+    this.navigationOpened = !this.navigationOpened;
+  }
+
+  _navigationClosed() {
+    this.navigationOpened = false;
+  }
+
   _demoTemplate() {
     const {
       source,
       amfModel,
-      loading
+      loading,
+      navigationOpened,
     } = this;
     return html`
     <header>
@@ -150,13 +163,24 @@ protocols: [HTTP, HTTPS]
       </div>
       <div class="main-border"></div>
       <div class="docs">
-        <h2>Documentation</h2>
+        <div class="docs-header">
+          <anypoint-icon-button
+            aria-label="Activate to open API console menu"
+            title="Open API console menu"
+            @click="${this.toggleNavigation}"
+          >
+            <span class="icon">${menu}</span>
+          </anypoint-icon-button>
+          <h2>Documentation</h2>
+        </div>
         ${loading ? html`<paper-progress indeterminate></paper-progress>` : ''}
         <api-console
           .amf="${amfModel}"
           selectedShape="summary"
           selectedShapeType="summary"
           redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
+          ?navigationOpened="${navigationOpened}"
+          @navigation-close="${this._navigationClosed}"
         >
         </api-console>
       </div>

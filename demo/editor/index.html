@@ -89,6 +89,8 @@
   .docs {
     flex: 1;
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
   }
 
   .editor {
@@ -104,6 +106,22 @@
   paper-progress {
     width: 100%;
     position: absolute;
+  }
+
+  .docs-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .icon {
+    display: inlink-block;
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+
+  api-console {
+    flex: 1;
   }
 
   html {
