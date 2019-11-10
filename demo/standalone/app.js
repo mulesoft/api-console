@@ -27,7 +27,9 @@ class ApicApplication extends DemoBase {
     return html`<api-console-app
       app
       redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
-      oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com">
+      oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com"
+      rearrangeEndpoints
+    >
       <anypoint-icon-button
         slot="toolbar"
         aria-label="Activate to open API selection menu"

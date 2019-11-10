@@ -246,12 +246,13 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   _navigationTemplate() {
-    const { amf, noAttribution } = this;
+    const { amf, noAttribution, rearrangeEndpoints } = this;
     return html`<div class="drawer-content-wrapper">
       <api-navigation
         .amf="${amf}"
         summary
         endpointsopened
+        ?rearrangeendpoints="${rearrangeEndpoints}"
         @api-navigation-selection-changed="${this._apiNavigationOcurred}"></api-navigation>
       ${noAttribution ? '' : attributionTpl}
     </div>`;
@@ -485,7 +486,17 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        /**
        * Enables compatibility with Anypoint components.
        */
-      compatibility: { type: Boolean }
+      compatibility: { type: Boolean },
+      /**
+       * This property is passed to the `api-navigation` component.
+       *
+       * When this value is set, the navigation component sorts the list
+       * of endpoints based on the `path` value of the endpoint, keeping the order
+       * of which endpoint was first in the list, relative to each other.
+       *
+       * **This is an experimental option and may dissapear without warning.**
+       */
+      rearrangeEndpoints: { type: Boolean },
     };
   }
 
@@ -763,5 +774,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
   _closeDrawer() {
     this.navigationOpened = false;
+    this.dispatchEvent(new CustomEvent('navigation-close'));
   }
 }
