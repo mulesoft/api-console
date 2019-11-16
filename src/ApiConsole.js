@@ -529,20 +529,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this._modelLocationChanged(value);
   }
 
-  get app() {
-    return this._app;
-  }
-
-  set app(value) {
-    const old = this._app;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this._app = value;
-    this._updateRenderInlineTyit();
-  }
-
   get oauth2clientId() {
     return this._oauth2clientId;
   }

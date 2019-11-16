@@ -142,15 +142,6 @@ export class ApiConsoleApp extends ApiConsole {
        */
       drawerAlign: { type: String },
       /**
-       * By default API console renders itself as an embeddable
-       * web component that has changed behavior of main layout elements
-       * (menu drawer and main view). When this option is set it renders
-       * layout elements in it's static positions instead relative.
-       *
-       * Note, this option is experimental and mey be removed.
-       */
-      app: { type: Boolean, reflect: true },
-      /**
        * A width when the navigation drawer is automatically toggled to narrow
        * view.
        * By default it is `640px`.
@@ -292,13 +283,12 @@ export class ApiConsoleApp extends ApiConsole {
    * Computes value for `_renderInlineTyit` property.
    * @param {Boolean} wideLayout
    * @param {Boolean} isMethod
-   * @param {Boolean} app
    * @param {Boolean} inlineMethods
-   * @return {Boolean} True if is wideLayout, it is a method, it is the app
-   * and when inlineMethods is not set.
+   * @return {Boolean} True if is wideLayout, it is a method, or when inlineMethods
+   * is not set.
    */
-  _computeRenderInlineTryIt(wideLayout, isMethod, app, inlineMethods) {
-    if (!wideLayout || !app || !isMethod ||inlineMethods) {
+  _computeRenderInlineTryIt(wideLayout, isMethod, inlineMethods) {
+    if (!wideLayout || !isMethod ||inlineMethods) {
       return false;
     }
     return wideLayout;
@@ -312,9 +302,6 @@ export class ApiConsoleApp extends ApiConsole {
   }
 
   _mediaQueriesTemplate() {
-    if (!this.app) {
-      return;
-    }
     return html`
     <iron-media-query
       query="(max-width: 740px)"
