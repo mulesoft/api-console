@@ -54,10 +54,13 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       background-color: #fff;
       transform: translateX(-100%);
       transform-origin: top right;
-      transition: transform 0.3s cubic-bezier(0.74, 0.03, 0.3, 0.97);
       height: 100%;
       position: absolute;
       z-index: 5;
+    }
+
+    .nav-drawer.animatable {
+      transition: transform 0.3s cubic-bezier(0.74, 0.03, 0.3, 0.97);
     }
 
     :host([navigationopened]) .nav-drawer {
@@ -584,6 +587,19 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
   firstUpdated() {
     this._initExtensionBanner();
+    this._setupNav();
+  }
+  /**
+   * On Firefix the navigation hidding animation runs when the app is first rendered,
+   * even if the navigation wasn't initially rendered. This to be called
+   * after initial render has been made (DOM is constructed) to add the `animatable`
+   * class on the navigation to enable animation effects.
+   */
+  _setupNav() {
+    setTimeout(() => {
+      const nav = this.shadowRoot.querySelector('.nav-drawer');
+      nav.classList.add('animatable');
+    });
   }
 
   __amfChanged() {
