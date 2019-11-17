@@ -1,5 +1,7 @@
-import { fixture, assert, aTimeout } from '@open-wc/testing';
+import { fixture, assert, aTimeout, html } from '@open-wc/testing';
 import * as sinon from 'sinon/pkg/sinon-esm.js';
+import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
+import { isChrome } from '../src/ApiConsole.js';
 import '../api-console.js';
 
 //
@@ -21,6 +23,10 @@ describe('<api-console>', function() {
 
   async function noAttributionFixture() {
     return (await fixture(`<api-console noattribution></api-console>`));
+  }
+
+  async function extensionFixture() {
+    return (await fixture(`<api-console allowExtensionBanner page="request"></api-console>`));
   }
 
   describe('RAML aware', () => {
@@ -80,6 +86,11 @@ describe('<api-console>', function() {
       assert.typeOf(element.amf, 'array');
     });
 
+    it('returns set location from the getter', () => {
+      element.modelLocation = 'apip.json';
+      assert.equal(element.modelLocation, 'apip.json');
+    });
+
     it('calls _apiLoadErrorHandler() when url is invalid', () => {
       const callback = sinon.spy(element, '_apiLoadErrorHandler');
       element.modelLocation = 'error.json';
@@ -96,22 +107,6 @@ describe('<api-console>', function() {
       document.body.addEventListener('api-console-ready', spy);
       await basicFixture();
       assert.isTrue(spy.called);
-    });
-  });
-
-  describe('_hasCorsExtensionChanged()', () => {
-    it('resets _extensionBannerActive', async () => {
-      const element = await basicFixture();
-      element._extensionBannerActive = true;
-      element._hasCorsExtensionChanged(true);
-      assert.isFalse(element._extensionBannerActive);
-    });
-
-    it('keeps current state when false argument', async () => {
-      const element = await basicFixture();
-      element._extensionBannerActive = true;
-      element._hasCorsExtensionChanged(false);
-      assert.isTrue(element._extensionBannerActive);
     });
   });
 
@@ -241,6 +236,198 @@ describe('<api-console>', function() {
       const element = await noAttributionFixture();
       const node = element.shadowRoot.querySelector('.powered-by');
       assert.notOk(node);
+    });
+  });
+
+  describe('page rendering', () => {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('renders documentation page', async () => {
+      element.page = 'docs';
+      await aTimeout();
+      const docs = element.shadowRoot.querySelector('api-documentation');
+      assert.ok(docs);
+    });
+
+    it('renders request panel', async () => {
+      element.page = 'request';
+      await aTimeout();
+      const docs = element.shadowRoot.querySelector('api-request-panel');
+      assert.ok(docs);
+    });
+
+    it('renders no content when invalid selection', async () => {
+      element.page = 'something';
+      await aTimeout();
+      const main = element.shadowRoot.querySelector('.main-content');
+      assert.lengthOf(main.children, 0);
+    });
+  });
+
+  describe('navigation element view', () => {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('does not render scrim when navigation is not opened', () => {
+      const scrim = element.shadowRoot.querySelector('.nav-scrim');
+      assert.notOk(scrim);
+    });
+
+    it('navigation is hidden outside the viewport', () => {
+      const nav = element.shadowRoot.querySelector('.nav-drawer');
+      const transform = getComputedStyle(nav).transform;
+      assert.include(transform, '-256'); // default width
+    });
+
+    it('renders scrim when navigation is opened', async () => {
+      element.navigationOpened = true;
+      await aTimeout();
+      const scrim = element.shadowRoot.querySelector('.nav-scrim');
+      assert.ok(scrim);
+    });
+
+    it('Navigation is rendered on screen', async () => {
+      element.navigationOpened = true;
+      await aTimeout(350);
+      const nav = element.shadowRoot.querySelector('.nav-drawer');
+      const transform = getComputedStyle(nav).transform;
+      assert.equal(transform, 'matrix(1, 0, 0, 1, 0, 0)')
+    });
+
+    it('closes the navigation when scrim is clicked', async () => {
+      element.navigationOpened = true;
+      await aTimeout();
+      const scrim = element.shadowRoot.querySelector('.nav-scrim');
+      MockInteractions.tap(scrim);
+      assert.isFalse(element.navigationOpened);
+    });
+
+    it('dispatches wbwnt when closing navigation', async () => {
+      element.navigationOpened = true;
+      await aTimeout();
+      const spy = sinon.spy();
+      element.addEventListener('navigation-close', spy);
+      const scrim = element.shadowRoot.querySelector('.nav-scrim');
+      MockInteractions.tap(scrim);
+      assert.isTrue(spy.called);
+    });
+  });
+
+  describe('model auto loading', () => {
+    function basicFixture(loc) {
+      return new Promise((resolve, reject) => {
+        fixture(html`<api-console modelLocation="${loc}"></api-console>`)
+        .then((element) => {
+          element.addEventListener('model-load-success', () => resolve(element));
+          element.addEventListener('model-load-error', () => reject(element));
+        })
+      });
+    }
+
+    it('loads a model from remote location', async () => {
+      const file = '/base/demo/models/demo-api.json';
+      const element = await basicFixture(file);
+      assert.ok(element.amf);
+    });
+
+    it('renders error toast when location is invalid', async () => {
+      const file = '/base/demo/models/invalid.json';
+      let element;
+      try {
+        await basicFixture(file);
+      } catch (e) {
+        element = e;
+      }
+      const toast = element.shadowRoot.querySelector('#apiLoadErrorToast');
+      assert.isTrue(toast.opened);
+    });
+  });
+
+  describe('setting oauth data', () => {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    afterEach(() => {
+      sessionStorage.removeItem('auth.methods.latest.client_id');
+      sessionStorage.removeItem('auth.methods.latest.client_secret');
+    });
+
+    it('sets client id in the session storage', () => {
+      element.oauth2clientId = 'client-id';
+      const sessionValue = sessionStorage.getItem('auth.methods.latest.client_id');
+      assert.ok(sessionValue, 'auth.methods.latest.client_id is set');
+      assert.equal(sessionValue, element.oauth2clientId, 'session value equals element set value');
+    });
+
+    it('sets client secret in the session storage', () => {
+      element.oauth2clientSecret = 'client-secret';
+      const sessionValue = sessionStorage.getItem('auth.methods.latest.client_secret');
+      assert.ok(sessionValue, 'auth.methods.latest.client_secret is set');
+      assert.equal(sessionValue, element.oauth2clientSecret, 'session value equals element set value');
+    });
+  });
+
+  describe('_tryitHandler()', () => {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('sets "request" page when the event is handler', () => {
+      const e = new CustomEvent('tryit-requested', { bubbles: true });
+      element.dispatchEvent(e);
+      assert.equal(element.page, 'request');
+    });
+  });
+
+  describe('Extension banner', () => {
+    let element;
+    beforeEach(async () => {
+      element = await extensionFixture();
+    });
+
+    (isChrome ? it : it.skip)('sets "_extensionBannerActive" after a timeout', async () => {
+      await aTimeout();
+      assert.isTrue(element._extensionBannerActive);
+    });
+
+    (isChrome ? it.skip : it)('does not sets "_extensionBannerActive" in unsupported browser', async () => {
+      await aTimeout();
+      assert.isUndefined(element._extensionBannerActive);
+    });
+
+    (isChrome ? it : it.skip)('renders the banner', async () => {
+      await aTimeout();
+      const node = element.shadowRoot.querySelector('.extension-banner');
+      assert.ok(node, 'banner container is rendered');
+      assert.isTrue(node.hasAttribute('active'), 'banner is active');
+    });
+
+    (isChrome ? it : it.skip)('hides the banner when api-console-extension-installed', async () => {
+      await aTimeout();
+      const node = element.shadowRoot.querySelector('api-console-ext-comm');
+      const e = new CustomEvent('api-console-extension-installed');
+      node.dispatchEvent(e);
+      const banner = element.shadowRoot.querySelector('.extension-banner');
+      assert.ok(banner, 'banner container is rendered');
+      assert.isTrue(banner.hasAttribute('active'), 'banner is active');
+    });
+
+    (isChrome ? it : it.skip)('hides the banner when close icon click', async () => {
+      await aTimeout();
+      const node = element.shadowRoot.querySelector('.extension-banner anypoint-icon-button');
+      MockInteractions.tap(node);
+      await aTimeout();
+      const banner = element.shadowRoot.querySelector('.extension-banner');
+      assert.ok(banner, 'banner container is rendered');
+      assert.isFalse(banner.hasAttribute('active'), 'banner is not active');
     });
   });
 });

@@ -634,6 +634,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   connectedCallback() {
+    /* istanbul ignore else */
     if (super.connectedCallback) {
       super.connectedCallback();
     }
@@ -642,6 +643,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   disconnectedCallback() {
+    /* istanbul ignore else */
     if (super.disconnectedCallback) {
       super.disconnectedCallback();
     }
@@ -666,6 +668,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   __amfChanged() {
+    /* istanbul ignore if */
     if (this.__amfProcessingDebouncer) {
       return;
     }
@@ -677,6 +680,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.__amfProcessingDebouncer = false;
 
     let { amf } = this;
+    /* istanbul ignore if */
     if (!amf) {
       return;
     }
@@ -698,6 +702,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       return;
     }
     const xhr = new XMLHttpRequest();
+    /* istanbul ignore next */
     xhr.addEventListener('error', (error) => this._apiLoadErrorHandler(error));
     xhr.addEventListener('loadend', () => this._apiLoadEndHandler(xhr));
     xhr.open('GET', url, true);
@@ -845,7 +850,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _allowExtensionBannerChanged(value) {
     if (!value && this._extensionBannerActive) {
       this._extensionBannerActive = false;
-    } else if (value && !this._hasApicCorsExtension) {
+    } else if (value && isChrome && !this._hasApicCorsExtension) {
       this._extensionBannerActive = true;
     }
   }
