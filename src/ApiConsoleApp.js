@@ -10,7 +10,7 @@ import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@polymer/iron-media-query/iron-media-query.js';
-import { menu, close } from '@advanced-rest-client/arc-icons/ArcIcons.js';
+import { menu } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 
 export class ApiConsoleApp extends ApiConsole {
   static get styles() {
@@ -33,25 +33,6 @@ export class ApiConsoleApp extends ApiConsole {
       app-toolbar {
         background-color: var(--api-console-toolbar-background-color, #283640); /* #2196f3 */
         color: var(--api-console-toolbar-color, #fff);
-      }
-
-      .extension-banner {
-        align-items: center;
-        display: none;
-        border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
-        border-top: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
-        margin-bottom: 12px;
-        box-sizing: border-box;
-        color: var(--api-console-extension-banner-color, rgba(0,0,0,0.54));
-      }
-
-      .extension-banner[active] {
-        display: flex;
-        flex-direction: row;
-      }
-
-      .extension-banner {
-        max-width: var(--api-console-main-max-width, 1600px);
       }
 
       .nav-content {
@@ -108,13 +89,6 @@ export class ApiConsoleApp extends ApiConsole {
         padding: 0 12px;
         box-sizing: border-box;
         flex: 1;
-      }
-
-      .icon {
-        fill: currentColor;
-        width: 24px;
-        height: 24px;
-        display: block;
       }
       `
     ];
@@ -216,20 +190,6 @@ export class ApiConsoleApp extends ApiConsole {
     this._updateRenderInlineTyit();
   }
 
-  get allowExtensionBanner() {
-    return this._allowExtensionBanner;
-  }
-
-  set allowExtensionBanner(value) {
-    const old = this._allowExtensionBanner;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this._allowExtensionBanner = value;
-    this._allowExtensionBannerChanged(value);
-  }
-
   get selectedShapeType() {
     return this._selectedShapeType;
   }
@@ -267,16 +227,6 @@ export class ApiConsoleApp extends ApiConsole {
    */
   resetLayout() {
     this.shadowRoot.querySelector('app-drawer-layout').notifyResize();
-  }
-
-  /**
-   * Controls behavior if the extension banner.
-   * @param {Boolean} value Current value of `allowExtensionBanner` property
-   */
-  _allowExtensionBannerChanged(value) {
-    if (!value && this._extensionBannerActive) {
-      this._extensionBannerActive = false;
-    }
   }
 
   /**
@@ -338,26 +288,6 @@ export class ApiConsoleApp extends ApiConsole {
         <slot name="toolbar"></slot>
       </app-toolbar>
     </app-header>`;
-  }
-
-  _bannerMessage() {
-    return html`
-    <div class="extension-banner" ?active="${this._extensionBannerActive}">
-      <p>
-        For better experience install API console extension.
-        Get it from <a target="_blank"
-          class="store-link"
-          href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">
-          Chrome Web Store
-        </a>
-      </p>
-      <anypoint-icon-button
-        aria-label="Activate to close the message"
-        @click="${this.dismissExtensionBanner}"
-      >
-        <span class="icon">${close}</span>
-      </anypoint-icon-button>
-    </div>`;
   }
 
   _apiDocumentationTemplate() {

@@ -21,6 +21,7 @@ import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '@api-components/api-console-ext-comm/api-console-ext-comm.js';
 import attributionTpl from './attribution-template.js';
+import { close } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 
 export const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 /**
@@ -127,6 +128,25 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       max-width: var(--api-console-main-max-width, 1600px);
     }
 
+    .extension-banner {
+      align-items: center;
+      display: none;
+      border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
+      border-top: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      color: var(--api-console-extension-banner-color, rgba(0,0,0,0.54));
+    }
+
+    .extension-banner[active] {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .extension-banner {
+      max-width: var(--api-console-main-max-width, 1600px);
+    }
+
     .method-title {
       flex: 1;
       font-size: var(--arc-font-headline-font-size);
@@ -150,6 +170,13 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       overflow: auto;
       height: 100%;
     }
+
+    .icon {
+      fill: currentColor;
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
     `;
   }
 
@@ -161,7 +188,29 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     }
   }
 
-  _bannerMessage() {}
+  _bannerMessage() {
+    if (!this.allowExtensionBanner) {
+      return '';
+    }
+    return html`
+    <div class="extension-banner" ?active="${this._extensionBannerActive}">
+      <p>
+        For better experience install API console extension.
+        Get it from <a target="_blank"
+          class="store-link"
+          href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa"
+        >
+          Chrome Web Store
+        </a>
+      </p>
+      <anypoint-icon-button
+        aria-label="Activate to close the message"
+        @click="${this.dismissExtensionBanner}"
+      >
+        <span class="icon">${close}</span>
+      </anypoint-icon-button>
+    </div>`;
+  }
 
   _getRequestTemplate() {
     const {
@@ -245,7 +294,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
-      @tryit-requested="${this._tryitHandler}"></api-documentation>`;
+    ></api-documentation>`;
   }
 
   _navigationTemplate() {
@@ -294,7 +343,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
    */
   _helpersTemplate() {
     return html`<paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
-    <api-console-ext-comm @has-extension-changed="${this._hasExtensionHandler}"></api-console-ext-comm>
+    <api-console-ext-comm @api-console-extension-installed="${this._hasExtensionHandler}"></api-console-ext-comm>
     `;
   }
 
@@ -503,6 +552,20 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     };
   }
 
+  get allowExtensionBanner() {
+    return this._allowExtensionBanner;
+  }
+
+  set allowExtensionBanner(value) {
+    const old = this._allowExtensionBanner;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._allowExtensionBanner = value;
+    this._allowExtensionBannerChanged(value);
+  }
+
   get selectedShape() {
     return this._selectedShape;
   }
@@ -653,16 +716,18 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       return;
     }
     this.amf = data;
+    this.dispatchEvent(new CustomEvent('model-load-success'));
   }
   /**
    * Called by `_modelLocationChanged` when error occurred when getting API data.
    * @param {Error} error
    */
   _apiLoadErrorHandler(error) {
-    const message = 'Unable to load API model data. ' + (error.message ? error.message : '');
+    const message = `Unable to load API model data. ${error.message || ''}`;
     const toast = this.shadowRoot.querySelector('#apiLoadErrorToast');
     toast.text = message;
     toast.opened = true;
+    this.dispatchEvent(new CustomEvent('model-load-error'));
   }
   /**
    * Handler for the `tryit-requested` event. Sets current screen to
@@ -731,12 +796,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       composed: true
     }));
   }
-
-  _hasCorsExtensionChanged(value) {
-    if (value && this._extensionBannerActive) {
-      this._extensionBannerActive = false;
-    }
-  }
   /**
    * Computes method name for not-wide view, where the request panel
    * has close button.
@@ -770,12 +829,24 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   _hasExtensionHandler(e) {
-    this._hasApicCorsExtension = e.detail.value;
-    this._hasCorsExtensionChanged(e.detail.value);
+    this._hasApicCorsExtension = true;
+    this._extensionBannerActive = false;
   }
 
   _closeDrawer() {
     this.navigationOpened = false;
     this.dispatchEvent(new CustomEvent('navigation-close'));
+  }
+
+  /**
+   * Controls behavior if the extension banner.
+   * @param {Boolean} value Current value of `allowExtensionBanner` property
+   */
+  _allowExtensionBannerChanged(value) {
+    if (!value && this._extensionBannerActive) {
+      this._extensionBannerActive = false;
+    } else if (value && !this._hasApicCorsExtension) {
+      this._extensionBannerActive = true;
+    }
   }
 }
