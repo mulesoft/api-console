@@ -29,6 +29,10 @@ npm i
 npm start
 ```
 
+## Documentation
+
+Learn more about using the console at https://docs.api-console.io.
+
 ## Changelog (so far)
 
 -   Upgrade to final web components specification: replacing HTML imports with JavaScript modules
