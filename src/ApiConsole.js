@@ -663,7 +663,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _setupNav() {
     setTimeout(() => {
       const nav = this.shadowRoot.querySelector('.nav-drawer');
-      nav.classList.add('animatable');
+      if (nav) {
+        nav.classList.add('animatable');
+      }
     });
   }
 
