@@ -835,7 +835,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.amf = e.detail.value;
   }
 
-  _hasExtensionHandler(e) {
+  _hasExtensionHandler() {
     this._hasApicCorsExtension = true;
     this._extensionBannerActive = false;
   }
