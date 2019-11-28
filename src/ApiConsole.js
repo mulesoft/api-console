@@ -640,6 +640,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     }
     this.addEventListener('tryit-requested', this._tryitHandler);
     this._notifyApicExtension();
+    if (window.ShadyCSS) {
+      window.ShadyCSS.styleElement(this);
+    }
   }
 
   disconnectedCallback() {
