@@ -92,7 +92,7 @@
     "start": "node demo/index.js",
     "start:old": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
     "start:server": "node --inspect demo/parsing-server/main.js",
-    "start:compatibility": "es-dev-server --app-index demo/index.html --compatibility all --node-resolve --open --watch",
+    "start:compatibility": "es-dev-server --app-index demo/index.html --compatibility auto --node-resolve --open --watch",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
     "format:eslint": "eslint --ext .js,.html . --fix --ignore-path .gitignore",
     "lint:prettier": "prettier \"**/*.js\" --check --ignore-path .gitignore",
@@ -103,9 +103,9 @@
     "test:watch": "karma start --auto-watch=true --single-run=false",
     "test:update-snapshots": "karma start --update-snapshots",
     "test:prune-snapshots": "karma start --prune-snapshots",
-    "test:compatibility": "karma start --compatibility all --coverage",
-    "test:compatibility:watch": "karma start --compatibility all --auto-watch=true --single-run=false",
-    "test:sl": "karma start karma.sl.config.js --compatibility all --coverage",
+    "test:compatibility": "karma start --compatibility auto --coverage",
+    "test:compatibility:watch": "karma start --compatibility auto --auto-watch=true --single-run=false",
+    "test:sl": "karma start karma.sl.config.js --compatibility auto --coverage",
     "build": "rimraf dist && rollup -c rollup.config.js"
   },
   "lint-staged": {
