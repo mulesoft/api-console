@@ -374,7 +374,7 @@ export class ApiConsoleApp extends ApiConsole {
   _apiNavigationOcurred(e) {
     super._apiNavigationOcurred(e);
     const { selected, type } = e.detail;
-    const url = `#docs/${type}/${selected}`;
+    const url = `${window.location.pathname}#docs/${type}/${selected}`;
     history.pushState({
       page: 'docs',
       type,

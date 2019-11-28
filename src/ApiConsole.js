@@ -663,7 +663,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _setupNav() {
     setTimeout(() => {
       const nav = this.shadowRoot.querySelector('.nav-drawer');
-      nav.classList.add('animatable');
+      if (nav) {
+        nav.classList.add('animatable');
+      }
     });
   }
 
@@ -833,7 +835,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.amf = e.detail.value;
   }
 
-  _hasExtensionHandler(e) {
+  _hasExtensionHandler() {
     this._hasApicCorsExtension = true;
     this._extensionBannerActive = false;
   }
