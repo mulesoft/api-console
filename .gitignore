@@ -57,3 +57,4 @@ $RECYCLE.BIN/
 node_modules
 coverage
 demo/vendor.js
+dist/

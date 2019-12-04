@@ -35,7 +35,7 @@
     "@api-components/amf-helper-mixin": "^4.0.14",
     "@api-components/api-console-default-theme": "^3.0.0-preview.2",
     "@api-components/api-console-ext-comm": "^3.0.0",
-    "@api-components/api-documentation": "^4.0.0",
+    "@api-components/api-documentation": "^4.0.4",
     "@api-components/api-navigation": "^4.0.0",
     "@api-components/api-request-panel": "^4.0.1",
     "@api-components/raml-aware": "^3.0.0",
@@ -48,7 +48,7 @@
     "web-animations-js": "^2.3.2"
   },
   "devDependencies": {
-    "@advanced-rest-client/eslint-config": "^1.1.1",
+    "@advanced-rest-client/eslint-config": "^1.1.4",
     "@advanced-rest-client/prettier-config": "^0.1.0",
     "@advanced-rest-client/testing-karma-sl": "^1.0.6",
     "@anypoint-web-components/anypoint-dropdown": "^1.0.1",
@@ -78,7 +78,9 @@
     "node-cache": "^5.0.2",
     "rimraf": "^3.0.0",
     "rollup": "^1.27.5",
+    "rollup-plugin-cpy": "^2.0.1",
     "rollup-plugin-multi-entry": "^2.1.0",
+    "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-uglify": "^6.0.3",
     "sinon": "^7.4.2",
     "tmp": "0.1.0",
