@@ -1,7 +1,7 @@
 {
   "name": "@anypoint-web-components/api-console",
   "description": "The API console used in RAML platform.",
-  "version": "6.0.0-preview.31",
+  "version": "6.0.0-preview.32",
   "license": "CPAL-1.0",
   "main": "api-console.js",
   "keywords": [
