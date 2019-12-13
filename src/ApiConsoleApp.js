@@ -213,7 +213,7 @@ export class ApiConsoleApp extends ApiConsole {
   }
 
   _updateRenderInlineTyit() {
-    const value = this._computeRenderInlineTryIt(this.wideLayout, this._isMethod, this.app, this.inlineMethods);
+    const value = this._computeRenderInlineTryIt(this.wideLayout, this._isMethod, this.inlineMethods);
     this._renderInlineTyit = value;
     this._noTryItValue = this._computeNoTryItValue(this.noTryIt, value);
   }
