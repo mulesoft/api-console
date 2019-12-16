@@ -88,6 +88,8 @@ types:
         type: number
         required: false
         description: Age of the person.
+  QueryParam: !include types/query-string.raml
+  OtherQueryParam: !include types/other-query-string.raml
 resourceTypes:
   ResourceNotFound:
     get:
@@ -138,49 +140,6 @@ documentation:
   - title: Test doc
     content: Test content
 
-
-/test-parameters/{feature}:
-  (deprecated): This endpoint is deprecated and will be removed.
-  uriParameters:
-    feature:
-      type: string
-      enum:
-        - A
-        - B
-        - C
-  get:
-    (deprecated): This method is deprecated and will be removed.
-    (clearanceLevel):
-      level: high
-      signature: 230-ghtwvfrs1itr
-    description: To test enum values in the URI parameters for inline type declaration.
-    queryParameters:
-      testRepeatable:
-        (deprecated): Test parameter will be removed in next version of the API.
-        required: true
-        type: string[]
-        example: [value1, value2]
-      numericRepeatable:
-        required: true
-        type: integer[]
-        examples:
-          Some-test-example: [123, 456]
-          Other-example: [1011, 1213]
-      notRequiredRepeatable:
-        (annotationTest):
-        type: array
-        items: date-only
-        required: false
-  /{typeFeature}:
-    (annotationTest):
-    (deprecated): This method will be removed in future release of the API.
-    uriParameters:
-      typeFeature:
-        (annotationTest):
-        type: Feature
-    get:
-      (deprecated): This endpoint is deprecated and will be removed.
-      description: To test enum values in the URI parameters for global type declaration.
 /people:
   displayName: People
   get:
@@ -478,3 +437,61 @@ documentation:
     body:
       multipart/form-data:
         type: MultipartPerson
+/query-string-test:
+  /node-type:
+    get:
+      queryString: QueryParam
+  /union:
+    get:
+      queryString: QueryParam | OtherQueryParam
+  /scalar:
+    get:
+      queryString:
+        type: string
+        example: test
+  /array:
+    get:
+      queryString:
+        type: OtherQueryParam[]
+/query-parameters/{feature}:
+  (deprecated): This endpoint is deprecated and will be removed.
+  uriParameters:
+    feature:
+      type: string
+      enum:
+        - A
+        - B
+        - C
+  get:
+    (deprecated): This method is deprecated and will be removed.
+    (clearanceLevel):
+      level: high
+      signature: 230-ghtwvfrs1itr
+    description: To test enum values in the URI parameters for inline type declaration.
+    queryParameters:
+      testRepeatable:
+        (deprecated): Test parameter will be removed in next version of the API.
+        required: true
+        type: string[]
+        example: [value1, value2]
+      numericRepeatable:
+        required: true
+        type: integer[]
+        examples:
+          Some-test-example: [123, 456]
+          Other-example: [1011, 1213]
+      notRequiredRepeatable:
+        (annotationTest):
+        type: array
+        items: date-only
+        required: false
+  /{typeFeature}:
+    (annotationTest):
+    (deprecated): This method will be removed in future release of the API.
+    uriParameters:
+      typeFeature:
+        (annotationTest):
+        type: Feature
+    get:
+      (deprecated): This endpoint is deprecated and will be removed.
+      description: To test enum values in the URI parameters for global type declaration.
