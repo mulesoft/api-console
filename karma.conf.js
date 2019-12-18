@@ -16,16 +16,6 @@ module.exports = (config) => {
           type: 'module'
         },
         {
-          pattern: require.resolve('chai/chai.js')
-        },
-        {
-          pattern: require.resolve('axe-core/axe.min.js')
-        },
-        {
-          pattern: config.grep ? config.grep : 'test/**/*.test.js',
-          type: 'module'
-        },
-        {
           pattern: 'node_modules/cryptojslib/components/core.js',
           type: 'js'
         },
