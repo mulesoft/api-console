@@ -16,6 +16,3 @@ commitlint.*
 .*
 *.config.*
 prettier.config.js
-sw-precache-config.js
-service-worker.js
-apic-import.js
