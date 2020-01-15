@@ -34,7 +34,7 @@ For more information, see [api-console-cli](https://github.com/mulesoft-labs/api
 Build API Console from the latest released version and use `path/to/api.raml` file as the data source. The API is a RAML 1.0 spec file.
 
 ```shell
-$ api-console -t "RAML 1.0" -a path/to/api.raml
+$ api-console build -t "RAML 1.0" -a path/to/api.raml
 ```
 
 Build API Console from local sources (`--local api-console-release.zip`) which is a zip file of a release.
