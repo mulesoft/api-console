@@ -1,0 +1,351 @@
+{
+ "kind": "drive#changeList",
+ "etag": "\"CHXJyqSTqQN6k2cni3iCrLmxCRE/ag6e1lAP_iB5Won11XGl5SMdZJw\"",
+ "selfLink": "https://www.googleapis.com/drive/v2/changes?maxResults=10",
+ "nextPageToken": "74291",
+ "nextLink": "https://www.googleapis.com/drive/v2/changes?maxResults=10&pageToken=74291",
+ "largestChangeId": "1360609",
+ "items": [
+  {
+   "kind": "drive#change",
+   "id": "19115",
+   "type": "file",
+   "modificationDate": "2011-06-14T09:23:28.208Z",
+   "deleted": false,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/19115",
+   "fileId": "0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5",
+   "file": {
+    "kind": "drive#file",
+    "id": "0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5",
+    "etag": "\"CHXJyqSTqQN6k2cni3iCrLmxCRE/MTMwNzg4OTMxNjYxMw\"",
+    "selfLink": "https://www.googleapis.com/drive/v2/files/0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5",
+    "alternateLink": "https://drive.google.com/drive/folders/0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5",
+    "embedLink": "https://drive.google.com/embeddedfolderview?id=0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5",
+    "openWithLinks": {
+     "407408718192": "https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/drive.file&client_id=407408718192.apps.googleusercontent.com&response_type=code&access_type=offline&redirect_uri=https://developers.google.com/oauthplayground&user_id=113648393775261658002&state=%7B%22ids%22:%5B%220Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5%22%5D,%22action%22:%22open%22,%22userId%22:%22113648393775261658002%22%7D",
+     "1095523759147": "https://drive.google.com/drive/folders/0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5"
+    },
+    "defaultOpenWithLink": "https://drive.google.com/drive/folders/0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5",
+    "iconLink": "https://ssl.gstatic.com/docs/doclist/images/icon_11_shared_collection_list_1.png",
+    "title": "File title",
+    "mimeType": "application/vnd.google-apps.folder",
+    "labels": {
+     "starred": false,
+     "hidden": false,
+     "trashed": false,
+     "restricted": false,
+     "viewed": true
+    },
+    "createdDate": "2011-06-12T14:32:49.377Z",
+    "modifiedDate": "2011-06-12T14:35:16.613Z",
+    "lastViewedByMeDate": "2011-06-12T14:32:49.753Z",
+    "markedViewedByMeDate": "2011-06-12T14:34:05.946Z",
+    "version": "19114",
+    "parents": [
+     {
+      "kind": "drive#parentReference",
+      "id": "0Bzpy9PK_RiBOOWE4YTc5YzgtODI1NS00YjEyLWIxYjUtMGJhMTc0YjE0YTI2",
+      "selfLink": "https://www.googleapis.com/drive/v2/files/0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5/parents/0Bzpy9PK_RiBOOWE4YTc5YzgtODI1NS00YjEyLWIxYjUtMGJhMTc0YjE0YTI2",
+      "parentLink": "https://www.googleapis.com/drive/v2/files/0Bzpy9PK_RiBOOWE4YTc5YzgtODI1NS00YjEyLWIxYjUtMGJhMTc0YjE0YTI2",
+      "isRoot": false
+     }
+    ],
+    "userPermission": {
+     "kind": "drive#permission",
+     "etag": "\"CHXJyqSTqQN6k2cni3iCrLmxCRE/dWNdLtTomm45p40ScgKOq1gwjHk\"",
+     "id": "me",
+     "selfLink": "https://www.googleapis.com/drive/v2/files/0Bzey9RO_RiBOY2IwZjIxNWMtNTQ0Zi00ZDJiLWEyOT3tZmJkMmRjNTJhYTg5/permissions/me",
+     "role": "owner",
+     "type": "user"
+    },
+    "quotaBytesUsed": "0",
+    "ownerNames": [
+     "John Doe"
+    ],
+    "owners": [
+     {
+      "kind": "drive#user",
+      "displayName": "John Doe",
+      "picture": {
+       "url": "https://lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr7Z/YmMhVu8Ol-I/s64/photo.jpg"
+      },
+      "isAuthenticatedUser": true,
+      "permissionId": "92796993228604565116",
+      "emailAddress": "author@gmail.com"
+     }
+    ],
+    "lastModifyingUserName": "John Doe",
+    "lastModifyingUser": {
+     "kind": "drive#user",
+     "displayName": "John Doe",
+     "picture": {
+      "url": "https://lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr7Z/YmMhVu8Ol-I/s64/photo.jpg"
+     },
+     "isAuthenticatedUser": true,
+     "permissionId": "92796993228604565116",
+     "emailAddress": "author@gmail.com"
+    },
+    "capabilities": {
+     "canCopy": false,
+     "canEdit": true
+    },
+    "editable": true,
+    "copyable": false,
+    "writersCanShare": true,
+    "shared": true,
+    "explicitlyTrashed": false,
+    "appDataContents": false
+   }
+  },
+  {
+   "kind": "drive#change",
+   "id": "23423",
+   "type": "file",
+   "modificationDate": "2011-09-15T11:20:17.108Z",
+   "deleted": true,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/23423",
+   "fileId": "1HyowKkIjANF4Z1Kvs1saPiC8xzE8vDUR9Bw8zvhzaqI"
+  },
+  {
+   "kind": "drive#change",
+   "id": "23424",
+   "type": "file",
+   "modificationDate": "2011-09-15T11:21:19.877Z",
+   "deleted": true,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/23424",
+   "fileId": "0B4nUXhY0dFqkMmEwMWRhZDktMjQ1ZS00NjJlLTkxZmItMWEyNTE2OTRlMGVh"
+  },
+  {
+   "kind": "drive#change",
+   "id": "38269",
+   "type": "file",
+   "modificationDate": "2011-11-08T01:47:06.888Z",
+   "deleted": false,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/38269",
+   "fileId": "1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA",
+   "file": {
+    "kind": "drive#file",
+    "id": "1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA",
+    "etag": "\"CHXJyqSTqQN6k2cni3iCrLmxCRE/MTMxNDcwMzQ2NzI2Mw\"",
+    "selfLink": "https://www.googleapis.com/drive/v2/files/1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA",
+    "alternateLink": "https://docs.google.com/document/d/1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA/edit?usp=drivesdk",
+    "embedLink": "https://docs.google.com/document/d/1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA/preview",
+    "openWithLinks": {
+     "619683526622": "https://docs.google.com/document/d/1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA/edit?usp=drivesdk",
+     "338347331578": "https://drive.google.com/file/d/1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA/view?usp=drivesdk"
+    },
+    "defaultOpenWithLink": "https://docs.google.com/document/d/1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA/edit?usp=drivesdk",
+    "iconLink": "https://ssl.gstatic.com/docs/doclist/images/icon_11_document_list.png",
+    "thumbnailLink": "https://docs.google.com/feeds/vt?gd=true&id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&v=9&s=AMedNnoAAAAAWNp-3m4vkCb9SV7FNNlcV-gyVOB2DO4U&sz=s220",
+    "title": "File title",
+    "mimeType": "application/vnd.google-apps.document",
+    "labels": {
+     "starred": false,
+     "hidden": false,
+     "trashed": false,
+     "restricted": false,
+     "viewed": true
+    },
+    "createdDate": "2011-08-27T12:13:30.075Z",
+    "modifiedDate": "2011-08-30T11:24:27.263Z",
+    "lastViewedByMeDate": "2011-10-01T09:35:32.959Z",
+    "markedViewedByMeDate": "2011-10-01T09:35:32.543Z",
+    "version": "38268",
+    "parents": [
+     {
+      "kind": "drive#parentReference",
+      "id": "0Bzpy9PK_RiBOODk1ZDEwMmQtZWM0OC00MGYzLTgzOTgtN2IwNWJkY2YzMDZi",
+      "selfLink": "https://www.googleapis.com/drive/v2/files/1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA/parents/0Bzpy9PK_RiBOODk1ZDEwMmQtZWM0OC00MGYzLTgzOTgtN2IwNWJkY2YzMDZi",
+      "parentLink": "https://www.googleapis.com/drive/v2/files/0Bzpy9PK_RiBOODk1ZDEwMmQtZWM0OC00MGYzLTgzOTgtN2IwNWJkY2YzMDZi",
+      "isRoot": false
+     }
+    ],
+    "exportLinks": {
+     "application/rtf": "https://docs.google.com/feeds/download/documents/export/Export?id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&exportFormat=rtf",
+     "application/vnd.oasis.opendocument.text": "https://docs.google.com/feeds/download/documents/export/Export?id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&exportFormat=odt",
+     "text/html": "https://docs.google.com/feeds/download/documents/export/Export?id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&exportFormat=html",
+     "application/pdf": "https://docs.google.com/feeds/download/documents/export/Export?id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&exportFormat=pdf",
+     "application/epub+zip": "https://docs.google.com/feeds/download/documents/export/Export?id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&exportFormat=epub",
+     "application/zip": "https://docs.google.com/feeds/download/documents/export/Export?id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&exportFormat=zip",
+     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "https://docs.google.com/feeds/download/documents/export/Export?id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&exportFormat=docx",
+     "text/plain": "https://docs.google.com/feeds/download/documents/export/Export?id=1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA&exportFormat=txt"
+    },
+    "userPermission": {
+     "kind": "drive#permission",
+     "etag": "\"CHXJyqSTqQN6k2cni3iCrLmxCRE/vTjlJ2yaeSz8GHllM0V__vRnBrs\"",
+     "id": "me",
+     "selfLink": "https://www.googleapis.com/drive/v2/files/1OLqg5fC_8FZbYv2HLo76DeYTkanVbHzqvf5LM-KLiLA/permissions/me",
+     "role": "owner",
+     "type": "user"
+    },
+    "quotaBytesUsed": "0",
+    "ownerNames": [
+     "John Doe"
+    ],
+    "owners": [
+     {
+      "kind": "drive#user",
+      "displayName": "John Doe",
+      "picture": {
+       "url": "https://lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr7Z/YmMhVu8Ol-I/s64/photo.jpg"
+      },
+      "isAuthenticatedUser": true,
+      "permissionId": "92796993228604565116",
+      "emailAddress": "author@gmail.com"
+     }
+    ],
+    "lastModifyingUserName": "John Doe",
+    "lastModifyingUser": {
+     "kind": "drive#user",
+     "displayName": "John Doe",
+     "picture": {
+      "url": "https://lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr7Z/YmMhVu8Ol-I/s64/photo.jpg"
+     },
+     "isAuthenticatedUser": true,
+     "permissionId": "92796993228604565116",
+     "emailAddress": "author@gmail.com"
+    },
+    "capabilities": {
+     "canCopy": true,
+     "canEdit": true
+    },
+    "editable": true,
+    "copyable": true,
+    "writersCanShare": true,
+    "shared": false,
+    "explicitlyTrashed": false,
+    "appDataContents": false
+   }
+  },
+  {
+   "kind": "drive#change",
+   "id": "50928",
+   "type": "file",
+   "modificationDate": "2011-12-16T11:41:56.940Z",
+   "deleted": false,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/50928",
+   "fileId": "17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM",
+   "file": {
+    "kind": "drive#file",
+    "id": "17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM",
+    "etag": "\"CHXJyqSTqQN6k2cni3iCrLmxCRE/MTMyMzg5Mzk0NzIzMw\"",
+    "selfLink": "https://www.googleapis.com/drive/v2/files/17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM",
+    "alternateLink": "https://docs.google.com/document/d/17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM/edit?usp=drivesdk",
+    "embedLink": "https://docs.google.com/document/d/17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM/preview",
+    "openWithLinks": {
+     "619683526622": "https://docs.google.com/document/d/17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM/edit?usp=drivesdk",
+     "338347331578": "https://drive.google.com/file/d/17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM/view?usp=drivesdk"
+    },
+    "defaultOpenWithLink": "https://docs.google.com/document/d/17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM/edit?usp=drivesdk",
+    "iconLink": "https://ssl.gstatic.com/docs/doclist/images/icon_11_document_list.png",
+    "thumbnailLink": "https://docs.google.com/feeds/vt?gd=true&id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&v=1&s=AMedNnoAAAAAWNp-3pBG7_oCmQVGpsn3mMVMOdMgs0zM&sz=s220",
+    "title": "Notes: talk.google.com/gtugpl hangout",
+    "mimeType": "application/vnd.google-apps.document",
+    "labels": {
+     "starred": false,
+     "hidden": false,
+     "trashed": false,
+     "restricted": false,
+     "viewed": true
+    },
+    "createdDate": "2011-12-14T20:19:06.223Z",
+    "modifiedDate": "2011-12-14T20:19:07.233Z",
+    "lastViewedByMeDate": "2011-12-14T21:56:15.874Z",
+    "markedViewedByMeDate": "1970-01-01T00:00:00.000Z",
+    "version": "687255",
+    "parents": [],
+    "exportLinks": {
+     "application/rtf": "https://docs.google.com/feeds/download/documents/export/Export?id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&exportFormat=rtf",
+     "application/vnd.oasis.opendocument.text": "https://docs.google.com/feeds/download/documents/export/Export?id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&exportFormat=odt",
+     "text/html": "https://docs.google.com/feeds/download/documents/export/Export?id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&exportFormat=html",
+     "application/pdf": "https://docs.google.com/feeds/download/documents/export/Export?id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&exportFormat=pdf",
+     "application/epub+zip": "https://docs.google.com/feeds/download/documents/export/Export?id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&exportFormat=epub",
+     "application/zip": "https://docs.google.com/feeds/download/documents/export/Export?id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&exportFormat=zip",
+     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "https://docs.google.com/feeds/download/documents/export/Export?id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&exportFormat=docx",
+     "text/plain": "https://docs.google.com/feeds/download/documents/export/Export?id=17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM&exportFormat=txt"
+    },
+    "userPermission": {
+     "kind": "drive#permission",
+     "etag": "\"CHXJyqSTqQN6k2cni3iCrLmxCRE/TC3DOxagWhff1q460kWUzQyVUvU\"",
+     "id": "me",
+     "selfLink": "https://www.googleapis.com/drive/v2/files/17phSS8LADSVMxm_wFfedPMLUlXkR6vWRP82ZmWHN3WM/permissions/me",
+     "role": "writer",
+     "type": "user"
+    },
+    "quotaBytesUsed": "0",
+    "ownerNames": [
+     "Other Author"
+    ],
+    "owners": [
+     {
+      "kind": "drive#user",
+      "displayName": "Other Author",
+      "picture": {
+       "url": "https://lh6.googleusercontent.com/-OtJfP7K94zY/AAAAAAAAAAI/AAAAAAABhMA/IRhn-88lDWX/s64/photo.jpg"
+      },
+      "isAuthenticatedUser": false,
+      "permissionId": "07042341848164379300",
+      "emailAddress": "author@gmail.com"
+     }
+    ],
+    "lastModifyingUserName": "Other Author",
+    "lastModifyingUser": {
+     "kind": "drive#user",
+     "displayName": "Other Author",
+     "picture": {
+      "url": "https://lh6.googleusercontent.com/-OtJfP7K94zY/AAAAAAAAAAI/AAAAAAABhMA/IRhn-88lDWX/s64/photo.jpg"
+     },
+     "isAuthenticatedUser": false,
+     "permissionId": "07042341848164379300",
+     "emailAddress": "author@gmail.com"
+    },
+    "capabilities": {
+     "canCopy": true,
+     "canEdit": true
+    },
+    "editable": true,
+    "copyable": true,
+    "writersCanShare": true,
+    "shared": true,
+    "explicitlyTrashed": false,
+    "appDataContents": false
+   }
+ },
+  {
+   "kind": "drive#change",
+   "id": "74243",
+   "type": "file",
+   "modificationDate": "2012-04-12T13:01:27.364Z",
+   "deleted": true,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/74243",
+   "fileId": "1AqCvbyNwKl4vJRW1R8lWUZv1ljjbn1lf4Y6jVaiuMM0"
+  },
+  {
+   "kind": "drive#change",
+   "id": "74287",
+   "type": "file",
+   "modificationDate": "2012-04-12T13:01:27.364Z",
+   "deleted": true,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/74287",
+   "fileId": "0ATpy9PK_RiBOZGQ5dmo1OXFfM2s2Y3M4d2s5"
+  },
+  {
+   "kind": "drive#change",
+   "id": "74288",
+   "type": "file",
+   "modificationDate": "2012-04-12T13:01:27.364Z",
+   "deleted": true,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/74288",
+   "fileId": "0ATpy9PK_RiBOZGQ5dmo1OXFfNWR6ZGM2Nmd0"
+  },
+  {
+   "kind": "drive#change",
+   "id": "74290",
+   "type": "file",
+   "modificationDate": "2012-04-12T13:01:27.497Z",
+   "deleted": true,
+   "selfLink": "https://www.googleapis.com/drive/v2/changes/74290",
+   "fileId": "1ISOLzdpBxaFd_XPahANNT5LJ72JDfvivypAaZAJ9dO0"
+  }
+ ]
+}

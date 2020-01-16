@@ -1,0 +1,52 @@
+#%RAML 1.0 Library
+
+types:
+  Parent:
+    type: object
+    description: A reference to a file's parent.
+    properties:
+      kind:
+        type: string
+        required: false
+        default: drive#parentReference
+        enum: [drive#parentReference]
+        description: This is always drive#parentReference.
+      id:
+        type: string
+        required: false
+        description: The ID of the parent.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this reference.
+      parentLink:
+        type: string
+        required: false
+        description: A link to the parent.
+      isRoot:
+        type: string
+        required: false
+        description: Whether or not the parent is the root folder.
+  ParentList:
+    displayName: ParentList
+    description: A list of Parents.
+    properties:
+      kind:
+        type: string
+        required: false
+        default: drive#parentList
+        enum: [drive#parentList]
+        description: This is always drive#parentList.
+      etag:
+        type: string
+        required: false
+        description: The ETag of the list.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this list.
+      items:
+        type: array
+        required: false
+        description: The actual list of parents.
+        items: Parent

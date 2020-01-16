@@ -1,0 +1,6 @@
+{
+  "kind" : "drive#childReference" ,
+  "id" : "string" ,
+  "selfLink" : "string" ,
+  "childLink" : "string"
+}

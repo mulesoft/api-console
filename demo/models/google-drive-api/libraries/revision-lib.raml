@@ -1,0 +1,116 @@
+#%RAML 1.0 Library
+
+types:
+  User: !include ../types/user.raml
+  RevisionBase:
+    type: object
+    properties:
+      pinned:
+        type: boolean
+        required: false
+        description: |
+          Whether this revision is pinned to prevent automatic purging.
+          This will only be populated and can only be modified on files with content stored in
+          Drive which are not Google Docs. Revisions can also be pinned when they are created
+          through the drive.files.insert/update/copy by using the pinned query parameter.
+      published:
+        type: boolean
+        required: false
+        description: Whether this revision is published. This is only populated and can only be modified for Google Docs.
+      publishAuto:
+        type: boolean
+        required: false
+        description: Whether subsequent revisions will be automatically republished. This is only populated and can only be modified for Google Docs.
+      publishedOutsideDomain:
+        type: boolean
+        required: false
+        description: Whether this revision is published outside the domain. This is only populated and can only be modified for Google Docs.
+  Revision:
+    type: RevisionBase
+    properties:
+      kind:
+        type: string
+        required: false
+        description: This is always drive#revision.
+        enum: [drive#revision]
+        default: drive#revision
+      etag:
+        type: string
+        required: false
+        description: The ETag of the revision.
+      id:
+        type: string
+        required: false
+        description: The ID of the revision.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this revision.
+      mimeType:
+        type: string
+        required: false
+        description: The MIME type of the revision.
+      modifiedDate:
+        type: datetime
+        required: false
+        description: Last time this revision was modified (formatted RFC 3339 timestamp).
+      publishedLink:
+        type: string
+        required: false
+        description: A link to the published revision.
+      downloadUrl:
+        type: string
+        required: false
+        description: Short term download URL for the file. This will only be populated on files with content stored in Drive.
+      exportLinks:
+        type: object
+        required: false
+        description: |
+          Links for exporting Google Docs to specific formats.
+
+          Keys in the object is a mapping from export format to URL.
+      lastModifyingUserName:
+        type: string
+        required: false
+        description: Name of the last user to modify this revision.
+      lastModifyingUser:
+        type: User
+        description: The last user to modify this revision.
+      originalFilename:
+        type: string
+        required: false
+        description: The original filename when this revision was created. This will only be populated on files with content stored in Drive.
+      md5Checksum:
+        type: string
+        required: false
+        description: An MD5 checksum for the content of this revision. This will only be populated on files with content stored in Drive.
+      fileSize:
+        type: string
+        required: false
+        description: The size of the revision in bytes. This will only be populated on files with content stored in Drive.
+  RevisionInsert:
+    description: An object used to create / update the revision resource.
+    type: RevisionBase
+
+  RevisionList:
+    type: object
+    properties:
+      kind:
+        type: string
+        required: false
+        default: drive#revisionList
+        enum: [drive#revisionList]
+        description: This is always drive#revisionList.
+      etag:
+        type: string
+        required: false
+        description: The ETag of the list.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this list.
+      items:
+        type: array
+        required: false
+        description: The actual list of revisions.
+        items: Revision

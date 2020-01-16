@@ -1,6 +1,91 @@
 {
+  "moduleResolution": "node",
+  "npm": true,
   "lint": {
-    "rules": ["polymer-2"],
+    "rules": [
+      "polymer-3"
+    ],
     "ignoreWarnings": ["undefined-elements"]
-  }
+  },
+  "entrypoint": "entrypoint.html",
+  "shell": "api-console.js",
+  "sources": [
+    "package.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/*.js",
+    "!node_modules/@webcomponents/webcomponentsjs/gulpfile.js",
+    "node_modules/@webcomponents/webcomponentsjs/bundles/*.js",
+    "node_modules/jsonlint/lib/jsonlint.js",
+    "node_modules/codemirror/lib/codemirror.js",
+    "node_modules/codemirror/addon/mode/loadmode.js",
+    "node_modules/codemirror/mode/meta.js",
+    "node_modules/codemirror/mode/javascript/javascript.js",
+    "node_modules/codemirror/mode/xml/xml.js",
+    "node_modules/codemirror/mode/htmlmixed/htmlmixed.js",
+    "node_modules/codemirror/addon/lint/lint.js",
+    "node_modules/codemirror/addon/lint/json-lint.js",
+    "node_modules/@advanced-rest-client/code-mirror-hint/*.js",
+    "node_modules/cryptojslib/components/core.js",
+    "node_modules/cryptojslib/components/enc-base64-min.js",
+    "node_modules/cryptojslib/rollups/sha1.js",
+    "node_modules/cryptojslib/rollups/md5.js",
+    "node_modules/cryptojslib/rollups/hmac-sha1.js",
+    "node_modules/jsrsasign/lib/jsrsasign-rsa-min.js"
+  ],
+  "builds": [
+    {
+      "name": "esm-bundled",
+      "browserCapabilities": [
+        "es2015",
+        "modules"
+      ],
+      "js": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": true,
+      "addServiceWorker": true
+    },
+    {
+      "name": "es6-bundled",
+      "browserCapabilities": [
+        "es2015"
+      ],
+      "js": {
+        "minify": true,
+        "transformModulesToAmd": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": true,
+      "addServiceWorker": true
+    },
+    {
+      "name": "es5-bundled",
+      "js": {
+        "minify": true,
+        "compile": true,
+        "transformModulesToAmd": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": true,
+      "addServiceWorker": true
+    }
+  ]
 }

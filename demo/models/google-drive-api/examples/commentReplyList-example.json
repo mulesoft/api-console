@@ -1,0 +1,21 @@
+{
+  "kind": "drive#commentReplyList",
+  "selfLink": "https://www.googleapis.com/drive/v2/files/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/comments/AAAABGvGYkY/replies",
+  "items": [{
+    "kind": "drive#commentReply",
+    "replyId": "AAAABGvGYkc",
+    "createdDate": "2017-01-26T22:27:31.702Z",
+    "modifiedDate": "2017-01-26T22:27:31.702Z",
+    "author": {
+      "kind": "drive#user",
+      "displayName": "John Doe",
+      "picture": {
+        "url": "//lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr8Y/YmMhVu8Ol-I/s96-k-no/photo.jpg"
+      },
+      "isAuthenticatedUser": true
+    },
+    "htmlContent": "This is the reply",
+    "content": "This is the reply",
+    "deleted": false
+  }]
+}

@@ -1,0 +1,44 @@
+#%RAML 1.0 Library
+
+usage: |
+  This library contains types definitions related to a Propery resource in Drive API.
+
+types:
+  Property:
+    type: object
+    properties:
+      kind:
+        type: string
+        description: The type of file. This is always drive#property.
+        default: drive#property
+      etag:
+        type: string
+        description: ETag of the property.
+      selfLink:
+        type: string
+        description: A link back to this property.
+      key:
+        type: string
+        description: The key of this property.
+      visibility:
+        type: string
+        description: The visibility of this property.
+      value:
+        type: string
+        description: The value of this property.
+  PropertyList:
+    type: object
+    properties:
+      kind:
+        type: string
+        description: The type of file. This is always drive#propertyList.
+        default: drive#propertyList
+      etag:
+        type: string
+        description: ETag of the list.
+      selfLink:
+        type: string
+        description: A link back to this list.
+      items:
+        type: Property[]
+        description: The list of properties.

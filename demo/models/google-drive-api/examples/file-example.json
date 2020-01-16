@@ -1,0 +1,92 @@
+{
+  "kind": "drive#file",
+  "id": "123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY",
+  "etag": "\"LbWe7Ybz7gmJtEmo4LFBfsRw3MM/MTQ4NTQ2NzQwNzIwOA\"",
+  "selfLink": "https://www.googleapis.com/drive/v2/files/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY",
+  "alternateLink": "https://docs.google.com/document/d/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/edit?usp=drivesdk",
+  "embedLink": "https://docs.google.com/document/d/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/preview",
+  "openWithLinks": {
+    "619683526622": "https://docs.google.com/document/d/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/edit?usp=drivesdk",
+    "338347331578": "https://drive.google.com/file/d/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/view?usp=drivesdk"
+  },
+  "defaultOpenWithLink": "https://docs.google.com/document/d/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/edit?usp=drivesdk",
+  "iconLink": "https://ssl.gstatic.com/docs/doclist/images/icon_11_document_list.png",
+  "title": "Dummy file",
+  "mimeType": "application/vnd.google-apps.document",
+  "labels": {
+    "starred": false,
+    "hidden": false,
+    "trashed": false,
+    "restricted": false,
+    "viewed": true
+  },
+  "createdDate": "2017-01-26T21:49:57.890Z",
+  "modifiedDate": "2017-01-26T21:50:07.208Z",
+  "modifiedByMeDate": "2017-01-26T21:50:07.208Z",
+  "lastViewedByMeDate": "2017-01-26T21:50:07.208Z",
+  "markedViewedByMeDate": "1970-01-01T00:00:00.000Z",
+  "version": "1341924",
+  "parents": [{
+    "kind": "drive#parentReference",
+    "id": "0ADpy9PK_RiBOUk9PVA",
+    "selfLink": "https://www.googleapis.com/drive/v2/files/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/parents/0ADpy9PK_RiBOUk9PVA",
+    "parentLink": "https://www.googleapis.com/drive/v2/files/0ADpy9PK_RiBOUk9PVA",
+    "isRoot": true
+  }],
+  "exportLinks": {
+    "application/rtf": "https://docs.google.com/feeds/download/documents/export/Export?id=123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY&exportFormat=rtf",
+    "application/vnd.oasis.opendocument.text": "https://docs.google.com/feeds/download/documents/export/Export?id=123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY&exportFormat=odt",
+    "text/html": "https://docs.google.com/feeds/download/documents/export/Export?id=123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY&exportFormat=html",
+    "application/pdf": "https://docs.google.com/feeds/download/documents/export/Export?id=123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY&exportFormat=pdf",
+    "application/epub+zip": "https://docs.google.com/feeds/download/documents/export/Export?id=123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY&exportFormat=epub",
+    "application/zip": "https://docs.google.com/feeds/download/documents/export/Export?id=123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY&exportFormat=zip",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "https://docs.google.com/feeds/download/documents/export/Export?id=123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY&exportFormat=docx",
+    "text/plain": "https://docs.google.com/feeds/download/documents/export/Export?id=123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY&exportFormat=txt"
+  },
+  "userPermission": {
+    "kind": "drive#permission",
+    "etag": "\"LbWe7Ybz7gmJtEmo4LFBfsRw3MM/49rcNZ38B0ih25Df2SiHRjHDrDU\"",
+    "id": "me",
+    "selfLink": "https://www.googleapis.com/drive/v2/files/123dK-h456ysbyF_ol3Pc13B789j1qgb4wAbCdIQrNBY/permissions/me",
+    "role": "owner",
+    "type": "user"
+  },
+  "quotaBytesUsed": "0",
+  "ownerNames": [
+    "John Doe"
+  ],
+  "owners": [{
+    "kind": "drive#user",
+    "displayName": "John Doe",
+    "picture": {
+      "url": "https://lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr8Y/YmMhVu8Ol-I/s64/photo.jpg"
+    },
+    "isAuthenticatedUser": true,
+    "permissionId": "91827364558604565116",
+    "emailAddress": "john.doe@gmail.com"
+  }],
+  "lastModifyingUserName": "John Doe",
+  "lastModifyingUser": {
+    "kind": "drive#user",
+    "displayName": "John Doe",
+    "picture": {
+      "url": "https://lh6.googleusercontent.com/-veehGFoGpso/AAAAAAAAAAI/AAAAAAACr8Y/YmMhVu8Ol-I/s64/photo.jpg"
+    },
+    "isAuthenticatedUser": true,
+    "permissionId": "91827364558604565116",
+    "emailAddress": "john.doe@gmail.com"
+  },
+  "capabilities": {
+    "canCopy": true,
+    "canEdit": true
+  },
+  "editable": true,
+  "copyable": true,
+  "writersCanShare": true,
+  "shared": false,
+  "explicitlyTrashed": false,
+  "appDataContents": false,
+  "spaces": [
+    "drive"
+  ]
+}

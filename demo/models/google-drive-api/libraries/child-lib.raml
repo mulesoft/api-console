@@ -1,0 +1,53 @@
+#%RAML 1.0 Library
+
+types:
+  Child:
+    type: object
+    description: A reference to a folder's child.
+    properties:
+      kind:
+        type: string
+        required: false
+        default: drive#childReference
+        enum: [drive#childReference]
+        description: This is always drive#childReference.
+      id:
+        type: string
+        required: false
+        description: The ID of the child.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this reference.
+      childLink:
+        type: string
+        required: false
+        description: A link to the child.
+  ChildrenList:
+    type: object
+    properties:
+      kind:
+        type: string
+        required: false
+        default: drive#childList
+        enum: [drive#childList]
+        description: This is always drive#childList.
+      etag:
+        type: string
+        required: false
+        description: The ETag of the list.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this list.
+      nextPageToken:
+        type: string
+        description: The page token for the next page of children.
+      nextLink:
+        type: string
+        description: A link to the next page of children.
+      items:
+        type: array
+        required: false
+        description: The actual list of children.
+        items: Child

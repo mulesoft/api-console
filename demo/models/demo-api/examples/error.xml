@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<error error="true">
+  <description>The parameter date is required</description>
+  <code>112</code>
+  <location>
+    <parameter>date</parameter>
+    <providedValue></providedValue>
+    <expectedValue>Date as YYYY-MM-DD</expectedValue>
+  </location>
+</resource>

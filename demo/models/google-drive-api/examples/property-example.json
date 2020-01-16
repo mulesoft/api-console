@@ -1,0 +1,8 @@
+{
+ "kind": "drive#property",
+ "etag": "\"LbWe7Ybz7gmJtEmo4LFBfsRw3MM/9yGD9cs1TBjhL0-_UdlnJlKhQ6I\"",
+ "selfLink": "https://www.googleapis.com/drive/v2/files/100dK-h3SlysbyF_ol3Pc13B14Sj1qgb4wZzVdIQrNBY/properties/propertyKey?visibility=PRIVATE",
+ "key": "propertyKey",
+ "visibility": "PRIVATE",
+ "value": "property value"
+}

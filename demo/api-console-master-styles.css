@@ -1,0 +1,53 @@
+html {
+  --primary-color: #00A2DF;
+  --accent-color: #4CAF50;
+  --code-background-color: #f5f2f0;
+  --error-color: #F44336;
+  /* --secondary-text-color: #616161; */
+  /* --primary-background-color: #424242; */
+  /* --code-background-color: #263238;
+  --code-color: #fff; */
+
+  --anypoiont-dropdown-shaddow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+  --anypoiont-autocomplete-dropdown-shaddow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+
+  --anypoint-listbox-background-color: #fff;
+
+  --arc-font-body1-font-size: 15px;
+  --arc-font-body1-font-weight: 400;
+  --arc-font-body1-line-height: 20px;
+  --arc-font-code-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
+
+  --arc-font-headline-font-size: 24px;
+  --arc-font-headline-font-weight: 400;
+  --arc-font-headline-letter-spacing: -.012em;
+  --arc-font-headline-line-height: 32px;
+
+  --arc-font-title-font-size: 20px;
+  --arc-font-title-font-weight: 500;
+  --arc-font-title-line-height: 28px;
+
+  --arc-font-subhead-font-size: 16px;
+  --arc-font-subhead-font-weight: 400;
+  --arc-font-subhead-line-height: 24px;
+
+  --code-mirror-height: auto;
+
+  --api-navigation-list-item-selected-background-color: #E1F5FE;
+  --api-navigation-list-item-selected-color: #0277BD;
+  --api-navigation-operation-font-size: 13px;
+  /* --api-navigation-color: #000; */
+
+  --http-method-label-get-background-color: rgb(0, 128, 0);
+  --http-method-label-get-color: #fff;
+  --http-method-label-post-background-color: #006ec5;
+  --http-method-label-post-color: #fff;
+  --http-method-label-put-background-color: #ffa500;
+  --http-method-label-put-color: #1D0029;
+  --http-method-label-delete-background-color: #e93628;
+  --http-method-label-delete-color: #fff;
+  --http-method-label-patch-background-color: #811f92;
+  --http-method-label-patch-color: #F2F1EF;
+
+  /* --api-body-document-media-button-background-color: #2196F3; */
+}

@@ -1,0 +1,14 @@
+#%RAML 1.0 DataType
+
+displayName: Thumbnail
+description: Thumbnail for the file. Only accepted on upload and for files that are not already thumbnailed by Google.
+
+properties:
+  image:
+    type: string
+    required: false
+    description: The URL-safe Base64 encoded bytes of the thumbnail image. It should conform to RFC 4648 section 5.
+  mimeType:
+    type: string
+    required: false
+    description: The MIME type of the thumbnail.

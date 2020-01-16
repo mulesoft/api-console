@@ -1,0 +1,37 @@
+#%RAML 1.0 DataType
+
+displayName: User
+type: object
+description: A representation of a user in Google Drive.
+properties:
+  kind:
+    type: string
+    description: This is always drive#user.
+    enum: [drive#user]
+    default: drive#user
+  displayName:
+    type: string
+    required: false
+    description: A plain text displayable name for this user.
+  picture:
+    type: object
+    description: The user's profile picture.
+    required: false
+    properties:
+      url:
+        type: string
+        required: false
+        description: A URL that points to a profile picture of this user.
+  isAuthenticatedUser:
+    type: boolean
+    required: false
+    description: Whether this user is the same as the authenticated user for whom the request was made.
+    example: false
+  permissionId:
+    type: string
+    required: false
+    description: The user's ID as visible in the permissions collection.
+  emailAddress:
+    type: string
+    required: false
+    description: The email address of the user.

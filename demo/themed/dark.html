@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>Themed API Console demo</title>
+  <link rel="stylesheet" type="text/css" href="./dark-theme.css">
+  <style>
+  .icon {
+    display: inlink-block;
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="demo"></div>
+  <script type="module" src="./dark.js" async></script>
+
+  <script src="../vendor.js"></script>
+  <script>
+  document.addEventListener('WebComponentsReady', function() {
+    if (!window.ShadyCSS) {
+      return;
+    }
+    function shouldAddDocumentStyle(n) {
+      return n.nodeType === Node.ELEMENT_NODE && n.localName === 'style' && !n.hasAttribute('scope');
+    }
+    const CustomStyleInterface = window.ShadyCSS.CustomStyleInterface;
+
+    const candidates = document.querySelectorAll('style');
+    for (let i = 0; i < candidates.length; i++) {
+      const candidate = candidates[i];
+      if (shouldAddDocumentStyle(candidate)) {
+        CustomStyleInterface.addCustomStyle(candidate);
+      }
+    }
+  });
+  </script>
+</body>
+
+</html>

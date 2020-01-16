@@ -1,0 +1,146 @@
+#%RAML 1.0 Library
+
+types:
+  Permission:
+    type: object
+    description: A permission for a file.
+    properties:
+      kind:
+        type: string
+        required: false
+        description: This is always drive#permission.
+        enum: [drive#permission]
+        default: drive#permission
+      etag:
+        type: string
+        required: false
+        description: The ETag of the permission
+      id:
+        type: string
+        required: false
+        description: The ID of the user this permission refers to, and identical to the `permissionId` in the About and Files resources. When making a `drive.permissions.insert` request, exactly one of the `id` or `value` fields must be specified
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this permission.
+      name:
+        type: string
+        required: false
+        description: The name for this permission
+      emailAddress:
+        type: string
+        required: false
+        description: The email address of the user or group this permission refers to. This is an output-only field which is present when the permission type is `user` or `group`.
+      domain:
+        type: string
+        required: false
+        description: he domain name of the entity this permission refers to. This is an output-only field which is present when the permission type is `user`, `group` or `domain`.
+      role:
+        type: string
+        required: false
+        description: |
+          The primary role for this user. Allowed values are:
+          - owner
+          - reader
+          - writer
+      additionalRoles:
+        type: array
+        required: false
+        description: Additional roles for this user. Only `commenter` is currently allowed.
+        items: string
+      type:
+        type: string
+        required: false
+        description: |
+          The account type. Allowed values are:
+          - user
+          - group
+          - domain
+          - anyone
+      value:
+        type: string
+        required: false
+        description: The email address or domain name for the entity. This is used during inserts and is not populated in responses. When making a `drive.permissions.insert` request, exactly one of the `id` or `value` fields must be specified.
+      authKey:
+        type: string
+        required: false
+        description: The authkey parameter required for this permission.
+      withLink:
+        type: boolean
+        required: false
+        description: Whether the link is required for this permission
+      photoLink:
+        type: string
+        required: false
+        description: A link to the profile photo, if available.
+  PermissionInsert:
+    type: object
+    description: Create a permission for a file.
+    properties:
+      id:
+        type: string
+        required: false
+        description: The ID of the user this permission refers to, and identical to the `permissionId` in the About and Files resources. When making a `drive.permissions.insert` request, exactly one of the `id` or `value` fields must be specified
+      role:
+        type: string
+        required: false
+        description: |
+          The primary role for this user. Allowed values are:
+          - owner
+          - reader
+          - writer
+      additionalRoles:
+        type: array
+        required: false
+        description: Additional roles for this user. Only `commenter` is currently allowed.
+        items: string
+      type:
+        type: string
+        required: false
+        description: |
+          The account type. Allowed values are:
+          - user
+          - group
+          - domain
+          - anyone
+      value:
+        type: string
+        required: false
+        description: The email address or domain name for the entity. This is used during inserts and is not populated in responses. When making a `drive.permissions.insert` request, exactly one of the `id` or `value` fields must be specified.
+      withLink:
+        type: boolean
+        required: false
+        description: Whether the link is required for this permission
+  PermissionList:
+    type: object
+    properties:
+      kind:
+        type: string
+        required: false
+        default: drive#permissionList
+        enum: [drive#permissionList]
+        description: This is always drive#permissionList.
+      etag:
+        type: string
+        required: false
+        description: The ETag of the list.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this list.
+      items:
+        type: array
+        required: false
+        description: The actual list of permissions.
+        items: Permission
+  PermissionId:
+    type: object
+    properties:
+      kind:
+        type: string
+        default: drive#permissionId
+        enum: [drive#permissionId]
+        description: This is always drive#permissionId.
+      id:
+        type: string
+        description: The permission ID.

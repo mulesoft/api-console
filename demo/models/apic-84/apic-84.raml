@@ -4,8 +4,8 @@ title: test-facets
 types:
   USCoreExtensionNested:
     properties:
-      url: uri
-      /^value(Coding|String)$/: Coding | string
+      url: string
+      /^value(Coding|String)$/: number | string
     facets:
       itemConstraints:
         type: array
@@ -17,7 +17,7 @@ types:
   USCoreRaceExtension:
     properties:
       url:
-        type: uri
+        type: string
         enum: [http://hl7.org/fhir/us/core/StructureDefinition/us-core-race]
       extension:
         type: array

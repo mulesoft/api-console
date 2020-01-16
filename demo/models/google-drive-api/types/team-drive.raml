@@ -1,0 +1,59 @@
+#%RAML 1.0 DataType
+
+type: object
+
+properties:
+  kind:
+    type: string
+    description: This is always drive#teamDrive
+    default: drive#teamDrive
+    enum: [drive#teamDrive]
+  id:
+    type: string
+    description: The ID of this Team Drive which is also the ID of the top level folder for this Team Drive.
+  name:
+    type: string
+    description: The name of this Team Drive.
+  capabilities:
+    type: object
+    description: Capabilities the current user has on this Team Drive.
+    properties:
+      canAddChildren:
+        type: boolean
+        description: Whether the current user can add children to folders in this Team Drive.
+      canComment:
+        type: boolean
+        description: Whether the current user can comment on files in this Team Drive.
+      canCopy:
+        type: boolean
+        description: Whether files in this Team Drive can be copied by the current user.
+      canDeleteTeamDrive:
+        type: boolean
+        description: Whether this Team Drive can be deleted by the current user.
+      canDownload:
+        type: boolean
+        description: Whether files in this Team Drive can be downloaded by the current user.
+      canEdit:
+        type: boolean
+        description: Whether files in this Team Drive can be edited by the current user.
+      canListChildren:
+        type: boolean
+        description: Whether the current user can list the children of folders in this Team Drive.
+      canManageMembers:
+        type: boolean
+        description: Whether the current user can add members to this Team Drive or remove them or change their role.
+      canReadRevisions:
+        type: boolean
+        description: Whether the current user has read access to the Revisions resource of files in this Team Drive.
+      canRemoveChildren:
+        type: boolean
+        description: Whether the current user can remove children from folders in this Team Drive.
+      canRename:
+        type: boolean
+        description: Whether files or folders in this Team Drive can be renamed by the current user.
+      canRenameTeamDrive:
+        type: boolean
+        description: Whether this Team Drive can be renamed by the current user.
+      canShare:
+        type: boolean
+        description: Whether the current user can share files or folders in this Team Drive.

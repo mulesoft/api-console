@@ -1,0 +1,517 @@
+#%RAML 1.0 Library
+
+uses:
+  PermissionsLib: permission-lib.raml
+  Annotations: annotations.raml
+
+types:
+  Thumbnail: !include ../types/thumbnail.raml
+  FileLabels: !include ../types/file-labels.raml
+  User: !include ../types/user.raml
+  Resource: !include ../types/resource.raml
+  Owners: !include ../types/owners.raml
+  Picture: !include ../types/picture.raml
+  FileCapabilities: !include ../types/file-capabilities.raml
+  Property: !include ../types/property.raml
+  DriveFile:
+    properties:
+      kind:
+        type: string
+        description: The type of file. This is always drive#file.
+        default: drive#file
+      id:
+        type: string
+        required: false
+        description: The ID of the file.
+      etag:
+        type: string
+        required: false
+        description: ETag of the file.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this file.
+      webContentLink:
+        type: string
+        required: false
+        description: |
+          A link for downloading the content of the file in a browser using cookie based authentication.
+          In cases where the content is shared publicly, the content can be downloaded without any credentials.
+      webViewLink:
+        type: string
+        required: false
+        description: |
+          A link only available on public folders for viewing their static web assets (HTML, CSS, JS, etc)
+          via Google Drive's Website Hosting.
+      alternateLink:
+        required: false
+        type: string
+        description: A link for opening the file in a relevant Google editor or viewer.
+      embedLink:
+        type: string
+        description: A link for embedding the file.
+        required: false
+      openWithLinks:
+        type: object
+        description: |
+          A map of the id of each of the user's apps to a link to open this file with that app.
+          Only populated when the drive.apps.readonly scope is used.
+        required: false
+      defaultOpenWithLink:
+        type: string
+        required: false
+        description: A link to open this file with the user's default app for this file. Only populated when the drive.apps.readonly scope is used.
+      iconLink:
+        type: string
+        required: false
+        description: A link to the file's icon
+      thumbnailLink:
+        type: string
+        required: false
+        description: A short-lived link to the file's thumbnail. Typically lasts on the order of hours.
+      thumbnail:
+        type: Thumbnail
+        required: false
+      title:
+        type: string
+        required: false
+        description: The title of the file. Used to identify file or folder name.
+      mimeType:
+        type: string
+        required: false
+        description: |
+          The MIME type of the file. This is only mutable on update when uploading new content.
+          This field can be left blank, and the mimetype will be determined from the uploaded content's MIME type.
+      description:
+        type: string
+        required: false
+        description: A short description of the file.
+      labels:
+        type: FileLabels
+        required: false
+      createdDate:
+        type: datetime
+        required: false
+        description: Create time for this file (formatted RFC 3339 timestamp)
+      modifiedDate:
+        type: datetime
+        required: false
+        description: Last time this file was modified by anyone (formatted RFC 3339 timestamp). This is only mutable on update when the setModifiedDate parameter is set.
+      modifiedByMeDate:
+        type: datetime
+        required: false
+        description: Last time this file was modified by the user (formatted RFC 3339 timestamp). Note that setting modifiedDate will also update the modifiedByMe date for the user which set the date.
+      lastViewedByMeDate:
+        type: datetime
+        required: false
+        description: Last time this file was viewed by the user (formatted RFC 3339 timestamp).
+      markedViewedByMeDate:
+        type: datetime
+        required: false
+        description: Deprecated
+      sharedWithMeDate:
+        type: datetime
+        required: false
+        description: Time at which this file was shared with the user (formatted RFC 3339 timestamp).
+      version:
+        required: false
+        type: string
+        description: A monotonically increasing version number for the file. This reflects every change made to the file on the server, even those not visible to the requesting user.
+      sharingUser:
+        type: User
+        required: false
+        displayName: SharingUser
+        description: User that shared the item with the current user, if available.
+      parents:
+        type: Resource[]
+      downloadUrl:
+        type: string
+        description: An URL to download the content of the file.
+        required: false
+      exportLinks:
+        type: object
+        required: false
+        description: |
+          Links for exporting Google Docs to specific formats.
+          The key in the object is a mapping from export format to URL
+      indexableText:
+        type: object
+        required: false
+        description: Indexable text attributes for the file. This property can only be written, and is not returned by files.get. For more information, see Custom thumbnails and indexable text.
+        properties:
+          text:
+            type: string
+            description: The text to be indexed for this file.
+      userPermission:
+        type: PermissionsLib.Permission
+        description: The permissions for the authenticated user on this file.
+        required: false
+      permissions:
+        type: PermissionsLib.Permission[]
+        required: false
+        description: The permissions for the authenticated user on this file.
+      originalFilename:
+        type: string
+        required: false
+        description: The original filename of the uploaded content if available, or else the original value of the title field. `This is only available for files with binary content in Drive.`
+      fileExtension:
+        type: string
+        required: false
+        description: The final component of fullFileExtension with trailing text that does not appear to be part of the extension removed. This field is only populated for files with content stored in Drive; it is not populated for Google Docs or shortcut files.
+      md5Checksum:
+        type: string
+        required: false
+        description: An MD5 checksum for the content of this file. This field is only populated for files with content stored in Drive; it is not populated for Google Docs or shortcut files.
+      fileSize:
+        type: integer
+        required: false
+        description: The size of the file in bytes. This field is only populated for files with content stored in Drive; it is not populated for Google Docs or shortcut files.
+      quotaBytesUsed:
+        type: string
+        required: false
+        description: The number of quota bytes used by this file.
+      ownerNames:
+        type: array
+        required: false
+        items: string
+        description: Name(s) of the owner(s) of this file.
+      owners:
+        type: Owners[]
+        required: false
+        description: The owner(s) of this file.
+      ownedByMe:
+        type: boolean
+        required: false
+        description: Whether the file is owned by the current user. Not populated for Team Drive files.
+      canComment:
+        type: boolean
+        required: false
+        (Annotations.deprecated):
+        description: |
+          Whether the current user can comment on the file.
+
+          **Deprecated: use capabilities/canComment.**
+      shareable:
+        type: boolean
+        required: false
+        (Annotations.deprecated):
+        description: |
+          Whether the file's sharing settings can be modified by the current user.
+
+          **Deprecated: use capabilities/canShare.**
+      lastModifyingUserName:
+        type: string
+        required: false
+        description: Name of the last user to modify this file
+      properties:
+        type: Property[]
+        description: The list of properties.
+        required: false
+      spaces:
+        type: string[]
+        required: false
+        description: |
+          The list of spaces which contain the file.
+          Supported values are `drive`, `appDataFolder` and `photos`.
+      canReadRevisions:
+        type: boolean
+        required: false
+        (Annotations.deprecated):
+        description: |
+          Whether the current user has read access to the Revisions resource of the file.
+
+          **Deprecated: use capabilities/canReadRevisions.**
+      isAppAuthorized:
+        type: boolean
+        description: Whether the file was created or opened by the requesting app.
+        required: false
+      hasThumbnail:
+        type: boolean
+        description: Whether this file has a thumbnail.
+        required: false
+      thumbnailVersion:
+        required: false
+        type: string
+        description: |
+          The thumbnail version for use in thumbnail cache invalidation.
+          The actual type is long but in the API is represented as a string.
+      hasAugmentedPermissions:
+        required: false
+        type: boolean
+        description: |
+          Whether any users are granted file access directly on this file.
+          This field is only populated for Team Drive files.
+      teamDriveId:
+        type: string
+        description: ID of the Team Drive the file resides in.
+        required: false
+      capabilities:
+        description: Capabilities the current user has on the file. Each capability corresponds to a fine-grained action that a user may take.
+        type: FileCapabilities
+        required: false
+      lastModifyingUser:
+        type: object
+        required: false
+        description: The last user to modify this file
+        properties:
+          kind:
+            type: string
+            description: This is always drive#user.
+            default: drive#user
+            enum: [drive#user]
+          displayName:
+            type: string
+            description: A plain text displayable name for this user.
+          picture:
+            type: Picture
+          isAuthenticatedUser:
+            type: boolean
+            description: Whether this user is the same as the authenticated user for whom the request was made.
+          permissionId:
+            type: string
+            description: The user's ID as visible in the permissions collection.
+          emailAddress:
+            type: string
+            description: The email address of the user. This field is returned only if the last modifying user is an owner of the file, the requesting user is an owner or can modify the file, or if the last modifying user's email address is visible.
+      trashingUser:
+        type: User
+        description: If the file has been explicitly trashed, the user who trashed it. Only populated for Team Drive files.
+        required: false
+      trashedDate:
+        required: false
+        type: datetime
+        description: The time that the item was trashed (formatted RFC 3339 timestamp). Only populated for Team Drive files.
+      editable:
+        type: boolean
+        description: Whether the file can be edited by the current user.
+        (Annotations.deprecated):
+      copyable:
+        type: boolean
+        description: Whether the file can be copied by the current user.
+        (Annotations.deprecated):
+      writersCanShare:
+        type: boolean
+        description: Whether writers can share the document with other users
+      shared:
+        type: boolean
+        description: Whether the file has been shared
+      explicitlyTrashed:
+        type: boolean
+        description: Whether this file has been explicitly trashed, as opposed to recursively trashed.
+      appDataContents:
+        type: boolean
+        description: Whether this file is in the Application Data folder.
+      headRevisionId:
+        type: string
+        required: false
+        description: The ID of the file's head revision. This field is only populated for files with content stored in Drive; it is not populated for Google Docs or shortcut files.
+      folderColorRgb:
+        type: string
+        required: false
+        description: Folder color as an RGB hex string if the file is a folder. The list of supported colors is available in the folderColorPalette field of the About resource. If an unsupported color is specified, it will be changed to the closest color in the palette.
+      imageMediaMetadata:
+        type: object
+        required: false
+        description: Metadata about image media. This will only be present for image types, and its contents will depend on what can be parsed from the image content.
+        properties:
+          width:
+            type: integer
+            description: The width of the image in pixels.
+            minimum: 0
+            required: false
+          height:
+            type: integer
+            description: The height of the image in pixels.
+            minimum: 0
+            required: false
+          rotation:
+            type: integer
+            description: The rotation in clockwise degrees from the image's original orientation.
+            required: false
+          location:
+            type: object
+            description: Geographic location information stored in the image.
+            required: false
+            properties:
+              latitude:
+                type: number
+                description: The latitude stored in the image.
+                required: false
+              longitude:
+                type: number
+                description: The longitude stored in the image.
+                required: false
+              altitude:
+                type: number
+                description: The altitude stored in the image.
+                required: false
+          date:
+            type: datetime
+            description: The date and time the photo was taken (EXIF format timestamp).
+            required: false
+          cameraMake:
+            type: string
+            description: The make of the camera used to create the photo.
+            required: false
+          cameraModel:
+            type: string
+            description: The model of the camera used to create the photo.
+            required: false
+          exposureTime:
+            type: number
+            description: The length of the exposure, in seconds.
+            minimum: 0
+            required: false
+          aperture:
+            type: number
+            description: The aperture used to create the photo (f-number).
+            minimum: 0
+            required: false
+          flashUsed:
+            type: boolean
+            description: Whether a flash was used to create the photo.
+            required: false
+          focalLength:
+            type: number
+            description: The focal length used to create the photo, in millimeters.
+            required: false
+            minimum: 0
+          isoSpeed:
+            type: integer
+            description: The ISO speed used to create the photo.
+            required: false
+            minimum: 0
+          meteringMode:
+            type: string
+            description: The metering mode used to create the photo.
+            required: false
+          sensor:
+            type: string
+            description: The type of sensor used to create the photo.
+            required: false
+          exposureMode:
+            type: string
+            description: The exposure mode used to create the photo.
+            required: false
+          colorSpace:
+            type: string
+            description: The color space of the photo.
+            required: false
+          whiteBalance:
+            type: string
+            description: The white balance mode used to create the photo.
+            required: false
+          exposureBias:
+            type: number
+            description: The exposure bias of the photo (APEX value).
+            required: false
+          maxApertureValue:
+            type: number
+            description: The smallest f-number of the lens at the focal length used to create the photo (APEX value).
+            required: false
+          subjectDistance:
+            type: integer
+            description: The distance to the subject of the photo, in meters.
+            minimum: 0
+            required: false
+          lens:
+            type: string
+            description: The lens used to create the photo.
+            required: false
+      videoMediaMetadata:
+        type: object
+        required: false
+        description: Metadata about video media. This will only be present for video types.
+        properties:
+          width:
+            type: integer
+            description: The width of the video in pixels.
+            minimum: 0
+            required: false
+          height:
+            type: integer
+            description: The height of the video in pixels.
+            minimum: 0
+            required: false
+          durationMillis:
+            type: number
+            description: The duration of the video in milliseconds.
+            minimum: 0
+            required: false
+  DriveFileCreate:
+    displayName: File
+    description: A type to be used when a new file to be created.
+    properties:
+      id:
+        type: string
+        description: The ID of the file.
+      title:
+        type: string
+        description: The title of the file. Used to identify file or folder name.
+      mimeType:
+        type: string
+        description: |
+          The MIME type of the file. This is only mutable on update when uploading new content.
+          This field can be left blank, and the mimetype will be determined from the uploaded content's MIME type.
+      description:
+        type: string
+        description: A short description of the file.
+      labels:
+        type: FileLabels
+      modifiedDate:
+        type: datetime
+        description: Last time this file was modified by anyone (formatted RFC 3339 timestamp). This is only mutable on update when the setModifiedDate parameter is set.
+      lastViewedByMeDate:
+        type: datetime
+        description: Last time this file was viewed by the user (formatted RFC 3339 timestamp).
+        required: false
+      markedViewedByMeDate:
+        type: datetime
+        description: Deprecated
+        required: false
+        (Annotations.deprecated):
+      parents:
+        type: Resource[]
+        required: false
+      indexableText:
+        type: object
+        required: false
+        description: Indexable text attributes for the file. This property can only be written, and is not returned by files.get. For more information, see Custom thumbnails and indexable text.
+        properties:
+          text:
+            type: string
+            required: false
+            description: The text to be indexed for this file.
+      originalFilename:
+        type: string
+        required: false
+        description: The original filename of the uploaded content if available, or else the original value of the title field. `This is only available for files with binary content in Drive.`
+      writersCanShare:
+        type: boolean
+        required: false
+        description: Whether writers can share the document with other users.
+  DriveFileList:
+    type: object
+    displayName: FileList
+    description: A response body for the files list
+    properties:
+      kind:
+        type: string
+        description: This is always drive#fileList.
+        enum: [drive#fileList]
+        default: drive#fileList
+      etag:
+        type: string
+        description: The ETag of the list.
+      selfLink:
+        type: string
+        description: A link back to this list.
+      nextPageToken:
+        type: string
+        description: The page token for the next page of files.
+      nextLink:
+        type: string
+        description: A link to the next page of files.
+      items:
+        type: DriveFile[]
+        description: The actual list of files.

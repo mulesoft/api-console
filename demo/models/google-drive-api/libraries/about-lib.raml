@@ -1,0 +1,121 @@
+#%RAML 1.0 Library
+
+types:
+  User: !include ../types/user.raml
+  ImportFormat: !include ../types/import-format.raml
+  ExportFormat: !include ../types/export-format.raml
+  AdditionalRoleInfo: !include ../types/additional-role-info.raml
+  Feature:  !include ../types/feature.raml
+  UploadSize: !include ../types/upload-size.raml
+  ServiceQuota: !include ../types/service-quota.raml
+  About:
+    type: object
+    properties:
+      kind:
+        type: string
+        required: false
+        description: This is always drive#about.
+        enum: [drive#about]
+      etag:
+        type: string
+        required: false
+        description: The ETag of the item.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this item.
+      name:
+        type: string
+        required: false
+        description: The name of the current user.
+      user:
+        type: User
+        required: false
+        description: The authenticated user.
+      quotaBytesTotal:
+        type: string
+        required: false
+        description: The total number of quota bytes.
+      quotaBytesUsed:
+        type: string
+        required: false
+        description: The number of quota bytes used by Google Drive.
+      quotaBytesUsedAggregate:
+        type: string
+        required: false
+        description: The number of quota bytes used by all Google apps (Drive, Picasa, etc.).
+      quotaBytesUsedInTrash:
+        type: string
+        required: false
+        description: The number of quota bytes used by trashed items.
+      quotaType:
+        type: string
+        required: false
+        description: |
+          The type of the user's storage quota. Possible values are:
+
+          - **LIMITED**
+          - **UNLIMITED**
+      quotaBytesByService:
+        type: array
+        required: false
+        items: ServiceQuota
+        description:
+      largestChangeId:
+        type: string
+        required: false
+        description: The largest change id.
+      remainingChangeIds:
+        type: string
+        required: false
+        description: The number of remaining change ids.
+      rootFolderId:
+        type: string
+        required: false
+        description: The id of the root folder.
+      domainSharingPolicy:
+        type: string
+        required: false
+        description: |
+          The domain sharing policy for the current user. Possible values are:
+
+          - **allowed**
+          - **allowedWithWarning**
+          - **incomingOnly**
+          - **disallowed**
+      permissionId:
+        type: string
+        required: false
+        description: The current user's ID as visible in the permissions collection.
+      importFormats:
+        type: ImportFormat[]
+        required: false
+        description: The allowable import formats.
+      exportFormats:
+        type: ExportFormat[]
+        required: false
+        description: The allowable export formats.
+      additionalRoleInfo:
+        type: AdditionalRoleInfo[]
+        required: false
+        description: Information about supported additional roles per file type. The most specific type takes precedence.
+      features:
+        type: Feature[]
+        required: false
+        description: List of additional features enabled on this account.
+      maxUploadSizes:
+        type: UploadSize[]
+        required: false
+        description: List of max upload sizes for each file type. The most specific type takes precedence.
+      isCurrentAppInstalled:
+        type: boolean
+        required: false
+        description: A boolean indicating whether the authenticated app is installed by the authenticated user.
+      languageCode:
+        type: string
+        required: false
+        description: The user's language or locale code, as defined by BCP 47, with some extensions from Unicode's LDML format (http://www.unicode.org/reports/tr35/).
+      folderColorPalette:
+        type: string[]
+        required: false
+        description: The palette of allowable folder colors as RGB hex strings.

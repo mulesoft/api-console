@@ -1,0 +1,128 @@
+#%RAML 1.0 Library
+
+uses:
+  DriveFile: file-lib.raml
+
+types:
+  Change:
+    type: object
+    properties:
+      kind:
+        type: string
+        required: false
+        default: drive#change
+        enum: [drive#change]
+        description: This is always drive#change.
+      id:
+        type: string
+        required: false
+        description: The ID of the change.
+      fileId:
+        type: string
+        description: The ID of the file associated with this change.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this change.
+      deleted:
+        type: boolean
+        required: false
+        description: Whether the file has been deleted.
+      file:
+        type: DriveFile.DriveFile
+        description: The updated state of the file. Present if the file has not been deleted.
+        required: false
+      modificationDate:
+        type: datetime
+        description: The time of this modification.
+      type:
+        type: string
+        description: The type of the change. Possible values are `file` and `teamDrive`.
+      teamDriveId:
+        type: string
+        description: The ID of the Team Drive associated with this change.
+        required: false
+      teamDrive:
+        description: The updated state of the Team Drive. Present if the type is teamDrive, the user is still a member of the Team Drive, and the Team Drive has not been deleted.
+        type: !include ../types/team-drive.raml
+        required: false
+  ChangeList:
+    type: object
+    properties:
+      kind:
+        type: string
+        required: false
+        default: drive#changeList
+        enum: [drive#changeList]
+        description: This is always drive#changeList.
+      etag:
+        type: string
+        required: false
+        description: The ETag of the list.
+      selfLink:
+        type: string
+        required: false
+        description: A link back to this list.
+      nextPageToken:
+        type: string
+        description: The page token for the next page of changes.
+      nextLink:
+        type: string
+        description: A link to the next page of changes.
+      largestChangeId:
+        type: string
+        description: The current largest change ID.
+      items:
+        type: array
+        required: false
+        description: The actual list of changes.
+        items: Change
+  Watch:
+    type: object
+    properties:
+      id:
+        type: string
+        required: false
+        description: A UUID or similar unique string that identifies this channel.
+      expiration:
+        type: string
+        required: false
+        description: An arbitrary string delivered to the target address with each notification delivered over this channel. Optional.
+      token:
+        type: string
+        required: false
+        description: Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds. Optional.
+      type:
+        type: string
+        required: false
+        description: The type of delivery mechanism used for this channel.
+      address:
+        type: string
+        required: false
+        description: The address where notifications are delivered for this channel.
+  WatchResponse:
+    type: object
+    properties:
+      kind:
+        type: string
+        required: false
+        default: api#channel
+        enum: [api#channel]
+        description: |
+          Identifies this as a notification channel used to watch for changes to a resource. Value: the fixed string api#channel.
+      id:
+        type: string
+        required: false
+        description: A UUID or similar unique string that identifies this channel.
+      resourceId:
+        type: string
+        description: An opaque ID that identifies the resource being watched on this channel. Stable across different API versions.
+      resourceUri:
+        type: string
+        description: A version-specific identifier for the watched resource.
+      token:
+        type: string
+        description: An arbitrary string delivered to the target address with each notification delivered over this channel. Optional.
+      expiration:
+        type: number
+        description: Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds. Optional.

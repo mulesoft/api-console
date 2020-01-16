@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head></head>
+  <body>
+    <script src="dist/vendor.js"></script>
+    <script src="dist/apic-import.js"></script>
+
+    <api-navigation compatibility></api-navigation>
+    <api-documentation compatibility handlenavigationevents></api-documentation>
+    <api-request-panel compatibility handlenavigationevents></api-request-panel>
+    <xhr-simple-request></xhr-simple-request>
+
+    <script>
+    {
+      function loadImportScript() {
+        var is = document.createElement('script');
+        is.src = 'dist/apic-import.js';
+        document.body.appendChild(is);
+      }
+      if (navigator.userAgent.indexOf('Trident') !== -1) {
+        setTimeout(loadImportScript, 1);
+      } else {
+        loadImportScript();
+      }
+
+      var resource = 'demo/models/google-drive-api-compact.json';
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener('load', function(e) {
+        var response = e.target.responseText;
+        var model = JSON.parse(response);
+        var nodes = document.querySelectorAll('api-request-panel,api-navigation,api-documentation');
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].amf = model;
+        }
+      });
+      xhr.addEventListener('error', function(e) {
+        console.error('Request errored with status', e.target.status);
+      });
+      xhr.open('GET', resource);
+      xhr.send();
+    }
+    </script>
+  </body>
+</html>

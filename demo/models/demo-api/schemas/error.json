@@ -1,0 +1,65 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "description": {
+      "$id": "/properties/description",
+      "type": "string",
+      "title": "The description schema",
+      "default": "",
+      "examples": [
+        "The parameter date is required"
+      ]
+    },
+    "code": {
+      "$id": "/properties/code",
+      "type": "number",
+      "title": "The code schema",
+      "default": "",
+      "examples": [
+        "112"
+      ]
+    },
+    "error": {
+      "$id": "/properties/error",
+      "type": "boolean",
+      "title": "The error schema",
+      "default": true
+    },
+    "location": {
+      "$id": "/properties/location",
+      "type": "object",
+      "properties": {
+        "parameter": {
+          "$id": "/properties/location/properties/parameter",
+          "type": "string",
+          "title": "The location.parameter schema",
+          "default": "",
+          "examples": [
+            "date"
+          ]
+        },
+        "providedValue": {
+          "$id": "/properties/location/properties/providedValue",
+          "type": "string",
+          "title": "The location.providedValue schema",
+          "default": "",
+          "examples": [
+            "10/24/2019"
+          ]
+        },
+        "expectedValue": {
+          "$id": "/properties/location/properties/expectedValue",
+          "type": "string",
+          "title": "The location.expectedValue schema",
+          "default": "",
+          "examples": [
+            "2019-10-24"
+          ]
+        }
+      }
+    }
+  }
+}

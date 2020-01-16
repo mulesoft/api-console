@@ -1,0 +1,12 @@
+#%RAML 1.0
+title: Example's type value
+
+types:
+  AmericanFlight: !include type.raml
+
+/endpoint:
+  post:
+    body:
+      application/json:
+        type: AmericanFlight
+        examples: !include example.raml

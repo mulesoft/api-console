@@ -1,0 +1,69 @@
+html {
+  font-family: var(--font-family);
+  font-size: var(--font-body-font-size);
+  --primary-color: var(--anypoint-color-primary);
+  --secondary-color: var(--anypoint-color-secondary);
+  --primary-background-color: var(--anypoint-color-tertiary);
+  --accent-color: var(--anypoint-color-primary);
+  --error-color: var(--anypoint-color-danger);
+
+  --arc-font-body1-font-size: var(--font-body-font-size);
+  --arc-font-body1-font-weight: var(--font-body-font-weight);
+  --arc-font-body1-line-height: 20px;
+  --arc-font-code-family: var(--font-code-family);
+
+  --arc-font-headline-font-size: var(--font-header1-font-size);
+  --arc-font-headline-font-weight: var(--font-header1-font-weight);
+  --arc-font-headline-letter-spacing: var(--font-header1-letter-spacing);
+  --arc-font-headline-line-height: 32px;
+
+  --arc-font-subhead-font-size: var(--font-header4-font-size);
+  --arc-font-subhead-font-weight: var(--font-header4-font-weight);
+  --arc-font-subhead-line-height: 24px;
+
+  /* HTTP methods colors */
+  --method-display-selected-color: #fff;
+  --method-display-get-color: var(--anypoint-color-viridian3);
+  --method-display-post-color: var(--anypoint-color-violet3);
+  --method-display-put-color: var(--anypoint-color-yellow3);
+  --method-display-patch-color: var(--anypoint-color-indigo3);
+  --method-display-delete-color: var(--anypoint-color-red3);
+  --method-display-options-color: var(--anypoint-color-teal3);
+  --method-display-head-color: var(--anypoint-color-futureGreen3);
+  /* HTTP methods colors in method documentation panel */
+  --http-method-label-border-radius: 1px;
+  --http-method-label-get-background-color: var(--method-display-get-color);
+  --http-method-label-get-color: #fff;
+  --http-method-label-post-background-color: var(--method-display-post-color);
+  --http-method-label-post-color: #fff;
+  --http-method-label-put-background-color: var(--method-display-put-color);
+  --http-method-label-put-color: #fff;
+  --http-method-label-patch-background-color: var(--method-display-patch-color);
+  --http-method-label-patch-color: #fff;
+  --http-method-label-delete-background-color: var(--method-display-delete-color);
+  --http-method-label-delete-color: #fff;
+  --http-method-label-options-background-color: var(--method-display-options-color);
+  --http-method-label-options-color: #fff;
+  --http-method-label-head-background-color: var(--method-display-head-color);
+  --http-method-label-head-color: #fff;
+  --http-method-label-padding: 4px 5px;
+  --method-display-font-weigth: 100;
+
+  --api-navigation-list-item-selected-background-color: #e8e9ea;
+  --api-navigation-list-item-selected-color: #000;
+
+
+  --api-method-documentation-url-border-radius: 0;
+
+  --api-method-documentation-section-background-color: #f9fafb;
+  --api-method-documentation-section-padding: 5px;
+
+  --code-background-color: #f4f5f6;
+  --api-type-document-type-background-color: transparent;
+  --api-type-document-type-color: #000;
+  --api-type-document-trait-data-type-font-weight: 400;
+  --api-type-document-trait-data-type-padding: 2px 0;
+  --property-shape-document-object-color: transparent;
+  --property-shape-document-array-color: transparent;
+  --property-shape-document-union-color: transparent;
+}

@@ -4,44 +4,110 @@
   <meta charset="utf-8">
   <title>API Console demo</title>
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-  <link rel="import" href="../../shadycss/apply-shim.html">
-  <link rel="import" href="../../polymer/lib/elements/custom-style.html">
-  <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-  <link rel="import" href="../../paper-styles/typography.html">
-  <link rel="import" href="../../paper-styles/shadow.html">
-  <custom-style>
-    <style is="custom-style" include="demo-pages-shared-styles">
-    .vertical-section-container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 24px;
-      margin-top: 40px;
-      @apply --shadow-elevation-2dp;
+  <link rel="stylesheet" type="text/css" crossorigin="anonymous" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 15px;
+      color: #424242;
+      height: 100%;
     }
 
     h1 {
-      @apply --paper-font-display1;
+      font-size: 112px;
+      font-weight: 300;
+      letter-spacing: -.044em;
+      line-height: 120px;
+      color: #fff;
+      box-sizing: border-box;
+      margin: 0;
     }
 
-    dd {
-      margin-bottom: 20px;
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 63%;
+      background-color: #2196F3;
+      background: linear-gradient(167deg, rgba(33,150,243,1) 46%, rgba(3,169,244,1) 100%);
+      box-shadow: 0 0 8px 0 rgba(0,0,0,.08),
+                  0 0 15px 0 rgba(0,0,0,.02),
+                  0 0 20px 4px rgba(0,0,0,.06);
     }
-    </style>
-  </custom-style>
+
+    .subtitle {
+      color: #fff;
+      font-size: 34px;
+      font-weight: 200;
+      line-height: 28px;
+      margin-top: 80px;
+    }
+
+    main {
+      max-width: 700px;
+      margin: 80px auto;
+    }
+
+    .list-item {
+      margin: 24px 0;
+    }
+
+    .list-item p {
+      margin: 4px 0;
+      font-size: 1.05rem;
+    }
+
+    @media (max-width: 1200px) {
+      h1 {
+        font-size: 54px;
+        text-align: center;
+        margin: 0 24px;
+        line-height: 64px;
+      }
+
+      .subtitle {
+        font-size: 28px;
+      }
+
+      main {
+        max-width: 100%;
+        margin: 40px 24px auto;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="vertical-section-container centered">
+  <header>
     <h1>API console demo pages</h1>
-    <dl>
-      <dt><a href="element/index.html">element/index.html</a></dt>
-      <dd>API console as a Polymer powered web component</dd>
-      <dt><a href="standalone/index.html">standalone/index.html</a></dt>
-      <dd>API console as a standalone application using native platform</dd>
-      <dt><a href="themed/index.html">themed/index.html</a></dt>
-      <dd>API console with custom theme</dd>
-    </dl>
-  </div>
+    <p class="subtitle">API design for humans</p>
+  </header>
+
+  <main class="centered">
+    <div class="list-item">
+      <p>API console as a web component</p>
+      <a href="element/index.html">element/index.html</a>
+    </div>
+    <div class="list-item">
+      <p>API console as a standalone application</p>
+      <a href="standalone/index.html">standalone/index.html</a>
+    </div>
+    <div class="list-item">
+      <p>API console with Anypoint theme</p>
+      <a href="themed/anypoint.html">themed/anypoint.html</a>
+    </div>
+    <div class="list-item">
+      <p>API console with dark theme</p>
+      <a href="themed/dark.html">themed/dark.html</a>
+    </div>
+    <div class="list-item">
+      <p>API console with code editor</p>
+      <a href="editor/index.html">editor/index.html</a>
+    </div>
+  </main>
 </body>
 
 </html>

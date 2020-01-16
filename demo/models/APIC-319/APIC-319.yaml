@@ -1,0 +1,73 @@
+swagger: "2.0"
+info:
+  title: Banking
+  description: Banking
+  version: "1.0"
+externalDocs:
+  url: http://
+  description: Bank
+  x-amf-title: Api Details
+x-amf-userDocumentation:
+  -
+    url: http://
+    content: newItem
+    title: newItem
+paths:
+  /customers/{id}:
+    post:
+      parameters:
+        -
+          name: id
+          required: true
+          in: path
+          default: 21
+          type: integer
+          format: int
+        -
+          x-amf-mediaType: application/json
+          in: body
+          name: generated
+          schema:
+            example:
+              strict: true
+              value:
+                address:
+                  street: 12 Oxford St.
+                  city: London
+                id: 1299
+                name: Example
+            type: object
+            additionalProperties: true
+            required:
+              - address
+              - id
+              - name
+            properties:
+              address:
+                type: object
+                additionalProperties: true
+                required:
+                  - street
+                  - city
+                properties:
+                  street:
+                    example: 12 Oxford St.
+                    type: string
+                  city:
+                    example: London
+                    type: string
+              id:
+                example: 1299
+                type: integer
+                format: int
+              name:
+                example: Example
+                type: string
+      responses:
+        "201":
+          description: ""
+          x-amf-mediaType: text/plain
+          schema:
+            example: Customer created
+            type: string
+      security: []
