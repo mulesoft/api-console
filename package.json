@@ -1,7 +1,7 @@
 {
   "name": "api-console",
   "description": "The API Console to automatically generate API documentation from RAML and OAS files.",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "license": "CPAL-1.0",
   "main": "api-console.js",
   "keywords": [
@@ -57,7 +57,7 @@
     "@api-components/api-model-generator": "^0.2.5",
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
-    "@open-wc/building-rollup": "^0.20.2",
+    "@open-wc/building-rollup": "^0.21.0",
     "@open-wc/testing": "^2.5.1",
     "@open-wc/testing-karma": "^3.2.32",
     "@polymer/gen-typescript-declarations": "^1.6.2",
@@ -78,7 +78,7 @@
     "rollup": "^1.30.1",
     "rollup-plugin-cpy": "^2.0.1",
     "rollup-plugin-postcss": "^2.0.5",
-    "sinon": "^8.1.1",
+    "sinon": "^9.0.0",
     "tmp": "0.1.0",
     "uglify-js": "^3.7.6",
     "unzipper": "^0.10.7",
