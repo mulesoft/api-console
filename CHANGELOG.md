@@ -1,3 +1,29 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [6.1.0](https://github.com/mulesoft/api-console/compare/v4.2.3...v6.1.0) (2020-03-17)
+
+
+### Features
+
+* adding an option to set OAuth client ID / secret ([391bba1](https://github.com/mulesoft/api-console/commit/391bba1377716d4638b496b22438b562318b2e16))
+* adding experimental `rearrangeEndpoints` property ([692c21f](https://github.com/mulesoft/api-console/commit/692c21f6955884194183f15516b2a213bdbde39b))
+
+
+### Bug Fixes
+
+* adding swagger match to API file search ([75208a4](https://github.com/mulesoft/api-console/commit/75208a4a51e15b00a9e0a3c9199a6f45855604ef))
+* fixed scrolling in APIC app ([58610bd](https://github.com/mulesoft/api-console/commit/58610bdcf6892bf3c83303c6c8a82acba83e88aa))
+* fixes APIC-291 - navigation animation when bootstraping ([c564eff](https://github.com/mulesoft/api-console/commit/c564efffdba2ce6f46da93938dc2d27f526af160))
+* Fixes linking ([fe17856](https://github.com/mulesoft/api-console/commit/fe17856527330c10bc98cba90a31905ed9d1026b))
+* fixing __amfChanged function by calling super class ([34fb6aa](https://github.com/mulesoft/api-console/commit/34fb6aab920dedce3477cbb73cec41ac21984867))
+* fixing APIC-260 - CM editor rendered above opened nav drawer ([4876283](https://github.com/mulesoft/api-console/commit/4876283695e4a1cc8dbef3601b448d5db181606f))
+* fixing click handler on the "back" button ([7ca40a7](https://github.com/mulesoft/api-console/commit/7ca40a71f5511060c3d23d28a0cd2901314e7cc2))
+* fixing input width issue for multipart form ([f15b029](https://github.com/mulesoft/api-console/commit/f15b02954a7fa37b8c97f813f32f8435c68073bd))
+* fixing recognizing swagger spec version ([e34740d](https://github.com/mulesoft/api-console/commit/e34740d8eccd83c87850a0ab9733672e120493fb))
+* removing `this.app` from function call ([f9cdf5d](https://github.com/mulesoft/api-console/commit/f9cdf5d44131fb3186eafb95c7edd8b1c8173431))
+
 <a name="6.0.0"></a>
 # 6.0.0 (2020-01-15)
 
