@@ -42,7 +42,6 @@
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/paper-toast": "^3.0.0",
     "lit-element": "^2.0.1",
-    "lit-element-router": "^1.2.5",
     "lit-html": "^1.1.2"
   },
   "devDependencies": {
