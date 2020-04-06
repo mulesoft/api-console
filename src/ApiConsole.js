@@ -264,7 +264,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .allowHideOptional="${allowHideOptional}"
       .baseUri="${baseUri}"
       .noDocs="${noDocs}"
-      .eventsTarget="${eventsTarget}"></api-request-panel>`;
+      .eventsTarget="${eventsTarget}">
+        <slot name="custom-base-uri" slot="custom-base-uri"></slot>
+      </api-request-panel>`;
   }
 
   _apiDocumentationTemplate() {
