@@ -29,6 +29,11 @@ describe('<api-console>', function() {
     return (await fixture(`<api-console allowExtensionBanner page="request"></api-console>`));
   }
 
+  async function customBaseUriSlotFixture() {
+    return (await fixture(`<api-console page="request"><anypoint-item slot="custom-base-uri"
+                            value="http://customServer.com">http://customServer.com</anypoint-item></api-console>`));
+  }
+
   describe('RAML aware', () => {
     it('Adds raml-aware to the DOM if aware is set', async () => {
       const element = await awareFixture();
@@ -428,6 +433,35 @@ describe('<api-console>', function() {
       const banner = element.shadowRoot.querySelector('.extension-banner');
       assert.ok(banner, 'banner container is rendered');
       assert.isFalse(banner.hasAttribute('active'), 'banner is not active');
+    });
+  });
+
+  describe('Custom baseUri slot', () => {
+    describe('with requestFixture', () => {
+      let element;
+      beforeEach(async () => {
+        element = await requestFixture();
+      });
+
+      it('should render empty extra servers slot', () => {
+        assert.exists(element.shadowRoot.querySelector('slot[name="custom-base-uri"]'));
+        assert.lengthOf(element.shadowRoot.querySelector('slot[name="custom-base-uri"]').assignedNodes(), 0)
+      });
+    });
+
+    describe('with customBaseUriSlot fixture', () => {
+      let element;
+      beforeEach(async () => {
+        element = await customBaseUriSlotFixture();
+      });
+
+      it('should render extra servers slot', () => {
+        assert.exists(element.shadowRoot.querySelector('slot[name="custom-base-uri"]'));
+      });
+
+      it('should have assigned node to slot', () => {
+        assert.lengthOf(element.shadowRoot.querySelector('slot[name="custom-base-uri"]').assignedNodes(), 1);
+      });
     });
   });
 });
