@@ -248,6 +248,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       redirectUri,
       eventsTarget,
       baseUri,
+      hideServerSelector,
+      hideCustomServer,
       noDocs
     } = this;
     return html`<api-request-panel
@@ -262,6 +264,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .allowCustom="${allowCustom}"
       .allowDisableParams="${allowDisableParams}"
       .allowHideOptional="${allowHideOptional}"
+      .hideServerSelector="${hideServerSelector}"
+      .hideCustomServer="${hideCustomServer}"
       .baseUri="${baseUri}"
       .noDocs="${noDocs}"
       .eventsTarget="${eventsTarget}">
@@ -281,6 +285,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       narrow,
       scrollTarget,
       redirectUri,
+      hideServerSelector,
       baseUri
     } = this;
     return html`<api-documentation
@@ -294,9 +299,12 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .noTryIt="${_noTryItValue}"
       .baseUri="${baseUri}"
       .redirectUri="${redirectUri}"
+      .hideServerSelector="${hideServerSelector}"
       .scrollTarget="${scrollTarget}"
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
-    ></api-documentation>`;
+    >
+      <slot name="custom-base-uri" slot="custom-base-uri"></slot>
+    </api-documentation>`;
   }
 
   _navigationTemplate() {
@@ -551,6 +559,16 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * **This is an experimental option and may dissapear without warning.**
        */
       rearrangeEndpoints: { type: Boolean },
+      /**
+       * Optional property to set
+       * If true, the server selector is not rendered
+       */
+      hideServerSelector: { type: Boolean },
+      /**
+       * Optional property to set
+       * If true, the server selector custom option is not rendered
+       */
+      hideCustomServer: { type: Boolean },
     };
   }
 
