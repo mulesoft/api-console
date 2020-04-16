@@ -248,9 +248,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       redirectUri,
       eventsTarget,
       baseUri,
+      noDocs,
+      selectedServerValue,
+      selectedServerType,
       noServerSelector,
       noCustomServer,
-      noDocs
     } = this;
     return html`<api-request-panel
       .amf="${amf}"
@@ -268,7 +270,10 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .allowHideOptional="${allowHideOptional}"
       .baseUri="${baseUri}"
       .noDocs="${noDocs}"
-      .eventsTarget="${eventsTarget}">
+      .selectedServerValue="${selectedServerValue}"
+      .selectedServerType="${selectedServerType}"
+      .eventsTarget="${eventsTarget}"
+      >
         <slot name="custom-base-uri" slot="custom-base-uri"></slot>
       </api-request-panel>`;
   }
@@ -285,8 +290,10 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       narrow,
       scrollTarget,
       redirectUri,
+      baseUri,
+      selectedServerValue,
+      selectedServerType,
       noServerSelector,
-      baseUri
     } = this;
     return html`<api-documentation
       .amf="${amf}"
@@ -302,6 +309,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
+      .selectedServerValue="${selectedServerValue}"
+      .selectedServerType="${selectedServerType}"
     >
       <slot name="custom-base-uri" slot="custom-base-uri"></slot>
     </api-documentation>`;
@@ -560,6 +569,16 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        */
       rearrangeEndpoints: { type: Boolean },
       /**
+       * Value of the selected server. This is passed into `api-documentation` and
+       * `api-request-panel`
+       */
+      selectedServerValue: { type: String },
+      /**
+       * Type of the selected server. This is passed into `api-documentation` and
+       * `api-request-panel`
+       */
+      selectedServerType: { type: String },
+      /**
        * Optional property to set
        * If true, the server selector is not rendered
        */
@@ -648,6 +667,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   constructor() {
     super();
     this._tryitHandler = this._tryitHandler.bind(this);
+    this._handleServerChange = this._handleServerChange.bind(this);
 
     this.page = 'docs';
     this.drawerAlign = 'left';
@@ -659,6 +679,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       super.connectedCallback();
     }
     this.addEventListener('tryit-requested', this._tryitHandler);
+    this.addEventListener('api-server-changed', this._handleServerChange);
     this._notifyApicExtension();
     if (window.ShadyCSS) {
       window.ShadyCSS.styleElement(this);
@@ -671,6 +692,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       super.disconnectedCallback();
     }
     this.removeEventListener('tryit-requested', this._tryitHandler);
+    this.removeEventListener('api-server-changed', this._handleServerChange);
   }
 
   firstUpdated() {
@@ -878,5 +900,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     } else if (value && isChrome && !this._hasApicCorsExtension) {
       this._extensionBannerActive = true;
     }
+  }
+
+  _handleServerChange(e) {
+    const { selectedValue, selectedType } = e.detail;
+    this.selectedServerValue = selectedValue;
+    this.selectedServerType = selectedType;
   }
 }

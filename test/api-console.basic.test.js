@@ -1,4 +1,4 @@
-import { fixture, assert, aTimeout, html } from '@open-wc/testing';
+import { fixture, assert, aTimeout, html, nextFrame } from '@open-wc/testing';
 import * as sinon from 'sinon/pkg/sinon-esm.js';
 import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
 import { isChrome } from '../src/ApiConsole.js';
@@ -8,7 +8,7 @@ import '../api-console.js';
 //  Tests for computations that do not require AMF model.
 //
 
-describe('<api-console>', function() {
+describe('<api-console>', function () {
   async function basicFixture() {
     return (await fixture(`<api-console></api-console>`));
   }
@@ -63,7 +63,7 @@ describe('<api-console>', function() {
     let requests;
     before(() => {
       xhr = sinon.useFakeXMLHttpRequest();
-      xhr.onCreate = function(xhr) {
+      xhr.onCreate = function (xhr) {
         requests.push(xhr);
       };
     });
@@ -86,7 +86,8 @@ describe('<api-console>', function() {
       element.modelLocation = 'apip.json';
       assert.equal(requests.length, 1);
       requests[0].respond(200, {
-        'Content-Type': 'application/json' },
+        'Content-Type': 'application/json'
+      },
         '[{"@context":{}, "@id": "","@type": []}]');
       assert.typeOf(element.amf, 'array');
     });
@@ -100,7 +101,8 @@ describe('<api-console>', function() {
       const callback = sinon.spy(element, '_apiLoadErrorHandler');
       element.modelLocation = 'error.json';
       requests[0].respond(404, {
-        'Content-Type': 'text/plain' },
+        'Content-Type': 'text/plain'
+      },
         'nothing');
       assert.isTrue(callback.called);
     });
@@ -230,7 +232,7 @@ describe('<api-console>', function() {
     });
   });
 
-  describe('Attribution', function() {
+  describe('Attribution', function () {
     it('Attribution logo is rendered', async () => {
       const element = await basicFixture();
       const node = element.shadowRoot.querySelector('.powered-by');
@@ -327,10 +329,10 @@ describe('<api-console>', function() {
     function basicFixture(loc) {
       return new Promise((resolve, reject) => {
         fixture(html`<api-console modelLocation="${loc}"></api-console>`)
-        .then((element) => {
-          element.addEventListener('model-load-success', () => resolve(element));
-          element.addEventListener('model-load-error', () => reject(element));
-        })
+          .then((element) => {
+            element.addEventListener('model-load-success', () => resolve(element));
+            element.addEventListener('model-load-error', () => reject(element));
+          })
       });
     }
 
@@ -462,6 +464,27 @@ describe('<api-console>', function() {
       it('should have assigned node to slot', () => {
         assert.lengthOf(element.shadowRoot.querySelector('slot[name="custom-base-uri"]').assignedNodes(), 1);
       });
+    });
+  });
+
+  describe('Server selection change', () => {
+    let element;
+
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('Should update selectedServerValue and selectedServerType', async () => {
+      const e = new CustomEvent('api-server-changed', {
+        detail: {
+          selectedValue: 'https://example.org',
+          selectedType: 'custom',
+        }
+      });
+      element.dispatchEvent(e);
+      await nextFrame();
+      assert.equal(element.selectedServerValue, 'https://example.org');
+      assert.equal(element.selectedServerType, 'custom');
     });
   });
 });
