@@ -560,7 +560,15 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * **This is an experimental option and may dissapear without warning.**
        */
       rearrangeEndpoints: { type: Boolean },
+      /**
+       * Value of the selected server. This is passed into `api-documentation` and
+       * `api-request-panel`
+       */
       selectedServerValue: { type: String },
+      /**
+       * Type of the selected server. This is passed into `api-documentation` and
+       * `api-request-panel`
+       */
       selectedServerType: { type: String },
     };
   }
