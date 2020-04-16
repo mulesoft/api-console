@@ -248,8 +248,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       redirectUri,
       eventsTarget,
       baseUri,
-      hideServerSelector,
-      hideCustomServer,
+      noServerSelector,
+      noCustomServer,
       noDocs
     } = this;
     return html`<api-request-panel
@@ -258,14 +258,14 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?narrow="${narrow}"
       ?outlined="${outlined}"
       ?compatibility="${compatibility}"
+      ?noServerSelector="${noServerSelector}"
+      ?noCustomServer="${noCustomServer}"
       .noUrlEditor="${noUrlEditor}"
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
       .allowCustom="${allowCustom}"
       .allowDisableParams="${allowDisableParams}"
       .allowHideOptional="${allowHideOptional}"
-      .hideServerSelector="${hideServerSelector}"
-      .hideCustomServer="${hideCustomServer}"
       .baseUri="${baseUri}"
       .noDocs="${noDocs}"
       .eventsTarget="${eventsTarget}">
@@ -285,7 +285,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       narrow,
       scrollTarget,
       redirectUri,
-      hideServerSelector,
+      noServerSelector,
       baseUri
     } = this;
     return html`<api-documentation
@@ -295,11 +295,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?narrow="${narrow}"
       ?compatibility="${compatibility}"
       ?outlined="${outlined}"
+      ?noServerSelector="${noServerSelector}"
       .inlineMethods="${inlineMethods}"
       .noTryIt="${_noTryItValue}"
       .baseUri="${baseUri}"
       .redirectUri="${redirectUri}"
-      .hideServerSelector="${hideServerSelector}"
       .scrollTarget="${scrollTarget}"
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
     >
@@ -563,12 +563,12 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * Optional property to set
        * If true, the server selector is not rendered
        */
-      hideServerSelector: { type: Boolean },
+      noServerSelector: { type: Boolean },
       /**
        * Optional property to set
        * If true, the server selector custom option is not rendered
        */
-      hideCustomServer: { type: Boolean },
+      noCustomServer: { type: Boolean },
     };
   }
 
