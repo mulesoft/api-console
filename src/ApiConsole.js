@@ -251,6 +251,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       noDocs,
       selectedServerValue,
       selectedServerType,
+      noServerSelector,
+      noCustomServer,
     } = this;
     return html`<api-request-panel
       .amf="${amf}"
@@ -258,6 +260,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?narrow="${narrow}"
       ?outlined="${outlined}"
       ?compatibility="${compatibility}"
+      ?noServerSelector="${noServerSelector}"
+      ?noCustomServer="${noCustomServer}"
       .noUrlEditor="${noUrlEditor}"
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
@@ -289,6 +293,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       baseUri,
       selectedServerValue,
       selectedServerType,
+      noServerSelector,
     } = this;
     return html`<api-documentation
       .amf="${amf}"
@@ -297,6 +302,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?narrow="${narrow}"
       ?compatibility="${compatibility}"
       ?outlined="${outlined}"
+      ?noServerSelector="${noServerSelector}"
       .inlineMethods="${inlineMethods}"
       .noTryIt="${_noTryItValue}"
       .baseUri="${baseUri}"
@@ -305,7 +311,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
       .selectedServerValue="${selectedServerValue}"
       .selectedServerType="${selectedServerType}"
-    ></api-documentation>`;
+    >
+      <slot name="custom-base-uri" slot="custom-base-uri"></slot>
+    </api-documentation>`;
   }
 
   _navigationTemplate() {
@@ -570,6 +578,16 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * `api-request-panel`
        */
       selectedServerType: { type: String },
+      /**
+       * Optional property to set
+       * If true, the server selector is not rendered
+       */
+      noServerSelector: { type: Boolean },
+      /**
+       * Optional property to set
+       * If true, the server selector custom option is not rendered
+       */
+      noCustomServer: { type: Boolean },
     };
   }
 
