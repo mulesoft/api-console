@@ -248,6 +248,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       redirectUri,
       eventsTarget,
       baseUri,
+      noServerSelector,
+      noCustomServer,
       noDocs
     } = this;
     return html`<api-request-panel
@@ -256,6 +258,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?narrow="${narrow}"
       ?outlined="${outlined}"
       ?compatibility="${compatibility}"
+      ?noServerSelector="${noServerSelector}"
+      ?noCustomServer="${noCustomServer}"
       .noUrlEditor="${noUrlEditor}"
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
@@ -281,6 +285,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       narrow,
       scrollTarget,
       redirectUri,
+      noServerSelector,
       baseUri
     } = this;
     return html`<api-documentation
@@ -290,13 +295,16 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?narrow="${narrow}"
       ?compatibility="${compatibility}"
       ?outlined="${outlined}"
+      ?noServerSelector="${noServerSelector}"
       .inlineMethods="${inlineMethods}"
       .noTryIt="${_noTryItValue}"
       .baseUri="${baseUri}"
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
-    ></api-documentation>`;
+    >
+      <slot name="custom-base-uri" slot="custom-base-uri"></slot>
+    </api-documentation>`;
   }
 
   _navigationTemplate() {
@@ -551,6 +559,16 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * **This is an experimental option and may dissapear without warning.**
        */
       rearrangeEndpoints: { type: Boolean },
+      /**
+       * Optional property to set
+       * If true, the server selector is not rendered
+       */
+      noServerSelector: { type: Boolean },
+      /**
+       * Optional property to set
+       * If true, the server selector custom option is not rendered
+       */
+      noCustomServer: { type: Boolean },
     };
   }
 
