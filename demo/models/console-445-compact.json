@@ -160,11 +160,6 @@
 "raml-shapes:Shape",
 "doc:DomainElement"
 ],
-"shacl:name": [
-{
-"@value": "file"
-}
-],
 "sourcemaps:sources": [
 {
 "@id": "#8/source-map",
@@ -196,7 +191,7 @@
 ],
 "sourcemaps:value": [
 {
-"@value": "[(11,15)-(14,0)]"
+"@value": "[(12,0)-(14,0)]"
 }
 ]
 }
@@ -507,7 +502,7 @@
 ],
 "doc:version": [
 {
-"@value": "2.1.0"
+"@value": "2.0.1"
 }
 ],
 "doc:root": [
