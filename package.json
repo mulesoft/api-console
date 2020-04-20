@@ -37,7 +37,7 @@
     "@api-components/api-console-ext-comm": "^3.0.0",
     "@api-components/api-documentation": "^4.1.1",
     "@api-components/api-navigation": "^4.1.0",
-    "@api-components/api-request-panel": "^4.0.1",
+    "@api-components/api-request-panel": "^4.1.2",
     "@api-components/raml-aware": "^3.0.0",
     "@polymer/app-layout": "^3.1.0",
     "@polymer/iron-media-query": "^3.0.0",
