@@ -49,7 +49,8 @@ class ApicApplication extends DemoBase {
 
       <api-console
         redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
-        oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com">
+        oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com"
+        narrow>
       </api-console>
 
       <xhr-simple-request></xhr-simple-request>

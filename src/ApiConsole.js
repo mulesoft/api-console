@@ -294,7 +294,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       selectedServerValue,
       selectedServerType,
       noServerSelector,
+      noCustomServer
     } = this;
+
     return html`<api-documentation
       .amf="${amf}"
       .selected="${selectedShape}"
@@ -303,6 +305,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?compatibility="${compatibility}"
       ?outlined="${outlined}"
       ?noServerSelector="${noServerSelector}"
+      ?noCustomServer="${noCustomServer}"
       .inlineMethods="${inlineMethods}"
       .noTryIt="${_noTryItValue}"
       .baseUri="${baseUri}"
