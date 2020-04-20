@@ -293,6 +293,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       baseUri,
       selectedServerValue,
       selectedServerType,
+      noDocumentationServerSelector,
       noServerSelector,
       noCustomServer
     } = this;
@@ -304,7 +305,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?narrow="${narrow}"
       ?compatibility="${compatibility}"
       ?outlined="${outlined}"
-      ?noServerSelector="${noServerSelector}"
+      ?noServerSelector="${noServerSelector || noDocumentationServerSelector}"
       ?noCustomServer="${noCustomServer}"
       .inlineMethods="${inlineMethods}"
       .noTryIt="${_noTryItValue}"
@@ -583,9 +584,14 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       selectedServerType: { type: String },
       /**
        * Optional property to set
-       * If true, the server selector is not rendered
+       * If true, the server selector is not rendered in any component
        */
       noServerSelector: { type: Boolean },
+      /**
+       * Optional property to set
+       * If true, forces the api-documentation to hide the server selector
+       */
+      noDocumentationServerSelector: { type: Boolean },
       /**
        * Optional property to set
        * If true, the server selector custom option is not rendered

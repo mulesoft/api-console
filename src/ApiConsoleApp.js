@@ -173,6 +173,7 @@ export class ApiConsoleApp extends ApiConsole {
       return;
     }
     this._wideLayout = value;
+    this.noDocumentationServerSelector = value;
     this._updateRenderInlineTyit();
   }
 
