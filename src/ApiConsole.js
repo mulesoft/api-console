@@ -315,6 +315,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
       .selectedServerValue="${selectedServerValue}"
       .selectedServerType="${selectedServerType}"
+      .noServerSelector="${narrow}"
     >
       <slot name="custom-base-uri" slot="custom-base-uri"></slot>
     </api-documentation>`;
