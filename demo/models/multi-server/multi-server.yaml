@@ -1,0 +1,84 @@
+openapi: '3.0.2'
+info:
+  title: Servers demo API
+  version: '1.0'
+
+servers:
+  - url: https://{customerId}.saas-app.com:{port}/v2
+    variables:
+      customerId:
+        default: demo
+        description: Customer ID assigned by the service provider
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+  - url: https://{region}.api.cognitive.microsoft.com
+    variables:
+      region:
+        default: westus
+        enum:
+          - westus
+          - eastus2
+          - westcentralus
+          - westeurope
+          - southeastasia
+  - url: https://api.openweathermap.org/data/2.5/
+    description: Production server
+  - url: http://beta.api.openweathermap.org/data/2.5/
+    description: Beta server
+
+# Relative URL to external documentation
+externalDocs:
+  url: /docs
+  description: Find more info here
+
+# Relative URLs to OAuth2 authorization and token URLs
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: /oauth/dialog
+          tokenUrl: /oauth/token
+          scopes: {}
+
+paths:
+  /default:
+    description: A default path to the API
+    get:
+      summary: "A get method"
+      responses:
+        200:
+          description: Successful response
+  /files:
+    description: File upload and download operations
+    servers:
+      - url: https://files.example.com
+        description: Override base path for all operations with the /files path
+    get:
+      summary: "A get method"
+      responses:
+        200:
+          description: Successful response
+  /ping:
+    servers:
+      - url: https://endpoint.example.com
+        description: Override base path servers
+    get:
+      servers:
+        - url: https://echo.example.com
+          description: Override base path for the GET /ping operation
+        - url: https://echo2.example.com
+          description: Also overrides base path for the GET /ping operation
+      summary: "A get method"
+      responses:
+        200:
+          description: Successful response
+    post:
+      summary: "A post method"
+      responses:
+        201:
+          description: Successful create

@@ -20,6 +20,7 @@ class ApicApplication extends DemoBase {
       ['console-445', 'Multipart request'],
       ['demo-api-v4', 'AMF v4'],
       ['APIC-319', 'APIC-319'],
+      ['multi-server', 'OAS multi server'],
     ];
   }
 
