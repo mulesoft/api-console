@@ -87,7 +87,7 @@
   },
   "scripts": {
     "update-types": "NODE_OPTIONS=--max_old_space_size=2048 gen-typescript-declarations --deleteExisting --outDir .",
-    "generate-model": "node demo/model.js",
+    "generate-model": "npm run build:models",
     "start": "node demo/index.js",
     "start:old": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
     "start:server": "node --inspect demo/parsing-server/main.js",
@@ -106,7 +106,9 @@
     "test:compatibility:watch": "karma start --compatibility auto --auto-watch=true --single-run=false",
     "test:sl": "karma start karma.sl.config.js --compatibility auto --coverage",
     "build": "rimraf dist && rollup -c rollup.config.js",
-    "prepare": "node tasks/prepare.js"
+    "build:vendor": "node tasks/prepare.js",
+    "build:models": "node demo/model.js",
+    "prepare": "npm run build:vendor && npm run build:models"
   },
   "lint-staged": {
     "*.js": [
