@@ -252,7 +252,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       selectedServerValue,
       selectedServerType,
       noServerSelector,
-      noCustomServer,
+      allowCustomBaseUri,
     } = this;
     return html`<api-request-panel
       .amf="${amf}"
@@ -261,7 +261,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?outlined="${outlined}"
       ?compatibility="${compatibility}"
       ?noServerSelector="${noServerSelector}"
-      ?noCustomServer="${noCustomServer}"
+      ?allowCustomBaseUri="${allowCustomBaseUri}"
       .noUrlEditor="${noUrlEditor}"
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
@@ -295,7 +295,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       selectedServerType,
       _noDocumentationServerSelector,
       noServerSelector,
-      noCustomServer
+      allowCustomBaseUri
     } = this;
 
     return html`<api-documentation
@@ -306,7 +306,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       ?compatibility="${compatibility}"
       ?outlined="${outlined}"
       ?noServerSelector="${noServerSelector || _noDocumentationServerSelector}"
-      ?noCustomServer="${noCustomServer}"
+      ?allowCustomBaseUri="${allowCustomBaseUri}"
       .inlineMethods="${inlineMethods}"
       .noTryIt="${_noTryItValue}"
       .baseUri="${baseUri}"
@@ -594,9 +594,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       _noDocumentationServerSelector: { type: Boolean },
       /**
        * Optional property to set
-       * If true, the server selector custom option is not rendered
+       * If true, the server selector custom base URI option is rendered
        */
-      noCustomServer: { type: Boolean },
+      allowCustomBaseUri: { type: Boolean },
     };
   }
 
