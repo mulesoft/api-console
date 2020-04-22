@@ -17,7 +17,10 @@
     "MuleSoft"
   ],
   "contributors": [
-    "The Advanced REST client authors <arc@mulesoft.com>"
+    "Paweł Psztyć",
+    "Joaquin Stankus",
+    "Francisco Di Giandomenico",
+    "Leandro Bauret"
   ],
   "repository": {
     "type": "git",
