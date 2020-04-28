@@ -14,11 +14,13 @@
     "oas"
   ],
   "authors": [
-    "Pawel Psztyc"
+    "MuleSoft"
   ],
   "contributors": [
-    "Leandro Bauret",
-    "Francisco Di Giandomenico"
+    "Paweł Psztyć",
+    "Joaquin Stankus",
+    "Francisco Di Giandomenico",
+    "Leandro Bauret"
   ],
   "repository": {
     "type": "git",
