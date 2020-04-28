@@ -26,6 +26,7 @@ async function apiRequest(ctx) {
     }
   } catch (e) {
     body = wrapError(e);
+    console.error(e);
   }
   /* eslint-disable require-atomic-updates */
   if (body.code) {

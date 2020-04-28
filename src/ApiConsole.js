@@ -11,7 +11,7 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import { html, css, LitElement } from 'lit-element';
+import { html, LitElement } from 'lit-element';
 import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
 import '@api-components/raml-aware/raml-aware.js';
 import '@api-components/api-navigation/api-navigation.js';
@@ -22,8 +22,13 @@ import '@polymer/paper-toast/paper-toast.js';
 import '@api-components/api-console-ext-comm/api-console-ext-comm.js';
 import attributionTpl from './attribution-template.js';
 import { close } from '@advanced-rest-client/arc-icons/ArcIcons.js';
+import styles from './ApiConsoleStyles.js';
 
 export const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+/** @typedef {import('lit-element').TemplateResult} TemplateResult */
+/** @typedef {import('lit-element').CSSResult} CSSResult */
+
 /**
  * he API Console
  *
@@ -35,325 +40,11 @@ export const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(
  * @appliesMixin AmfHelperMixin
  */
 export class ApiConsole extends AmfHelperMixin(LitElement) {
-  static get styles() {
-    return css`:host {
-      display: block;
-      position: relative;
-      overflow: hidden;
-    }
-
-    *[hidden] {
-      display: none !important;
-    }
-
-    .nav-drawer {
-      width: var(--app-drawer-width, 256px);
-      display: block;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      background-color: #fff;
-      transform: translateX(-100%);
-      transform-origin: top right;
-      height: 100%;
-      position: absolute;
-      z-index: 5;
-    }
-
-    .nav-drawer.animatable {
-      transition: transform 0.3s cubic-bezier(0.74, 0.03, 0.3, 0.97);
-    }
-
-    :host([navigationopened]) .nav-drawer {
-      transform: translateX(0);
-      box-shadow: var(--anypoiont-dropdown-shaddow);
-    }
-
-    .nav-scrim {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      height: 100%;
-      position: absolute;
-      z-index: 4;
-      transition-property: opacity;
-      -webkit-transform: translateZ(0);
-      transform:  translateZ(0);
-      opacity: 0;
-      background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));
-    }
-
-    :host([navigationopened]) .nav-scrim {
-      opacity: 1;
-    }
-
-    .drawer-content-wrapper {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    api-navigation {
-      flex: 1;
-      overflow: auto;
-    }
-
-    .powered-by {
-      padding: 12px 0px;
-      border-top: 1px rgba(0,0,0,0.24) solid;
-      margin: 8px 12px 0 12px;
-    }
-
-    a img {
-      text-underline: none;
-    }
-
-    a.attribution {
-      display: inline-block;
-      width: 177px;
-      margin-left: 24px;
-      fill: var(--api-console-menu-color, #424143);
-    }
-
-    .method-title-area {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-    }
-
-    .method-title-area,
-    .extension-banner {
-      max-width: var(--api-console-main-max-width, 1600px);
-    }
-
-    .extension-banner {
-      align-items: center;
-      display: none;
-      border-bottom: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
-      border-top: 1px var(--api-console-extension-banner-border-bottom-color, rgba(0,0,0,0.12)) solid;
-      margin-bottom: 12px;
-      box-sizing: border-box;
-      color: var(--api-console-extension-banner-color, rgba(0,0,0,0.54));
-    }
-
-    .extension-banner[active] {
-      display: flex;
-      flex-direction: row;
-    }
-
-    .extension-banner {
-      max-width: var(--api-console-main-max-width, 1600px);
-    }
-
-    .method-title {
-      flex: 1;
-      font-size: var(--arc-font-headline-font-size);
-      font-weight: var(--arc-font-headline-font-weight);
-      letter-spacing: var(--arc-font-headline-letter-spacing);
-      line-height: var(--arc-font-headline-line-height);
-      text-transform: capitalize;
-    }
-
-    :host([narrow]) .method-title-area {
-      margin-bottom: 24px;
-      margin-top: 12px;
-    }
-
-    :host([narrow]) .method-title {
-      font-size: 20px;
-      margin: 0;
-    }
-
-    .main-content {
-      overflow: auto;
-      height: 100%;
-    }
-
-    .icon {
-      fill: currentColor;
-      width: 24px;
-      height: 24px;
-      display: block;
-    }
-    `;
-  }
-
-  _getPageTemplate() {
-    switch (this.page) {
-      case 'docs': return this._apiDocumentationTemplate();
-      case 'request': return this._getRequestTemplate();
-      default: return '';
-    }
-  }
-
-  _bannerMessage() {
-    if (!this.allowExtensionBanner) {
-      return '';
-    }
-    return html`
-    <div class="extension-banner" ?active="${this._extensionBannerActive}">
-      <p>
-        For better experience install API console extension.
-        Get it from <a target="_blank"
-          class="store-link"
-          href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa"
-        >
-          Chrome Web Store
-        </a>
-      </p>
-      <anypoint-icon-button
-        aria-label="Activate to close the message"
-        @click="${this.dismissExtensionBanner}"
-      >
-        <span class="icon">${close}</span>
-      </anypoint-icon-button>
-    </div>`;
-  }
-
-  _getRequestTemplate() {
-    const {
-      methodName,
-      compatibility
-    } = this;
-    return html`
-    <div class="method-title-area">
-      <h1 class="method-title">${methodName}</h1>
-      <div class="method-close-action">
-        <anypoint-button
-          class="action-button"
-          ?compatibility="${compatibility}"
-          @click="${this.closeTryIt}"
-          emphasis="medium">Back to docs</anypoint-button>
-      </div>
-    </div>
-    ${this._bannerMessage()}
-    ${this._requestPanelTemplate()}
-    `;
-  }
-
-  _requestPanelTemplate() {
-    const {
-      compatibility,
-      outlined,
-      amf,
-      selectedShape,
-      narrow,
-      noUrlEditor,
-      scrollTarget,
-      allowCustom,
-      allowDisableParams,
-      allowHideOptional,
-      redirectUri,
-      eventsTarget,
-      baseUri,
-      noDocs
-    } = this;
-    return html`<api-request-panel
-      .amf="${amf}"
-      .selected="${selectedShape}"
-      ?narrow="${narrow}"
-      ?outlined="${outlined}"
-      ?compatibility="${compatibility}"
-      .noUrlEditor="${noUrlEditor}"
-      .redirectUri="${redirectUri}"
-      .scrollTarget="${scrollTarget}"
-      .allowCustom="${allowCustom}"
-      .allowDisableParams="${allowDisableParams}"
-      .allowHideOptional="${allowHideOptional}"
-      .baseUri="${baseUri}"
-      .noDocs="${noDocs}"
-      .eventsTarget="${eventsTarget}"></api-request-panel>`;
-  }
-
-  _apiDocumentationTemplate() {
-    const {
-      inlineMethods,
-      compatibility,
-      outlined,
-      _noTryItValue,
-      amf,
-      selectedShape,
-      selectedShapeType,
-      narrow,
-      scrollTarget,
-      redirectUri,
-      baseUri
-    } = this;
-    return html`<api-documentation
-      .amf="${amf}"
-      .selected="${selectedShape}"
-      .selectedType="${selectedShapeType}"
-      ?narrow="${narrow}"
-      ?compatibility="${compatibility}"
-      ?outlined="${outlined}"
-      .inlineMethods="${inlineMethods}"
-      .noTryIt="${_noTryItValue}"
-      .baseUri="${baseUri}"
-      .redirectUri="${redirectUri}"
-      .scrollTarget="${scrollTarget}"
-      @api-navigation-selection-changed="${this._apiNavigationOcurred}"
-    ></api-documentation>`;
-  }
-
-  _navigationTemplate() {
-    const { amf, noAttribution, rearrangeEndpoints } = this;
-    return html`<div class="drawer-content-wrapper">
-      <api-navigation
-        .amf="${amf}"
-        summary
-        endpointsopened
-        ?rearrangeendpoints="${rearrangeEndpoints}"
-        @api-navigation-selection-changed="${this._apiNavigationOcurred}"></api-navigation>
-      ${noAttribution ? '' : attributionTpl}
-    </div>`;
-  }
-
-  _navigationDrawerTemplate() {
-    return html`
-    ${this.navigationOpened ? html`<div class="nav-scrim" @click="${this._closeDrawer}"></div>` : ''}
-    <div class="nav-drawer">
-    ${this._navigationTemplate()}
-    </div>
-    `;
-  }
-
-  _mainContentTemplate() {
-    return html`
-    <div class="main-content">
-      ${this._getPageTemplate()}
-    </div>
-    ${this._navigationDrawerTemplate()}`;
-  }
   /**
-   * The components below are optional dependencies. They will not be used until
-   * sources of the components are included into AC bundle.
-   * This would help build the console and only add a dependency at the build time
-   * without statically include the dependency.
-   *
-   * TBD:
-   * xhr-simple-request component placed here will prohibit application from
-   * using api-request custom event. If the application uses both this element
-   * (by adding it's import file to the build / page) this element would be the
-   * first one to handle the event and run the request. Any other listener
-   * attached to the console, body or window is called after this one.
-   *
-   * @return {TemplateResult}
+   * @type {CSSResult|CSSResult[]}
    */
-  _helpersTemplate() {
-    return html`<paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
-    <api-console-ext-comm @api-console-extension-installed="${this._hasExtensionHandler}"></api-console-ext-comm>
-    `;
-  }
-
-  render() {
-    const { aware } = this;
-    return html`
-    ${aware ? html`<raml-aware .scope="${aware}" @api-changed="${this._apiChanged}"></raml-aware>` : ''}
-    ${this._mainContentTemplate()}
-    ${this._helpersTemplate()}
-    `;
+  static get styles() {
+    return styles;
   }
 
   static get properties() {
@@ -524,7 +215,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
         * set this value to the container so the request panel only listen
         * to events dispatched inside the container. Otherwise events dispatched
         * by the request panel will be handled by other instances of the console.
-        * @type {Element}
         */
        eventsTarget: { type: Object },
        /**
@@ -549,6 +239,33 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * **This is an experimental option and may dissapear without warning.**
        */
       rearrangeEndpoints: { type: Boolean },
+      /**
+       * Value of the selected server. This is passed into `api-documentation` and
+       * `api-request-panel`
+       */
+      serverValue: { type: String },
+      /**
+       * Type of the selected server. This is passed into `api-documentation` and
+       * `api-request-panel`
+       */
+      serverType: { type: String },
+      /**
+       * Optional property to set
+       * If true, the server selector is not rendered in any component
+       */
+      noServerSelector: { type: Boolean },
+      /**
+       * Optional property to set
+       * If true, forces the api-documentation to hide the server selector
+       */
+      _noDocumentationServerSelector: { type: Boolean },
+      /**
+       * Optional property to set
+       * If true, the server selector custom base URI option is rendered
+       */
+      allowCustomBaseUri: { type: Boolean },
+
+      _noTryItValue: { type: Boolean },
     };
   }
 
@@ -625,12 +342,51 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     sessionStorage.setItem('auth.methods.latest.client_secret', value);
   }
 
+  /**
+   * This can be overriten by child classes to decide whether to render the server
+   * selector or not.
+   * @return {boolean} The final value of `noServerSelector`.
+   */
+  get _noServerSelector() {
+    return !!this.noServerSelector;
+  }
+
+  /**
+   * @return {Boolean} True when the request panel is being rendered
+   */
+  get _rendersRequestPanel() {
+    return this.page === 'request';
+  }
+
   constructor() {
     super();
     this._tryitHandler = this._tryitHandler.bind(this);
+    this._handleServerChange = this._handleServerChange.bind(this);
 
     this.page = 'docs';
     this.drawerAlign = 'left';
+
+    // the below is done for types only
+    this.aware = null;
+    this.compatibility = false;
+    this.outlined = false;
+    this.narrow = false;
+    this.noUrlEditor = false;
+    this.scrollTarget = undefined;
+    this.allowCustom = false;
+    this.allowDisableParams = false;
+    this.allowHideOptional = false;
+    this.redirectUri = undefined;
+    this.eventsTarget = undefined;
+    this.baseUri = undefined;
+    this.noDocs = false;
+    this.noServerSelector = false;
+    this.allowCustomBaseUri = false;
+    this.inlineMethods = false;
+    this.noAttribution = false;
+    this.rearrangeEndpoints = false;
+    this.noTryIt = false;
+    this._noTryItValue = false;
   }
 
   connectedCallback() {
@@ -639,8 +395,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       super.connectedCallback();
     }
     this.addEventListener('tryit-requested', this._tryitHandler);
+    this.addEventListener('apiserverchanged', this._handleServerChange);
     this._notifyApicExtension();
+    // @ts-ignore
     if (window.ShadyCSS) {
+      // @ts-ignore
       window.ShadyCSS.styleElement(this);
     }
   }
@@ -651,6 +410,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       super.disconnectedCallback();
     }
     this.removeEventListener('tryit-requested', this._tryitHandler);
+    this.removeEventListener('apiserverchanged', this._handleServerChange);
   }
 
   firstUpdated() {
@@ -708,7 +468,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     }
     const xhr = new XMLHttpRequest();
     /* istanbul ignore next */
-    xhr.addEventListener('error', (error) => this._apiLoadErrorHandler(error));
+    xhr.addEventListener('error', () => this._apiLoadErrorHandler());
     xhr.addEventListener('loadend', () => this._apiLoadEndHandler(xhr));
     xhr.open('GET', url, true);
     xhr.send();
@@ -730,12 +490,14 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
   /**
    * Called by `_modelLocationChanged` when error occurred when getting API data.
-   * @param {Error} error
+   * @param {Error|Object=} error
    */
-  _apiLoadErrorHandler(error) {
+  _apiLoadErrorHandler(error={}) {
     const message = `Unable to load API model data. ${error.message || ''}`;
     const toast = this.shadowRoot.querySelector('#apiLoadErrorToast');
+    // @ts-ignore
     toast.text = message;
+    // @ts-ignore
     toast.opened = true;
     this.dispatchEvent(new CustomEvent('model-load-error'));
   }
@@ -811,7 +573,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
    * has close button.
    * @param {String} selected Curerently selected AMF shape (@id).
    * @param {Object} webApi Computed AMF WebAPI model.
-   * @return {String|Undefined} Name of current method (verb) as RAML's
+   * @return {String|undefined} Name of current method (verb) as RAML's
    * `displayName` property or name of the HTTP method.
    */
   _computeMethodName(selected, webApi) {
@@ -827,22 +589,35 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     if (!method) {
       return;
     }
-    let name = this._getValue(method, this.ns.aml.vocabularies.core.name);
+    let name = /** @type string */ (this._getValue(method, this.ns.aml.vocabularies.core.name));
     if (!name) {
-      name = this._getValue(method, this.ns.aml.vocabularies.apiContract.method);
+      name = /** @type string */ (this._getValue(method, this.ns.aml.vocabularies.apiContract.method));
     }
     return name;
   }
 
+  /**
+   * Handler for the `api-changed` event on the RAML aware element.
+   * Sets `amf` property to the detail value.
+   * @param {CustomEvent} e
+   */
   _apiChanged(e) {
     this.amf = e.detail.value;
   }
 
+  /**
+   * A handler for the `api-console-extension-installed` event dispatched by the
+   * component that is responsible for communication with the browser extension
+   * built for API Console to deal with the CORS issues.
+   */
   _hasExtensionHandler() {
     this._hasApicCorsExtension = true;
     this._extensionBannerActive = false;
   }
 
+  /**
+   * Handler for the close drawer button click.
+   */
   _closeDrawer() {
     this.navigationOpened = false;
     this.dispatchEvent(new CustomEvent('navigation-close'));
@@ -858,5 +633,251 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     } else if (value && isChrome && !this._hasApicCorsExtension) {
       this._extensionBannerActive = true;
     }
+  }
+
+  /**
+   * Handler for the `apiserverchanged` event dispatched from the components.
+   * @param {CustomEvent} e
+   */
+  _handleServerChange(e) {
+    const { value, type } = e.detail;
+    this.serverValue = value;
+    this.serverType = type;
+  }
+
+  render() {
+    const { aware } = this;
+    return html`
+    ${aware ? html`<raml-aware .scope="${aware}" @api-changed="${this._apiChanged}"></raml-aware>` : ''}
+    ${this._mainContentTemplate()}
+    ${this._helpersTemplate()}
+    `;
+  }
+
+  /**
+   * @return {TemplateResult|''} A template for current page
+   */
+  _getPageTemplate() {
+    switch (this.page) {
+      case 'docs': return this._apiDocumentationTemplate();
+      case 'request': return this._getRequestTemplate();
+      default: return '';
+    }
+  }
+
+  /**
+   * @return {TemplateResult|''} A template the extension banner, if allowed.
+   */
+  _bannerMessage() {
+    if (!this.allowExtensionBanner) {
+      return '';
+    }
+    return html`
+    <div class="extension-banner" ?active="${this._extensionBannerActive}">
+      <p>
+        For better experience install API console extension.
+        Get it from <a target="_blank"
+          class="store-link"
+          href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa"
+        >
+          Chrome Web Store
+        </a>
+      </p>
+      <anypoint-icon-button
+        aria-label="Activate to close the message"
+        @click="${this.dismissExtensionBanner}"
+      >
+        <span class="icon">${close}</span>
+      </anypoint-icon-button>
+    </div>`;
+  }
+
+  /**
+   * @return {TemplateResult} The template for the request panel section.
+   */
+  _getRequestTemplate() {
+    const {
+      methodName,
+      compatibility
+    } = this;
+    return html`
+    <div class="method-title-area">
+      <h1 class="method-title">${methodName}</h1>
+      <div class="method-close-action">
+        <anypoint-button
+          class="action-button"
+          ?compatibility="${compatibility}"
+          @click="${this.closeTryIt}"
+          emphasis="medium">Back to docs</anypoint-button>
+      </div>
+    </div>
+    ${this._bannerMessage()}
+    ${this._requestPanelTemplate()}
+    `;
+  }
+
+  /**
+   * @return {TemplateResult} The template for the request panel element.
+   */
+  _requestPanelTemplate() {
+    const {
+      compatibility,
+      outlined,
+      amf,
+      selectedShape,
+      narrow,
+      noUrlEditor,
+      scrollTarget,
+      allowCustom,
+      allowDisableParams,
+      allowHideOptional,
+      redirectUri,
+      eventsTarget,
+      baseUri,
+      noDocs,
+      serverValue,
+      serverType,
+      noServerSelector,
+      allowCustomBaseUri,
+    } = this;
+    return html`<api-request-panel
+      .amf="${amf}"
+      .selected="${selectedShape}"
+      ?narrow="${narrow}"
+      ?outlined="${outlined}"
+      ?compatibility="${compatibility}"
+      ?noServerSelector="${noServerSelector}"
+      ?allowCustomBaseUri="${allowCustomBaseUri}"
+      .noUrlEditor="${noUrlEditor}"
+      .redirectUri="${redirectUri}"
+      .scrollTarget="${scrollTarget}"
+      .allowCustom="${allowCustom}"
+      .allowDisableParams="${allowDisableParams}"
+      .allowHideOptional="${allowHideOptional}"
+      .baseUri="${baseUri}"
+      .noDocs="${noDocs}"
+      .serverValue="${serverValue}"
+      .serverType="${serverType}"
+      .eventsTarget="${eventsTarget}"
+      >
+        <slot name="custom-base-uri" slot="custom-base-uri"></slot>
+      </api-request-panel>`;
+  }
+
+  /**
+   * @return {TemplateResult} The template for the documentation element
+   */
+  _apiDocumentationTemplate() {
+    const {
+      inlineMethods,
+      compatibility,
+      outlined,
+      _noTryItValue,
+      amf,
+      selectedShape,
+      selectedShapeType,
+      narrow,
+      scrollTarget,
+      redirectUri,
+      baseUri,
+      serverValue,
+      serverType,
+      _noServerSelector,
+      allowCustomBaseUri,
+    } = this;
+
+    return html`<api-documentation
+      .amf="${amf}"
+      .selected="${selectedShape}"
+      .selectedType="${selectedShapeType}"
+      ?narrow="${narrow}"
+      ?compatibility="${compatibility}"
+      ?outlined="${outlined}"
+      ?noServerSelector="${_noServerSelector}"
+      ?allowCustomBaseUri="${allowCustomBaseUri}"
+      .inlineMethods="${inlineMethods}"
+      .noTryIt="${_noTryItValue}"
+      .baseUri="${baseUri}"
+      .redirectUri="${redirectUri}"
+      .scrollTarget="${scrollTarget}"
+      .serverValue="${serverValue}"
+      .serverType="${serverType}"
+      @api-navigation-selection-changed="${this._apiNavigationOcurred}"
+    >
+      ${this._documentationBaseSlot()}
+    </api-documentation>`;
+  }
+
+  /**
+   * Renders the `<slot>` element in the `<api-documentation>` only when
+   * ther request panel is not rendered. When it is rendered then it
+   * is the target for slots.
+   * @return {TemplateResult|string} Template for a slot to be used in the api documentation
+   */
+  _documentationBaseSlot() {
+    if (this._rendersRequestPanel) {
+      return '';
+    }
+    return html`<slot name="custom-base-uri" slot="custom-base-uri"></slot>`;
+  }
+
+  /**
+   * @return {TemplateResult} The template for api navigation element
+   */
+  _navigationTemplate() {
+    const { amf, noAttribution, rearrangeEndpoints } = this;
+    return html`<div class="drawer-content-wrapper">
+      <api-navigation
+        .amf="${amf}"
+        summary
+        endpointsopened
+        ?rearrangeendpoints="${rearrangeEndpoints}"
+        @api-navigation-selection-changed="${this._apiNavigationOcurred}"></api-navigation>
+      ${noAttribution ? '' : attributionTpl}
+    </div>`;
+  }
+
+  /**
+   * @return {TemplateResult} The template for the navigation drawer
+   */
+  _navigationDrawerTemplate() {
+    return html`
+    ${this.navigationOpened ? html`<div class="nav-scrim" @click="${this._closeDrawer}"></div>` : ''}
+    <div class="nav-drawer">
+    ${this._navigationTemplate()}
+    </div>
+    `;
+  }
+
+  /**
+   * @return {TemplateResult} The template for the main content
+   */
+  _mainContentTemplate() {
+    return html`
+    <div class="main-content">
+      <slot name="content"></slot>
+      ${this._getPageTemplate()}
+    </div>
+    ${this._navigationDrawerTemplate()}`;
+  }
+  /**
+   * The components below are optional dependencies. They will not be used until
+   * sources of the components are included into AC bundle.
+   * This would help build the console and only add a dependency at the build time
+   * without statically include the dependency.
+   *
+   * TBD:
+   * xhr-simple-request component placed here will prohibit application from
+   * using api-request custom event. If the application uses both this element
+   * (by adding it's import file to the build / page) this element would be the
+   * first one to handle the event and run the request. Any other listener
+   * attached to the console, body or window is called after this one.
+   *
+   * @return {TemplateResult}
+   */
+  _helpersTemplate() {
+    return html`<paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
+    <api-console-ext-comm @api-console-extension-installed="${this._hasExtensionHandler}"></api-console-ext-comm>
+    `;
   }
 }
