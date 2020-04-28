@@ -1,5 +1,5 @@
 import { fixture, assert, aTimeout, html, nextFrame } from '@open-wc/testing';
-import * as sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon';
 import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
 import { isChrome } from '../src/ApiConsole.js';
 import '../api-console.js';
@@ -29,11 +29,6 @@ describe('<api-console>', function () {
     return (await fixture(`<api-console allowExtensionBanner page="request"></api-console>`));
   }
 
-  async function customBaseUriSlotFixture() {
-    return (await fixture(`<api-console page="request"><anypoint-item slot="custom-base-uri"
-                            value="http://customServer.com">http://customServer.com</anypoint-item></api-console>`));
-  }
-
   describe('RAML aware', () => {
     it('Adds raml-aware to the DOM if aware is set', async () => {
       const element = await awareFixture();
@@ -47,7 +42,7 @@ describe('<api-console>', function () {
       aware.scope = 'test';
       aware.api = [{}];
       assert.deepEqual(element.amf, [{}]);
-      await aTimeout();
+      await aTimeout(0);
     });
 
     it('raml-aware is not in the DOM by default', async () => {
@@ -254,23 +249,24 @@ describe('<api-console>', function () {
 
     it('renders documentation page', async () => {
       element.page = 'docs';
-      await aTimeout();
+      await aTimeout(0);
       const docs = element.shadowRoot.querySelector('api-documentation');
       assert.ok(docs);
     });
 
     it('renders request panel', async () => {
       element.page = 'request';
-      await aTimeout();
+      await aTimeout(0);
       const docs = element.shadowRoot.querySelector('api-request-panel');
       assert.ok(docs);
     });
 
     it('renders no content when invalid selection', async () => {
       element.page = 'something';
-      await aTimeout();
+      await aTimeout(0);
       const main = element.shadowRoot.querySelector('.main-content');
-      assert.lengthOf(main.children, 0);
+      const filtered = Array.from(main.children).filter((node) => node.nodeName !== 'SLOT');
+      assert.lengthOf(filtered, 0);
     });
   });
 
@@ -293,7 +289,7 @@ describe('<api-console>', function () {
 
     it('renders scrim when navigation is opened', async () => {
       element.navigationOpened = true;
-      await aTimeout();
+      await aTimeout(0);
       const scrim = element.shadowRoot.querySelector('.nav-scrim');
       assert.ok(scrim);
     });
@@ -308,7 +304,7 @@ describe('<api-console>', function () {
 
     it('closes the navigation when scrim is clicked', async () => {
       element.navigationOpened = true;
-      await aTimeout();
+      await aTimeout(0);
       const scrim = element.shadowRoot.querySelector('.nav-scrim');
       MockInteractions.tap(scrim);
       assert.isFalse(element.navigationOpened);
@@ -316,7 +312,7 @@ describe('<api-console>', function () {
 
     it('dispatches wbwnt when closing navigation', async () => {
       element.navigationOpened = true;
-      await aTimeout();
+      await aTimeout(0);
       const spy = sinon.spy();
       element.addEventListener('navigation-close', spy);
       const scrim = element.shadowRoot.querySelector('.nav-scrim');
@@ -401,24 +397,24 @@ describe('<api-console>', function () {
     });
 
     (isChrome ? it : it.skip)('sets "_extensionBannerActive" after a timeout', async () => {
-      await aTimeout();
+      await aTimeout(undefined);
       assert.isTrue(element._extensionBannerActive);
     });
 
     (isChrome ? it.skip : it)('does not sets "_extensionBannerActive" in unsupported browser', async () => {
-      await aTimeout();
+      await aTimeout(0);
       assert.isUndefined(element._extensionBannerActive);
     });
 
     (isChrome ? it : it.skip)('renders the banner', async () => {
-      await aTimeout();
+      await aTimeout(0);
       const node = element.shadowRoot.querySelector('.extension-banner');
       assert.ok(node, 'banner container is rendered');
       assert.isTrue(node.hasAttribute('active'), 'banner is active');
     });
 
     (isChrome ? it : it.skip)('hides the banner when api-console-extension-installed', async () => {
-      await aTimeout();
+      await aTimeout(0);
       const node = element.shadowRoot.querySelector('api-console-ext-comm');
       const e = new CustomEvent('api-console-extension-installed');
       node.dispatchEvent(e);
@@ -428,63 +424,93 @@ describe('<api-console>', function () {
     });
 
     (isChrome ? it : it.skip)('hides the banner when close icon click', async () => {
-      await aTimeout();
+      await aTimeout(0);
       const node = element.shadowRoot.querySelector('.extension-banner anypoint-icon-button');
       MockInteractions.tap(node);
-      await aTimeout();
+      await aTimeout(0);
       const banner = element.shadowRoot.querySelector('.extension-banner');
       assert.ok(banner, 'banner container is rendered');
       assert.isFalse(banner.hasAttribute('active'), 'banner is not active');
     });
   });
 
-  describe('Custom baseUri slot', () => {
-    describe('with requestFixture', () => {
-      let element;
-      beforeEach(async () => {
-        element = await requestFixture();
-      });
-
-      it('should render empty extra servers slot', () => {
-        assert.exists(element.shadowRoot.querySelector('slot[name="custom-base-uri"]'));
-        assert.lengthOf(element.shadowRoot.querySelector('slot[name="custom-base-uri"]').assignedNodes(), 0)
-      });
-    });
-
-    describe('with customBaseUriSlot fixture', () => {
-      let element;
-      beforeEach(async () => {
-        element = await customBaseUriSlotFixture();
-      });
-
-      it('should render extra servers slot', () => {
-        assert.exists(element.shadowRoot.querySelector('slot[name="custom-base-uri"]'));
-      });
-
-      it('should have assigned node to slot', () => {
-        assert.lengthOf(element.shadowRoot.querySelector('slot[name="custom-base-uri"]').assignedNodes(), 1);
-      });
-    });
-  });
-
-  describe('Server selection change', () => {
+  describe('#_rendersRequestPanel', () => {
     let element;
-
     beforeEach(async () => {
       element = await basicFixture();
     });
 
-    it('Should update selectedServerValue and selectedServerType', async () => {
-      const e = new CustomEvent('api-server-changed', {
-        detail: {
-          selectedValue: 'https://example.org',
-          selectedType: 'custom',
-        }
+    it('returns true when page is request', () => {
+      element.page = 'request';
+      assert.isTrue(element._rendersRequestPanel);
+    });
+
+    it('returns false when page is not request', () => {
+      element.page = 'docs';
+      assert.isFalse(element._rendersRequestPanel);
+    });
+  });
+
+  describe('#_noServerSelector', () => {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('returns value of noServerSelector', () => {
+      element.noServerSelector = true;
+      assert.isTrue(element.noServerSelector);
+    });
+
+    it('returns default value', () => {
+      assert.isFalse(element.noServerSelector);
+    });
+  });
+
+  describe('apiserverchanged event', () => {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    function dispatchEvent(element, value, type) {
+      // technically only the docs and request panels sends this event but since
+      // the component listens on itself for this event then it doesn't matter
+      // which component did send the event.
+      const node = element.shadowRoot.querySelectorAll('*')[0];
+      const e = new CustomEvent('apiserverchanged', {
+        detail: { value, type },
+        bubbles: true,
+        composed: true,
       });
-      element.dispatchEvent(e);
+      node.dispatchEvent(e);
+    }
+
+    it('sets serverValue property', () => {
+      dispatchEvent(element, 'test', 'server');
+      assert.equal(element.serverValue, 'test');
+    });
+
+    it('sets serverType property', () => {
+      dispatchEvent(element, 'test', 'server');
+      assert.equal(element.serverType, 'server');
+    });
+
+    it('propagates the selection back to the documentation element', async () => {
+      dispatchEvent(element, 'test', 'server');
       await nextFrame();
-      assert.equal(element.selectedServerValue, 'https://example.org');
-      assert.equal(element.selectedServerType, 'custom');
+      const node = element.shadowRoot.querySelector('api-documentation');
+      assert.equal(node.serverValue, 'test', 'serverValue is set');
+      assert.equal(node.serverType, 'server', 'serverType is set');
+    });
+
+    it('propagates the selection back to the request panel', async () => {
+      dispatchEvent(element, 'test', 'server');
+      element.page = 'request';
+      await nextFrame();
+      const node = element.shadowRoot.querySelector('api-request-panel');
+      assert.equal(node.serverValue, 'test', 'serverValue is set');
+      assert.equal(node.serverType, 'server', 'serverType is set');
     });
   });
 });

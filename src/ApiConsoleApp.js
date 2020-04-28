@@ -1,5 +1,5 @@
 import { ApiConsole } from './ApiConsole.js';
-import { html, css } from 'lit-element';
+import { html } from 'lit-element';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -11,86 +11,19 @@ import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { menu } from '@advanced-rest-client/arc-icons/ArcIcons.js';
+import styles from './ApiConsoleAppStyles.js';
+
+/** @typedef {import('lit-html').TemplateResult} TemplateResult */
+/** @typedef {import('lit-element').CSSResult} CSSResult */
 
 export class ApiConsoleApp extends ApiConsole {
+  /**
+   * @type {CSSResult[]}
+   */
   static get styles() {
     return [
-      ApiConsole.styles,
-      css`
-      :host {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        overflow: scroll;
-      }
-
-      app-drawer-layout:not([narrow]) [drawer-toggle] {
-        display: none;
-      }
-
-      app-toolbar {
-        background-color: var(--api-console-toolbar-background-color, #283640); /* #2196f3 */
-        color: var(--api-console-toolbar-color, #fff);
-      }
-
-      .nav-content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .main-content {
-        margin-left: var(--api-console-main-content-margin-left, 24px);
-        margin-right: var(--api-console-main-content-margin-right, 24px);
-        margin-top: var(--api-console-main-content-margin-top, 0px);
-        position: relative;
-        /* Overrides values from the element */
-        overflow: initial;
-        height: initial;
-      }
-
-      .drawer-content-wrapper {
-        max-height: calc(100% - 64px);
-        display: flex;
-        flex-direction: column;
-        background-color: var(--api-console-menu-background-color, inherit);
-        height: 100%;
-      }
-
-      api-navigation {
-        flex: 1 1 auto;
-      }
-
-      api-request-panel,
-      api-documentation {
-        max-width: var(--api-console-main-max-width, 1600px);
-      }
-
-      .api-docs {
-        display: flex;
-        flex-direction: row;
-        overflow: auto;
-        margin-top: 12px;
-      }
-
-      .api-docs api-documentation {
-        flex: 1;
-      }
-
-      .api-docs .inline-request {
-        max-width: 600px;
-        margin-left: 12px;
-        background-color: var(--apic-tryint-wide-background-color, transparent);
-        border-left-width: 1px;
-        border-left-color: var(--apic-tryint-wide-border-color, #e5e5e5);
-        border-left-style: solid;
-        padding: 0 12px;
-        box-sizing: border-box;
-        flex: 1;
-      }
-      `
+      /** @type CSSResult */ (ApiConsole.styles),
+      styles,
     ];
   }
 
@@ -156,9 +89,7 @@ export class ApiConsoleApp extends ApiConsole {
        */
       proxyEncodeUrl: { type: Boolean },
 
-      _renderInlineTyit: { type: Boolean },
-
-      _noTryItValue: { type: Boolean },
+      _renderInlineTryit: { type: Boolean },
     };
   }
 
@@ -173,7 +104,6 @@ export class ApiConsoleApp extends ApiConsole {
       return;
     }
     this._wideLayout = value;
-    this._noDocumentationServerSelector = value;
     this._updateRenderInlineTyit();
   }
 
@@ -207,15 +137,42 @@ export class ApiConsoleApp extends ApiConsole {
     this.requestUpdate('selectedShapeType', old);
   }
 
+  /**
+   * Overrides api console's `_noServerSelector`.
+   * @return {boolean} True when `noServerSelector` or when wide layout is set.
+   */
+  get _noServerSelector() {
+    return this.noServerSelector || this.wideLayout;
+  }
+
+  /**
+   * @return {Boolean} True when the request panel is being rendered
+   */
+  get _rendersRequestPanel() {
+    return this.page === 'request' || this.wideLayout;
+  }
+
   constructor() {
     super();
     this.responsiveWidth = '900px';
     this.allowHideOptional = true;
+    this.manualNavigation = false;
+    this.layoutNarrow = false;
+    this.appendHeaders = undefined;
+    this.proxy = undefined;
+    this.proxyEncodeUrl = undefined;
+  }
+
+  connectedCallback() {
+    if (super.connectedCallback) {
+      super.connectedCallback();
+    }
+    window.addEventListener('popstate', this._onRoute.bind(this));
   }
 
   _updateRenderInlineTyit() {
     const value = this._computeRenderInlineTryIt(this.wideLayout, this._isMethod, this.inlineMethods);
-    this._renderInlineTyit = value;
+    this._renderInlineTryit = value;
     this._noTryItValue = this._computeNoTryItValue(this.noTryIt, value);
   }
 
@@ -231,7 +188,7 @@ export class ApiConsoleApp extends ApiConsole {
   }
 
   /**
-   * Computes value for `_renderInlineTyit` property.
+   * Computes value for `_renderInlineTryit` property.
    * @param {Boolean} wideLayout
    * @param {Boolean} isMethod
    * @param {Boolean} inlineMethods
@@ -252,6 +209,109 @@ export class ApiConsoleApp extends ApiConsole {
     return noTryIt;
   }
 
+  /**
+   * Called when route change has been detected.
+   * @param {History|PopStateEvent} e
+   */
+  _onRoute(e) {
+    const { state } = e;
+    if (!state) {
+      return;
+    }
+    this.selectedShape = state.selected;
+    this.selectedShapeType = state.type;
+  }
+
+  /**
+   * Overrides ApiConsole's `resetSelection()` function to manage history state
+   */
+  resetSelection() {
+    super.resetSelection();
+    history.pushState({
+      page: 'docs',
+      type: 'summary',
+      selected: 'summary'
+    }, '', '#');
+  }
+
+  /**
+   * Handler for the API navigation event. Manages history API state.
+   * Overrides ApiConsole function.
+   *
+   * @param {CustomEvent} e
+   */
+  _apiNavigationOcurred(e) {
+    super._apiNavigationOcurred(e);
+    const { selected, type } = e.detail;
+    const url = `${window.location.pathname}#docs/${type}/${selected}`;
+    history.pushState({
+      page: 'docs',
+      type,
+      selected
+    }, '', url);
+  }
+
+  /**
+   * Called when AMF model has changed. Sets API title and updates routes.
+   * @return {Promise}
+   */
+  async _processModelChange() {
+    super._processModelChange();
+    this.apiTitle = this._computeApiTitle(this.webApi);
+    await this.updateComplete;
+    if (window.history.state) {
+      this._onRoute(window.history);
+    } else {
+      this._selectionFromHash(location.hash);
+    }
+  }
+
+  /**
+   * Sets route params from hash value of an URL.
+   * @param {String} hash The hash value to process
+   */
+  _selectionFromHash(hash) {
+    if (!hash) {
+      return;
+    }
+    const matches = hash.substr(1).match(/(docs|request)\/([^/]*)\/(.*)/);
+    if (!matches) {
+      return;
+    }
+    this.page = matches[1];
+    this.selectedShape = matches[3];
+    this.selectedShapeType = matches[2];
+  }
+
+  /**
+   * Computes value of `apiTitle` property.
+   *
+   * @param {Object} shape Shape of AMF model.
+   * @return {String|undefined} Description if defined.
+   */
+  _computeApiTitle(shape) {
+    return /** @type string */ (this._getValue(shape, this.ns.aml.vocabularies.core.name));
+  }
+
+  /**
+   * Sets `narrow` from detected media query change.
+   * @param {CustomEvent} e
+   */
+  _narrowHandler(e) {
+    this.narrow = e.detail.value;
+  }
+
+  /**
+   * Sets `wideLayout` from detected media query change.
+   * @param {CustomEvent} e
+   */
+  _wideLayoutHandler(e) {
+    this.wideLayout = e.detail.value;
+  }
+
+  /**
+   * @return {TemplateResult} Template for media queries elements
+   */
   _mediaQueriesTemplate() {
     return html`
     <iron-media-query
@@ -262,12 +322,18 @@ export class ApiConsoleApp extends ApiConsole {
       @query-matches-changed="${this._wideLayoutHandler}"></iron-media-query>`;
   }
 
+  /**
+   * @return {TemplateResult} Template for the side drawer toolbar
+   */
   _drawerToolbarTemplate() {
     return html`<app-toolbar>
       <div>API console</div>
     </app-toolbar>`;
   }
 
+  /**
+   * @return {TemplateResult} Template for the main content toolbar
+   */
   _contentToolbarTemplate() {
     const {
       manualNavigation,
@@ -291,16 +357,22 @@ export class ApiConsoleApp extends ApiConsole {
     </app-header>`;
   }
 
+  /**
+   * @return {TemplateResult} Template for the api documentation section
+   */
   _apiDocumentationTemplate() {
     return html`<section class="api-docs">
     ${super._apiDocumentationTemplate()}
-    ${this._renderInlineTyit ? html`<div class="inline-request">
+    ${this._renderInlineTryit ? html`<div class="inline-request">
       ${this._bannerMessage()}
       ${this._requestPanelTemplate()}
     </div>` : ''}
     </section>`;
   }
 
+  /**
+   * @return {TemplateResult} Template for the main page content
+   */
   _mainContentTemplate() {
     const {
       responsiveWidth,
@@ -345,83 +417,5 @@ export class ApiConsoleApp extends ApiConsole {
       .proxyEncodeUrl="${this.proxyEncodeUrl}"></xhr-simple-request>
     <oauth1-authorization></oauth1-authorization>
     <oauth2-authorization></oauth2-authorization>`;
-  }
-
-  connectedCallback() {
-    if (super.connectedCallback) {
-      super.connectedCallback();
-    }
-    window.addEventListener('popstate', this._onRoute.bind(this));
-  }
-
-  _onRoute(e) {
-    const { state } = e;
-    if (!state) {
-      return;
-    }
-    this.selectedShape = state.selected;
-    this.selectedShapeType = state.type;
-  }
-
-  resetSelection() {
-    super.resetSelection();
-    history.pushState({
-      page: 'docs',
-      type: 'summary',
-      selected: 'summary'
-    }, '', '#');
-  }
-
-  _apiNavigationOcurred(e) {
-    super._apiNavigationOcurred(e);
-    const { selected, type } = e.detail;
-    const url = `${window.location.pathname}#docs/${type}/${selected}`;
-    history.pushState({
-      page: 'docs',
-      type,
-      selected
-    }, '', url);
-  }
-
-  async _processModelChange(amf) {
-    super._processModelChange(amf);
-    this.apiTitle = this._computeApiTitle(this.webApi);
-    await this.updateComplete;
-    if (window.history.state) {
-      this._onRoute(window.history);
-    } else {
-      this._selectionFromHash(location.hash);
-    }
-  }
-
-  _selectionFromHash(hash) {
-    if (!hash) {
-      return;
-    }
-    const matches = hash.substr(1).match(/(docs|request)\/([^/]*)\/(.*)/);
-    if (!matches) {
-      return;
-    }
-    this.page = matches[1];
-    this.selectedShape = matches[3];
-    this.selectedShapeType = matches[2];
-  }
-
-  /**
-   * Computes value of `apiTitle` property.
-   *
-   * @param {Object} shape Shape of AMF model.
-   * @return {String|undefined} Description if defined.
-   */
-  _computeApiTitle(shape) {
-    return this._getValue(shape, this.ns.aml.vocabularies.core.name);
-  }
-
-  _narrowHandler(e) {
-    this.narrow = e.detail.value;
-  }
-
-  _wideLayoutHandler(e) {
-    this.wideLayout = e.detail.value;
   }
 }

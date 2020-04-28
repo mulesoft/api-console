@@ -31,6 +31,7 @@ class ApicApplication extends DemoBase {
       oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com"
       rearrangeEndpoints
     >
+      <!-- Toolbar items -->
       <anypoint-icon-button
         slot="toolbar"
         aria-label="Activate to open API selection menu"
@@ -39,6 +40,12 @@ class ApicApplication extends DemoBase {
       >
         <span class="icon">${moreVert}</span>
       </anypoint-icon-button>
+
+      <!-- Server selector items -->
+      <div class="other-section" slot="custom-base-uri">Other options</div>
+      <anypoint-item slot="custom-base-uri"
+        value="http://mocking.com"
+      >Mocking service</anypoint-item>
     </api-console-app>
     ${this.apiSelectorTemplate()}
     `;
