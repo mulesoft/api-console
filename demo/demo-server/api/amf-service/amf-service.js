@@ -189,7 +189,7 @@ export class AmfService {
   }
   /**
    * Parses API data using AMF parser.
-   * @param {?String} mainFile Main API file to use.
+   * @param {String=} mainFile Main API file to use.
    * @return {Promise<Object>} A promise resolved to AMF model.
    */
   async parse(mainFile) {

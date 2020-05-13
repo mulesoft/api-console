@@ -80,12 +80,12 @@
     "rollup-plugin-cpy": "^2.0.1",
     "rollup-plugin-postcss": "^3.1.1",
     "sinon": "^9.0.1",
-    "tmp": "0.1.0",
+    "tmp": "^0.2.1",
     "typescript": "^3.9.2",
     "typescript-lit-html-plugin": "^0.9.0",
     "uglify-js": "^3.9.3",
     "unzipper": "^0.10.10",
-    "uuid": "^7.0.2"
+    "uuid": "^8.0.0"
   },
   "scripts": {
     "update-types": "NODE_OPTIONS=--max_old_space_size=2048 gen-typescript-declarations --deleteExisting --outDir .",

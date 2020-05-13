@@ -1,6 +1,6 @@
 import { AmfService } from './amf-service/amf-service.js';
 import NodeCache from 'node-cache';
-import uuidv4 from 'uuid/v4.js';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ApiParser {
   async parseFile(request) {
@@ -32,7 +32,7 @@ export class ApiParser {
   /**
    * Parses API data to AMF model.
    * @param {Buffer} buffer Buffer created from API file.
-   * @param {Object} opts Processing options:
+   * @param {Object=} opts Processing options:
    * - zip {Boolean} If true the buffer represents zipped file.
    * @return {Promise<Object>} Promise resolved to the AMF json-ld model
    */
