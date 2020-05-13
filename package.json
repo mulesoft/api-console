@@ -31,14 +31,14 @@
     "email": "arc@mulesoft.com"
   },
   "dependencies": {
-    "@advanced-rest-client/arc-icons": "^3.0.5",
+    "@advanced-rest-client/arc-icons": "^3.1.0",
     "@advanced-rest-client/oauth-authorization": "^4.0.2",
     "@advanced-rest-client/xhr-simple-request": "^3.0.0",
     "@anypoint-web-components/anypoint-button": "^1.0.14",
-    "@api-components/amf-helper-mixin": "^4.1.1",
+    "@api-components/amf-helper-mixin": "^4.1.2",
     "@api-components/api-console-ext-comm": "^3.0.0",
     "@api-components/api-documentation": "^5.0.0",
-    "@api-components/api-navigation": "^4.1.0",
+    "@api-components/api-navigation": "^4.1.1",
     "@api-components/api-request-panel": "^5.0.1",
     "@api-components/raml-aware": "^3.0.0",
     "@polymer/app-layout": "^3.1.0",
