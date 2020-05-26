@@ -497,11 +497,11 @@ describe('<api-console>', function () {
     });
 
     it('propagates the selection back to the documentation element', async () => {
-      dispatchEvent(element, 'test', 'server');
+      dispatchEvent(element, 'test', 'custom');
       await nextFrame();
       const node = element.shadowRoot.querySelector('api-documentation');
       assert.equal(node.serverValue, 'test', 'serverValue is set');
-      assert.equal(node.serverType, 'server', 'serverType is set');
+      assert.equal(node.serverType, 'custom', 'serverType is set');
     });
 
     it('propagates the selection back to the request panel', async () => {
