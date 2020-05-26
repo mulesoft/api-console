@@ -18,7 +18,8 @@ class ApicApplication extends DemoBase {
       ['google-drive-api', 'Google Drive API'],
       ['httpbin', 'HTTPbin API'],
       ['data-type-fragment', 'RAML data type fragment'],
-      ['demo-api', 'Demo API']
+      ['demo-api', 'Demo API'],
+      ['multi-server', 'Multi Server API'],
     ];
 
     this.toggleConsoleMenu = this.toggleConsoleMenu.bind(this);

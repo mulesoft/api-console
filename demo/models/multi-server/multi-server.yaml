@@ -29,25 +29,21 @@ servers:
   - url: http://beta.api.openweathermap.org/data/2.5/
     description: Beta server
 
-# Relative URL to external documentation
-externalDocs:
-  url: /docs
-  description: Find more info here
-
-# Relative URLs to OAuth2 authorization and token URLs
-components:
-  securitySchemes:
-    oauth2:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: /oauth/dialog
-          tokenUrl: /oauth/token
-          scopes: {}
-
 paths:
   /default:
     description: A default path to the API
+    get:
+      summary: "A get method"
+      responses:
+        200:
+          description: Successful response
+  /duplicated:
+    description: Has some of the default servers
+    servers:
+      - url: https://api.openweathermap.org/data/2.5/
+        description: Production server
+      - url: http://beta.api.openweathermap.org/data/2.5/
+        description: Beta server
     get:
       summary: "A get method"
       responses:
