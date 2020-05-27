@@ -13,10 +13,10 @@ describe('<api-console>', function() {
     const element = (await fixture(html`
       <api-console
         .amf="${amf}"
-        .selectedShape="${selected}"
-        .selectedShapeType="${type}"
       ></api-console>
     `));
+    element.selectedShape = selected;
+    element.selectedShapeType = type;
     await aTimeout(0);
     return element;
   }

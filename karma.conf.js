@@ -89,7 +89,7 @@ module.exports = (config) => {
 
       client: {
         mocha: {
-          timeout: 25000
+          timeout: 20000
         }
       },
 
