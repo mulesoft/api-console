@@ -473,6 +473,10 @@ describe('<api-console>', function () {
       element = await basicFixture();
     });
 
+    afterEach(() => {
+      console.log('test end.');
+    })
+
     function dispatchEvent(element, value, type, debug) {
       // technically only the docs and request panels sends this event but since
       // the component listens on itself for this event then it doesn't matter
@@ -484,7 +488,7 @@ describe('<api-console>', function () {
         bubbles: true,
         composed: true,
       });
-      debug && console.log('event', e);
+      debug && console.log('event detail', e.detail);
       node.dispatchEvent(e);
     }
 
@@ -498,7 +502,7 @@ describe('<api-console>', function () {
       assert.equal(element.serverType, 'custom');
     });
 
-    it('propagates the selection back to the documentation element', async () => {
+    it.only('propagates the selection back to the documentation element', async () => {
       console.log('starting test that fails.');
       dispatchEvent(element, 'test', 'custom', true);
       await nextFrame();

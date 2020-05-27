@@ -650,6 +650,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
    */
   _handleServerChange(e) {
     const { value, type } = e.detail;
+	console.log('_handleServerChange', { value, type })
     this.serverType = type;
     this.serverValue = value;
   }
@@ -794,6 +795,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       _noServerSelector,
       allowCustomBaseUri,
     } = this;
+
+	console.log('_apiDocumentationTemplate', { serverValue, serverType })
 
     return html`<api-documentation
       .amf="${amf}"
