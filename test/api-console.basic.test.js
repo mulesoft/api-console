@@ -500,8 +500,8 @@ describe('<api-console>', function () {
       dispatchEvent(element, 'test', 'custom');
       await nextFrame();
       const node = element.shadowRoot.querySelector('api-documentation');
-      assert.equal(element.serverValue, 'test');
-      assert.equal(element.serverType, 'custom');
+      assert.equal(element.serverValue, 'test', 'api console server value is set');
+      assert.equal(element.serverType, 'custom', 'api console server type is set');
       assert.equal(node.serverValue, 'test', 'serverValue is set');
       assert.equal(node.serverType, 'custom', 'serverType is set');
     });
