@@ -10,7 +10,7 @@ import '../api-console.js';
 
 describe('<api-console>', function () {
   async function basicFixture() {
-    return (await fixture(`<api-console></api-console>`));
+    return (await fixture(`<api-console allowCustomBaseUri></api-console>`));
   }
 
   async function awareFixture() {
