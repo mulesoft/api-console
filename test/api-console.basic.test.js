@@ -499,6 +499,7 @@ describe('<api-console>', function () {
     it('propagates the selection back to the documentation element', async () => {
       dispatchEvent(element, 'test', 'custom');
       await nextFrame();
+      await aTimeout(2000);
       const node = element.shadowRoot.querySelector('api-documentation');
       assert.equal(element.serverValue, 'test', 'api console server value is set');
       assert.equal(element.serverType, 'custom', 'api console server type is set');
