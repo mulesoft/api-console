@@ -514,7 +514,7 @@ describe('<api-console>', function () {
       assert.equal(node.serverValue, 'test', 'serverValue is set');
     });
 
-    it('propagates the selection back to the request panel', async () => {
+    it.only('propagates the selection back to the request panel', async () => {
       dispatchEvent(element, 'test', 'custom');
       element.page = 'request';
       await nextFrame();
