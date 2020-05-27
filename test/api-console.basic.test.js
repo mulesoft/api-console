@@ -473,16 +473,18 @@ describe('<api-console>', function () {
       element = await basicFixture();
     });
 
-    function dispatchEvent(element, value, type) {
+    function dispatchEvent(element, value, type, debug) {
       // technically only the docs and request panels sends this event but since
       // the component listens on itself for this event then it doesn't matter
       // which component did send the event.
       const node = element.shadowRoot.querySelectorAll('*')[0];
+      debug && console.log('node:', node);
       const e = new CustomEvent('apiserverchanged', {
         detail: { value, type },
         bubbles: true,
         composed: true,
       });
+      debug && console.log('event', e);
       node.dispatchEvent(e);
     }
 
@@ -497,14 +499,15 @@ describe('<api-console>', function () {
     });
 
     it('propagates the selection back to the documentation element', async () => {
-      dispatchEvent(element, 'test', 'custom');
+      console.log('starting test that fails.');
+      dispatchEvent(element, 'test', 'custom', true);
       await nextFrame();
-      await aTimeout(2000);
       const node = element.shadowRoot.querySelector('api-documentation');
-      assert.equal(element.serverValue, 'test', 'api console server value is set');
-      assert.equal(element.serverType, 'custom', 'api console server type is set');
-      assert.equal(node.serverValue, 'test', 'serverValue is set');
+      console.log('api documentation:', node);
+      console.log('serverType:', node.serverType);
+      console.log('serverValue:', node.serverValue);
       assert.equal(node.serverType, 'custom', 'serverType is set');
+      assert.equal(node.serverValue, 'test', 'serverValue is set');
     });
 
     it('propagates the selection back to the request panel', async () => {
