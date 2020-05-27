@@ -650,7 +650,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
    */
   _handleServerChange(e) {
     const { value, type } = e.detail;
-	console.log('_handleServerChange', e)
+	console.log('_handleServerChange', e.detail, e.target)
     this.serverType = type;
     this.serverValue = value;
   }
