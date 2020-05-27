@@ -496,7 +496,7 @@ describe('<api-console>', function () {
       assert.equal(element.serverType, 'custom');
     });
 
-    it('propagates the selection back to the documentation element', async () => {
+    it.skip('propagates the selection back to the documentation element', async () => {
       dispatchEvent(element, 'test', 'custom');
       await nextFrame();
       const node = element.shadowRoot.querySelector('api-documentation');
