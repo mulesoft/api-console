@@ -486,19 +486,23 @@ describe('<api-console>', function () {
       node.dispatchEvent(e);
     }
 
-    it('sets serverValue property', () => {
-      dispatchEvent(element, 'test', 'server');
+    it('sets serverValue property', async() => {
+      dispatchEvent(element, 'test', 'custom');
+      await nextFrame();
       assert.equal(element.serverValue, 'test');
     });
 
-    it('sets serverType property', () => {
-      dispatchEvent(element, 'test', 'server');
-      assert.equal(element.serverType, 'server');
+    it('sets serverType property', async() => {
+      dispatchEvent(element, 'test', 'custom');
+      await nextFrame();
+      assert.equal(element.serverType, 'custom');
     });
 
     it('propagates the selection back to the documentation element', async () => {
+      console.log('221-- dispatchEvent');
       dispatchEvent(element, 'test', 'custom');
       await nextFrame();
+      console.log('221-- api console values:', { value: element.serverValue, type: element.serverType });
       const node = element.shadowRoot.querySelector('api-documentation');
       assert.equal(node.serverValue, 'test', 'serverValue is set');
       assert.equal(node.serverType, 'custom', 'serverType is set');
