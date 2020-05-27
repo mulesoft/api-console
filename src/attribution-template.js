@@ -1,4 +1,5 @@
 import { html } from 'lit-element';
+
 /* eslint-disable max-len */
 export default html`<div class="powered-by">
   <a href="https://github.com/mulesoft/api-console" class="attribution" target="_blank" tabindex="-1">

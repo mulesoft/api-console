@@ -61,3 +61,5 @@ dist/
 
 # AMF models
 demo/models/*.json
+
+.idea/

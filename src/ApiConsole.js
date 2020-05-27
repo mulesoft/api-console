@@ -34,10 +34,7 @@ export const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(
  *
  * API designed for humans.
  *
- * @customElement
  * @demo demo/index.html
- * @memberof MulesoftApps
- * @appliesMixin AmfHelperMixin
  */
 export class ApiConsole extends AmfHelperMixin(LitElement) {
   /**
@@ -417,6 +414,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this._initExtensionBanner();
     this._setupNav();
   }
+
   /**
    * On Firefix the navigation hidding animation runs when the app is first rendered,
    * even if the navigation wasn't initially rendered. This to be called
@@ -455,6 +453,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     const webApi = this.webApi = this._computeWebApi(amf);
     this.methodName = this._computeMethodName(this.selectedShape, webApi);
   }
+
   /**
    * Loads model from a file described in `modelLocation` property.
    * This function is called automatically when the value of the property
@@ -473,6 +472,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     xhr.open('GET', url, true);
     xhr.send();
   }
+
   /**
    * Called by `_modelLocationChanged` when model data are read from remote location.
    * @param {XMLHttpRequest} xhr
@@ -488,6 +488,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.amf = data;
     this.dispatchEvent(new CustomEvent('model-load-success'));
   }
+
   /**
    * Called by `_modelLocationChanged` when error occurred when getting API data.
    * @param {Error|Object=} error
@@ -501,6 +502,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     toast.opened = true;
     this.dispatchEvent(new CustomEvent('model-load-error'));
   }
+
   /**
    * Handler for the `tryit-requested` event. Sets current screen to
    * `request`.
@@ -508,6 +510,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _tryitHandler() {
     this.page = 'request';
   }
+
   /**
    * Resets current selection to "summary" page
    */
@@ -518,6 +521,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.selectedShapeType = 'summary';
     this.selectedShape = 'summary';
   }
+
   /**
    * Renders the extension banner if is Chrome and extension is not detected.
    */
@@ -531,12 +535,14 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       }
     });
   }
+
   /**
    * Dismisses Chrome extension banner.
    */
   dismissExtensionBanner() {
     this._extensionBannerActive = false;
   }
+
   /**
    * Handler for the navigation event dispatched by the `api-navigation`
    * component.
@@ -552,12 +558,14 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.selectedShape = selected;
     this.selectedShapeType = type;
   }
+
   /**
    * Closes "try it" panel and restores docs view.
    */
   closeTryIt() {
     this.page = 'docs';
   }
+
   /**
    * Dispatches `api-console-ready` event that is used by APIC extension
    * so it can initialize itself when handled
@@ -568,6 +576,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       composed: true
     }));
   }
+
   /**
    * Computes method name for not-wide view, where the request panel
    * has close button.
@@ -641,8 +650,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
    */
   _handleServerChange(e) {
     const { value, type } = e.detail;
-    this.serverValue = value;
     this.serverType = type;
+    this.serverValue = value;
   }
 
   render() {
@@ -655,7 +664,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   /**
-   * @return {TemplateResult|''} A template for current page
+   * @return {TemplateResult|string} A template for current page
    */
   _getPageTemplate() {
     switch (this.page) {
@@ -666,7 +675,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   /**
-   * @return {TemplateResult|''} A template the extension banner, if allowed.
+   * @return {TemplateResult|string} A template the extension banner, if allowed.
    */
   _bannerMessage() {
     if (!this.allowExtensionBanner) {
@@ -860,6 +869,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     </div>
     ${this._navigationDrawerTemplate()}`;
   }
+
   /**
    * The components below are optional dependencies. They will not be used until
    * sources of the components are included into AC bundle.

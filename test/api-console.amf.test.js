@@ -9,26 +9,14 @@ describe('<api-console>', function() {
     `));
   }
 
-  async function selectedFixture(amf, selected, type, endpointId) {
+  async function selectedFixture(amf, selected, type) {
     const element = (await fixture(html`
       <api-console
         .amf="${amf}"
+        .selectedShape="${selected}"
+        .selectedShapeType="${type}"
       ></api-console>
     `));
-    // The server selector ignores selection via attributes and
-    // uses api navigation events.
-    // TODO: This probably should be working as other elements to
-    // react on selection change through attributes.
-    const e = new CustomEvent('api-navigation-selection-changed', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        selected,
-        type,
-        endpointId
-      }
-    });
-    element.dispatchEvent(e);
     await aTimeout(0);
     return element;
   }
