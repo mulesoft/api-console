@@ -487,19 +487,21 @@ describe('<api-console>', function () {
     }
 
     it('sets serverValue property', () => {
-      dispatchEvent(element, 'test', 'server');
+      dispatchEvent(element, 'test', 'custom');
       assert.equal(element.serverValue, 'test');
     });
 
     it('sets serverType property', () => {
-      dispatchEvent(element, 'test', 'server');
-      assert.equal(element.serverType, 'server');
+      dispatchEvent(element, 'test', 'custom');
+      assert.equal(element.serverType, 'custom');
     });
 
     it('propagates the selection back to the documentation element', async () => {
       dispatchEvent(element, 'test', 'custom');
       await nextFrame();
       const node = element.shadowRoot.querySelector('api-documentation');
+      assert.equal(element.serverValue, 'test');
+      assert.equal(element.serverType, 'custom');
       assert.equal(node.serverValue, 'test', 'serverValue is set');
       assert.equal(node.serverType, 'custom', 'serverType is set');
     });
