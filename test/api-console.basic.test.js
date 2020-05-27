@@ -474,10 +474,12 @@ describe('<api-console>', function () {
     });
 
     function dispatchEvent(element, value, type) {
+      console.log('221-- dispatchEvent', { value, type });
       // technically only the docs and request panels sends this event but since
       // the component listens on itself for this event then it doesn't matter
       // which component did send the event.
       const node = element.shadowRoot.querySelectorAll('*')[0];
+      console.log('node is defined: ', Boolean(node));
       const e = new CustomEvent('apiserverchanged', {
         detail: { value, type },
         bubbles: true,
@@ -499,7 +501,6 @@ describe('<api-console>', function () {
     });
 
     it('propagates the selection back to the documentation element', async () => {
-      console.log('221-- dispatchEvent');
       dispatchEvent(element, 'test', 'custom');
       await nextFrame();
       console.log('221-- api console values:', { value: element.serverValue, type: element.serverType });
