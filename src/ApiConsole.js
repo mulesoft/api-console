@@ -812,8 +812,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .baseUri="${baseUri}"
       .redirectUri="${redirectUri}"
       .scrollTarget="${scrollTarget}"
-      .serverValue="${serverValue}"
       .serverType="${serverType}"
+      .serverValue="${serverValue}"
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
     >
       ${this._documentationBaseSlot()}
