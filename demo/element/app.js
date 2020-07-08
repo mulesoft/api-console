@@ -20,6 +20,7 @@ class ApicApplication extends DemoBase {
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API'],
       ['multi-server', 'Multi Server API'],
+      ['oas-3-api', 'OAS 3 API'],
     ];
 
     this.toggleConsoleMenu = this.toggleConsoleMenu.bind(this);
