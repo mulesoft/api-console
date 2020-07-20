@@ -812,7 +812,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .scrollTarget="${scrollTarget}"
       .serverValue="${serverValue}"
       .serverType="${serverType}"
-      .rearrangeEndpoints="${rearrangeEndpoints}"
+      ?rearrangeEndpoints="${rearrangeEndpoints}"
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
     >
       ${this._documentationBaseSlot()}
