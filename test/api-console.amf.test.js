@@ -71,6 +71,31 @@ describe('<api-console>', function() {
             assert.equal(result, 'List people');
           });
         });
+
+        describe('api-documentation', () => {
+          let element;
+          let amf;
+
+          before(async () => {
+            amf = await AmfLoader.load({ compact });
+          });
+
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+          });
+
+          it('set rearrangeEndpoints to false', async () => {
+            element.rearrangeEndpoints = false;
+            await nextFrame();
+            assert.isFalse(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
+          });
+
+          it('set rearrangeEndpoints to true', async () => {
+            element.rearrangeEndpoints = true;
+            await nextFrame();
+            assert.isTrue(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
+          });
+        });
       });
     });
   });
