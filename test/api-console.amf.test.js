@@ -90,6 +90,18 @@ describe('<api-console>', function() {
             element = await amfFixture(amf);
           });
 
+          it('sets rearrangeEndpoints to false', async () => {
+            element.rearrangeEndpoints = false;
+            await nextFrame();
+            assert.isFalse(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
+          });
+
+          it('sets rearrangeEndpoints to true', async () => {
+            element.rearrangeEndpoints = true;
+            await nextFrame();
+            assert.isTrue(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
+          });
+
           it('passes true rearrangeendpoints value down', async () => {
             element = await rearrangedEndpointsFixture(amf, true);
             assert.isTrue(element.rearrangeEndpoints);
