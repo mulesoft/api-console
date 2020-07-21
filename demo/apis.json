@@ -11,5 +11,6 @@
   "models/console-445/console-445.raml": "RAML 1.0",
   "models/apic-80/apic-80.raml": "RAML 1.0",
   "models/apic-83/apic-83.raml": "RAML 1.0",
-  "models/multi-server/multi-server.yaml": { "type": "OAS 3.0", "mime": "application/yaml" }
+  "models/multi-server/multi-server.yaml": { "type": "OAS 3.0", "mime": "application/yaml" },
+  "models/oas-3-api/oas-3-api.yaml": { "type": "OAS 3.0", "mime": "application/yaml" }
 }

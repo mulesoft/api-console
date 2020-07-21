@@ -9,6 +9,12 @@ describe('<api-console>', function() {
     `));
   }
 
+  async function rearrangedEndpointsFixture(amf, rearrangeEndpoints) {
+    return (await fixture(html`
+      <api-console .amf="${amf}" ?rearrangeEndpoints="${rearrangeEndpoints}"></api-console>
+    `));
+  }
+
   async function selectedFixture(amf, selected, type) {
     const element = (await fixture(html`
       <api-console
@@ -69,6 +75,43 @@ describe('<api-console>', function() {
           it('returns method name', () => {
             const result = element._computeMethodName(id, webapi);
             assert.equal(result, 'List people');
+          });
+        });
+
+        describe('api-documentation', () => {
+          let element;
+          let amf;
+
+          before(async () => {
+            amf = await AmfLoader.load({ compact });
+          });
+
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+          });
+
+          it('sets rearrangeEndpoints to false', async () => {
+            element.rearrangeEndpoints = false;
+            await nextFrame();
+            assert.isFalse(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
+          });
+
+          it('sets rearrangeEndpoints to true', async () => {
+            element.rearrangeEndpoints = true;
+            await nextFrame();
+            assert.isTrue(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
+          });
+
+          it('passes true rearrangeendpoints value down', async () => {
+            element = await rearrangedEndpointsFixture(amf, true);
+            assert.isTrue(element.rearrangeEndpoints);
+            assert.isTrue(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
+          });
+
+          it('passes false rearrangeendpoints value down', async () => {
+            element = await rearrangedEndpointsFixture(amf, false);
+            assert.isFalse(element.rearrangeEndpoints);
+            assert.isFalse(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
           });
         });
       });
