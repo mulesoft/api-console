@@ -1,7 +1,7 @@
 {
   "name": "api-console",
   "description": "The API Console to automatically generate API documentation from RAML and OAS files.",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "license": "CPAL-1.0",
   "main": "api-console.js",
   "keywords": [
