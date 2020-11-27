@@ -1,0 +1,95 @@
+asyncapi: '2.0.0'
+info:
+  title: Hello world application
+  version: '0.1.0'
+servers:
+  production:
+    url: broker.mycompany.com
+    protocol: amqp
+    protocolVersion: 1.0.0
+    description: This is "My Company" broker.
+    security: 
+      - oAuth2: []
+      - foo: []
+channels:
+  hello:
+    publish:
+      message:
+        $ref: '#/components/messages/hello-msg'
+  goodbye:
+    publish:
+      message:
+        $ref: '#/components/messages/goodbye-msg'
+components:
+  messages:
+    hello-msg:
+      headers:
+        $ref: '#/components/schemas/hello-headers'
+      payload:
+        type: object
+        properties:
+          name:
+            type: string
+          sentAt:
+            $ref: '#/components/schemas/sent-at'
+    goodbye-msg:
+      headers:
+        oneOf:
+          - $ref: '#/components/schemas/goodbye-headers-1'
+          - $ref: '#/components/schemas/goodbye-headers-2'
+      payload:
+        type: object
+        properties:
+          sentAt:
+            $ref: '#/components/schemas/sent-at'
+  schemas:
+    sent-at:
+      type: string
+      description: The date and time a message was sent.
+      format: datetime
+    hello-headers:
+      type: object
+      properties:
+        x-custom-header:
+          description: You can put whatever you want here
+          type: string
+        Accept:
+          description: You must specificy accept type for response
+          type: string
+        x-request-id:
+          description: Request id for tracing errors
+          type: string
+    goodbye-headers-1:
+      type: object
+      properties:
+        x-first-header:
+          type: string
+        x-second-header:
+          type: string
+    goodbye-headers-2:
+      type: object
+      properties:
+        x-foo:
+          type: string
+        x-bar:
+          type: string
+        x-foo-bar:
+          type: string
+  securitySchemes:
+    foo:
+      type: userPassword
+      description: This is the Foo scheme with username and password config
+    oAuth2:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://example.com/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+        authorizationCode:
+          authorizationUrl: https://example.com/api/oauth/dialog
+          tokenUrl: https://example.com/api/oauth/token
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
