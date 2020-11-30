@@ -450,7 +450,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     if (amf instanceof Array) {
       amf = amf[0];
     }
-    const webApi = this.webApi = this._computeWebApi(amf);
+    const webApi = this.webApi = this._computeApi(amf);
     this.methodName = this._computeMethodName(this.selectedShape, webApi);
   }
 

@@ -21,6 +21,7 @@ class ApicApplication extends DemoBase {
       ['demo-api-v4', 'AMF v4'],
       ['APIC-319', 'APIC-319'],
       ['multi-server', 'OAS multi server'],
+      ['async-api', 'AsyncAPI'],
     ];
   }
 

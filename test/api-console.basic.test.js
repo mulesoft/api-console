@@ -3,6 +3,7 @@ import * as sinon from 'sinon';
 import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
 import { isChrome } from '../src/ApiConsole.js';
 import '../api-console.js';
+import { AmfLoader } from './amf-loader.js';
 
 //
 //  Tests for computations that do not require AMF model.
@@ -10,23 +11,23 @@ import '../api-console.js';
 
 describe('<api-console>', function () {
   async function basicFixture() {
-    return (await fixture(`<api-console></api-console>`));
+    return fixture(`<api-console></api-console>`);
   }
 
   async function awareFixture() {
-    return (await fixture(`<api-console aware="test"></api-console>`));
+    return fixture(`<api-console aware="test"></api-console>`);
   }
 
   async function requestFixture() {
-    return (await fixture(`<api-console page="request"></api-console>`));
+    return fixture(`<api-console page="request"></api-console>`);
   }
 
   async function noAttributionFixture() {
-    return (await fixture(`<api-console noattribution></api-console>`));
+    return fixture(`<api-console noattribution></api-console>`);
   }
 
   async function extensionFixture() {
-    return (await fixture(`<api-console allowExtensionBanner page="request"></api-console>`));
+    return fixture(`<api-console allowExtensionBanner page="request"></api-console>`);
   }
 
   describe('RAML aware', () => {
@@ -37,12 +38,13 @@ describe('<api-console>', function () {
     });
 
     it('passes AMF model', async () => {
+      const amf = AmfLoader.load();
       const element = await awareFixture();
       const aware = document.createElement('raml-aware');
       aware.scope = 'test';
-      aware.api = [{}];
-      assert.deepEqual(element.amf, [{}]);
+      aware.api = amf;
       await aTimeout(0);
+      assert.deepEqual(element.amf, amf);
     });
 
     it('raml-aware is not in the DOM by default', async () => {
