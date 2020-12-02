@@ -202,8 +202,8 @@ describe('<api-console>', function() {
 
         it('should have _noTryItValue set to true', () => {
           assert.isTrue(element._noTryItValue);
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 });
