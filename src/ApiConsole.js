@@ -452,6 +452,9 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     }
     const webApi = this.webApi = this._computeApi(amf);
     this.methodName = this._computeMethodName(this.selectedShape, webApi);
+    if (!this._isWebAPI(amf)) {
+      this._noTryItValue = true;
+    }
   }
 
   /**

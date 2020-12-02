@@ -199,11 +199,17 @@ export class ApiConsoleApp extends ApiConsole {
     if (!wideLayout || !isMethod ||inlineMethods) {
       return false;
     }
+    if (!this._isWebAPI(this.amf)) {
+      return false;
+    }
     return wideLayout;
   }
 
   _computeNoTryItValue(noTryIt, renderInlineTyit) {
     if (renderInlineTyit) {
+      return true;
+    }
+    if (!this._isWebAPI(this.amf)) {
       return true;
     }
     return noTryIt;

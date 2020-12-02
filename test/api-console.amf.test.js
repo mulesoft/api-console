@@ -181,4 +181,29 @@ describe('<api-console>', function() {
       });
     });
   });
+
+  describe.only('AsyncAPI', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true),
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await aTimeout(0);
+        });
+
+        it('should have _noTryItValue set to true', () => {
+          assert.isTrue(element._noTryItValue);
+        })
+      })
+    })
+  })
 });
