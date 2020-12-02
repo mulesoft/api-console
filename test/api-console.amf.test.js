@@ -182,7 +182,7 @@ describe('<api-console>', function() {
     });
   });
 
-  describe.only('AsyncAPI', () => {
+  describe('AsyncAPI', () => {
     [
       new ApiDescribe('Regular model'),
       new ApiDescribe('Compact model', true),
