@@ -1,0 +1,57 @@
+#%RAML 1.0
+baseUri: http://domain.org 
+
+title: Array does not work API
+version: 1.0
+mediaType:  application/json
+
+types:
+  ORX_ARRAY:
+    type: array
+    items: string
+    minItems: 1
+  ORX_STR_WITH_EXAMPLE:
+    type: string
+    example: foo
+
+
+
+/cmt:
+  get:
+    queryParameters:
+      orx:
+        description: List ORX type.
+        type: ORX_ARRAY
+        required: true
+      details:
+        displayName: details
+        type: string
+        required: false
+      modemCount:
+        displayName: modemCount
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+/cmt-with-qp-example:
+  get:
+    queryParameters:
+      orx:
+        description: ORX type.
+        type: string
+        required: true
+        example: foo
+      details:
+        displayName: details
+        type: string
+        required: false
+      modemCount:
+        displayName: modemCount
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
