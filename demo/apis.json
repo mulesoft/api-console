@@ -14,5 +14,6 @@
   "models/multi-server/multi-server.yaml": { "type": "OAS 3.0", "mime": "application/yaml" },
   "models/oas-3-api/oas-3-api.yaml": { "type": "OAS 3.0", "mime": "application/yaml" },
   "models/async-api/async-api.yaml": "ASYNC 2.0",
-  "models/APIC-553/APIC-553.raml": "RAML 1.0"
+  "models/APIC-553/APIC-553.raml": "RAML 1.0",
+  "models/APIC-554/APIC-554.raml": "RAML 1.0"
 }
