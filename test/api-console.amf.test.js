@@ -27,6 +27,13 @@ describe('<api-console>', function() {
     return element;
   }
 
+  function selectOperation(element, endpointName, operationName) {
+    const operation = AmfLoader.lookupOperation(element.amf, endpointName, operationName);
+    const operationId = operation['@id'];
+    element.selectedShape = operationId;
+    element.selectedShapeType = 'method';
+  }
+
   describe('AMF model computations', () => {
     [
       new ApiDescribe('Regular model'),
@@ -202,6 +209,63 @@ describe('<api-console>', function() {
 
         it('should have _noTryItValue set to true', () => {
           assert.isTrue(element._noTryItValue);
+        });
+      });
+    });
+  });
+
+  describe('APIC-553', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true),
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'APIC-553' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await aTimeout(0);
+        });
+
+        it('should have URL set', async () => {
+          selectOperation(element, '/cmt', 'get');
+          await nextFrame();
+          await nextFrame();
+          const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
+          const apiMethodDocumentation = apiDocumentation.shadowRoot.querySelector('api-method-documentation');
+          assert.equal(apiMethodDocumentation.shadowRoot.querySelector('api-url').url, 'http://domain.org/cmt');
+        });
+      });
+    });
+  });
+
+  describe('APIC-554', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true),
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'APIC-554' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await aTimeout(0);
+        });
+
+        it('should set correct navigation labels', async () => {
+          const apiNavigation = element.shadowRoot.querySelector('api-navigation');
+          const labels = ['/customer/{customerId}/chromeos', '/deviceId', '/customerId'];
+          assert.deepEqual(apiNavigation._endpoints.map(e => e.label), labels);
         });
       });
     });

@@ -22,6 +22,7 @@ class ApicApplication extends DemoBase {
       ['multi-server', 'Multi Server API'],
       ['oas-3-api', 'OAS 3 API'],
       ['async-api', 'AsyncAPI'],
+      ['APIC-553', 'APIC-553'],
     ];
 
     this.toggleConsoleMenu = this.toggleConsoleMenu.bind(this);
