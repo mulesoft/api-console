@@ -234,7 +234,8 @@ describe('<api-console>', function() {
 
         it('should have URL set', async () => {
           selectOperation(element, '/cmt', 'get');
-          await aTimeout(5);
+          await nextFrame();
+          await nextFrame();
           const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
           const apiMethodDocumentation = apiDocumentation.shadowRoot.querySelector('api-method-documentation');
           assert.equal(apiMethodDocumentation.shadowRoot.querySelector('api-url').url, 'http://domain.org/cmt');
