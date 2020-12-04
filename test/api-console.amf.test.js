@@ -120,6 +120,17 @@ describe('<api-console>', function() {
             assert.isFalse(element.rearrangeEndpoints);
             assert.isFalse(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
           });
+
+          it('should not render method-label nor method-value in Summary view', async () => {
+            element = await selectedFixture(amf, 'summary', 'summary')
+            await nextFrame();
+            await nextFrame();
+            const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
+            const apiSummary = apiDocumentation.shadowRoot.querySelector('api-summary');
+            const apiUrl = apiSummary.shadowRoot.querySelector('api-url');
+            assert.notExists(apiUrl.shadowRoot.querySelector('.method-label'));
+            assert.notExists(apiUrl.shadowRoot.querySelector('.method-value'));
+          });
         });
       });
     });
