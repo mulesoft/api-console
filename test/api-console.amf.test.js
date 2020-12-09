@@ -125,6 +125,7 @@ describe('<api-console>', function() {
             element = await selectedFixture(amf, 'summary', 'summary')
             await nextFrame();
             await nextFrame();
+            await nextFrame();
             const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
             const apiSummary = apiDocumentation.shadowRoot.querySelector('api-summary');
             const apiUrl = apiSummary.shadowRoot.querySelector('api-url');
@@ -277,6 +278,42 @@ describe('<api-console>', function() {
           const apiNavigation = element.shadowRoot.querySelector('api-navigation');
           const labels = ['/customer/{customerId}/chromeos', '/deviceId', '/customerId'];
           assert.deepEqual(apiNavigation._endpoints.map(e => e.label), labels);
+        });
+      });
+    });
+  });
+
+  describe('APIC-557', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true),
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'APIC-557' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await aTimeout(0);
+        });
+
+        it('should update api-url url value on server change', async () => {
+          selectOperation(element, '/pets', 'get');
+          await nextFrame();
+          await nextFrame();
+          // await nextFrame();
+          const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
+          const apiMethodDocumentation = apiDocumentation.shadowRoot.querySelector('api-method-documentation');
+          const apiUrl = apiMethodDocumentation.shadowRoot.querySelector('api-url');
+          assert.equal(apiUrl.url, 'http://petstore.swagger.io/v1/pets');
+          apiDocumentation.serverValue = 'http://qa.petstore.swagger.io/v1';
+          apiDocumentation.serverType = 'server';
+          await nextFrame();
+          assert.equal(apiUrl.url, 'http://qa.petstore.swagger.io/v1/pets');
         });
       });
     });

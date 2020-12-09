@@ -1,0 +1,254 @@
+openapi: "3.0.0"
+externalDocs:
+  url: petstore.com
+  description: Pet Store website
+info:
+  version: 1.0.0
+  contact: 
+    name: John Smith
+    email: jsmith@petstore.com
+    url: petstore.com
+  title: OpenAPI Spec 3.0  Petstore
+  license:
+    name: MIT
+servers:
+  - url: http://petstore.swagger.io/v1
+    description: prodcutive env
+  - url: http://qa.petstore.swagger.io/v1
+    description: qa env
+  - url: http://dev.petstore.swagger.io/v1
+    description: dev env
+  
+components:
+  
+  responses:
+    "200":
+      description: "ok"
+      content:
+        application/json: 
+          schema:
+            $ref: "#/components/schemas/Pet"
+            example: 
+              $ref: "#/components/schemas/Pet"
+  links:
+    UserRepositories:
+      # returns array of '#/components/schemas/repository'
+      operationRef: 'https://na2.gigantic-server.com/#/paths/~12.0~1repositories~1{username}/get'
+      parameters:
+        username: $response.body#/username
+  securitySchemes:
+    api_key:
+      type: "apiKey"
+      description: Api key security
+      name: "api_key"
+      in: "header"
+    petstore_auth:
+      type: oauth2
+      flows: 
+        implicit:
+          authorizationUrl: https://example.com/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+        authorizationCode:
+          authorizationUrl: https://example.com/api/oauth/dialog
+          tokenUrl: https://example.com/api/oauth/token
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets 
+  examples:
+    petsArrayExample:
+      summary: s
+      description: aaa
+      value: 
+        -  
+            id: 233
+            name: Archie
+        - 
+            id: 455
+            name: Bella
+    petExample1:
+      description: pet1
+      value: 
+        id: 2333
+        name: Max
+    petExample2:
+      description: pet2
+      value: 
+        id: 344
+        name: Brea
+    errorExample:
+      value: 
+        code: 1400
+        message: Unexpected error
+  schemas:
+    Pet:
+      type: object
+      required: 
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Pets:
+      type: array
+      items:
+        $ref: "#/components/schemas/Pet"
+    Error:
+      type: object
+      required: 
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+paths: 
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      tags:
+        - pets
+      parameters:
+        - name: limit
+          in: query
+          description: how many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link
+              schema:
+                type: string
+          content:
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/Pets" 
+              examples: 
+                pet1:
+                  $ref: "#/components/examples/petsArrayExample"
+    
+    post:
+      summary: Create a pet
+ 
+      requestBody:
+        content:
+          application/json: 
+            schema:
+              $ref: "#/components/schemas/Pet"
+              
+            examples:
+              e1:
+                $ref: "#/components/examples/petExample1"
+                
+      
+      tags:
+        - pets
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/Error"
+              examples:
+                err1:
+                  $ref: "#/components/examples/errorExample"
+  /pets/{petId}:
+    get:
+      summary: Info for specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        default:
+          
+            $ref: "#/components/responses/200"
+        "200":
+          description: Expected response to a valid request
+          content:
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/Pet"
+           
+              examples:
+                one: 
+                  $ref: "#/components/examples/petExample1"
+  /users/{id}:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      description: the user identifier, as userId 
+      schema:
+        type: string
+    get:
+      responses:
+    
+        '200':
+          description: the user being returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid: # the unique user id
+                    type: string
+                    format: uuid
+          links:
+            address:
+              # the target link operationId
+              operationId: getUserAddress
+              parameters:
+                # get the `id` field from the request path parameter named `id`
+                userId: $request.path.id
+  # the path item of the linked operation
+  /users/{userid}/address:
+    parameters:
+    - name: userid
+      in: path
+      required: true
+      description: the user identifier, as userId 
+      schema:
+        type: string
+    # linked operation
+    get:
+      operationId: getUserAddress
+      responses:
+        '200':
+          description: the user's address               
+          content:
+            application/json: 
+              schema:
+                type: object
+                properties:
+                  addressLine1: 
+                    type: string
+                  country: 
+                    type: string
+                example: 
+                  addressLine1: Washintong 3434
+                  country: USA

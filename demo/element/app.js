@@ -23,6 +23,8 @@ class ApicApplication extends DemoBase {
       ['oas-3-api', 'OAS 3 API'],
       ['async-api', 'AsyncAPI'],
       ['APIC-553', 'APIC-553'],
+      ['APIC-557', 'APIC-557'],
+      ['APIC-558', 'APIC-558'],
     ];
 
     this.toggleConsoleMenu = this.toggleConsoleMenu.bind(this);
@@ -52,8 +54,10 @@ class ApicApplication extends DemoBase {
       </div>
 
       <api-console
+        allowcustombaseuri
         redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
         oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com">
+        <anypoint-item slot="custom-base-uri" value="http://example-ms.com">Mocking Service</anypoint-item>
       </api-console>
 
       <xhr-simple-request></xhr-simple-request>
