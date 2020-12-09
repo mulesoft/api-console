@@ -125,6 +125,7 @@ describe('<api-console>', function() {
             element = await selectedFixture(amf, 'summary', 'summary')
             await nextFrame();
             await nextFrame();
+            await nextFrame();
             const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
             const apiSummary = apiDocumentation.shadowRoot.querySelector('api-summary');
             const apiUrl = apiSummary.shadowRoot.querySelector('api-url');
