@@ -16,7 +16,8 @@ class ApicApplication extends DemoBase {
       ['google-drive-api', 'Google Drive API'],
       ['httpbin', 'HTTPbin API'],
       ['data-type-fragment', 'RAML data type fragment'],
-      ['demo-api', 'Demo API']
+      ['demo-api', 'Demo API'],
+      ['APIC-538', 'APIC-538']
     ];
   }
 

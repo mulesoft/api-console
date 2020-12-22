@@ -1,7 +1,7 @@
 {
   "name": "api-console",
   "description": "The API Console to automatically generate API documentation from RAML and OAS files.",
-  "version": "6.3.5",
+  "version": "6.3.6",
   "license": "CPAL-1.0",
   "main": "index.js",
   "module": "index.js",
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@advanced-rest-client/arc-icons": "^3.1.0",
-    "@advanced-rest-client/oauth-authorization": "^4.0.2",
+    "@advanced-rest-client/oauth-authorization": "^5.0.0",
     "@advanced-rest-client/xhr-simple-request": "^3.0.0",
     "@anypoint-web-components/anypoint-button": "^1.1.1",
     "@api-components/amf-helper-mixin": "^4.1.2",
