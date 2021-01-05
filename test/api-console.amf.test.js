@@ -436,4 +436,37 @@ describe('<api-console>', function() {
       });
     });
   });
+
+  describe('APIC-561', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true)
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'anyOf' });
+        });
+
+        beforeEach(async () => {
+          // eslint-disable-next-line no-unused-vars
+          const [_, operation] = AmfLoader.lookupEndpointOperation(amf, 'test', 'publish');
+          element = await selectedFixture(amf, operation['@id'], 'method');
+          await aTimeout(0);
+        });
+
+        it('should render correct type for anyOf body', async () => {
+          const documentation = element.shadowRoot.querySelector('api-documentation');
+          const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
+          const bodyDocument = methodDocumentation.shadowRoot.querySelector('api-body-document');
+          bodyDocument.shadowRoot.querySelector('.section-title-area').click();
+          await nextFrame();
+          const typeDocument = bodyDocument.shadowRoot.querySelector('api-type-document');
+          assert.exists(typeDocument);
+        });
+      });
+    });
+  });
 });
