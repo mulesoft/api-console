@@ -306,7 +306,7 @@ describe('<api-console>', function() {
           selectOperation(element, '/pets', 'get');
           await nextFrame();
           await nextFrame();
-          // await nextFrame();
+          await nextFrame();
           const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
           const apiMethodDocumentation = apiDocumentation.shadowRoot.querySelector('api-method-documentation');
           const apiUrl = apiMethodDocumentation.shadowRoot.querySelector('api-url');
@@ -321,7 +321,10 @@ describe('<api-console>', function() {
   });
 
   describe('APIC-559', () => {
-    [new ApiDescribe('Regular model'), new ApiDescribe('Compact model', true)].forEach(({ label, compact }) => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true)
+    ].forEach(({ label, compact }) => {
       describe(label, () => {
         let amf;
         let element;
@@ -348,7 +351,10 @@ describe('<api-console>', function() {
   });
 
   describe('APIC-571', () => {
-    [new ApiDescribe('Regular model'), new ApiDescribe('Compact model', true)].forEach(({ label, compact }) => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true)
+    ].forEach(({ label, compact }) => {
       describe(label, () => {
         let amf;
         let element;
@@ -370,6 +376,34 @@ describe('<api-console>', function() {
           const apiUrl = methodDocumentation.shadowRoot.querySelector('api-url');
           const methodLabel = apiUrl.shadowRoot.querySelector('.method-label');
           assert.equal(getComputedStyle(methodLabel).backgroundColor, 'rgba(31, 157, 85, 0.12)');
+        });
+      });
+    });
+  });
+
+  describe('APIC-570', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true)
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+        });
+
+        beforeEach(async () => {
+          element = await selectedFixture(amf, 'summary', 'summary');
+          await aTimeout(0);
+        });
+
+        it('should not prefix URL with `http://', () => {
+          const documentation = element.shadowRoot.querySelector('api-documentation');
+          const summary = documentation.shadowRoot.querySelector('api-summary');
+          const apiUrl = summary.shadowRoot.querySelector('api-url');
+          assert.isFalse(apiUrl.url.startsWith('http') || apiUrl.url.startsWith('https'));
         });
       });
     });
