@@ -408,4 +408,32 @@ describe('<api-console>', function() {
       });
     });
   });
+
+  describe('APIC-562', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true)
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+        });
+
+        beforeEach(async () => {
+          element = await selectedFixture(amf, 'summary', 'summary');
+          await aTimeout(0);
+        });
+
+        it('should not prefix URL with `http://', () => {
+          const documentation = element.shadowRoot.querySelector('api-documentation');
+          const summary = documentation.shadowRoot.querySelector('api-summary');
+          const message = summary.shadowRoot.querySelector('.section.endpoints-title')
+          assert.equal(message.textContent, 'API channels');
+        });
+      });
+    });
+  });
 });
