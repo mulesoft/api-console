@@ -18,5 +18,6 @@
   "models/APIC-554/APIC-554.raml": "RAML 1.0",
   "models/APIC-557/APIC-557.yaml": "OAS 3.0",
   "models/APIC-538/APIC-538.raml": "RAML 1.0",
-  "models/anyOf/anyOf.yaml": "ASYNC 2.0"
+  "models/anyOf/anyOf.yaml": "ASYNC 2.0",
+  "models/streetlights/streetlights.yaml": "ASYNC 2.0"
 }
