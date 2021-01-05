@@ -17,7 +17,7 @@ channels:
       message:
         $ref: '#/components/messages/hello-msg'
   goodbye:
-    publish:
+    subscribe:
       message:
         $ref: '#/components/messages/goodbye-msg'
 components:

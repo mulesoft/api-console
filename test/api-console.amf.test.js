@@ -248,6 +248,7 @@ describe('<api-console>', function() {
           selectOperation(element, '/cmt', 'get');
           await nextFrame();
           await nextFrame();
+          await nextFrame();
           const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
           const apiMethodDocumentation = apiDocumentation.shadowRoot.querySelector('api-method-documentation');
           assert.equal(apiMethodDocumentation.shadowRoot.querySelector('api-url').url, 'http://domain.org/cmt');
@@ -314,6 +315,61 @@ describe('<api-console>', function() {
           apiDocumentation.serverType = 'server';
           await nextFrame();
           assert.equal(apiUrl.url, 'http://qa.petstore.swagger.io/v1/pets');
+        });
+      });
+    });
+  });
+
+  describe('APIC-559', () => {
+    [new ApiDescribe('Regular model'), new ApiDescribe('Compact model', true)].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+        });
+
+        beforeEach(async () => {
+          element = await selectedFixture(amf, 'summary', 'summary');
+          await aTimeout(0);
+        });
+
+        it('should render Publish and Subcribe operations with styles in Summary panel', () => {
+          const documentation = element.shadowRoot.querySelector('api-documentation');
+          const summary = documentation.shadowRoot.querySelector('api-summary');
+          const methodLabels = summary.shadowRoot.querySelectorAll('.method-label');
+          assert.lengthOf(methodLabels, 2);
+          const [pub, sub] = methodLabels;
+          assert.notEqual(getComputedStyle(pub).backgroundColor, getComputedStyle(sub).backgroundColor);
+        });
+      });
+    });
+  });
+
+  describe('APIC-571', () => {
+    [new ApiDescribe('Regular model'), new ApiDescribe('Compact model', true)].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+        });
+
+        beforeEach(async () => {
+          // eslint-disable-next-line no-unused-vars
+          const [_, operation] = AmfLoader.lookupEndpointOperation(amf, 'hello', 'publish');
+          element = await selectedFixture(amf, operation['@id'], 'method');
+          await aTimeout(0);
+        });
+
+        it('should render style Publish operation in method documentation', () => {
+          const documentation = element.shadowRoot.querySelector('api-documentation');
+          const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
+          const apiUrl = methodDocumentation.shadowRoot.querySelector('api-url');
+          const methodLabel = apiUrl.shadowRoot.querySelector('.method-label');
+          assert.equal(getComputedStyle(methodLabel).backgroundColor, 'rgba(31, 157, 85, 0.12)');
         });
       });
     });
