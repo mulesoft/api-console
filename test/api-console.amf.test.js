@@ -463,8 +463,42 @@ describe('<api-console>', function() {
           const bodyDocument = methodDocumentation.shadowRoot.querySelector('api-body-document');
           bodyDocument.shadowRoot.querySelector('.section-title-area').click();
           await nextFrame();
+          await nextFrame();
           const typeDocument = bodyDocument.shadowRoot.querySelector('api-type-document');
           assert.exists(typeDocument);
+        });
+      });
+    });
+  });
+
+  describe('APIC-560', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true)
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+        });
+
+        beforeEach(async () => {
+          const path = 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured';
+          // TODO this needs to be changed to 'publish' once AMF bug is fixed
+          // eslint-disable-next-line no-unused-vars
+          const [_, operation] = AmfLoader.lookupEndpointOperation(amf, path, 'kafka');
+          element = await selectedFixture(amf, operation['@id'], 'method');
+          await aTimeout(0);
+        });
+
+        it('should render channel and server separately', async () => {
+          const documentation = element.shadowRoot.querySelector('api-documentation');
+          const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
+          const apiUrl = methodDocumentation.shadowRoot.querySelector('api-url');
+          assert.exists(apiUrl.shadowRoot.querySelector('.url-channel-value'));
+          assert.exists(apiUrl.shadowRoot.querySelector('.url-server-value'));
         });
       });
     });
