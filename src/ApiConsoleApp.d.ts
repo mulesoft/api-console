@@ -4,12 +4,14 @@ import { ApiConsole } from './ApiConsole';
 export declare class ApiConsoleApp extends ApiConsole {
   /**
    * Computed title of the API
+   * @attribute
    */
   apiTitle: string;
   /**
    * True when the main layout element renders in narrow view.
    * This changes when media query breakpoint has been reached or
    * when narrow property is set.
+   * @attribute
    */
   layoutNarrow: boolean;
   /**
@@ -19,6 +21,7 @@ export declare class ApiConsoleApp extends ApiConsole {
    * - end
    *
    * Default to "start".
+   * @attribute
    */
   drawerAlign: string;
   /**
@@ -28,11 +31,13 @@ export declare class ApiConsoleApp extends ApiConsole {
    *
    * To control width of the navigation drawer, set `--app-drawer-width`
    * CSS variable to requested size.
+   * @attribute
    */
   responsiveWidth: string;
   /**
    * When true it places try it panel next to the documentation panel.
    * It is set automatically via media queries
+   * @attribute
    */
   wideLayout: boolean;
   /**
@@ -41,6 +46,7 @@ export declare class ApiConsoleApp extends ApiConsole {
    * It can be useful if the console has to send any headers string
    * to a server without user knowing about it.
    * The headers should be valid HTTP headers string.
+   * @attribute
    */
   appendHeaders: string;
   /**
@@ -53,12 +59,14 @@ export declare class ApiConsoleApp extends ApiConsole {
    * If the proxy require a to pass the URL as a query parameter define value as follows:
    * `https://proxy.com/path/?url=`. In this case be sure to set `proxy-encode-url`
    * attribute.
+   * @attribute
    */
   proxy: string;
   /**
    * If `proxy` is set, it will URL encode the request URL before appending it to the proxy URL.
    * `http://domain.com/path/?query=some+value` will become
    * `https://proxy.com/?url=http%3A%2F%2Fdomain.com%2Fpath%2F%3Fquery%3Dsome%2Bvalue`
+   * @attribute
    */
   proxyEncodeUrl: boolean;
 

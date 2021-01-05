@@ -16,15 +16,15 @@ class ApicApplication extends DemoBase {
       ['google-drive-api', 'Google Drive API'],
       ['httpbin', 'HTTPbin API'],
       ['data-type-fragment', 'RAML data type fragment'],
-      ['demo-api', 'Demo API']
+      ['demo-api', 'Demo API'],
+      ['APIC-538', 'APIC-538'],
     ];
   }
 
   demoTemplate() {
     return html`<api-console-app
-      app
-      redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
-      oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com"
+      redirectUri="https://auth.advancedrestclient.com/oauth-popup.html"
+      oauth2ClientId="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com"
       compatibility>
       <anypoint-icon-button
         slot="toolbar"
