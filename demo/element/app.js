@@ -25,6 +25,8 @@ class ApicApplication extends DemoBase {
       ['APIC-553', 'APIC-553'],
       ['APIC-557', 'APIC-557'],
       ['APIC-558', 'APIC-558'],
+      ['anyOf', 'AnyOf'],
+      ['streetlights', 'Streetlights'],
     ];
 
     this.toggleConsoleMenu = this.toggleConsoleMenu.bind(this);

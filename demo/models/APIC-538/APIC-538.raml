@@ -1,0 +1,20 @@
+#%RAML 1.0
+title: APIC-538
+version: v1
+baseUri: http://domain.com/
+
+securitySchemes:
+  oauth_2_0:
+     type: OAuth 2.0
+     settings:
+       accessTokenUri: http://api.domain.com/oauth2/token
+       authorizationUri: http://api.domain.com/oauth2/auth
+       authorizationGrants: ["authorization_code"]
+
+/test:
+  securedBy: [oauth_2_0]
+  get:
+    responses:
+      200:
+        body:
+          application/json: 

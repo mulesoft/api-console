@@ -11,6 +11,7 @@ export declare class ApiConsole {
    * When using `<raml-aware>` set it's `scope` property to some name
    * and this property to the same name. Once you update `raml` property
    * on the aware it updates the model in the console.
+   * @attribute
    */
   aware: string;
 
@@ -26,6 +27,7 @@ export declare class ApiConsole {
    * ```
    * file://demo/models/api-name/api.raml#/web-api/end-points/%2Ftest-endpoint
    * ```
+   * @attribute
    */
   selectedShape: string;
 
@@ -42,6 +44,7 @@ export declare class ApiConsole {
    *
    * Use it with combination of setting `selectedShape` property to control
    * the view.
+   * @attribute
    */
   selectedShapeType: string;
 
@@ -61,11 +64,13 @@ export declare class ApiConsole {
    * ```html
    * <api-console model-location="https://amf-parser/domain.com"></api-console>
    * ```
+   * @attribute
    */
   modelLocation: string;
 
   /**
    * Currently rendered page. It can be either `docs` or `request`.
+   * @attribute
    */
   page: string;
 
@@ -74,7 +79,9 @@ export declare class ApiConsole {
    * request through Chrome extension's sandbox and eliminates CORS.
    *
    * When this is set it enables this feature and renders installation banner
-   * when currrent browser profile does not have extension installed.
+   * when current browser profile does not have extension installed.
+   * 
+   * @attribute
    */
   allowExtensionBanner: boolean;
 
@@ -88,6 +95,7 @@ export declare class ApiConsole {
    * If true it forces the console to render narrow layout.
    * This hides left hand side navigation and some fonts are smaller
    * (like titles).
+   * @attribute
    */
   narrow: boolean;
 
@@ -95,12 +103,14 @@ export declare class ApiConsole {
    * If set then the API console hide the "try it" button from the
    * method documentation view. The request and response panels still will
    * be available, but to enter this section you'll have to do it
-   * programatically.
+   * programmatically.
+   * @attribute
    */
   noTryIt: boolean;
 
   /**
    * True when navigation is opened.
+   * @attribute
    */
   navigationOpened: boolean;
 
@@ -108,13 +118,14 @@ export declare class ApiConsole {
    * OAuth2 redirect URI.
    * See documentation for `advanced-rest-client/oauth-authorization`
    * for API details.
+   * @attribute
    */
   redirectUri: string;
 
   /**
    * Hides the URL editor from the view.
-   * Note that the editor is still in the DOM. This property just hiddes
-   * it.
+   * Note that the editor is still in the DOM. This property just hides it.
+   * @attribute
    */
   noUrlEditor: boolean;
 
@@ -123,6 +134,8 @@ export declare class ApiConsole {
    * declaration and this produces invalid URL input. This information
    * is passed to the URL editor that prefixes the URL with `baseUri` value
    * if passed URL is a relative URL.
+   * 
+   * @attribute
    */
   baseUri: string;
 
@@ -130,6 +143,8 @@ export declare class ApiConsole {
    * Removes the "Powered by Mulesoft" attribution from the main navigation.
    * The use of this feature must be in accordance with all licensing
    * and copyright protections required by the use of this software
+   * 
+   * @attribute
    */
   noAttribution: boolean;
 
@@ -138,12 +153,16 @@ export declare class ApiConsole {
    * the endpoint documentation.
    * When it's not set (or value is `false`, default) then it renders
    * just a list of methods with links in the documentation panel
+   * 
+   * @attribute
    */
   inlineMethods: boolean;
 
   /**
    * Computed value from the method model, name of the method.
    * It is either a `displayName` or HTTP method name
+   * 
+   * @attribute
    */
   methodName: string;
 
@@ -151,14 +170,17 @@ export declare class ApiConsole {
    * Scroll target used to observe `scroll` events.
    * Set it to a parent element that is a scroll region (has overflow set)
    * so the app can handle scrolling properly.
+   * 
+   * @attribute
    */
-  scrollTarget: object;
+  scrollTarget: HTMLElement|Window;
 
   /**
    * Option passed to the try it panel.
    * When set it allows to disable parameters in an editor (headers,
    * query parameters). Disabled parameter won't be used with a test call
    * but won't be removed from the UI.
+   * @attribute
    */
   allowDisableParams: boolean;
 
@@ -166,6 +188,7 @@ export declare class ApiConsole {
    * Option passed to the try it panel.
    * When set, editors renders "add custom" button that allows to define
    * custom parameters next to API spec defined.
+   * @attribute
    */
   allowCustom: boolean;
 
@@ -174,12 +197,14 @@ export declare class ApiConsole {
    * Enables auto hiding of optional properties (like query parameters
    * or headers) and renders a checkbox to render optional items in the
    * editor view.
+   * @attribute
    */
    allowHideOptional: boolean;
 
    /**
     * Prohibits rendering documentation (the icon and the
     * description) in request editors.
+    * @attribute
     */
    noDocs: boolean;
 
@@ -190,21 +215,25 @@ export declare class ApiConsole {
     * set this value to the container so the request panel only listen
     * to events dispatched inside the container. Otherwise events dispatched
     * by the request panel will be handled by other instances of the console.
+    * @attribute
     */
-   eventsTarget: HTMLElement|Window;
+   eventsTarget: EventTarget;
 
    /**
     * A default Client ID to set on the OAuth 2 authorization panel
+    * @attribute
     */
    oauth2clientId: string;
 
    /**
     * A default Client Secret to set on the OAuth 2 authorization panel
+    * @attribute
     */
    oauth2clientSecret: string;
 
    /**
    * Enables compatibility with Anypoint components.
+   * @attribute
    */
   compatibility: boolean;
 
@@ -215,25 +244,29 @@ export declare class ApiConsole {
    * of endpoints based on the `path` value of the endpoint, keeping the order
    * of which endpoint was first in the list, relative to each other.
    *
-   * **This is an experimental option and may dissapear without warning.**
+   * **This is an experimental option and may disappear without warning.**
+   * @attribute
    */
   rearrangeEndpoints: boolean;
 
   /**
    * Value of the selected server. This is passed into `api-documentation` and
    * `api-request-panel`
+   * @attribute
    */
   serverValue: string;
 
   /**
    * Type of the selected server. This is passed into `api-documentation` and
    * `api-request-panel`
+   * @attribute
    */
   serverType: string;
 
   /**
    * Optional property to set
    * If true, the server selector is not rendered in any component
+   * @attribute
    */
   noServerSelector: boolean;
 
@@ -246,13 +279,14 @@ export declare class ApiConsole {
   /**
    * Optional property to set
    * If true, the server selector custom base URI option is rendered
+   * @attribute
    */
   allowCustomBaseUri: boolean;
 
   _noTryItValue: boolean;
 
   /**
-   * This can be overriten by child classes to decide whether to render the server
+   * This can be overwritten by child classes to decide whether to render the server
    * selector or not.
    * @returns The final value of `noServerSelector`.
    */
@@ -272,7 +306,7 @@ export declare class ApiConsole {
   disconnectedCallback(): void;
 
   /**
-   * On Firefix the navigation hidding animation runs when the app is first rendered,
+   * On Firefox the navigation hiding animation runs when the app is first rendered,
    * even if the navigation wasn't initially rendered. This to be called
    * after initial render has been made (DOM is constructed) to add the `animatable`
    * class on the navigation to enable animation effects.
@@ -339,7 +373,7 @@ export declare class ApiConsole {
   /**
    * Computes method name for not-wide view, where the request panel
    * has close button.
-   * @param selected Curerently selected AMF shape (@id).
+   * @param selected Currently selected AMF shape (@id).
    * @param webApi Computed AMF WebAPI model.
    * @returns Name of current method (verb) as RAML's
    * `displayName` property or name of the HTTP method.
@@ -404,7 +438,7 @@ export declare class ApiConsole {
 
   /**
    * Renders the `<slot>` element in the `<api-documentation>` only when
-   * ther request panel is not rendered. When it is rendered then it
+   * the request panel is not rendered. When it is rendered then it
    * is the target for slots.
    * @returns Template for a slot to be used in the api documentation
    */
