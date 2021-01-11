@@ -1,4 +1,5 @@
-import { ApiConsole } from './ApiConsole.js';
+/* eslint-disable class-methods-use-this */
+/* eslint-disable prefer-destructuring */
 import { html } from 'lit-element';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
@@ -10,7 +11,8 @@ import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@polymer/iron-media-query/iron-media-query.js';
-import { menu } from '@advanced-rest-client/arc-icons/ArcIcons.js';
+import '@advanced-rest-client/arc-icons/arc-icon.js';
+import { ApiConsole } from './ApiConsole.js';
 import styles from './ApiConsoleAppStyles.js';
 
 /** @typedef {import('lit-html').TemplateResult} TemplateResult */
@@ -107,6 +109,7 @@ export class ApiConsoleApp extends ApiConsole {
     this._updateRenderInlineTyit();
   }
 
+  // @ts-ignore
   get inlineMethods() {
     return this._inlineMethods;
   }
@@ -121,6 +124,7 @@ export class ApiConsoleApp extends ApiConsole {
     this._updateRenderInlineTyit();
   }
 
+  // @ts-ignore
   get selectedShapeType() {
     return this._selectedShapeType;
   }
@@ -141,6 +145,7 @@ export class ApiConsoleApp extends ApiConsole {
    * Overrides api console's `_noServerSelector`.
    * @return {boolean} True when `noServerSelector` or when wide layout is set.
    */
+  // @ts-ignore
   get _noServerSelector() {
     return this.noServerSelector || this.wideLayout;
   }
@@ -148,6 +153,7 @@ export class ApiConsoleApp extends ApiConsole {
   /**
    * @return {Boolean} True when the request panel is being rendered
    */
+  // @ts-ignore
   get _rendersRequestPanel() {
     return this.page === 'request' || this.wideLayout;
   }
@@ -161,6 +167,7 @@ export class ApiConsoleApp extends ApiConsole {
     this.appendHeaders = undefined;
     this.proxy = undefined;
     this.proxyEncodeUrl = undefined;
+    this.drawerAlign = undefined;
   }
 
   connectedCallback() {
@@ -233,7 +240,7 @@ export class ApiConsoleApp extends ApiConsole {
    */
   resetSelection() {
     super.resetSelection();
-    history.pushState({
+    window.history.pushState({
       page: 'docs',
       type: 'summary',
       selected: 'summary'
@@ -250,7 +257,7 @@ export class ApiConsoleApp extends ApiConsole {
     super._apiNavigationOcurred(e);
     const { selected, type } = e.detail;
     const url = `${window.location.pathname}#docs/${type}/${selected}`;
-    history.pushState({
+    window.history.pushState({
       page: 'docs',
       type,
       selected
@@ -268,7 +275,7 @@ export class ApiConsoleApp extends ApiConsole {
     if (window.history.state) {
       this._onRoute(window.history);
     } else {
-      this._selectionFromHash(location.hash);
+      this._selectionFromHash(window.location.hash);
     }
   }
 
@@ -355,7 +362,7 @@ export class ApiConsoleApp extends ApiConsole {
           ?hidden="${manualNavigation}"
           ?compatibility="${compatibility}"
         >
-          <span drawer-toggle class="icon">${menu}</span>
+          <arc-icon drawer-toggle icon="menu"></arc-icon>
         </anypoint-icon-button>
         <div main-title>${apiTitle}</div>
         <slot name="toolbar"></slot>

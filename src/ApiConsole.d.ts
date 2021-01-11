@@ -1,6 +1,8 @@
 import { TemplateResult, CSSResult, LitElement } from 'lit-element';
 import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
 
+export const isChrome: boolean;
+
 export declare class ApiConsole {
   static styles: CSSResult|CSSResult[];
   /**
@@ -379,12 +381,6 @@ export declare class ApiConsole {
    * `displayName` property or name of the HTTP method.
    */
   _computeMethodName(selected: string, webApi: object): string|undefined;
-
-  /**
-   * Handler for the `api-changed` event on the RAML aware element.
-   * Sets `amf` property to the detail value.
-   */
-  _apiChanged(e: CustomEvent): void;
 
   /**
    * A handler for the `api-console-extension-installed` event dispatched by the
