@@ -1,5 +1,5 @@
 import { html, render } from 'lit-html';
-import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
+import '@api-components/api-request/xhr-simple-request.js';
 import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '@polymer/paper-toast/paper-toast.js';
@@ -7,6 +7,7 @@ import './helpers/loader-screen.js';
 import './helpers/upload-api-screen.js';
 import './helpers/api-file-selector.js';
 import './helpers/api-selector.js';
+
 const apiCache = new WeakMap();
 
 export class DemoBase {

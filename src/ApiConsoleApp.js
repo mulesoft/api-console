@@ -6,7 +6,7 @@ import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
 import '@polymer/app-layout/app-header-layout/app-header-layout.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
+import '@api-components/api-request/xhr-simple-request.js';
 import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';

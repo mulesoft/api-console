@@ -34,13 +34,12 @@
   "dependencies": {
     "@advanced-rest-client/arc-icons": "^3.2.2",
     "@advanced-rest-client/oauth-authorization": "^5.0.3",
-    "@advanced-rest-client/xhr-simple-request": "^3.0.0",
     "@anypoint-web-components/anypoint-button": "^1.1.1",
-    "@api-components/amf-helper-mixin": "^4.3.3",
+    "@api-components/amf-helper-mixin": "^4.3.4",
     "@api-components/api-console-ext-comm": "^3.0.0",
-    "@api-components/api-documentation": "^6.0.0-preview",
+    "@api-components/api-documentation": "^6.0.1",
     "@api-components/api-navigation": "^4.1.1",
-    "@api-components/api-request": "^0.1.0",
+    "@api-components/api-request": "^0.1.2",
     "@polymer/app-layout": "^3.1.0",
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/paper-toast": "^3.0.0",
@@ -60,9 +59,9 @@
     "@open-wc/eslint-config": "^4.2.0",
     "@open-wc/testing": "^2.5.16",
     "@polymer/iron-test-helpers": "^3.0.0",
-    "@web/test-runner": "^0.12.1",
+    "@web/test-runner": "^0.12.2",
     "@web/test-runner-playwright": "^0.8.0",
-    "amf-client-js": "^4.5.1",
+    "amf-client-js": "^4.6.0",
     "body-parser": "^1.19.0",
     "deepmerge": "^4.2.1",
     "es-dev-server": "^2.0.2",
@@ -86,7 +85,7 @@
     "typescript-lit-html-plugin": "^0.9.0",
     "uglify-js": "^3.12.4",
     "unzipper": "^0.10.10",
-    "uuid": "^8.0.0"
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "generate-model": "npm run build:models",
