@@ -351,7 +351,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this._handleServerChange = this._handleServerChange.bind(this);
 
     this.page = 'docs';
-    this.drawerAlign = 'left';
     this.compatibility = false;
     this.outlined = false;
     this.narrow = false;
