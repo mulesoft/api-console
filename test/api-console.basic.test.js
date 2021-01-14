@@ -293,7 +293,7 @@ describe('ApiConsole', () => {
 
     it('Navigation is rendered on screen', async () => {
       element.navigationOpened = true;
-      await aTimeout(350);
+      await aTimeout(360);
       const nav = element.shadowRoot.querySelector('.nav-drawer');
       const transform = getComputedStyle(nav).transform;
       assert.equal(transform, 'matrix(1, 0, 0, 1, 0, 0)')
