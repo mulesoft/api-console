@@ -3,7 +3,7 @@ import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixi
 
 export const isChrome: boolean;
 
-export declare class ApiConsole {
+export declare class ApiConsole extends AmfHelperMixin(LitElement) {
   static styles: CSSResult|CSSResult[];
   /**
    * You can use `raml-aware` component to pass AMF data to the console.
@@ -462,8 +462,4 @@ export declare class ApiConsole {
    * without statically include the dependency.
    */
   _helpersTemplate(): TemplateResult;
-}
-
-export declare interface ApiConsole extends AmfHelperMixin, LitElement {
-
 }
