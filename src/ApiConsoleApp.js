@@ -167,13 +167,11 @@ export class ApiConsoleApp extends ApiConsole {
     this.appendHeaders = undefined;
     this.proxy = undefined;
     this.proxyEncodeUrl = undefined;
-    this.drawerAlign = undefined;
+    this.drawerAlign = 'left';
   }
 
   connectedCallback() {
-    if (super.connectedCallback) {
-      super.connectedCallback();
-    }
+    super.connectedCallback();
     window.addEventListener('popstate', this._onRoute.bind(this));
   }
 
@@ -397,7 +395,7 @@ export class ApiConsoleApp extends ApiConsole {
     ${this._mediaQueriesTemplate()}
     <app-drawer-layout
       .responsiveWidth="${responsiveWidth}"
-      ?narrow="${layoutNarrow}"
+      ?forceNarrow="${layoutNarrow}"
       fullbleed>
       <app-drawer slot="drawer" .align="${drawerAlign}" .opened="${navigationOpened}">
         ${this._drawerToolbarTemplate()}

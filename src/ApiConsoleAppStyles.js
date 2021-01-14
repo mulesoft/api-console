@@ -66,9 +66,9 @@ api-documentation {
 .api-docs .inline-request {
   max-width: 600px;
   margin-left: 12px;
-  background-color: var(--apic-tryint-wide-background-color, transparent);
+  background-color: var(--apic-tryit-wide-background-color, transparent);
   border-left-width: 1px;
-  border-left-color: var(--apic-tryint-wide-border-color, #e5e5e5);
+  border-left-color: var(--apic-tryit-wide-border-color, #e5e5e5);
   border-left-style: solid;
   padding: 0 12px;
   box-sizing: border-box;
