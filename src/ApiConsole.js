@@ -47,16 +47,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   static get properties() {
     return {
       /**
-       * You can use `raml-aware` component to pass AMF data to the console.
-       * Raml aware uses monostate pattern to pass the data to any other
-       * instance of the same component and receives updates from them.
-       *
-       * When using `<raml-aware>` set it's `scope` property to some name
-       * and this property to the same name. Once you update `raml` property
-       * on the aware it updates the model in the console.
-       */
-      aware: { type: String },
-      /**
        * It is current selection from the navigation represented
        * as an `@id` property of the AMD json/ld model.
        *
@@ -362,9 +352,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
     this.page = 'docs';
     this.drawerAlign = 'left';
-
-    // the below is done for types only
-    this.aware = null;
     this.compatibility = false;
     this.outlined = false;
     this.narrow = false;
