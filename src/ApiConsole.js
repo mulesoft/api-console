@@ -1,3 +1,4 @@
+/* eslint-disable lit-a11y/click-events-have-key-events */
 /**
 @license
 Copyright 2018 The Advanced REST client authors <arc@mulesoft.com>
@@ -13,15 +14,14 @@ the License.
 */
 import { html, LitElement } from 'lit-element';
 import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
-import '@api-components/raml-aware/raml-aware.js';
 import '@api-components/api-navigation/api-navigation.js';
 import '@api-components/api-documentation/api-documentation.js';
-import '@api-components/api-request-panel/api-request-panel.js';
+import '@api-components/api-request/api-request-panel.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '@api-components/api-console-ext-comm/api-console-ext-comm.js';
 import attributionTpl from './attribution-template.js';
-import { close } from '@advanced-rest-client/arc-icons/ArcIcons.js';
+import '@advanced-rest-client/arc-icons/arc-icon.js';
 import styles from './ApiConsoleStyles.js';
 
 export const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
@@ -46,16 +46,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
   static get properties() {
     return {
-      /**
-       * You can use `raml-aware` component to pass AMF data to the console.
-       * Raml aware uses monostate pattern to pass the data to any other
-       * instance of the same component and receives updates from them.
-       *
-       * When using `<raml-aware>` set it's `scope` property to some name
-       * and this property to the same name. Once you update `raml` property
-       * on the aware it updates the model in the console.
-       */
-      aware: { type: String },
       /**
        * It is current selection from the navigation represented
        * as an `@id` property of the AMD json/ld model.
@@ -111,7 +101,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * request through Chrome extension's sandbox and eliminates CORS.
        *
        * When this is set it enables this feature and renders installation banner
-       * when currrent browser profile does not have extension installed.
+       * when current browser profile does not have extension installed.
        */
       allowExtensionBanner: { type: Boolean },
       /**
@@ -130,7 +120,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * If set then the API console hide the "try it" button from the
        * method documentation view. The request and response panels still will
        * be available, but to enter this section you'll have to do it
-       * programatically.
+       * programmatically.
        */
       noTryIt: { type: Boolean },
       /**
@@ -145,7 +135,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       redirectUri: { type: String },
       /**
        * Hides the URL editor from the view.
-       * Note that the editor is still in the DOM. This property just hiddes
+       * Note that the editor is still in the DOM. This property just hides
        * it.
        */
       noUrlEditor: { type: Boolean },
@@ -233,7 +223,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * of endpoints based on the `path` value of the endpoint, keeping the order
        * of which endpoint was first in the list, relative to each other.
        *
-       * **This is an experimental option and may dissapear without warning.**
+       * **This is an experimental option and may disappear without warning.**
        */
       rearrangeEndpoints: { type: Boolean },
       /**
@@ -320,7 +310,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       return;
     }
     this._oauth2clientId = value;
-    // No need to pass the valu via binding system because the auth method
+    // No need to pass the value via binding system because the auth method
     // uses session storage to restore user values between the screens
     sessionStorage.setItem('auth.methods.latest.client_id', value);
   }
@@ -340,7 +330,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   /**
-   * This can be overriten by child classes to decide whether to render the server
+   * This can be overwritten by child classes to decide whether to render the server
    * selector or not.
    * @return {boolean} The final value of `noServerSelector`.
    */
@@ -361,10 +351,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this._handleServerChange = this._handleServerChange.bind(this);
 
     this.page = 'docs';
-    this.drawerAlign = 'left';
-
-    // the below is done for types only
-    this.aware = null;
     this.compatibility = false;
     this.outlined = false;
     this.narrow = false;
@@ -416,7 +402,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   /**
-   * On Firefix the navigation hidding animation runs when the app is first rendered,
+   * On Firefox, the animation that is hiding the navigation runs when the app is first rendered,
    * even if the navigation wasn't initially rendered. This to be called
    * after initial render has been made (DOM is constructed) to add the `animatable`
    * class on the navigation to enable animation effects.
@@ -447,10 +433,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     if (!amf) {
       return;
     }
-    if (amf instanceof Array) {
-      amf = amf[0];
+    if (Array.isArray(amf)) {
+      [amf] = amf;
     }
-    const webApi = this.webApi = this._computeApi(amf);
+    const webApi = this._computeApi(amf);
+    this.webApi = webApi;
     this.methodName = this._computeMethodName(this.selectedShape, webApi);
     if (!this._isWebAPI(amf)) {
       this._noTryItValue = true;
@@ -583,38 +570,29 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   /**
    * Computes method name for not-wide view, where the request panel
    * has close button.
-   * @param {String} selected Curerently selected AMF shape (@id).
+   * @param {String} selected Currently selected AMF shape (@id).
    * @param {Object} webApi Computed AMF WebAPI model.
    * @return {String|undefined} Name of current method (verb) as RAML's
    * `displayName` property or name of the HTTP method.
    */
   _computeMethodName(selected, webApi) {
     if (!selected || !webApi) {
-      return;
+      return undefined;
     }
     let method;
     try {
       method = this._computeMethodModel(webApi, selected);
     } catch (_) {
-      return;
+      return undefined;
     }
     if (!method) {
-      return;
+      return undefined;
     }
     let name = /** @type string */ (this._getValue(method, this.ns.aml.vocabularies.core.name));
     if (!name) {
       name = /** @type string */ (this._getValue(method, this.ns.aml.vocabularies.apiContract.method));
     }
     return name;
-  }
-
-  /**
-   * Handler for the `api-changed` event on the RAML aware element.
-   * Sets `amf` property to the detail value.
-   * @param {CustomEvent} e
-   */
-  _apiChanged(e) {
-    this.amf = e.detail.value;
   }
 
   /**
@@ -658,9 +636,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   render() {
-    const { aware } = this;
     return html`
-    ${aware ? html`<raml-aware .scope="${aware}" @api-changed="${this._apiChanged}"></raml-aware>` : ''}
     ${this._mainContentTemplate()}
     ${this._helpersTemplate()}
     `;
@@ -699,7 +675,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
         aria-label="Activate to close the message"
         @click="${this.dismissExtensionBanner}"
       >
-        <span class="icon">${close}</span>
+        <arc-icon icon="close"></arc-icon>
       </anypoint-icon-button>
     </div>`;
   }
@@ -737,16 +713,13 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       outlined,
       amf,
       selectedShape,
-      narrow,
       noUrlEditor,
-      scrollTarget,
       allowCustom,
       allowDisableParams,
       allowHideOptional,
       redirectUri,
       eventsTarget,
       baseUri,
-      noDocs,
       serverValue,
       serverType,
       noServerSelector,
@@ -755,19 +728,16 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     return html`<api-request-panel
       .amf="${amf}"
       .selected="${selectedShape}"
-      ?narrow="${narrow}"
       ?outlined="${outlined}"
       ?compatibility="${compatibility}"
       ?noServerSelector="${noServerSelector}"
       ?allowCustomBaseUri="${allowCustomBaseUri}"
       .noUrlEditor="${noUrlEditor}"
       .redirectUri="${redirectUri}"
-      .scrollTarget="${scrollTarget}"
       .allowCustom="${allowCustom}"
       .allowDisableParams="${allowDisableParams}"
       .allowHideOptional="${allowHideOptional}"
       .baseUri="${baseUri}"
-      .noDocs="${noDocs}"
       .serverValue="${serverValue}"
       .serverType="${serverType}"
       .eventsTarget="${eventsTarget}"
@@ -796,7 +766,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       serverType,
       _noServerSelector,
       allowCustomBaseUri,
-      rearrangeEndpoints,
     } = this;
 
     return html`<api-documentation
@@ -815,7 +784,6 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .scrollTarget="${scrollTarget}"
       .serverValue="${serverValue}"
       .serverType="${serverType}"
-      ?rearrangeEndpoints="${rearrangeEndpoints}"
       @api-navigation-selection-changed="${this._apiNavigationOcurred}"
     >
       ${this._documentationBaseSlot()}
@@ -824,7 +792,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
   /**
    * Renders the `<slot>` element in the `<api-documentation>` only when
-   * ther request panel is not rendered. When it is rendered then it
+   * the request panel is not rendered. When it is rendered then it
    * is the target for slots.
    * @return {TemplateResult|string} Template for a slot to be used in the api documentation
    */
@@ -844,8 +812,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       <api-navigation
         .amf="${amf}"
         summary
-        endpointsopened
-        ?rearrangeendpoints="${rearrangeEndpoints}"
+        endpointsOpened
+        ?rearrangeEndpoints="${rearrangeEndpoints}"
         @api-navigation-selection-changed="${this._apiNavigationOcurred}"></api-navigation>
       ${noAttribution ? '' : attributionTpl}
     </div>`;

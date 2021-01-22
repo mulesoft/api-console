@@ -1,7 +1,9 @@
 import { TemplateResult, CSSResult, LitElement } from 'lit-element';
 import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
 
-export declare class ApiConsole {
+export const isChrome: boolean;
+
+export declare class ApiConsole extends AmfHelperMixin(LitElement) {
   static styles: CSSResult|CSSResult[];
   /**
    * You can use `raml-aware` component to pass AMF data to the console.
@@ -381,12 +383,6 @@ export declare class ApiConsole {
   _computeMethodName(selected: string, webApi: object): string|undefined;
 
   /**
-   * Handler for the `api-changed` event on the RAML aware element.
-   * Sets `amf` property to the detail value.
-   */
-  _apiChanged(e: CustomEvent): void;
-
-  /**
    * A handler for the `api-console-extension-installed` event dispatched by the
    * component that is responsible for communication with the browser extension
    * built for API Console to deal with the CORS issues.
@@ -466,8 +462,4 @@ export declare class ApiConsole {
    * without statically include the dependency.
    */
   _helpersTemplate(): TemplateResult;
-}
-
-export declare interface ApiConsole extends AmfHelperMixin, LitElement {
-
 }

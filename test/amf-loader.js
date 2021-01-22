@@ -1,3 +1,8 @@
+/* eslint-disable no-continue */
+/* eslint-disable no-shadow */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-param-reassign */
+/* eslint-disable max-classes-per-file */
 import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
 
 export class ApiDescribe {
@@ -74,11 +79,11 @@ const helper = new HelperElement();
  *
  * @return {Promise<ApiModel>} Promise resolved to API object.
  */
-AmfLoader.load = async function(config = {}) {
+AmfLoader.load = async (config = {}) => {
   const { compact=false, fileName='demo-api' } = config;
   const suffix = compact ? '-compact' : '';
   const file = `${fileName}${suffix}.json`;
-  const url = location.protocol + '//' + location.host + '/base/demo/models/'+ file;
+  const url = `${window.location.protocol  }//${  window.location.host  }/base/demo/models/${ file}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Unable to download ${url}`);
@@ -88,7 +93,7 @@ AmfLoader.load = async function(config = {}) {
 };
 
 /**
- * Lookups WebAppi's AMF definition from the API model.
+ * Lookups WebApi's AMF definition from the API model.
  * @param {ApiModel} model Api model.
  * @return {WebApiModel} Model for the WebApi
  */
@@ -138,7 +143,7 @@ AmfLoader.lookupPayload = function(model, endpoint, operation) {
 
 /**
  * Looks up for an endpoint and an operation in a single query.
- * Thids is equivalent to calling:
+ * This is equivalent to calling:
  *
  * ```javascript
  * const result = [AmfLoader.lookupEndpoint(...), AmfLoader.lookupOperation(...)]

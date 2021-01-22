@@ -1,5 +1,4 @@
 import { html, render } from 'lit-html';
-import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
 import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
 import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
 import '@anypoint-web-components/anypoint-styles/colors.js';
@@ -55,7 +54,7 @@ protocols: [HTTP, HTTPS]
     props.forEach((item) => {
       Object.defineProperty(this, item, {
         get() {
-          return this['_' + item];
+          return this[`_${  item}`];
         },
         set(newValue) {
           this._setObservableProperty(item, newValue);
@@ -67,7 +66,7 @@ protocols: [HTTP, HTTPS]
   }
 
   _setObservableProperty(prop, value) {
-    const key = '_' + prop;
+    const key = `_${  prop}`;
     if (this[key] === value) {
       return;
     }

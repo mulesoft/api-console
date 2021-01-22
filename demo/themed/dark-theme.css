@@ -1,10 +1,17 @@
 html {
-  --secondary-text-color: #616161;
-  --primary-background-color: #424242;
-  --code-background-color: #263238;
-  --code-color: #fff;
+  --primary-color: #ffcc80;
+  --primary-text-color: #fff;
+  --accent-color: #9c27b0;
+  --secondary-text-color: rgba(255, 255, 255, 0.84);
+  --primary-background-color: #212121;
+  --error-color: #ff9090;
+  --link-color: #8bc34a;
 
-  --anypoint-input-legacy-label-color: #F5F5F5;
+  /* layout */
+  --api-console-toolbar-background-color: #424242;
+  --api-console-menu-background-color: var(--primary-background-color);
+  --api-console-menu-color: #fff;
+
   --anypoint-checkbox-label-color:  #F5F5F5;
   --anypoint-input-background-color: #494949;
   --anypoint-input-label-color: #fff;
@@ -18,45 +25,50 @@ html {
 
   --inline-documentation-background-color: #3a3a3a;
 
+  --anypoint-menu-button-border-radius: 12px;
+
   --anypoint-dropdown-menu-background-color: #494949;
   --anypoint-dropdown-menu-label-background-color: var(--primary-background-color);
   --anypoint-listbox-background-color: #494949;
-  --anypoint-dropdown-menu-focus-background-color: #9E9E9E;
+  --anypoint-dropdown-menu-focus-background-color: #616161;
   --anypoint-dropdown-menu-label-color: #fff;
   --anypoint-dropdown-menu-info-message-color: #fff;
-  --anypoint-item-hover-background-color: #9E9E9E;
-  --anypoiont-autocomplete-background-color: #494949;
-  --anypoint-icon-button-emphasis-low-color: #fff;
+  --anypoint-item-hover-background-color: #616161;
+  --anypoint-item-focused-background-color: #212121;
+  --anypoint-autocomplete-background-color: #494949;
+  --anypoint-icon-button-emphasis-low-color: #c5c5c5;
 
-  --code-mirror-background-color: #37474F;
+  --anypoint-button-emphasis-low-hover-background-color: #616161;
+  --anypoint-button-emphasis-low-focus-background-color: var(--anypoint-button-emphasis-low-hover-background-color);
+  --anypoint-button-emphasis-low-focus-color: var(--primary-color);
+
+  --code-mirror-background-color: #1e1e1e;
+  --code-mirror-gutters-background-color: #1e1e1e;
   --code-mirror-string-color: #C3E88D;
   --code-mirror-punctuation-color: #EEFFFF;
   --code-mirror-atom-color: #F07178;
   --code-mirror-number-color: #F78C6A;
   --code-mirror-cursor-color: #009688;
-  --code-mirror-gutters-background-color: #37474F;
+  --code-mirror-tag-color: #ffffff;
+  --code-mirror-tag-color: #b4b4b4;
+  --code-mirror-gutters-border-right-color: #757575;
 
-  --code-type-boolean-value-color: #F07178;
-  --code-type-number-value-color: #F78C6A;
-  --code-type-text-value-color: #C3E88D;
-  --code-property-value-color: #F07178;
   --code-operator-value-background-color: transparent;
+  --code-background-color: #212121;
+  --code-color: #fff;
+  --code-type-number-value-color: #eb67b0;
+  --code-property-value-color: #b0e6ff;
+  --code-type-text-value-color: #ffb89b;
+  --code-type-boolean-value-color: #72baff;
+  --code-type-number-value-color: #b5cea8;
+  --code-token-comment-value-color: #91afcd;
+  --code-keyword-value-color: #63d0ff;
 
   --api-type-document-type-attribute-color: #fff;
   --api-annotation-document-color: #fff;
   --api-body-document-description-color: #fff;
   --api-method-documentation-description-color: #fff;
   --api-method-documentation-bottom-navigation-color: #fff;
-
-  --http-method-label-get-background-color: rgb(0, 128, 0);
-  --http-method-label-get-color: #fff;
-  --http-method-label-post-background-color: rgb(33, 150, 243);
-  --http-method-label-post-color: #fff;
-  --http-method-label-put-background-color: rgb(255, 165, 0);
-  --http-method-label-put-color: #fff;
-  --http-method-label-delete-background-color: rgb(244, 67, 54);
-  --http-method-label-delete-color: #fff;
-  --iron-icon-fill-color: #fff;
   --api-method-documentation-url-background-color: var(--code-background-color);
   --markdown-styles-code-text-shadow: none;
 
@@ -76,15 +88,49 @@ html {
   --auth-method-oauth2-redirect-info-color: #fff;
   --inline-documentation-color: #fff;
 
-  --api-console-menu-background-color: #424242;
-  --api-console-menu-color: #fff;
+  --api-endpoint-documentation-bottom-navigation-color: var(--link-color);
+  --api-endpoint-documentation-description-color: #fff;
+  --api-method-documentation-bottom-navigation-color: var(--link-color);
 
-  --api-endpoint-documentation-bottom-navigation-color: #fff;
-  --api-method-documentation-bottom-navigation-color: #fff;
+  --authorization-method-oauth2-redirect-info-color: #fff;
+
+  /* Response error message */
+  --error-message-icon-color: rgba(255, 255, 255, 0.64);
+  --error-message-color: #fff;
+  --error-message-code-color: #9e9e9e;
+
+  /* HTTP method colors */
+  --http-get-color: rgba(0, 128, 0, 0.74);
+  --http-post-color: rgba(33, 150, 243, 0.74);
+  --http-put-color: rgba(255, 165, 0, 0.74);
+  --http-patch-color: rgb(156, 39, 176);
+  --http-delete-color: rgba(244, 67, 54, 0.74);
+  --http-options-color: rgba(128, 128, 128, 0.74);
+  --http-head-color: rgba(128, 128, 128, 0.74);
+  --http-connect-color: rgba(128, 128, 128, 0.74);
+  --http-trace-color: rgba(128, 128, 128, 0.74);
+  --http-method-label-get-background-color: var(--http-get-color);
+  --http-method-label-get-color: #fff;
+  --http-method-label-post-background-color: var(--http-post-color);
+  --http-method-label-post-color: #fff;
+  --http-method-label-patch-background-color: var(--http-patch-color);
+  --http-method-label-patch-color: #fff;
+  --http-method-label-put-background-color: var(--http-put-color);
+  --http-method-label-put-color: #fff;
+  --http-method-label-delete-background-color: var(--http-delete-color);
+  --http-method-label-delete-color: #fff;
+  --http-method-label-options-background-color: var(--http-options-color);
+  --http-method-label-options-background-color: #fff;
+  --http-method-label-head-background-color: var(--http-head-color);
+  --http-method-label-head-background-color: #fff;
+  --http-method-label-trace-background-color: var(--http-trace-color);
+  --http-method-label-trace-background-color: #fff;
+  --http-method-label-connect-background-color: var(--http-connect-color);
+  --http-method-label-connect-background-color: #fff;
 }
 
 body {
-  background-color: #424242;
+  background-color: #212121;
   color: #fff;
 
   margin: 0;

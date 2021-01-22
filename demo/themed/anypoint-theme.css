@@ -47,14 +47,12 @@ html {
   --http-method-label-head-background-color: var(--method-display-head-color);
   --http-method-label-head-color: #fff;
   --http-method-label-padding: 4px 5px;
-  --method-display-font-weigth: 100;
+  --method-display-font-weight: 100;
 
   --api-navigation-list-item-selected-background-color: #e8e9ea;
   --api-navigation-list-item-selected-color: #000;
 
-
   --api-method-documentation-url-border-radius: 0;
-
   --api-method-documentation-section-background-color: #f9fafb;
   --api-method-documentation-section-padding: 5px;
 

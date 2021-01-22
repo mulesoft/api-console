@@ -1,67 +1,54 @@
+/* eslint-disable no-shadow */
+/* eslint-disable prefer-destructuring */
 import { fixture, assert, aTimeout, html, nextFrame } from '@open-wc/testing';
 import * as sinon from 'sinon';
 import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
 import { isChrome } from '../src/ApiConsole.js';
 import '../api-console.js';
-import { AmfLoader } from './amf-loader.js';
+
+/** @typedef {import('..').ApiConsole} ApiConsole */
 
 //
 //  Tests for computations that do not require AMF model.
 //
 
-describe('<api-console>', function () {
+describe('ApiConsole', () => {
+  /**
+   * @returns {Promise<ApiConsole>}
+   */
   async function basicFixture() {
-    return fixture(`<api-console></api-console>`);
+    return fixture(html`<api-console></api-console>`);
   }
 
-  async function awareFixture() {
-    return fixture(`<api-console aware="test"></api-console>`);
-  }
-
+  /**
+   * @returns {Promise<ApiConsole>}
+   */
   async function requestFixture() {
-    return fixture(`<api-console page="request"></api-console>`);
+    return fixture(html`<api-console page="request"></api-console>`);
   }
 
+  /**
+   * @returns {Promise<ApiConsole>}
+   */
   async function noAttributionFixture() {
-    return fixture(`<api-console noattribution></api-console>`);
+    return fixture(html`<api-console noAttribution></api-console>`);
   }
 
+  /**
+   * @returns {Promise<ApiConsole>}
+   */
   async function extensionFixture() {
-    return fixture(`<api-console allowExtensionBanner page="request"></api-console>`);
+    return fixture(html`<api-console allowExtensionBanner page="request"></api-console>`);
   }
-
-  describe('RAML aware', () => {
-    it('Adds raml-aware to the DOM if aware is set', async () => {
-      const element = await awareFixture();
-      const node = element.shadowRoot.querySelector('raml-aware');
-      assert.ok(node);
-    });
-
-    it('passes AMF model', async () => {
-      const amf = AmfLoader.load();
-      const element = await awareFixture();
-      const aware = document.createElement('raml-aware');
-      aware.scope = 'test';
-      aware.api = amf;
-      await aTimeout(0);
-      assert.deepEqual(element.amf, amf);
-    });
-
-    it('raml-aware is not in the DOM by default', async () => {
-      const element = await basicFixture();
-      const node = element.shadowRoot.querySelector('raml-aware');
-      assert.notOk(node);
-    });
-  });
 
   describe('built-in model downloading', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     let xhr;
     let requests;
     before(() => {
       xhr = sinon.useFakeXMLHttpRequest();
-      xhr.onCreate = function (xhr) {
-        requests.push(xhr);
+      xhr.onCreate = (arg) => {
+        requests.push(arg);
       };
     });
 
@@ -75,7 +62,7 @@ describe('<api-console>', function () {
     });
 
     it('does nothing when no argument', () => {
-      element._modelLocationChanged();
+      element._modelLocationChanged(undefined);
       assert.equal(requests.length, 0);
     });
 
@@ -115,7 +102,7 @@ describe('<api-console>', function () {
   });
 
   describe('Navigation events', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     const SEL_ID = 'test-id';
     const SEL_TYPE = 'test-type';
 
@@ -124,12 +111,13 @@ describe('<api-console>', function () {
     });
 
     it('Closes request panel', () => {
-      element._apiNavigationOcurred({
+      const e = new CustomEvent('api-navigation-selection-changed', {
         detail: {
           selected: SEL_ID,
           type: SEL_TYPE
         }
       });
+      element._apiNavigationOcurred(e);
       assert.equal(element.page, 'docs');
     });
 
@@ -137,33 +125,36 @@ describe('<api-console>', function () {
       element.selectedShape = SEL_ID;
       element.selectedShapeType = SEL_TYPE;
       element.page = 'request';
-      element._apiNavigationOcurred({
+      const e = new CustomEvent('api-navigation-selection-changed', {
         detail: {
           selected: SEL_ID,
           type: SEL_TYPE,
           passive: true
         }
       });
+      element._apiNavigationOcurred(e);
       assert.equal(element.page, 'request');
     });
 
     it('Sets selectedShape', () => {
-      element._apiNavigationOcurred({
+      const e = new CustomEvent('api-navigation-selection-changed', {
         detail: {
           selected: SEL_ID,
           type: SEL_TYPE
         }
       });
+      element._apiNavigationOcurred(e);
       assert.equal(element.selectedShape, SEL_ID);
     });
 
     it('Sets selectedShapeType', () => {
-      element._apiNavigationOcurred({
+      const e = new CustomEvent('api-navigation-selection-changed', {
         detail: {
           selected: SEL_ID,
           type: SEL_TYPE
         }
       });
+      element._apiNavigationOcurred(e);
       assert.equal(element.selectedShapeType, SEL_TYPE);
     });
   });
@@ -191,20 +182,22 @@ describe('<api-console>', function () {
   });
 
   describe('_apiLoadEndHandler()', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
 
     it('Sets amf property', () => {
+      // @ts-ignore
       element._apiLoadEndHandler({
         response: '[{"@context":{}, "@id": "","@type": []}]'
       });
       assert.typeOf(element.amf, 'array');
     });
 
-    it('Calles _apiLoadErrorHandler when response is not valid', () => {
+    it('Calls _apiLoadErrorHandler when response is not valid', () => {
       const callback = sinon.spy(element, '_apiLoadErrorHandler');
+      // @ts-ignore
       element._apiLoadEndHandler({
         response: '[{"@context":'
       });
@@ -213,23 +206,25 @@ describe('<api-console>', function () {
   });
 
   describe('_apiLoadErrorHandler()', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
 
     it('Sets message on the toast', () => {
       element._apiLoadErrorHandler(new Error('test'));
+      // @ts-ignore
       assert.typeOf(element.shadowRoot.querySelector('#apiLoadErrorToast').text, 'string');
     });
 
     it('The toast is opened', () => {
       element._apiLoadErrorHandler(new Error('test'));
+      // @ts-ignore
       assert.isTrue(element.shadowRoot.querySelector('#apiLoadErrorToast').opened);
     });
   });
 
-  describe('Attribution', function () {
+  describe('Attribution', () => {
     it('Attribution logo is rendered', async () => {
       const element = await basicFixture();
       const node = element.shadowRoot.querySelector('.powered-by');
@@ -244,7 +239,7 @@ describe('<api-console>', function () {
   });
 
   describe('page rendering', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
@@ -273,7 +268,7 @@ describe('<api-console>', function () {
   });
 
   describe('navigation element view', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
@@ -298,7 +293,7 @@ describe('<api-console>', function () {
 
     it('Navigation is rendered on screen', async () => {
       element.navigationOpened = true;
-      await aTimeout(350);
+      await aTimeout(360);
       const nav = element.shadowRoot.querySelector('.nav-drawer');
       const transform = getComputedStyle(nav).transform;
       assert.equal(transform, 'matrix(1, 0, 0, 1, 0, 0)')
@@ -312,7 +307,7 @@ describe('<api-console>', function () {
       assert.isFalse(element.navigationOpened);
     });
 
-    it('dispatches wbwnt when closing navigation', async () => {
+    it('dispatches the event when closing navigation', async () => {
       element.navigationOpened = true;
       await aTimeout(0);
       const spy = sinon.spy();
@@ -342,19 +337,20 @@ describe('<api-console>', function () {
 
     it('renders error toast when location is invalid', async () => {
       const file = '/base/demo/models/invalid.json';
-      let element;
+      let element = /** @type ApiConsole */ (null);
       try {
         await basicFixture(file);
       } catch (e) {
         element = e;
       }
       const toast = element.shadowRoot.querySelector('#apiLoadErrorToast');
+      // @ts-ignore
       assert.isTrue(toast.opened);
     });
   });
 
   describe('setting oauth data', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
@@ -380,7 +376,7 @@ describe('<api-console>', function () {
   });
 
   describe('_tryitHandler()', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
@@ -393,7 +389,7 @@ describe('<api-console>', function () {
   });
 
   describe('Extension banner', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await extensionFixture();
     });
@@ -437,7 +433,7 @@ describe('<api-console>', function () {
   });
 
   describe('#_rendersRequestPanel', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
@@ -454,7 +450,7 @@ describe('<api-console>', function () {
   });
 
   describe('#_noServerSelector', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
@@ -470,7 +466,7 @@ describe('<api-console>', function () {
   });
 
   describe('apiserverchanged event', () => {
-    let element;
+    let element = /** @type ApiConsole */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });

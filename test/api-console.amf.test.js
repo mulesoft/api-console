@@ -1,22 +1,25 @@
+/* eslint-disable no-param-reassign */
 import { fixture, assert, html, aTimeout, nextFrame } from '@open-wc/testing';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 
-describe('<api-console>', function() {
+/** @typedef {import('..').ApiConsole} ApiConsole */
+
+describe('ApiConsole', () => {
+  /**
+   * @returns {Promise<ApiConsole>}
+   */
   async function amfFixture(amf) {
-    return (await fixture(html`
+    return (fixture(html`
       <api-console .amf="${amf}"></api-console>
     `));
   }
 
-  async function rearrangedEndpointsFixture(amf, rearrangeEndpoints) {
-    return (await fixture(html`
-      <api-console .amf="${amf}" ?rearrangeEndpoints="${rearrangeEndpoints}"></api-console>
-    `));
-  }
-
+  /**
+   * @returns {Promise<ApiConsole>}
+   */
   async function selectedFixture(amf, selected, type) {
-    const element = (await fixture(html`
+    const element = /** @type ApiConsole */ (await fixture(html`
       <api-console
         .amf="${amf}"
         .selectedShape="${selected}"
@@ -64,7 +67,7 @@ describe('<api-console>', function() {
             assert.equal(element.methodName, 'List people');
           });
 
-          it('returns undefined when no selectction', () => {
+          it('returns undefined when no selection', () => {
             const result = element._computeMethodName(undefined, webapi);
             assert.isUndefined(result);
           });
@@ -97,30 +100,6 @@ describe('<api-console>', function() {
             element = await amfFixture(amf);
           });
 
-          it('sets rearrangeEndpoints to false', async () => {
-            element.rearrangeEndpoints = false;
-            await nextFrame();
-            assert.isFalse(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
-          });
-
-          it('sets rearrangeEndpoints to true', async () => {
-            element.rearrangeEndpoints = true;
-            await nextFrame();
-            assert.isTrue(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
-          });
-
-          it('passes true rearrangeendpoints value down', async () => {
-            element = await rearrangedEndpointsFixture(amf, true);
-            assert.isTrue(element.rearrangeEndpoints);
-            assert.isTrue(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
-          });
-
-          it('passes false rearrangeendpoints value down', async () => {
-            element = await rearrangedEndpointsFixture(amf, false);
-            assert.isFalse(element.rearrangeEndpoints);
-            assert.isFalse(element.shadowRoot.querySelector('api-documentation').rearrangeEndpoints);
-          });
-
           it('should not render method-label nor method-value in Summary view', async () => {
             element = await selectedFixture(amf, 'summary', 'summary')
             await nextFrame();
@@ -151,14 +130,14 @@ describe('<api-console>', function() {
             amf = await AmfLoader.load({ compact, fileName });
           });
 
-          it('autoselects the default server', async () => {
+          it('auto-selects the default server', async () => {
             const op = AmfLoader.lookupOperation(amf, '/default', 'get');
             const element = await selectedFixture(amf, op['@id'], 'method');
             assert.equal(element.serverValue, 'https://{customerId}.saas-app.com:{port}/v2');
             assert.equal(element.serverType, 'server');
           });
 
-          it('autoselects the default server that has no variables', async () => {
+          it('auto-selects the default server that has no variables', async () => {
             const op = AmfLoader.lookupOperation(amf, '/files', 'get');
             const element = await selectedFixture(amf, op['@id'], 'method');
             assert.equal(element.serverValue, 'https://files.example.com');
@@ -338,7 +317,7 @@ describe('<api-console>', function() {
           await aTimeout(0);
         });
 
-        it('should render Publish and Subcribe operations with styles in Summary panel', () => {
+        it('should render Publish and Subscribe operations with styles in Summary panel', () => {
           const documentation = element.shadowRoot.querySelector('api-documentation');
           const summary = documentation.shadowRoot.querySelector('api-summary');
           const methodLabels = summary.shadowRoot.querySelectorAll('.method-label');
