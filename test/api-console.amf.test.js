@@ -467,7 +467,7 @@ describe('ApiConsole', () => {
           const path = 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured';
           // TODO this needs to be changed to 'publish' once AMF bug is fixed
           // eslint-disable-next-line no-unused-vars
-          const [_, operation] = AmfLoader.lookupEndpointOperation(amf, path, 'kafka');
+          const [_, operation] = AmfLoader.lookupEndpointOperation(amf, path, 'subscribe');
           element = await selectedFixture(amf, operation['@id'], 'method');
           await aTimeout(0);
         });
