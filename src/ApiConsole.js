@@ -261,6 +261,10 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * No overview as a separated element. Overview can be seen by clicking the endpoint label.
        */
       noOverview: { type: Boolean },
+      /**
+       * List of credentials source
+       */
+      credentialsSource: { type: Array },
     };
   }
 
@@ -378,6 +382,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.rearrangeEndpoints = false;
     this.noTryIt = false;
     this._noTryItValue = false;
+    this.credentialsSource = [];
   }
 
   connectedCallback() {
@@ -732,6 +737,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       serverType,
       noServerSelector,
       allowCustomBaseUri,
+      credentialsSource,
     } = this;
     return html`<api-request-panel
       .amf="${amf}"
@@ -749,6 +755,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .serverValue="${serverValue}"
       .serverType="${serverType}"
       .eventsTarget="${eventsTarget}"
+      .credentialsSource="${credentialsSource}"
       >
         <slot name="custom-base-uri" slot="custom-base-uri"></slot>
       </api-request-panel>`;
