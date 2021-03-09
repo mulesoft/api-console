@@ -253,6 +253,14 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       allowCustomBaseUri: { type: Boolean },
 
       _noTryItValue: { type: Boolean },
+      /**
+       * Determines and changes the opened state of endpoints
+       */
+      operationsOpened: { type: Boolean },
+      /**
+       * No overview as a separated element. Overview can be seen by clicking the endpoint label.
+       */
+      noOverview: { type: Boolean },
     };
   }
 
@@ -814,7 +822,10 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
         summary
         endpointsOpened
         ?rearrangeEndpoints="${rearrangeEndpoints}"
-        @api-navigation-selection-changed="${this._apiNavigationOcurred}"></api-navigation>
+        @api-navigation-selection-changed="${this._apiNavigationOcurred}"
+        ?operationsOpened="${this.operationsOpened}"
+        ?noOverview="${this.noOverview}"
+      ></api-navigation>
       ${noAttribution ? '' : attributionTpl}
     </div>`;
   }
