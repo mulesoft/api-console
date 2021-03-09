@@ -1,5 +1,6 @@
 import { TemplateResult, CSSResult, LitElement } from 'lit-element';
 import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixin.js';
+import { CredentialSource } from '@api-components/api-authorization/src/types';
 
 export const isChrome: boolean;
 
@@ -286,6 +287,24 @@ export declare class ApiConsole extends AmfHelperMixin(LitElement) {
   allowCustomBaseUri: boolean;
 
   _noTryItValue: boolean;
+
+  /**
+   * Determines and changes the opened state of endpoints
+   * @attribute
+   */
+  operationsOpened: { type: Boolean }
+
+  /**
+  * No overview as a separated element. Overview can be seen by clicking the endpoint label.
+  * @attribute
+  */
+  noOverview: { type: Boolean }
+
+  /**
+   * List of credentials source
+   * @attribute
+   */
+  credentialsSource: Array<CredentialSource>
 
   /**
    * This can be overwritten by child classes to decide whether to render the server

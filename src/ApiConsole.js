@@ -253,6 +253,18 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       allowCustomBaseUri: { type: Boolean },
 
       _noTryItValue: { type: Boolean },
+      /**
+       * Determines and changes the opened state of endpoints
+       */
+      operationsOpened: { type: Boolean },
+      /**
+       * No overview as a separated element. Overview can be seen by clicking the endpoint label.
+       */
+      noOverview: { type: Boolean },
+      /**
+       * List of credentials source
+       */
+      credentialsSource: { type: Array },
     };
   }
 
@@ -370,6 +382,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.rearrangeEndpoints = false;
     this.noTryIt = false;
     this._noTryItValue = false;
+    this.credentialsSource = [];
   }
 
   connectedCallback() {
@@ -724,6 +737,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       serverType,
       noServerSelector,
       allowCustomBaseUri,
+      credentialsSource,
     } = this;
     return html`<api-request-panel
       .amf="${amf}"
@@ -741,6 +755,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .serverValue="${serverValue}"
       .serverType="${serverType}"
       .eventsTarget="${eventsTarget}"
+      .credentialsSource="${credentialsSource}"
       >
         <slot name="custom-base-uri" slot="custom-base-uri"></slot>
       </api-request-panel>`;
@@ -814,7 +829,10 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
         summary
         endpointsOpened
         ?rearrangeEndpoints="${rearrangeEndpoints}"
-        @api-navigation-selection-changed="${this._apiNavigationOcurred}"></api-navigation>
+        @api-navigation-selection-changed="${this._apiNavigationOcurred}"
+        ?operationsOpened="${this.operationsOpened}"
+        ?noOverview="${this.noOverview}"
+      ></api-navigation>
       ${noAttribution ? '' : attributionTpl}
     </div>`;
   }
