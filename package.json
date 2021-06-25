@@ -38,7 +38,7 @@
     "@api-components/amf-helper-mixin": "^4.4.0",
     "@api-components/api-console-ext-comm": "^3.0.0",
     "@api-components/api-documentation": "^6.0.1",
-    "@api-components/api-navigation": "^4.2.5",
+    "@api-components/api-navigation": "^4.3.0",
     "@api-components/api-request": "^0.1.3",
     "@polymer/app-layout": "^3.1.0",
     "@polymer/iron-media-query": "^3.0.0",
