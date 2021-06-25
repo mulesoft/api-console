@@ -265,6 +265,11 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * List of credentials source
        */
       credentialsSource: { type: Array },
+      /**
+       * When sets, renders full paths for endpoints unless they have a display name.
+       * Indentation is also not applied.
+       */
+      renderFullPaths: { type: Boolean },
     };
   }
 
@@ -383,6 +388,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.noTryIt = false;
     this._noTryItValue = false;
     this.credentialsSource = [];
+    this.renderFullPaths = false;
   }
 
   connectedCallback() {
@@ -832,6 +838,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
         @api-navigation-selection-changed="${this._apiNavigationOcurred}"
         ?operationsOpened="${this.operationsOpened}"
         ?noOverview="${this.noOverview}"
+        ?renderFullPaths="${this.renderFullPaths}"
       ></api-navigation>
       ${noAttribution ? '' : attributionTpl}
     </div>`;
