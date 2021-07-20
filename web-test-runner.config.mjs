@@ -9,6 +9,9 @@ export default {
       return next();
     }
   ],
+  coverageConfig: {
+    include: ['src/**.js'],
+  },
   testRunnerHtml: (testFramework) =>
   `<html>
   <body>
