@@ -1,7 +1,7 @@
 {
   "name": "api-console",
   "description": "The API Console to automatically generate API documentation from RAML and OAS files.",
-  "version": "6.5.1",
+  "version": "0.0.0-valkyr",
   "license": "CPAL-1.0",
   "main": "index.js",
   "module": "index.js",
@@ -21,7 +21,8 @@
     "Paweł Psztyć",
     "Joaquin Stankus",
     "Francisco Di Giandomenico",
-    "Leandro Bauret"
+    "Leandro Bauret",
+    "Carolina Wright"
   ],
   "repository": {
     "type": "git",
