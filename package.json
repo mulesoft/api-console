@@ -1,7 +1,7 @@
 {
   "name": "api-console",
   "description": "The API Console to automatically generate API documentation from RAML and OAS files.",
-  "version": "6.5.1",
+  "version": "0.0.0-valkyr",
   "license": "CPAL-1.0",
   "main": "index.js",
   "module": "index.js",
@@ -21,7 +21,8 @@
     "Paweł Psztyć",
     "Joaquin Stankus",
     "Francisco Di Giandomenico",
-    "Leandro Bauret"
+    "Leandro Bauret",
+    "Carolina Wright"
   ],
   "repository": {
     "type": "git",
@@ -37,9 +38,9 @@
     "@anypoint-web-components/anypoint-button": "^1.1.1",
     "@api-components/amf-helper-mixin": "^4.4.0",
     "@api-components/api-console-ext-comm": "^3.0.0",
-    "@api-components/api-documentation": "^6.0.1",
+    "@api-components/api-documentation": "^6.0.3",
     "@api-components/api-navigation": "^4.3.0",
-    "@api-components/api-request": "^0.1.3",
+    "@api-components/api-request": "^0.1.17",
     "@polymer/app-layout": "^3.1.0",
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/paper-toast": "^3.0.0",
@@ -65,7 +66,7 @@
     "body-parser": "^1.19.0",
     "deepmerge": "^4.2.1",
     "es-dev-server": "^2.1.0",
-    "eslint": "^7.18.0",
+    "eslint": "^7.31.0",
     "eslint-config-prettier": "^7.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
@@ -76,7 +77,7 @@
     "node-cache": "^5.1.0",
     "postcss": "^8.2.4",
     "rimraf": "^3.0.1",
-    "rollup": "^2.38.0",
+    "rollup": "^2.53.2",
     "rollup-plugin-cpy": "^2.0.1",
     "rollup-plugin-postcss": "^4.0.0",
     "sinon": "^9.2.3",

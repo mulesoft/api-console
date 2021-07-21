@@ -1,0 +1,12 @@
+product: api-console
+component: raw
+
+version: 6.6
+strategy: node-lib
+strategyVersion: 12
+
+requires:
+  db: false
+  staticAsset: false
+  deployment: false
+  mutationTesting: false
