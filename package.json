@@ -102,7 +102,8 @@
     "build": "rimraf dist && rollup -c rollup.config.js",
     "build:vendor": "node tasks/prepare.js",
     "build:models": "node demo/model.js",
-    "prepare": "npm run build:vendor && npm run build:models"
+    "prepare": "npm run build:vendor && npm run build:models",
+    "preinstall": "npx playwright install"
   },
   "husky": {
     "hooks": {
