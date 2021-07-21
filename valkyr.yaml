@@ -10,7 +10,3 @@ requires:
   staticAsset: false
   deployment: false
   mutationTesting: false
-
-dockerArgs:
-  build-arg:
-    NODE_ENV: production
