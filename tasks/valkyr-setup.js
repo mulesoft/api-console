@@ -1,9 +1,16 @@
 const fs = require("fs");
 
 function hasAccessToCache() {
+  const cachePathMap = {
+    darwin: '/Library/Caches',
+    linux: '/AppData/Local'
+  }
+  const { platform } = process;
+  console.log('Platform:', platform)
   try {
-    fs.accessSync("\\AppData\\Local\\ms-playwright");
-    console.log(fs.readdirSync("\\AppData\\Local\\ms-playwright"))
+    const cachePath = cachePathMap[platform];
+    fs.accessSync(cachePath);
+    console.log(fs.readdirSync(cachePath))
   } catch (e) {
     console.log("Does not have access", e);
     return false;
@@ -18,3 +25,4 @@ if (process.env.NODE_ENV === "production" || !hasAccessToCache()) {
   console.log("NODE_ENV: ", process.env.NODE_ENV);
   // console.log("env variables: ", JSON.stringify(process.env, null, 2));
 }
+ 
