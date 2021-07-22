@@ -10,3 +10,4 @@ requires:
   staticAsset: false
   deployment: false
   mutationTesting: false
+  visualTesting: true
