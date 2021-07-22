@@ -99,6 +99,7 @@
     "format": "npm run format:eslint",
     "test": "web-test-runner test/**/*.test.js --coverage --node-resolve --playwright --browsers chromium firefox webkit",
     "test:watch": "web-test-runner test/**/*.test.js --node-resolve --watch",
+    "test.prod": "PLAYWRIGHT_BROWSERS_PATH=0 web-test-runner test/**/*.test.js --coverage --node-resolve --playwright --browsers chromium firefox webkit",
     "build": "rimraf dist && rollup -c rollup.config.js",
     "build:vendor": "node tasks/prepare.js",
     "build:models": "node demo/model.js",
