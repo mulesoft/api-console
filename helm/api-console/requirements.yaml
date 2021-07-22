@@ -1,0 +1,3 @@
+dependencies:
+  - name: playwright-bioninc
+    repository: mcr.microsoft.com/playwright:bionic
