@@ -80,6 +80,7 @@
     "rollup": "^2.53.2",
     "rollup-plugin-cpy": "^2.0.1",
     "rollup-plugin-postcss": "^4.0.0",
+    "shelljs": "^0.8.4",
     "sinon": "^9.2.3",
     "tmp": "^0.2.1",
     "typescript": "^4.1.3",
@@ -102,7 +103,7 @@
     "build:vendor": "node tasks/prepare.js",
     "build:models": "node demo/model.js",
     "prepare": "npm run build:vendor && npm run build:models",
-    "preinstall": "node tasks/valkyr-setup.js"
+    "postinstall": "node tasks/valkyr-setup.js"
   },
   "husky": {
     "hooks": {
