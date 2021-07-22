@@ -1,6 +1,4 @@
 dependencies:
-  - name: playwright-bioninc
-    repository: mcr.microsoft.com/playwright:bionic
   - name: api-console-test-dependency-playwright
     version: 0.4.x
     repository: "https://s3-us-west-2.amazonaws.com/mulesoft-ci-helm-chart-repository/stable/api-console"
