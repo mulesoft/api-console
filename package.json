@@ -103,8 +103,7 @@
     "build": "rimraf dist && rollup -c rollup.config.js",
     "build:vendor": "node tasks/prepare.js",
     "build:models": "node demo/model.js",
-    "prepare": "npm run build:vendor && npm run build:models",
-    "postinstall": "node tasks/valkyr-setup.js"
+    "prepare": "npm run build:vendor && npm run build:models"
   },
   "husky": {
     "hooks": {
