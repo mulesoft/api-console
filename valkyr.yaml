@@ -5,6 +5,8 @@ version: 6.6
 strategy: node-lib
 strategyVersion: 12
 
+runTestImage: api-console-test-dependency-playwright:v0.3.2
+
 requires:
   db: false
   staticAsset: false
