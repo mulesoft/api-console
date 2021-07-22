@@ -10,6 +10,3 @@ requires:
   staticAsset: false
   deployment: false
   mutationTesting: false
-  parallelTests:
-    suites:
-      - test:prod
