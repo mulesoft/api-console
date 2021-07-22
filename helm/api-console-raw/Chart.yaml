@@ -1,0 +1,10 @@
+name: api-console-raw
+description: API Consoles
+version: 0.1.0
+home: "https://github.com/mulesoft/api-console"
+sources:
+  - "https://github.com/mulesoft/api-consoleß"
+maintainers:
+  - name: API Console team
+    email: api-console-team@mulesoft.com
+apiVersion: v1
