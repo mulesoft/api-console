@@ -1,5 +1,5 @@
 {
-  "name": "@mulesoft/api-console",
+  "name": "api-console",
   "description": "The API Console to automatically generate API documentation from RAML and OAS files.",
   "version": "6.5.3",
   "license": "CPAL-1.0",
