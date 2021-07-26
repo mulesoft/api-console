@@ -17,7 +17,7 @@ on:
       - support/*
 jobs:
   tests:
-    if: github.event_name == 'pull_request'
+    if: github.event_name != 'pull_request'
     name: ${{ matrix.os }}
     strategy:
       fail-fast: false
