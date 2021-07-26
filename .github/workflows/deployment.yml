@@ -79,7 +79,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: npm install
+      - run: npm ci
       - name: Read version from package.json
         uses: culshaw/read-package-node-version-actions@v1
         id: package-node-version
