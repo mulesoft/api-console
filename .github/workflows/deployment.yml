@@ -62,7 +62,7 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     needs: 
       - test_linux
-      - test_win
+      # - test_win
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
