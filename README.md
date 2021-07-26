@@ -3,6 +3,10 @@
 MuleSoft's API Console is an enterprise grade API Documentation tool.
 This is an open source version of the console used in Anypoint Platform.
 
+[![Published on NPM](https://img.shields.io/npm/v/api-console.svg)](https://www.npmjs.com/package/api-console)
+
+[![Tests and publishing](https://github.com/mulesoft/api-console/actions/workflows/deployment.yml/badge.svg)](https://github.com/mulesoft/api-console/actions/workflows/deployment.yml)
+
 ## Usage
 
 For best developer experience use one of our tools to use the console in your project depending on your use case:
