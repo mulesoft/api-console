@@ -8,13 +8,16 @@ on:
       - main
       - develop
       - stage
+      - support/*
   pull_request:
     branches:
       - master
       - main
       - stage
+      - support/*
 jobs:
   tests:
+    if: github.event_name == 'pull_request'
     name: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -39,7 +42,7 @@ jobs:
         run: npm test
   tag:
     name: "Publishing release"
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'support/')
     needs: 
       - tests
     runs-on: ubuntu-latest
