@@ -270,6 +270,10 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * Indentation is also not applied.
        */
       renderFullPaths: { type: Boolean },
+      /**
+       * Disables clearing of cache after AMF change
+       */
+      persistCache: { type: Boolean },
     };
   }
 
@@ -389,6 +393,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this._noTryItValue = false;
     this.credentialsSource = [];
     this.renderFullPaths = false;
+    this.persistCache = false;
   }
 
   connectedCallback() {
@@ -744,6 +749,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       noServerSelector,
       allowCustomBaseUri,
       credentialsSource,
+      persistCache,
     } = this;
     return html`<api-request-panel
       .amf="${amf}"
@@ -762,6 +768,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .serverType="${serverType}"
       .eventsTarget="${eventsTarget}"
       .credentialsSource="${credentialsSource}"
+      ?persistCache="${persistCache}"
       >
         <slot name="custom-base-uri" slot="custom-base-uri"></slot>
       </api-request-panel>`;

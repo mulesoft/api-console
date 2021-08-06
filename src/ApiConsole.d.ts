@@ -307,6 +307,12 @@ export declare class ApiConsole extends AmfHelperMixin(LitElement) {
   credentialsSource: Array<CredentialSource>
 
   /**
+   * Disables clearing of cache after AMF change
+   * @attribute
+   */
+  persistCache: boolean
+
+  /**
    * This can be overwritten by child classes to decide whether to render the server
    * selector or not.
    * @returns The final value of `noServerSelector`.
