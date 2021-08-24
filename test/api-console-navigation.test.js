@@ -71,8 +71,6 @@ describe('API Console navigation', () => {
           const summarySection = navigationSummarySection(element);
           assert.equal(summarySection.innerText.trim(), summaryLabel);
         });
-
-        // todo testear fragments, no deberian tener summary
       });
 
       describe('Endpoints section', () => {
