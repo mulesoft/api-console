@@ -75,7 +75,6 @@
     "lint-staged": "^10.2.2",
     "multer": "^1.4.2",
     "node-cache": "^5.1.0",
-    "npm-force-resolutions": "0.0.10",
     "postcss": "^8.2.4",
     "rimraf": "^3.0.1",
     "rollup": "^2.53.2",
@@ -103,7 +102,7 @@
     "@anypoint-web-components/anypoint-selector": "1.1.8"
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
+    "preinstall": "npx force-resolutions",
     "generate-model": "npm run build:models",
     "start": "node demo/index.js",
     "start:server": "node --inspect demo/parsing-server/main.js",
