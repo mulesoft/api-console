@@ -426,7 +426,6 @@ export class ApiConsoleApp extends ApiConsole {
       .appendHeaders="${this.appendHeaders}"
       .proxy="${this.proxy}"
       .proxyEncodeUrl="${this.proxyEncodeUrl}"></xhr-simple-request>
-    <oauth1-authorization></oauth1-authorization>
-    <oauth2-authorization></oauth2-authorization>`;
+      `;
   }
 }

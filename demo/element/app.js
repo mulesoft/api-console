@@ -62,8 +62,6 @@ class ApicApplication extends DemoBase {
       </api-console>
 
       <xhr-simple-request></xhr-simple-request>
-      <oauth1-authorization></oauth1-authorization>
-      <oauth2-authorization></oauth2-authorization>
 
       <div class="footer">
         Brought to you with ❤ by MuleSoft. A Salesforce company.

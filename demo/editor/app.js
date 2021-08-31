@@ -186,8 +186,6 @@ protocols: [HTTP, HTTPS]
     </main>
 
     <xhr-simple-request></xhr-simple-request>
-    <oauth1-authorization></oauth1-authorization>
-    <oauth2-authorization></oauth2-authorization>
     `;
   }
 
