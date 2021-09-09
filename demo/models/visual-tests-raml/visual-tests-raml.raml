@@ -1,0 +1,124 @@
+#%RAML 1.0
+title: API Console Visual Test RAML
+description: API spec created for the visual tests for API Console
+version: Alpha
+
+baseUri: https://example.org/
+
+types:
+  StringType:
+    type: string
+    description: Basic string type
+  IntegerType:
+    type: integer
+    description: Basic integer type
+  NumberType:
+    type: number
+    description: Basic number type
+  BooleanType:
+    type: boolean
+    description: Basic boolean type
+  ArrayType:
+    type: array
+    description: Basic array of strings type
+    items:
+      type: string
+  ObjectType:
+    type: object
+    description: Basic object type
+    properties:
+      string: StringType
+      integer: IntegerType
+      number: NumberType
+      array: ArrayType
+
+securitySchemes:
+  BasicSecurity:
+    type: Basic Authentication
+    displayName: Basic security
+    description: Basic authentication security scheme
+
+documentation:
+  - title: Basic documentation page
+    content: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus vitae turpis vel viverra.
+
+
+/basicEndpoint:
+  get:
+    description: GET without displayName
+  post:
+    description: POST without displayName
+  put:
+    description: PUT without displayName
+  delete:
+    description: DELETE without displayName
+  patch:
+    description: PATCH without displayName
+  head:
+    description: HEAD without displayName
+  options:
+    description: OPTIONS without displayName
+
+/endpointWithDisplayNames:
+  displayName: Endpoint with displayNames
+  get:
+    displayName: GET displayName
+    description: GET with displayName
+  post:
+    displayName: POST displayName
+    description: POST with displayName
+  put:
+    displayName: PUT displayName
+    description: PUT with displayName
+  delete:
+    displayName: DELETE displayName
+    description: DELETE with displayName
+  patch:
+    displayName: PATCH displayName
+    description: PATCH with displayName
+  head:
+    displayName: HEAD displayName
+    description: HEAD with displayName
+  options:
+    displayName: OPTIONS displayName
+    description: OPTIONS with displayName
+  
+/emptyEndpoint:
+  displayName: Empty endpoint
+  description: Endpoint without any operations
+
+/endpointWithBasicSecurity:
+  displayName: Basic security endpoint
+  securedBy:
+    - BasicSecurity
+  get:
+
+/uriendpoint/{uriParameter}:
+  displayName: Endpoint with URI parameter
+  uriParameters:
+    uriParameter:
+      description: Basic URI parameter in endpoint
+      type: string
+  get:
+    description: Method with URI parameter
+
+/basicparams:
+  displayName: Endpoint with basic params
+  get:
+    displayName: Query params
+    queryParameters:
+      exampleStringParam: string
+      exampleNumberParam: number
+  post:
+    displayName: Headers
+    headers:
+      X-Example-Header:
+        type: string
+  put:
+    displayName: Body
+    body:
+      application/json:
+        properties:
+          stringProperty: string
+          numberProperty: number
+          booleanProperty: boolean
