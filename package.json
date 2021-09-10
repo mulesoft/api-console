@@ -88,20 +88,7 @@
     "unzipper": "^0.10.10",
     "uuid": "^8.3.2"
   },
-  "resolutions": {
-    "@api-components/api-headers-document": "4.2.2",
-    "@api-components/api-body-document": "4.4.3",
-    "@api-components/api-parameters-document": "4.1.3",
-    "@api-components/api-method-documentation": "5.2.5",
-    "@api-components/api-server-selector": "0.6.4",
-    "@api-components/api-url": "0.1.12",
-    "@api-components/api-forms": "0.2.4",
-    "@api-components/api-example-generator": "4.4.14",
-    "@anypoint-web-components/anypoint-autocomplete": "0.2.11",
-    "@anypoint-web-components/anypoint-selector": "1.1.8"
-  },
   "scripts": {
-    "preinstall": "npx force-resolutions",
     "generate-model": "npm run build:models",
     "start": "node demo/index.js",
     "start:server": "node --inspect demo/parsing-server/main.js",
