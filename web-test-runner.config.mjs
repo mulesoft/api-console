@@ -12,6 +12,7 @@ export default {
   coverageConfig: {
     include: ['src/**.js'],
   },
+  testsFinishTimeout: 20000,
   testRunnerHtml: (testFramework) =>
   `<html>
   <body>
