@@ -34,7 +34,7 @@
     "@anypoint-web-components/anypoint-button": "^1.0.14",
     "@api-components/amf-helper-mixin": "^4.0.18",
     "@api-components/api-console-ext-comm": "^3.0.0",
-    "@api-components/api-documentation": "^4.0.5",
+    "@api-components/api-documentation": "^4.1.4",
     "@api-components/api-navigation": "^4.0.3",
     "@api-components/api-request-panel": "^4.0.1",
     "@api-components/raml-aware": "^3.0.0",
