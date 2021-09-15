@@ -1,0 +1,15 @@
+#%RAML 1.0
+title: Test API
+version: v2
+description: Our test API
+baseUri: https://example/
+
+/test-headers:
+  displayName: Headers
+  post:
+    headers:
+      Cache-Control:
+        type: string
+        example: only-if-cached
+    body:
+      application/json:

@@ -9,6 +9,8 @@ export declare function navigationSelectSummarySection(element: ApiConsole): voi
 export declare function navigationEndpointsSection(element: ApiConsole): Element|null;
 export declare function navigationToggleEndpointsSection(element: ApiConsole): Element|null;
 export declare function navigationEndpointsList(element: ApiConsole): NodeListOf<Element>|null;
+export declare function navigationToggleEndpoint(element: ApiConsole, path: string): Element|null;
+export declare function navigationSelectEndpointMethod(element: ApiConsole, path: string, method: string): void;
 
 export declare function navigationDocumentationSection(element: ApiConsole): Element|null;
 export declare function navigationDocumentationList(element: ApiConsole): Element|null;
@@ -25,3 +27,13 @@ export declare function navigationSecurityList(element: ApiConsole): Element|nul
 export declare function documentationPanel(element: ApiConsole): Element|null;
 export declare function documentationSummary(element: ApiConsole): Element|null;
 export declare function documentationDocument(element: ApiConsole): Element|null;
+export declare function documentationTryItButton(element: ApiConsole): Element|null;
+
+/** Request panel * */
+export declare function requestPanel(element: ApiConsole): Element|null;
+export declare function requestEditor(element: ApiConsole): Element|null;
+export declare function requestUrlSection(element: ApiConsole): Element|null;
+export declare function requestQueryParamSection(element: ApiConsole): Element|null;
+export declare function requestHeadersSection(element: ApiConsole): Element|null;
+export declare function requestBodySection(element: ApiConsole): Element|null;
+export declare function requestSendButton(element: ApiConsole): Element|null;
