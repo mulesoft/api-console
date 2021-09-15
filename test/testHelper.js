@@ -1,3 +1,5 @@
+import {nextFrame} from '@open-wc/testing';
+
 /** Navigation * */
 export const navigationTree = (element) => element.shadowRoot.querySelector('api-navigation')
 
@@ -24,6 +26,23 @@ export const navigationToggleEndpointsSection = (element) => {
 export const navigationEndpointsList = (element) => {
   const endpointsSection = navigationEndpointsSection(element);
   return endpointsSection.querySelectorAll('.list-item.endpoint')
+}
+
+export const navigationToggleEndpoint = (element, path) => {
+  const endpointsSection = navigationEndpointsSection(element);
+  const endpoint = endpointsSection.querySelector(`[data-endpoint-path="${path}"]`);
+  endpoint.querySelector('.endpoint-toggle-button').click();
+  return endpoint;
+}
+
+export const navigationSelectEndpointMethod = async (element, path, method) => {
+  const endpoint = navigationToggleEndpoint(element, path);
+  await nextFrame();
+  await nextFrame();
+
+  const endpointOperations = endpoint.nextElementSibling;
+  const endpointMethod = endpointOperations.querySelector(`[data-method="${method}"]`);
+  endpointMethod.parentElement.click();
 }
 
 export const navigationDocumentationSection = (element) => {
@@ -79,4 +98,42 @@ export const documentationDocument = (element) => {
   return documentation.shadowRoot.querySelector('api-documentation-document');
 }
 
+export const documentationTryItButton = (element) => {
+  const documentation = documentationPanel(element);
+  const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
+  return methodDocumentation.shadowRoot.querySelector('.action-button');
+}
 
+/** Request panel * */
+
+const requestPanel = (element) => element.shadowRoot.querySelector('api-request-panel')
+
+const requestEditor = (element) => {
+  const request = requestPanel(element);
+  return request.shadowRoot.querySelector('api-request-editor');
+}
+
+export const requestUrlSection = (element) => {
+  const editor = requestEditor(element);
+  return editor.shadowRoot.querySelector('.url-editor');
+}
+
+export const requestQueryParamSection = (element) => {
+  const editor = requestEditor(element);
+  return editor.shadowRoot.querySelector('api-url-params-editor');
+}
+
+export const requestHeadersSection = (element) => {
+  const editor = requestEditor(element);
+  return editor.shadowRoot.querySelector('api-headers-editor');
+}
+
+export const requestBodySection = (element) => {
+  const editor = requestEditor(element);
+  return editor.shadowRoot.querySelector('api-body-editor');
+}
+
+export const requestSendButton = (element) => {
+  const editor = requestEditor(element);
+  return editor.shadowRoot.querySelector('.send-button');
+}
