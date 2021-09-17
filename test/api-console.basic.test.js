@@ -293,10 +293,10 @@ describe('<api-console>', function() {
 
     it('Navigation is rendered on screen', async () => {
       element.navigationOpened = true;
-      await aTimeout(350);
+      await aTimeout(720);
       const nav = element.shadowRoot.querySelector('.nav-drawer');
       const transform = getComputedStyle(nav).transform;
-      assert.equal(transform, 'matrix(1, 0, 0, 1, 0, 0)')
+      assert.equal(transform, 'matrix(1, 0, 0, 1, 0, 0)');
     });
 
     it('closes the navigation when scrim is clicked', async () => {
