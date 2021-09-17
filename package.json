@@ -48,7 +48,6 @@
   "devDependencies": {
     "@advanced-rest-client/eslint-config": "^1.1.4",
     "@advanced-rest-client/prettier-config": "^0.1.0",
-    "@advanced-rest-client/testing-karma-sl": "^1.2.0",
     "@anypoint-web-components/anypoint-dropdown": "^1.0.1",
     "@anypoint-web-components/anypoint-item": "^1.0.5",
     "@anypoint-web-components/anypoint-listbox": "^1.0.4",
@@ -59,7 +58,6 @@
     "@commitlint/config-conventional": "^8.3.4",
     "@open-wc/building-rollup": "^0.20.2",
     "@open-wc/testing": "^2.5.1",
-    "@open-wc/testing-karma": "^3.2.32",
     "@polymer/gen-typescript-declarations": "^1.6.2",
     "@polymer/iron-test-helpers": "^3.0.0",
     "amf-client-js": "^4.0.4",
@@ -70,7 +68,6 @@
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
     "husky": "^4.2.1",
-    "karma": "^4.4.1",
     "lint-staged": "^10.0.6",
     "multer": "^1.4.2",
     "node-cache": "^5.1.0",
