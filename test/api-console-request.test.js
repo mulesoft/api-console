@@ -216,9 +216,9 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-oauth10-scheme', 'get');
-            await aTimeout(50)
+            await aTimeout(70)
             documentationTryItButton(element).click()
-            await aTimeout(50)
+            await aTimeout(70)
             credentialsSection = requestCredentialsSection(element);
           });
 
