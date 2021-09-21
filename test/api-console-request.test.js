@@ -1,4 +1,4 @@
-import {fixture, assert, html, nextFrame} from '@open-wc/testing';
+import {fixture, assert, html, nextFrame, aTimeout} from '@open-wc/testing';
 import * as sinon from 'sinon';
 import {AmfLoader, ApiDescribe} from './amf-loader.js';
 import '../api-console.js';
@@ -45,11 +45,9 @@ describe('API Console request', () => {
       describe('Sections', () => {
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-headers', 'post');
-          await nextFrame();
-          await nextFrame();
+          await aTimeout(50)
           documentationTryItButton(element).click();
-          await nextFrame();
-          await nextFrame();
+          await aTimeout(50)
         });
 
         it(`should render all sections`, async () => {
@@ -64,11 +62,9 @@ describe('API Console request', () => {
       describe('Headers', () => {
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-headers', 'post');
-          await nextFrame();
-          await nextFrame();
+          await aTimeout(50)
           documentationTryItButton(element).click()
-          await nextFrame();
-          await nextFrame();
+          await aTimeout(50)
         });
 
         it(`should render header section`, async () => {
@@ -123,11 +119,9 @@ describe('API Console request', () => {
       describe('Body', () => {
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-headers', 'post');
-          await nextFrame();
-          await nextFrame();
+          await aTimeout(50)
           documentationTryItButton(element).click()
-          await nextFrame();
-          await nextFrame();
+          await aTimeout(50)
         });
 
         it(`should render body section`, async () => {

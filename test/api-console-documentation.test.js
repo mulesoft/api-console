@@ -1,4 +1,4 @@
-import {fixture, assert, html, nextFrame} from '@open-wc/testing';
+import {fixture, assert, html, aTimeout} from '@open-wc/testing';
 import {AmfLoader, ApiDescribe} from './amf-loader.js';
 import '../api-console.js';
 import {
@@ -42,9 +42,7 @@ describe('API Console documentation', () => {
       describe('Summary section', () => {
         beforeEach(async () => {
           navigationSelectSummarySection(element);
-          await nextFrame();
-          await nextFrame();
-          await nextFrame();
+          await aTimeout(50)
         });
 
         it(`should render summary documentation panel`, async () => {
@@ -86,10 +84,9 @@ describe('API Console documentation', () => {
       describe('Documentation section', () => {
         beforeEach(async () => {
           navigationSelectDocumentationSection(element);
-          await nextFrame();
+          await aTimeout(50)
           navigationSelectDocumentation(element, 0);
-          await nextFrame();
-          await nextFrame();
+          await aTimeout(50)
         });
 
         it(`should render documentation`, async () => {
