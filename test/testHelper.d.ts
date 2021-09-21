@@ -36,4 +36,5 @@ export declare function requestUrlSection(element: ApiConsole): Element|null;
 export declare function requestQueryParamSection(element: ApiConsole): Element|null;
 export declare function requestHeadersSection(element: ApiConsole): Element|null;
 export declare function requestBodySection(element: ApiConsole): Element|null;
+export declare function requestCredentialsSection(element: ApiConsole): Element|null;
 export declare function requestSendButton(element: ApiConsole): Element|null;

@@ -133,6 +133,11 @@ export const requestBodySection = (element) => {
   return editor.shadowRoot.querySelector('api-body-editor');
 }
 
+export const requestCredentialsSection = (element) => {
+  const editor = requestEditor(element);
+  return editor.shadowRoot.querySelector('api-authorization');
+}
+
 export const requestSendButton = (element) => {
   const editor = requestEditor(element);
   return editor.shadowRoot.querySelector('.send-button');

@@ -4,6 +4,64 @@ version: v2
 description: Our test API
 baseUri: https://example/
 
+securitySchemes:
+  customScheme:
+    description: |
+      A custom security scheme for authenticating requests.
+    type: x-custom
+    describedBy:
+      headers:
+        SpecialToken:
+          description: |
+            Used to send a custom token.
+          type: string
+          example: special-token
+      responses:
+        401:
+          description: |
+            Bad token.
+        403:
+  oauth_1_0:
+    description: |
+      OAuth 1.0 continues to be supported for all API requests, but OAuth 2.0 is now preferred.
+    type: OAuth 1.0
+    settings:
+      requestTokenUri: https://api.mysampleapi.com/1/oauth/request_token
+      authorizationUri: https://api.mysampleapi.com/1/oauth/authorize
+      tokenCredentialsUri: https://api.mysampleapi.com/1/oauth/access_token
+      signatures: [ 'HMAC-SHA1', 'PLAINTEXT' ]
+  oauth_2_0:
+    description: |
+      Dropbox supports OAuth 2.0 for authenticating all API requests.
+    type: OAuth 2.0
+    describedBy:
+      headers:
+        Authorization:
+          description: |
+             Used to send a valid OAuth 2 access token. Do not use
+             with the "access_token" query string parameter.
+          type: string
+      queryParameters:
+        access_token:
+          description: |
+             Used to send a valid OAuth 2 access token. Do not use with
+             the "Authorization" header.
+          type: string
+      responses:
+        401:
+          description: |
+              Bad or expired token. This can happen if the user or Dropbox
+              revoked or expired an access token. To fix, re-authenticate
+              the user.
+        403:
+          description: |
+              Bad OAuth request (wrong consumer key, bad nonce, expired
+              timestamp...). Unfortunately, re-authenticating the user won't help here.
+    settings:
+      authorizationUri: https://www.dropbox.com/1/oauth2/authorize
+      accessTokenUri: https://api.dropbox.com/1/oauth2/token
+      authorizationGrants: [ authorization_code, implicit, 'urn:ietf:params:oauth:grant-type:saml2-bearer' ]
+
 /test-headers:
   displayName: Headers
   post:
@@ -13,3 +71,16 @@ baseUri: https://example/
         example: only-if-cached
     body:
       application/json:
+/test-custom-scheme:
+  displayName: Custom security scheme
+  get:
+    securedBy: [customScheme]
+/test-oauth10-scheme:
+  displayName: Oauth 1.0 security scheme
+  get:
+    securedBy: [oauth_1_0]
+/test-oauth20-scheme:
+  displayName: Oauth 2.0 security scheme
+  get:
+    securedBy: [oauth_2_0]
+
