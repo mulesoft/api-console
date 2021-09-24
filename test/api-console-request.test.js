@@ -280,6 +280,7 @@ describe('API Console request', () => {
           });
 
           it(`should render auth label`, async () => {
+            await aTimeout(100);
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'OAuth 2.0');
           });
 
