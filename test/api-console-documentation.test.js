@@ -73,12 +73,15 @@ describe('API Console documentation', () => {
           const documentation = documentationSummary(element);
           const summaryShadowRoot = documentation.shadowRoot;
           const endpointsSection = summaryShadowRoot.querySelector('.toc');
+          await aTimeout(100);
           assert.ok(endpointsSection)
 
           const endpoints = summaryShadowRoot.querySelectorAll('.endpoint-item');
+          await aTimeout(100);
           assert.lengthOf(endpoints,32);
 
           const files = endpoints[0];
+          await aTimeout(100);
           assert.equal(files.querySelector('.endpoint-path').innerText,'Files');
           assert.equal(files.querySelector('.endpoint-path-name').innerText,'/files');
           assert.ok(files.querySelector('.endpoint-header'));
