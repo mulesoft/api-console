@@ -54,18 +54,18 @@ describe('API Console documentation', () => {
         it(`should render basic summary documentation`, async () => {
           const summaryShadowRoot = documentationSummary(element).shadowRoot;
           const title = summaryShadowRoot.querySelector('.api-title').innerText;
-          await aTimeout(100);
+          await aTimeout(200);
           assert.equal(title.trim(), 'API title: Google Drive')
           const version = summaryShadowRoot.querySelector('.inline-description.version').innerText;
-          await aTimeout(100);
+          await aTimeout(200);
           assert.equal(version.trim(), 'Version: v2')
 
           const url = summaryShadowRoot.querySelector('api-url').shadowRoot;
           const baseUri = url.querySelector('.url-area > .url-value').innerText;
-          await aTimeout(100);
+          await aTimeout(200);
           assert.equal(baseUri.trim(), 'https://www.googleapis.com/drive/{version}')
           const description = summaryShadowRoot.querySelector('.marked-description').innerText;
-          await aTimeout(100);
+          await aTimeout(200);
           assert.equal(description.trim(), 'Google Drive API')
         });
 
@@ -73,15 +73,15 @@ describe('API Console documentation', () => {
           const documentation = documentationSummary(element);
           const summaryShadowRoot = documentation.shadowRoot;
           const endpointsSection = summaryShadowRoot.querySelector('.toc');
-          await aTimeout(100);
+          await aTimeout(200);
           assert.ok(endpointsSection)
 
           const endpoints = summaryShadowRoot.querySelectorAll('.endpoint-item');
-          await aTimeout(100);
+          await aTimeout(200);
           assert.lengthOf(endpoints,32);
 
           const files = endpoints[0];
-          await aTimeout(100);
+          await aTimeout(200);
           assert.equal(files.querySelector('.endpoint-path').innerText,'Files');
           assert.equal(files.querySelector('.endpoint-path-name').innerText,'/files');
           assert.ok(files.querySelector('.endpoint-header'));
