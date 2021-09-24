@@ -185,13 +185,17 @@ describe('API Console request', () => {
           it(`should render scheme fields`, async () => {
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
+            await aTimeout(100);
             assert.equal(authorizationMethodForm.querySelector('.section-title').innerText, 'Headers');
 
             const fields = authorizationMethodForm.querySelectorAll('.field-value');
+            await aTimeout(100);
             assert.lengthOf(fields, 1);
             const formItem = fields[0].querySelector('api-form-item');
             const input = formItem.shadowRoot.querySelector('anypoint-input');
+            await aTimeout(100);
             assert.equal(input.querySelector('label').innerText, 'SpecialToken*');
+            await aTimeout(100);
             assert.exists(fields[0].querySelector('.hint-icon'));
           });
 
