@@ -51,8 +51,8 @@ export const navigationDocumentationSection = (element) => {
 }
 
 export const navigationDocumentationList = (element) => {
-  const apiNavigation = navigationDocumentationSection(element);
-  return apiNavigation.querySelectorAll('.list-item');
+  const documentationSection = navigationDocumentationSection(element);
+  return documentationSection.querySelectorAll('.list-item');
 }
 
 export const navigationSelectDocumentationSection = (element) => {
@@ -71,8 +71,8 @@ export const navigationTypesSection = (element) => {
 }
 
 export const navigationTypesList = (element) => {
-  const apiNavigation = navigationTypesSection(element);
-  return apiNavigation.querySelectorAll('.list-item');
+  const typesSection = navigationTypesSection(element);
+  return typesSection.querySelectorAll('.list-item');
 }
 
 export const navigationSecuritySection = (element) => {
@@ -80,9 +80,19 @@ export const navigationSecuritySection = (element) => {
   return apiNavigation.shadowRoot.querySelector('.security');
 }
 
+export const navigationSelectSecuritySection = (element) => {
+  const securitySection = navigationSecuritySection(element);
+  securitySection.querySelector('.toggle-button').click();
+}
+
 export const navigationSecurityList = (element) => {
-  const apiNavigation = navigationSecuritySection(element);
-  return apiNavigation.querySelectorAll('.list-item');
+  const securitySection = navigationSecuritySection(element);
+  return securitySection.querySelectorAll('.list-item');
+}
+
+export const navigationSelectSecurity = (element, index) => {
+  const securityList = navigationSecurityList(element);
+  securityList[index].click();
 }
 
 /** Documentation * */
@@ -96,6 +106,11 @@ export const documentationSummary = (element) => {
 export const documentationDocument = (element) => {
   const documentation = documentationPanel(element);
   return documentation.shadowRoot.querySelector('api-documentation-document');
+}
+
+export const documentationSecurity = (element) => {
+  const documentation = documentationPanel(element);
+  return documentation.shadowRoot.querySelector('api-security-documentation');
 }
 
 export const documentationTryItButton = (element) => {

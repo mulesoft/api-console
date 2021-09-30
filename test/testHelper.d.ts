@@ -21,12 +21,15 @@ export declare function navigationTypesSection(element: ApiConsole): Element|nul
 export declare function navigationTypesList(element: ApiConsole): Element|null;
 
 export declare function navigationSecuritySection(element: ApiConsole): Element|null;
+export declare function navigationSelectSecuritySection(element: ApiConsole): Element|null;
 export declare function navigationSecurityList(element: ApiConsole): Element|null;
+export declare function navigationSelectSecurity(element: ApiConsole, index: number): Element|null;
 
 /** Documentation * */
 export declare function documentationPanel(element: ApiConsole): Element|null;
 export declare function documentationSummary(element: ApiConsole): Element|null;
 export declare function documentationDocument(element: ApiConsole): Element|null;
+export declare function documentationSecurity(element: ApiConsole): Element|null;
 export declare function documentationTryItButton(element: ApiConsole): Element|null;
 
 /** Request panel * */
