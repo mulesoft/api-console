@@ -75,6 +75,16 @@ export const navigationTypesList = (element) => {
   return typesSection.querySelectorAll('.list-item');
 }
 
+export const navigationSelectTypesSection = (element) => {
+  const typesSection = navigationTypesSection(element);
+  typesSection.querySelector('.toggle-button').click();
+}
+
+export const navigationSelectType = (element, index) => {
+  const typesList = navigationTypesList(element);
+  typesList[index].click();
+}
+
 export const navigationSecuritySection = (element) => {
   const apiNavigation = navigationTree(element);
   return apiNavigation.shadowRoot.querySelector('.security');
@@ -111,6 +121,11 @@ export const documentationDocument = (element) => {
 export const documentationSecurity = (element) => {
   const documentation = documentationPanel(element);
   return documentation.shadowRoot.querySelector('api-security-documentation');
+}
+
+export const documentationType = (element) => {
+  const documentation = documentationPanel(element);
+  return documentation.shadowRoot.querySelector('api-type-documentation');
 }
 
 export const documentationTryItButton = (element) => {

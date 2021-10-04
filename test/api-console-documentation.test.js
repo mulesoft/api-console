@@ -4,12 +4,13 @@ import '../api-console.js';
 import {
   documentationDocument,
   documentationPanel, documentationSecurity,
-  documentationSummary, navigationSelectDocumentation,
+  documentationSummary, documentationType, navigationSelectDocumentation,
   navigationSelectDocumentationSection, navigationSelectSecurity, navigationSelectSecuritySection,
-  navigationSelectSummarySection
+  navigationSelectSummarySection, navigationSelectType, navigationSelectTypesSection
 } from './testHelper.js';
 
 /** @typedef {import('..').ApiConsole} ApiConsole */
+/** @typedef {import('./testHelper.js').TypeDocumentShapeOpts} TypeDocumentShapeOpts */
 
 describe('API Console documentation', () => {
   /**
@@ -25,6 +26,59 @@ describe('API Console documentation', () => {
   const testApi = 'test-api';
   let element;
   let amf;
+
+  const testNoExamplesTypeDocument = (elem) => {
+    const typeDocument = elem.querySelector('api-type-document');
+    const typeExamples = typeDocument.shadowRoot.querySelector('.examples');
+    assert.equal(typeExamples.getAttribute('hidden'), '')
+  }
+
+  const testResourceExampleDocument = (elem, example) => {
+    const resourceExample = elem.shadowRoot.querySelector('api-resource-example-document');
+    assert.equal(resourceExample.shadowRoot.querySelector('.example-title').innerText, 'Example');
+
+    const renderer = resourceExample.shadowRoot.querySelector('.renderer');
+    const exampleHighlight = renderer.querySelector('api-example-render').shadowRoot.querySelector('prism-highlight');
+    assert.equal(exampleHighlight.shadowRoot.querySelector('.parsed-content').innerText.trim(), example);
+  }
+
+  /**
+   * @param {Element|ShadowRoot} elem
+   * @param {TypeDocumentShapeOpts[]} opts
+   */
+  const testTypeDocumentShape = (elem, opts) => {
+    const typeDocument = elem.querySelector('api-type-document');
+    const shapes = typeDocument.shadowRoot.querySelectorAll('property-shape-document');
+    assert.lengthOf(shapes, opts.length);
+    shapes.forEach((s, index) => {
+      const shape = opts[index];
+      shape.name && assert.equal(s.shadowRoot.querySelector('.property-title .property-name').innerText, shape.name);
+      shape.type && assert.equal(s.shadowRoot.querySelector('.property-traits .data-type').innerText, shape.type);
+      shape.description && assert.equal(s.shadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), shape.description);
+      shape.required && assert.equal(s.shadowRoot.querySelector('.property-traits .required-type').innerText, shape.required);
+      shape.displayName && assert.equal(s.shadowRoot.querySelector('.property-display-name').innerText, shape.displayName);
+      if (shape.example) {
+        const range = s.shadowRoot.querySelector('property-range-document');
+        testResourceExampleDocument(range, shape.example)
+      }
+    })
+  }
+
+  const testTypeDocumentExample = (elem, example, attributes, shapeIndex = 0) => {
+    const typeDocument = elem.querySelector('api-type-document');
+    const shape = typeDocument.shadowRoot.querySelectorAll('property-shape-document')[shapeIndex];
+    const range = shape.shadowRoot.querySelector('property-range-document');
+
+    if (attributes) {
+      const propAttributes = range.shadowRoot.querySelectorAll('.property-attribute');
+      propAttributes.forEach((a, index) => {
+        assert.equal(a.querySelector('.attribute-label').innerText, attributes[index].label);
+        assert.equal(a.querySelector('.attribute-value').innerText, attributes[index].value);
+      })
+    }
+
+    testResourceExampleDocument(range, example)
+  }
 
   [
     new ApiDescribe('Regular model'),
@@ -150,21 +204,6 @@ describe('API Console documentation', () => {
           testCollapsibleSection(headers, 'Headers');
         }
 
-        const testNoExamplesTypeDocument = (elem) => {
-          const typeDocument = elem.querySelector('api-type-document');
-          const typeExamples = typeDocument.shadowRoot.querySelector('.examples');
-          assert.equal(typeExamples.getAttribute('hidden'), '')
-        }
-
-        const testTypeDocumentShape = (elem, propName, propType, propDescription, requiredType) => {
-          const typeDocument = elem.querySelector('api-type-document');
-          const shape = typeDocument.shadowRoot.querySelector('property-shape-document');
-          assert.equal(shape.shadowRoot.querySelector('.property-title .property-name').innerText, propName);
-          assert.equal(shape.shadowRoot.querySelector('.property-traits .data-type').innerText, propType);
-          assert.equal(shape.shadowRoot.querySelector('.property-traits .required-type').innerText, requiredType);
-          assert.equal(shape.shadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), propDescription);
-        }
-
         const testSecurityResponses = (elem, expectedTabs, selectedTabContent) => {
           const item = documentationSecurity(elem);
           const securityShadowRoot = item.shadowRoot;
@@ -204,16 +243,8 @@ describe('API Console documentation', () => {
             const headersDocument = securityShadowRoot.querySelector('api-headers-document');
             const collapse = headersDocument.shadowRoot.querySelector('anypoint-collapse');
             testNoExamplesTypeDocument(collapse);
-            testTypeDocumentShape(collapse, 'SpecialToken', 'String', 'Used to send a custom token.', 'Required')
-            const typeDocument = collapse.querySelector('api-type-document');
-            const shape = typeDocument.shadowRoot.querySelector('property-shape-document');
-            const range = shape.shadowRoot.querySelector('property-range-document');
-            const resourceExample = range.shadowRoot.querySelector('api-resource-example-document');
-            assert.equal(resourceExample.shadowRoot.querySelector('.example-title').innerText, 'Example');
-
-            const example = resourceExample.shadowRoot.querySelector('.renderer');
-            const exampleHighlight = example.querySelector('api-example-render').shadowRoot.querySelector('prism-highlight');
-            assert.equal(exampleHighlight.shadowRoot.querySelector('.parsed-content').innerText.trim(), 'special-token');
+            testTypeDocumentShape(collapse, [{name: 'SpecialToken', type: 'String', description: 'Used to send a custom token.', required: 'Required'}])
+            testTypeDocumentExample(collapse, 'special-token')
           });
 
           it(`should render responses`, async () => {
@@ -296,7 +327,12 @@ describe('API Console documentation', () => {
             const parameters = securityShadowRoot.querySelector('api-parameters-document');
             const collapse = parameters.shadowRoot.querySelector('anypoint-collapse');
             testNoExamplesTypeDocument(collapse);
-            testTypeDocumentShape(collapse, 'access_token', 'String', 'Used to send a valid OAuth 2 access token. Do not use with the "Authorization" header.', 'Required')
+            testTypeDocumentShape(collapse, [{
+              name: 'access_token',
+              type: 'String',
+              description: 'Used to send a valid OAuth 2 access token. Do not use with the "Authorization" header.',
+              required: 'Required'
+            }])
           });
 
           it(`should render headers section`, async () => {
@@ -309,11 +345,282 @@ describe('API Console documentation', () => {
             const headers = securityShadowRoot.querySelector('api-headers-document');
             const collapse = headers.shadowRoot.querySelector('anypoint-collapse');
             testNoExamplesTypeDocument(collapse);
-            testTypeDocumentShape(collapse, 'Authorization', 'String','Used to send a valid OAuth 2 access token. Do not use with the "access_token" query string parameter.', 'Required')
+            testTypeDocumentShape(collapse, [{
+              name: 'Authorization',
+              type: 'String',
+              description: 'Used to send a valid OAuth 2 access token. Do not use with the "access_token" query string parameter.',
+              required: 'Required'
+            }])
           });
 
           it(`should render responses`, async () => {
             testSecurityResponses(element, ['401', '403'], 'Bad or expired token. This can happen if the user or Dropbox revoked or expired an access token. To fix, re-authenticate the user.')
+          });
+        });
+      });
+
+      describe('Types section', () => {
+        beforeEach(async () => {
+          navigationSelectTypesSection(element);
+          await aTimeout(50)
+        });
+
+        const testTypeDocumentation = (elem, title, description) => {
+          assert.equal(elem.querySelector('.title').innerText, title);
+          assert.equal(elem.querySelector('arc-marked').querySelector('.markdown-html').innerText.trim(), description);
+        }
+
+        describe('Time-only type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 0);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is time-only type';
+            const displayName = 'Time-only type';
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'timeType', type: 'Time', description, displayName}]);
+          });
+        });
+
+        describe('Nil type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 1);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is nil type';
+            const displayName = 'Nil type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'nilType', type: 'Null', description}]);
+          });
+        });
+
+        describe('Datetime type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 2);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is datetime type';
+            const displayName = 'Datetime type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'dateTimeType', type: 'DateTime', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot,  'Sun, 28 Feb 2016 16:41:41 GMT')
+          });
+        });
+
+        describe('Union type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 3);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is union type';
+            const displayName = 'Union type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+
+            const typeDocument = docShadowRoot.querySelector('api-type-document');
+            const typeShadowRoot = typeDocument.shadowRoot;
+            const unionSelector = typeShadowRoot.querySelector('.union-type-selector');
+            assert.equal(unionSelector.querySelector('span').innerText, 'Any of:');
+
+            const unionButtons = unionSelector.querySelectorAll('anypoint-button');
+            assert.lengthOf(unionButtons, 2);
+            assert.equal(unionButtons[0].innerText, 'OBJECT TYPE');
+            assert.equal(unionButtons[1].innerText, 'STRING TYPE');
+
+            testTypeDocumentShape(typeShadowRoot, [{name: 'prop1', type: 'String', required: 'Required'}, {name: 'prop2', type: 'String'}]);
+            testTypeDocumentExample(typeShadowRoot, 'prop1')
+          });
+        });
+
+        describe('File type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 4);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is file type';
+            const displayName = 'File type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'fileType', type: 'File', description}]);
+          });
+        });
+
+        describe('Number type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 5);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is number type';
+            const displayName = 'Number type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'numberType', type: 'Integer', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot,  '2', [{label: 'Min value:', value: '1'}, {label: 'Max value:', value: '10'}])
+          });
+        });
+
+        describe('String type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 6);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is string type';
+            const displayName = 'String type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'stringType', type: 'String', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot, 'a@example', [{label: 'Pattern:', value: '^.+@.+.+$'}, {label: 'Minimum characters:', value: '1'}, {label: 'Maximum characters:', value: '10'}])
+          });
+        });
+
+        describe('Datetime-only type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 7);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is datetime-only type';
+            const displayName = 'Datetime-only type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'dateTimeOnlyType', type: 'Time', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot,  '2015-07-04T21:00:00')
+          });
+        });
+
+        describe('Object type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 8);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is object type';
+            const displayName = 'Object type';
+            const prop1 = 'prop1';
+            const prop2 = 'prop2';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: prop1, type: 'String', required: 'Required', example: prop1}, {name: prop2, type: 'String', example: prop2}]);
+          });
+        });
+
+        describe('Boolean type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 9);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is boolean type';
+            const displayName = 'Boolean type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'booleanType', type: 'Boolean', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot, 'false')
+          });
+        });
+
+        describe('Array type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 10);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const typeDocument = docShadowRoot.querySelector('api-type-document');
+            const description = 'This is array type';
+            const displayName = 'Array type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testResourceExampleDocument(typeDocument,  "- 'item1'\n- 'item2'")
+          });
+        });
+
+        describe('Date-only type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 11);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is date-only type';
+            const displayName = 'Date-only type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            testTypeDocumentShape(docShadowRoot, [{name: 'dateType', type: 'Date', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot,  '2015-05-23')
+          });
+        });
+
+        describe('Any type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 12);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const typeDocument = docShadowRoot.querySelector('api-type-document');
+            const description = 'This is any type';
+            const displayName = 'Any type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testResourceExampleDocument(typeDocument,  'any')
+            testTypeDocumentShape(docShadowRoot, [{name: 'anyType', type: 'Any', description}]);
           });
         });
       });
