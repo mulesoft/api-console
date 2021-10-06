@@ -54,7 +54,7 @@ describe('API Console documentation', () => {
         it(`should render basic summary documentation`, async () => {
           const summaryShadowRoot = documentationSummary(element).shadowRoot;
           const title = summaryShadowRoot.querySelector('.api-title').innerText;
-          await aTimeout(200);
+          await aTimeout(300);
           assert.equal(title.trim(), 'API title: Google Drive')
           const version = summaryShadowRoot.querySelector('.inline-description.version').innerText;
           await aTimeout(200);
@@ -73,7 +73,7 @@ describe('API Console documentation', () => {
           const documentation = documentationSummary(element);
           const summaryShadowRoot = documentation.shadowRoot;
           const endpointsSection = summaryShadowRoot.querySelector('.toc');
-          await aTimeout(200);
+          await aTimeout(300);
           assert.ok(endpointsSection)
 
           const endpoints = summaryShadowRoot.querySelectorAll('.endpoint-item');
