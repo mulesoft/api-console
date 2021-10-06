@@ -455,23 +455,29 @@ describe('API Console navigation', () => {
           it(`should list all endpoints`, async () => {
             const endpointsList = navigationEndpointsList(element);
             assert.ok(endpointsList);
-            assert.lengthOf(endpointsList, 4);
+            assert.lengthOf(endpointsList, 7);
 
             [
-              ["/test-headers", "Headers V2"],
             ["/test-custom-scheme", "Custom security scheme"],
+              ["/test-headers", "Headers V2"],
+            ["/test-oauth20-scheme", "Oauth 2.0 security scheme"],
             ["/test-oauth10-scheme", "Oauth 1.0 security scheme"],
-            ["/test-oauth20-scheme", "Oauth 2.0 security scheme"]
+            ["/test-pass-through-scheme", "Digest pass through scheme"],
+            ["/test-basic-scheme", "Basic security scheme"],
+            ["/test-digest-scheme", "Digest security scheme"],
               ].forEach(([path, name], index) => testEndpoint(endpointsList[index], path, name))
           });
 
           it(`should list all security items`, async () => {
             const securityList = navigationSecurityList(element);
             assert.ok(securityList);
-            assert.lengthOf(securityList, 3);
-            assert.equal(securityList[0].innerText.trim(), 'customScheme - x-custom');
-            assert.equal(securityList[1].innerText.trim(), 'oauth_1_0 - OAuth 1.0');
+            assert.lengthOf(securityList, 6);
+            assert.equal(securityList[0].innerText.trim(), 'digest - Digest Authentication');
+            assert.equal(securityList[1].innerText.trim(), 'customScheme - x-custom');
             assert.equal(securityList[2].innerText.trim(), 'oauth_2_0 - OAuth 2.0');
+            assert.equal(securityList[3].innerText.trim(), 'passthrough - Pass Through');
+            assert.equal(securityList[4].innerText.trim(), 'basic - Basic Authentication');
+            assert.equal(securityList[5].innerText.trim(), 'oauth_1_0 - OAuth 1.0');
           });
         });
 
