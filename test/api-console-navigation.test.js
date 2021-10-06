@@ -20,6 +20,11 @@ describe('API Console navigation', () => {
     `));
   }
 
+  const testEndpoint = (endpoint, path, name) => {
+    assert.equal(endpoint.getAttribute('data-endpoint-path'), path)
+    assert.equal(endpoint.querySelector('.endpoint-name').innerText, name)
+  }
+
   const googleApi = 'google-drive-api';
 
   [
@@ -74,11 +79,6 @@ describe('API Console navigation', () => {
       });
 
       describe('Endpoints section', () => {
-        const testEndpoint = (endpoint, path, name) => {
-          assert.equal(endpoint.getAttribute('data-endpoint-path'), path)
-          assert.equal(endpoint.querySelector('.endpoint-name').innerText, name)
-        }
-
         const testGoogleEndpoints = (elem, fullPaths = false) => {
           const endpointsList = navigationEndpointsList(elem);
           assert.ok(endpointsList);
@@ -321,6 +321,183 @@ describe('API Console navigation', () => {
           assert.lengthOf(securityList, 1);
 
           assert.equal(securityList[0].innerText.trim(), 'oauth_2_0 - OAuth 2.0');
+        });
+      });
+    });
+  });
+
+  [
+    new ApiDescribe('Regular model'),
+    new ApiDescribe('Compact model', true)
+  ].forEach(({label, compact}) => {
+    describe(label, () => {
+      let element;
+      let amf;
+
+      describe('RAML Fragments', () => {
+        describe('SecurityScheme fragment', () => {
+          before(async () => {
+            amf = await AmfLoader.load({compact, fileName: 'basicAuth'});
+          });
+
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+          });
+
+          it(`should only render security section`, async () => {
+            assert.notOk(navigationSummarySection(element));
+            assert.notOk(navigationEndpointsSection(element));
+            assert.notOk(navigationDocumentationSection(element));
+            assert.notOk(navigationTypesSection(element));
+            assert.ok(navigationSecuritySection(element));
+          });
+
+          it(`should list all security items`, async () => {
+            const securityList = navigationSecurityList(element);
+            assert.ok(securityList);
+            assert.lengthOf(securityList, 1);
+            assert.equal(securityList[0].innerText.trim(), 'BasicAuth');
+          });
+        });
+
+        describe('DocumentationItem fragment', () => {
+          before(async () => {
+            amf = await AmfLoader.load({compact, fileName: 'documentation'});
+          });
+
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+          });
+
+          it(`should only render documentation section`, async () => {
+            assert.notOk(navigationSummarySection(element));
+            assert.notOk(navigationEndpointsSection(element));
+            assert.ok(navigationDocumentationSection(element));
+            assert.notOk(navigationTypesSection(element));
+            assert.notOk(navigationSecuritySection(element));
+          });
+
+          it(`should list all documentation items`, async () => {
+            const documentationList = navigationDocumentationList(element);
+            assert.ok(documentationList);
+            assert.lengthOf(documentationList, 1);
+            assert.equal(documentationList[0].innerText.trim(), 'Home');
+          });
+        });
+
+        describe('Extension fragment', () => {
+          before(async () => {
+            amf = await AmfLoader.load({compact, fileName: 'extension'});
+          });
+
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+          });
+
+          it(`should render all extended elements`, async () => {
+            assert.ok(navigationSummarySection(element));
+            assert.ok(navigationEndpointsSection(element));
+            assert.notOk(navigationDocumentationSection(element));
+            assert.notOk(navigationTypesSection(element));
+            assert.notOk(navigationSecuritySection(element));
+          });
+
+          it(`should list all endpoints`, async () => {
+            const endpointsList = navigationEndpointsList(element);
+            assert.ok(endpointsList);
+            assert.lengthOf(endpointsList, 1);
+            testEndpoint(endpointsList[0], "/test-v2", "/test-v2");
+          });
+        });
+
+        describe('Library fragment', () => {
+          before(async () => {
+            amf = await AmfLoader.load({compact, fileName: 'library'});
+          });
+
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+          });
+
+          it(`should only render types section`, async () => {
+            assert.notOk(navigationSummarySection(element));
+            assert.notOk(navigationEndpointsSection(element));
+            assert.notOk(navigationDocumentationSection(element));
+            assert.ok(navigationTypesSection(element));
+            assert.notOk(navigationSecuritySection(element));
+          });
+
+          it(`should list all type items`, async () => {
+            const documentationList = navigationTypesList(element);
+            assert.ok(documentationList);
+            assert.lengthOf(documentationList, 1);
+            assert.equal(documentationList[0].innerText.trim(), 'myType')
+          });
+        });
+
+        describe('Overlay fragment', () => {
+          before(async () => {
+            amf = await AmfLoader.load({compact, fileName: 'overlay'});
+          });
+
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+          });
+
+          it(`should render all sections in spec`, async () => {
+            assert.ok(navigationSummarySection(element));
+            assert.ok(navigationEndpointsSection(element));
+            assert.notOk(navigationDocumentationSection(element));
+            assert.notOk(navigationTypesSection(element));
+            assert.ok(navigationSecuritySection(element));
+          });
+
+          it(`should list all endpoints`, async () => {
+            const endpointsList = navigationEndpointsList(element);
+            assert.ok(endpointsList);
+            assert.lengthOf(endpointsList, 4);
+
+            [
+              ["/test-headers", "Headers V2"],
+            ["/test-custom-scheme", "Custom security scheme"],
+            ["/test-oauth10-scheme", "Oauth 1.0 security scheme"],
+            ["/test-oauth20-scheme", "Oauth 2.0 security scheme"]
+              ].forEach(([path, name], index) => testEndpoint(endpointsList[index], path, name))
+          });
+
+          it(`should list all security items`, async () => {
+            const securityList = navigationSecurityList(element);
+            assert.ok(securityList);
+            assert.lengthOf(securityList, 3);
+            assert.equal(securityList[0].innerText.trim(), 'customScheme - x-custom');
+            assert.equal(securityList[1].innerText.trim(), 'oauth_1_0 - OAuth 1.0');
+            assert.equal(securityList[2].innerText.trim(), 'oauth_2_0 - OAuth 2.0');
+          });
+        });
+
+        describe('DataType fragment', () => {
+          before(async () => {
+            amf = await AmfLoader.load({compact, fileName: 'person'});
+          });
+
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+          });
+
+          it(`should render all sections in spec`, async () => {
+            assert.notOk(navigationSummarySection(element));
+            assert.notOk(navigationEndpointsSection(element));
+            assert.notOk(navigationDocumentationSection(element));
+            assert.ok(navigationTypesSection(element));
+            assert.notOk(navigationSecuritySection(element));
+          });
+
+          it(`should list all type items`, async () => {
+            const documentationList = navigationTypesList(element);
+            assert.ok(documentationList);
+            assert.lengthOf(documentationList, 1);
+            assert.equal(documentationList[0].innerText.trim(), 'type')
+          });
         });
       });
     });

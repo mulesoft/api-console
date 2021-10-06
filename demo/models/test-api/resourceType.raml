@@ -1,0 +1,10 @@
+#%RAML 1.0 ResourceType
+
+delete?:
+  headers:
+    Accept:
+      description: Is used to set specified media type.
+  responses:
+    403:
+      description: |
+        API rate limit exceeded.
