@@ -306,6 +306,208 @@ describe('API Console request', () => {
             assert.exists(authorizationMethod.shadowRoot.querySelector('.auth-button'));
           });
         })
+
+        describe('Basic', () => {
+          let credentialsSection
+
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/test-basic-scheme', 'get');
+            await aTimeout(50)
+            documentationTryItButton(element).click()
+            await aTimeout(50)
+            credentialsSection = requestCredentialsSection(element);
+          });
+
+          it(`should render credentials section`, async () => {
+            assert.exists(credentialsSection);
+          });
+
+          it(`should render auth label`, async () => {
+            await aTimeout(100);
+            assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'Basic Authentication');
+          });
+
+          it(`should render authorization method`, async () => {
+            const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            assert.equal(authorizationMethod.getAttribute('type'), 'basic');
+          });
+
+          it(`should render scheme fields`, async () => {
+            const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
+
+            assertInput(authorizationMethodForm, 'username', 'User name')
+            assertMaskedInput(authorizationMethodForm, 'password', 'Password')
+          });
+
+          it(`should render all sections`, async () => {
+            assert.exists(requestUrlSection(element));
+            assert.exists(requestSendButton(element));
+          });
+
+          describe('Basic auth request', () => {
+            beforeEach(async () => {
+              spy = sinon.spy();
+              document.body.addEventListener('api-request', spy);
+            });
+
+            it(`should add auth to request`, async () => {
+              requestSendButton(element).click();
+              await nextFrame();
+
+              assert.isTrue(spy.called);
+
+              const authElement = spy.getCall(0).args[0].detail.auth[0];
+              assert.equal(authElement.type, 'basic');
+              assert.equal(authElement.config.password, '');
+              assert.equal(authElement.config.username, '');
+            });
+          });
+        })
+
+        describe('Digest', () => {
+          let credentialsSection
+
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/test-digest-scheme', 'get');
+            await aTimeout(50)
+            documentationTryItButton(element).click()
+            await aTimeout(50)
+            credentialsSection = requestCredentialsSection(element);
+          });
+
+          it(`should render credentials section`, async () => {
+            assert.exists(credentialsSection);
+          });
+
+          it(`should render auth label`, async () => {
+            await aTimeout(100);
+            assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'Digest Authentication');
+          });
+
+          it(`should render authorization method`, async () => {
+            const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            assert.equal(authorizationMethod.getAttribute('type'), 'digest');
+          });
+
+          it(`should render scheme fields`, async () => {
+            const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
+
+            assertInput(authorizationMethodForm, 'username', 'User name')
+            assertInput(authorizationMethodForm, 'realm', 'Server issued realm')
+            assertInput(authorizationMethodForm, 'nonce', 'Server issued nonce')
+            assertInput(authorizationMethodForm, 'nc', 'Nonce count')
+            assertInput(authorizationMethodForm, 'opaque', 'Server issued opaque string')
+            assertInput(authorizationMethodForm, 'cnonce', 'Client nonce')
+
+            assertMaskedInput(authorizationMethodForm, 'password', 'Password')
+
+            assertDropdownMenu(authorizationMethodForm, 'qop', 'Quality of protection', 'Access token')
+            assertDropdownMenu(authorizationMethodForm, 'algorithm', 'Hash algorithm', 'MD5')
+          });
+
+          it(`should render all sections`, async () => {
+            assert.exists(requestUrlSection(element));
+            assert.exists(requestSendButton(element));
+          });
+
+          describe('Digest auth request', () => {
+            beforeEach(async () => {
+              spy = sinon.spy();
+              document.body.addEventListener('api-request', spy);
+            });
+
+            it(`should add auth to request`, async () => {
+              requestSendButton(element).click();
+              await nextFrame();
+
+              assert.isTrue(spy.called);
+
+              const authElement = spy.getCall(0).args[0].detail.auth[0];
+              assert.equal(authElement.type, 'digest');
+              assert.equal(authElement.config.username, '');
+              assert.equal(authElement.config.password, '');
+              assert.equal(authElement.config.response, 'b51d5ed92022b12518f81219d05e0ea1');
+              assert.equal(authElement.config.nc, '00000001');
+              assert.isDefined(authElement.config.cnonce);
+              assert.equal(authElement.config.algorithm, 'MD5');
+              assert.isUndefined(authElement.config.realm);
+              assert.isUndefined(authElement.config.nonce);
+              assert.isUndefined(authElement.config.uri);
+              assert.isUndefined(authElement.config.opaque);
+              assert.isUndefined(authElement.config.qop);
+            });
+          });
+        })
+
+        describe('Pass through', () => {
+          let credentialsSection
+
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/test-pass-through-scheme', 'get');
+            await aTimeout(50)
+            documentationTryItButton(element).click()
+            await aTimeout(50)
+            credentialsSection = requestCredentialsSection(element);
+          });
+
+          it(`should render credentials section`, async () => {
+            assert.exists(credentialsSection);
+          });
+
+          it(`should render auth label`, async () => {
+            await aTimeout(100);
+            assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'Pass Through');
+          });
+
+          it(`should render authorization method`, async () => {
+            const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            assert.equal(authorizationMethod.getAttribute('type'), 'pass through');
+          });
+
+          it(`should render scheme fields`, async () => {
+            const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            assert.equal(authorizationMethod.shadowRoot.querySelector('.subtitle').innerText.trim(), 'Scheme: passthrough');
+            assert.exists(authorizationMethod.shadowRoot.querySelector('.hint-icon'));
+
+            const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
+            const titles = authorizationMethodForm.querySelectorAll('.section-title');
+            assert.lengthOf(titles, 2)
+            assert.equal(titles[0].innerText, 'Headers')
+            assert.equal(titles[1].innerText, 'Query parameters')
+
+            const items = authorizationMethodForm.querySelectorAll('api-form-item');
+            assert.lengthOf(items, 2)
+            assert.equal(items[0].getAttribute('name'), 'api_key')
+            assert.equal(items[0].getAttribute('data-type'), 'header')
+            assert.equal(items[1].getAttribute('name'), 'query')
+            assert.equal(items[1].getAttribute('data-type'), 'query')
+          });
+
+          it(`should render all sections`, async () => {
+            assert.exists(requestUrlSection(element));
+            assert.exists(requestSendButton(element));
+          });
+
+          describe('Pass through auth request', () => {
+            beforeEach(async () => {
+              spy = sinon.spy();
+              document.body.addEventListener('api-request', spy);
+            });
+
+            it(`should add auth to request`, async () => {
+              requestSendButton(element).click();
+              await nextFrame();
+
+              assert.isTrue(spy.called);
+              const authElement = spy.getCall(0).args[0].detail.auth[0];
+              assert.equal(authElement.type, 'pass through');
+              assert.equal(authElement.config.headers.api_key, '');
+              assert.isUndefined(authElement.config.query);
+            });
+          });
+        })
       });
     });
   });
