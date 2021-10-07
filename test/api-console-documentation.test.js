@@ -73,7 +73,7 @@ describe('API Console documentation', () => {
           const documentation = documentationSummary(element);
           const summaryShadowRoot = documentation.shadowRoot;
           const endpointsSection = summaryShadowRoot.querySelector('.toc');
-          await aTimeout(300);
+          await aTimeout(400);
           assert.ok(endpointsSection)
 
           const endpoints = summaryShadowRoot.querySelectorAll('.endpoint-item');
