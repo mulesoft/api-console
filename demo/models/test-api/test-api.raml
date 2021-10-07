@@ -146,7 +146,25 @@ securitySchemes:
       authorizationUri: https://www.dropbox.com/1/oauth2/authorize
       accessTokenUri: https://api.dropbox.com/1/oauth2/token
       authorizationGrants: [ authorization_code, implicit, 'urn:ietf:params:oauth:grant-type:saml2-bearer' ]
-
+  basic:
+    description: |
+      This API supports Basic Authentication.
+    type: Basic Authentication
+  digest:
+    description: |
+      This API supports DigestSecurityScheme Authentication.
+    type: Digest Authentication
+  passthrough:
+    description: |
+      This API supports Pass Through Authentication.
+    type: Pass Through
+    describedBy:
+      queryParameters:
+        query:
+          type: string
+      headers:
+        api_key:
+          type: string
 /test-headers:
   displayName: Headers
   post:
@@ -168,4 +186,16 @@ securitySchemes:
   displayName: Oauth 2.0 security scheme
   get:
     securedBy: [oauth_2_0]
+/test-basic-scheme:
+  displayName: Basic security scheme
+  get:
+    securedBy: [basic]
+/test-digest-scheme:
+  displayName: Digest security scheme
+  get:
+    securedBy: [digest]
+/test-pass-through-scheme:
+  displayName: Digest pass through scheme
+  get:
+    securedBy: [passthrough]
 
