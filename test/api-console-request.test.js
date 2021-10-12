@@ -1,4 +1,4 @@
-import {fixture, assert, html, nextFrame, aTimeout} from '@open-wc/testing';
+import {fixture, assert, html, nextFrame, aTimeout, waitUntil} from '@open-wc/testing';
 import * as sinon from 'sinon';
 import {AmfLoader, ApiDescribe} from './amf-loader.js';
 import '../api-console.js';
@@ -22,6 +22,12 @@ describe('API Console request', () => {
         <api-console .amf="${amf}"></api-console>
     `));
   }
+
+  const waitForElement = async (elem) => waitUntil(
+    () => elem,
+    'Element did not render',
+    {timeout: 400}
+  );
 
   const testApi = 'test-api';
 
@@ -159,7 +165,7 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-custom-scheme', 'get');
-            await aTimeout(50)
+            await aTimeout(100)
             documentationTryItButton(element).click()
             await aTimeout(50)
             credentialsSection = requestCredentialsSection(element);
@@ -269,7 +275,7 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-oauth20-scheme', 'get');
-            await aTimeout(50)
+            await aTimeout(100)
             documentationTryItButton(element).click()
             await aTimeout(50)
             credentialsSection = requestCredentialsSection(element);
@@ -463,6 +469,7 @@ describe('API Console request', () => {
 
           it(`should render authorization method`, async () => {
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            await waitForElement(authorizationMethod);
             assert.equal(authorizationMethod.getAttribute('type'), 'pass through');
           });
 

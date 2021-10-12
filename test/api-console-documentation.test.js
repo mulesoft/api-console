@@ -1,4 +1,4 @@
-import {fixture, assert, html, aTimeout} from '@open-wc/testing';
+import {fixture, assert, html, aTimeout, waitUntil} from '@open-wc/testing';
 import {AmfLoader, ApiDescribe} from './amf-loader.js';
 import '../api-console.js';
 import {
@@ -27,15 +27,23 @@ describe('API Console documentation', () => {
   let element;
   let amf;
 
+  const waitForElement = async (elem) => waitUntil(
+    () => elem,
+    'Element did not render',
+    {timeout: 400}
+  );
+
   const testNoExamplesTypeDocument = (elem) => {
     const typeDocument = elem.querySelector('api-type-document');
     const typeExamples = typeDocument.shadowRoot.querySelector('.examples');
     assert.equal(typeExamples.getAttribute('hidden'), '')
   }
 
-  const testResourceExampleDocument = (elem, example) => {
+  const testResourceExampleDocument = async (elem, example) => {
     const resourceExample = elem.shadowRoot.querySelector('api-resource-example-document');
-    assert.equal(resourceExample.shadowRoot.querySelector('.example-title').innerText, 'Example');
+    const title = resourceExample.shadowRoot.querySelector('.example-title');
+    await waitForElement(title);
+    assert.equal(title.innerText, 'Example');
 
     const renderer = resourceExample.shadowRoot.querySelector('.renderer');
     const exampleHighlight = renderer.querySelector('api-example-render').shadowRoot.querySelector('prism-highlight');
@@ -46,17 +54,22 @@ describe('API Console documentation', () => {
    * @param {Element|ShadowRoot} elem
    * @param {TypeDocumentShapeOpts[]} opts
    */
-  const testTypeDocumentShape = (elem, opts) => {
+  const testTypeDocumentShape = async (elem, opts) => {
     const typeDocument = elem.querySelector('api-type-document');
     const shapes = typeDocument.shadowRoot.querySelectorAll('property-shape-document');
+    await aTimeout(100);
     assert.lengthOf(shapes, opts.length);
     shapes.forEach((s, index) => {
       const shape = opts[index];
       shape.name && assert.equal(s.shadowRoot.querySelector('.property-title .property-name').innerText, shape.name);
       shape.type && assert.equal(s.shadowRoot.querySelector('.property-traits .data-type').innerText, shape.type);
-      shape.description && assert.equal(s.shadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), shape.description);
       shape.required && assert.equal(s.shadowRoot.querySelector('.property-traits .required-type').innerText, shape.required);
       shape.displayName && assert.equal(s.shadowRoot.querySelector('.property-display-name').innerText, shape.displayName);
+      if (shape.description) {
+        const expectedDescription = s.shadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim();
+        const description = expectedDescription.replace(/\n/g,' ');
+        assert.equal(description, shape.description);
+      }
       if (shape.example) {
         const range = s.shadowRoot.querySelector('property-range-document');
         testResourceExampleDocument(range, shape.example)
@@ -107,27 +120,27 @@ describe('API Console documentation', () => {
 
         it(`should render basic summary documentation`, async () => {
           const summaryShadowRoot = documentationSummary(element).shadowRoot;
-          const title = summaryShadowRoot.querySelector('.api-title').innerText;
-          await aTimeout(300);
-          assert.equal(title.trim(), 'API title: Google Drive')
-          const version = summaryShadowRoot.querySelector('.inline-description.version').innerText;
-          await aTimeout(200);
-          assert.equal(version.trim(), 'Version: v2')
+          const title = summaryShadowRoot.querySelector('.api-title');
+          await waitForElement(title);
+          assert.equal(title.innerText.trim(), 'API title: Google Drive')
+          const version = summaryShadowRoot.querySelector('.inline-description.version');
+          await waitForElement(version);
+          assert.equal(version.innerText.trim(), 'Version: v2')
 
           const url = summaryShadowRoot.querySelector('api-url').shadowRoot;
-          const baseUri = url.querySelector('.url-area > .url-value').innerText;
-          await aTimeout(200);
-          assert.equal(baseUri.trim(), 'https://www.googleapis.com/drive/{version}')
-          const description = summaryShadowRoot.querySelector('.marked-description').innerText;
-          await aTimeout(200);
-          assert.equal(description.trim(), 'Google Drive API')
+          const baseUri = url.querySelector('.url-area > .url-value');
+          await waitForElement(baseUri);
+          assert.equal(baseUri.innerText.trim(), 'https://www.googleapis.com/drive/{version}')
+          const description = summaryShadowRoot.querySelector('.marked-description');
+          await waitForElement(description);
+          assert.equal(description.innerText.trim(), 'Google Drive API')
         });
 
         it(`should render endpoints list`, async () => {
           const documentation = documentationSummary(element);
           const summaryShadowRoot = documentation.shadowRoot;
           const endpointsSection = summaryShadowRoot.querySelector('.toc');
-          await aTimeout(400);
+          await waitForElement(endpointsSection);
           assert.ok(endpointsSection)
 
           const endpoints = summaryShadowRoot.querySelectorAll('.endpoint-item');
@@ -225,7 +238,7 @@ describe('API Console documentation', () => {
           beforeEach(async () => {
             navigationSelectSecuritySection(element);
             await aTimeout(50)
-            navigationSelectSecurity(element, 0);
+            navigationSelectSecurity(element, 1);
             await aTimeout(100)
           });
 
@@ -256,7 +269,7 @@ describe('API Console documentation', () => {
           beforeEach(async () => {
             navigationSelectSecuritySection(element);
             await aTimeout(50)
-            navigationSelectSecurity(element, 1);
+            navigationSelectSecurity(element, 5);
             await aTimeout(50)
           });
 
