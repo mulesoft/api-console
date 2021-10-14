@@ -8,6 +8,7 @@ import {
   navigationSelectDocumentationSection, navigationSelectSecurity, navigationSelectSecuritySection,
   navigationSelectSummarySection, navigationSelectType, navigationSelectTypesSection
 } from './testHelper.js';
+import {isWebkit} from '../src/ApiConsole.js';
 
 /** @typedef {import('..').ApiConsole} ApiConsole */
 /** @typedef {import('./testHelper.js').TypeDocumentShapeOpts} TypeDocumentShapeOpts */
@@ -443,7 +444,7 @@ describe('API Console documentation', () => {
             await aTimeout(100)
           });
 
-          it(`should render type documentation`, async () => {
+          (isWebkit ? it : it.skip)('should render type documentation', async () => {
             const item = documentationType(element);
             const docShadowRoot = item.shadowRoot;
             const description = 'This is union type';
