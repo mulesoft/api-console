@@ -10,7 +10,7 @@ import { documentationPanel, navigationTree } from '../testHelper.js';
 const apis = ['demo-api'];
 
 const hasScrolledToTheEnd = (target) => target.scrollTop === (target.scrollHeight - target.offsetHeight);
-const DEFAULT_RENDER_TIMEOUT = () => aTimeout(500);
+const DEFAULT_RENDER_TIMEOUT = () => aTimeout(1000);
 
 const diffFullScroll = async (element, name) => {
   let screenShotCount = 0;
