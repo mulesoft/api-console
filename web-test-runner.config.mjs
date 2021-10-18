@@ -1,3 +1,5 @@
+import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
+
 export default {
   files: 'test/**/*.test.js',
   nodeResolve: true,
@@ -20,6 +22,11 @@ export default {
   browserStartTimeout: 20000,
   testsStartTimeout: 20000,
   testsFinishTimeout: 600000,
+  plugins: [
+    visualRegressionPlugin({
+      update: process.argv.includes('--update-visual-baseline'),
+    }),
+  ],
   testRunnerHtml: (testFramework) =>
   `<html>
   <body>
