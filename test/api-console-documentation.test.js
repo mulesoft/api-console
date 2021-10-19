@@ -1,4 +1,4 @@
-import {fixture, assert, html, aTimeout} from '@open-wc/testing';
+import { fixture, assert, html, aTimeout, waitUntil } from '@open-wc/testing'
 import {AmfLoader, ApiDescribe} from './amf-loader.js';
 import '../api-console.js';
 import {
@@ -72,6 +72,7 @@ describe('API Console documentation', () => {
         it(`should render endpoints list`, async () => {
           const documentation = documentationSummary(element);
           const summaryShadowRoot = documentation.shadowRoot;
+          await waitUntil(() => Boolean(summaryShadowRoot.querySelector('.toc')));
           const endpointsSection = summaryShadowRoot.querySelector('.toc');
           await aTimeout(400);
           assert.ok(endpointsSection)
