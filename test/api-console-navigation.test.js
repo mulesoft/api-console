@@ -448,7 +448,7 @@ describe('API Console navigation', () => {
             assert.ok(navigationSummarySection(element));
             assert.ok(navigationEndpointsSection(element));
             assert.notOk(navigationDocumentationSection(element));
-            assert.notOk(navigationTypesSection(element));
+            assert.ok(navigationTypesSection(element));
             assert.ok(navigationSecuritySection(element));
           });
 

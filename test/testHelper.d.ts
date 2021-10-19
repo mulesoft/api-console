@@ -19,14 +19,20 @@ export declare function navigationSelectDocumentation(element: ApiConsole, index
 
 export declare function navigationTypesSection(element: ApiConsole): Element|null;
 export declare function navigationTypesList(element: ApiConsole): Element|null;
+export declare function navigationSelectTypesSection(element: ApiConsole): Element|null;
+export declare function navigationSelectType(element: ApiConsole, index: number): Element|null;
 
 export declare function navigationSecuritySection(element: ApiConsole): Element|null;
+export declare function navigationSelectSecuritySection(element: ApiConsole): Element|null;
 export declare function navigationSecurityList(element: ApiConsole): Element|null;
+export declare function navigationSelectSecurity(element: ApiConsole, index: number): Element|null;
 
 /** Documentation * */
 export declare function documentationPanel(element: ApiConsole): Element|null;
 export declare function documentationSummary(element: ApiConsole): Element|null;
 export declare function documentationDocument(element: ApiConsole): Element|null;
+export declare function documentationSecurity(element: ApiConsole): Element|null;
+export declare function documentationType(element: ApiConsole): Element|null;
 export declare function documentationTryItButton(element: ApiConsole): Element|null;
 
 /** Request panel * */
@@ -38,3 +44,12 @@ export declare function requestHeadersSection(element: ApiConsole): Element|null
 export declare function requestBodySection(element: ApiConsole): Element|null;
 export declare function requestCredentialsSection(element: ApiConsole): Element|null;
 export declare function requestSendButton(element: ApiConsole): Element|null;
+
+export declare interface TypeDocumentShapeOpts {
+    name?: string,
+    type?: string,
+    description?: string,
+    required?: string,
+    displayName?: string,
+    example?: string
+}
