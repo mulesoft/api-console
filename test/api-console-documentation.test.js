@@ -39,8 +39,8 @@ describe('API Console documentation', () => {
     await waitUntil(() => resourceExample.shadowRoot.querySelector('.example-title'));
     assert.equal(resourceExample.shadowRoot.querySelector('.example-title').innerText, 'Example');
 
-    const renderer = resourceExample.shadowRoot.querySelector('.renderer');
     if (!isWebkit) {
+      const renderer = resourceExample.shadowRoot.querySelector('.renderer');
       const exampleHighlight = renderer.querySelector('api-example-render').shadowRoot.querySelector('prism-highlight');
       assert.equal(exampleHighlight.shadowRoot.querySelector('.parsed-content').innerText.trim(), example);
     }
@@ -56,7 +56,7 @@ describe('API Console documentation', () => {
     const shapes = typeDocument.shadowRoot.querySelectorAll('property-shape-document');
     assert.lengthOf(shapes, opts.length);
 
-    shapes.forEach((s, index) => {
+    for (const [index, s] of shapes.entries()) {
       const shape = opts[index];
       shape.name && assert.equal(s.shadowRoot.querySelector('.property-title .property-name').innerText, shape.name);
       shape.type && assert.equal(s.shadowRoot.querySelector('.property-traits .data-type').innerText, shape.type);
@@ -64,17 +64,18 @@ describe('API Console documentation', () => {
       shape.displayName && assert.equal(s.shadowRoot.querySelector('.property-display-name').innerText, shape.displayName);
       if (shape.description) {
         const expectedDescription = s.shadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim();
-        const description = expectedDescription.replace(/\n/g,' ');
+        const description = expectedDescription.replace(/\n/g, ' ');
         assert.equal(description, shape.description);
       }
       if (shape.example) {
         const range = s.shadowRoot.querySelector('property-range-document');
-        testResourceExampleDocument(range, shape.example)
+        // eslint-disable-next-line no-await-in-loop
+        await testResourceExampleDocument(range, shape.example)
       }
-    })
+    }
   }
 
-  const testTypeDocumentExample = (elem, example, attributes, shapeIndex = 0) => {
+  const testTypeDocumentExample = async (elem, example, attributes, shapeIndex = 0) => {
     const typeDocument = elem.querySelector('api-type-document');
     const shape = typeDocument.shadowRoot.querySelectorAll('property-shape-document')[shapeIndex];
     const range = shape.shadowRoot.querySelector('property-range-document');
@@ -87,7 +88,7 @@ describe('API Console documentation', () => {
       })
     }
 
-    testResourceExampleDocument(range, example)
+    await testResourceExampleDocument(range, example)
   }
 
   [
@@ -251,7 +252,7 @@ describe('API Console documentation', () => {
             const collapse = headersDocument.shadowRoot.querySelector('anypoint-collapse');
             testNoExamplesTypeDocument(collapse);
             await testTypeDocumentShape(collapse, [{name: 'SpecialToken', type: 'String', description: 'Used to send a custom token.', required: 'Required'}])
-            testTypeDocumentExample(collapse, 'special-token')
+            await testTypeDocumentExample(collapse, 'special-token')
           });
 
           it(`should render responses`, async () => {
@@ -427,7 +428,7 @@ describe('API Console documentation', () => {
             testTypeDocumentation(docShadowRoot, displayName, description)
             testNoExamplesTypeDocument(docShadowRoot)
             await testTypeDocumentShape(docShadowRoot, [{name: 'dateTimeType', type: 'DateTime', description, displayName}]);
-            testTypeDocumentExample(docShadowRoot,  'Sun, 28 Feb 2016 16:41:41 GMT')
+            await testTypeDocumentExample(docShadowRoot,  'Sun, 28 Feb 2016 16:41:41 GMT')
           });
         });
 
@@ -457,7 +458,7 @@ describe('API Console documentation', () => {
             assert.equal(unionButtons[1].innerText, 'STRING TYPE');
 
             await testTypeDocumentShape(typeShadowRoot, [{name: 'prop1', type: 'String', required: 'Required'}, {name: 'prop2', type: 'String'}]);
-            testTypeDocumentExample(typeShadowRoot, 'prop1')
+            await testTypeDocumentExample(typeShadowRoot, 'prop1')
           });
         });
 
@@ -494,7 +495,7 @@ describe('API Console documentation', () => {
             testTypeDocumentation(docShadowRoot, displayName, description)
             testNoExamplesTypeDocument(docShadowRoot)
             await testTypeDocumentShape(docShadowRoot, [{name: 'numberType', type: 'Integer', description, displayName}]);
-            testTypeDocumentExample(docShadowRoot,  '2', [{label: 'Min value:', value: '1'}, {label: 'Max value:', value: '10'}])
+            await testTypeDocumentExample(docShadowRoot,  '2', [{label: 'Min value:', value: '1'}, {label: 'Max value:', value: '10'}])
           });
         });
 
@@ -513,7 +514,7 @@ describe('API Console documentation', () => {
             testTypeDocumentation(docShadowRoot, displayName, description)
             testNoExamplesTypeDocument(docShadowRoot)
             await testTypeDocumentShape(docShadowRoot, [{name: 'stringType', type: 'String', description, displayName}]);
-            testTypeDocumentExample(docShadowRoot, 'a@example', [{label: 'Pattern:', value: '^.+@.+.+$'}, {label: 'Minimum characters:', value: '1'}, {label: 'Maximum characters:', value: '10'}])
+            await testTypeDocumentExample(docShadowRoot, 'a@example', [{label: 'Pattern:', value: '^.+@.+.+$'}, {label: 'Minimum characters:', value: '1'}, {label: 'Maximum characters:', value: '10'}])
           });
         });
 
@@ -532,7 +533,7 @@ describe('API Console documentation', () => {
             testTypeDocumentation(docShadowRoot, displayName, description)
             testNoExamplesTypeDocument(docShadowRoot)
             await testTypeDocumentShape(docShadowRoot, [{name: 'dateTimeOnlyType', type: 'Time', description, displayName}]);
-            testTypeDocumentExample(docShadowRoot,  '2015-07-04T21:00:00')
+            await testTypeDocumentExample(docShadowRoot,  '2015-07-04T21:00:00')
           });
         });
 
@@ -571,7 +572,7 @@ describe('API Console documentation', () => {
             testTypeDocumentation(docShadowRoot, displayName, description)
             testNoExamplesTypeDocument(docShadowRoot)
             await testTypeDocumentShape(docShadowRoot, [{name: 'booleanType', type: 'Boolean', description, displayName}]);
-            testTypeDocumentExample(docShadowRoot, 'false')
+            await testTypeDocumentExample(docShadowRoot, 'false')
           });
         });
 
@@ -608,7 +609,7 @@ describe('API Console documentation', () => {
             testTypeDocumentation(docShadowRoot, displayName, description)
             testNoExamplesTypeDocument(docShadowRoot)
             await testTypeDocumentShape(docShadowRoot, [{name: 'dateType', type: 'Date', description, displayName}]);
-            testTypeDocumentExample(docShadowRoot,  '2015-05-23')
+            await testTypeDocumentExample(docShadowRoot,  '2015-05-23')
           });
         });
 
