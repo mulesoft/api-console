@@ -184,6 +184,7 @@ describe('API Console request', () => {
 
           it(`should render scheme fields`, async () => {
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            await waitUntil(() => authorizationMethod.shadowRoot.querySelector('form'));
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
             await aTimeout(100);
             assert.equal(authorizationMethodForm.querySelector('.section-title').innerText, 'Headers');
@@ -448,7 +449,7 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-pass-through-scheme', 'get');
-            await aTimeout(50)
+            await aTimeout(100)
             documentationTryItButton(element).click()
             await aTimeout(50)
             credentialsSection = requestCredentialsSection(element);
