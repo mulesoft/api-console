@@ -329,6 +329,7 @@ describe('API Console request', () => {
           });
 
           it(`should render authorization method`, async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')))
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             assert.equal(authorizationMethod.getAttribute('type'), 'basic');
           });
