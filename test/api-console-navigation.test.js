@@ -455,7 +455,7 @@ describe('API Console navigation', () => {
           it(`should list all endpoints`, async () => {
             const endpointsList = navigationEndpointsList(element);
             assert.ok(endpointsList);
-            assert.lengthOf(endpointsList, 7);
+            assert.lengthOf(endpointsList, 8);
 
             [
             ["/test-custom-scheme", "Custom security scheme"],
@@ -463,6 +463,7 @@ describe('API Console navigation', () => {
             ["/test-oauth20-scheme", "Oauth 2.0 security scheme"],
             ["/test-oauth10-scheme", "Oauth 1.0 security scheme"],
             ["/test-pass-through-scheme", "Digest pass through scheme"],
+            ["/test-query-parameters", "Query parameters"],
             ["/test-basic-scheme", "Basic security scheme"],
             ["/test-digest-scheme", "Digest security scheme"],
               ].forEach(([path, name], index) => testEndpoint(endpointsList[index], path, name))
