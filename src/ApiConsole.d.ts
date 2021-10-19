@@ -3,6 +3,7 @@ import { AmfHelperMixin } from '@api-components/amf-helper-mixin/amf-helper-mixi
 import { CredentialSource } from '@api-components/api-authorization/src/types';
 
 export const isChrome: boolean;
+export const isWebkit: boolean;
 
 export declare class ApiConsole extends AmfHelperMixin(LitElement) {
   static styles: CSSResult|CSSResult[];
