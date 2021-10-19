@@ -1,4 +1,4 @@
-import {fixture, assert, html, nextFrame, aTimeout} from '@open-wc/testing';
+import { fixture, assert, html, nextFrame, aTimeout, waitUntil } from '@open-wc/testing'
 import * as sinon from 'sinon';
 import {AmfLoader, ApiDescribe} from './amf-loader.js';
 import '../api-console.js';
@@ -235,6 +235,7 @@ describe('API Console request', () => {
           });
 
           it(`should render authorization method`, async () => {
+            await waitUntil(() => credentialsSection.shadowRoot.querySelector('api-authorization-method'));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             assert.equal(authorizationMethod.getAttribute('type'), 'oauth 1');
           });
