@@ -1,4 +1,4 @@
-import {fixture, assert, html, nextFrame, aTimeout} from '@open-wc/testing';
+import { fixture, assert, html, nextFrame, aTimeout, waitUntil } from '@open-wc/testing'
 import * as sinon from 'sinon';
 import {AmfLoader, ApiDescribe} from './amf-loader.js';
 import '../api-console.js';
@@ -184,6 +184,7 @@ describe('API Console request', () => {
 
           it(`should render scheme fields`, async () => {
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            await waitUntil(() => authorizationMethod.shadowRoot.querySelector('form'));
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
             await aTimeout(100);
             assert.equal(authorizationMethodForm.querySelector('.section-title').innerText, 'Headers');
@@ -235,6 +236,7 @@ describe('API Console request', () => {
           });
 
           it(`should render authorization method`, async () => {
+            await waitUntil(() => credentialsSection.shadowRoot.querySelector('api-authorization-method'));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             assert.equal(authorizationMethod.getAttribute('type'), 'oauth 1');
           });
@@ -328,6 +330,7 @@ describe('API Console request', () => {
           });
 
           it(`should render authorization method`, async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')))
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             assert.equal(authorizationMethod.getAttribute('type'), 'basic');
           });
@@ -370,7 +373,7 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-digest-scheme', 'get');
-            await aTimeout(50)
+            await aTimeout(100)
             documentationTryItButton(element).click()
             await aTimeout(50)
             credentialsSection = requestCredentialsSection(element);
@@ -446,7 +449,7 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-pass-through-scheme', 'get');
-            await aTimeout(50)
+            await aTimeout(100)
             documentationTryItButton(element).click()
             await aTimeout(50)
             credentialsSection = requestCredentialsSection(element);
