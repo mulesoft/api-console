@@ -371,7 +371,7 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-digest-scheme', 'get');
-            await waitUntil(() => Boolean(documentationTryItButton(element)))
+            await aTimeout(100)
             documentationTryItButton(element).click()
             await aTimeout(50)
             credentialsSection = requestCredentialsSection(element);
