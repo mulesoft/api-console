@@ -25,6 +25,7 @@ import '@advanced-rest-client/arc-icons/arc-icon.js';
 import styles from './ApiConsoleStyles.js';
 
 export const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+export const isWebkit = /Webkit/.test(navigator.userAgent);
 
 /** @typedef {import('lit-element').TemplateResult} TemplateResult */
 /** @typedef {import('lit-element').CSSResult} CSSResult */
