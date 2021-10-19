@@ -4,9 +4,9 @@ import '../api-console.js';
 import {
   documentationDocument,
   documentationPanel, documentationSecurity,
-  documentationSummary, navigationSelectDocumentation,
+  documentationSummary, documentationType, navigationSelectDocumentation,
   navigationSelectDocumentationSection, navigationSelectSecurity, navigationSelectSecuritySection,
-  navigationSelectSummarySection
+  navigationSelectSummarySection, navigationSelectType, navigationSelectTypesSection
 } from './testHelper.js';
 
 /** @typedef {import('..').ApiConsole} ApiConsole */
@@ -359,6 +359,272 @@ describe('API Console documentation', () => {
 
           it(`should render responses`, async () => {
             testSecurityResponses(element, ['401', '403'], 'Bad or expired token. This can happen if the user or Dropbox revoked or expired an access token. To fix, re-authenticate the user.')
+          });
+        });
+      });
+
+      describe('Types section', () => {
+        beforeEach(async () => {
+          navigationSelectTypesSection(element);
+          await aTimeout(50)
+        });
+
+        const testTypeDocumentation = (elem, title, description) => {
+          assert.equal(elem.querySelector('.title').innerText, title);
+          assert.equal(elem.querySelector('arc-marked').querySelector('.markdown-html').innerText.trim(), description);
+        }
+
+        describe('Time-only type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 0);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is time-only type';
+            const displayName = 'Time-only type';
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'timeType', type: 'Time', description, displayName}]);
+          });
+        });
+
+        describe('Nil type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 1);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is nil type';
+            const displayName = 'Nil type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'nilType', type: 'Null', description}]);
+          });
+        });
+
+        describe('Datetime type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 2);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is datetime type';
+            const displayName = 'Datetime type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'dateTimeType', type: 'DateTime', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot,  'Sun, 28 Feb 2016 16:41:41 GMT')
+          });
+        });
+
+        describe('Union type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 3);
+            await aTimeout(100)
+          });
+
+          it('should render type documentation', async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is union type';
+            const displayName = 'Union type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+
+            const typeDocument = docShadowRoot.querySelector('api-type-document');
+            const typeShadowRoot = typeDocument.shadowRoot;
+            const unionSelector = typeShadowRoot.querySelector('.union-type-selector');
+            assert.equal(unionSelector.querySelector('span').innerText, 'Any of:');
+
+            const unionButtons = unionSelector.querySelectorAll('anypoint-button');
+            assert.lengthOf(unionButtons, 2);
+            assert.equal(unionButtons[0].innerText, 'OBJECT TYPE');
+            assert.equal(unionButtons[1].innerText, 'STRING TYPE');
+
+            await testTypeDocumentShape(typeShadowRoot, [{name: 'prop1', type: 'String', required: 'Required'}, {name: 'prop2', type: 'String'}]);
+            testTypeDocumentExample(typeShadowRoot, 'prop1')
+          });
+        });
+
+        describe('File type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 4);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is file type';
+            const displayName = 'File type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'fileType', type: 'File', description}]);
+          });
+        });
+
+        describe('Number type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 5);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is number type';
+            const displayName = 'Number type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'numberType', type: 'Integer', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot,  '2', [{label: 'Min value:', value: '1'}, {label: 'Max value:', value: '10'}])
+          });
+        });
+
+        describe('String type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 6);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is string type';
+            const displayName = 'String type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'stringType', type: 'String', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot, 'a@example', [{label: 'Pattern:', value: '^.+@.+.+$'}, {label: 'Minimum characters:', value: '1'}, {label: 'Maximum characters:', value: '10'}])
+          });
+        });
+
+        describe('Datetime-only type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 7);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is datetime-only type';
+            const displayName = 'Datetime-only type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'dateTimeOnlyType', type: 'Time', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot,  '2015-07-04T21:00:00')
+          });
+        });
+
+        describe('Object type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 8);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is object type';
+            const displayName = 'Object type';
+            const prop1 = 'prop1';
+            const prop2 = 'prop2';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: prop1, type: 'String', required: 'Required', example: prop1}, {name: prop2, type: 'String', example: prop2}]);
+          });
+        });
+
+        describe('Boolean type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 9);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is boolean type';
+            const displayName = 'Boolean type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'booleanType', type: 'Boolean', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot, 'false')
+          });
+        });
+
+        describe('Array type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 10);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const typeDocument = docShadowRoot.querySelector('api-type-document');
+            const description = 'This is array type';
+            const displayName = 'Array type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            await testResourceExampleDocument(typeDocument,  "- 'item1'\n- 'item2'")
+          });
+        });
+
+        describe('Date-only type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 11);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const description = 'This is date-only type';
+            const displayName = 'Date-only type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            testNoExamplesTypeDocument(docShadowRoot)
+            await testTypeDocumentShape(docShadowRoot, [{name: 'dateType', type: 'Date', description, displayName}]);
+            testTypeDocumentExample(docShadowRoot,  '2015-05-23')
+          });
+        });
+
+        describe('Any type', () => {
+          beforeEach(async () => {
+            navigationSelectType(element, 12);
+            await aTimeout(100)
+          });
+
+          it(`should render type documentation`, async () => {
+            const item = documentationType(element);
+            const docShadowRoot = item.shadowRoot;
+            const typeDocument = docShadowRoot.querySelector('api-type-document');
+            const description = 'This is any type';
+            const displayName = 'Any type';
+
+            testTypeDocumentation(docShadowRoot, displayName, description)
+            await testResourceExampleDocument(typeDocument,  'any')
+            await testTypeDocumentShape(docShadowRoot, [{name: 'anyType', type: 'Any', description}]);
           });
         });
       });
