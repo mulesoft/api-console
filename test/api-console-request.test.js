@@ -186,15 +186,15 @@ describe('API Console request', () => {
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             await waitUntil(() => authorizationMethod.shadowRoot.querySelector('form'));
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
-            await aTimeout(100);
             assert.equal(authorizationMethodForm.querySelector('.section-title').innerText, 'Headers');
 
+            await waitUntil(() => authorizationMethodForm.querySelectorAll('.field-value'));
             const fields = authorizationMethodForm.querySelectorAll('.field-value');
-            await aTimeout(100);
             assert.lengthOf(fields, 1);
+
             const formItem = fields[0].querySelector('api-form-item');
+            await waitUntil(() => formItem.shadowRoot.querySelector('anypoint-input'));
             const input = formItem.shadowRoot.querySelector('anypoint-input');
-            await aTimeout(100);
             assert.equal(input.querySelector('label').innerText, 'SpecialToken*');
             await aTimeout(100);
             assert.exists(fields[0].querySelector('.hint-icon'));
@@ -282,7 +282,7 @@ describe('API Console request', () => {
           });
 
           it(`should render auth label`, async () => {
-            await aTimeout(100);
+            await waitUntil(() => credentialsSection.shadowRoot.querySelector('.auth-selector-label'));
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'OAuth 2.0');
           });
 
@@ -325,7 +325,7 @@ describe('API Console request', () => {
           });
 
           it(`should render auth label`, async () => {
-            await aTimeout(100);
+            await waitUntil(() => credentialsSection.shadowRoot.querySelector('.auth-selector-label'));
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'Basic Authentication');
           });
 
@@ -384,7 +384,7 @@ describe('API Console request', () => {
           });
 
           it(`should render auth label`, async () => {
-            await aTimeout(100);
+            await waitUntil(() => credentialsSection.shadowRoot.querySelector('.auth-selector-label'));
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'Digest Authentication');
           });
 
@@ -460,7 +460,7 @@ describe('API Console request', () => {
           });
 
           it(`should render auth label`, async () => {
-            await aTimeout(100);
+            await waitUntil(() => credentialsSection.shadowRoot.querySelector('.auth-selector-label'));
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'Pass Through');
           });
 
@@ -607,8 +607,8 @@ describe('API Console request', () => {
             const param2 = queryParams[1];
             assert.isNull(param2.getAttribute('hidden'));
 
+            await waitUntil(() => section.shadowRoot.querySelector('.param-switch'));
             const showOptionalToggle = section.shadowRoot.querySelector('.param-switch');
-            await aTimeout(50);
             showOptionalToggle.shadowRoot.querySelector('.button').click();
             await aTimeout(50);
 
@@ -649,7 +649,8 @@ describe('API Console request', () => {
           });
 
           it(`should not render query parameters section`, async () => {
-            assert.notExists(requestQueryParamSection(element));
+            const queryParamSection = requestQueryParamSection(element);
+            assert.notExists(queryParamSection.shadowRoot.querySelector('.form-title'));
           });
         })
       });
