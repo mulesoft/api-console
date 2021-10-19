@@ -14,7 +14,7 @@ export default {
   },
   testFramework: {
     config: {
-      timeout: 600000,
+      timeout: 800000,
     },
   },
   browserStartTimeout: 20000,
