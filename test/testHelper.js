@@ -106,7 +106,7 @@ export const documentationTryItButton = (element) => {
 
 /** Request panel * */
 
-const requestPanel = (element) => element.shadowRoot.querySelector('api-request-panel')
+export const requestPanel = (element) => element.shadowRoot.querySelector('api-request-panel')
 
 const requestEditor = (element) => {
   const request = requestPanel(element);

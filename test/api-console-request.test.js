@@ -6,7 +6,7 @@ import {
   documentationTryItButton,
   navigationSelectEndpointMethod,
   requestBodySection, requestCredentialsSection,
-  requestHeadersSection,
+  requestHeadersSection, requestPanel,
   requestQueryParamSection, requestSendButton,
   requestUrlSection
 } from './testHelper.js';
@@ -506,6 +506,147 @@ describe('API Console request', () => {
               assert.equal(authElement.config.headers.api_key, '');
               assert.isUndefined(authElement.config.query);
             });
+          });
+        })
+      });
+
+      describe('Query parameters', () => {
+        describe('Required parameters', () => {
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/test-query-parameters', 'post');
+            await aTimeout(50)
+            documentationTryItButton(element).click()
+            await aTimeout(50)
+            requestPanel(element).allowHideOptional = true
+            await aTimeout(50)
+          });
+
+          it(`should render all sections`, async () => {
+            assert.exists(requestUrlSection(element));
+            assert.exists(requestQueryParamSection(element));
+            assert.exists(requestBodySection(element));
+          });
+
+          it(`should render query parameters title`, async () => {
+            const queryParams = requestQueryParamSection(element);
+            assert.equal(queryParams.shadowRoot.querySelector('.form-title').innerText, 'Query parameters');
+          });
+
+          it(`should render optional parameters toggle`, async () => {
+            const queryParams = requestQueryParamSection(element);
+            await aTimeout(50)
+            const showOptionalToggle = queryParams.shadowRoot.querySelector('anypoint-switch');
+            assert.equal(showOptionalToggle.getAttribute('disabled'), '');
+            assert.equal(showOptionalToggle.getAttribute('title'), 'Show optional parameters');
+          });
+
+          it(`should render all parameters`, async () => {
+            const section = requestQueryParamSection(element);
+            const queryParams = section.shadowRoot.querySelectorAll('.form-row.form-item');
+            assert.lengthOf(queryParams, 2);
+
+            const pageQueryParam = queryParams[0];
+            const pageItem = pageQueryParam.querySelector('api-form-item')
+            assert.equal(pageItem.getAttribute('data-type'), 'queryModel');
+            assert.equal(pageItem.getAttribute('name'), 'page');
+            assert.equal(pageItem.getAttribute('required'), '');
+            assert.isNull(pageQueryParam.getAttribute('hidden'));
+
+            const perPageQueryParam = queryParams[1];
+            const perPageItem = perPageQueryParam.querySelector('api-form-item')
+            assert.equal(perPageItem.getAttribute('data-type'), 'queryModel');
+            assert.equal(perPageItem.getAttribute('name'), 'per_page');
+            assert.equal(perPageItem.getAttribute('required'), '');
+            assert.isNull(perPageQueryParam.getAttribute('hidden'));
+          });
+
+          describe('Request with parameters', () => {
+            beforeEach(async () => {
+              spy = sinon.spy();
+              document.body.addEventListener('api-request', spy);
+            });
+
+            it(`should add all parameters to request`, async () => {
+              requestSendButton(element).click();
+              await nextFrame();
+
+              assert.isTrue(spy.called);
+              assert.equal(spy.getCall(0).args[0].detail.url, 'https://example/test-query-parameters?page=1&per_page=30');
+            });
+          });
+        })
+
+        describe('Optional parameters', () => {
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/test-query-parameters', 'put');
+            await aTimeout(50)
+            documentationTryItButton(element).click()
+            await aTimeout(50)
+            requestPanel(element).allowHideOptional = true
+            await aTimeout(50)
+          });
+
+          it(`should render optional parameters toggle`, async () => {
+            const queryParams = requestQueryParamSection(element);
+            const showOptionalToggle = queryParams.shadowRoot.querySelector('.param-switch');
+            assert.isNull(showOptionalToggle.getAttribute('disabled'));
+            assert.equal(showOptionalToggle.getAttribute('title'), 'Show optional parameters');
+          });
+
+          it(`should hide optional parameters`, async () => {
+            const section = requestQueryParamSection(element);
+            const queryParams = section.shadowRoot.querySelectorAll('.form-row.form-item');
+            assert.lengthOf(queryParams, 2);
+
+            const param1 = queryParams[0];
+            assert.isNull(param1.getAttribute('hidden'));
+
+            const param2 = queryParams[1];
+            assert.isNull(param2.getAttribute('hidden'));
+
+            const showOptionalToggle = section.shadowRoot.querySelector('.param-switch');
+            await aTimeout(50);
+            showOptionalToggle.shadowRoot.querySelector('.button').click();
+            await aTimeout(50);
+
+            const param1Item = param1.querySelector('api-form-item')
+            assert.equal(param1Item.getAttribute('data-type'), 'queryModel');
+            assert.equal(param1Item.getAttribute('name'), 'param1');
+            assert.isNull(param1Item.getAttribute('required'));
+            assert.equal(param1.getAttribute('hidden'), '');
+
+            const param2Item = param2.querySelector('api-form-item')
+            assert.equal(param2Item.getAttribute('data-type'), 'queryModel');
+            assert.equal(param2Item.getAttribute('name'), 'param2');
+            assert.equal(param2Item.getAttribute('required'), '');
+            assert.isNull(param2.getAttribute('hidden'));
+          });
+        })
+
+        describe('allowHideOptional disabled', () => {
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/test-query-parameters', 'put');
+            await aTimeout(50)
+            documentationTryItButton(element).click()
+            await aTimeout(50)
+          });
+
+          it(`should render optional parameters toggle`, async () => {
+            const queryParams = requestQueryParamSection(element);
+            assert.notExists(queryParams.shadowRoot.querySelector('.param-switch'));
+          });
+        })
+
+        describe('No parameters', () => {
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/test-custom-scheme', 'get');
+            await aTimeout(50)
+            documentationTryItButton(element).click()
+            await aTimeout(50)
+          });
+
+          it(`should not render query parameters section`, async () => {
+            assert.notExists(requestQueryParamSection(element));
           });
         })
       });

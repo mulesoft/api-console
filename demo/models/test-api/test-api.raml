@@ -113,4 +113,35 @@ securitySchemes:
   displayName: Digest pass through scheme
   get:
     securedBy: [passthrough]
-
+/test-query-parameters:
+  displayName: Query parameters
+  post:
+    queryParameters:
+      page:
+        description: Specify the page that you want to retrieve
+        type:        integer
+        required:    true
+        example:     1
+      per_page:
+        description: Specify the amount of items that will be retrieved per page
+        type:        integer
+        minimum:     10
+        maximum:     200
+        default:     30
+        example:     50
+    body:
+      application/json:
+  put:
+    queryParameters:
+      param1:
+        type:        integer
+        required:    false
+        example:     1
+      param2:
+        type:        integer
+        example:     50
+    body:
+      application/json:
+  get:
+    queryString:
+      type: string
