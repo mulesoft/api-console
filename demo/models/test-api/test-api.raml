@@ -3,6 +3,90 @@ title: Test API
 version: v2
 description: Our test API
 baseUri: https://example/
+types:
+  anyType:
+    default: 'any'
+    type: any
+    example: 'any'
+    displayName: Any type
+    description: This is any type
+  objectType:
+    type: object
+    displayName: Object type
+    description: This is object type
+    properties:
+      prop1:
+        required: true
+        example: 'prop1'
+      prop2?:
+        example: 'prop2'
+  arrayType:
+    type: array
+    displayName: Array type
+    description: This is array type
+    uniqueItems: true
+    minItems: 1
+    maxItems: 10
+    items: anyType
+    example: ['item1', 'item2']
+  stringType:
+    type: string
+    displayName: String type
+    description: This is string type
+    minLength: 1
+    maxLength: 10
+    pattern: ^.+@.+.+$
+    example: 'a@example'
+  numberType:
+    type: number
+    displayName: Number type
+    description: This is number type
+    minimum: 1
+    maximum: 10
+    format: int16
+    multipleOf: 2
+    example: 2
+  booleanType:
+    type: boolean
+    displayName: Boolean type
+    description: This is boolean type
+    example: false
+  dateType:
+    type: date-only
+    displayName: Date-only type
+    description: This is date-only type
+    example: 2015-05-23
+  timeType:
+    type: time-only
+    displayName: Time-only type
+    description: This is time-only type
+    example: 12:30:00
+  dateTimeOnlyType:
+    type: datetime-only
+    displayName: Datetime-only type
+    description: This is datetime-only type
+    example: 2015-07-04T21:00:00
+  dateTimeType:
+    type: datetime
+    displayName: Datetime type
+    description: This is datetime type
+    example: Sun, 28 Feb 2016 16:41:41 GMT
+    format: rfc2616
+  fileType:
+    type: file
+    displayName: File type
+    description: This is file type
+    fileTypes: ['image/jpeg', 'image/png']
+    maxLength: 307200
+  nilType:
+    type: nil
+    displayName: Nil type
+    description: This is nil type
+    example: null
+  unionType:
+    type: objectType | stringType
+    displayName: Union type
+    description: This is union type
 
 securitySchemes:
   customScheme:
