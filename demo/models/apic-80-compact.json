@@ -12,6 +12,7 @@
 "@id": "#4",
 "@type": [
 "apiContract:WebAPI",
+"apiContract:API",
 "doc:RootDomainElement",
 "doc:DomainElement"
 ],
@@ -75,7 +76,7 @@
 ],
 "doc:version": [
 {
-"@value": "2.0.1"
+"@value": "3.1.0"
 }
 ],
 "doc:root": [
@@ -107,7 +108,7 @@
 ],
 "doc:version": [
 {
-"@value": "2.0.1"
+"@value": "3.1.0"
 }
 ],
 "doc:root": [
@@ -179,6 +180,34 @@
 "sourcemaps:value": [
 {
 "@value": ""
+}
+]
+}
+],
+"sourcemaps:synthesized-field": [
+{
+"@id": "#3/source-map/synthesized-field/element_1",
+"sourcemaps:element": [
+{
+"@value": "core:mediaType"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
+}
+]
+},
+{
+"@id": "#3/source-map/synthesized-field/element_0",
+"sourcemaps:element": [
+{
+"@value": "doc:location"
+}
+],
+"sourcemaps:value": [
+{
+"@value": "true"
 }
 ]
 }
