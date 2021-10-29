@@ -60,8 +60,8 @@ export const navigationDocumentationSection = (element) => {
 };
 
 export const navigationDocumentationList = (element) => {
-  const apiNavigation = navigationDocumentationSection(element);
-  return apiNavigation.querySelectorAll('.list-item');
+  const documentationSection = navigationDocumentationSection(element);
+  return documentationSection.querySelectorAll('.list-item');
 };
 
 export const navigationSelectDocumentationSection = (element) => {
@@ -82,8 +82,20 @@ export const navigationTypesSection = (element) => {
 };
 
 export const navigationTypesList = (element) => {
-  const apiNavigation = navigationTypesSection(element);
-  return apiNavigation.querySelectorAll('.list-item');
+  const typesSection = navigationTypesSection(element);
+  return typesSection.querySelectorAll('.list-item');
+};
+
+export const navigationSelectTypesSection = (element) => {
+  const typesSection = navigationTypesSection(element);
+  // @ts-ignore
+  typesSection.querySelector('.toggle-button').click();
+};
+
+export const navigationSelectType = (element, index) => {
+  const typesList = navigationTypesList(element);
+  // @ts-ignore
+  typesList[index].click();
 };
 
 export const navigationSecuritySection = (element) => {
@@ -91,9 +103,21 @@ export const navigationSecuritySection = (element) => {
   return apiNavigation.shadowRoot.querySelector('.security');
 };
 
+export const navigationSelectSecuritySection = (element) => {
+  const securitySection = navigationSecuritySection(element);
+  // @ts-ignore
+  securitySection.querySelector('.toggle-button').click();
+};
+
 export const navigationSecurityList = (element) => {
-  const apiNavigation = navigationSecuritySection(element);
-  return apiNavigation.querySelectorAll('.list-item');
+  const securitySection = navigationSecuritySection(element);
+  return securitySection.querySelectorAll('.list-item');
+};
+
+export const navigationSelectSecurity = (element, index) => {
+  const securityList = navigationSecurityList(element);
+  // @ts-ignore
+  securityList[index].click();
 };
 
 /** Documentation * */
@@ -109,6 +133,16 @@ export const documentationDocument = (element) => {
   return documentation.shadowRoot.querySelector('api-documentation-document');
 };
 
+export const documentationSecurity = (element) => {
+  const documentation = documentationPanel(element);
+  return documentation.shadowRoot.querySelector('api-security-documentation');
+};
+
+export const documentationType = (element) => {
+  const documentation = documentationPanel(element);
+  return documentation.shadowRoot.querySelector('api-type-documentation');
+};
+
 export const documentationTryItButton = (element) => {
   const documentation = documentationPanel(element);
   const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
@@ -117,7 +151,7 @@ export const documentationTryItButton = (element) => {
 
 /** Request panel * */
 
-const requestPanel = (element) => element.shadowRoot.querySelector('api-request-panel');
+export const requestPanel = (element) => element.shadowRoot.querySelector('api-request-panel');
 
 const requestEditor = (element) => {
   const request = requestPanel(element);

@@ -16,12 +16,12 @@ export default {
   },
   testFramework: {
     config: {
-      timeout: 600000,
+      timeout: 800000,
     },
   },
   browserStartTimeout: 20000,
   testsStartTimeout: 20000,
-  testsFinishTimeout: 600000,
+  testsFinishTimeout: 800000,
   plugins: [
     visualRegressionPlugin({
       update: process.argv.includes('--update-visual-baseline'),

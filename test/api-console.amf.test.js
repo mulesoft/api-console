@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { assert, aTimeout, fixture, html, nextFrame } from '@open-wc/testing';
+import { assert, aTimeout, fixture, html, nextFrame, waitUntil } from '@open-wc/testing';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 
@@ -438,8 +438,7 @@ describe('ApiConsole', () => {
           const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
           const bodyDocument = methodDocumentation.shadowRoot.querySelector('api-body-document');
           bodyDocument.shadowRoot.querySelector('.section-title-area').click();
-          await nextFrame();
-          await nextFrame();
+          await waitUntil(() => bodyDocument.shadowRoot.querySelector('api-type-document'));
           const typeDocument = bodyDocument.shadowRoot.querySelector('api-type-document');
           assert.exists(typeDocument);
         });
