@@ -1,41 +1,38 @@
 /* eslint-disable no-param-reassign */
-import { fixture, assert, html, aTimeout, nextFrame, waitUntil } from '@open-wc/testing'
+import { assert, aTimeout, fixture, html, nextFrame, waitUntil } from '@open-wc/testing';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 
 /** @typedef {import('..').ApiConsole} ApiConsole */
 
-describe('ApiConsole', () => {
-  /**
-   * @returns {Promise<ApiConsole>}
-   */
-  async function amfFixture(amf) {
-    return (fixture(html`
-      <api-console .amf="${amf}"></api-console>
-    `));
-  }
+/**
+ * @returns {Promise<ApiConsole>}
+ */
+// eslint-disable-next-line require-await
+export const amfFixture = async (amf) => fixture(html`<api-console .amf="${amf}"></api-console>`);
 
-  /**
-   * @returns {Promise<ApiConsole>}
-   */
-  async function selectedFixture(amf, selected, type) {
-    const element = /** @type ApiConsole */ (await fixture(html`
+/**
+ * @returns {Promise<ApiConsole>}
+ */
+export const selectedFixture = async (amf, selected, type) => {
+  const element = /** @type ApiConsole */ (await fixture(html`
       <api-console
         .amf="${amf}"
         .selectedShape="${selected}"
         .selectedShapeType="${type}"
       ></api-console>
     `));
-    await aTimeout(0);
-    return element;
-  }
+  await aTimeout(0);
+  return element;
+};
 
-  function selectOperation(element, endpointName, operationName) {
-    const operation = AmfLoader.lookupOperation(element.amf, endpointName, operationName);
-    const operationId = operation['@id'];
-    element.selectedShape = operationId;
-    element.selectedShapeType = 'method';
-  }
+export const selectOperation = (element, endpointName, operationName) => {
+  const operation = AmfLoader.lookupOperation(element.amf, endpointName, operationName);
+  element.selectedShape = operation['@id'];
+  element.selectedShapeType = 'method';
+};
+
+describe('ApiConsole', () => {
 
   describe('AMF model computations', () => {
     [
@@ -101,7 +98,7 @@ describe('ApiConsole', () => {
           });
 
           it('should not render method-label nor method-value in Summary view', async () => {
-            element = await selectedFixture(amf, 'summary', 'summary')
+            element = await selectedFixture(amf, 'summary', 'summary');
             await nextFrame();
             await nextFrame();
             await nextFrame();
@@ -254,10 +251,10 @@ describe('ApiConsole', () => {
           await aTimeout(0);
         });
 
-        it('should set correct navigation labels', async () => {
+        it('should set correct navigation labels', () => {
           const apiNavigation = element.shadowRoot.querySelector('api-navigation');
           const labels = ['/customer/{customerId}/chromeos', '/deviceId', '/customerId'];
-          assert.deepEqual(apiNavigation._endpoints.map(e => e.label), labels);
+          assert.deepEqual(apiNavigation._endpoints.map((e) => e.label), labels);
         });
       });
     });
@@ -287,6 +284,7 @@ describe('ApiConsole', () => {
           await nextFrame();
           await nextFrame();
           const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
+          await waitUntil(() => Boolean(apiDocumentation.shadowRoot.querySelector('api-method-documentation')));
           const apiMethodDocumentation = apiDocumentation.shadowRoot.querySelector('api-method-documentation');
           const apiUrl = apiMethodDocumentation.shadowRoot.querySelector('api-url');
           assert.equal(apiUrl.url, 'http://petstore.swagger.io/v1/pets');
@@ -409,7 +407,7 @@ describe('ApiConsole', () => {
         it('should not prefix URL with `http://', () => {
           const documentation = element.shadowRoot.querySelector('api-documentation');
           const summary = documentation.shadowRoot.querySelector('api-summary');
-          const message = summary.shadowRoot.querySelector('.section.endpoints-title')
+          const message = summary.shadowRoot.querySelector('.section.endpoints-title');
           assert.equal(message.textContent, 'API channels');
         });
       });
@@ -471,7 +469,7 @@ describe('ApiConsole', () => {
           await aTimeout(0);
         });
 
-        it('should render channel and server separately', async () => {
+        it('should render channel and server separately', () => {
           const documentation = element.shadowRoot.querySelector('api-documentation');
           const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
           const apiUrl = methodDocumentation.shadowRoot.querySelector('api-url');

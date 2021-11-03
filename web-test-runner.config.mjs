@@ -1,13 +1,15 @@
+import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin'
+
 export default {
   files: 'test/**/*.test.js',
   nodeResolve: true,
   middleware: [
     function rewriteBase(context, next) {
       if (context.url.indexOf('/base') === 0) {
-        context.url = context.url.replace('/base', '');
+        context.url = context.url.replace('/base', '')
       }
-      return next();
-    }
+      return next()
+    },
   ],
   coverageConfig: {
     include: ['src/**.js'],
@@ -20,11 +22,19 @@ export default {
   browserStartTimeout: 20000,
   testsStartTimeout: 20000,
   testsFinishTimeout: 800000,
+  plugins: [
+    visualRegressionPlugin({
+      update: process.argv.includes('--update-visual-baseline'),
+      diffOptions: {
+        threshold: 1,
+      },
+    }),
+  ],
   testRunnerHtml: (testFramework) =>
-  `<html>
+    `<html>
   <body>
     <script src="./demo/vendor.js"></script>
     <script type="module" src="${testFramework}"></script>
   </body>
-  </html>`
-};
+  </html>`,
+}
