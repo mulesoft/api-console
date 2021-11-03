@@ -122,7 +122,7 @@ describe('API Console request', () => {
       describe('Body', () => {
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-headers', 'post');
-          await aTimeout(50);
+          await aTimeout(100);
           // @ts-ignore
           documentationTryItButton(element).click();
           await aTimeout(50);
