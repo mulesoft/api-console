@@ -126,10 +126,10 @@ describe('API Console documentation', () => {
         it('should render basic summary documentation', async () => {
           const summaryShadowRoot = documentationSummary(element).shadowRoot;
           await waitUntil(() => Boolean(summaryShadowRoot.querySelector('.api-title')));
-          assert.equal(summaryShadowRoot.querySelector('.api-title').textContent.trim(), 'API title: Google Drive');
+          assert.equal(summaryShadowRoot.querySelector('.api-title').textContent.trim(), 'API title:\n    Google Drive');
 
           await waitUntil(() => Boolean(summaryShadowRoot.querySelector('.inline-description.version')));
-          assert.equal(summaryShadowRoot.querySelector('.inline-description.version').textContent.trim(), 'Version: v2');
+          assert.equal(summaryShadowRoot.querySelector('.inline-description.version').textContent.trim(), 'Version:\n      v2');
 
           const url = summaryShadowRoot.querySelector('api-url').shadowRoot;
           await waitUntil(() => Boolean(url.querySelector('.url-area > .url-value')));
@@ -234,7 +234,7 @@ describe('API Console documentation', () => {
           tabsList.forEach((t, index) => assert.equal(t.textContent, expectedTabs[index]));
 
           const methodResponse = responsesDocument.shadowRoot.querySelector('.method-response arc-marked');
-          assert.equal(methodResponse.querySelector('.markdown-body').textContent, selectedTabContent);
+          assert.equal(methodResponse.querySelector('.markdown-body').textContent.trim(), selectedTabContent);
         };
 
         describe('x-other', () => {
@@ -374,7 +374,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render responses', () => {
-            testSecurityResponses(element, ['401', '403'], 'Bad or expired token. This can happen if the user or Dropbox revoked or expired an access token. To fix, re-authenticate the user.');
+            testSecurityResponses(element, ['401', '403'], 'Bad or expired token. This can happen if the user or Dropbox\nrevoked or expired an access token. To fix, re-authenticate\nthe user.');
           });
         });
       });
