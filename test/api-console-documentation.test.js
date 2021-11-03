@@ -715,6 +715,7 @@ describe('API Console documentation', () => {
           const codes = codeExamples.querySelector('anypoint-collapse').querySelector('http-code-snippets').shadowRoot;
           assert.exists(codes.querySelector('curl-http-snippet'))
 
+          waitUntil(() => codes.querySelector('anypoint-tab'))
           const tabs = codes.querySelectorAll('anypoint-tab');
           assert.lengthOf(tabs, 6)
           assert.equal(tabs[0].innerText, 'CURL')
