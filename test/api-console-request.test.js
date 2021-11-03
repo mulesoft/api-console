@@ -346,7 +346,8 @@ describe('API Console request', () => {
             assert.equal(authorizationMethod.getAttribute('type'), 'basic');
           });
 
-          it('should render scheme fields', () => {
+          it('should render scheme fields', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
 
@@ -408,7 +409,8 @@ describe('API Console request', () => {
             assert.equal(authorizationMethod.getAttribute('type'), 'digest');
           });
 
-          it('should render scheme fields', () => {
+          it('should render scheme fields', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
 

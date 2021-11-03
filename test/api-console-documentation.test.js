@@ -140,6 +140,7 @@ describe('API Console documentation', () => {
         });
 
         it('should render endpoints list', async () => {
+          await waitUntil(() => Boolean(documentationSummary(element)));
           const documentation = documentationSummary(element);
           const summaryShadowRoot = documentation.shadowRoot;
           await waitUntil(() => Boolean(summaryShadowRoot.querySelector('.toc')));
@@ -358,6 +359,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render headers', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             const item = documentationSecurity(element);
             const securityShadowRoot = item.shadowRoot;
             const headers = securityShadowRoot.querySelector('api-headers-document');
