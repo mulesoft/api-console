@@ -284,6 +284,7 @@ describe('ApiConsole', () => {
           await nextFrame();
           await nextFrame();
           const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
+          await waitUntil(() => Boolean(apiDocumentation.shadowRoot.querySelector('api-method-documentation')));
           const apiMethodDocumentation = apiDocumentation.shadowRoot.querySelector('api-method-documentation');
           const apiUrl = apiMethodDocumentation.shadowRoot.querySelector('api-url');
           assert.equal(apiUrl.url, 'http://petstore.swagger.io/v1/pets');
