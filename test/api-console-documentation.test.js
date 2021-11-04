@@ -2,11 +2,19 @@ import { fixture, assert, html, aTimeout, waitUntil } from '@open-wc/testing';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 import {
-  documentationDocument,
-  documentationPanel, documentationSecurity,
-  documentationSummary, documentationType, navigationSelectDocumentation,
-  navigationSelectDocumentationSection, navigationSelectSecurity, navigationSelectSecuritySection,
-  navigationSelectSummarySection, navigationSelectType, navigationSelectTypesSection
+  documentationDocument, documentationEndpoint, documentationMethod,
+  documentationPanel,
+  documentationSecurity,
+  documentationSummary,
+  documentationType,
+  navigationSelectDocumentation,
+  navigationSelectDocumentationSection, navigationSelectEndpointMethod,
+  navigationSelectEndpointOverview,
+  navigationSelectSecurity,
+  navigationSelectSecuritySection,
+  navigationSelectSummarySection,
+  navigationSelectType,
+  navigationSelectTypesSection
 } from './testHelper.js';
 
 /** @typedef {import('..').ApiConsole} ApiConsole */
@@ -644,6 +652,119 @@ describe('API Console documentation', () => {
             await testResourceExampleDocument(typeDocument);
             await testTypeDocumentShape(docShadowRoot, [{ name: 'anyType', type: 'Any', description }]);
           });
+        });
+      });
+
+      describe('Endpoint section', () => {
+        let docShadowRoot;
+
+        [true, false].forEach((noOverview) => {
+          describe(`No overview ${noOverview ? 'enabled' : 'disabled'}`, () => {
+            beforeEach(async () => {
+              element.noOverview = noOverview;
+              await aTimeout(50);
+              await navigationSelectEndpointOverview(element, '/test-query-parameters', noOverview);
+              await aTimeout(100);
+              const item = documentationEndpoint(element);
+              docShadowRoot = item.shadowRoot;
+            });
+
+            it('should render endpoint title', () => {
+              assert.equal(docShadowRoot.querySelector('.title').innerText, 'Query Parameters');
+            });
+
+            it('should render URL', () => {
+              assert.equal(docShadowRoot.querySelector('api-url').shadowRoot.querySelector('.url-area').innerText.trim(), 'https://example/test-query-parameters');
+            });
+
+            it('should render description', () => {
+              assert.equal(docShadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), 'Query parameters endpoint');
+            });
+
+            it('should render methods', () => {
+              const methodsSection = docShadowRoot.querySelector('.methods');
+              assert.exists(methodsSection);
+
+              const methods = methodsSection.querySelectorAll('.method');
+              assert.lengthOf(methods, 3);
+              assert.equal(methods[0].querySelector('.method-label').innerText, 'POST');
+              assert.equal(methods[0].querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), 'Post method description');
+              assert.equal(methods[1].querySelector('.method-label').innerText, 'PUT');
+              assert.equal(methods[2].querySelector('.method-label').innerText, 'GET');
+            });
+          });
+        });
+      });
+
+      describe('Method section', () => {
+        let docShadowRoot;
+
+        beforeEach(async () => {
+          await navigationSelectEndpointMethod(element, '/test-query-parameters', 'post');
+          await aTimeout(100);
+          const item = documentationMethod(element);
+          docShadowRoot = item.shadowRoot;
+        });
+
+        it('should render endpoint title', () => {
+          assert.equal(docShadowRoot.querySelector('.title').innerText, 'Post');
+        });
+
+        it('should render URL', () => {
+          const urlArea = docShadowRoot.querySelector('api-url').shadowRoot.querySelector('.url-area');
+          assert.equal(urlArea.querySelector('.method-label').innerText, 'POST');
+          assert.equal(urlArea.querySelector('.url-value').innerText, 'https://example/test-query-parameters');
+        });
+
+        it('should render code examples section', async () => {
+          const codeExamples = docShadowRoot.querySelector('.snippets');
+          assert.exists(codeExamples);
+          assert.equal(codeExamples.querySelector('.heading3.table-title').innerText, 'Code examples');
+
+          const toggleButton = codeExamples.querySelector('.toggle-button');
+          assert.exists(toggleButton);
+          toggleButton.click();
+          await aTimeout(50);
+
+          const codes = codeExamples.querySelector('anypoint-collapse').querySelector('http-code-snippets').shadowRoot;
+          assert.exists(codes.querySelector('curl-http-snippet'));
+
+          waitUntil(() => codes.querySelector('anypoint-tab'));
+          const tabs = codes.querySelectorAll('anypoint-tab');
+          assert.lengthOf(tabs, 6);
+          // assert.equal(tabs[0].innerText, 'CURL')
+          // assert.equal(tabs[1].innerText, 'HTTP')
+          // assert.equal(tabs[2].innerText, 'JAVASCRIPT')
+          // assert.equal(tabs[3].innerText, 'PYTHON')
+          // assert.equal(tabs[4].innerText, 'C')
+          // assert.equal(tabs[5].innerText, 'JAVA')
+        });
+
+        it('should render query parameters section', async () => {
+          const parametersSection = docShadowRoot.querySelector('api-parameters-document').shadowRoot;
+          assert.exists(parametersSection);
+          assert.equal(parametersSection.querySelector('.heading3').innerText, 'Query parameters');
+
+          const collapse = parametersSection.querySelector('anypoint-collapse');
+          await testTypeDocumentShape(collapse, [{ name: 'page', type: 'Integer', description: 'Specify the page that you want to retrieve', required: 'Required' }, { name: 'per_page', type: 'Integer', description: 'Specify the amount of items that will be retrieved per page', required: 'Required' }]);
+          await testTypeDocumentExample(collapse, '1', [{ label: 'Min value:', value: '1' }, { label: 'Max value:', value: '10' }]);
+          await testTypeDocumentExample(collapse, '50', [{ label: 'Default value:', value: '30' }, { label: 'Min value:', value: '10' }, { label: 'Max value:', value: '200' }]);
+        });
+
+        it('should render body section', async () => {
+          const parametersSection = docShadowRoot.querySelector('api-body-document').shadowRoot;
+          assert.exists(parametersSection);
+          assert.equal(parametersSection.querySelector('.heading3').innerText, 'Body');
+
+          const toggleButton = parametersSection.querySelector('.toggle-button');
+          assert.exists(toggleButton);
+          toggleButton.click();
+          await aTimeout(0);
+
+          const collapse = parametersSection.querySelector('anypoint-collapse');
+          assert.equal(collapse.querySelector('.media-type-selector').innerText, 'Media type: application/json');
+          assert.equal(collapse.querySelector('.any-info').innerText, 'Any instance of data is allowed.');
+          assert.equal(collapse.querySelector('.any-info-description').innerText, 'The API file specifies body for this request but it does not specify the data model.');
         });
       });
     });

@@ -13,6 +13,7 @@ export declare function navigationToggleEndpointsSection(element: ApiConsole): E
 export declare function navigationEndpointsList(element: ApiConsole): NodeListOf<Element>|null;
 export declare function navigationToggleEndpoint(element: ApiConsole, path: string): Element|null;
 export declare function navigationSelectEndpointMethod(element: ApiConsole, path: string, method: string): void;
+export declare function navigationSelectEndpointOverview(element: ApiConsole, path: string, noOverview: boolean): void;
 
 export declare function navigationDocumentationSection(element: ApiConsole): Element|null;
 export declare function navigationDocumentationList(element: ApiConsole): NodeListOf<Element>|null;
@@ -35,6 +36,8 @@ export declare function documentationSummary(element: ApiConsole): Element|null;
 export declare function documentationDocument(element: ApiConsole): Element|null;
 export declare function documentationSecurity(element: ApiConsole): Element|null;
 export declare function documentationType(element: ApiConsole): Element|null;
+export declare function documentationEndpoint(element: ApiConsole): Element|null;
+export declare function documentationMethod(element: ApiConsole): Element|null;
 export declare function documentationTryItButton(element: ApiConsole): Element|null;
 
 /** Request panel * */

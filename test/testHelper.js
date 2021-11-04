@@ -54,6 +54,20 @@ export const navigationSelectEndpointMethod = async (element, path, method) => {
   endpointMethod.parentElement.click();
 };
 
+export const navigationSelectEndpointOverview = async (element, path, noOverview) => {
+  const endpoint = navigationToggleEndpoint(element, path);
+  await nextFrame();
+  await nextFrame();
+
+  if (noOverview) {
+    endpoint.querySelector('.endpoint-name-overview').click();
+  } else {
+    const endpointOperations = endpoint.nextElementSibling;
+    const endpointMethod = endpointOperations.querySelector(`[data-endpoint-overview="${path}"]`);
+    endpointMethod.click();
+  }
+};
+
 export const navigationDocumentationSection = (element) => {
   const apiNavigation = navigationTree(element);
   return apiNavigation.shadowRoot.querySelector('.documentation');
@@ -141,6 +155,16 @@ export const documentationSecurity = (element) => {
 export const documentationType = (element) => {
   const documentation = documentationPanel(element);
   return documentation.shadowRoot.querySelector('api-type-documentation');
+};
+
+export const documentationEndpoint = (element) => {
+  const documentation = documentationPanel(element);
+  return documentation.shadowRoot.querySelector('api-endpoint-documentation');
+};
+
+export const documentationMethod = (element) => {
+  const documentation = documentationPanel(element);
+  return documentation.shadowRoot.querySelector('api-method-documentation');
 };
 
 export const documentationTryItButton = (element) => {
