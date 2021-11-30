@@ -671,19 +671,23 @@ describe('API Console documentation', () => {
               docShadowRoot = item.shadowRoot;
             });
 
-            it('should render endpoint title', () => {
+            it('should render endpoint title', async () => {
+              await waitUntil(() => Boolean(docShadowRoot.querySelector('.title')));
               assert.equal(docShadowRoot.querySelector('.title').innerText, 'Query Parameters');
             });
 
-            it('should render URL', () => {
+            it('should render URL', async () => {
+              await waitUntil(() => Boolean(docShadowRoot.querySelector('api-url')));
               assert.equal(docShadowRoot.querySelector('api-url').shadowRoot.querySelector('.url-area').innerText.trim(), 'https://example/test-query-parameters');
             });
 
-            it('should render description', () => {
+            it('should render description', async () => {
+              await waitUntil(() => Boolean(docShadowRoot.querySelector('arc-marked')));
               assert.equal(docShadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), 'Query parameters endpoint');
             });
 
-            it('should render methods', () => {
+            it('should render methods', async () => {
+              await waitUntil(() => Boolean(docShadowRoot.querySelector('.methods')));
               const methodsSection = docShadowRoot.querySelector('.methods');
               assert.exists(methodsSection);
 
@@ -761,7 +765,7 @@ describe('API Console documentation', () => {
           const toggleButton = parametersSection.querySelector('.toggle-button');
           assert.exists(toggleButton);
           toggleButton.click();
-          await aTimeout(0);
+          await nextFrame();
 
           const collapse = parametersSection.querySelector('anypoint-collapse');
           assert.equal(collapse.querySelector('.media-type-selector').innerText, 'Media type: application/json');
