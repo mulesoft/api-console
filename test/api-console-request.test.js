@@ -489,7 +489,8 @@ describe('API Console request', () => {
             assert.equal(authorizationMethod.getAttribute('type'), 'pass through');
           });
 
-          it('should render scheme fields', () => {
+          it('should render scheme fields', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             assert.equal(authorizationMethod.shadowRoot.querySelector('.subtitle').innerText.trim(), 'Scheme: passthrough');
             assert.exists(authorizationMethod.shadowRoot.querySelector('.hint-icon'));

@@ -509,6 +509,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render type documentation', async () => {
+            await waitUntil(() => Boolean(documentationType(element)));
             const item = documentationType(element);
             const docShadowRoot = item.shadowRoot;
             const description = 'This is number type';
