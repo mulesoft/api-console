@@ -263,6 +263,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render security headers content', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             const item = documentationSecurity(element);
             const securityShadowRoot = item.shadowRoot;
             const headersDocument = securityShadowRoot.querySelector('api-headers-document');
