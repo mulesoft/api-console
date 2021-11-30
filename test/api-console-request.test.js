@@ -281,7 +281,6 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-oauth20-scheme', 'get');
-            await aTimeout(50);
             await waitUntil(() => Boolean(documentationPanel(element)));
             // @ts-ignore
             documentationTryItButton(element).click();
@@ -542,7 +541,7 @@ describe('API Console request', () => {
         describe('Required parameters', () => {
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-query-parameters', 'post');
-            await aTimeout(50);
+            await waitUntil(() => Boolean(documentationPanel(element)));
             // @ts-ignore
             documentationTryItButton(element).click();
             await aTimeout(50);
