@@ -104,6 +104,7 @@ describe('ApiConsole', () => {
             await nextFrame();
             const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
             const apiSummary = apiDocumentation.shadowRoot.querySelector('api-summary');
+            await waitUntil(() => Boolean(apiSummary.shadowRoot.querySelector('api-url')));
             const apiUrl = apiSummary.shadowRoot.querySelector('api-url');
             assert.notExists(apiUrl.shadowRoot.querySelector('.method-label'));
             assert.notExists(apiUrl.shadowRoot.querySelector('.method-value'));

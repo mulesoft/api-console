@@ -1,4 +1,4 @@
-import { fixture, assert, html, aTimeout, waitUntil } from '@open-wc/testing';
+import { fixture, assert, html, aTimeout, waitUntil, nextFrame } from '@open-wc/testing';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 import {
@@ -263,6 +263,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render security headers content', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             const item = documentationSecurity(element);
             const securityShadowRoot = item.shadowRoot;
             const headersDocument = securityShadowRoot.querySelector('api-headers-document');
@@ -509,6 +510,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render type documentation', async () => {
+            await waitUntil(() => Boolean(documentationType(element)));
             const item = documentationType(element);
             const docShadowRoot = item.shadowRoot;
             const description = 'This is number type';
@@ -662,26 +664,30 @@ describe('API Console documentation', () => {
           describe(`No overview ${noOverview ? 'enabled' : 'disabled'}`, () => {
             beforeEach(async () => {
               element.noOverview = noOverview;
-              await aTimeout(50);
+              await nextFrame();
               await navigationSelectEndpointOverview(element, '/test-query-parameters', noOverview);
-              await aTimeout(100);
+              await waitUntil(() => Boolean(documentationEndpoint(element)));
               const item = documentationEndpoint(element);
               docShadowRoot = item.shadowRoot;
             });
 
-            it('should render endpoint title', () => {
+            it('should render endpoint title', async () => {
+              await waitUntil(() => Boolean(docShadowRoot.querySelector('.title')));
               assert.equal(docShadowRoot.querySelector('.title').innerText, 'Query Parameters');
             });
 
-            it('should render URL', () => {
+            it('should render URL', async () => {
+              await waitUntil(() => Boolean(docShadowRoot.querySelector('api-url')));
               assert.equal(docShadowRoot.querySelector('api-url').shadowRoot.querySelector('.url-area').innerText.trim(), 'https://example/test-query-parameters');
             });
 
-            it('should render description', () => {
+            it('should render description', async () => {
+              await waitUntil(() => Boolean(docShadowRoot.querySelector('arc-marked')));
               assert.equal(docShadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), 'Query parameters endpoint');
             });
 
-            it('should render methods', () => {
+            it('should render methods', async () => {
+              await waitUntil(() => Boolean(docShadowRoot.querySelector('.methods')));
               const methodsSection = docShadowRoot.querySelector('.methods');
               assert.exists(methodsSection);
 
@@ -759,9 +765,10 @@ describe('API Console documentation', () => {
           const toggleButton = parametersSection.querySelector('.toggle-button');
           assert.exists(toggleButton);
           toggleButton.click();
-          await aTimeout(0);
+          await nextFrame();
 
           const collapse = parametersSection.querySelector('anypoint-collapse');
+          await waitUntil(() => collapse.querySelector('.media-type-selector').innerText === 'Media type: application/json');
           assert.equal(collapse.querySelector('.media-type-selector').innerText, 'Media type: application/json');
           assert.equal(collapse.querySelector('.any-info').innerText, 'Any instance of data is allowed.');
           assert.equal(collapse.querySelector('.any-info-description').innerText, 'The API file specifies body for this request but it does not specify the data model.');
