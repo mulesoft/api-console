@@ -1,4 +1,4 @@
-import { nextFrame } from '@open-wc/testing';
+import { nextFrame, waitUntil } from '@open-wc/testing';
 
 /** @typedef {import('@api-components/api-navigation').ApiNavigation} ApiNavigation */
 
@@ -167,8 +167,10 @@ export const documentationMethod = (element) => {
   return documentation.shadowRoot.querySelector('api-method-documentation');
 };
 
-export const documentationTryItButton = (element) => {
+export const documentationTryItButton = async (element) => {
+  await waitUntil(() => Boolean(documentationPanel(element)));
   const documentation = documentationPanel(element);
+  await waitUntil(() => Boolean(documentation.shadowRoot.querySelector('api-method-documentation')));
   const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
   return methodDocumentation.shadowRoot.querySelector('.action-button');
 };

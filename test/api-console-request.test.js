@@ -3,7 +3,6 @@ import * as sinon from 'sinon';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 import {
-  documentationPanel,
   documentationTryItButton,
   navigationSelectEndpointMethod,
   requestBodySection, requestCredentialsSection,
@@ -45,9 +44,8 @@ describe('API Console request', () => {
       describe('Sections', () => {
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-headers', 'post');
-          await aTimeout(50);
           // @ts-ignore
-          documentationTryItButton(element).click();
+          (await documentationTryItButton(element)).click();
           await aTimeout(50);
         });
 
@@ -63,9 +61,8 @@ describe('API Console request', () => {
       describe('Headers', () => {
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-headers', 'post');
-          await aTimeout(50);
           // @ts-ignore
-          documentationTryItButton(element).click();
+          (await documentationTryItButton(element)).click();
           await aTimeout(50);
         });
 
@@ -123,9 +120,8 @@ describe('API Console request', () => {
       describe('Body', () => {
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-headers', 'post');
-          await aTimeout(100);
           // @ts-ignore
-          documentationTryItButton(element).click();
+          (await documentationTryItButton(element)).click();
           await aTimeout(50);
         });
 
@@ -164,9 +160,8 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-custom-scheme', 'get');
-            await aTimeout(50);
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
             credentialsSection = requestCredentialsSection(element);
           });
@@ -230,9 +225,8 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-oauth10-scheme', 'get');
-            await aTimeout(70);
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(70);
             credentialsSection = requestCredentialsSection(element);
           });
@@ -281,9 +275,8 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-oauth20-scheme', 'get');
-            await waitUntil(() => Boolean(documentationPanel(element)));
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
             credentialsSection = requestCredentialsSection(element);
           });
@@ -325,9 +318,8 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-basic-scheme', 'get');
-            await aTimeout(50);
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
             credentialsSection = requestCredentialsSection(element);
           });
@@ -388,9 +380,8 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-digest-scheme', 'get');
-            await aTimeout(100);
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
             credentialsSection = requestCredentialsSection(element);
           });
@@ -469,9 +460,8 @@ describe('API Console request', () => {
 
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-pass-through-scheme', 'get');
-            await aTimeout(100);
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
             credentialsSection = requestCredentialsSection(element);
           });
@@ -541,9 +531,8 @@ describe('API Console request', () => {
         describe('Required parameters', () => {
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-query-parameters', 'post');
-            await waitUntil(() => Boolean(documentationPanel(element)));
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
             requestPanel(element).allowHideOptional = true;
             await aTimeout(50);
@@ -610,9 +599,8 @@ describe('API Console request', () => {
         describe('Optional parameters', () => {
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-query-parameters', 'put');
-            await aTimeout(50);
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
             requestPanel(element).allowHideOptional = true;
             await aTimeout(50);
@@ -661,9 +649,8 @@ describe('API Console request', () => {
         describe('allowHideOptional disabled', () => {
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-query-parameters', 'put');
-            await aTimeout(50);
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
           });
 
@@ -676,9 +663,8 @@ describe('API Console request', () => {
         describe('No parameters', () => {
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-custom-scheme', 'get');
-            await aTimeout(50);
             // @ts-ignore
-            documentationTryItButton(element).click();
+            (await documentationTryItButton(element)).click();
             await aTimeout(50);
           });
 
