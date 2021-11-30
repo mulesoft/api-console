@@ -768,6 +768,7 @@ describe('API Console documentation', () => {
           await nextFrame();
 
           const collapse = parametersSection.querySelector('anypoint-collapse');
+          await waitUntil(() => collapse.querySelector('.media-type-selector').innerText === 'Media type: application/json');
           assert.equal(collapse.querySelector('.media-type-selector').innerText, 'Media type: application/json');
           assert.equal(collapse.querySelector('.any-info').innerText, 'Any instance of data is allowed.');
           assert.equal(collapse.querySelector('.any-info-description').innerText, 'The API file specifies body for this request but it does not specify the data model.');
