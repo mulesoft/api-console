@@ -1,4 +1,4 @@
-import { fixture, assert, html, aTimeout, waitUntil } from '@open-wc/testing';
+import { fixture, assert, html, aTimeout, waitUntil, nextFrame } from '@open-wc/testing';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 import {
@@ -664,9 +664,9 @@ describe('API Console documentation', () => {
           describe(`No overview ${noOverview ? 'enabled' : 'disabled'}`, () => {
             beforeEach(async () => {
               element.noOverview = noOverview;
-              await aTimeout(50);
+              await nextFrame();
               await navigationSelectEndpointOverview(element, '/test-query-parameters', noOverview);
-              await aTimeout(100);
+              await waitUntil(() => Boolean(documentationEndpoint(element)));
               const item = documentationEndpoint(element);
               docShadowRoot = item.shadowRoot;
             });
