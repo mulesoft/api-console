@@ -3,12 +3,13 @@ import * as sinon from 'sinon';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 import {
+  documentationPanel,
   documentationTryItButton,
   navigationSelectEndpointMethod,
   requestBodySection, requestCredentialsSection,
   requestHeadersSection, requestPanel,
   requestQueryParamSection, requestSendButton,
-  requestUrlSection
+  requestUrlSection,
 } from './testHelper.js';
 
 /** @typedef {import('..').ApiConsole} ApiConsole */
@@ -281,6 +282,7 @@ describe('API Console request', () => {
           beforeEach(async () => {
             await navigationSelectEndpointMethod(element, '/test-oauth20-scheme', 'get');
             await aTimeout(50);
+            await waitUntil(() => Boolean(documentationPanel(element)));
             // @ts-ignore
             documentationTryItButton(element).click();
             await aTimeout(50);
