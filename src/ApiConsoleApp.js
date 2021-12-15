@@ -159,6 +159,12 @@ export class ApiConsoleApp extends ApiConsole {
       _renderInlineTyit: { type: Boolean },
 
       _noTryItValue: { type: Boolean },
+      /**
+       * When set it renders a label with the computed URL.
+       * This intended to be used with `noUrlEditor` set to true.
+       * This way it replaces the editor with a simple label.
+       */
+      urlLabel: { type: Boolean },
     };
   }
 
