@@ -227,6 +227,7 @@ describe('ApiConsole', () => {
           await nextFrame();
           await nextFrame();
           const apiDocumentation = element.shadowRoot.querySelector('api-documentation');
+          await waitUntil(() => Boolean(apiDocumentation.shadowRoot.querySelector('api-method-documentation')));
           const apiMethodDocumentation = apiDocumentation.shadowRoot.querySelector('api-method-documentation');
           assert.equal(apiMethodDocumentation.shadowRoot.querySelector('api-url').url, 'http://domain.org/cmt');
         });

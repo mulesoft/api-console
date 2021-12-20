@@ -295,8 +295,9 @@ describe('API Console request', () => {
             assert.equal(authorizationMethod.getAttribute('type'), 'oauth 2');
           });
 
-          it('should render scheme fields', () => {
+          it('should render scheme fields', async () => {
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            await waitUntil(() => Boolean(authorizationMethod.shadowRoot.querySelector('form')));
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
 
             assertDropdownMenu(authorizationMethodForm, 'grantType', 'Response type', 'Access token');
