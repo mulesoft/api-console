@@ -758,6 +758,7 @@ describe('API Console documentation', () => {
         });
 
         it('should render body section', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('api-body-document')));
           const parametersSection = docShadowRoot.querySelector('api-body-document').shadowRoot;
           assert.exists(parametersSection);
           assert.equal(parametersSection.querySelector('.heading3').innerText, 'Body');
