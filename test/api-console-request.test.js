@@ -296,12 +296,17 @@ describe('API Console request', () => {
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'OAuth 2.0');
           });
 
-          it('should render authorization method', () => {
-            const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+          it('should render authorization method', async () => {
+            let authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            await waitUntil(() => {
+              authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+              return Boolean(authorizationMethod);
+            });
             assert.equal(authorizationMethod.getAttribute('type'), 'oauth 2');
           });
 
-          it('should render scheme fields', () => {
+          it('should render scheme fields', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
 
