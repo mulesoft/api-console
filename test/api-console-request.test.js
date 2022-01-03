@@ -8,7 +8,7 @@ import {
   requestBodySection, requestCredentialsSection,
   requestHeadersSection, requestPanel,
   requestQueryParamSection, requestSendButton,
-  requestUrlSection,
+  requestUrlSection
 } from './testHelper.js';
 
 /** @typedef {import('..').ApiConsole} ApiConsole */
@@ -170,7 +170,8 @@ describe('API Console request', () => {
             assert.exists(credentialsSection);
           });
 
-          it('should render auth label', () => {
+          it('should render auth label', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('.auth-selector-label')));
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'x-custom');
           });
 
@@ -297,6 +298,7 @@ describe('API Console request', () => {
           });
 
           it('should render scheme fields', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
             await waitUntil(() => Boolean(authorizationMethod.shadowRoot.querySelector('form')));
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
@@ -675,6 +677,32 @@ describe('API Console request', () => {
             const queryParamSection = requestQueryParamSection(element);
             assert.notExists(queryParamSection.shadowRoot.querySelector('.form-title'));
           });
+        });
+      });
+    });
+  });
+
+  [
+    new ApiDescribe('Regular model'),
+    new ApiDescribe('Compact model', true)
+  ].forEach(({ label, compact }) => {
+    describe(label, () => {
+      let element;
+      let amf;
+
+      describe('Async APIs', () => {
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await navigationSelectEndpointMethod(element, 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured', 'subscribe');
+          await aTimeout(50);
+        });
+
+        it('should not render request panel', () => {
+          assert.notExists(requestPanel(element));
         });
       });
     });

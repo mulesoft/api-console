@@ -555,4 +555,55 @@ describe('API Console navigation', () => {
       });
     });
   });
+
+  [
+    new ApiDescribe('Regular model'),
+    new ApiDescribe('Compact model', true)
+  ].forEach(({ label, compact }) => {
+    describe(label, () => {
+      let element;
+      let amf;
+
+      describe('Async APIs', () => {
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+        });
+
+        it('should render all sections', () => {
+          assert.ok(navigationSummarySection(element));
+          assert.ok(navigationEndpointsSection(element));
+          assert.notOk(navigationDocumentationSection(element));
+          assert.ok(navigationTypesSection(element));
+          assert.ok(navigationSecuritySection(element));
+        });
+
+        it('should list all channels', () => {
+          const endpointsList = navigationEndpointsList(element);
+          assert.ok(endpointsList);
+          assert.lengthOf(endpointsList, 4);
+
+          [
+            ['smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured', 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured'],
+            ['smartylighting/streetlights/1/0/action/{streetlightId}/turn/on', 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on'],
+            ['smartylighting/streetlights/1/0/action/{streetlightId}/turn/off', 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off'],
+            ['smartylighting/streetlights/1/0/action/{streetlightId}/dim', 'smartylighting/streetlights/1/0/action/{streetlightId}/dim'],
+          ].forEach((([path, name], index) => testEndpoint(endpointsList[index], path, name)));
+        });
+
+        it('should list all security items', () => {
+          const securityList = navigationSecurityList(element);
+          assert.ok(securityList);
+          assert.lengthOf(securityList, 3);
+
+          assert.equal(securityList[0].textContent.trim(), 'apiKey - Api Key');
+          assert.equal(securityList[1].textContent.trim(), 'supportedOauthFlows - OAuth 2.0');
+          assert.equal(securityList[2].textContent.trim(), 'openIdConnectWellKnown - OpenID Connect');
+        });
+      });
+    });
+  });
 });

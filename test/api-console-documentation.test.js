@@ -2,13 +2,16 @@ import { fixture, assert, html, aTimeout, waitUntil, nextFrame } from '@open-wc/
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
 import {
-  documentationDocument, documentationEndpoint, documentationMethod,
+  documentationDocument,
+  documentationEndpoint,
+  documentationMethod,
   documentationPanel,
   documentationSecurity,
   documentationSummary,
   documentationType,
   navigationSelectDocumentation,
-  navigationSelectDocumentationSection, navigationSelectEndpointMethod,
+  navigationSelectDocumentationSection,
+  navigationSelectEndpointMethod,
   navigationSelectEndpointOverview,
   navigationSelectSecurity,
   navigationSelectSecuritySection,
@@ -132,6 +135,7 @@ describe('API Console documentation', () => {
         });
 
         it('should render basic summary documentation', async () => {
+          await waitUntil(() => Boolean(documentationSummary(element)));
           const summaryShadowRoot = documentationSummary(element).shadowRoot;
           await waitUntil(() => Boolean(summaryShadowRoot.querySelector('.api-title')));
           assert.equal(summaryShadowRoot.querySelector('.api-title').textContent.trim(), 'API title:\n    Google Drive');
@@ -773,6 +777,79 @@ describe('API Console documentation', () => {
           assert.equal(collapse.querySelector('.media-type-selector').innerText, 'Media type: application/json');
           assert.equal(collapse.querySelector('.any-info').innerText, 'Any instance of data is allowed.');
           assert.equal(collapse.querySelector('.any-info-description').innerText, 'The API file specifies body for this request but it does not specify the data model.');
+        });
+      });
+    });
+  });
+
+  [
+    new ApiDescribe('Regular model'),
+    new ApiDescribe('Compact model', true)
+  ].forEach(({ label, compact }) => {
+    describe(label, () => {
+      let docShadowRoot;
+
+      before(async () => {
+        amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+      });
+
+      describe('Async APIs', () => {
+        describe('Subscribe', () => {
+          beforeEach(async () => {
+            element = await amfFixture(amf);
+            await navigationSelectEndpointMethod(element, 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured', 'subscribe');
+            await aTimeout(100);
+            const item = documentationMethod(element);
+            docShadowRoot = item.shadowRoot;
+          });
+
+          it('should render URL', async () => {
+            await waitUntil(() => Boolean(docShadowRoot.querySelector('api-url')));
+            const apiUrl = docShadowRoot.querySelector('api-url').shadowRoot;
+            assert.equal(apiUrl.querySelector('.url-channel-value').innerText.trim(), 'Channel\nsmartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured');
+            assert.equal(apiUrl.querySelector('.url-server-value').innerText.trim(), 'Server\nmqtt://api.streetlights.smartylighting.com:{port}');
+          });
+
+          it('should render description', async () => {
+            await waitUntil(() => Boolean(docShadowRoot.querySelector('arc-marked')));
+            assert.equal(docShadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), 'The topic on which measured values may be produced and consumed.');
+          });
+
+          it('should render methods', async () => {
+            await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
+            const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
+            assert.exists(requestDocumentation);
+            assert.exists(requestDocumentation.querySelector('.security'));
+            assert.exists(requestDocumentation.querySelector('api-parameters-document'));
+            assert.exists(requestDocumentation.querySelector('api-headers-document'));
+            assert.exists(requestDocumentation.querySelector('api-body-document'));
+          });
+        });
+
+        describe('Publish', () => {
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on', 'publish');
+            await aTimeout(100);
+            const item = documentationMethod(element);
+            docShadowRoot = item.shadowRoot;
+          });
+
+          it('should render URL', async () => {
+            await waitUntil(() => Boolean(docShadowRoot.querySelector('api-url')));
+            const apiUrl = docShadowRoot.querySelector('api-url').shadowRoot;
+            assert.equal(apiUrl.querySelector('.url-channel-value').innerText.trim(), 'Channelsmartylighting/streetlights/1/0/action/{streetlightId}/turn/on');
+            assert.equal(apiUrl.querySelector('.url-server-value').innerText.trim(), 'Servermqtt://api.streetlights.smartylighting.com:{port}');
+          });
+
+          it('should render methods', async () => {
+            await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
+            const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
+            assert.exists(requestDocumentation);
+            assert.exists(requestDocumentation.querySelector('.security'));
+            assert.exists(requestDocumentation.querySelector('api-parameters-document'));
+            assert.exists(requestDocumentation.querySelector('api-headers-document'));
+            assert.exists(requestDocumentation.querySelector('api-body-document'));
+          });
         });
       });
     });
