@@ -281,7 +281,8 @@ describe('API Console documentation', () => {
             testSecurityTitleAndDescription(element, 'OAuth 1.0', 'OAuth 1.0 continues to be supported for all API requests, but OAuth 2.0 is now preferred.');
           });
 
-          it('should render settings section', () => {
+          it('should render settings section', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             const item = documentationSecurity(element);
             const securityShadowRoot = item.shadowRoot;
             const settings = securityShadowRoot.querySelector('api-oauth1-settings-document');
