@@ -2,7 +2,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import { aTimeout } from '@open-wc/testing';
 import { amfFixture } from '../api-console.amf.test.js';
 import { AmfLoader, ApiDescribe } from '../amf-loader.js';
-import { documentationPanel, navigationTree } from '../testHelper.js';
+import { navigationTree } from '../testHelper.js';
 
 /** @typedef {import('@api-components/api-navigation').ApiNavigation} ApiNavigation */
 /** @typedef {import('@api-components/amf-helper-mixin').WebApi} WebApi */
@@ -12,7 +12,13 @@ const apis = ['demo-api'];
 const hasScrolledToTheEnd = (target) => target.scrollTop === (target.scrollHeight - target.offsetHeight);
 const DEFAULT_RENDER_TIMEOUT = () => aTimeout(1000);
 
+const isScrollable = (element) => element.scrollWidth > element.clientWidth || element.scrollHeight > element.clientHeight;
+
 const diffFullScroll = async (element, name) => {
+  if (!isScrollable(element)) {
+    await visualDiff(element, name);
+    return;
+  }
   let screenShotCount = 0;
   const height = element.clientHeight;
   const scrollAmount = Math.max(100, Math.floor(height / 100) * 100);
@@ -50,13 +56,13 @@ describe('Visual tests', () => {
           let element;
           let amf;
           let navigation;
-          let documentation;
+          let mainContentSection;
 
           beforeEach(async () => {
             amf = await AmfLoader.load({ fileName: api, compact });
             element = await amfFixture(amf);
             navigation = navigationTree(element);
-            documentation = documentationPanel(element);
+            mainContentSection = element.shadowRoot.querySelector('div.main-content');
           });
 
           it('should render default view', async () => {
@@ -93,7 +99,7 @@ describe('Visual tests', () => {
                   // eslint-disable-next-line no-await-in-loop
                   await DEFAULT_RENDER_TIMEOUT();
                   // eslint-disable-next-line no-await-in-loop
-                  await visualDiff(documentation, `${label}/endpoint-doc-view${endpoint.path}`);
+                  await diffFullScroll(mainContentSection, `${label}/endpoint-doc-view${endpoint.path}`);
                 }
               });
 
@@ -110,7 +116,7 @@ describe('Visual tests', () => {
                       const methodKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.method);
                       const method = element._getValue(operation, methodKey);
                       // eslint-disable-next-line no-await-in-loop
-                      await visualDiff(documentation, `${label}/operation-doc-view${endpoint.path}-${method}`);
+                      await diffFullScroll(mainContentSection, `${label}/operation-doc-view${endpoint.path}-${method}`);
                     }
                   }
                 }
