@@ -135,6 +135,7 @@ describe('API Console documentation', () => {
         });
 
         it('should render basic summary documentation', async () => {
+          await waitUntil(() => Boolean(documentationSummary(element)));
           const summaryShadowRoot = documentationSummary(element).shadowRoot;
           await waitUntil(() => Boolean(summaryShadowRoot.querySelector('.api-title')));
           assert.equal(summaryShadowRoot.querySelector('.api-title').textContent.trim(), 'API title:\n    Google Drive');
