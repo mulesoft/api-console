@@ -394,7 +394,8 @@ describe('API Console documentation', () => {
 ]);
           });
 
-          it('should render responses', () => {
+          it('should render responses', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             testSecurityResponses(element, ['401', '403'], 'Bad or expired token. This can happen if the user or Dropbox\nrevoked or expired an access token. To fix, re-authenticate\nthe user.');
           });
         });
@@ -648,6 +649,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render type documentation', async () => {
+            await waitUntil(() => Boolean(documentationType(element)));
             const item = documentationType(element);
             const docShadowRoot = item.shadowRoot;
             const description = 'This is date-only type';
@@ -730,12 +732,13 @@ describe('API Console documentation', () => {
 
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-query-parameters', 'post');
-          await aTimeout(100);
+          await waitUntil(() => Boolean(documentationMethod(element)));
           const item = documentationMethod(element);
           docShadowRoot = item.shadowRoot;
         });
 
-        it('should render endpoint title', () => {
+        it('should render endpoint title', async () => {
+          await waitUntil(() => docShadowRoot.querySelector('.title').innerText === 'Post');
           assert.equal(docShadowRoot.querySelector('.title').innerText, 'Post');
         });
 
@@ -770,6 +773,7 @@ describe('API Console documentation', () => {
         });
 
         it('should render query parameters section', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('api-parameters-document')));
           const parametersSection = docShadowRoot.querySelector('api-parameters-document').shadowRoot;
           assert.exists(parametersSection);
           assert.equal(parametersSection.querySelector('.heading3').innerText, 'Query parameters');
@@ -838,6 +842,7 @@ describe('API Console documentation', () => {
             await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
             const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
             assert.exists(requestDocumentation);
+            await waitUntil(() => Boolean(requestDocumentation.querySelector('.security')));
             assert.exists(requestDocumentation.querySelector('.security'));
             assert.exists(requestDocumentation.querySelector('api-parameters-document'));
             assert.exists(requestDocumentation.querySelector('api-headers-document'));
