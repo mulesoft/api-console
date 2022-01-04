@@ -236,7 +236,8 @@ describe('API Console request', () => {
             assert.exists(credentialsSection);
           });
 
-          it('should render auth label', () => {
+          it('should render auth label', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('.auth-selector-label')));
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'OAuth 1.0');
           });
 
@@ -246,8 +247,10 @@ describe('API Console request', () => {
             assert.equal(authorizationMethod.getAttribute('type'), 'oauth 1');
           });
 
-          it('should render scheme fields', () => {
+          it('should render scheme fields', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            await waitUntil(() => Boolean(authorizationMethod.shadowRoot.querySelector('form')));
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
 
             assertDropdownMenu(authorizationMethodForm, 'authTokenMethod', 'Authorization token method', 'POST');
