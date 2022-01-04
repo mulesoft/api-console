@@ -19,6 +19,7 @@ const diffFullScroll = async (element, name) => {
     await visualDiff(element, name);
     return;
   }
+  element.scrollTo(0, 0);
   let screenShotCount = 0;
   const height = element.clientHeight;
   const scrollAmount = Math.max(100, Math.floor(height / 100) * 100);
@@ -56,13 +57,13 @@ describe('Visual tests', () => {
           let element;
           let amf;
           let navigation;
-          // let documentation;
+          let mainContent;
 
           beforeEach(async () => {
             amf = await AmfLoader.load({ fileName: api, compact });
             element = await amfFixture(amf);
             navigation = navigationTree(element);
-            // documentation = documentationPanel(element);
+            mainContent = element.shadowRoot.querySelector('.main-content');
           });
 
           it('should render default view', async () => {
@@ -99,7 +100,7 @@ describe('Visual tests', () => {
                   // eslint-disable-next-line no-await-in-loop
                   await DEFAULT_RENDER_TIMEOUT();
                   // eslint-disable-next-line no-await-in-loop
-                  await visualDiff(document.body, `${label}/endpoint-doc-view${endpoint.path}`);
+                  await diffFullScroll(mainContent, `${label}/endpoint-doc-view${endpoint.path}`);
                 }
               });
 
@@ -116,7 +117,7 @@ describe('Visual tests', () => {
                       const methodKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.method);
                       const method = element._getValue(operation, methodKey);
                       // eslint-disable-next-line no-await-in-loop
-                      await visualDiff(document.body, `${label}/operation-doc-view${endpoint.path}-${method}`);
+                      await diffFullScroll(mainContent, `${label}/operation-doc-view${endpoint.path}-${method}`);
                     }
                   }
                 }
