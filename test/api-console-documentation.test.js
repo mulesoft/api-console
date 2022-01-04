@@ -324,7 +324,8 @@ describe('API Console documentation', () => {
             testSecurityTitleAndDescription(element, 'OAuth 2.0', 'Dropbox supports OAuth 2.0 for authenticating all API requests.');
           });
 
-          it('should render settings section', () => {
+          it('should render settings section', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             const item = documentationSecurity(element);
             const securityShadowRoot = item.shadowRoot;
             assert.equal(securityShadowRoot.querySelector('.settings-title').textContent, 'Settings');
@@ -932,6 +933,7 @@ describe('API Console documentation', () => {
 
         it('should render callbacks info', async () => {
           await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation').querySelector('.callbacks')));
           const callbacks = docShadowRoot.querySelector('.request-documentation').querySelector('.callbacks');
           const callbacksCollapse = callbacks.querySelector('anypoint-collapse');
           assert.isNull(callbacksCollapse.getAttribute('collapse-opened'));
