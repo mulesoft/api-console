@@ -29,5 +29,6 @@
   "models/test-api/secured.raml": "RAML 1.0",
   "models/anyOf/anyOf.yaml": "ASYNC 2.0",
   "models/streetlights/streetlights.yaml": "ASYNC 2.0",
-  "models/visual-tests-raml/visual-tests-raml.raml": "RAML 1.0"
+  "models/visual-tests-raml/visual-tests-raml.raml": "RAML 1.0",
+  "models/representative-service/representative-service.yaml": "OAS 3.0"
 }
