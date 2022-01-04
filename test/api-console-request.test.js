@@ -710,4 +710,48 @@ describe('API Console request', () => {
       });
     });
   });
+
+  [
+    new ApiDescribe('Regular model'),
+    new ApiDescribe('Compact model', true)
+  ].forEach(({ label, compact }) => {
+    describe(label, () => {
+      let element;
+      let amf;
+
+      describe('OAS 3.0', () => {
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'representative-service' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await navigationSelectEndpointMethod(element, '/streams', 'post');
+          // @ts-ignore
+          (await documentationTryItButton(element)).click();
+          await aTimeout(50);
+        });
+
+        it('should render all sections', () => {
+          assert.exists(requestUrlSection(element));
+          assert.exists(requestQueryParamSection(element));
+          assert.exists(requestCredentialsSection(element));
+        });
+
+        it('should render all parameters', () => {
+          const section = requestQueryParamSection(element);
+          const queryParams = section.shadowRoot.querySelectorAll('.form-row.form-item');
+          assert.lengthOf(queryParams, 1);
+
+          // eslint-disable-next-line prefer-destructuring
+          const pageQueryParam = queryParams[0];
+          const pageItem = pageQueryParam.querySelector('api-form-item');
+          assert.equal(pageItem.getAttribute('data-type'), 'queryModel');
+          assert.equal(pageItem.getAttribute('name'), 'callbackUrl');
+          assert.equal(pageItem.getAttribute('required'), '');
+          assert.isNull(pageQueryParam.getAttribute('hidden'));
+        });
+      });
+    });
+  });
 });

@@ -873,4 +873,72 @@ describe('API Console documentation', () => {
       });
     });
   });
+
+  [
+    new ApiDescribe('Regular model'),
+    new ApiDescribe('Compact model', true)
+  ].forEach(({ label, compact }) => {
+    describe(label, () => {
+      let docShadowRoot;
+
+      before(async () => {
+        amf = await AmfLoader.load({ compact, fileName: 'representative-service' });
+      });
+
+      describe('OAS 3.0', () => {
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await navigationSelectEndpointMethod(element, '/streams', 'post');
+          await aTimeout(100);
+          const item = documentationMethod(element);
+          docShadowRoot = item.shadowRoot;
+        });
+
+        it('should render URL', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('api-url')));
+          assert.equal(docShadowRoot.querySelector('api-url').shadowRoot.querySelector('.url-area > .url-value').innerText.trim(), 'https://localhost:8080/streams');
+        });
+
+        it('should render description', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('arc-marked')));
+          assert.equal(docShadowRoot.querySelector('arc-marked').querySelector('.markdown-body').innerText.trim(), 'subscribes a client to receive out-of-band data');
+        });
+
+        it('should add callbacks to documentation sections', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
+          const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
+          assert.exists(requestDocumentation);
+          assert.exists(requestDocumentation.querySelector('.snippets'));
+          assert.exists(requestDocumentation.querySelector('.security'));
+          assert.exists(requestDocumentation.querySelector('api-parameters-document'));
+          assert.exists(requestDocumentation.querySelector('.callbacks'));
+        });
+
+        it('should render responses', () => {
+          assert.exists(docShadowRoot.querySelector('.response-documentation'));
+        });
+
+        it('should render callbacks section in documentation', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
+          const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
+          const callbacks = requestDocumentation.querySelector('.callbacks');
+          assert.equal(callbacks.querySelector('.table-title').innerText, 'Callbacks');
+        });
+
+        it('should render callbacks info', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
+          const callbacks = docShadowRoot.querySelector('.request-documentation').querySelector('.callbacks');
+          const callbacksCollapse = callbacks.querySelector('anypoint-collapse');
+          assert.isNull(callbacksCollapse.getAttribute('collapse-opened'));
+
+          const toggleButton = callbacks.querySelector('.toggle-button');
+          assert.exists(toggleButton);
+          toggleButton.click();
+
+          await waitUntil(() => Boolean(callbacksCollapse.querySelector('.callback-section')));
+          assert.exists(callbacksCollapse.querySelector('.callback-section'));
+        });
+      });
+    });
+  });
 });
