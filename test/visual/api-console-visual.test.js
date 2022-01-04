@@ -2,7 +2,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import { aTimeout } from '@open-wc/testing';
 import { amfFixture } from '../api-console.amf.test.js';
 import { AmfLoader, ApiDescribe } from '../amf-loader.js';
-import { navigationTree } from '../testHelper.js';
+import { documentationPanel, navigationTree } from '../testHelper.js';
 
 /** @typedef {import('@api-components/api-navigation').ApiNavigation} ApiNavigation */
 /** @typedef {import('@api-components/amf-helper-mixin').WebApi} WebApi */
@@ -56,13 +56,13 @@ describe('Visual tests', () => {
           let element;
           let amf;
           let navigation;
-          let mainContentSection;
+          let documentation;
 
           beforeEach(async () => {
             amf = await AmfLoader.load({ fileName: api, compact });
             element = await amfFixture(amf);
             navigation = navigationTree(element);
-            mainContentSection = element.shadowRoot.querySelector('div.main-content');
+            documentation = documentationPanel(element);
           });
 
           it('should render default view', async () => {
@@ -99,7 +99,7 @@ describe('Visual tests', () => {
                   // eslint-disable-next-line no-await-in-loop
                   await DEFAULT_RENDER_TIMEOUT();
                   // eslint-disable-next-line no-await-in-loop
-                  await diffFullScroll(mainContentSection, `${label}/endpoint-doc-view${endpoint.path}`);
+                  await visualDiff(documentation, `${label}/endpoint-doc-view${endpoint.path}`);
                 }
               });
 
@@ -116,7 +116,7 @@ describe('Visual tests', () => {
                       const methodKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.method);
                       const method = element._getValue(operation, methodKey);
                       // eslint-disable-next-line no-await-in-loop
-                      await diffFullScroll(mainContentSection, `${label}/operation-doc-view${endpoint.path}-${method}`);
+                      await visualDiff(documentation, `${label}/operation-doc-view${endpoint.path}-${method}`);
                     }
                   }
                 }
