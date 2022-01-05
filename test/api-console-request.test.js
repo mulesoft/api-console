@@ -260,7 +260,8 @@ describe('API Console request', () => {
             assert.exists(credentialsSection);
           });
 
-          it('should render auth label', () => {
+          it('should render auth label', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('.auth-selector-label')));
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'OAuth 1.0');
           });
 
