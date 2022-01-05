@@ -915,6 +915,7 @@ describe('API Console documentation', () => {
           const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
           assert.exists(requestDocumentation);
           assert.exists(requestDocumentation.querySelector('.snippets'));
+          await waitUntil(() => Boolean(requestDocumentation.querySelector('.security')));
           assert.exists(requestDocumentation.querySelector('.security'));
           assert.exists(requestDocumentation.querySelector('api-parameters-document'));
           assert.exists(requestDocumentation.querySelector('.callbacks'));
@@ -927,6 +928,7 @@ describe('API Console documentation', () => {
         it('should render callbacks section in documentation', async () => {
           await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
           const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
+          await waitUntil(() => Boolean(requestDocumentation.querySelector('.callbacks')));
           const callbacks = requestDocumentation.querySelector('.callbacks');
           assert.equal(callbacks.querySelector('.table-title').innerText, 'Callbacks');
         });
