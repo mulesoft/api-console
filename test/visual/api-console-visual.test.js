@@ -100,7 +100,7 @@ describe('Visual tests', () => {
                   // eslint-disable-next-line no-await-in-loop
                   await DEFAULT_RENDER_TIMEOUT();
                   // eslint-disable-next-line no-await-in-loop
-                  await diffFullScroll(mainContent, `${label}/endpoint-doc-view${endpoint.path}`);
+                  await visualDiff(mainContent, `${label}/endpoint-doc-view${endpoint.path}`);
                 }
               });
 
@@ -117,7 +117,7 @@ describe('Visual tests', () => {
                       const methodKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.method);
                       const method = element._getValue(operation, methodKey);
                       // eslint-disable-next-line no-await-in-loop
-                      await diffFullScroll(mainContent, `${label}/operation-doc-view${endpoint.path}-${method}`);
+                      await visualDiff(mainContent, `${label}/operation-doc-view${endpoint.path}-${method}`);
                     }
                   }
                 }
