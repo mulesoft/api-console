@@ -295,7 +295,8 @@ describe('API Console documentation', () => {
             testSecurityTitleAndDescription(element, 'OAuth 1.0', 'OAuth 1.0 continues to be supported for all API requests, but OAuth 2.0 is now preferred.');
           });
 
-          it('should render settings section', () => {
+          it('should render settings section', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             const item = documentationSecurity(element);
             const securityShadowRoot = item.shadowRoot;
             const settings = securityShadowRoot.querySelector('api-oauth1-settings-document');
@@ -324,7 +325,8 @@ describe('API Console documentation', () => {
             testSecurityTitleAndDescription(element, 'OAuth 2.0', 'Dropbox supports OAuth 2.0 for authenticating all API requests.');
           });
 
-          it('should render settings section', () => {
+          it('should render settings section', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             const item = documentationSecurity(element);
             const securityShadowRoot = item.shadowRoot;
             assert.equal(securityShadowRoot.querySelector('.settings-title').textContent, 'Settings');
@@ -345,14 +347,19 @@ describe('API Console documentation', () => {
             assert.equal(flows[1].textContent, 'https://www.dropbox.com/1/oauth2/authorize');
           });
 
-          it('should render query parameters section', () => {
-            const item = documentationSecurity(element);
+          it('should render query parameters section', async () => {
+            let item = documentationSecurity(element);
+            await waitUntil(() => {
+              item = documentationSecurity(element);
+              return Boolean(item);
+            });
             const securityShadowRoot = item.shadowRoot;
             const parameters = securityShadowRoot.querySelector('api-parameters-document');
             testCollapsibleSection(parameters, 'Query parameters');
           });
 
           it('should render query parameters', async () => {
+            await waitUntil(() => Boolean(documentationSecurity(element)));
             const item = documentationSecurity(element);
             const securityShadowRoot = item.shadowRoot;
             const parameters = securityShadowRoot.querySelector('api-parameters-document');
@@ -413,7 +420,11 @@ describe('API Console documentation', () => {
           });
 
           it('should render type documentation', async () => {
-            const item = documentationType(element);
+            let item = documentationType(element);
+            await waitUntil(() => {
+              item = documentationType(element);
+              return Boolean(item);
+            });
             const docShadowRoot = item.shadowRoot;
             const description = 'This is time-only type';
             const displayName = 'Time-only type';
@@ -448,6 +459,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render type documentation', async () => {
+            await waitUntil(() => Boolean(documentationType(element)));
             const item = documentationType(element);
             const docShadowRoot = item.shadowRoot;
             const description = 'This is datetime type';
@@ -477,7 +489,11 @@ describe('API Console documentation', () => {
 
             const typeDocument = docShadowRoot.querySelector('api-type-document');
             const typeShadowRoot = typeDocument.shadowRoot;
-            const unionSelector = typeShadowRoot.querySelector('.union-type-selector');
+            let unionSelector = typeShadowRoot.querySelector('.union-type-selector');
+            await waitUntil(() => {
+              unionSelector = typeShadowRoot.querySelector('.union-type-selector');
+              return Boolean(unionSelector);
+            });
             assert.equal(unionSelector.querySelector('span').innerText, 'Any of:');
 
             const unionButtons = unionSelector.querySelectorAll('anypoint-button');
@@ -593,7 +609,11 @@ describe('API Console documentation', () => {
           });
 
           it('should render type documentation', async () => {
-            const item = documentationType(element);
+            let item = documentationType(element);
+            await waitUntil(() => {
+              item = documentationType(element);
+              return Boolean(item);
+            });
             const docShadowRoot = item.shadowRoot;
             const description = 'This is boolean type';
             const displayName = 'Boolean type';
@@ -630,6 +650,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render type documentation', async () => {
+            await waitUntil(() => Boolean(documentationType(element)));
             const item = documentationType(element);
             const docShadowRoot = item.shadowRoot;
             const description = 'This is date-only type';
@@ -712,12 +733,13 @@ describe('API Console documentation', () => {
 
         beforeEach(async () => {
           await navigationSelectEndpointMethod(element, '/test-query-parameters', 'post');
-          await aTimeout(100);
+          await waitUntil(() => Boolean(documentationMethod(element)));
           const item = documentationMethod(element);
           docShadowRoot = item.shadowRoot;
         });
 
-        it('should render endpoint title', () => {
+        it('should render endpoint title', async () => {
+          await waitUntil(() => docShadowRoot.querySelector('.title').innerText === 'Post');
           assert.equal(docShadowRoot.querySelector('.title').innerText, 'Post');
         });
 
@@ -752,6 +774,7 @@ describe('API Console documentation', () => {
         });
 
         it('should render query parameters section', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('api-parameters-document')));
           const parametersSection = docShadowRoot.querySelector('api-parameters-document').shadowRoot;
           assert.exists(parametersSection);
           assert.equal(parametersSection.querySelector('.heading3').innerText, 'Query parameters');
@@ -820,6 +843,7 @@ describe('API Console documentation', () => {
             await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
             const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
             assert.exists(requestDocumentation);
+            await waitUntil(() => Boolean(requestDocumentation.querySelector('.security')));
             assert.exists(requestDocumentation.querySelector('.security'));
             assert.exists(requestDocumentation.querySelector('api-parameters-document'));
             assert.exists(requestDocumentation.querySelector('api-headers-document'));
@@ -891,6 +915,7 @@ describe('API Console documentation', () => {
           const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
           assert.exists(requestDocumentation);
           assert.exists(requestDocumentation.querySelector('.snippets'));
+          await waitUntil(() => Boolean(requestDocumentation.querySelector('.security')));
           assert.exists(requestDocumentation.querySelector('.security'));
           assert.exists(requestDocumentation.querySelector('api-parameters-document'));
           assert.exists(requestDocumentation.querySelector('.callbacks'));
@@ -903,12 +928,14 @@ describe('API Console documentation', () => {
         it('should render callbacks section in documentation', async () => {
           await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
           const requestDocumentation = docShadowRoot.querySelector('.request-documentation');
+          await waitUntil(() => Boolean(requestDocumentation.querySelector('.callbacks')));
           const callbacks = requestDocumentation.querySelector('.callbacks');
           assert.equal(callbacks.querySelector('.table-title').innerText, 'Callbacks');
         });
 
         it('should render callbacks info', async () => {
           await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation')));
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('.request-documentation').querySelector('.callbacks')));
           const callbacks = docShadowRoot.querySelector('.request-documentation').querySelector('.callbacks');
           const callbacksCollapse = callbacks.querySelector('anypoint-collapse');
           assert.isNull(callbacksCollapse.getAttribute('collapse-opened'));

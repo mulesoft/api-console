@@ -271,8 +271,10 @@ describe('API Console request', () => {
             assert.equal(authorizationMethod.getAttribute('type'), 'oauth 1');
           });
 
-          it('should render scheme fields', () => {
+          it('should render scheme fields', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('api-authorization-method')));
             const authorizationMethod = credentialsSection.shadowRoot.querySelector('api-authorization-method');
+            await waitUntil(() => Boolean(authorizationMethod.shadowRoot.querySelector('form')));
             const authorizationMethodForm = authorizationMethod.shadowRoot.querySelector('form');
 
             assertDropdownMenu(authorizationMethodForm, 'authTokenMethod', 'Authorization token method', 'POST');
