@@ -118,20 +118,44 @@ describe('API Console request', () => {
       });
 
       describe('Body', () => {
-        beforeEach(async () => {
-          await navigationSelectEndpointMethod(element, '/test-headers', 'post');
-          // @ts-ignore
-          (await documentationTryItButton(element)).click();
-          await aTimeout(50);
+        describe('Sections', () => {
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/test-headers', 'post');
+            // @ts-ignore
+            (await documentationTryItButton(element)).click();
+            await aTimeout(50);
+          });
+
+          it('should render body section', () => {
+            assert.exists(requestBodySection(element));
+          });
+
+          it('should render raw editor', () => {
+            const body = requestBodySection(element);
+            assert.exists(body.shadowRoot.querySelector('raw-payload-editor'));
+          });
         });
 
-        it('should render body section', () => {
-          assert.exists(requestBodySection(element));
-        });
+        describe('Request', () => {
+          beforeEach(async () => {
+            await navigationSelectEndpointMethod(element, '/songs', 'post');
+            // @ts-ignore
+            (await documentationTryItButton(element)).click();
+            await aTimeout(50);
 
-        it('should render raw editor', () => {
-          const body = requestBodySection(element);
-          assert.exists(body.shadowRoot.querySelector('raw-payload-editor'));
+            spy = sinon.spy();
+            document.body.addEventListener('api-request', spy);
+          });
+
+          it('should add body to request', async () => {
+            // @ts-ignore
+            requestSendButton(element).click();
+            await nextFrame();
+
+            const body = '{\n  "songId": "550e8400-e29b-41d4-a716-446655440000",\n  "songTitle": "Get Lucky"\n}';
+            assert.isTrue(spy.called);
+            assert.equal(spy.getCall(0).args[0].detail.payload, body);
+          });
         });
       });
 
@@ -236,7 +260,8 @@ describe('API Console request', () => {
             assert.exists(credentialsSection);
           });
 
-          it('should render auth label', () => {
+          it('should render auth label', async () => {
+            await waitUntil(() => Boolean(credentialsSection.shadowRoot.querySelector('.auth-selector-label')));
             assert.equal(credentialsSection.shadowRoot.querySelector('.auth-selector-label').innerText, 'OAuth 1.0');
           });
 
