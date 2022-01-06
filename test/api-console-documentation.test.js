@@ -233,7 +233,8 @@ describe('API Console documentation', () => {
           testCollapsibleSection(headers, 'Headers');
         };
 
-        const testSecurityResponses = (elem, expectedTabs, selectedTabContent) => {
+        const testSecurityResponses = async (elem, expectedTabs, selectedTabContent) => {
+          await waitUntil(() => Boolean(documentationSecurity(elem)));
           const item = documentationSecurity(elem);
           const securityShadowRoot = item.shadowRoot;
           const responses = securityShadowRoot.querySelector('.response-documentation');
@@ -277,8 +278,8 @@ describe('API Console documentation', () => {
             await testTypeDocumentExample(collapse, 'special-token');
           });
 
-          it('should render responses', () => {
-            testSecurityResponses(element, ['401', '403'], 'Bad token.');
+          it('should render responses', async () => {
+            await testSecurityResponses(element, ['401', '403'], 'Bad token.');
           });
         });
 
@@ -396,8 +397,7 @@ describe('API Console documentation', () => {
           });
 
           it('should render responses', async () => {
-            await waitUntil(() => Boolean(documentationSecurity(element)));
-            testSecurityResponses(element, ['401', '403'], 'Bad or expired token. This can happen if the user or Dropbox\nrevoked or expired an access token. To fix, re-authenticate\nthe user.');
+            await testSecurityResponses(element, ['401', '403'], 'Bad or expired token. This can happen if the user or Dropbox\nrevoked or expired an access token. To fix, re-authenticate\nthe user.');
           });
         });
       });
