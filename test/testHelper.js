@@ -180,14 +180,14 @@ export const documentationTryItButton = async (element) => {
 /** Request panel * */
 
 /**
- * Get api-navigation element
+ * Get api-request-panel element
  * @param {Element} element
  * @returns {ApiRequestPanel}
  */
 export const requestPanel = (element) => element.shadowRoot.querySelector('api-request-panel');
 
 /**
- * Get api-navigation element
+ * Get api-request-editor element
  * @param {Element} element
  * @returns {ApiRequestEditor}
  */
