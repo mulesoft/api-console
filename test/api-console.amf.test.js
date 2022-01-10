@@ -2,8 +2,10 @@
 import { assert, aTimeout, fixture, html, nextFrame, waitUntil } from '@open-wc/testing';
 import { AmfLoader, ApiDescribe } from './amf-loader.js';
 import '../api-console.js';
+import { documentationTryItButton, requestEditor, requestPanel } from './testHelper';
 
 /** @typedef {import('..').ApiConsole} ApiConsole */
+/** @typedef {import('@api-components/api-request').ApiRequestEditorElement} ApiRequestEditor */
 
 /**
  * @returns {Promise<ApiConsole>}
@@ -477,6 +479,57 @@ describe('ApiConsole', () => {
           const apiUrl = methodDocumentation.shadowRoot.querySelector('api-url');
           assert.exists(apiUrl.shadowRoot.querySelector('.url-channel-value'));
           assert.exists(apiUrl.shadowRoot.querySelector('.url-server-value'));
+        });
+      });
+    });
+  });
+
+  describe('APIC-763', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true)
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+        let bodyEditor;
+        let requestEditorElement;
+        let filesPayloadEditor;
+
+        const uploadFile = async () => {
+          await waitUntil(() => !!requestPanel(element), 'Request panel did not load');
+          await waitUntil(() => !!requestEditor(element), 'Request editor did not load');
+          requestEditorElement = requestEditor(element);
+
+          await waitUntil(() => !!requestEditorElement.shadowRoot.querySelector('api-body-editor'), 'Body editor did not load');
+          bodyEditor = requestEditorElement.shadowRoot.querySelector('api-body-editor');
+
+          await waitUntil(() => !!bodyEditor.shadowRoot.querySelector('files-payload-editor'), 'Files payload editor did not load');
+          filesPayloadEditor = bodyEditor.shadowRoot.querySelector('files-payload-editor');
+
+          const file = new File([''], 'filename');
+          // @ts-ignore
+          filesPayloadEditor.value = file;
+        };
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'APIC-763' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          const operation = AmfLoader.lookupOperation(amf, '/file', 'post');
+          element.selectedShape = operation['@id'];
+          element.selectedShapeType = 'method';
+        });
+
+        it('should not throw error when sending request', async () => {
+          // @ts-ignore
+          (await documentationTryItButton(element)).click();
+          await uploadFile();
+          assert.doesNotThrow(() => {
+            requestEditorElement._sendHandler();
+          }, 'Request editor threw error when sending request with file in body');
         });
       });
     });
