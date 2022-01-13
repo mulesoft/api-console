@@ -1,6 +1,8 @@
 import { nextFrame, waitUntil } from '@open-wc/testing';
 
 /** @typedef {import('@api-components/api-navigation').ApiNavigation} ApiNavigation */
+/** @typedef {import('@api-components/api-request').ApiRequestPanelElement} ApiRequestPanel */
+/** @typedef {import('@api-components/api-request').ApiRequestEditorElement} ApiRequestEditor */
 
 /**
  * Get api-navigation element
@@ -177,9 +179,19 @@ export const documentationTryItButton = async (element) => {
 
 /** Request panel * */
 
+/**
+ * Get api-request-panel element
+ * @param {Element} element
+ * @returns {ApiRequestPanel}
+ */
 export const requestPanel = (element) => element.shadowRoot.querySelector('api-request-panel');
 
-const requestEditor = (element) => {
+/**
+ * Get api-request-editor element
+ * @param {Element} element
+ * @returns {ApiRequestEditor}
+ */
+export const requestEditor = (element) => {
   const request = requestPanel(element);
   return request.shadowRoot.querySelector('api-request-editor');
 };
