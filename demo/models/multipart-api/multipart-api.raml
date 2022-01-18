@@ -1,0 +1,29 @@
+#%RAML 1.0
+title: Social Determinants of Health
+version: v1
+protocols:
+  - HTTP
+  - HTTPS
+/sdoh:
+  post:
+    headers:
+      clientId:
+        example: Example
+        type: string
+      clientSecret:
+        example: Example
+        type: string
+    body:
+      multipart/form-data:
+        properties:
+          file:
+            fileTypes:
+              - "*/*"
+              - text/plain
+    responses:
+      "200":
+        body:
+          application/json:
+            type: object
+      "201": {}
+    securedBy: []
