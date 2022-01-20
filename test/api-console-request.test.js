@@ -711,15 +711,16 @@ describe('API Console request', () => {
 
   [
     new ApiDescribe('Regular model'),
-    new ApiDescribe('Compact model', true)
-  ].forEach(({ label, compact }) => {
+    new ApiDescribe('Compact model', true),
+    new ApiDescribe('Flattened model', false, true),
+  ].forEach(({ label, compact, flattened }) => {
     describe(label, () => {
       let element;
       let amf;
 
       describe('Async APIs', () => {
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+          amf = await AmfLoader.load({ compact, fileName: 'streetlights', flattened });
         });
 
         beforeEach(async () => {

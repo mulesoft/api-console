@@ -34,6 +34,8 @@ describe('API Console documentation', () => {
 
   const googleApi = 'google-drive-api';
   const testApi = 'test-api';
+  const streetlights = 'streetlights';
+  const representativeService = 'representative-service';
   let element;
   let amf;
 
@@ -111,7 +113,7 @@ describe('API Console documentation', () => {
 
   [
     new ApiDescribe('Regular model'),
-    new ApiDescribe('Compact model', true)
+    new ApiDescribe('Compact model', true),
   ].forEach(({ label, compact }) => {
     describe(label, () => {
       before(async () => {
@@ -194,7 +196,7 @@ describe('API Console documentation', () => {
 
   [
     new ApiDescribe('Regular model'),
-    new ApiDescribe('Compact model', true)
+    new ApiDescribe('Compact model', true),
   ].forEach(({ label, compact }) => {
     describe(label, () => {
       before(async () => {
@@ -808,13 +810,14 @@ describe('API Console documentation', () => {
 
   [
     new ApiDescribe('Regular model'),
-    new ApiDescribe('Compact model', true)
-  ].forEach(({ label, compact }) => {
+    new ApiDescribe('Compact model', true),
+    new ApiDescribe('Flattened model', false, true),
+  ].forEach(({ label, compact, flattened }) => {
     describe(label, () => {
       let docShadowRoot;
 
       before(async () => {
-        amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+        amf = await AmfLoader.load({ compact, fileName: streetlights, flattened });
       });
 
       describe('Async APIs', () => {
@@ -888,7 +891,7 @@ describe('API Console documentation', () => {
       let docShadowRoot;
 
       before(async () => {
-        amf = await AmfLoader.load({ compact, fileName: 'representative-service' });
+        amf = await AmfLoader.load({ compact, fileName: representativeService });
       });
 
       describe('OAS 3.0', () => {

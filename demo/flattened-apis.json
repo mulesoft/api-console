@@ -1,0 +1,21 @@
+{
+  "models/demo-api/demo-api.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/google-drive-api/google-drive-api.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/multi-server/multi-server.yaml": { "type": "OAS 3.0", "mime": "application/yaml", "flattened": true },
+  "models/async-api/async-api.yaml": { "type": "ASYNC 2.0", "flattened": true },
+  "models/APIC-553/APIC-553.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/APIC-554/APIC-554.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/APIC-557/APIC-557.yaml": { "type": "OAS 3.0", "flattened": true },
+  "models/anyOf/anyOf.yaml": { "type": "ASYNC 2.0", "flattened": true },
+  "models/streetlights/streetlights.yaml": { "type": "ASYNC 2.0", "flattened": true },
+  "models/test-api/test-api.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/test-api/basicAuth.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/test-api/documentation.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/test-api/extension.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/test-api/library.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/test-api/overlay.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/test-api/person.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/representative-service/representative-service.yaml": { "type": "OAS 3.0", "flattened": true },
+  "models/APIC-763/APIC-763.raml": { "type": "RAML 1.0", "flattened": true},
+  "models/multipart-api/multipart-api.raml": { "type": "RAML 1.0", "flattened": true}
+}

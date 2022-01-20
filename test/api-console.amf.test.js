@@ -35,6 +35,14 @@ export const selectOperation = (element, endpointName, operationName) => {
 };
 
 describe('ApiConsole', () => {
+  const asyncApi = 'async-api';
+  const multiServer = 'multi-server';
+  const apic553 = 'APIC-553';
+  const apic554 = 'APIC-554';
+  const apic557 = 'APIC-557';
+  const anyOf = 'anyOf';
+  const streetlights = 'streetlights';
+  const apic763 = 'APIC-763';
 
   describe('AMF model computations', () => {
     [
@@ -122,12 +130,10 @@ describe('ApiConsole', () => {
       new ApiDescribe('Compact model', true),
     ].forEach(({ label, compact }) => {
       describe(label, () => {
-        const fileName = 'multi-server';
-
         describe('server selection', () => {
           let amf;
           before(async () => {
-            amf = await AmfLoader.load({ compact, fileName });
+            amf = await AmfLoader.load({ compact, fileName: multiServer });
           });
 
           it('auto-selects the default server', async () => {
@@ -148,7 +154,7 @@ describe('ApiConsole', () => {
         describe('slot rendering', () => {
           let amf;
           before(async () => {
-            amf = await AmfLoader.load({ compact, fileName });
+            amf = await AmfLoader.load({ compact, fileName: multiServer });
           });
 
           it('renders the slot when page is documentation', async () => {
@@ -184,13 +190,14 @@ describe('ApiConsole', () => {
     [
       new ApiDescribe('Regular model'),
       new ApiDescribe('Compact model', true),
-    ].forEach(({ label, compact }) => {
+      new ApiDescribe('Flattened model', false, true),
+    ].forEach(({ label, compact, flattened }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+          amf = await AmfLoader.load({ compact, fileName: asyncApi, flattened });
         });
 
         beforeEach(async () => {
@@ -209,13 +216,14 @@ describe('ApiConsole', () => {
     [
       new ApiDescribe('Regular model'),
       new ApiDescribe('Compact model', true),
-    ].forEach(({ label, compact }) => {
+      new ApiDescribe('Flattened model', false, true),
+    ].forEach(({ label, compact, flattened }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'APIC-553' });
+          amf = await AmfLoader.load({ compact, fileName: apic553, flattened });
         });
 
         beforeEach(async () => {
@@ -241,13 +249,14 @@ describe('ApiConsole', () => {
     [
       new ApiDescribe('Regular model'),
       new ApiDescribe('Compact model', true),
-    ].forEach(({ label, compact }) => {
+      new ApiDescribe('Flattened model', false, true),
+    ].forEach(({ label, compact, flattened }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'APIC-554' });
+          amf = await AmfLoader.load({ compact, fileName: apic554, flattened });
         });
 
         beforeEach(async () => {
@@ -274,7 +283,7 @@ describe('ApiConsole', () => {
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'APIC-557' });
+          amf = await AmfLoader.load({ compact, fileName: apic557 });
         });
 
         beforeEach(async () => {
@@ -304,14 +313,15 @@ describe('ApiConsole', () => {
   describe('APIC-559', () => {
     [
       new ApiDescribe('Regular model'),
-      new ApiDescribe('Compact model', true)
-    ].forEach(({ label, compact }) => {
+      new ApiDescribe('Compact model', true),
+      new ApiDescribe('Flattened model', false, true),
+    ].forEach(({ label, compact, flattened }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+          amf = await AmfLoader.load({ compact, fileName: asyncApi, flattened });
         });
 
         beforeEach(async () => {
@@ -334,14 +344,14 @@ describe('ApiConsole', () => {
   describe('APIC-571', () => {
     [
       new ApiDescribe('Regular model'),
-      new ApiDescribe('Compact model', true)
+      new ApiDescribe('Compact model', true),
     ].forEach(({ label, compact }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+          amf = await AmfLoader.load({ compact, fileName: asyncApi });
         });
 
         beforeEach(async () => {
@@ -365,14 +375,15 @@ describe('ApiConsole', () => {
   describe('APIC-570', () => {
     [
       new ApiDescribe('Regular model'),
-      new ApiDescribe('Compact model', true)
-    ].forEach(({ label, compact }) => {
+      new ApiDescribe('Compact model', true),
+      new ApiDescribe('Flattened model', false, true),
+    ].forEach(({ label, compact, flattened }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+          amf = await AmfLoader.load({ compact, fileName: asyncApi, flattened });
         });
 
         beforeEach(async () => {
@@ -393,14 +404,15 @@ describe('ApiConsole', () => {
   describe('APIC-562', () => {
     [
       new ApiDescribe('Regular model'),
-      new ApiDescribe('Compact model', true)
-    ].forEach(({ label, compact }) => {
+      new ApiDescribe('Compact model', true),
+      new ApiDescribe('Flattened model', false, true),
+    ].forEach(({ label, compact, flattened }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'async-api' });
+          amf = await AmfLoader.load({ compact, fileName: asyncApi, flattened });
         });
 
         beforeEach(async () => {
@@ -428,7 +440,7 @@ describe('ApiConsole', () => {
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'anyOf' });
+          amf = await AmfLoader.load({ compact, fileName: anyOf });
         });
 
         beforeEach(async () => {
@@ -454,14 +466,14 @@ describe('ApiConsole', () => {
   describe('APIC-560', () => {
     [
       new ApiDescribe('Regular model'),
-      new ApiDescribe('Compact model', true)
+      new ApiDescribe('Compact model', true),
     ].forEach(({ label, compact }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+          amf = await AmfLoader.load({ compact, fileName: streetlights });
         });
 
         beforeEach(async () => {
@@ -487,7 +499,7 @@ describe('ApiConsole', () => {
   describe('APIC-763', () => {
     [
       new ApiDescribe('Regular model'),
-      new ApiDescribe('Compact model', true)
+      new ApiDescribe('Compact model', true),
     ].forEach(({ label, compact }) => {
       describe(label, () => {
         let amf;
@@ -513,7 +525,7 @@ describe('ApiConsole', () => {
         };
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'APIC-763' });
+          amf = await AmfLoader.load({ compact, fileName: apic763 });
         });
 
         beforeEach(async () => {
