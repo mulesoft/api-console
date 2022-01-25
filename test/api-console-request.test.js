@@ -779,4 +779,43 @@ describe('API Console request', () => {
       });
     });
   });
+
+  [
+    new ApiDescribe('Regular model'),
+    new ApiDescribe('Compact model', true)
+  ].forEach(({ label, compact }) => {
+    describe(label, () => {
+      let element;
+      let amf;
+
+      describe('Multipart payload', () => {
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: 'multipart-api' });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await navigationSelectEndpointMethod(element, '/sdoh', 'post');
+          // @ts-ignore
+          (await documentationTryItButton(element)).click();
+          await aTimeout(50);
+        });
+
+        it('should render request panel with optional field to overwrite content type', () => {
+          const requestBody = requestBodySection(element);
+          assert.exists(requestBody);
+
+          const multipartPayload = requestBody.shadowRoot.querySelector('multipart-payload-editor');
+          assert.exists(multipartPayload);
+
+          const multipartFileForm = multipartPayload.shadowRoot.querySelector('multipart-file-form-item');
+          assert.exists(multipartFileForm);
+
+          const inputLabel = multipartFileForm.shadowRoot.querySelector('anypoint-input').querySelector('label');
+          assert.exists(inputLabel);
+          assert.equal(inputLabel.innerText, 'Content type (Optional)');
+        });
+      });
+    });
+  });
 });
