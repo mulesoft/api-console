@@ -31,5 +31,6 @@
   "models/streetlights/streetlights.yaml": "ASYNC 2.0",
   "models/visual-tests-raml/visual-tests-raml.raml": "RAML 1.0",
   "models/representative-service/representative-service.yaml": "OAS 3.0",
-  "models/APIC-763/APIC-763.raml": "RAML 1.0"
+  "models/APIC-763/APIC-763.raml": "RAML 1.0",
+  "models/multipart-api/multipart-api.raml": "RAML 1.0"
 }
