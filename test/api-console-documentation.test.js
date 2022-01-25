@@ -924,7 +924,8 @@ describe('API Console documentation', () => {
           assert.exists(requestDocumentation.querySelector('.callbacks'));
         });
 
-        it('should render responses', () => {
+        it('should render responses', async () => {
+          await waitUntil(() => Boolean(docShadowRoot.querySelector('.response-documentation')));
           assert.exists(docShadowRoot.querySelector('.response-documentation'));
         });
 
