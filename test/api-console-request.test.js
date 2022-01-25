@@ -801,10 +801,11 @@ describe('API Console request', () => {
           await aTimeout(50);
         });
 
-        it('should render request panel with optional field to overwrite content type', () => {
+        it('should render request panel with optional field to overwrite content type', async () => {
           const requestBody = requestBodySection(element);
           assert.exists(requestBody);
 
+          await waitUntil(() => Boolean(requestBody.shadowRoot.querySelector('multipart-payload-editor')));
           const multipartPayload = requestBody.shadowRoot.querySelector('multipart-payload-editor');
           assert.exists(multipartPayload);
 
