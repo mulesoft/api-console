@@ -9,8 +9,9 @@ export class ApiDescribe {
   /**
    * @param {string} label
    * @param {boolean} compact
+   * @param {boolean} flattened
    */
-  constructor(label, compact=false) {
+  constructor(label, compact=false, flattened=false) {
     /**
      * @type {string}
      */
@@ -19,6 +20,10 @@ export class ApiDescribe {
      * @type {boolean}
      */
     this.compact = compact;
+    /**
+     * @type {boolean}
+     */
+    this.flattened = flattened;
   }
 }
 
@@ -35,6 +40,7 @@ const helper = new HelperElement();
  * @typedef {Object} ApiLoadOptions
  * @property {boolean=} compact Whether to download a compact version of an API
  * @property {string=} fileName Name of the API file, without the extension
+ * @property {boolean=} flattened Whether to generate flattened model or not
  */
 
 /**
@@ -80,10 +86,10 @@ const helper = new HelperElement();
  * @return {Promise<ApiModel>} Promise resolved to API object.
  */
 AmfLoader.load = async (config = {}) => {
-  const { compact=false, fileName='demo-api' } = config;
+  const { compact=false, fileName='demo-api', flattened=false } = config;
   const suffix = compact ? '-compact' : '';
   const file = `${fileName}${suffix}.json`;
-  const url = `${window.location.protocol  }//${  window.location.host  }/base/demo/models/${ file}`;
+  const url = `${window.location.protocol}//${window.location.host}/base/demo/models/${flattened? 'flattened/' : ''}${file}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Unable to download ${url}`);
@@ -97,7 +103,7 @@ AmfLoader.load = async (config = {}) => {
  * @param {ApiModel} model Api model.
  * @return {WebApiModel} Model for the WebApi
  */
-AmfLoader.lookupWebApi = function(model) {
+AmfLoader.lookupWebApi = (model) => {
   helper.amf = model;
   return helper._computeApi(model);
 };
@@ -108,7 +114,7 @@ AmfLoader.lookupWebApi = function(model) {
  * @param {string} endpoint Endpoint path
  * @return {EndpointModel|undefined} Model for the endpoint
  */
-AmfLoader.lookupEndpoint = function(model, endpoint) {
+AmfLoader.lookupEndpoint = (model, endpoint) => {
   helper.amf = model;
   const webApi = helper._computeApi(model);
   return helper._computeEndpointByPath(webApi, endpoint);
@@ -121,7 +127,7 @@ AmfLoader.lookupEndpoint = function(model, endpoint) {
  * @param {string} operation Operation name (the verb, lowercase)
  * @return {OperationModel|undefined} Model for the endpoint
  */
-AmfLoader.lookupOperation = function(model, endpoint, operation) {
+AmfLoader.lookupOperation = (model, endpoint, operation) => {
   const endPoint = AmfLoader.lookupEndpoint(model, endpoint);
   const opKey = helper._getAmfKey(helper.ns.aml.vocabularies.apiContract.supportedOperation);
   const ops = helper._ensureArray(endPoint[opKey]);
@@ -135,7 +141,7 @@ AmfLoader.lookupOperation = function(model, endpoint, operation) {
  * @param {string} operation Operation name (the verb, lowercase)
  * @return {PayloadModel[]|undefined} Model for the payload
  */
-AmfLoader.lookupPayload = function(model, endpoint, operation) {
+AmfLoader.lookupPayload = (model, endpoint, operation) => {
   const op = AmfLoader.lookupOperation(model, endpoint, operation);
   const expects = helper._computeExpects(op);
   return helper._ensureArray(helper._computePayload(expects));
@@ -154,7 +160,7 @@ AmfLoader.lookupPayload = function(model, endpoint, operation) {
  * @param {string} operation Operation name (the verb, lowercase)
  * @return {Array<EndpointModel|OperationModel>} First item is the endpoint model and the second is the operation model.
  */
-AmfLoader.lookupEndpointOperation = function(model, endpoint, operation) {
+AmfLoader.lookupEndpointOperation = (model, endpoint, operation) => {
   const endPoint = AmfLoader.lookupEndpoint(model, endpoint);
   const opKey = helper._getAmfKey(helper.ns.aml.vocabularies.apiContract.supportedOperation);
   const ops = helper._ensureArray(endPoint[opKey]);
@@ -168,11 +174,9 @@ AmfLoader.lookupEndpointOperation = function(model, endpoint, operation) {
  * @param {string} name Name of the security scheme
  * @return {SecurityModel}
  */
-AmfLoader.lookupSecurity = function(model, name) {
+AmfLoader.lookupSecurity = (model, name) => {
   helper.amf = model;
-  const webApi = helper._hasType(model, helper.ns.aml.vocabularies.document.Document) ?
-    helper._computeApi(model) :
-    model;
+  const webApi = helper._hasType(model, helper.ns.aml.vocabularies.document.Document)? helper._computeApi(model): model;
   const declares = helper._computeDeclares(webApi) || [];
   let result = declares.find((item) => {
     if (item instanceof Array) {
@@ -208,11 +212,9 @@ AmfLoader.lookupSecurity = function(model, name) {
  * @param {string} name Name of the data type
  * @return {TypeModel}
  */
-AmfLoader.lookupType = function(model, name) {
+AmfLoader.lookupType = (model, name) => {
   helper.amf = model;
-  const webApi = helper._hasType(model, helper.ns.aml.vocabularies.document.Document) ?
-    helper._computeApi(model) :
-    model;
+  const webApi = helper._hasType(model, helper.ns.aml.vocabularies.document.Document)? helper._computeApi(model): model;
   const declares = helper._computeDeclares(webApi) || [];
   let result = declares.find((item) => {
     if (item instanceof Array) {
@@ -244,7 +246,7 @@ AmfLoader.lookupType = function(model, name) {
  * @param {string} name Name of the documentation
  * @return {DocumentationModel}
  */
-AmfLoader.lookupDocumentation = function(model, name) {
+AmfLoader.lookupDocumentation = (model, name) => {
   helper.amf = model;
   const webApi = helper._computeApi(model);
   const key = helper._getAmfKey(helper.ns.aml.vocabularies.core.documentation);
@@ -262,7 +264,7 @@ AmfLoader.lookupDocumentation = function(model, name) {
  * @param {ApiModel} model Api model.
  * @return {EncodeModel[]}
  */
-AmfLoader.lookupEncodes = function(model) {
+AmfLoader.lookupEncodes = (model) => {
   if (model instanceof Array) {
     model = model[0];
   }

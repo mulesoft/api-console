@@ -27,14 +27,15 @@ describe('API Console navigation', () => {
 
   [
     new ApiDescribe('Regular model'),
-    new ApiDescribe('Compact model', true)
-  ].forEach(({ label, compact }) => {
+    new ApiDescribe('Compact model', true),
+    new ApiDescribe('Flattened model', false, true),
+  ].forEach(({ label, compact, flattened }) => {
     describe(label, () => {
       let element;
       let amf;
 
       before(async () => {
-        amf = await AmfLoader.load({ compact, fileName: googleApi });
+        amf = await AmfLoader.load({ compact, fileName: googleApi, flattened });
       });
 
       beforeEach(async () => {
@@ -374,8 +375,9 @@ describe('API Console navigation', () => {
 
   [
     new ApiDescribe('Regular model'),
-    new ApiDescribe('Compact model', true)
-  ].forEach(({ label, compact }) => {
+    new ApiDescribe('Compact model', true),
+    new ApiDescribe('Flattened model', false, true),
+  ].forEach(({ label, compact, flattened }) => {
     describe(label, () => {
       let element;
       let amf;
@@ -383,7 +385,7 @@ describe('API Console navigation', () => {
       describe('RAML Fragments', () => {
         describe('SecurityScheme fragment', () => {
           before(async () => {
-            amf = await AmfLoader.load({ compact, fileName: 'basicAuth' });
+            amf = await AmfLoader.load({ compact, fileName: 'basicAuth', flattened });
           });
 
           beforeEach(async () => {
@@ -408,7 +410,7 @@ describe('API Console navigation', () => {
 
         describe('DocumentationItem fragment', () => {
           before(async () => {
-            amf = await AmfLoader.load({ compact, fileName: 'documentation' });
+            amf = await AmfLoader.load({ compact, fileName: 'documentation', flattened });
           });
 
           beforeEach(async () => {
@@ -433,7 +435,7 @@ describe('API Console navigation', () => {
 
         describe('Extension fragment', () => {
           before(async () => {
-            amf = await AmfLoader.load({ compact, fileName: 'extension' });
+            amf = await AmfLoader.load({ compact, fileName: 'extension', flattened });
           });
 
           beforeEach(async () => {
@@ -458,7 +460,7 @@ describe('API Console navigation', () => {
 
         describe('Library fragment', () => {
           before(async () => {
-            amf = await AmfLoader.load({ compact, fileName: 'library' });
+            amf = await AmfLoader.load({ compact, fileName: 'library', flattened });
           });
 
           beforeEach(async () => {
@@ -483,7 +485,7 @@ describe('API Console navigation', () => {
 
         describe('Overlay fragment', () => {
           before(async () => {
-            amf = await AmfLoader.load({ compact, fileName: 'overlay' });
+            amf = await AmfLoader.load({ compact, fileName: 'overlay', flattened });
           });
 
           beforeEach(async () => {
@@ -531,7 +533,7 @@ describe('API Console navigation', () => {
 
         describe('DataType fragment', () => {
           before(async () => {
-            amf = await AmfLoader.load({ compact, fileName: 'person' });
+            amf = await AmfLoader.load({ compact, fileName: 'person', flattened });
           });
 
           beforeEach(async () => {
@@ -559,15 +561,16 @@ describe('API Console navigation', () => {
 
   [
     new ApiDescribe('Regular model'),
-    new ApiDescribe('Compact model', true)
-  ].forEach(({ label, compact }) => {
+    new ApiDescribe('Compact model', true),
+    new ApiDescribe('Flattened model', false, true),
+  ].forEach(({ label, compact, flattened }) => {
     describe(label, () => {
       let element;
       let amf;
 
       describe('Async APIs', () => {
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+          amf = await AmfLoader.load({ compact, fileName: 'streetlights', flattened });
         });
 
         beforeEach(async () => {

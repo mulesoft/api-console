@@ -711,15 +711,16 @@ describe('API Console request', () => {
 
   [
     new ApiDescribe('Regular model'),
-    new ApiDescribe('Compact model', true)
-  ].forEach(({ label, compact }) => {
+    new ApiDescribe('Compact model', true),
+    new ApiDescribe('Flattened model', false, true),
+  ].forEach(({ label, compact, flattened }) => {
     describe(label, () => {
       let element;
       let amf;
 
       describe('Async APIs', () => {
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: 'streetlights' });
+          amf = await AmfLoader.load({ compact, fileName: 'streetlights', flattened });
         });
 
         beforeEach(async () => {
@@ -800,10 +801,11 @@ describe('API Console request', () => {
           await aTimeout(50);
         });
 
-        it('should render request panel with optional field to overwrite content type', () => {
+        it('should render request panel with optional field to overwrite content type', async () => {
           const requestBody = requestBodySection(element);
           assert.exists(requestBody);
 
+          await waitUntil(() => Boolean(requestBody.shadowRoot.querySelector('multipart-payload-editor')));
           const multipartPayload = requestBody.shadowRoot.querySelector('multipart-payload-editor');
           assert.exists(multipartPayload);
 
