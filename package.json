@@ -1,7 +1,7 @@
 {
   "name": "api-console",
   "description": "The API Console to automatically generate API documentation from RAML and OAS files.",
-  "version": "6.6.8",
+  "version": "6.6.9",
   "license": "CPAL-1.0",
   "main": "index.js",
   "module": "index.js",
