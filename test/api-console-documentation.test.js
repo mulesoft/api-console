@@ -48,7 +48,7 @@ describe('API Console documentation', () => {
   const testResourceExampleDocument = async (elem) => {
     const resourceExample = elem.shadowRoot.querySelector('api-resource-example-document');
     await waitUntil(() => resourceExample.shadowRoot.querySelector('.example-title'));
-    assert.equal(resourceExample.shadowRoot.querySelector('.example-title').innerText, 'Example');
+    assert.equal(resourceExample.shadowRoot.querySelector('.example-title').innerText.trim(), 'Example');
 
     // if (!isWebkit) {
     //   const renderer = resourceExample.shadowRoot.querySelector('.renderer');
