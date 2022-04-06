@@ -13,4 +13,4 @@ the License.
 */
 import '../api-console.js';
 import '../api-console-app.js';
-import './api-console-master-styles.css';
+import './api-console-demo-styles.css';
