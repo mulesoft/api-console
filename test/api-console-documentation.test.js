@@ -579,7 +579,7 @@ describe('API Console documentation', () => {
 
             testTypeDocumentation(docShadowRoot, displayName, description);
             testNoExamplesTypeDocument(docShadowRoot);
-            await testTypeDocumentShape(docShadowRoot, [{ name: 'dateTimeOnlyType', type: 'Time', description, displayName }]);
+            await testTypeDocumentShape(docShadowRoot, [{ name: 'dateTimeOnlyType', type: 'DateTime', description, displayName }]);
             await testTypeDocumentExample(docShadowRoot, '2015-07-04T21:00:00');
           });
         });
