@@ -143,8 +143,5 @@
         }
       }
     ]
-  },
-  "overrides": {
-    "@api-components/api-authorization": "0.7.1"
   }
 }
