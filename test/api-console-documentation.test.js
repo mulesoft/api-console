@@ -954,4 +954,33 @@ describe('API Console documentation', () => {
       });
     });
   });
+
+  // AsyncAPI
+  [
+    new ApiDescribe('Regular model'),
+    new ApiDescribe('Compact model', true)
+  ].forEach(({ label, compact }) => {
+    describe(label, () => {
+      const multipleMessagesApi = 'multiple-messages';
+
+      before(async () => {
+        amf = await AmfLoader.load({ compact, fileName: multipleMessagesApi });
+      });
+
+      describe('OAS 3.0', () => {
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await navigationSelectEndpointMethod(element, 'shipping-messages', 'publish');
+          await nextFrame();
+        });
+
+        it('should render the messages dropdown selector', async () => {
+          await waitUntil(() => !!documentationMethod(element));
+          const methodDocumentation = documentationMethod(element);
+          await waitUntil(() => !!methodDocumentation.shadowRoot.querySelector('.messages-options'));
+          assert.exists(methodDocumentation.shadowRoot.querySelector('.messages-options'));
+        });
+      });
+    });
+  });
 });
