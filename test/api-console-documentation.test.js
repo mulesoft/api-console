@@ -977,6 +977,7 @@ describe('API Console documentation', () => {
         it('should render the messages dropdown selector', async () => {
           await waitUntil(() => !!documentationMethod(element));
           const methodDocumentation = documentationMethod(element);
+          await waitUntil(() => !!methodDocumentation.shadowRoot.querySelector('.messages-options'));
           assert.exists(methodDocumentation.shadowRoot.querySelector('.messages-options'));
         });
       });
