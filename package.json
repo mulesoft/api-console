@@ -99,7 +99,7 @@
     "format": "npm run format:eslint",
     "test": "web-test-runner test/*.test.js --coverage --node-resolve --playwright --browsers chromium firefox webkit && npm run test:visual",
     "test:visual": "web-test-runner test/visual/*.test.js --coverage --node-resolve --playwright --browsers chromium firefox webkit",
-    "test:watch": "web-test-runner test/*.test.js --node-resolve --watch",
+    "test:watch": "web-test-runner test/*.test.js --node-resolve --watch --playwright --browsers chromium",
     "test:visual:update": "web-test-runner test/**/*.test.js --coverage --node-resolve --playwright --browsers chromium firefox webkit --update-visual-baseline\n",
     "build": "rimraf dist && rollup -c rollup.config.js",
     "build:vendor": "node tasks/prepare.js",
