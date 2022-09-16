@@ -1,0 +1,51 @@
+asyncapi: '2.0.0'
+info:
+  title: exp-shipping-sftp-async
+  description: This api processes Shipping Notification messages and converts them to a CDM.
+  version: '1.0.0'
+  
+channels:
+  shipping-messages:
+    description: Converted Shipping Notification messages are published on this channel.
+    publish:
+      description: Converted Shipping Notification messages can be subscribed to via this channel.
+      message:
+          oneOf:
+            - $ref: '#/components/messages/ASN'
+            - $ref: '#/components/messages/GRN'
+
+components:
+
+  messages:
+    ASN:
+      contentType: application/json
+      headers:
+        type: object
+        description: Message header
+        properties:
+          messageId:
+            description: Message ID field
+            type: string
+      payload:
+        type: object
+        description: Message payload
+        properties:
+          data1:
+            description: Data 1 field
+            type: string
+    GRN:
+      contentType: application/json
+      headers:
+        type: object
+        description: Message header
+        properties:
+          messageId:
+            description: Message ID field
+            type: string
+      payload:
+        type: object
+        description: Message payload
+        properties:
+          data2:
+            description: Data 2 field
+            type: string
