@@ -1,7 +1,7 @@
 {
   "name": "api-console",
   "description": "The API Console to automatically generate API documentation from RAML and OAS files.",
-  "version": "6.6.21",
+  "version": "6.6.22",
   "license": "CPAL-1.0",
   "main": "index.js",
   "module": "index.js",
@@ -61,7 +61,7 @@
     "@open-wc/testing": "^2.5.16",
     "@polymer/iron-test-helpers": "^3.0.0",
     "@web/test-runner": "^0.12.5",
-    "@web/test-runner-playwright": "^0.8.9",
+    "@web/test-runner-playwright": "0.8.10",
     "@web/test-runner-visual-regression": "^0.6.4",
     "amf-client-js": "^4.6.0",
     "body-parser": "^1.19.0",
@@ -146,5 +146,8 @@
         }
       }
     ]
+  },
+  "overrides": {
+    "playwright": "1.25.2"
   }
 }
