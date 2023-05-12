@@ -38,7 +38,7 @@
     "@anypoint-web-components/anypoint-button": "^1.1.1",
     "@api-components/amf-helper-mixin": "^4.5.19",
     "@api-components/api-console-ext-comm": "^3.0.0",
-    "@api-components/api-documentation": "^6.0.5",
+    "@api-components/api-documentation": "^6.1.2",
     "@api-components/api-navigation": "^4.3.1",
     "@api-components/api-request": "^0.3.0",
     "@polymer/app-layout": "^3.1.0",
