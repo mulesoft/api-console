@@ -132,8 +132,8 @@ export class ApiSearch {
     await fs.close(fd);
     const data = result.buffer.toString().trim();
     if (data[0] === '{') {
-      // OAS 1/2
-      const match = data.match(/"swagger"(?:\s*)?:(?:\s*)"(.*)"/im);
+      // OAS 1/2/3
+      const match = data.match(/"(?:openapi|swagger)"(?:\s*)?:(?:\s*)"([^"])/im);
       if (!match) {
         throw new Error('Expected OAS but could not find version header.');
       }

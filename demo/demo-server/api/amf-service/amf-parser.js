@@ -30,8 +30,12 @@ const getConfiguration = (vendor) => {
   switch (vendor) {
     case 'RAML 0.8': return RAMLConfiguration.RAML08();
     case 'RAML 1.0': return RAMLConfiguration.RAML10();
-    case 'OAS 2.0': return OASConfiguration.OAS20();
-    case 'OAS 3.0': return OASConfiguration.OAS30();
+    case 'OAS 2.0':
+    case 'OAS 2':
+      return OASConfiguration.OAS20();
+    case 'OAS 3.0':
+    case 'OAS 3':
+      return OASConfiguration.OAS30();
     case 'ASYNC 2.0': return AsyncAPIConfiguration.Async20();
     default: throw new Error(`Unknown vendor: ${vendor}`);
   }
