@@ -1,3 +1,5 @@
+/* eslint-disable no-continue */
+/* eslint-disable class-methods-use-this */
 import fs from 'fs-extra';
 import path from 'path';
 /**
@@ -10,6 +12,7 @@ export class ApiSearch {
   constructor(dir) {
     this._workingDir = dir;
   }
+
   /**
    * Finds main API name.
    *
@@ -24,7 +27,7 @@ export class ApiSearch {
    * If it returns undefined than the process failed and API main file cannot
    * be determined.
    *
-   * @return {Promise<Array<String>|String|undefined>}
+   * @returns {Promise<string[]|string|undefined>}
    */
   async findApiFile() {
     const items = await fs.readdir(this._workingDir);
@@ -52,47 +55,50 @@ export class ApiSearch {
     if (files.length) {
       return this._decideMainFile(files);
     }
+    return undefined;
   }
 
   /**
    * Decides which file to use as API main file.
-   * @param {Array<String>} files A file or list of files.
-   * @return {Promise<String>}
+   * @param {string[]} files A file or list of files.
+   * @return {Promise<string | string[]>}
    */
   async _decideMainFile(files) {
     const root = this._workingDir;
-    const fullPathFiles = files.map((item) => {
-      return {
-        absolute: path.join(root, item),
-        relative: item
-      };
-    });
+    const fullPathFiles = files.map((item) => ({
+      absolute: path.join(root, item),
+      relative: item,
+    }));
     const list = await this._findWebApiFile(fullPathFiles);
     if (!list) {
       return files;
     }
     return list;
   }
+
   /**
    * Reads all files and looks for 'RAML 0.8' or 'RAML 1.0' header which
    * is a WebApi.
-   * @param {Array<String>} files List of candidates
-   * @param {?Array<Object>} results List od results
-   * @return {Promise<String>}
+   * @param {{ absolute: string; relative: string; }[]} files List of candidates
+   * @param {any[]=} results List od results
+   * @return {Promise<string>}
    */
   async _findWebApiFile(files, results) {
     if (!results) {
+      // eslint-disable-next-line no-param-reassign
       results = [];
     }
     const f = files.shift();
     if (!f) {
       if (!results.length) {
+        // eslint-disable-next-line no-param-reassign
         results = undefined;
       }
       if (results && results.length === 1) {
+        // eslint-disable-next-line prefer-destructuring, no-param-reassign
         results = results[0];
       }
-      return results;
+      return /** @type string */ (/** @type unknown */ (results));
     }
     try {
       const type = await this._readApiType(f.absolute);
@@ -102,19 +108,22 @@ export class ApiSearch {
       }
       return await this._findWebApiFile(files, results);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.warn('Unable to find file type', e);
     }
+    return undefined;
   }
+
   /**
    * Reads API type from the API main file.
-   * @param {String} file File location
-   * @return {Promise}
+   * @param {string} file File location
+   * @returns {Promise}
    */
   async _readApiType(file) {
     const size = 100;
     // todo (pawel): This works 100% for RAML files as they have to have a
     // type and version in the file header. However JSON OAS can have version
-    // definition anythere in the JSON object. It works for lot of APIs
+    // definition anywhere in the JSON object. It works for lot of APIs
     // but it may be broken for some APIs.
     // It should read and parse JSON files and look for the version value.
     // Leaving it here for performance reasons.
@@ -123,15 +132,15 @@ export class ApiSearch {
     await fs.close(fd);
     const data = result.buffer.toString().trim();
     if (data[0] === '{') {
-      // OAS 1/2
-      const match = data.match(/"swagger"(?:\s*)?:(?:\s*)"(.*)"/im);
+      // OAS 1/2/3
+      const match = data.match(/"(?:openapi|swagger)"(?:\s*)?:(?:\s*)"([^"])/im);
       if (!match) {
         throw new Error('Expected OAS but could not find version header.');
       }
       const v = match[1].trim();
       return {
         type: `OAS ${v}`,
-        contentType: 'application/json'
+        contentType: 'application/json',
       };
     }
     const oasMatch = data.match(/(?:openapi|swagger)[^\s*]?:(?:\s*)("|')?(\d\.\d)("|')?/im);
@@ -139,7 +148,7 @@ export class ApiSearch {
       const v = oasMatch[2].trim();
       return {
         type: `OAS ${v}`,
-        contentType: 'application/yaml'
+        contentType: 'application/yaml',
       };
     }
     const header = data.split('\n')[0].substr(2).trim();
@@ -149,14 +158,16 @@ export class ApiSearch {
     if (header === 'RAML 1.0' || header === 'RAML 0.8') {
       return {
         type: header,
-        contentType: 'application/raml'
+        contentType: 'application/raml',
       };
     }
-    if (header.indexOf('RAML 1.0 Overlay') === 0 ||
-      header.indexOf('RAML 1.0 Extension') === 0) {
+    if (
+      header.indexOf('RAML 1.0 Overlay') === 0 ||
+      header.indexOf('RAML 1.0 Extension') === 0
+    ) {
       return {
         type: 'RAML 1.0',
-        contentType: 'application/raml'
+        contentType: 'application/raml',
       };
     }
     throw new Error('Unsupported API file');
