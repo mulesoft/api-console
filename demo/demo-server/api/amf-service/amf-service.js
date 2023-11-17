@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import tmp from 'tmp';
 import { Duplex } from 'stream';
 import unzipper from 'unzipper';
@@ -41,19 +42,20 @@ import { ApiSearch } from './api-search.js';
  */
 export class AmfService {
   /**
-   * The same as with constructror but resets the sate.
+   * The same as with constructor but resets the sate.
    * @param {Buffer|String} source Location of the API file on the disk or
    * buffer of a file. If the source is a file and it's not a zip file then
    * it must be the API file.
    * @param {?Object} opts Process options:
    * - zip {Boolean} - if true it treats the source as a zip data. Files are
-   * unzzipped to a temporary location before processing.
+   * unzipped to a temporary location before processing.
    * - validate {Boolean} - if true it validates the API when parsing.
    * Validation is made in the `parse` phase and results (as string) are stored
    * in `validationResult` property of the service.
    */
   setSource(source, opts) {
     if (!opts) {
+      // eslint-disable-next-line no-param-reassign
       opts = {};
     }
     this.source = source;
@@ -82,6 +84,7 @@ export class AmfService {
      */
     this._tmpIsFile = false;
   }
+
   /**
    * Returns current working directory.
    * @return {String}
@@ -107,12 +110,12 @@ export class AmfService {
     this._mainFile = undefined;
   }
 
-  async cleanup() {
+  cleanup() {
     this._cancelMonitorParser();
     this._cancelParseProcTimeout();
     const proc = this._parserProc;
     if (!proc) {
-      return await this.cancel();
+      return this.cancel();
     }
     return new Promise((resolve) => {
       this._killParser();
@@ -121,16 +124,17 @@ export class AmfService {
       });
     });
   }
+
   /**
    * Prepares the file to be processed.
-   * @return {Promise}
+   * @returns {Promise}
    */
   async prepare() {
     if (this.isZip) {
-      return await this._prepareZip();
+      return this._prepareZip();
     }
     if (this.source instanceof Buffer) {
-      return await this._prepareBuffer();
+      return this._prepareBuffer();
     }
     const stat = await fs.stat(this.source);
     if (stat.isDirectory()) {
@@ -139,6 +143,7 @@ export class AmfService {
       this._workingDir = path.dirname(this.source);
       this._mainFile = path.basename(this.source);
     }
+    return Promise.resolve();
   }
 
   async _prepareZip() {
@@ -155,22 +160,23 @@ export class AmfService {
     this._workingDir = path.dirname(location);
     this._mainFile = path.basename(location);
   }
+
   /**
    * Resolves the API structure and tries to find main API file.
    *
-   * @return {Promise<Array<String>>} If promise resolves to an array it means
+   * @return {Promise<string[] | undefined>} If promise resolves to an array it means
    * that API type could not be determined automatically.
    */
   async resolve() {
     if (this._tmpIsFile) {
-      return;
+      return undefined;
     }
     if (!this._workingDir) {
       await this._cleanTempFiles();
-      throw new Error(`prepare() function not called`);
+      throw new Error('prepare() function not called');
     }
     if (this._mainFile) {
-      return;
+      return undefined;
     }
     const search = new ApiSearch(this._workingDir);
     try {
@@ -186,7 +192,9 @@ export class AmfService {
       await this._cleanTempFiles();
       throw cause;
     }
+    return undefined;
   }
+
   /**
    * Parses API data using AMF parser.
    * @param {String=} mainFile Main API file to use.
@@ -195,14 +203,14 @@ export class AmfService {
   async parse(mainFile) {
     if (!this._workingDir) {
       await this._cleanTempFiles();
-      throw new Error(`prepare() function not called`);
+      throw new Error('prepare() function not called');
     }
     if (mainFile && typeof mainFile === 'string') {
       this._mainFile = mainFile;
     }
     if (!this._mainFile) {
       await this._cleanTempFiles();
-      throw new Error(`resolve() function not called`);
+      throw new Error('resolve() function not called');
     }
     const search = new ApiSearch(this._workingDir);
     const apiLocation = path.join(this._workingDir, this._mainFile);
@@ -217,8 +225,9 @@ export class AmfService {
       throw cause;
     }
   }
+
   /**
-   * Unzpis the source to a tem folder.
+   * Unzips the source to a tem folder.
    * @return {Promise}
    */
   async _unzipSource() {
@@ -236,11 +245,12 @@ export class AmfService {
   async _tmpBuffer(buffer) {
     this.tmpobj = tmp.fileSync();
     this._tmpIsFile = true;
-    const fd = this.tmpobj.fd;
+    const { fd } = this.tmpobj;
     await fs.write(fd, buffer);
     await fs.close(fd);
     return this.tmpobj.name;
   }
+
   /**
    * Unzips API folder and returns path to the folder in tmp location.
    * @param {ArrayBuffer} buffer Zip data
@@ -264,11 +274,12 @@ export class AmfService {
       stream.pipe(extractor);
     });
   }
+
   /**
    * The zip may have source files enclosed in a folder.
    * This will look for a folder in the root path and will copy sources from it.
    *
-   * @param {String} destination A place where the zip sources has been
+   * @param {string} destination A place where the zip sources has been
    * extracted.
    * @return {Promise}
    */
@@ -284,6 +295,7 @@ export class AmfService {
       await fs.copy(dirPath, destination);
     }
   }
+
   /**
    * Removes created temporary directory.
    * @return {Promise}
@@ -306,11 +318,11 @@ export class AmfService {
     if (this._parserProc) {
       if (this._parserProc.connected) {
         return this._parserProc;
-      } else {
-        this._killParser();
       }
+        this._killParser();
+
     }
-    const env = Object.assign({ NODE_OPTIONS: '--max-old-space-size=4096' }, process.env);
+    const env = { NODE_OPTIONS: '--max-old-space-size=4096', ...process.env };
     const options = {
       execArgv: [],
       env
@@ -368,6 +380,7 @@ export class AmfService {
       clearTimeout(this._parserMinitorTimeout);
     }
   }
+
   /**
    * Runs the parser.
    *
@@ -381,12 +394,13 @@ export class AmfService {
       const callbacks = {
         onmessage: (result) => {
           if (result.validation) {
+            // eslint-disable-next-line no-console
             console.log(result.validation);
             return;
           }
           this._cancelParseProcTimeout();
-          this._parserProc.removeAllListeners('message', callbacks.onmessage);
-          this._parserProc.removeAllListeners('error', callbacks.onerror);
+          this._parserProc.removeAllListeners('message');
+          this._parserProc.removeAllListeners('error');
           this._parserProcCb = undefined;
           this._monitorParserProc();
           this._killParser();
@@ -398,8 +412,8 @@ export class AmfService {
         },
         onerror: (err) => {
           this._cancelParseProcTimeout();
-          this._parserProc.removeAllListeners('message', callbacks.onmessage);
-          this._parserProc.removeAllListeners('error', callbacks.onerror);
+          this._parserProc.removeAllListeners('message');
+          this._parserProc.removeAllListeners('error');
           this._parserProcCb = undefined;
           this._monitorParserProc();
           reject(new Error(err.message || 'Unknown error'));
@@ -409,8 +423,8 @@ export class AmfService {
       const proc = this._createParserProcess();
       this._setParserProcTimeout(() => {
         reject(new Error('API parsing timeout'));
-        this._parserProc.removeAllListeners('message', callbacks.onmessage);
-        this._parserProc.removeAllListeners('error', callbacks.onerror);
+        this._parserProc.removeAllListeners('message');
+        this._parserProc.removeAllListeners('error');
         this._monitorParserProc();
       });
       proc.on('message', callbacks.onmessage);
