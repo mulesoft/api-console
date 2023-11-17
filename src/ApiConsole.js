@@ -1,4 +1,3 @@
-/* eslint-disable lit-a11y/click-events-have-key-events */
 /**
 @license
 Copyright 2018 The Advanced REST client authors <arc@mulesoft.com>
@@ -370,6 +369,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     super();
     this._tryitHandler = this._tryitHandler.bind(this);
     this._handleServerChange = this._handleServerChange.bind(this);
+    this._handleSelectionChange = this._handleSelectionChange.bind(this);
 
     this.page = 'docs';
     this.compatibility = false;
@@ -659,6 +659,15 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.serverValue = value;
   }
 
+  /**
+   * Handler for the `apiselectionchange` event dispatched from the components.
+   * @param {CustomEvent} e
+   */
+  _handleSelectionChange(e) {
+    const { value } = e.detail;
+    this.selectedShape = value;
+  }
+
   render() {
     return html`
     ${this._mainContentTemplate()}
@@ -769,6 +778,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       .eventsTarget="${eventsTarget}"
       .credentialsSource="${credentialsSource}"
       ?persistCache="${persistCache}"
+      @api-request-panel-selection-changed="${this._handleSelectionChange}"
       >
         <slot name="custom-base-uri" slot="custom-base-uri"></slot>
       </api-request-panel>`;
