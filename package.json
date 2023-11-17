@@ -63,7 +63,7 @@
     "@web/test-runner": "^0.12.5",
     "@web/test-runner-playwright": "0.8.10",
     "@web/test-runner-visual-regression": "^0.6.4",
-    "amf-client-js": "^4.6.0",
+    "amf-client-js": "^5.4.4",
     "body-parser": "^1.19.0",
     "deepmerge": "^4.2.1",
     "es-dev-server": "^2.1.0",

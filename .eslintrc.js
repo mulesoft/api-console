@@ -1,64 +1,68 @@
 // eslint-disable-next-line no-undef
 module.exports = {
-  'env': {
-    'browser': true,
-    'es2021': true,
-    'mocha': true,
+  env: {
+    browser: true,
+    es2021: true,
+    mocha: true,
   },
-  'extends': 'eslint:recommended',
-  'parserOptions': {
-    'ecmaVersion': 12,
-    'sourceType': 'module',
+  extends: 'eslint:recommended',
+  parserOptions: {
+    ecmaVersion: 12,
+    sourceType: 'module',
   },
-  'rules': {
+  rules: {
     'accessor-pairs': 'error',
     'array-bracket-newline': 'error',
     'array-bracket-spacing': ['error', 'never'],
     'array-callback-return': 'error',
     'array-element-newline': [
-      'error', {
-        'ArrayExpression': 'consistent',
-        'ArrayPattern': { 'multiline': true },
+      'error',
+      {
+        ArrayExpression: 'consistent',
+        ArrayPattern: { multiline: true },
       },
     ],
     'arrow-body-style': 'error',
     'arrow-parens': 'error',
     'arrow-spacing': [
-      'error', {
-        'after': true,
-        'before': true,
+      'error',
+      {
+        after: true,
+        before: true,
       },
     ],
     'block-scoped-var': 'error',
     'block-spacing': 'error',
     'brace-style': ['error', '1tbs'],
-    'camelcase': 'error',
+    camelcase: 'error',
     'capitalized-comments': 'off',
     'class-methods-use-this': 'error',
     'comma-dangle': 'off',
     'comma-spacing': [
-      'error', {
-        'after': true,
-        'before': false,
+      'error',
+      {
+        after: true,
+        before: false,
       },
     ],
     'comma-style': ['error', 'last'],
-    'complexity': 'error',
+    complexity: 'error',
     'computed-property-spacing': ['error', 'never'],
     'consistent-return': [
-      'error', {
-        'treatUndefinedAsUnspecified': false,
+      'error',
+      {
+        treatUndefinedAsUnspecified: false,
       },
     ],
     'consistent-this': 'error',
-    'curly': 'error',
+    curly: 'error',
     'default-case': 'error',
     'default-case-last': 'error',
     'default-param-last': 'error',
     'dot-location': 'error',
     'dot-notation': 'error',
     'eol-last': 'error',
-    'eqeqeq': 'error',
+    eqeqeq: 'error',
     'func-call-spacing': 'error',
     'func-name-matching': 'error',
     'func-names': 'error',
@@ -71,14 +75,15 @@ module.exports = {
     'id-length': 'off',
     'id-match': 'error',
     'implicit-arrow-linebreak': ['error', 'beside'],
-    'indent': 'off',
+    indent: 'off',
     'init-declarations': 'off',
     'jsx-quotes': 'error',
     'key-spacing': 'error',
     'keyword-spacing': [
-      'error', {
-        'after': true,
-        'before': true,
+      'error',
+      {
+        after: true,
+        before: true,
       },
     ],
     'line-comment-position': 'error',
@@ -204,13 +209,13 @@ module.exports = {
     'prefer-spread': 'error',
     'prefer-template': 'error',
     'quote-props': 'off',
-    'quotes': ['error', 'single'],
-    'radix': 'error',
+    quotes: ['error', 'single'],
+    radix: 'error',
     'require-atomic-updates': 'error',
     'require-await': 'error',
     'require-unicode-regexp': 'off',
     'rest-spread-spacing': 'error',
-    'semi': 'error',
+    semi: 'error',
     'semi-spacing': 'error',
     'semi-style': ['error', 'last'],
     'sort-keys': 'off',
@@ -221,11 +226,12 @@ module.exports = {
     'space-infix-ops': 'off',
     'space-unary-ops': 'error',
     'spaced-comment': ['error', 'always'],
-    'strict': 'error',
+    strict: 'error',
     'switch-colon-spacing': [
-      'error', {
-        'after': true,
-        'before': false,
+      'error',
+      {
+        after: true,
+        before: false,
       },
     ],
     'symbol-description': 'error',
@@ -236,6 +242,18 @@ module.exports = {
     'wrap-iife': 'error',
     'wrap-regex': 'off',
     'yield-star-spacing': 'error',
-    'yoda': ['error', 'never'],
+    yoda: ['error', 'never'],
   },
+  overrides: [
+    {
+      files: ['demo/demo-server/api/amf-service/*.js'],
+      env: {
+        node: true,
+        browser: false,
+      },
+      globals: {
+        process: true,
+      },
+    },
+  ],
 };

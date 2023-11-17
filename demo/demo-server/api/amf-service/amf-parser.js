@@ -1,66 +1,80 @@
+// eslint-disable-next-line no-undef
 const amf = require('amf-client-js');
-// import amf from 'amf-client-js';
-amf.plugins.document.WebApi.register();
-amf.plugins.document.Vocabularies.register();
-amf.plugins.features.AMFValidation.register();
-let initied = false;
 
-async function validateDoc(type, doc) {
-  let validateProfile;
-  switch (type) {
-    case 'RAML 1.0': validateProfile = amf.ProfileNames.RAML; break;
-    case 'RAML 0.8': validateProfile = amf.ProfileNames.RAML08; break;
-    case 'OAS 1.0':
+/** @typedef {import('amf-client-js').AMFConfiguration} AMFConfiguration */
+
+/**
+ * @typedef ApiSearchResult
+ * @property {string} type
+ */
+
+/**
+ * @typedef ParserApiConfiguration
+ * @property {string} source
+ * @property {ApiSearchResult} from
+ */
+
+const {
+  RAMLConfiguration,
+  OASConfiguration,
+  AsyncAPIConfiguration,
+  RenderOptions,
+  PipelineId,
+} = amf;
+
+/**
+ * @param {string} vendor
+ * @returns {AMFConfiguration}
+ */
+const getConfiguration = (vendor) => {
+  switch (vendor) {
+    case 'RAML 0.8': return RAMLConfiguration.RAML08();
+    case 'RAML 1.0': return RAMLConfiguration.RAML10();
     case 'OAS 2.0':
+    case 'OAS 2':
+      return OASConfiguration.OAS20();
     case 'OAS 3.0':
-      validateProfile = amf.ProfileNames.OAS;
-      break;
+    case 'OAS 3':
+      return OASConfiguration.OAS30();
+    case 'ASYNC 2.0': return AsyncAPIConfiguration.Async20();
+    default: throw new Error(`Unknown vendor: ${vendor}`);
   }
-  const result = await amf.AMF.validate(doc, validateProfile);
-  process.send({ validation: result.toString() });
-}
+};
+
 /**
  * AMF parser to be called in a child process.
  *
  * AMF can in extreme cases takes forever to parse API data if, for example,
- * RAML type us defined as a number of union types. It may sometimes cause
- * the process to crash. To protect the renderer proces this is run as forked
+ * RAML type is defined as a number of union types. It may sometimes cause
+ * the process to crash. To protect the renderer process this is run as forked
  * process.
  *
- * @param {Object} data
+ * @param {ParserApiConfiguration} data
  */
-async function processData(data) {
+const processData = async (data) => {
   const sourceFile = data.source;
-  const type = data.from.type;
-  const contentType = data.from.contentType;
-  const validate = data.validate;
-  if (!initied) {
-    await amf.Core.init();
-  }
-  /* eslint-disable-next-line require-atomic-updates */
-  initied = true;
-  const file = `file://${sourceFile}`;
-  const parser = amf.Core.parser(type, contentType);
-  let doc = await parser.parseFileAsync(file);
-  if (validate) {
-    await validateDoc(type, doc);
-  }
+  const { type } = data.from;
 
-  const resolver = amf.Core.resolver(type);
-  doc = resolver.resolve(doc, 'editing');
-  const generator = amf.Core.generator('AMF Graph', 'application/ld+json');
-  const opts = amf.render.RenderOptions().withSourceMaps.withCompactUris;
-  return await generator.generateString(doc, opts);
-}
+  const ro = new RenderOptions().
+    withSourceMaps().
+    withCompactUris();
+  const apiConfiguration = getConfiguration(type).withRenderOptions(ro);
+  const client = apiConfiguration.baseUnitClient();
+  const file = `file://${sourceFile}`;
+  const result = await client.parse(file);
+  const transformed = client.transform(result.baseUnit, PipelineId.Editing);
+  return client.render(transformed.baseUnit, 'application/ld+json');
+};
 
 process.on('message', async (data) => {
+  const typed = /** @type ParserApiConfiguration */ (data);
   try {
-    const api = await processData(data);
+    const api = await processData(typed);
     process.send({
       api
     });
   } catch (cause) {
-    let m = `AMF parser: Unable to parse API ${data.source}.\n`;
+    let m = `AMF parser: Unable to parse API ${typed.source}.\n`;
     m += cause.s$1 || cause.message;
     process.send({ error: m });
   }
