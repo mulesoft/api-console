@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04, windows-2019]
+        os: [ubuntu-20.04, windows-2019, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -29,6 +29,8 @@ jobs:
         with:
           node-version: 18
       - uses: microsoft/playwright-github-action@v1
+        with:
+            node-version: 14
       - uses: actions/cache@v1
         with:
           path: ~/.npm
