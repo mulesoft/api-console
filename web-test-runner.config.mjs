@@ -19,7 +19,7 @@ export default {
       timeout: 800000,
     },
   },
-  browserStartTimeout: 20000,
+  browserStartTimeout: 30000,
   testsStartTimeout: 20000,
   testsFinishTimeout: 800000,
   plugins: [
