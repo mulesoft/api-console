@@ -15,6 +15,8 @@ class ApicApplication extends DemoBase {
       ['httpbin', 'HTTPbin API'],
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API'],
+      ['jldAsync26', 'Async API 2.6'],
+      ['asyncApi-2.6', 'Async API 2.6-2'],
       ['SE-12703', 'OAS allOf body'],
       ['APIC-262', 'Example value type'],
       ['console-445', 'Multipart request'],
@@ -22,6 +24,8 @@ class ApicApplication extends DemoBase {
       ['APIC-319', 'APIC-319'],
       ['multi-server', 'OAS multi server'],
       ['async-api', 'AsyncAPI'],
+      ['APIC-560', 'AsyncAPI560'],
+      ['APIC-570', 'AsyncAPI570'],
     ];
   }
 

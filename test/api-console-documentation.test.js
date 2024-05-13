@@ -140,7 +140,7 @@ describe('API Console documentation', () => {
           await waitUntil(() => Boolean(documentationSummary(element)));
           const summaryShadowRoot = documentationSummary(element).shadowRoot;
           await waitUntil(() => Boolean(summaryShadowRoot.querySelector('.api-title')));
-          assert.equal(summaryShadowRoot.querySelector('.api-title').textContent.trim(), 'API title:\n    Google Drive');
+          assert.equal(summaryShadowRoot.querySelector('.api-title span').textContent.trim(), 'Google Drive');
 
           await waitUntil(() => Boolean(summaryShadowRoot.querySelector('.inline-description.version')));
           assert.equal(summaryShadowRoot.querySelector('.inline-description.version').textContent.trim(), 'Version:\n      v2');
@@ -833,8 +833,8 @@ describe('API Console documentation', () => {
           it('should render URL', async () => {
             await waitUntil(() => Boolean(docShadowRoot.querySelector('api-url')));
             const apiUrl = docShadowRoot.querySelector('api-url').shadowRoot;
-            assert.equal(apiUrl.querySelector('.url-channel-value').innerText.trim(), 'Channel\nsmartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured');
-            assert.equal(apiUrl.querySelector('.url-server-value').innerText.trim(), 'Server\nmqtt://api.streetlights.smartylighting.com:{port}');
+            assert.equal(apiUrl.querySelector('.url-channel-value').innerText.trim(), 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured');
+            assert.equal(apiUrl.querySelector('.async-server-name').innerText.trim(), 'production');
           });
 
           it('should render description', async () => {
@@ -865,8 +865,8 @@ describe('API Console documentation', () => {
           it('should render URL', async () => {
             await waitUntil(() => Boolean(docShadowRoot.querySelector('api-url')));
             const apiUrl = docShadowRoot.querySelector('api-url').shadowRoot;
-            assert.equal(apiUrl.querySelector('.url-channel-value').innerText.trim(), 'Channelsmartylighting/streetlights/1/0/action/{streetlightId}/turn/on');
-            assert.equal(apiUrl.querySelector('.url-server-value').innerText.trim(), 'Servermqtt://api.streetlights.smartylighting.com:{port}');
+            assert.equal(apiUrl.querySelector('.url-channel-value').innerText.trim(), 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on');
+            assert.equal(apiUrl.querySelector('.async-server-name').innerText.trim(), 'production');
           });
 
           it('should render methods', async () => {

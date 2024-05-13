@@ -1,0 +1,1344 @@
+{
+"@graph": [
+{
+"@id": "#34",
+"@type": [
+"doc:APIContractProcessingData"
+],
+"apiContract:modelVersion": "3.9.0",
+"doc:transformed": true,
+"doc:sourceSpec": "ASYNC 2.6"
+},
+{
+"@id": "#35",
+"@type": [
+"apiContract:AsyncAPI",
+"apiContract:API",
+"doc:RootDomainElement",
+"doc:DomainElement"
+],
+"core:name": "Hello world application",
+"apiContract:server": [
+{
+"@id": "#37"
+},
+{
+"@id": "#41"
+}
+],
+"apiContract:accepts": [
+"application/html"
+],
+"apiContract:contentType": [
+"application/html"
+],
+"core:version": "0.1.0",
+"apiContract:endpoint": [
+{
+"@id": "#36"
+},
+{
+"@id": "#42"
+},
+{
+"@id": "#52"
+},
+{
+"@id": "#55"
+},
+{
+"@id": "#58"
+}
+]
+},
+{
+"@id": "#37",
+"@type": [
+"apiContract:Server",
+"doc:DomainElement"
+],
+"core:name": "production",
+"core:urlTemplate": "broker.mycompany.com",
+"core:description": "This is \"My Company\" broker.",
+"apiContract:tags": [
+{
+"@id": "#38"
+},
+{
+"@id": "#39"
+},
+{
+"@id": "#40"
+}
+],
+"apiContract:protocol": "amqp",
+"security:security": [
+{
+"@id": "#26"
+},
+{
+"@id": "#28"
+}
+]
+},
+{
+"@id": "#41",
+"@type": [
+"apiContract:Server",
+"doc:DomainElement"
+],
+"core:name": "development",
+"core:urlTemplate": "broker.mycompany.com",
+"core:description": "This is \"My Company\" broker.",
+"apiContract:protocol": "amqp",
+"security:security": [
+{
+"@id": "#32"
+}
+]
+},
+{
+"@id": "#36",
+"@type": [
+"apiContract:EndPoint",
+"doc:DomainElement"
+],
+"apiContract:path": "refed",
+"apiContract:supportedOperation": [
+{
+"@id": "#25"
+}
+],
+"apiContract:server": [
+{
+"@id": "#37"
+},
+{
+"@id": "#41"
+}
+]
+},
+{
+"@id": "#42",
+"@type": [
+"apiContract:EndPoint",
+"doc:DomainElement"
+],
+"apiContract:path": "hello",
+"apiContract:supportedOperation": [
+{
+"@id": "#43"
+}
+],
+"apiContract:server": [
+{
+"@id": "#37"
+}
+]
+},
+{
+"@id": "#52",
+"@type": [
+"apiContract:EndPoint",
+"doc:DomainElement"
+],
+"apiContract:path": "anotherOne",
+"apiContract:supportedOperation": [
+{
+"@id": "#53"
+}
+],
+"apiContract:server": [
+{
+"@id": "#37"
+},
+{
+"@id": "#41"
+}
+]
+},
+{
+"@id": "#55",
+"@type": [
+"apiContract:EndPoint",
+"doc:DomainElement"
+],
+"apiContract:path": "subscribedTo",
+"apiContract:supportedOperation": [
+{
+"@id": "#56"
+}
+],
+"apiContract:server": [
+{
+"@id": "#37"
+},
+{
+"@id": "#41"
+}
+]
+},
+{
+"@id": "#58",
+"@type": [
+"apiContract:EndPoint",
+"doc:DomainElement"
+],
+"apiContract:path": "avro",
+"apiContract:supportedOperation": [
+{
+"@id": "#59"
+}
+],
+"apiContract:server": [
+{
+"@id": "#37"
+},
+{
+"@id": "#41"
+}
+]
+},
+{
+"@id": "#38",
+"@type": [
+"apiContract:Tag",
+"doc:DomainElement"
+],
+"core:name": "env:test-scram",
+"core:description": "This environment is for running internal tests through scramSha256"
+},
+{
+"@id": "#39",
+"@type": [
+"apiContract:Tag",
+"doc:DomainElement"
+],
+"core:name": "kind:remote",
+"core:description": "This server is a remote server. Not exposed by the application"
+},
+{
+"@id": "#40",
+"@type": [
+"apiContract:Tag",
+"doc:DomainElement"
+],
+"core:name": "visibility:private",
+"core:description": "This resource is private and only available to certain users"
+},
+{
+"@id": "#26",
+"@type": [
+"security:SecurityRequirement",
+"doc:DomainElement"
+],
+"security:schemes": [
+{
+"@id": "#27"
+}
+]
+},
+{
+"@id": "#28",
+"@type": [
+"security:SecurityRequirement",
+"doc:DomainElement"
+],
+"security:schemes": [
+{
+"@id": "#29"
+}
+]
+},
+{
+"@id": "#32",
+"@type": [
+"security:SecurityRequirement",
+"doc:DomainElement"
+],
+"security:schemes": [
+{
+"@id": "#33"
+}
+]
+},
+{
+"@id": "#25",
+"@type": [
+"apiContract:Operation",
+"core:Operation",
+"doc:DomainElement"
+],
+"apiContract:method": "publish",
+"apiContract:expects": [
+{
+"@id": "#12"
+}
+],
+"security:security": [
+{
+"@id": "#26"
+},
+{
+"@id": "#28"
+},
+{
+"@id": "#32"
+}
+]
+},
+{
+"@id": "#43",
+"@type": [
+"apiContract:Operation",
+"core:Operation",
+"doc:DomainElement"
+],
+"apiContract:method": "publish",
+"apiContract:expects": [
+{
+"@id": "#44"
+}
+],
+"security:security": [
+{
+"@id": "#47"
+}
+]
+},
+{
+"@id": "#53",
+"@type": [
+"apiContract:Operation",
+"core:Operation",
+"doc:DomainElement"
+],
+"apiContract:method": "publish",
+"apiContract:expects": [
+{
+"@id": "#54"
+}
+],
+"security:security": [
+{
+"@id": "#26"
+},
+{
+"@id": "#28"
+},
+{
+"@id": "#32"
+}
+]
+},
+{
+"@id": "#56",
+"@type": [
+"apiContract:Operation",
+"core:Operation",
+"doc:DomainElement"
+],
+"apiContract:method": "subscribe",
+"apiContract:returns": [
+{
+"@id": "#57"
+}
+],
+"security:security": [
+{
+"@id": "#26"
+},
+{
+"@id": "#28"
+},
+{
+"@id": "#32"
+}
+]
+},
+{
+"@id": "#59",
+"@type": [
+"apiContract:Operation",
+"core:Operation",
+"doc:DomainElement"
+],
+"apiContract:method": "subscribe",
+"apiContract:returns": [
+{
+"@id": "#60"
+}
+],
+"security:security": [
+{
+"@id": "#26"
+},
+{
+"@id": "#28"
+},
+{
+"@id": "#32"
+}
+]
+},
+{
+"@id": "#27",
+"@type": [
+"security:ParametrizedSecurityScheme",
+"doc:DomainElement"
+],
+"core:name": "user-password",
+"security:scheme": {
+"@id": "#1"
+}
+},
+{
+"@id": "#29",
+"@type": [
+"security:ParametrizedSecurityScheme",
+"doc:DomainElement"
+],
+"core:name": "petstore_auth",
+"security:scheme": {
+"@id": "#2"
+},
+"security:settings": {
+"@id": "#30"
+}
+},
+{
+"@id": "#33",
+"@type": [
+"security:ParametrizedSecurityScheme",
+"doc:DomainElement"
+],
+"core:name": "kafka-scram",
+"security:scheme": {
+"@id": "#6"
+}
+},
+{
+"@id": "#12",
+"@type": [
+"apiContract:Request",
+"core:Request",
+"apiContract:Message",
+"doc:DomainElement"
+],
+"core:name": "hello-msg",
+"core:description": "This is the description",
+"apiContract:payload": [
+{
+"@id": "#13"
+}
+],
+"core:summary": "This is the summary of the hello message",
+"apiBinding:binding": {
+"@id": "#8"
+}
+},
+{
+"@id": "#44",
+"@type": [
+"apiContract:Request",
+"core:Request",
+"apiContract:Message",
+"doc:DomainElement"
+],
+"core:description": "This is the description",
+"apiContract:payload": [
+{
+"@id": "#45"
+}
+],
+"core:summary": "This is the summary of the hello message",
+"apiContract:messageId": "messageIdHello"
+},
+{
+"@id": "#47",
+"@type": [
+"security:SecurityRequirement",
+"doc:DomainElement"
+],
+"security:schemes": [
+{
+"@id": "#48"
+}
+]
+},
+{
+"@id": "#54",
+"@type": [
+"apiContract:Request",
+"core:Request",
+"apiContract:Message",
+"doc:DomainElement"
+],
+"core:name": "user-signup",
+"core:description": "This is the description",
+"apiContract:payload": [
+{
+"@id": "#16"
+}
+],
+"core:summary": "This is the summary of the anotherOne message"
+},
+{
+"@id": "#57",
+"@type": [
+"apiContract:Response",
+"core:Response",
+"apiContract:Message",
+"doc:DomainElement"
+],
+"core:name": "user-signup",
+"core:description": "This is the description",
+"apiContract:payload": [
+{
+"@id": "#16"
+}
+],
+"core:summary": "This is the summary of the anotherOne message"
+},
+{
+"@id": "#60",
+"@type": [
+"apiContract:Response",
+"core:Response",
+"apiContract:Message",
+"doc:DomainElement"
+],
+"core:description": "A longer description",
+"apiContract:payload": [
+{
+"@id": "#74"
+}
+],
+"core:correlationId": {
+"@id": "#61"
+},
+"core:displayName": "UserSignup",
+"core:title": "User signup",
+"core:summary": "Action to sign a user up.",
+"apiContract:tag": [
+{
+"@id": "#62"
+},
+{
+"@id": "#63"
+},
+{
+"@id": "#64"
+}
+],
+"apiContract:headerSchema": {
+"@id": "#65"
+}
+},
+{
+"@id": "#1",
+"@type": [
+"security:SecurityScheme",
+"doc:DomainElement"
+],
+"core:name": "user-password",
+"security:type": "userPassword"
+},
+{
+"@id": "#2",
+"@type": [
+"security:SecurityScheme",
+"doc:DomainElement"
+],
+"core:name": "petstore_auth",
+"security:type": "OAuth 2.0",
+"core:description": "The oauth security descriptions",
+"security:settings": {
+"@id": "#3"
+}
+},
+{
+"@id": "#30",
+"@type": [
+"security:OAuth2Settings",
+"security:Settings",
+"doc:DomainElement"
+],
+"security:flows": [
+{
+"@id": "#31"
+}
+]
+},
+{
+"@id": "#6",
+"@type": [
+"security:SecurityScheme",
+"doc:DomainElement"
+],
+"core:name": "kafka-scram",
+"security:type": "scramSha512"
+},
+{
+"@id": "#13",
+"@type": [
+"apiContract:Payload",
+"core:Payload",
+"doc:DomainElement"
+],
+"core:mediaType": "application/html",
+"raml-shapes:schema": {
+"@id": "#14"
+}
+},
+{
+"@id": "#8",
+"@type": [
+"apiBinding:MessageBindings",
+"doc:DomainElement"
+],
+"apiBinding:bindings": [
+{
+"@id": "#9"
+}
+]
+},
+{
+"@id": "#45",
+"@type": [
+"apiContract:Payload",
+"core:Payload",
+"doc:DomainElement"
+],
+"core:mediaType": "application/html",
+"raml-shapes:schema": {
+"@id": "#46"
+}
+},
+{
+"@id": "#48",
+"@type": [
+"security:ParametrizedSecurityScheme",
+"doc:DomainElement"
+],
+"core:name": "petstore_auth",
+"security:scheme": {
+"@id": "#2"
+},
+"security:settings": {
+"@id": "#49"
+}
+},
+{
+"@id": "#16",
+"@type": [
+"apiContract:Payload",
+"core:Payload",
+"doc:DomainElement"
+],
+"core:mediaType": "application/html",
+"raml-shapes:schema": {
+"@id": "#17"
+}
+},
+{
+"@id": "#74",
+"@type": [
+"apiContract:Payload",
+"core:Payload",
+"doc:DomainElement"
+],
+"core:mediaType": "application/json",
+"raml-shapes:schema": {
+"@id": "#75"
+}
+},
+{
+"@id": "#61",
+"@type": [
+"core:CorrelationId",
+"doc:DomainElement"
+],
+"core:description": "Default Correlation ID",
+"core:location": "$message.header#/correlationId"
+},
+{
+"@id": "#62",
+"@type": [
+"apiContract:Tag",
+"doc:DomainElement"
+],
+"core:name": "user"
+},
+{
+"@id": "#63",
+"@type": [
+"apiContract:Tag",
+"doc:DomainElement"
+],
+"core:name": "signup"
+},
+{
+"@id": "#64",
+"@type": [
+"apiContract:Tag",
+"doc:DomainElement"
+],
+"core:name": "register"
+},
+{
+"@id": "#65",
+"@type": [
+"shacl:NodeShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:closed": false,
+"shacl:property": [
+{
+"@id": "#66"
+},
+{
+"@id": "#68"
+}
+],
+"shacl:name": "schema",
+"apiContract:examples": [
+{
+"@id": "#70"
+}
+]
+},
+{
+"@id": "#3",
+"@type": [
+"security:OAuth2Settings",
+"security:Settings",
+"doc:DomainElement"
+],
+"security:flows": [
+{
+"@id": "#4"
+}
+]
+},
+{
+"@id": "#31",
+"@type": [
+"security:OAuth2Flow",
+"doc:DomainElement"
+],
+"security:scope": []
+},
+{
+"@id": "#14",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:pattern": "^hello .+$",
+"shacl:name": "schema",
+"apiContract:examples": [
+{
+"@id": "#10"
+}
+]
+},
+{
+"@id": "#9",
+"@type": [
+"apiBinding:EmptyBinding",
+"doc:DomainElement"
+],
+"apiBinding:type": "pulsar"
+},
+{
+"@id": "#46",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:pattern": "^hello .+$",
+"shacl:name": "schema"
+},
+{
+"@id": "#49",
+"@type": [
+"security:OAuth2Settings",
+"security:Settings",
+"doc:DomainElement"
+],
+"security:flows": [
+{
+"@id": "#50"
+}
+]
+},
+{
+"@id": "#17",
+"@type": [
+"shacl:NodeShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:closed": true,
+"shacl:property": [
+{
+"@id": "#18"
+},
+{
+"@id": "#20"
+},
+{
+"@id": "#22"
+}
+],
+"shacl:name": "schema"
+},
+{
+"@id": "#75",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": "schema",
+"apiContract:examples": [
+{
+"@id": "#76"
+}
+]
+},
+{
+"@id": "#66",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#correlationId"
+}
+],
+"raml-shapes:range": {
+"@id": "#67"
+},
+"shacl:minCount": 0,
+"shacl:name": "correlationId"
+},
+{
+"@id": "#68",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#applicationInstanceId"
+}
+],
+"raml-shapes:range": {
+"@id": "#69"
+},
+"shacl:minCount": 0,
+"shacl:name": "applicationInstanceId"
+},
+{
+"@id": "#70",
+"@type": [
+"apiContract:Example",
+"doc:DomainElement"
+],
+"core:name": "default-example_1",
+"core:displayName": "SimpleSignup",
+"core:description": "A simple UserSignup example message",
+"doc:strict": true,
+"doc:structuredValue": {
+"@id": "#71"
+},
+"doc:raw": "correlationId: my-correlation-id\napplicationInstanceId: myInstanceId",
+"sourcemaps:sources": [
+{
+"@id": "#70/source-map"
+}
+]
+},
+{
+"@id": "#4",
+"@type": [
+"security:OAuth2Flow",
+"doc:DomainElement"
+],
+"security:accessTokenUri": "https://example.com/api/oauth/dialog",
+"security:flow": "clientCredentials",
+"security:scope": [
+{
+"@id": "#5"
+}
+]
+},
+{
+"@id": "#10",
+"@type": [
+"apiContract:Example",
+"doc:DomainElement"
+],
+"core:name": "default-example_1",
+"core:displayName": "Hello example",
+"core:description": "This is the only hello example",
+"doc:strict": true,
+"doc:structuredValue": {
+"@id": "#11"
+},
+"doc:raw": "hello Kenobi",
+"sourcemaps:sources": [
+{
+"@id": "#10/source-map"
+}
+]
+},
+{
+"@id": "#50",
+"@type": [
+"security:OAuth2Flow",
+"doc:DomainElement"
+],
+"security:scope": [
+{
+"@id": "#51"
+}
+]
+},
+{
+"@id": "#18",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#fullName"
+}
+],
+"raml-shapes:range": {
+"@id": "#19"
+},
+"shacl:minCount": 0,
+"shacl:name": "fullName"
+},
+{
+"@id": "#20",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#email"
+}
+],
+"raml-shapes:range": {
+"@id": "#21"
+},
+"shacl:minCount": 0,
+"shacl:name": "email"
+},
+{
+"@id": "#22",
+"@type": [
+"shacl:PropertyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:path": [
+{
+"@id": "http://a.ml/vocabularies/data#age"
+}
+],
+"raml-shapes:range": {
+"@id": "#23"
+},
+"shacl:minCount": 0,
+"shacl:name": "age"
+},
+{
+"@id": "#76",
+"@type": [
+"apiContract:Example",
+"doc:DomainElement"
+],
+"core:name": "default-example_2",
+"core:displayName": "SimpleSignup",
+"core:description": "A simple UserSignup example message",
+"doc:strict": true,
+"doc:structuredValue": {
+"@id": "#77"
+},
+"doc:raw": "example",
+"sourcemaps:sources": [
+{
+"@id": "#76/source-map"
+}
+]
+},
+{
+"@id": "#67",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": "correlationId",
+"core:description": "Correlation ID set by application"
+},
+{
+"@id": "#69",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": "applicationInstanceId",
+"core:description": "Unique identifier for a given instance of the publishing application"
+},
+{
+"@id": "#71",
+"@type": [
+"data:Object",
+"data:Node",
+"doc:DomainElement"
+],
+"data:correlationId": {
+"@id": "#72"
+},
+"data:applicationInstanceId": {
+"@id": "#73"
+},
+"core:name": "object_1"
+},
+{
+"@id": "#70/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:tracked-element": [
+{
+"@id": "#70/source-map/tracked-element/element_0"
+}
+]
+},
+{
+"@id": "#5",
+"@type": [
+"security:Scope",
+"doc:DomainElement"
+],
+"core:name": "subscribe:auth_revocations",
+"core:description": "Scope required for authorization revocation topic"
+},
+{
+"@id": "#11",
+"@type": [
+"data:Scalar",
+"data:Node",
+"doc:DomainElement"
+],
+"data:value": "hello Kenobi",
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"core:name": "scalar_1"
+},
+{
+"@id": "#10/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:tracked-element": [
+{
+"@id": "#10/source-map/tracked-element/element_0"
+}
+]
+},
+{
+"@id": "#51",
+"@type": [
+"security:Scope",
+"doc:DomainElement"
+],
+"core:name": "subscribe:auth_revocations"
+},
+{
+"@id": "#19",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"shacl:name": "fullName"
+},
+{
+"@id": "#21",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"raml-shapes:format": "email",
+"shacl:name": "email"
+},
+{
+"@id": "#23",
+"@type": [
+"raml-shapes:ScalarShape",
+"raml-shapes:AnyShape",
+"shacl:Shape",
+"raml-shapes:Shape",
+"doc:DomainElement"
+],
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#integer"
+}
+],
+"shacl:minInclusive": 18.0,
+"shacl:name": "age"
+},
+{
+"@id": "#77",
+"@type": [
+"data:Scalar",
+"data:Node",
+"doc:DomainElement"
+],
+"data:value": "example",
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"core:name": "scalar_1"
+},
+{
+"@id": "#76/source-map",
+"@type": [
+"sourcemaps:SourceMap"
+],
+"sourcemaps:tracked-element": [
+{
+"@id": "#76/source-map/tracked-element/element_0"
+}
+]
+},
+{
+"@id": "#72",
+"@type": [
+"data:Scalar",
+"data:Node",
+"doc:DomainElement"
+],
+"data:value": "my-correlation-id",
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"core:name": "correlationId"
+},
+{
+"@id": "#73",
+"@type": [
+"data:Scalar",
+"data:Node",
+"doc:DomainElement"
+],
+"data:value": "myInstanceId",
+"shacl:datatype": [
+{
+"@id": "http://www.w3.org/2001/XMLSchema#string"
+}
+],
+"core:name": "applicationInstanceId"
+},
+{
+"@id": "#70/source-map/tracked-element/element_0",
+"sourcemaps:element": "amf://id#70",
+"sourcemaps:value": "amf://id#60"
+},
+{
+"@id": "#10/source-map/tracked-element/element_0",
+"sourcemaps:element": "amf://id#10",
+"sourcemaps:value": "amf://id#12"
+},
+{
+"@id": "#76/source-map/tracked-element/element_0",
+"sourcemaps:element": "amf://id#76",
+"sourcemaps:value": "amf://id#60"
+},
+{
+"@id": "",
+"doc:declares": [
+{
+"@id": "#1"
+},
+{
+"@id": "#2"
+},
+{
+"@id": "#6"
+},
+{
+"@id": "#7"
+},
+{
+"@id": "#15"
+},
+{
+"@id": "#24"
+}
+],
+"@type": [
+"doc:Document",
+"doc:Fragment",
+"doc:Module",
+"doc:Unit"
+],
+"doc:encodes": {
+"@id": "#35"
+},
+"doc:root": true,
+"doc:processingData": {
+"@id": "#34"
+}
+},
+{
+"@id": "#7",
+"@type": [
+"apiContract:Message",
+"doc:DomainElement"
+],
+"core:name": "hello-msg",
+"core:description": "This is the description",
+"apiContract:payload": [
+{
+"@id": "#13"
+}
+],
+"core:summary": "This is the summary of the hello message",
+"apiBinding:binding": {
+"@id": "#8"
+},
+"apiContract:examples": [
+{
+"@id": "#10"
+}
+]
+},
+{
+"@id": "#15",
+"@type": [
+"apiContract:Message",
+"doc:DomainElement"
+],
+"core:name": "user-signup",
+"core:description": "This is the description",
+"apiContract:payload": [
+{
+"@id": "#16"
+}
+],
+"core:summary": "This is the summary of the anotherOne message"
+},
+{
+"@id": "#24",
+"@type": [
+"apiContract:EndPoint",
+"doc:DomainElement"
+],
+"apiContract:path": "hello-channel",
+"apiContract:supportedOperation": [
+{
+"@id": "#25"
+}
+]
+}
+],
+"@context": {
+"@base": "amf://id",
+"shacl": "http://www.w3.org/ns/shacl#",
+"raml-shapes": "http://a.ml/vocabularies/shapes#",
+"security": "http://a.ml/vocabularies/security#",
+"apiBinding": "http://a.ml/vocabularies/apiBinding#",
+"data": "http://a.ml/vocabularies/data#",
+"doc": "http://a.ml/vocabularies/document#",
+"apiContract": "http://a.ml/vocabularies/apiContract#",
+"core": "http://a.ml/vocabularies/core#",
+"sourcemaps": "http://a.ml/vocabularies/document-source-maps#"
+}
+}
