@@ -391,11 +391,11 @@ describe('ApiConsole', () => {
           await aTimeout(0);
         });
 
-        it('should not prefix URL with `http://', () => {
+        it('should render server name', () => {
           const documentation = element.shadowRoot.querySelector('api-documentation');
           const summary = documentation.shadowRoot.querySelector('api-summary');
-          const apiUrl = summary.shadowRoot.querySelector('api-url');
-          assert.isFalse(apiUrl.url.startsWith('http') || apiUrl.url.startsWith('https'));
+          const serverName = summary.shadowRoot.querySelector('.server-name');
+          assert.equal(serverName.textContent, 'production');
         });
       });
     });
@@ -490,7 +490,7 @@ describe('ApiConsole', () => {
           const methodDocumentation = documentation.shadowRoot.querySelector('api-method-documentation');
           const apiUrl = methodDocumentation.shadowRoot.querySelector('api-url');
           assert.exists(apiUrl.shadowRoot.querySelector('.url-channel-value'));
-          assert.exists(apiUrl.shadowRoot.querySelector('.url-server-value'));
+          assert.exists(apiUrl.shadowRoot.querySelector('.async-server-name'));
         });
       });
     });
