@@ -1,0 +1,25 @@
+#%RAML 1.0
+title: oauth2
+description: Best API ever
+securitySchemes:
+  oAuth2:
+    type: OAuth 2.0
+    settings:
+      authorizationGrants:
+        [ client_credentials, password, authorization_code, implicit ]
+      authorizationUri: https://api.example.com/oauth2/authorize
+      accessTokenUri: https://api.example.com/oauth2/token
+      redirectUri: https://tudev-app.com/callback
+/products:
+  get:
+    securedBy:
+      - oAuth2
+    responses:
+      200:
+        body:
+          application/json:
+            type: string
+            example: |
+              {
+                "message": "OK"
+              }
