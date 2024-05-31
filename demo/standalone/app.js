@@ -13,6 +13,7 @@ class ApicApplication extends DemoBase {
     this.apis = [
       ['google-drive-api', 'Google Drive API'],
       ['httpbin', 'HTTPbin API'],
+      ['oAuth2', 'oAuth2'],
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API'],
       ['jldAsync26', 'Async API 2.6'],
@@ -32,7 +33,7 @@ class ApicApplication extends DemoBase {
   demoTemplate() {
     return html`<api-console-app
       app
-      redirecturi="https://auth.advancedrestclient.com/oauth-popup.html"
+      redirecturi="http://localhost:3000/public/oauth-popup.html"
       oauth2clientid="821776164331-rserncqpdsq32lmbf5cfeolgcoujb6fm.apps.googleusercontent.com"
       rearrangeEndpoints
     >
