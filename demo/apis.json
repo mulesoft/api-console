@@ -1,5 +1,6 @@
 {
   "models/demo-api/demo-api.raml": "RAML 1.0",
+  "models/demo-api/demo-api-2.raml": "RAML 1.0",
   "models/appian-api/appian-api.raml": "RAML 1.0",
   "models/oAuth2/oAuth2.raml": "RAML 1.0",
   "models/nexmo-sms-api/nexmo-sms-api.raml": "RAML 1.0",
