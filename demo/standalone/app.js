@@ -16,6 +16,7 @@ class ApicApplication extends DemoBase {
       ['oAuth2', 'oAuth2'],
       ['avro', 'avro'],
       ['avro2', 'avro2'],
+      ['avro-inline-other', 'avro3'],
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API'],
       ['demo-api-2', 'Demo API 2'],
