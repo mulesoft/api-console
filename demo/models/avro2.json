@@ -1,0 +1,2053 @@
+[
+  {
+    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml",
+    "@type": [
+      "http://a.ml/vocabularies/document#Document",
+      "http://a.ml/vocabularies/document#Fragment",
+      "http://a.ml/vocabularies/document#Module",
+      "http://a.ml/vocabularies/document#Unit"
+    ],
+    "http://a.ml/vocabularies/document#encodes": [
+      {
+        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api",
+        "@type": [
+          "http://a.ml/vocabularies/apiContract#AsyncAPI",
+          "http://a.ml/vocabularies/apiContract#API",
+          "http://a.ml/vocabularies/document#RootDomainElement",
+          "http://a.ml/vocabularies/document#DomainElement"
+        ],
+        "http://a.ml/vocabularies/core#name": [
+          {
+            "@value": "My API"
+          }
+        ],
+        "http://a.ml/vocabularies/core#version": [
+          {
+            "@value": "1.0.0"
+          }
+        ],
+        "http://a.ml/vocabularies/apiContract#endpoint": [
+          {
+            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel",
+            "@type": [
+              "http://a.ml/vocabularies/apiContract#EndPoint",
+              "http://a.ml/vocabularies/document#DomainElement"
+            ],
+            "http://a.ml/vocabularies/apiContract#path": [
+              {
+                "@value": "mychannel"
+              }
+            ],
+            "http://a.ml/vocabularies/apiContract#supportedOperation": [
+              {
+                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish",
+                "@type": [
+                  "http://a.ml/vocabularies/apiContract#Operation",
+                  "http://a.ml/vocabularies/core#Operation",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://a.ml/vocabularies/apiContract#method": [
+                  {
+                    "@value": "publish"
+                  }
+                ],
+                "http://a.ml/vocabularies/apiContract#expects": [
+                  {
+                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request",
+                    "@type": [
+                      "http://a.ml/vocabularies/apiContract#Request",
+                      "http://a.ml/vocabularies/core#Request",
+                      "http://a.ml/vocabularies/apiContract#Message",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://a.ml/vocabularies/apiContract#payload": [
+                      {
+                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default",
+                        "@type": [
+                          "http://a.ml/vocabularies/apiContract#Payload",
+                          "http://a.ml/vocabularies/core#Payload",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://a.ml/vocabularies/apiContract#schemaMediaType": [
+                          {
+                            "@value": "application/vnd.apache.avro;version=1.9.0"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/shapes#schema": [
+                          {
+                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes",
+                            "@type": [
+                              "http://www.w3.org/ns/shacl#NodeShape",
+                              "http://a.ml/vocabularies/shapes#AnyShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://a.ml/vocabularies/shapes#Shape",
+                              "http://a.ml/vocabularies/document#DomainElement"
+                            ],
+                            "http://www.w3.org/ns/shacl#property": [
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type/scalar/default-scalar",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type/scalar/default-scalar/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type/scalar/default-scalar/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type/scalar/default-scalar"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "boolean"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "boolean-primitive-type"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/core#description": [
+                                  {
+                                    "@value": "this is a documentation for the boolean primitive type"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "false"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "boolean"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/boolean-primitive-type/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "boolean"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type/scalar/default-scalar",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#int"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type/scalar/default-scalar/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type/scalar/default-scalar/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type/scalar/default-scalar"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "int"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "int-primitive-type"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/core#description": [
+                                  {
+                                    "@value": "this is a documentation for the int primitive type"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "123"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#integer"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "int"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/int-primitive-type/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "int"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type/scalar/default-scalar",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#long"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type/scalar/default-scalar/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type/scalar/default-scalar/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type/scalar/default-scalar"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "long"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "long-primitive-type"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/core#description": [
+                                  {
+                                    "@value": "this is a documentation for the long primitive type"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "123"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#integer"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "long"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/long-primitive-type/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "long"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type/scalar/default-scalar",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#float"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type/scalar/default-scalar/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type/scalar/default-scalar/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type/scalar/default-scalar"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "float"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "float-primitive-type"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/core#description": [
+                                  {
+                                    "@value": "this is a documentation for the float primitive type"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "1.0"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#double"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "float"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/float-primitive-type/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "float"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type/scalar/default-scalar",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#double"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type/scalar/default-scalar/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type/scalar/default-scalar/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type/scalar/default-scalar"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "double"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "double-primitive-type"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/core#description": [
+                                  {
+                                    "@value": "this is a documentation for the double primitive type"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "1.0"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#double"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "double"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/double-primitive-type/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "double"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type/scalar/default-scalar",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#bytes"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type/scalar/default-scalar/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type/scalar/default-scalar/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type/scalar/default-scalar"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "bytes"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "bytes-primitive-type"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/core#description": [
+                                  {
+                                    "@value": "this is a documentation for the bytes primitive type"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "\\u00FF"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "bytes"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/bytes-primitive-type/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "bytes"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type/scalar/default-scalar",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type/scalar/default-scalar/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type/scalar/default-scalar/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type/scalar/default-scalar"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "string"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "string-primitive-type"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/core#description": [
+                                  {
+                                    "@value": "this is a documentation for the string primitive type"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "foo"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "string"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/string-primitive-type/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "string"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#UnionShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/shapes#anyOf": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/anyOf/nil/null",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/shapes#NilShape",
+                                          "http://www.w3.org/ns/shacl#Shape",
+                                          "http://a.ml/vocabularies/shapes#Shape",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://www.w3.org/ns/shacl#name": [
+                                          {
+                                            "@value": "null"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#sources": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/anyOf/nil/null/source-map",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                              {
+                                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/anyOf/nil/null/source-map/avro-schema/element_0",
+                                                "http://a.ml/vocabularies/document-source-maps#element": [
+                                                  {
+                                                    "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/anyOf/nil/null"
+                                                  }
+                                                ],
+                                                "http://a.ml/vocabularies/document-source-maps#value": [
+                                                  {
+                                                    "@value": "null"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/anyOf/scalar/default-scalar",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                                          "http://a.ml/vocabularies/shapes#AnyShape",
+                                          "http://www.w3.org/ns/shacl#Shape",
+                                          "http://a.ml/vocabularies/shapes#Shape",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#sources": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/anyOf/scalar/default-scalar/source-map",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                              {
+                                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/anyOf/scalar/default-scalar/source-map/avro-schema/element_0",
+                                                "http://a.ml/vocabularies/document-source-maps#element": [
+                                                  {
+                                                    "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/anyOf/scalar/default-scalar"
+                                                  }
+                                                ],
+                                                "http://a.ml/vocabularies/document-source-maps#value": [
+                                                  {
+                                                    "@value": "LongList"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#name": [
+                                      {
+                                        "@value": "union"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#description": [
+                                      {
+                                        "@value": "this is a documentation for the union type with recursive element"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#defaultValue": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/scalar_1",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/data#Scalar",
+                                          "http://a.ml/vocabularies/data#Node",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://a.ml/vocabularies/data#value": [
+                                          {
+                                            "@value": "null"
+                                          }
+                                        ],
+                                        "http://www.w3.org/ns/shacl#datatype": [
+                                          {
+                                            "@id": "http://www.w3.org/2001/XMLSchema#nil"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/core#name": [
+                                          {
+                                            "@value": "scalar_1"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/union/union"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "union"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "union"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/core#description": [
+                                  {
+                                    "@value": "this is a documentation for the union type with recursive element"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "null"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#nil"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "union"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/union/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "union"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ArrayShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/shapes#items": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array/scalar/default-scalar",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                                          "http://a.ml/vocabularies/shapes#AnyShape",
+                                          "http://www.w3.org/ns/shacl#Shape",
+                                          "http://a.ml/vocabularies/shapes#Shape",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://www.w3.org/ns/shacl#datatype": [
+                                          {
+                                            "@id": "http://www.w3.org/2001/XMLSchema#long"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#sources": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array/scalar/default-scalar/source-map",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                              {
+                                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array/scalar/default-scalar/source-map/avro-schema/element_0",
+                                                "http://a.ml/vocabularies/document-source-maps#element": [
+                                                  {
+                                                    "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array/scalar/default-scalar"
+                                                  }
+                                                ],
+                                                "http://a.ml/vocabularies/document-source-maps#value": [
+                                                  {
+                                                    "@value": "long"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#defaultValue": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array/array_1",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/data#Array",
+                                          "http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq",
+                                          "http://a.ml/vocabularies/data#Node",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://www.w3.org/2000/01/rdf-schema#member": [],
+                                        "http://a.ml/vocabularies/core#name": [
+                                          {
+                                            "@value": "array_1"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array/default-array"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "array"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/array_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Array",
+                                      "http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/2000/01/rdf-schema#member": [],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "array_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "array"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "array"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ArrayShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/shapes#items": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array/default-array",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/shapes#ArrayShape",
+                                          "http://a.ml/vocabularies/shapes#AnyShape",
+                                          "http://www.w3.org/ns/shacl#Shape",
+                                          "http://a.ml/vocabularies/shapes#Shape",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://a.ml/vocabularies/shapes#items": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array/default-array/scalar/default-scalar",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/shapes#ScalarShape",
+                                              "http://a.ml/vocabularies/shapes#AnyShape",
+                                              "http://www.w3.org/ns/shacl#Shape",
+                                              "http://a.ml/vocabularies/shapes#Shape",
+                                              "http://a.ml/vocabularies/document#DomainElement"
+                                            ],
+                                            "http://www.w3.org/ns/shacl#datatype": [
+                                              {
+                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#sources": [
+                                              {
+                                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array/default-array/scalar/default-scalar/source-map",
+                                                "@type": [
+                                                  "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                                ],
+                                                "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                                  {
+                                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array/default-array/scalar/default-scalar/source-map/avro-schema/element_0",
+                                                    "http://a.ml/vocabularies/document-source-maps#element": [
+                                                      {
+                                                        "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array/default-array/scalar/default-scalar"
+                                                      }
+                                                    ],
+                                                    "http://a.ml/vocabularies/document-source-maps#value": [
+                                                      {
+                                                        "@value": "string"
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#sources": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array/default-array/source-map",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                              {
+                                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array/default-array/source-map/avro-schema/element_0",
+                                                "http://a.ml/vocabularies/document-source-maps#element": [
+                                                  {
+                                                    "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array/default-array"
+                                                  }
+                                                ],
+                                                "http://a.ml/vocabularies/document-source-maps#value": [
+                                                  {
+                                                    "@value": "array"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#defaultValue": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/array_1",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/data#Array",
+                                          "http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq",
+                                          "http://a.ml/vocabularies/data#Node",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://www.w3.org/2000/01/rdf-schema#member": [],
+                                        "http://a.ml/vocabularies/core#name": [
+                                          {
+                                            "@value": "array_1"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array/default-array"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "array"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/array_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Array",
+                                      "http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/2000/01/rdf-schema#member": [],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "array_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "array"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_1/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "array"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#name": [
+                                      {
+                                        "@value": "Suit"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#defaultValue": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit/scalar_1",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/data#Scalar",
+                                          "http://a.ml/vocabularies/data#Node",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://a.ml/vocabularies/data#value": [
+                                          {
+                                            "@value": "SPADES"
+                                          }
+                                        ],
+                                        "http://www.w3.org/ns/shacl#datatype": [
+                                          {
+                                            "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/core#name": [
+                                          {
+                                            "@value": "scalar_1"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#in": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit/list",
+                                        "@type": "http://www.w3.org/2000/01/rdf-schema#Seq",
+                                        "http://www.w3.org/2000/01/rdf-schema#_1": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit/in/data-node",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/data#Scalar",
+                                              "http://a.ml/vocabularies/data#Node",
+                                              "http://a.ml/vocabularies/document#DomainElement"
+                                            ],
+                                            "http://a.ml/vocabularies/data#value": [
+                                              {
+                                                "@value": "SPADES"
+                                              }
+                                            ],
+                                            "http://www.w3.org/ns/shacl#datatype": [
+                                              {
+                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "http://www.w3.org/2000/01/rdf-schema#_2": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit/in/data-node_3",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/data#Scalar",
+                                              "http://a.ml/vocabularies/data#Node",
+                                              "http://a.ml/vocabularies/document#DomainElement"
+                                            ],
+                                            "http://a.ml/vocabularies/data#value": [
+                                              {
+                                                "@value": "HEARTS"
+                                              }
+                                            ],
+                                            "http://www.w3.org/ns/shacl#datatype": [
+                                              {
+                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "http://www.w3.org/2000/01/rdf-schema#_3": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit/in/data-node_4",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/data#Scalar",
+                                              "http://a.ml/vocabularies/data#Node",
+                                              "http://a.ml/vocabularies/document#DomainElement"
+                                            ],
+                                            "http://a.ml/vocabularies/data#value": [
+                                              {
+                                                "@value": "DIAMONDS"
+                                              }
+                                            ],
+                                            "http://www.w3.org/ns/shacl#datatype": [
+                                              {
+                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "http://www.w3.org/2000/01/rdf-schema#_4": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit/in/data-node_5",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/data#Scalar",
+                                              "http://a.ml/vocabularies/data#Node",
+                                              "http://a.ml/vocabularies/document#DomainElement"
+                                            ],
+                                            "http://a.ml/vocabularies/data#value": [
+                                              {
+                                                "@value": "CLUBS"
+                                              }
+                                            ],
+                                            "http://www.w3.org/ns/shacl#datatype": [
+                                              {
+                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar/Suit"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "enum"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "Suit"
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "SPADES"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "scalar_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "enum"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/Suit/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "enum"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5/scalar/md5",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#datatype": [
+                                      {
+                                        "@id": "http://www.w3.org/2001/XMLSchema#fixed"
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#name": [
+                                      {
+                                        "@value": "md5"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/shapes#size": [
+                                      {
+                                        "@value": 16
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5/scalar/md5/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5/scalar/md5/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5/scalar/md5"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "fixed"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#name": [
+                                  {
+                                    "@value": "md5"
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "fixed"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/md5/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "fixed"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2",
+                                "@type": [
+                                  "http://www.w3.org/ns/shacl#PropertyShape",
+                                  "http://www.w3.org/ns/shacl#Shape",
+                                  "http://a.ml/vocabularies/shapes#Shape",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/shapes#range": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node",
+                                    "@type": [
+                                      "http://www.w3.org/ns/shacl#NodeShape",
+                                      "http://a.ml/vocabularies/shapes#AnyShape",
+                                      "http://www.w3.org/ns/shacl#Shape",
+                                      "http://a.ml/vocabularies/shapes#Shape",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://www.w3.org/ns/shacl#additionalPropertiesSchema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node/scalar/default-scalar",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                                          "http://a.ml/vocabularies/shapes#AnyShape",
+                                          "http://www.w3.org/ns/shacl#Shape",
+                                          "http://a.ml/vocabularies/shapes#Shape",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://www.w3.org/ns/shacl#datatype": [
+                                          {
+                                            "@id": "http://www.w3.org/2001/XMLSchema#long"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#sources": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node/scalar/default-scalar/source-map",
+                                            "@type": [
+                                              "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                              {
+                                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node/scalar/default-scalar/source-map/avro-schema/element_0",
+                                                "http://a.ml/vocabularies/document-source-maps#element": [
+                                                  {
+                                                    "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node/scalar/default-scalar"
+                                                  }
+                                                ],
+                                                "http://a.ml/vocabularies/document-source-maps#value": [
+                                                  {
+                                                    "@value": "long"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://www.w3.org/ns/shacl#defaultValue": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node/object_1",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/data#Object",
+                                          "http://a.ml/vocabularies/data#Node",
+                                          "http://a.ml/vocabularies/document#DomainElement"
+                                        ],
+                                        "http://a.ml/vocabularies/core#name": [
+                                          {
+                                            "@value": "object_1"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#sources": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node/source-map",
+                                        "@type": [
+                                          "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                          {
+                                            "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node/source-map/avro-schema/element_0",
+                                            "http://a.ml/vocabularies/document-source-maps#element": [
+                                              {
+                                                "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/shape/default-node"
+                                              }
+                                            ],
+                                            "http://a.ml/vocabularies/document-source-maps#value": [
+                                              {
+                                                "@value": "map"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#defaultValue": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/object_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Object",
+                                      "http://a.ml/vocabularies/data#Node",
+                                      "http://a.ml/vocabularies/document#DomainElement"
+                                    ],
+                                    "http://a.ml/vocabularies/core#name": [
+                                      {
+                                        "@value": "object_1"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/source-map/avro-schema/element_1",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "map"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/property/property/default-property_2/source-map/avro-schema/element_0",
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "http://a.ml/vocabularies/shapes#range"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "map"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "AllTypes"
+                              }
+                            ],
+                            "http://a.ml/vocabularies/core#description": [
+                              {
+                                "@value": "this schema contains every possible type you can declare in avro inside it's fields"
+                              }
+                            ],
+                            "http://a.ml/vocabularies/shapes#namespace": [
+                              {
+                                "@value": "root"
+                              }
+                            ],
+                            "http://a.ml/vocabularies/shapes#aliases": [
+                              {
+                                "@value": "EveryTypeInTheSameSchema"
+                              }
+                            ],
+                            "http://a.ml/vocabularies/document-source-maps#sources": [
+                              {
+                                "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/source-map",
+                                "@type": [
+                                  "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#avro-schema": [
+                                  {
+                                    "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes/source-map/avro-schema/element_0",
+                                    "http://a.ml/vocabularies/document-source-maps#element": [
+                                      {
+                                        "@value": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/async-api/endpoint/mychannel/supportedOperation/publish/expects/request/payload/default/shape/AllTypes"
+                                      }
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#value": [
+                                      {
+                                        "@value": "record"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "http://a.ml/vocabularies/document#root": [
+      {
+        "@value": true
+      }
+    ],
+    "http://a.ml/vocabularies/document#processingData": [
+      {
+        "@id": "file://amf-cli/shared/src/test/resources/avro/tck/apis/valid/avro-inline.yaml#/BaseUnitProcessingData",
+        "@type": [
+          "http://a.ml/vocabularies/document#APIContractProcessingData"
+        ],
+        "http://a.ml/vocabularies/apiContract#modelVersion": [
+          {
+            "@value": "3.9.0"
+          }
+        ],
+        "http://a.ml/vocabularies/document#sourceSpec": [
+          {
+            "@value": "ASYNC 2.0"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -64,5 +64,6 @@ demo/models/*.json
 demo/models/flattened/*.json
 !demo/models/jldAsync26.json
 !demo/models/avro.json
+!demo/models/avro2.json
 
 .idea/
