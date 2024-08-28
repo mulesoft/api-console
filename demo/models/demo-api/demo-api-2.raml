@@ -1,0 +1,1401 @@
+#%RAML 1.0
+title: API body demo
+version: v1
+baseUri: http://{instance}.domain.com/
+
+mediaType: [application/json, application/xml]
+protocols: [HTTP, HTTPS]
+
+description: |
+
+  # This is a description of demo API.
+  ```javascript
+  This is **markdown**.
+  ```
+  # Encabezado 1
+
+  ## Encabezado 2
+
+  ### Encabezado 3
+
+  #### Encabezado 4
+
+  ##### Encabezado 5
+
+  ###### Encabezado 6
+
+  [Encabezado](#Encabezado)
+
+
+  **Negrita**
+
+  _Italica_
+
+  > Test
+
+  ```
+  Code
+  ```
+
+  1. List 1
+  2. List 2
+
+      - Item 1
+      - Item 2
+
+  Item 2
+
+  | Api      | Version |
+  |----------|---------|
+  | American | v1.0    |
+
+  ------
+
+baseUriParameters:
+  instance:
+    description: |
+      The execution environments. Can be one of:
+      - development
+      - staging
+      - qa
+      - production
+    type: string
+    enum: [development, staging, qa, production]
+    pattern: (development|staging|qa|production)
+    default: production
+annotationTypes:
+  deprecated: string
+  annotationTest: nil
+  clearanceLevel:
+    properties:
+      level:
+        enum: [ low, medium, high ]
+        required: true
+      signature:
+        pattern: "\\d{3}-\\w{12}"
+        required: true
+uses:
+  ExampleType: resourceTypes/example-types.raml
+types:
+  Image: !include resourceTypes/image.raml
+  Resource: !include resourceTypes/resource.raml
+  AppPerson: !include resourceTypes/app-person.raml
+  Product: !include resourceTypes/product.raml
+  ErrorResource:
+    description: A response that is errored
+    type: object
+    properties:
+      error:
+        type: boolean
+        required: true
+        example: true
+        default: true
+        description: Indicate that the response is errored.
+      message:
+        type: string
+        description: The error message associated with the error.
+        required: true
+  Feature:
+    description: A feature to test enum values in the URI parameters.
+    type: string
+    enum:
+      - A
+      - B
+      - C
+  Parent:
+    type: object
+    properties:
+      id: number
+      etag: string
+  Child:
+    type: Parent
+    properties:
+      name: string
+  MultipartPerson:
+    properties:
+      name:
+        type: string
+        description: Name of the person
+      email:
+        type: string
+      image:
+        type: file
+        fileTypes: ['image/jpeg', 'image/png']
+      age:
+        type: number
+        description: Age of the person.
+      optParam:
+        type: number
+        required: false
+        description: Age of the person.
+  QueryParam: !include types/query-string.raml
+  OtherQueryParam: !include types/other-query-string.raml
+  Dimension: !include types/dimensions.raml
+  SchemaPerson:
+    type: !include schemas/person.json
+    example: !include examples/person.json
+  Picture:
+    displayName: Pic
+    type: Resource
+    description: The user's profile picture.
+    properties:
+      url:
+        type: string
+        required: false
+        description: A URL that points to a profile picture of this user.
+      dimension: Dimension
+  XmlTypeSchema:
+    type: !include schemas/product.xsd
+    example: !include examples/product.xml
+  Person:
+    properties:
+      name:
+        type: string
+        xml:
+          attribute: true
+          name: "fullname"
+      addresses:
+        type: Address[]
+        xml:
+          wrapped: true # serialize it into its own <addresses>...</addresses> XML element
+  SimpleSchema:
+    example: |
+      {
+      "status":"success"
+      }
+  Address:
+    properties:
+      street: string
+      city: string
+  AddressWithExamples:
+    properties:
+      street: string
+      zip:
+        type: string
+        example: "94100"
+        default: "00000"
+      house:
+        type: number
+        example: 1
+  ScalarType: string
+  Unionable:
+    type: ErrorResource | Product
+  Notification:
+    properties:
+      scalarArray:
+        required: true
+        type: array
+        items: integer
+        description: Integer array item type
+        displayName: Scalar array (integer)
+      otherScalar:
+        required: false
+        type: string[]
+  ArrayType:
+    type: string[]
+  FileType:
+    type: object
+    properties:
+      filetype:
+        minLength: 100
+        maxLength: 300
+        required: false
+        type: file
+        fileTypes:
+          - image/png
+          - image/jpeg
+  DefaultArray:
+    type: array
+    default: []
+  DefaultString:
+    type: string
+    default: 'default'
+  Arrays:
+    type: object
+    properties:
+      testRepeatable:
+        (deprecated): Test parameter will be removed in next version of the API.
+        required: true
+        type: string[]
+        example: [value1, value2]
+        description: A string array with an example and annotation.
+        minItems: 1
+        maxItems: 10
+      numericRepeatable:
+        required: true
+        type: integer[]
+        examples:
+          Some-test-example: [123, 456]
+          Other-example: [1011, 1213]
+      notRequiredRepeatable:
+        (annotationTest):
+        type: array
+        items: date-only
+        required: false
+      multiArray:
+        type: array
+        items: boolean | string
+  withEmbeddedType:
+    type: object
+    properties:
+      imageProperty: Image
+      other: string
+  ComplexRecursive:
+    type: object
+    properties:
+      iteration1:
+        properties:
+          images:
+            type: array
+            items: Image
+          userImage:
+            type: Image
+            properties:
+              options:
+                type: string | Product
+              user:
+                type: AppPerson
+      ieration2:
+        type: Product
+        properties:
+          images:
+            type: Image[]
+  PropertyArray:
+    type: object
+    properties:
+      etag:
+        type: string
+      nextPageToken:
+        type: string
+      data:
+        type: array
+        items: Product
+      complex:
+        type: array
+        items: string | number | Product
+  NilType: nil
+  AnyType: any
+  Arrable2:
+    type: string[]
+  BooleanType: boolean
+  EnurableType:
+    description: |
+      Test description for a type.
+    type: object
+    minProperties: 2
+    maxProperties: 12
+    examples:
+      NormalExample:
+        e1: v1
+        e2: e2
+      OtherExample:
+        e1: v4
+        e2: e4
+    properties:
+      e1:
+        (deprecated): |
+          This property is deprecated.
+
+          Please, do not use it in new projects.
+        (clearanceLevel):
+          level: low
+          signature: 230-ghtwvfrs1itr
+        type: string
+        displayName: Enumerable 1
+        description: |
+          Example enumerable type to test the documentation
+          element.
+
+          It renders `Markdown` model.
+        enum: [v1, v2, v3, v4]
+        required: false
+        examples:
+          "Example 1": v1
+          "Example 2": v2
+        pattern: "v[1-4]"
+        default: v1
+      e2:
+        type: string
+        enum: [e1, e2, e3, e4]
+        required: true
+        example: e1
+  XmlSchema:
+    (deprecated): Test annotation
+    description: |
+      XML type that has only xsd schema and example
+    type: !include /schemas/product.xsd
+    example: !include /examples/product.xml
+  UnionArray:
+    type: Arrable2 | string
+  Arrable:
+      type: array
+      items: Picture
+  TrademarkPierreNotWorkingType:
+    type: array
+    items:
+      type: string
+      enum:
+        - NON_USE
+        - INTERNATIONAL_REGISTRATION
+        - REGULATED
+        - SERIES
+  ComplexPerson:
+    properties:
+      error?:
+        type: boolean
+        xml:
+          attribute: true
+      id:
+        type: string | number
+      name: string
+      birthday: date-only
+      gender:
+        type: string
+        examples:
+          Male: male
+          Female: female
+      url: string
+      tagline: string
+      language:
+        type: string
+        default: PL
+      etag:
+        type: string
+        example: etag example
+      image:
+        type: object
+        properties:
+          url: string
+          thumb: string
+      opt?: Image | string
+    example:
+      error: false
+      id: 1234
+      name: Pawel Psztyc
+      birthday: 20-10-1983
+      tagline: Test example
+      url: https://domain.com
+      language: PL
+      etag: test
+      image:
+        url: https://image.com
+        thumb: https://image.com/thumb
+  PropertyExamples:
+    properties:
+      xtra:
+        type: string
+        xml:
+          attribute: true
+      firstName:
+        type: string
+        example: Pawel
+      lastName:
+        type: string
+        example: Psztyc
+      address: Address
+      num: number
+      int: integer
+      bool: boolean
+      defVal:
+        type: integer
+        default: 10
+        example: 1
+  TypeExamples:
+    properties:
+      firstName: string
+      lastName: string
+    example:
+      firstName: Pawel
+      lastName: Psztyc
+  ScalarWithExample:
+    type: number
+    example: 5
+  ScalarArrayWithExample:
+    type: number[]
+    example: [1, 5]
+  Images:
+    type: array
+    items: Image
+  Imgs:
+    properties:
+      something: string
+      images:
+        type: Image[]
+        xml:
+          wrapped: true
+  UnionType: Image | Imgs
+  JsonExampleInclude:
+    type: ComplexPerson
+    example: !include schemas/example.json
+  SimpleInlineExample:
+    type: object
+    properties:
+      testProperty: boolean
+    example:
+      testProperty: true
+  DataTypesExample:
+    type: object
+    properties:
+      typeString:
+        type: string
+        example: String example
+      typeNumber:
+        type: number
+        example: 123456
+      typeInt:
+        type: integer
+        example: 1234546
+      typeDecimal:
+        type: number
+        multipleOf: 0.01
+        example: 10.67
+      typeBool:
+        type: boolean
+        example: true
+      typeNull:
+        type: nil
+        example: null
+      typeNegativeInt:
+        type: integer
+        example: -12
+      typeNumberFormatInt64:
+        type: number
+        minimum: 3
+        maximum: 5
+        format: int64
+        multipleOf: 4
+        example: 8
+      typeNumFormatInt32:
+        type: number
+        format: int32
+        example: 109298
+      typeNumFormatInt:
+        type: number
+        format: int
+        example: 11
+      typeNumFormatLong:
+        type: number
+        format: long
+        example: 123456789
+      typeNumFormatFloat:
+        type: number
+        format: float
+        example: 1234567.89
+      typeNumFormatDouble:
+        type: number
+        format: double
+        example: 1234.56789
+      typeNumFormatInt8:
+        type: number
+        format: int8
+        example: 1
+      typeNumFormatInt16:
+        type: number
+        format: int16
+        example: 2
+      typeIntFormatInt8:
+        type: integer
+        minimum: 3
+        maximum: 5
+        format: int8
+        multipleOf: 1
+        example: 12
+  ScalarArray: string[]
+  ArrayTypeWithExample:
+    type: array
+    items: Image
+    example: [{"url": "url 1", "thumb": "thumb 1"}]
+  ArrayWithoutItems:
+    type: array
+    displayName: Incomplete array
+
+resourceTypes:
+  ResourceNotFound:
+    get:
+      responses:
+        404:
+          body:
+            application/json:
+              displayName: Not found response
+              type: ErrorResource
+            application/xml:
+              displayName: Not found response
+              type: !include schemas/error-response.xsd
+              example: !include examples/e404.xml
+  UnauthorizedResponse:
+    get:
+      responses:
+        404:
+          body:
+            application/json:
+              displayName: Unauthorized response
+              type: ErrorResource
+            application/xml:
+              displayName: Unauthorized response
+              type: !include schemas/error-response.xsd
+              example: !include examples/e401.xml
+  RequestErrorResponse:
+    get:
+      responses:
+        400:
+          description: The error response when one of the parameters is invalid and can't be parsed. Nothing can be done at the time except correcting the request to send valid data.
+          body:
+            application/json:
+              displayName: Invalid request
+              type: ErrorResource
+            application/xml:
+              displayName: Invalid request
+              type: !include schemas/error-response.xsd
+              example: !include examples/e400.xml
+traits:
+  Paginated: !include traits/pagination.raml
+  Adminable: !include traits/adminable.raml
+securitySchemes:
+  oauth_2_0: !include securitySchemes/oauth_2_0.raml
+  x-custom: !include securitySchemes/x-custom.raml
+  basic: !include securitySchemes/basic.raml
+  oauth_1_0: !include securitySchemes/oauth_1_0.raml
+
+documentation:
+  - title: Test doc
+    content: Test content
+
+/people:
+  displayName: People
+  get:
+    (annotationTest):
+    displayName: List people
+    description: Use this method to list all the people.
+    is: [Paginated: {resourceType: AppPerson}]
+    queryParameters:
+      nilParam: nil
+    headers:
+      x-people-op-id:
+        (annotationTest):
+        type: string
+        pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+        description: People ops ID. It is UUID v4 string
+        example: 9719fa6f-c666-48e0-a191-290890760b30
+      x-nil:
+        type: nil
+  post:
+    (deprecated): |
+      This method is not deprecated. And this is only an annotation test.
+    displayName: Create a person
+    description: Use this method to add new person
+    body:
+      application/json:
+        (deprecated): This response type is deprecated and soon will be replaced.
+        type: AppPerson
+      application/xml:
+        type: !include schemas/person.xsd
+        example: !include examples/person.xml
+  put:
+    displayName: Update a person
+    description: Updates the person in the datastore.
+    body:
+      application/json:
+        schema: !include schemas/person.json
+        example: !include examples/person.json
+      application/xml:
+        type: !include schemas/person.xsd
+        example: !include examples/person.xml
+    responses:
+      200:
+        (deprecated): This response type is deprecated and soon will be replaced.
+        description: |
+          Success response for the body
+        headers:
+          X-Frame-Options:
+            type: string
+            examples:
+              Deny: DENY
+              SameOrigin: SAMEORIGIN
+        body:
+          application/json:
+            schema: !include schemas/person.json
+            example: !include examples/person.json
+          application/xml:
+            type: !include schemas/person.xsd
+            example: !include examples/person.xml
+      400:
+        description: |
+          Client error
+        body:
+          application/json:
+            schema: !include schemas/error.json
+            example: !include examples/error.json
+          application/xml:
+            type: !include schemas/error.xsd
+            example: !include examples/error.xml
+  /{personId}:
+    securedBy: x-custom
+    type: ResourceNotFound
+    displayName: A person
+    description: The endpoint to access information about the person
+    uriParameters:
+      personId:
+        type: integer
+        required: true
+        description: The ID of the person in the system. It is generated by the database numeric value for the person.
+        example: 1234
+    get:
+      displayName: Get a person
+      description: Returns a person
+      headers:
+        x-client-id:
+          (deprecated): This will be replaced
+          example: 123456-acme.client.com
+          description: The application id used to make a request. It can be obtained in the developer console.
+          type: string
+          required: true
+        x-people-op-id:
+          (annotationTest):
+          type: string
+          pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          description: People ops ID. It is UUID v4 string
+          example: 9719fa6f-c666-48e0-a191-290890760b30
+        x-enum:
+          type: string
+          enum: [a,b,c]
+      responses:
+        200:
+          body:
+            application/json:
+              type: AppPerson
+            application/xml:
+              type: !include schemas/person.xsd
+              example: !include examples/person.xml
+    delete:
+      displayName: Remove a person
+      description: Removes the person from the datastore. This method do not returns any data in 200 response.
+      responses:
+        204:
+      headers:
+        x-people-op-id:
+          (annotationTest):
+          type: string
+          pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          description: People ops ID. It is UUID v4 string
+          example: 9719fa6f-c666-48e0-a191-290890760b30
+    put:
+      displayName: Update a person
+      description: Updates the person in the datastore.
+      queryParameters:
+        testPatam: string
+      body:
+        application/json:
+          type: AppPerson
+        application/xml:
+          type: !include schemas/person.xsd
+          example: !include examples/person.xml
+      responses:
+        200:
+      headers:
+        x-people-op-id:
+          (annotationTest):
+          type: string
+          pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          description: People ops ID. It is UUID v4 string
+          example: 9719fa6f-c666-48e0-a191-290890760b30
+/products:
+  displayName: Products
+  description: The API is to be used to access data about the products.
+  post:
+    displayName: Create product
+    description: |
+      Creates a product in the store.
+      While creating a product the `id` and `etag` properties will be ignored.
+
+      The endpoint will reject the request if exactly the same product is already defined in the
+      datastore (all properties of both objects equals). Newly created product is available
+      for listing but **it won't be available for ordering API** until it's availability is not set.
+    body:
+      application/json:
+        type: Product
+      application/xml:
+        type: !include schemas/product.xsd
+        example: !include examples/product.xml
+    responses:
+      200:
+        body:
+          application/json:
+            type: Product
+            examples:
+              Product:
+                id: d697f5cea85011e680f576304dec7eb7
+                name: Super product
+                quantity: 125
+                unit: ml
+                upc: "123456789101"
+                available: true
+                etag: "W/\"686897696a7c876b7e\""
+              OtherProduct:
+                id: 123e4567e89b12d3a456426655440000
+                name: Acme Product
+                quantity: 1
+                unit: kg
+                upc: "223456789101"
+                available: true
+                etag: "W/\"123456789\""
+          application/xml:
+            type: !include schemas/product.xsd
+            example: !include examples/product.xml
+      400:
+        description: The request has been rejected. Probably the product already exists in the datastore.
+/orgs:
+  /{orgId}:
+    get:
+      displayName: Get organization
+      description: Returns an organization info.
+      responses:
+        200:
+          body:
+            application/json:
+              type: ExampleType.Org
+              properties:
+                id:
+                  type: string
+                  description: UUID generated ID
+              example:
+                id: "12345"
+                onCall:
+                  firstname: nico
+                  lastname: ark
+                  kind: AcmeAdmin
+                  clearanceLevel: low
+                  phone: "12321"
+                Head:
+                  firstname: nico
+                  lastname: ark
+                  kind: AcmeManager
+                  reports:
+                    -
+                      firstname: nico
+                      lastname: ark
+                      kind: admin
+                  phone: "123-23"
+    put:
+      body:
+        application/json:
+          type: ExampleType.Org
+          properties:
+            id:
+              type: string
+              description: UUID generated ID
+      responses:
+        200:
+          body:
+            application/json:
+              type: ExampleType.Org
+    /managers:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: ExampleType.Manager[]
+/messages:
+  securedBy: [oauth_2_0]
+  post:
+    description: Create a new message
+    is:  [Adminable]
+    body:
+      application/json:
+        type: object
+        properties:
+          receiver:
+            type: string
+            description: receiver of the message
+            required: true
+          body:
+            type: string
+            description: A message body
+            required: true
+          important:
+            type: boolean
+            description: If true then the message will be marked as important
+            default: false
+            required: true
+  get:
+    description: |
+      List user messages. It returns an array of messages for last of 7 days if
+      `since` property is not set.
+      You can use `since` and `until` query parameters to control messages time
+      span.
+    queryParameters:
+      until:
+        (annotationTest):
+        type: date-only
+        description: Date right limit of the messages query.
+        example: 2017-05-12
+      since:
+        type: date-only
+        description: Date left limit of the messages query.
+        example: 2017-05-10
+    responses:
+      200:
+        body:
+          application/json:
+            type: array
+            items: !include resourceTypes/message-type.raml
+            example: !include examples/messages-example.json
+  /bulk:
+    post:
+      description: Bulk create messages.
+      is:  [Adminable]
+      body:
+        application/json:
+          (annotationTest):
+          type: array
+          items: !include resourceTypes/message-sent-type.raml
+          examples:
+            Example1: !include examples/messages-sent-example.json
+/arrayBody:
+  post:
+    body:
+      application/json:
+        (deprecated): This response type is deprecated and soon will be replaced.
+        description: |
+          This demonstrates a body as an Array
+        type: AppPerson[]
+/multipart:
+  post:
+    body:
+      multipart/form-data:
+        type: MultipartPerson
+/query-string-test:
+  /node-type:
+    get:
+      queryString: QueryParam
+  /union:
+    get:
+      queryString: QueryParam | OtherQueryParam
+  /scalar:
+    get:
+      queryString:
+        type: string
+        example: test
+  /array:
+    get:
+      queryString:
+        type: OtherQueryParam[]
+/query-parameters/{feature}:
+  (deprecated): This endpoint is deprecated and will be removed.
+  uriParameters:
+    feature:
+      type: string
+      enum:
+        - A
+        - B
+        - C
+  get:
+    (deprecated): This method is deprecated and will be removed.
+    (clearanceLevel):
+      level: high
+      signature: 230-ghtwvfrs1itr
+    description: To test enum values in the URI parameters for inline type declaration.
+    queryParameters:
+      testRepeatable:
+        (deprecated): Test parameter will be removed in next version of the API.
+        required: true
+        type: string[]
+        example: [value1, value2]
+      numericRepeatable:
+        required: true
+        type: integer[]
+        examples:
+          Some-test-example: [123, 456]
+          Other-example: [1011, 1213]
+      notRequiredRepeatable:
+        (annotationTest):
+        type: array
+        items: date-only
+        required: false
+  /{typeFeature}:
+    (annotationTest):
+    (deprecated): This method will be removed in future release of the API.
+    uriParameters:
+      typeFeature:
+        (annotationTest):
+        type: Feature
+    get:
+      (deprecated): This endpoint is deprecated and will be removed.
+      description: To test enum values in the URI parameters for global type declaration.
+/json-schema:
+  post:
+    body:
+      application/json:
+        type: SchemaPerson
+/xml-schema:
+  post:
+    body:
+      application/xml:
+        type: XmlTypeSchema
+/raml-xml-schema:
+  post:
+    body:
+      application/xml:
+        type: Person
+/raml-json-simple-schema:
+  post:
+    body:
+      application/json:
+        type: SimpleSchema
+/raml-json-no-example-schema:
+  post:
+    body:
+      application/json:
+        type: Address
+/test-headers:
+  get:
+    headers:
+      x-deprecated:
+        (deprecated): |
+          This property is deprecated.
+
+          Please, do not use it in new projects.
+        type: string
+        required: false
+        displayName: Deprecated
+        minLength: 0
+        maxLength: 100
+        pattern: "[a-zA-Z]*"
+        description: |
+          This is a description
+        examples:
+          Googd: ""
+          Bad: "something"
+      x-enumerable:
+        (clearanceLevel):
+          level: low
+          signature: 230-ghtwvfrs1itr
+        type: string
+        displayName: Enumerable 1
+        description: |
+          Example enumerable type to test the documentation
+          element.
+
+          It renders `Markdown` model.
+        enum: [v1, v2, v3, v4]
+        required: false
+        examples:
+          Version1: v1
+          Version2: v2
+        pattern: "v[1-4]"
+        default: v1
+      x-repeat:
+        type: array
+        items: string
+        description: |
+          Hello world
+      x-unionable:
+        type: string | number
+      Accept:
+        type: string
+        default: application/json
+        description: |
+          Supported mime tyes in this API are:
+
+          - `application/json`
+          - `application/xml`
+          - `application/x-vnd.unknown`
+/no-desc:
+  get:
+    responses:
+      200:
+      405:
+      201:
+/files:
+  displayName: Files
+  post:
+    displayName: Insert
+    description: |
+      Insert a new file.
+      This method supports an /upload URI and accepts uploaded media with the following characteristics:
+      - Maximum file size: 5120GB
+      - Accepted Media MIME types: */*
+      Note: Apps creating shortcuts with files.insert must specify the MIME type `application/vnd.google-apps.drive-sdk`.
+      Apps should specify a file extension in the title property when inserting files with the API. For example, an operation to insert a JPEG file should specify something like `"title": "cat.jpg"` in the metadata.
+      Subsequent GET requests include the read-only fileExtension property populated with the extension originally specified in the title property. When a Google Drive user requests to download a file, or when the file is downloaded through the sync client, Drive builds a full filename (with extension) based on the title. In cases where the extension is missing, Google Drive attempts to determine the extension based on the file's MIME type.
+      ### HTTP request
+      This method provides media upload functionality through two separate URIs. For more details, see the document on media upload.
+      - Upload URI, for media upload requests: `POST https://www.googleapis.com/upload/drive/v2/files`
+      - Metadata URI, for metadata-only requests: `POST https://www.googleapis.com/drive/v2/files`
+  get:
+    securedBy: [basic]
+    displayName: list
+    description: |
+      Lists the user's files. Try it now or see an example.
+      Requests with `files.list` accept the `q` parameter, which is a search query combining one or more search terms. For more information, see Search for files.
+      Note: Note: This method returns all files by default. This includes files with trashed=true in the results. Use the trashed=false query parameter to filter these from the results.
+  /file:
+    post:
+      body:
+        image/png:
+          type: file
+  /multipart:
+    post:
+      body:
+        multipart/form-data:
+          properties:
+            avatar:
+              type: file
+/external-data-type:
+  post:
+    body:
+      application/json:
+        type: !include types/external-type.raml
+/referenceId:
+  post:
+    body:
+      application/json:
+        type: SchemaPerson
+/permissionIds/{email}:
+  uriParameters:
+    email:
+      type: string
+      description: The email address for which to return a permission ID
+  get:
+    description: Returns the permission ID for an email address.
+/changes:
+  displayName: Changes
+  get:
+
+  /{changeId}:
+    uriParameters:
+      changeId:
+        type: string
+        description: The ID of the change.
+    get:
+      description: Gets a specific change.
+
+  /watch:
+    post:
+      queryParameters:
+        spaces:
+          type: string
+          required: false
+          description: |
+            A comma-separated list of spaces to query. Supported values are:
+            - **drive**
+            - **appDataFolder**
+            - **photos**
+      description: "Watch for all changes to a user's Drive."
+      headers:
+        x-test: string
+    get:
+      description: Dummy function
+
+/emptybody:
+  post:
+    body:
+      application/json:
+
+/unionBody:
+  post:
+    body:
+      application/json:
+        type: AppPerson | Product
+        example:
+          id: "R34fg663H9KW9MMSKISI"
+          name: "Pawel Psztyc"
+          birthday: "1983-10-20"
+          gender: male
+          url: "https://domain.com/profile/pawel.psztyc"
+          image:
+            url: https://domain.com/profile/pawel.psztyc/image
+            thumb: https://domain.com/profile/pawel.psztyc/image/thumb
+          tagline: Some text about me.
+          language: en_GB
+          etag: "W\\244m4n5kj3gbn2nj4k4n4"
+
+/emptyBodyWithAllProperties:
+  post:
+    body:
+      application/json:
+        displayName: My body name
+        examples:
+          Product:
+            id: d697f5cea85011e680f576304dec7eb7
+            name: Super product
+            quantity: 125
+            unit: ml
+            upc: "123456789101"
+            available: true
+            etag: "W/\"686897696a7c876b7e\""
+          OtherProduct:
+            id: 123e4567e89b12d3a456426655440000
+            name: Acme Product
+            quantity: 1
+            unit: kg
+            upc: "223456789101"
+            available: true
+            etag: "W/\"123456789\""
+        description: My description of `body`.
+        default: None
+
+/emptyBodyWithExample:
+  post:
+   body:
+     application/json:
+      example: |
+        {
+          "address": {
+            "id":"test-id"
+          }
+        }
+/IncludedInType:
+  post:
+    body:
+      application/json:
+        type: ComplexPerson
+      application/xml:
+        type: ComplexPerson
+/union:
+  post:
+    body:
+      application/json:
+        type: ComplexPerson | PropertyExamples
+      application/xml:
+        type: ComplexPerson | PropertyExamples
+/propertyExamples:
+  post:
+    body:
+      application/json:
+        type: PropertyExamples
+      application/xml:
+        type: PropertyExamples
+/arrayTypeExample:
+  post:
+    body:
+      application/json:
+        type: TypeExamples[]
+/IncludedInline:
+  post:
+    body:
+      application/json:
+        type: ComplexPerson
+        example:
+          error: false
+          id: 1234
+          name: Inline person
+          birthday: 01-01-1990
+          tagline: Test example
+          url: https://domain.com
+          language: PL
+          etag: test
+          image:
+            url: https://image.com
+            thumb: https://image.com/thumb
+      application/xml:
+        type: !include schemas/example.xsd
+        example: !include schemasexample.xml
+/IncludedInlineJson:
+  post:
+    body:
+      application/json:
+        type: !include types/user.raml
+        example: !include schemas/user.json
+/user-raml-example:
+  post:
+    body:
+      application/json:
+        type: !include types/user-raml-example.raml
+        examples:
+          User 3:
+            id: uid3
+            username: ppsztyc
+            firstName: Pawel
+            lastName: Psztyc
+            profilePhoto: https://img/domain.com/ppsztyc
+            email: ppsztyc@domain.com
+          User 4:
+            id: uid4
+            username: jdoe
+            firstName: John
+            lastName: Does
+            profilePhoto: https://img/domain.com/jdoe
+            email: jdoe@domain.com
+      application/xml:
+        type: !include types/user-raml-example.raml
+/named-linked-example:
+  post:
+    body:
+      application/json:
+        examples: !include examples/named-example-with-link.raml
+      application/xml:
+        examples: !include examples/named-example-with-link.raml
+/named-example:
+  post:
+    body:
+      application/json:
+        examples: !include examples/named-example.raml
+      application/xml:
+        examples: !include examples/named-example.raml
+/users-json-example:
+  post:
+    body:
+      application/json:
+        type: !include types/users-json-example.raml
+/user-json-example:
+  post:
+    body:
+      application/json:
+        type: !include types/user-json-example.raml
+/users-raml-example:
+  post:
+    body:
+      application/json:
+        type: !include types/users-raml-example.raml
+      application/xml:
+        type: !include types/users-raml-example.raml
+/arrayScalar:
+  post:
+    body:
+      application/json:
+        type: array
+        items: [number]
+/arrayScalarWithExample:
+  post:
+    body:
+      application/json:
+        type: array
+        items: [number]
+        example: [1, 2, 3]
+/arrayPropertyExamples:
+  post:
+    body:
+      application/json:
+        type: PropertyExamples[]
+      application/xml:
+        type: PropertyExamples[]
+/arrayPropertyGeneratedExamples:
+  post:
+    body:
+      application/json:
+        type: array
+        items:
+          properties:
+            test: boolean
+            other: string
+      application/xml:
+        type: array
+        items:
+          properties:
+            test: boolean
+            other: string
+/scalar:
+  post:
+    body:
+      application/json:
+        type: integer
+/test-parameters/{feature}:
+  (deprecated): This endpoint is deprecated and will be removed.
+  uriParameters:
+    feature:
+      type: string
+      enum:
+        - A
+        - B
+        - C
+  get:
+    (deprecated): This method is deprecated and will be removed.
+    (clearanceLevel):
+      level: high
+      signature: 230-ghtwvfrs1itr
+    description: To test enum values in the URI parameters for inline type declaration.
+    queryParameters:
+      testRepeatable:
+        (deprecated): Test parameter will be removed in next version of the API.
+        required: true
+        type: string[]
+        example: [value1, value2]
+      numericRepeatable:
+        required: true
+        type: integer[]
+        examples:
+          Some-test-example: [123, 456]
+          Other-example: [1011, 1213]
+      notRequiredRepeatable:
+        (annotationTest):
+        type: array
+        items: date-only
+        required: false
+  /{typeFeature}:
+    (annotationTest):
+    (deprecated): This method will be removed in future release of the API.
+    uriParameters:
+      typeFeature:
+        (annotationTest):
+        type: Feature
+    get:
+      (deprecated): This endpoint is deprecated and will be removed.
+      description: To test enum values in the URI parameters for global type declaration.
+/defaultValues:
+  get:
+    headers:
+      x-string:
+        type: string
+        default: TestDefault
+      x-integer:
+        type: integer
+        default: 1234
+      x-boolean:
+        type: boolean
+        default: false
+      x-array:
+        type: string[]
+        default: [ArrayTest, OtherTest]
+/dateformats:
+  get:
+    headers:
+      x-date-only: date-only
+      x-time-only: time-only
+      x-datetime-only: datetime-only
+      x-datetime: datetime
+      x-datetime-format-default:
+        type: datetime
+        format: rfc3339
+      x-datetime-format:
+        type: datetime
+        format: rfc2616
+/nillableUnion:
+  get:
+    headers:
+      nillable:
+        type: integer | nil
+      notUnion: nil
+      notNillable: integer
+      notNillableUnion: integer | string
+/no-body:
+  get:
+    responses:
+      200:
+        description: Test
+/urlencoded:
+  post:
+    body:
+      application/x-www-form-urlencoded:
+        type: Product
+/content-type:
+  post:
+    headers:
+      Content-Type:
+        default: application/json
+    body:
+      type: object
+      properties:
+        error:
+          type: boolean
+          default: false
+/post-headers:
+  post:
+    headers:
+      x-string:
+        required: true
+        type: string
+        default: my-value
+    body:
+      application/json:
+        type: AppPerson
