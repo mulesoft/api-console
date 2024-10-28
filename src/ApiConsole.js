@@ -92,7 +92,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        */
       modelLocation: { type: String },
       /**
-       * Currently rendered page. It can be either `docs` or `request`.
+       * Currently rendered page. It can be either `docs` or `request`
        */
       page: { type: String },
       /**
