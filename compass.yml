@@ -1,0 +1,14 @@
+name: api-console
+id: ari:cloud:compass:b099cca4-e168-464e-955f-9bc5bd1e455b:component/3d461702-821a-4c5d-a6f6-eb922d0c914e/31202e2a-9efe-4f05-be69-e87f3c657794
+description: An interactive REST console based on RAML/OAS files
+configVersion: 1
+typeId: SERVICE
+fields:
+  tier: 4
+links: []
+relationships:
+  DEPENDS_ON: []
+labels:
+  - language:javascript
+  - source:github
+customFields: null
