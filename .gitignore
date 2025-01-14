@@ -67,3 +67,5 @@ demo/models/flattened/*.json
 !demo/models/avro2.json
 
 .idea/
+.sfdx
+.codegenie
