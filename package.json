@@ -56,7 +56,7 @@
     "@api-components/api-model-generator": "^0.2.8",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@open-wc/building-rollup": "^1.2.6",
+    "@open-wc/building-rollup": "^3.0.2",
     "@open-wc/eslint-config": "^4.2.0",
     "@open-wc/testing": "^2.5.16",
     "@polymer/iron-test-helpers": "^3.0.0",
