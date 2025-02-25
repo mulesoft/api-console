@@ -11,10 +11,9 @@ on:
       - support/*
   pull_request:
     branches:
-      - master
       - main
-      - stage
-      - support/*
+      - develop
+
 jobs:
   tests:
     name: ${{ matrix.os }}
@@ -39,12 +38,13 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
+
   tag:
     name: "Publishing release"
-    if: github.event_name != 'pull_request'
-    needs: 
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs:
       - tests
-    runs-on: mulesoft-ubuntu
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
