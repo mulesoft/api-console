@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: 18
       - uses: microsoft/playwright-github-action@v1
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -42,7 +42,7 @@ jobs:
   tag:
     name: "Publishing release"
     if: github.event_name != 'pull_request'
-    needs: 
+    needs:
       - tests
     runs-on: mulesoft-ubuntu
     steps:
@@ -54,7 +54,7 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
