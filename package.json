@@ -77,6 +77,7 @@
     "lint-staged": "^10.2.2",
     "multer": "^1.4.2",
     "node-cache": "^5.1.0",
+    "playwright": "^1.25.2",
     "postcss": "^8.4.14",
     "rimraf": "^3.0.1",
     "rollup": "^2.75.6",
@@ -149,7 +150,6 @@
     ]
   },
   "overrides": {
-    "playwright": "1.25.2",
     "unset-value": "2.0.1",
     "semver": "7.5.4",
     "decode-uri-component": "0.4.1",
