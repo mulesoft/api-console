@@ -3,16 +3,6 @@ import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugi
 export default {
   files: 'test/**/*.test.js',
   nodeResolve: true,
-  browsers: [
-    playwrightLauncher({
-      product: 'chromium',
-      launchOptions: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        timeout: 20000
-      }
-    }),
-    playwrightLauncher({ product: 'firefox' }),
-  ],
   middleware: [
     function rewriteBase(context, next) {
       if (context.url.indexOf('/base') === 0) {
