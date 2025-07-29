@@ -73,6 +73,7 @@
     "express": "^4.17.1",
     "fs-extra": "^9.1.0",
     "husky": "^4.3.8",
+    "js-yaml": "^4.1.0",
     "lint-staged": "^10.2.2",
     "multer": "^1.4.2",
     "node-cache": "^5.1.0",
