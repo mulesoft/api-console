@@ -18,6 +18,7 @@ class ApicApplication extends DemoBase {
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API'],
       ['APIC-538', 'APIC-538'],
+      ['grpc-test', 'GRPC Test'],
     ];
   }
 
