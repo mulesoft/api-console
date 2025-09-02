@@ -394,6 +394,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     this.credentialsSource = [];
     this.renderFullPaths = false;
     this.persistCache = false;
+    this.operationsOpened = false;
+    this.noOverview = false;
   }
 
   connectedCallback() {
@@ -592,6 +594,36 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   }
 
   /**
+   * Checks if the current operation is a gRPC operation based on the AMF model.
+   * @param {String} selected Currently selected AMF shape (@id).
+   * @param {Object} webApi Computed AMF WebAPI model.
+   * @return {Boolean} True if the operation is a gRPC operation.
+   */
+  _isGrpcOperation(selected, webApi) {
+    debugger
+    return true;
+    if (!selected || !webApi) {
+      return false;
+    }
+    let method;
+    try {
+      method = this._computeMethodModel(webApi, selected);
+    } catch (_) {
+      return false;
+    }
+    if (!method) {
+      return false;
+    }
+    // Check if operation has application/grpc media type
+    const request = this._computePayload(method);
+    if (!request) {
+      return false;
+    }
+    const mediaType = this._getValue(/** @type {any} */ (request), this.ns.aml.vocabularies.core.mediaType);
+    return mediaType === 'application/grpc';
+  }
+
+  /**
    * Computes method name for not-wide view, where the request panel
    * has close button.
    * @param {String} selected Currently selected AMF shape (@id).
@@ -719,12 +751,23 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
   _getRequestTemplate() {
     const {
       methodName,
-      compatibility
+      compatibility,
+      selectedShape,
+      webApi
     } = this;
+    debugger
+    const isGrpc = this._isGrpcOperation(selectedShape, webApi);
     return html`
     <div class="method-title-area">
       <h1 class="method-title">${methodName}</h1>
       <div class="method-close-action">
+        ${isGrpc ? html`
+          <anypoint-button
+            class="action-button"
+            ?compatibility="${compatibility}"
+            @click="${this._handleGrpcRequest}"
+            emphasis="high">Try gRPC Request</anypoint-button>
+        ` : ''}
         <anypoint-button
           class="action-button"
           ?compatibility="${compatibility}"
@@ -739,6 +782,47 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
 
   /**
    * @return {TemplateResult} The template for the request panel element.
+   */
+  /**
+   * Renders a form field based on the field schema
+   * @param {Object} field Field schema
+   * @return {TemplateResult} The form field template
+   */
+  _renderGrpcField(field) {
+    if (field.type === 'message') {
+      return html`
+        <div class="grpc-nested-message">
+          <h4>${field.name}</h4>
+          ${field.fields.map(f => this._renderGrpcField(f))}
+        </div>
+      `;
+    }
+    return html`
+      <div class="grpc-field">
+        <label for="${field.name}">${field.name} ${field.required ? '*' : ''}</label>
+        <input
+          id="${field.name}"
+          type="text"
+          .value="${field.value || ''}"
+          @input="${e => this._handleGrpcFieldInput(e, field)}"
+          ?required="${field.required}"
+        />
+      </div>
+    `;
+  }
+
+  /**
+   * Handles input changes in gRPC form fields
+   * @param {Event} e Input event
+   * @param {Object} field Field schema
+   */
+  _handleGrpcFieldInput(e, field) {
+    const input = /** @type {HTMLInputElement} */ (e.target);
+    field.value = input.value;
+  }
+
+  /**
+   * @return {TemplateResult} The template for the request panel element
    */
   _requestPanelTemplate() {
     const {
@@ -759,29 +843,45 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
       allowCustomBaseUri,
       credentialsSource,
       persistCache,
+      webApi
     } = this;
-    return html`<api-request-panel
-      .amf="${amf}"
-      .selected="${selectedShape}"
-      ?outlined="${outlined}"
-      ?compatibility="${compatibility}"
-      ?noServerSelector="${noServerSelector}"
-      ?allowCustomBaseUri="${allowCustomBaseUri}"
-      .noUrlEditor="${noUrlEditor}"
-      .redirectUri="${redirectUri}"
-      .allowCustom="${allowCustom}"
-      .allowDisableParams="${allowDisableParams}"
-      .allowHideOptional="${allowHideOptional}"
-      .baseUri="${baseUri}"
-      .serverValue="${serverValue}"
-      .serverType="${serverType}"
-      .eventsTarget="${eventsTarget}"
-      .credentialsSource="${credentialsSource}"
-      ?persistCache="${persistCache}"
-      @api-request-panel-selection-changed="${this._handleSelectionChange}"
-      >
-        <slot name="custom-base-uri" slot="custom-base-uri"></slot>
-      </api-request-panel>`;
+
+    const isGrpc = this._isGrpcOperation(selectedShape, webApi);
+    const schema = isGrpc ? this._getGrpcRequestSchema(selectedShape, webApi) : null;
+
+    return html`
+      ${isGrpc ? html`
+        <div class="grpc-request-panel">
+          <h3>gRPC Request</h3>
+          <div class="grpc-form">
+            ${schema ? schema.fields.map(field => this._renderGrpcField(field)) : ''}
+          </div>
+        </div>
+      ` : html`
+        <api-request-panel
+          .amf="${amf}"
+          .selected="${selectedShape}"
+          ?outlined="${outlined}"
+          ?compatibility="${compatibility}"
+          ?noServerSelector="${noServerSelector}"
+          ?allowCustomBaseUri="${allowCustomBaseUri}"
+          .noUrlEditor="${noUrlEditor}"
+          .redirectUri="${redirectUri}"
+          .allowCustom="${allowCustom}"
+          .allowDisableParams="${allowDisableParams}"
+          .allowHideOptional="${allowHideOptional}"
+          .baseUri="${baseUri}"
+          .serverValue="${serverValue}"
+          .serverType="${serverType}"
+          .eventsTarget="${eventsTarget}"
+          .credentialsSource="${credentialsSource}"
+          ?persistCache="${persistCache}"
+          @api-request-panel-selection-changed="${this._handleSelectionChange}"
+        >
+          <slot name="custom-base-uri" slot="custom-base-uri"></slot>
+        </api-request-panel>
+      `}
+    `;
   }
 
   /**
@@ -904,5 +1004,183 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     return html`<paper-toast class="error-toast" id="apiLoadErrorToast"></paper-toast>
     <api-console-ext-comm @api-console-extension-installed="${this._hasExtensionHandler}"></api-console-ext-comm>
     `;
+  }
+
+  /**
+   * Extracts field information from a SHACL property
+   * @param {Object} property SHACL property object
+   * @return {Object} Field information
+   */
+  _extractFieldInfo(property) {
+    const name = this._getValue(/** @type {any} */ (property), this.ns.aml.vocabularies.core.name);
+    const range = this._getValue(/** @type {any} */ (property), this.ns.aml.vocabularies.shapes.range);
+    const dataType = this._getValue(/** @type {any} */ (range), this.ns.aml.vocabularies.core.displayName) || 'string';
+    const minCount = this._getValue(/** @type {any} */ (property), `${this.ns.aml.vocabularies.shapes.key}minCount`);
+    const isRequired = typeof minCount === 'number' && minCount > 0;
+    
+    // Check if it's a nested message
+    const properties = this._getValueArray(/** @type {any} */ (range), `${this.ns.aml.vocabularies.shapes.key}property`);
+    if (properties && properties.length > 0) {
+      const fields = properties.map(prop => this._extractFieldInfo(prop));
+      return {
+        name,
+        type: 'message',
+        fields,
+        required: isRequired
+      };
+    }
+
+    return {
+      name,
+      type: dataType,
+      required: isRequired
+    };
+  }
+
+  /**
+   * Extracts the request schema from the AMF model for a gRPC operation
+   * @param {String} selected Currently selected AMF shape (@id)
+   * @param {Object} webApi Computed AMF WebAPI model
+   * @return {Object|undefined} The request schema object with field information
+   */
+  _getGrpcRequestSchema(selected, webApi) {
+    if (!selected || !webApi) {
+      return undefined;
+    }
+    const method = this._computeMethodModel(webApi, selected);
+    if (!method) {
+      return undefined;
+    }
+    const request = this._computePayload(method);
+    if (!request) {
+      return undefined;
+    }
+    // Extract schema from SHACL shape
+    const schema = this._getValue(/** @type {any} */ (request), this.ns.aml.vocabularies.shapes.schema);
+    if (!schema) {
+      return undefined;
+    }
+
+    // Get message properties
+    const properties = this._getValueArray(/** @type {any} */ (schema), `${this.ns.aml.vocabularies.shapes.key}property`);
+    if (!properties) {
+      return undefined;
+    }
+
+    // Extract field information for each property
+    const fields = properties.map(prop => this._extractFieldInfo(prop));
+    return {
+      name: this._getValue(/** @type {any} */ (schema), this.ns.aml.vocabularies.core.name),
+      fields
+    };
+  }
+
+  /**
+   * Handles click on the "Try gRPC Request" button
+   * @param {Event} e Click event
+   */
+  /**
+   * Creates a protobuf message type from a schema
+   * @param {Object} schema Schema object from AMF model
+   * @return {Promise<any>} protobuf.Type The message type
+   */
+  async _createMessageType(schema) {
+    const { Root, Type } = await import('protobufjs');
+    // Create a dynamic proto definition
+    let protoDefinition = `message ${schema.name} {\n`;
+    schema.fields.forEach((field, index) => {
+      if (field.type === 'message') {
+        protoDefinition += `  optional ${field.name}Message ${field.name} = ${index + 1};\n`;
+      } else {
+        protoDefinition += `  optional ${field.type} ${field.name} = ${index + 1};\n`;
+      }
+    });
+    protoDefinition += '}\n';
+
+    // Load the proto definition
+    const root = Root.fromJSON({
+      nested: {
+        [schema.name]: {
+          fields: schema.fields.reduce((acc, field, index) => {
+            acc[field.name] = {
+              type: field.type,
+              id: index + 1
+            };
+            return acc;
+          }, {})
+        }
+      }
+    });
+    
+    return root.lookupType(schema.name);
+  }
+
+  /**
+   * Handles click on the "Try gRPC Request" button
+   * @param {Event} e Click event
+   */
+  async _handleGrpcRequest(e) {
+    e.preventDefault();
+    const { selectedShape, webApi } = this;
+    const schema = this._getGrpcRequestSchema(selectedShape, webApi);
+    
+    if (!schema) {
+      const toast = /** @type {any} */ (this.shadowRoot.querySelector('#apiLoadErrorToast'));
+      toast.text = 'Error: Could not parse gRPC schema';
+      toast.opened = true;
+      return;
+    }
+    
+    try {
+      // Create message type from schema
+      const messageType = await this._createMessageType(schema);
+      
+      // Build message from form values
+      const buildMessageValues = (fields) => {
+        const values = {};
+        fields.forEach(field => {
+          if (field.type === 'message') {
+            values[field.name] = buildMessageValues(field.fields);
+          } else {
+            values[field.name] = field.value || '';
+          }
+        });
+        return values;
+      };
+      
+      const message = messageType.create(buildMessageValues(schema.fields));
+      
+      // Create gRPC-Web client
+      const { GrpcWebClientBase } = await import('grpc-web');
+      const client = new GrpcWebClientBase({
+        format: 'text',
+        suppressCorsPreflight: true,
+        withCredentials: false,
+      });
+
+      // Get method info from AMF model
+      const method = this._computeMethodModel(webApi, selectedShape);
+      const methodName = this._getValue(method, this.ns.aml.vocabularies.core.name);
+      const service = this._computeEncodes(webApi);
+      const serviceName = this._getValue(service, this.ns.aml.vocabularies.core.name);
+      
+      // Make unary call
+      const response = await client.rpcCall(
+        `/${serviceName}/${methodName}`, // Method path
+        message.toObject(), // Convert to plain object
+        {}, // Metadata
+        null, // Callback
+        () => {}, // Callback
+      );
+
+      // Show response in toast
+      const toast = /** @type {any} */ (this.shadowRoot.querySelector('#apiLoadErrorToast'));
+      toast.text = `gRPC Response: ${JSON.stringify(response)}`;
+      toast.opened = true;
+    } catch (error) {
+      const toast = /** @type {any} */ (this.shadowRoot.querySelector('#apiLoadErrorToast'));
+      toast.text = `gRPC Error: ${error.message}`;
+      toast.opened = true;
+    }
   }
 }

@@ -44,8 +44,10 @@
     "@polymer/app-layout": "^3.1.0",
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/paper-toast": "^3.0.0",
+    "grpc-web": "^1.5.0",
     "lit-element": "^2.3.1",
-    "lit-html": "^1.2.1"
+    "lit-html": "^1.2.1",
+    "protobufjs": "^7.5.4"
   },
   "devDependencies": {
     "@anypoint-web-components/anypoint-dropdown": "^1.0.1",

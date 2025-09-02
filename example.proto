@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package example;
+
+// Definición del servicio
+service Greeter {
+  // Método unary (simple request-response)
+  rpc SayHello (HelloRequest) returns (HelloResponse);
+}
+
+// Mensaje de solicitud
+message HelloRequest {
+  string name = 1;
+}
+
+// Mensaje de respuesta
+message HelloResponse {
+  string message = 1;
+}

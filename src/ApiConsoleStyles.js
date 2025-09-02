@@ -141,4 +141,63 @@ a.attribution {
   width: 24px;
   height: 24px;
   display: block;
+}
+
+.grpc-request-panel {
+  padding: 16px;
+  background-color: var(--api-console-grpc-panel-background-color, #f5f5f5);
+  border-radius: 4px;
+  margin: 16px;
+}
+
+.grpc-request-panel h3 {
+  margin: 0 0 16px 0;
+  font-size: var(--arc-font-title-font-size);
+  font-weight: var(--arc-font-title-font-weight);
+  letter-spacing: var(--arc-font-title-letter-spacing);
+  line-height: var(--arc-font-title-line-height);
+}
+
+.grpc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grpc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.grpc-field label {
+  font-size: var(--arc-font-body1-font-size);
+  font-weight: var(--arc-font-body1-font-weight);
+  color: var(--api-console-grpc-label-color, rgba(0, 0, 0, 0.87));
+}
+
+.grpc-field input {
+  padding: 8px;
+  border: 1px solid var(--api-console-grpc-input-border-color, rgba(0, 0, 0, 0.12));
+  border-radius: 4px;
+  font-size: var(--arc-font-body1-font-size);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.grpc-field input:focus {
+  border-color: var(--api-console-grpc-input-focus-color, #2196f3);
+}
+
+.grpc-nested-message {
+  padding: 16px;
+  background-color: var(--api-console-grpc-nested-background-color, rgba(0, 0, 0, 0.03));
+  border-radius: 4px;
+}
+
+.grpc-nested-message h4 {
+  margin: 0 0 12px 0;
+  font-size: var(--arc-font-subhead-font-size);
+  font-weight: var(--arc-font-subhead-font-weight);
+  color: var(--api-console-grpc-nested-title-color, rgba(0, 0, 0, 0.87));
 }`;
