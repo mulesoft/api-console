@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Hotel Reservations API
+  description: API to manage hotel room bookings, check availability, and apply loyalty benefits.
+x-sfdc:
+  agent:
+    topic:
+      name: Hotel_Room_Reservation
+      classificationDescription: This API allows agents to book, modify, and cancel hotel reservations, as well as apply loyalty upgrades.
+      scope: Your job is to assist customers in booking hotel rooms based on their preferences, loyalty status, and availability. You should also be able to recommend upgrades if the customer qualifies.
+      instructions:
+        - Always check the customer's loyalty status before finalizing the booking.
+        - If the preferred room type is unavailable, suggest alternative options with similar amenities.
+        - Never confirm a reservation without validating payment information.
+        - If the customer qualifies for an upgrade, apply it automatically and notify them.
+paths:
+  /reservations:
+    post:
+      summary: Create a new hotel reservation
+      description: Book a hotel room with specified preferences and apply loyalty upgrades if eligible.
+      operationId: reservationCreate
+      x-sfdc:
+          agent:
+              action:
+                  publishAsAgentAction: true
+      requestBody:
+        required: true
+        description: customer-reservation
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              x-sfdc:
+                  agent:
+                      action:
+                          isUserInput: true
+              properties:
+                customerId:
+                  type: string
+                  description: Unique identifier of the customer.
+                checkInDate:
+                  type: string
+                  format: date
+                  description: Date of check-in.
+                checkOutDate:
+                  type: string
+                  format: date
+                  description: Date of check-out.
+                roomType:
+                  type: string
+                  enum: [Standard, Deluxe, Suite]
+                  description: Preferred room type.
+                specialRequests:
+                  type: string
+                  description: Additional requests like pillow type or air freshener choice.
+      responses:
+        '201':
+          description: Reservation successfully created
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                type: object
+                x-sfdc:
+                    agent:
+                        action:
+                            isDisplayable: true
+                    privacy:
+                        isPii: true
+                properties:
+                  reservationId:
+                    type: string
+                    description: Unique ID of the created reservation.
+                  upgradeApplied:
+                    type: boolean
+                    description: Indicates if a loyalty-based upgrade was applied.
+                  totalPrice:
+                    type: number
+                    format: float
+                    description: Final price after applying any discounts or upgrades.
+        '400':
+          description: Invalid input provided
+  /reservations/reservationlookup:
+    get:
+      summary: Retrieve reservation details
+      description: Get details of a specific reservation by ID.
+      x-sfdc:
+          agent:
+              action:
+                  publishAsAgentAction: true
+      operationId: reservationRetrieve  
+      requestBody:
+        required: true
+        description: customer-reservation
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              x-sfdc:
+                  agent:
+                      action:
+                          isUserInput: true
+              properties:
+                reservationID:
+                  type: string
+                  description: Unique identifier of the reservation.
+      responses:
+        '200':
+          description: Reservation details retrieved successfully
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                x-sfdc:
+                    agent:
+                        action:
+                            isDisplayable: true
+                    privacy:
+                        isPii: true 
+                type: object
+                properties:
+                  reservationId:
+                    type: string
+                  customerId:
+                    type: string
+                  roomType:
+                    type: string
+                  checkInDate:
+                    type: string
+                    format: date
+                  checkOutDate:
+                    type: string
+                    format: date
+                  upgradeApplied:
+                    type: boolean
+        '404':
+          description: Reservation not found
