@@ -1,0 +1,2239 @@
+[
+    {
+        "@id": "",
+        "@type": [
+            "doc:Document",
+            "doc:Fragment",
+            "doc:Module",
+            "doc:Unit"
+        ],
+        "doc:encodes": [
+            {
+                "@id": "#2",
+                "@type": [
+                    "apiContract:WebAPI",
+                    "apiContract:API",
+                    "doc:RootDomainElement",
+                    "doc:DomainElement"
+                ],
+                "core:name": [
+                    {
+                        "@value": "Hotel Reservations API"
+                    }
+                ],
+                "core:description": [
+                    {
+                        "@value": "API to manage hotel room bookings, check availability, and apply loyalty benefits."
+                    }
+                ],
+                "core:version": [
+                    {
+                        "@value": "1.0.0"
+                    }
+                ],
+                "apiContract:endpoint": [
+                    {
+                        "@id": "#3",
+                        "@type": [
+                            "apiContract:EndPoint",
+                            "doc:DomainElement"
+                        ],
+                        "apiContract:path": [
+                            {
+                                "@value": "/reservations"
+                            }
+                        ],
+                        "apiContract:supportedOperation": [
+                            {
+                                "@id": "#4",
+                                "@type": [
+                                    "apiContract:Operation",
+                                    "core:Operation",
+                                    "doc:DomainElement"
+                                ],
+                                "apiContract:method": [
+                                    {
+                                        "@value": "post"
+                                    }
+                                ],
+                                "core:name": [
+                                    {
+                                        "@value": "reservationCreate"
+                                    }
+                                ],
+                                "core:description": [
+                                    {
+                                        "@value": "Book a hotel room with specified preferences and apply loyalty upgrades if eligible."
+                                    }
+                                ],
+                                "apiContract:guiSummary": [
+                                    {
+                                        "@value": "Create a new hotel reservation"
+                                    }
+                                ],
+                                "apiContract:expects": [
+                                    {
+                                        "@id": "#29",
+                                        "@type": [
+                                            "apiContract:Request",
+                                            "core:Request",
+                                            "apiContract:Message",
+                                            "doc:DomainElement"
+                                        ],
+                                        "apiContract:required": [
+                                            {
+                                                "@value": true
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "requestBody"
+                                            }
+                                        ],
+                                        "core:description": [
+                                            {
+                                                "@value": "customer-reservation"
+                                            }
+                                        ],
+                                        "apiContract:payload": [
+                                            {
+                                                "@id": "#30",
+                                                "@type": [
+                                                    "apiContract:Payload",
+                                                    "core:Payload",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "core:mediaType": [
+                                                    {
+                                                        "@value": "application/json"
+                                                    }
+                                                ],
+                                                "raml-shapes:schema": [
+                                                    {
+                                                        "@id": "#31",
+                                                        "@type": [
+                                                            "sh:NodeShape",
+                                                            "raml-shapes:AnyShape",
+                                                            "sh:Shape",
+                                                            "raml-shapes:Shape",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "sh:closed": [
+                                                            {
+                                                                "@value": true,
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "sh:property": [
+                                                            {
+                                                                "@id": "#38",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#customerId",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#39",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "customerId",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Unique identifier of the customer.",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0,
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "customerId",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            },
+                                                            {
+                                                                "@id": "#40",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#checkInDate",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#41",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#date",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "raml-shapes:format": [
+                                                                            {
+                                                                                "@value": "date",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "checkInDate",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Date of check-in.",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0,
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "checkInDate",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            },
+                                                            {
+                                                                "@id": "#42",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#checkOutDate",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#43",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#date",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "raml-shapes:format": [
+                                                                            {
+                                                                                "@value": "date",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "checkOutDate",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Date of check-out.",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0,
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "checkOutDate",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            },
+                                                            {
+                                                                "@id": "#44",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#roomType",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#45",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "roomType",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Preferred room type.",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:in": [
+                                                                            {
+                                                                                "@id": "#45/list",
+                                                                                "@type": [
+                                                                                    "rdfs:Seq"
+                                                                                ],
+                                                                                "rdfs:_1": [
+                                                                                    {
+                                                                                        "@id": "#46",
+                                                                                        "@type": [
+                                                                                            "data:Scalar",
+                                                                                            "data:Node",
+                                                                                            "doc:DomainElement"
+                                                                                        ],
+                                                                                        "data:value": [
+                                                                                            {
+                                                                                                "@value": "Standard",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "sh:datatype": [
+                                                                                            {
+                                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "core:name": [
+                                                                                            {
+                                                                                                "@value": "scalar_1",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "rdfs:_2": [
+                                                                                    {
+                                                                                        "@id": "#47",
+                                                                                        "@type": [
+                                                                                            "data:Scalar",
+                                                                                            "data:Node",
+                                                                                            "doc:DomainElement"
+                                                                                        ],
+                                                                                        "data:value": [
+                                                                                            {
+                                                                                                "@value": "Deluxe",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "sh:datatype": [
+                                                                                            {
+                                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "core:name": [
+                                                                                            {
+                                                                                                "@value": "scalar_2",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "rdfs:_3": [
+                                                                                    {
+                                                                                        "@id": "#48",
+                                                                                        "@type": [
+                                                                                            "data:Scalar",
+                                                                                            "data:Node",
+                                                                                            "doc:DomainElement"
+                                                                                        ],
+                                                                                        "data:value": [
+                                                                                            {
+                                                                                                "@value": "Suite",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "sh:datatype": [
+                                                                                            {
+                                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "core:name": [
+                                                                                            {
+                                                                                                "@value": "scalar_3",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0,
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "roomType",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            },
+                                                            {
+                                                                "@id": "#49",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#specialRequests",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#50",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "specialRequests",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Additional requests like pillow type or air freshener choice.",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0,
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "specialRequests",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "sh:name": [
+                                                            {
+                                                                "@value": "schema",
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "amf://id#37": [
+                                                            {
+                                                                "core:extensionName": [
+                                                                    {
+                                                                        "@value": "sfdc",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "@id": "#33",
+                                                                "@type": [
+                                                                    "data:Object",
+                                                                    "data:Node",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "data:agent": [
+                                                                    {
+                                                                        "@id": "#34",
+                                                                        "@type": [
+                                                                            "data:Object",
+                                                                            "data:Node",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "data:action": [
+                                                                            {
+                                                                                "@id": "#35",
+                                                                                "@type": [
+                                                                                    "data:Object",
+                                                                                    "data:Node",
+                                                                                    "doc:DomainElement"
+                                                                                ],
+                                                                                "data:isUserInput": [
+                                                                                    {
+                                                                                        "@id": "#36",
+                                                                                        "@type": [
+                                                                                            "data:Scalar",
+                                                                                            "data:Node",
+                                                                                            "doc:DomainElement"
+                                                                                        ],
+                                                                                        "data:value": [
+                                                                                            {
+                                                                                                "@value": "true",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "sh:datatype": [
+                                                                                            {
+                                                                                                "@id": "http://www.w3.org/2001/XMLSchema#boolean",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "core:name": [
+                                                                                            {
+                                                                                                "@value": "isUserInput",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "core:name": [
+                                                                                    {
+                                                                                        "@value": "action",
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:name": [
+                                                                            {
+                                                                                "@value": "agent",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "core:name": [
+                                                                    {
+                                                                        "@value": "object_1",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "doc:customDomainProperties": [
+                                                            {
+                                                                "@id": "#37",
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "__apicResolved": true
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "apiContract:returns": [
+                                    {
+                                        "@id": "#11",
+                                        "@type": [
+                                            "apiContract:Response",
+                                            "core:Response",
+                                            "apiContract:Message",
+                                            "doc:DomainElement"
+                                        ],
+                                        "apiContract:statusCode": [
+                                            {
+                                                "@value": "201"
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "201"
+                                            }
+                                        ],
+                                        "core:description": [
+                                            {
+                                                "@value": "Reservation successfully created"
+                                            }
+                                        ],
+                                        "apiContract:payload": [
+                                            {
+                                                "@id": "#12",
+                                                "@type": [
+                                                    "apiContract:Payload",
+                                                    "core:Payload",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "core:mediaType": [
+                                                    {
+                                                        "@value": "application/json"
+                                                    }
+                                                ],
+                                                "raml-shapes:schema": [
+                                                    {
+                                                        "@id": "#13",
+                                                        "@type": [
+                                                            "sh:NodeShape",
+                                                            "raml-shapes:AnyShape",
+                                                            "sh:Shape",
+                                                            "raml-shapes:Shape",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "sh:closed": [
+                                                            {
+                                                                "@value": true,
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "sh:property": [
+                                                            {
+                                                                "@id": "#22",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#reservationId",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#23",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "reservationId",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Unique ID of the created reservation.",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0,
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "reservationId",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            },
+                                                            {
+                                                                "@id": "#24",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#upgradeApplied",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#25",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#boolean",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "upgradeApplied",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Indicates if a loyalty-based upgrade was applied.",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0,
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "upgradeApplied",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            },
+                                                            {
+                                                                "@id": "#26",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#totalPrice",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#27",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#float",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "raml-shapes:format": [
+                                                                            {
+                                                                                "@value": "float",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "totalPrice",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Final price after applying any discounts or upgrades.",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0,
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "totalPrice",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "sh:name": [
+                                                            {
+                                                                "@value": "schema",
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "amf://id#21": [
+                                                            {
+                                                                "core:extensionName": [
+                                                                    {
+                                                                        "@value": "sfdc",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "@id": "#15",
+                                                                "@type": [
+                                                                    "data:Object",
+                                                                    "data:Node",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "data:agent": [
+                                                                    {
+                                                                        "@id": "#16",
+                                                                        "@type": [
+                                                                            "data:Object",
+                                                                            "data:Node",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "data:action": [
+                                                                            {
+                                                                                "@id": "#17",
+                                                                                "@type": [
+                                                                                    "data:Object",
+                                                                                    "data:Node",
+                                                                                    "doc:DomainElement"
+                                                                                ],
+                                                                                "data:isDisplayable": [
+                                                                                    {
+                                                                                        "@id": "#18",
+                                                                                        "@type": [
+                                                                                            "data:Scalar",
+                                                                                            "data:Node",
+                                                                                            "doc:DomainElement"
+                                                                                        ],
+                                                                                        "data:value": [
+                                                                                            {
+                                                                                                "@value": "true",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "sh:datatype": [
+                                                                                            {
+                                                                                                "@id": "http://www.w3.org/2001/XMLSchema#boolean",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "core:name": [
+                                                                                            {
+                                                                                                "@value": "isDisplayable",
+                                                                                                "__apicResolved": true
+                                                                                            }
+                                                                                        ],
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "core:name": [
+                                                                                    {
+                                                                                        "@value": "action",
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:name": [
+                                                                            {
+                                                                                "@value": "agent",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "data:privacy": [
+                                                                    {
+                                                                        "@id": "#19",
+                                                                        "@type": [
+                                                                            "data:Object",
+                                                                            "data:Node",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "data:isPii": [
+                                                                            {
+                                                                                "@id": "#20",
+                                                                                "@type": [
+                                                                                    "data:Scalar",
+                                                                                    "data:Node",
+                                                                                    "doc:DomainElement"
+                                                                                ],
+                                                                                "data:value": [
+                                                                                    {
+                                                                                        "@value": "true",
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "sh:datatype": [
+                                                                                    {
+                                                                                        "@id": "http://www.w3.org/2001/XMLSchema#boolean",
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "core:name": [
+                                                                                    {
+                                                                                        "@value": "isPii",
+                                                                                        "__apicResolved": true
+                                                                                    }
+                                                                                ],
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "core:name": [
+                                                                            {
+                                                                                "@value": "privacy",
+                                                                                "__apicResolved": true
+                                                                            }
+                                                                        ],
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "core:name": [
+                                                                    {
+                                                                        "@value": "object_1",
+                                                                        "__apicResolved": true
+                                                                    }
+                                                                ],
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "doc:customDomainProperties": [
+                                                            {
+                                                                "@id": "#21",
+                                                                "__apicResolved": true
+                                                            }
+                                                        ],
+                                                        "__apicResolved": true
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "@id": "#28",
+                                        "@type": [
+                                            "apiContract:Response",
+                                            "core:Response",
+                                            "apiContract:Message",
+                                            "doc:DomainElement"
+                                        ],
+                                        "apiContract:statusCode": [
+                                            {
+                                                "@value": "400"
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "400"
+                                            }
+                                        ],
+                                        "core:description": [
+                                            {
+                                                "@value": "Invalid input provided"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "apiContract:operationId": [
+                                    {
+                                        "@value": "reservationCreate"
+                                    }
+                                ],
+                                "amf://id#10": [
+                                    {
+                                        "core:extensionName": [
+                                            {
+                                                "@value": "sfdc"
+                                            }
+                                        ],
+                                        "@id": "#6",
+                                        "@type": [
+                                            "data:Object",
+                                            "data:Node",
+                                            "doc:DomainElement"
+                                        ],
+                                        "data:agent": [
+                                            {
+                                                "@id": "#7",
+                                                "@type": [
+                                                    "data:Object",
+                                                    "data:Node",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "data:action": [
+                                                    {
+                                                        "@id": "#8",
+                                                        "@type": [
+                                                            "data:Object",
+                                                            "data:Node",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "data:publishAsAgentAction": [
+                                                            {
+                                                                "@id": "#9",
+                                                                "@type": [
+                                                                    "data:Scalar",
+                                                                    "data:Node",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "data:value": [
+                                                                    {
+                                                                        "@value": "true"
+                                                                    }
+                                                                ],
+                                                                "sh:datatype": [
+                                                                    {
+                                                                        "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+                                                                    }
+                                                                ],
+                                                                "core:name": [
+                                                                    {
+                                                                        "@value": "publishAsAgentAction"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ],
+                                                        "core:name": [
+                                                            {
+                                                                "@value": "action"
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "core:name": [
+                                                    {
+                                                        "@value": "agent"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "object_1"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "doc:customDomainProperties": [
+                                    {
+                                        "@id": "#10"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "@id": "#51",
+                        "@type": [
+                            "apiContract:EndPoint",
+                            "doc:DomainElement"
+                        ],
+                        "apiContract:path": [
+                            {
+                                "@value": "/reservations/reservationlookup"
+                            }
+                        ],
+                        "apiContract:supportedOperation": [
+                            {
+                                "@id": "#52",
+                                "@type": [
+                                    "apiContract:Operation",
+                                    "core:Operation",
+                                    "doc:DomainElement"
+                                ],
+                                "apiContract:method": [
+                                    {
+                                        "@value": "get"
+                                    }
+                                ],
+                                "core:name": [
+                                    {
+                                        "@value": "reservationRetrieve"
+                                    }
+                                ],
+                                "core:description": [
+                                    {
+                                        "@value": "Get details of a specific reservation by ID."
+                                    }
+                                ],
+                                "apiContract:guiSummary": [
+                                    {
+                                        "@value": "Retrieve reservation details"
+                                    }
+                                ],
+                                "apiContract:expects": [
+                                    {
+                                        "@id": "#83",
+                                        "@type": [
+                                            "apiContract:Request",
+                                            "core:Request",
+                                            "apiContract:Message",
+                                            "doc:DomainElement"
+                                        ],
+                                        "apiContract:required": [
+                                            {
+                                                "@value": true
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "requestBody"
+                                            }
+                                        ],
+                                        "core:description": [
+                                            {
+                                                "@value": "customer-reservation"
+                                            }
+                                        ],
+                                        "apiContract:payload": [
+                                            {
+                                                "@id": "#84",
+                                                "@type": [
+                                                    "apiContract:Payload",
+                                                    "core:Payload",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "core:mediaType": [
+                                                    {
+                                                        "@value": "application/json"
+                                                    }
+                                                ],
+                                                "raml-shapes:schema": [
+                                                    {
+                                                        "@id": "#85",
+                                                        "@type": [
+                                                            "sh:NodeShape",
+                                                            "raml-shapes:AnyShape",
+                                                            "sh:Shape",
+                                                            "raml-shapes:Shape",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "sh:closed": [
+                                                            {
+                                                                "@value": true
+                                                            }
+                                                        ],
+                                                        "sh:property": [
+                                                            {
+                                                                "@id": "#92",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#reservationID"
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#93",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "reservationID"
+                                                                            }
+                                                                        ],
+                                                                        "core:description": [
+                                                                            {
+                                                                                "@value": "Unique identifier of the reservation."
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "reservationID"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ],
+                                                        "sh:name": [
+                                                            {
+                                                                "@value": "schema"
+                                                            }
+                                                        ],
+                                                        "amf://id#91": [
+                                                            {
+                                                                "core:extensionName": [
+                                                                    {
+                                                                        "@value": "sfdc"
+                                                                    }
+                                                                ],
+                                                                "@id": "#87",
+                                                                "@type": [
+                                                                    "data:Object",
+                                                                    "data:Node",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "data:agent": [
+                                                                    {
+                                                                        "@id": "#88",
+                                                                        "@type": [
+                                                                            "data:Object",
+                                                                            "data:Node",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "data:action": [
+                                                                            {
+                                                                                "@id": "#89",
+                                                                                "@type": [
+                                                                                    "data:Object",
+                                                                                    "data:Node",
+                                                                                    "doc:DomainElement"
+                                                                                ],
+                                                                                "data:isUserInput": [
+                                                                                    {
+                                                                                        "@id": "#90",
+                                                                                        "@type": [
+                                                                                            "data:Scalar",
+                                                                                            "data:Node",
+                                                                                            "doc:DomainElement"
+                                                                                        ],
+                                                                                        "data:value": [
+                                                                                            {
+                                                                                                "@value": "true"
+                                                                                            }
+                                                                                        ],
+                                                                                        "sh:datatype": [
+                                                                                            {
+                                                                                                "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+                                                                                            }
+                                                                                        ],
+                                                                                        "core:name": [
+                                                                                            {
+                                                                                                "@value": "isUserInput"
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ],
+                                                                                "core:name": [
+                                                                                    {
+                                                                                        "@value": "action"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ],
+                                                                        "core:name": [
+                                                                            {
+                                                                                "@value": "agent"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "core:name": [
+                                                                    {
+                                                                        "@value": "object_1"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ],
+                                                        "doc:customDomainProperties": [
+                                                            {
+                                                                "@id": "#91"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "apiContract:returns": [
+                                    {
+                                        "@id": "#59",
+                                        "@type": [
+                                            "apiContract:Response",
+                                            "core:Response",
+                                            "apiContract:Message",
+                                            "doc:DomainElement"
+                                        ],
+                                        "apiContract:statusCode": [
+                                            {
+                                                "@value": "200"
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "200"
+                                            }
+                                        ],
+                                        "core:description": [
+                                            {
+                                                "@value": "Reservation details retrieved successfully"
+                                            }
+                                        ],
+                                        "apiContract:payload": [
+                                            {
+                                                "@id": "#60",
+                                                "@type": [
+                                                    "apiContract:Payload",
+                                                    "core:Payload",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "core:mediaType": [
+                                                    {
+                                                        "@value": "application/json"
+                                                    }
+                                                ],
+                                                "raml-shapes:schema": [
+                                                    {
+                                                        "@id": "#61",
+                                                        "@type": [
+                                                            "sh:NodeShape",
+                                                            "raml-shapes:AnyShape",
+                                                            "sh:Shape",
+                                                            "raml-shapes:Shape",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "sh:closed": [
+                                                            {
+                                                                "@value": true
+                                                            }
+                                                        ],
+                                                        "sh:property": [
+                                                            {
+                                                                "@id": "#70",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#reservationId"
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#71",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "reservationId"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "reservationId"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "@id": "#72",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#customerId"
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#73",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "customerId"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "customerId"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "@id": "#74",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#roomType"
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#75",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "roomType"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "roomType"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "@id": "#76",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#checkInDate"
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#77",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#date"
+                                                                            }
+                                                                        ],
+                                                                        "raml-shapes:format": [
+                                                                            {
+                                                                                "@value": "date"
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "checkInDate"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "checkInDate"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "@id": "#78",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#checkOutDate"
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#79",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#date"
+                                                                            }
+                                                                        ],
+                                                                        "raml-shapes:format": [
+                                                                            {
+                                                                                "@value": "date"
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "checkOutDate"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "checkOutDate"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "@id": "#80",
+                                                                "@type": [
+                                                                    "sh:PropertyShape",
+                                                                    "sh:Shape",
+                                                                    "raml-shapes:Shape",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "sh:path": [
+                                                                    {
+                                                                        "@id": "http://a.ml/vocabularies/data#upgradeApplied"
+                                                                    }
+                                                                ],
+                                                                "raml-shapes:range": [
+                                                                    {
+                                                                        "@id": "#81",
+                                                                        "@type": [
+                                                                            "raml-shapes:ScalarShape",
+                                                                            "raml-shapes:AnyShape",
+                                                                            "sh:Shape",
+                                                                            "raml-shapes:Shape",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "sh:datatype": [
+                                                                            {
+                                                                                "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+                                                                            }
+                                                                        ],
+                                                                        "sh:name": [
+                                                                            {
+                                                                                "@value": "upgradeApplied"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "sh:minCount": [
+                                                                    {
+                                                                        "@value": 0
+                                                                    }
+                                                                ],
+                                                                "sh:name": [
+                                                                    {
+                                                                        "@value": "upgradeApplied"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ],
+                                                        "sh:name": [
+                                                            {
+                                                                "@value": "schema"
+                                                            }
+                                                        ],
+                                                        "amf://id#69": [
+                                                            {
+                                                                "core:extensionName": [
+                                                                    {
+                                                                        "@value": "sfdc"
+                                                                    }
+                                                                ],
+                                                                "@id": "#63",
+                                                                "@type": [
+                                                                    "data:Object",
+                                                                    "data:Node",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "data:agent": [
+                                                                    {
+                                                                        "@id": "#64",
+                                                                        "@type": [
+                                                                            "data:Object",
+                                                                            "data:Node",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "data:action": [
+                                                                            {
+                                                                                "@id": "#65",
+                                                                                "@type": [
+                                                                                    "data:Object",
+                                                                                    "data:Node",
+                                                                                    "doc:DomainElement"
+                                                                                ],
+                                                                                "data:isDisplayable": [
+                                                                                    {
+                                                                                        "@id": "#66",
+                                                                                        "@type": [
+                                                                                            "data:Scalar",
+                                                                                            "data:Node",
+                                                                                            "doc:DomainElement"
+                                                                                        ],
+                                                                                        "data:value": [
+                                                                                            {
+                                                                                                "@value": "true"
+                                                                                            }
+                                                                                        ],
+                                                                                        "sh:datatype": [
+                                                                                            {
+                                                                                                "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+                                                                                            }
+                                                                                        ],
+                                                                                        "core:name": [
+                                                                                            {
+                                                                                                "@value": "isDisplayable"
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ],
+                                                                                "core:name": [
+                                                                                    {
+                                                                                        "@value": "action"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ],
+                                                                        "core:name": [
+                                                                            {
+                                                                                "@value": "agent"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "data:privacy": [
+                                                                    {
+                                                                        "@id": "#67",
+                                                                        "@type": [
+                                                                            "data:Object",
+                                                                            "data:Node",
+                                                                            "doc:DomainElement"
+                                                                        ],
+                                                                        "data:isPii": [
+                                                                            {
+                                                                                "@id": "#68",
+                                                                                "@type": [
+                                                                                    "data:Scalar",
+                                                                                    "data:Node",
+                                                                                    "doc:DomainElement"
+                                                                                ],
+                                                                                "data:value": [
+                                                                                    {
+                                                                                        "@value": "true"
+                                                                                    }
+                                                                                ],
+                                                                                "sh:datatype": [
+                                                                                    {
+                                                                                        "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+                                                                                    }
+                                                                                ],
+                                                                                "core:name": [
+                                                                                    {
+                                                                                        "@value": "isPii"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ],
+                                                                        "core:name": [
+                                                                            {
+                                                                                "@value": "privacy"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "core:name": [
+                                                                    {
+                                                                        "@value": "object_1"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ],
+                                                        "doc:customDomainProperties": [
+                                                            {
+                                                                "@id": "#69"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "@id": "#82",
+                                        "@type": [
+                                            "apiContract:Response",
+                                            "core:Response",
+                                            "apiContract:Message",
+                                            "doc:DomainElement"
+                                        ],
+                                        "apiContract:statusCode": [
+                                            {
+                                                "@value": "404"
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "404"
+                                            }
+                                        ],
+                                        "core:description": [
+                                            {
+                                                "@value": "Reservation not found"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "apiContract:operationId": [
+                                    {
+                                        "@value": "reservationRetrieve"
+                                    }
+                                ],
+                                "amf://id#58": [
+                                    {
+                                        "core:extensionName": [
+                                            {
+                                                "@value": "sfdc"
+                                            }
+                                        ],
+                                        "@id": "#54",
+                                        "@type": [
+                                            "data:Object",
+                                            "data:Node",
+                                            "doc:DomainElement"
+                                        ],
+                                        "data:agent": [
+                                            {
+                                                "@id": "#55",
+                                                "@type": [
+                                                    "data:Object",
+                                                    "data:Node",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "data:action": [
+                                                    {
+                                                        "@id": "#56",
+                                                        "@type": [
+                                                            "data:Object",
+                                                            "data:Node",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "data:publishAsAgentAction": [
+                                                            {
+                                                                "@id": "#57",
+                                                                "@type": [
+                                                                    "data:Scalar",
+                                                                    "data:Node",
+                                                                    "doc:DomainElement"
+                                                                ],
+                                                                "data:value": [
+                                                                    {
+                                                                        "@value": "true"
+                                                                    }
+                                                                ],
+                                                                "sh:datatype": [
+                                                                    {
+                                                                        "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+                                                                    }
+                                                                ],
+                                                                "core:name": [
+                                                                    {
+                                                                        "@value": "publishAsAgentAction"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ],
+                                                        "core:name": [
+                                                            {
+                                                                "@value": "action"
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "core:name": [
+                                                    {
+                                                        "@value": "agent"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "object_1"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "doc:customDomainProperties": [
+                                    {
+                                        "@id": "#58"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "amf://id#106": [
+                    {
+                        "core:extensionName": [
+                            {
+                                "@value": "sfdc"
+                            }
+                        ],
+                        "@id": "#95",
+                        "@type": [
+                            "data:Object",
+                            "data:Node",
+                            "doc:DomainElement"
+                        ],
+                        "data:agent": [
+                            {
+                                "@id": "#96",
+                                "@type": [
+                                    "data:Object",
+                                    "data:Node",
+                                    "doc:DomainElement"
+                                ],
+                                "data:topic": [
+                                    {
+                                        "@id": "#97",
+                                        "@type": [
+                                            "data:Object",
+                                            "data:Node",
+                                            "doc:DomainElement"
+                                        ],
+                                        "data:name": [
+                                            {
+                                                "@id": "#98",
+                                                "@type": [
+                                                    "data:Scalar",
+                                                    "data:Node",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "data:value": [
+                                                    {
+                                                        "@value": "Hotel_Room_Reservation"
+                                                    }
+                                                ],
+                                                "sh:datatype": [
+                                                    {
+                                                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                    }
+                                                ],
+                                                "core:name": [
+                                                    {
+                                                        "@value": "name"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "data:classificationDescription": [
+                                            {
+                                                "@id": "#99",
+                                                "@type": [
+                                                    "data:Scalar",
+                                                    "data:Node",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "data:value": [
+                                                    {
+                                                        "@value": "This API allows agents to book, modify, and cancel hotel reservations, as well as apply loyalty upgrades."
+                                                    }
+                                                ],
+                                                "sh:datatype": [
+                                                    {
+                                                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                    }
+                                                ],
+                                                "core:name": [
+                                                    {
+                                                        "@value": "classificationDescription"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "data:scope": [
+                                            {
+                                                "@id": "#100",
+                                                "@type": [
+                                                    "data:Scalar",
+                                                    "data:Node",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "data:value": [
+                                                    {
+                                                        "@value": "Your job is to assist customers in booking hotel rooms based on their preferences, loyalty status, and availability. You should also be able to recommend upgrades if the customer qualifies."
+                                                    }
+                                                ],
+                                                "sh:datatype": [
+                                                    {
+                                                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                    }
+                                                ],
+                                                "core:name": [
+                                                    {
+                                                        "@value": "scope"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "data:instructions": [
+                                            {
+                                                "@id": "#101",
+                                                "@type": [
+                                                    "data:Array",
+                                                    "rdf:Seq",
+                                                    "data:Node",
+                                                    "doc:DomainElement"
+                                                ],
+                                                "rdfs:member": [
+                                                    {
+                                                        "@id": "#102",
+                                                        "@type": [
+                                                            "data:Scalar",
+                                                            "data:Node",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "data:value": [
+                                                            {
+                                                                "@value": "Always check the customer's loyalty status before finalizing the booking."
+                                                            }
+                                                        ],
+                                                        "sh:datatype": [
+                                                            {
+                                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                            }
+                                                        ],
+                                                        "core:name": [
+                                                            {
+                                                                "@value": "scalar_8"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "@id": "#103",
+                                                        "@type": [
+                                                            "data:Scalar",
+                                                            "data:Node",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "data:value": [
+                                                            {
+                                                                "@value": "If the preferred room type is unavailable, suggest alternative options with similar amenities."
+                                                            }
+                                                        ],
+                                                        "sh:datatype": [
+                                                            {
+                                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                            }
+                                                        ],
+                                                        "core:name": [
+                                                            {
+                                                                "@value": "scalar_9"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "@id": "#104",
+                                                        "@type": [
+                                                            "data:Scalar",
+                                                            "data:Node",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "data:value": [
+                                                            {
+                                                                "@value": "Never confirm a reservation without validating payment information."
+                                                            }
+                                                        ],
+                                                        "sh:datatype": [
+                                                            {
+                                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                            }
+                                                        ],
+                                                        "core:name": [
+                                                            {
+                                                                "@value": "scalar_10"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "@id": "#105",
+                                                        "@type": [
+                                                            "data:Scalar",
+                                                            "data:Node",
+                                                            "doc:DomainElement"
+                                                        ],
+                                                        "data:value": [
+                                                            {
+                                                                "@value": "If the customer qualifies for an upgrade, apply it automatically and notify them."
+                                                            }
+                                                        ],
+                                                        "sh:datatype": [
+                                                            {
+                                                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                            }
+                                                        ],
+                                                        "core:name": [
+                                                            {
+                                                                "@value": "scalar_11"
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "core:name": [
+                                                    {
+                                                        "@value": "instructions"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "core:name": [
+                                            {
+                                                "@value": "topic"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "core:name": [
+                                    {
+                                        "@value": "agent"
+                                    }
+                                ]
+                            }
+                        ],
+                        "core:name": [
+                            {
+                                "@value": "object_1"
+                            }
+                        ]
+                    }
+                ],
+                "doc:customDomainProperties": [
+                    {
+                        "@id": "#106"
+                    }
+                ]
+            }
+        ],
+        "doc:root": [
+            {
+                "@value": true
+            }
+        ],
+        "doc:processingData": [
+            {
+                "@id": "#1",
+                "@type": [
+                    "doc:APIContractProcessingData"
+                ],
+                "apiContract:modelVersion": [
+                    {
+                        "@value": "3.11.0"
+                    }
+                ],
+                "doc:transformed": [
+                    {
+                        "@value": true
+                    }
+                ],
+                "doc:sourceSpec": [
+                    {
+                        "@value": "OAS 3.0"
+                    }
+                ]
+            }
+        ],
+        "@context": {
+            "@base": "amf://id",
+            "raml-shapes": "http://a.ml/vocabularies/shapes#",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+            "data": "http://a.ml/vocabularies/data#",
+            "doc": "http://a.ml/vocabularies/document#",
+            "apiContract": "http://a.ml/vocabularies/apiContract#",
+            "core": "http://a.ml/vocabularies/core#",
+            "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            "sh": "http://www.w3.org/ns/shacl#"
+        }
+    }
+]

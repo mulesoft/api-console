@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: Flights API
+  version: v1
+tags:
+  - name: AllFlights
+    description: Operations related to all flights
+  - name: OneFlight
+    description: Operations related to a single flight
+paths:
+  /flights:
+    get:
+      tags:
+        - AllFlights
+      summary: List all flights
+      operationId: getAllFlights
+      responses:
+        '200':
+          description: Successful response
+    post:
+      tags:
+        - AllFlights
+      summary: Create a new flight
+      operationId: createFlight
+      responses:
+        '201':
+          description: Flight created
+  /flights/{ID}:
+    get:
+      tags:
+        - OneFlight
+      summary: Get a single flight by ID
+      operationId: getOneFlight
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
