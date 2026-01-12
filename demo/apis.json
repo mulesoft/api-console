@@ -37,5 +37,7 @@
   "models/multipart-api/multipart-api.raml": "RAML 1.0",
   "models/multiple-messages/multiple-messages.yaml": "ASYNC 2.0",
   "models/APIC-560/APIC-560.yaml": "ASYNC 2.0",
-  "models/agens-api/agents-api.yaml": "OAS 3.0"
+  "models/agens-api/agents-api.yaml": "OAS 3.0",
+  "models/union-error/union.raml": "RAML 1.0",
+  "models/tags-flights/tags-flights.yml": "OAS 3.0"
 }

@@ -1,0 +1,15 @@
+#%RAML 1.0 DataType
+
+uses:
+  lib: lib.raml
+
+type: object
+
+properties:
+  users_direct_array:
+    # This property is a simple array
+    type: lib.userItem[]
+  users_union_array:
+    # This property is an array OR null
+    type: lib.userItem[] | nil
+
