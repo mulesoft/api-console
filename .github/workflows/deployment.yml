@@ -62,7 +62,7 @@ jobs:
     needs:
       - test_linux
       - test_win
-    runs-on: ubuntu-latest
+    runs-on: mulesoft-ubuntu
     permissions:
       contents: write
     steps:
