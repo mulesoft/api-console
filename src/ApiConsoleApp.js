@@ -204,7 +204,7 @@ export class ApiConsoleApp extends ApiConsole {
     if (!wideLayout || !isMethod ||inlineMethods) {
       return false;
     }
-    if (!this._isWebAPI(this.amf)) {
+    if (!this._isWebAPI(this.amf) || this._isGrpcApi(this.amf)) {
       return false;
     }
     return wideLayout;
@@ -214,7 +214,7 @@ export class ApiConsoleApp extends ApiConsole {
     if (renderInlineTyit) {
       return true;
     }
-    if (!this._isWebAPI(this.amf)) {
+    if (!this._isWebAPI(this.amf) || this._isGrpcApi(this.amf)) {
       return true;
     }
     return noTryIt;
