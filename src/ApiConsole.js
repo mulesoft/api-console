@@ -188,32 +188,32 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
        * or headers) and renders a checkbox to render optional items in the
        * editor view.
        */
-       allowHideOptional: { type: Boolean },
-       /**
-        * Prohibits rendering documentation (the icon and the
-        * description) in request editors.
-        */
-       noDocs: { type: Boolean },
-       /**
-        * A HTML element used to listen for events on.
-        * If you use one than more API console elements on single page
-        * at the same time wrap the console is a HTML element (eg div) and
-        * set this value to the container so the request panel only listen
-        * to events dispatched inside the container. Otherwise events dispatched
-        * by the request panel will be handled by other instances of the console.
-        */
-       eventsTarget: { type: Object },
-       /**
-        * A default Client ID to set on the OAuth 2 authorization panel
-        */
-       oauth2clientId: { type: String },
-       /**
-        * A default Client Secret to set on the OAuth 2 authorization panel
-        */
-       oauth2clientSecret: { type: String },
-       /**
-       * Enables compatibility with Anypoint components.
+      allowHideOptional: { type: Boolean },
+      /**
+       * Prohibits rendering documentation (the icon and the
+       * description) in request editors.
        */
+      noDocs: { type: Boolean },
+      /**
+       * A HTML element used to listen for events on.
+       * If you use one than more API console elements on single page
+       * at the same time wrap the console is a HTML element (eg div) and
+       * set this value to the container so the request panel only listen
+       * to events dispatched inside the container. Otherwise events dispatched
+       * by the request panel will be handled by other instances of the console.
+       */
+      eventsTarget: { type: Object },
+      /**
+       * A default Client ID to set on the OAuth 2 authorization panel
+       */
+      oauth2clientId: { type: String },
+      /**
+       * A default Client Secret to set on the OAuth 2 authorization panel
+       */
+      oauth2clientSecret: { type: String },
+      /**
+      * Enables compatibility with Anypoint components.
+      */
       compatibility: { type: Boolean },
       /**
        * This property is passed to the `api-navigation` component.
@@ -463,7 +463,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     const webApi = this._computeApi(amf);
     this.webApi = webApi;
     this.methodName = this._computeMethodName(this.selectedShape, webApi);
-    if (!this._isWebAPI(amf)) {
+
+    if (!this._isWebAPI(amf) || this._isGrpcApi(amf)) {
       this._noTryItValue = true;
     }
   }
@@ -507,7 +508,7 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
    * Called by `_modelLocationChanged` when error occurred when getting API data.
    * @param {Error|Object=} error
    */
-  _apiLoadErrorHandler(error={}) {
+  _apiLoadErrorHandler(error = {}) {
     const message = `Unable to load API model data. ${error.message || ''}`;
     const toast = this.shadowRoot.querySelector('#apiLoadErrorToast');
     // @ts-ignore
