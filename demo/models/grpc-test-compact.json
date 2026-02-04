@@ -1,0 +1,1045 @@
+[
+  {
+      "@id": "",
+      "doc:declares": [
+          {
+              "@id": "#1",
+              "@type": [
+                  "sh:NodeShape",
+                  "raml-shapes:AnyShape",
+                  "sh:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+              ],
+              "sh:property": [
+                  {
+                      "@id": "#2",
+                      "@type": [
+                          "sh:PropertyShape",
+                          "sh:Shape",
+                          "raml-shapes:Shape",
+                          "doc:DomainElement"
+                      ],
+                      "raml-shapes:range": [
+                          {
+                              "@id": "#3",
+                              "@type": [
+                                  "raml-shapes:ScalarShape",
+                                  "raml-shapes:AnyShape",
+                                  "sh:Shape",
+                                  "raml-shapes:Shape",
+                                  "doc:DomainElement"
+                              ],
+                              "sh:datatype": [
+                                  {
+                                      "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                      "__apicResolved": true
+                                  }
+                              ],
+                              "__apicResolved": true
+                          }
+                      ],
+                      "raml-shapes:serializationOrder": [
+                          {
+                              "@value": 1,
+                              "__apicResolved": true
+                          }
+                      ],
+                      "sh:name": [
+                          {
+                              "@value": "query",
+                              "__apicResolved": true
+                          }
+                      ],
+                      "__apicResolved": true
+                  },
+                  {
+                      "@id": "#4",
+                      "@type": [
+                          "sh:PropertyShape",
+                          "sh:Shape",
+                          "raml-shapes:Shape",
+                          "doc:DomainElement"
+                      ],
+                      "raml-shapes:range": [
+                          {
+                              "@id": "#5",
+                              "@type": [
+                                  "raml-shapes:ScalarShape",
+                                  "raml-shapes:AnyShape",
+                                  "sh:Shape",
+                                  "raml-shapes:Shape",
+                                  "doc:DomainElement"
+                              ],
+                              "sh:datatype": [
+                                  {
+                                      "@id": "http://www.w3.org/2001/XMLSchema#integer",
+                                      "__apicResolved": true
+                                  }
+                              ],
+                              "raml-shapes:format": [
+                                  {
+                                      "@value": "int32",
+                                      "__apicResolved": true
+                                  }
+                              ],
+                              "__apicResolved": true
+                          }
+                      ],
+                      "raml-shapes:serializationOrder": [
+                          {
+                              "@value": 2,
+                              "__apicResolved": true
+                          }
+                      ],
+                      "sh:name": [
+                          {
+                              "@value": "page_number",
+                              "__apicResolved": true
+                          }
+                      ],
+                      "__apicResolved": true
+                  },
+                  {
+                      "@id": "#6",
+                      "@type": [
+                          "sh:PropertyShape",
+                          "sh:Shape",
+                          "raml-shapes:Shape",
+                          "doc:DomainElement"
+                      ],
+                      "raml-shapes:range": [
+                          {
+                              "@id": "#7",
+                              "@type": [
+                                  "raml-shapes:ScalarShape",
+                                  "raml-shapes:AnyShape",
+                                  "sh:Shape",
+                                  "raml-shapes:Shape",
+                                  "doc:DomainElement"
+                              ],
+                              "sh:datatype": [
+                                  {
+                                      "@id": "http://www.w3.org/2001/XMLSchema#integer",
+                                      "__apicResolved": true
+                                  }
+                              ],
+                              "raml-shapes:format": [
+                                  {
+                                      "@value": "int32",
+                                      "__apicResolved": true
+                                  }
+                              ],
+                              "__apicResolved": true
+                          }
+                      ],
+                      "raml-shapes:serializationOrder": [
+                          {
+                              "@value": 3,
+                              "__apicResolved": true
+                          }
+                      ],
+                      "sh:name": [
+                          {
+                              "@value": "results_per_page",
+                              "__apicResolved": true
+                          }
+                      ],
+                      "__apicResolved": true
+                  }
+              ],
+              "sh:name": [
+                  {
+                      "@value": ".test_grpc_FF.SearchRequest",
+                      "__apicResolved": true
+                  }
+              ],
+              "core:name": [
+                  {
+                      "@value": "SearchRequest",
+                      "__apicResolved": true
+                  }
+              ],
+              "__apicResolved": true
+          },
+          {
+              "@id": "#9",
+              "@type": [
+                  "sh:NodeShape",
+                  "raml-shapes:AnyShape",
+                  "sh:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+              ],
+              "sh:property": [
+                  {
+                      "@id": "#10",
+                      "@type": [
+                          "sh:PropertyShape",
+                          "sh:Shape",
+                          "raml-shapes:Shape",
+                          "doc:DomainElement"
+                      ],
+                      "raml-shapes:range": [
+                          {
+                              "@id": "#11",
+                              "@type": [
+                                  "raml-shapes:ArrayShape",
+                                  "raml-shapes:AnyShape",
+                                  "sh:Shape",
+                                  "raml-shapes:Shape",
+                                  "doc:DomainElement"
+                              ],
+                              "raml-shapes:items": [
+                                  {
+                                      "@id": "#12",
+                                      "@type": [
+                                          "sh:NodeShape",
+                                          "raml-shapes:AnyShape",
+                                          "sh:Shape",
+                                          "raml-shapes:Shape",
+                                          "doc:DomainElement"
+                                      ],
+                                      "sh:property": [
+                                          {
+                                              "@id": "#13",
+                                              "@type": [
+                                                  "sh:PropertyShape",
+                                                  "sh:Shape",
+                                                  "raml-shapes:Shape",
+                                                  "doc:DomainElement"
+                                              ],
+                                              "raml-shapes:range": [
+                                                  {
+                                                      "@id": "#14",
+                                                      "@type": [
+                                                          "raml-shapes:ScalarShape",
+                                                          "raml-shapes:AnyShape",
+                                                          "sh:Shape",
+                                                          "raml-shapes:Shape",
+                                                          "doc:DomainElement"
+                                                      ],
+                                                      "sh:datatype": [
+                                                          {
+                                                              "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                          }
+                                                      ]
+                                                  }
+                                              ],
+                                              "raml-shapes:serializationOrder": [
+                                                  {
+                                                      "@value": 1
+                                                  }
+                                              ],
+                                              "sh:name": [
+                                                  {
+                                                      "@value": "url"
+                                                  }
+                                              ]
+                                          },
+                                          {
+                                              "@id": "#15",
+                                              "@type": [
+                                                  "sh:PropertyShape",
+                                                  "sh:Shape",
+                                                  "raml-shapes:Shape",
+                                                  "doc:DomainElement"
+                                              ],
+                                              "raml-shapes:range": [
+                                                  {
+                                                      "@id": "#16",
+                                                      "@type": [
+                                                          "raml-shapes:ScalarShape",
+                                                          "raml-shapes:AnyShape",
+                                                          "sh:Shape",
+                                                          "raml-shapes:Shape",
+                                                          "doc:DomainElement"
+                                                      ],
+                                                      "sh:datatype": [
+                                                          {
+                                                              "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                          }
+                                                      ]
+                                                  }
+                                              ],
+                                              "raml-shapes:serializationOrder": [
+                                                  {
+                                                      "@value": 2
+                                                  }
+                                              ],
+                                              "sh:name": [
+                                                  {
+                                                      "@value": "title"
+                                                  }
+                                              ]
+                                          },
+                                          {
+                                              "@id": "#17",
+                                              "@type": [
+                                                  "sh:PropertyShape",
+                                                  "sh:Shape",
+                                                  "raml-shapes:Shape",
+                                                  "doc:DomainElement"
+                                              ],
+                                              "raml-shapes:range": [
+                                                  {
+                                                      "@id": "#18",
+                                                      "@type": [
+                                                          "raml-shapes:ArrayShape",
+                                                          "raml-shapes:AnyShape",
+                                                          "sh:Shape",
+                                                          "raml-shapes:Shape",
+                                                          "doc:DomainElement"
+                                                      ],
+                                                      "raml-shapes:items": [
+                                                          {
+                                                              "@id": "#19",
+                                                              "@type": [
+                                                                  "raml-shapes:ScalarShape",
+                                                                  "raml-shapes:AnyShape",
+                                                                  "sh:Shape",
+                                                                  "raml-shapes:Shape",
+                                                                  "doc:DomainElement"
+                                                              ],
+                                                              "sh:datatype": [
+                                                                  {
+                                                                      "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                                  }
+                                                              ]
+                                                          }
+                                                      ]
+                                                  }
+                                              ],
+                                              "raml-shapes:serializationOrder": [
+                                                  {
+                                                      "@value": 3
+                                                  }
+                                              ],
+                                              "sh:name": [
+                                                  {
+                                                      "@value": "snippets"
+                                                  }
+                                              ]
+                                          }
+                                      ],
+                                      "sh:name": [
+                                          {
+                                              "@value": ".test_grpc_FF.Result"
+                                          }
+                                      ],
+                                      "core:name": [
+                                          {
+                                              "@value": "Result"
+                                          }
+                                      ]
+                                  }
+                              ]
+                          }
+                      ],
+                      "raml-shapes:serializationOrder": [
+                          {
+                              "@value": 1
+                          }
+                      ],
+                      "sh:name": [
+                          {
+                              "@value": "results"
+                          }
+                      ]
+                  }
+              ],
+              "sh:name": [
+                  {
+                      "@value": ".test_grpc_FF.SearchResponse"
+                  }
+              ],
+              "core:name": [
+                  {
+                      "@value": "SearchResponse"
+                  }
+              ]
+          },
+          {
+              "@id": "#12",
+              "@type": [
+                  "sh:NodeShape",
+                  "raml-shapes:AnyShape",
+                  "sh:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+              ],
+              "sh:property": [
+                  {
+                      "@id": "#13",
+                      "@type": [
+                          "sh:PropertyShape",
+                          "sh:Shape",
+                          "raml-shapes:Shape",
+                          "doc:DomainElement"
+                      ],
+                      "raml-shapes:range": [
+                          {
+                              "@id": "#14",
+                              "@type": [
+                                  "raml-shapes:ScalarShape",
+                                  "raml-shapes:AnyShape",
+                                  "sh:Shape",
+                                  "raml-shapes:Shape",
+                                  "doc:DomainElement"
+                              ],
+                              "sh:datatype": [
+                                  {
+                                      "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                  }
+                              ]
+                          }
+                      ],
+                      "raml-shapes:serializationOrder": [
+                          {
+                              "@value": 1
+                          }
+                      ],
+                      "sh:name": [
+                          {
+                              "@value": "url"
+                          }
+                      ]
+                  },
+                  {
+                      "@id": "#15",
+                      "@type": [
+                          "sh:PropertyShape",
+                          "sh:Shape",
+                          "raml-shapes:Shape",
+                          "doc:DomainElement"
+                      ],
+                      "raml-shapes:range": [
+                          {
+                              "@id": "#16",
+                              "@type": [
+                                  "raml-shapes:ScalarShape",
+                                  "raml-shapes:AnyShape",
+                                  "sh:Shape",
+                                  "raml-shapes:Shape",
+                                  "doc:DomainElement"
+                              ],
+                              "sh:datatype": [
+                                  {
+                                      "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                  }
+                              ]
+                          }
+                      ],
+                      "raml-shapes:serializationOrder": [
+                          {
+                              "@value": 2
+                          }
+                      ],
+                      "sh:name": [
+                          {
+                              "@value": "title"
+                          }
+                      ]
+                  },
+                  {
+                      "@id": "#17",
+                      "@type": [
+                          "sh:PropertyShape",
+                          "sh:Shape",
+                          "raml-shapes:Shape",
+                          "doc:DomainElement"
+                      ],
+                      "raml-shapes:range": [
+                          {
+                              "@id": "#18",
+                              "@type": [
+                                  "raml-shapes:ArrayShape",
+                                  "raml-shapes:AnyShape",
+                                  "sh:Shape",
+                                  "raml-shapes:Shape",
+                                  "doc:DomainElement"
+                              ],
+                              "raml-shapes:items": [
+                                  {
+                                      "@id": "#19",
+                                      "@type": [
+                                          "raml-shapes:ScalarShape",
+                                          "raml-shapes:AnyShape",
+                                          "sh:Shape",
+                                          "raml-shapes:Shape",
+                                          "doc:DomainElement"
+                                      ],
+                                      "sh:datatype": [
+                                          {
+                                              "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                          }
+                                      ]
+                                  }
+                              ]
+                          }
+                      ],
+                      "raml-shapes:serializationOrder": [
+                          {
+                              "@value": 3
+                          }
+                      ],
+                      "sh:name": [
+                          {
+                              "@value": "snippets"
+                          }
+                      ]
+                  }
+              ],
+              "sh:name": [
+                  {
+                      "@value": ".test_grpc_FF.Result"
+                  }
+              ],
+              "core:name": [
+                  {
+                      "@value": "Result"
+                  }
+              ]
+          }
+      ],
+      "@type": [
+          "doc:Document",
+          "doc:Fragment",
+          "doc:Module",
+          "doc:Unit"
+      ],
+      "doc:encodes": [
+          {
+              "@id": "#22",
+              "@type": [
+                  "apiContract:WebAPI",
+                  "apiContract:API",
+                  "doc:RootDomainElement",
+                  "doc:DomainElement"
+              ],
+              "core:name": [
+                  {
+                      "@value": "test_grpc_FF"
+                  }
+              ],
+              "apiContract:endpoint": [
+                  {
+                      "@id": "#23",
+                      "@type": [
+                          "apiContract:EndPoint",
+                          "doc:DomainElement"
+                      ],
+                      "core:name": [
+                          {
+                              "@value": "SearchService"
+                          }
+                      ],
+                      "apiContract:supportedOperation": [
+                          {
+                              "@id": "#24",
+                              "@type": [
+                                  "apiContract:Operation",
+                                  "core:Operation",
+                                  "doc:DomainElement"
+                              ],
+                              "apiContract:method": [
+                                  {
+                                      "@value": "post"
+                                  }
+                              ],
+                              "core:name": [
+                                  {
+                                      "@value": "Search"
+                                  }
+                              ],
+                              "apiContract:expects": [
+                                  {
+                                      "@id": "#25",
+                                      "@type": [
+                                          "apiContract:Request",
+                                          "core:Request",
+                                          "apiContract:Message",
+                                          "doc:DomainElement"
+                                      ],
+                                      "apiContract:payload": [
+                                          {
+                                              "@id": "#26",
+                                              "@type": [
+                                                  "apiContract:Payload",
+                                                  "core:Payload",
+                                                  "doc:DomainElement"
+                                              ],
+                                              "core:mediaType": [
+                                                  {
+                                                      "@value": "application/grpc"
+                                                  }
+                                              ],
+                                              "raml-shapes:schema": [
+                                                  {
+                                                      "@id": "#1",
+                                                      "@type": [
+                                                          "sh:NodeShape",
+                                                          "raml-shapes:AnyShape",
+                                                          "sh:Shape",
+                                                          "raml-shapes:Shape",
+                                                          "doc:DomainElement"
+                                                      ],
+                                                      "sh:property": [
+                                                          {
+                                                              "@id": "#2",
+                                                              "@type": [
+                                                                  "sh:PropertyShape",
+                                                                  "sh:Shape",
+                                                                  "raml-shapes:Shape",
+                                                                  "doc:DomainElement"
+                                                              ],
+                                                              "raml-shapes:range": [
+                                                                  {
+                                                                      "@id": "#3",
+                                                                      "@type": [
+                                                                          "raml-shapes:ScalarShape",
+                                                                          "raml-shapes:AnyShape",
+                                                                          "sh:Shape",
+                                                                          "raml-shapes:Shape",
+                                                                          "doc:DomainElement"
+                                                                      ],
+                                                                      "sh:datatype": [
+                                                                          {
+                                                                              "@id": "http://www.w3.org/2001/XMLSchema#string",
+                                                                              "__apicResolved": true
+                                                                          }
+                                                                      ],
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "raml-shapes:serializationOrder": [
+                                                                  {
+                                                                      "@value": 1,
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "sh:name": [
+                                                                  {
+                                                                      "@value": "query",
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "__apicResolved": true
+                                                          },
+                                                          {
+                                                              "@id": "#4",
+                                                              "@type": [
+                                                                  "sh:PropertyShape",
+                                                                  "sh:Shape",
+                                                                  "raml-shapes:Shape",
+                                                                  "doc:DomainElement"
+                                                              ],
+                                                              "raml-shapes:range": [
+                                                                  {
+                                                                      "@id": "#5",
+                                                                      "@type": [
+                                                                          "raml-shapes:ScalarShape",
+                                                                          "raml-shapes:AnyShape",
+                                                                          "sh:Shape",
+                                                                          "raml-shapes:Shape",
+                                                                          "doc:DomainElement"
+                                                                      ],
+                                                                      "sh:datatype": [
+                                                                          {
+                                                                              "@id": "http://www.w3.org/2001/XMLSchema#integer",
+                                                                              "__apicResolved": true
+                                                                          }
+                                                                      ],
+                                                                      "raml-shapes:format": [
+                                                                          {
+                                                                              "@value": "int32",
+                                                                              "__apicResolved": true
+                                                                          }
+                                                                      ],
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "raml-shapes:serializationOrder": [
+                                                                  {
+                                                                      "@value": 2,
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "sh:name": [
+                                                                  {
+                                                                      "@value": "page_number",
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "__apicResolved": true
+                                                          },
+                                                          {
+                                                              "@id": "#6",
+                                                              "@type": [
+                                                                  "sh:PropertyShape",
+                                                                  "sh:Shape",
+                                                                  "raml-shapes:Shape",
+                                                                  "doc:DomainElement"
+                                                              ],
+                                                              "raml-shapes:range": [
+                                                                  {
+                                                                      "@id": "#7",
+                                                                      "@type": [
+                                                                          "raml-shapes:ScalarShape",
+                                                                          "raml-shapes:AnyShape",
+                                                                          "sh:Shape",
+                                                                          "raml-shapes:Shape",
+                                                                          "doc:DomainElement"
+                                                                      ],
+                                                                      "sh:datatype": [
+                                                                          {
+                                                                              "@id": "http://www.w3.org/2001/XMLSchema#integer",
+                                                                              "__apicResolved": true
+                                                                          }
+                                                                      ],
+                                                                      "raml-shapes:format": [
+                                                                          {
+                                                                              "@value": "int32",
+                                                                              "__apicResolved": true
+                                                                          }
+                                                                      ],
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "raml-shapes:serializationOrder": [
+                                                                  {
+                                                                      "@value": 3,
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "sh:name": [
+                                                                  {
+                                                                      "@value": "results_per_page",
+                                                                      "__apicResolved": true
+                                                                  }
+                                                              ],
+                                                              "__apicResolved": true
+                                                          }
+                                                      ],
+                                                      "sh:name": [
+                                                          {
+                                                              "@value": ".test_grpc_FF.SearchRequest",
+                                                              "__apicResolved": true
+                                                          }
+                                                      ],
+                                                      "core:name": [
+                                                          {
+                                                              "@value": "SearchRequest",
+                                                              "__apicResolved": true
+                                                          }
+                                                      ],
+                                                      "__apicResolved": true
+                                                  }
+                                              ]
+                                          }
+                                      ]
+                                  }
+                              ],
+                              "apiContract:returns": [
+                                  {
+                                      "@id": "#27",
+                                      "@type": [
+                                          "apiContract:Response",
+                                          "core:Response",
+                                          "apiContract:Message",
+                                          "doc:DomainElement"
+                                      ],
+                                      "apiContract:payload": [
+                                          {
+                                              "@id": "#28",
+                                              "@type": [
+                                                  "apiContract:Payload",
+                                                  "core:Payload",
+                                                  "doc:DomainElement"
+                                              ],
+                                              "core:mediaType": [
+                                                  {
+                                                      "@value": "application/protobuf"
+                                                  }
+                                              ],
+                                              "raml-shapes:schema": [
+                                                  {
+                                                      "@id": "#9",
+                                                      "@type": [
+                                                          "sh:NodeShape",
+                                                          "raml-shapes:AnyShape",
+                                                          "sh:Shape",
+                                                          "raml-shapes:Shape",
+                                                          "doc:DomainElement"
+                                                      ],
+                                                      "sh:property": [
+                                                          {
+                                                              "@id": "#10",
+                                                              "@type": [
+                                                                  "sh:PropertyShape",
+                                                                  "sh:Shape",
+                                                                  "raml-shapes:Shape",
+                                                                  "doc:DomainElement"
+                                                              ],
+                                                              "raml-shapes:range": [
+                                                                  {
+                                                                      "@id": "#11",
+                                                                      "@type": [
+                                                                          "raml-shapes:ArrayShape",
+                                                                          "raml-shapes:AnyShape",
+                                                                          "sh:Shape",
+                                                                          "raml-shapes:Shape",
+                                                                          "doc:DomainElement"
+                                                                      ],
+                                                                      "raml-shapes:items": [
+                                                                          {
+                                                                              "@id": "#12",
+                                                                              "@type": [
+                                                                                  "sh:NodeShape",
+                                                                                  "raml-shapes:AnyShape",
+                                                                                  "sh:Shape",
+                                                                                  "raml-shapes:Shape",
+                                                                                  "doc:DomainElement"
+                                                                              ],
+                                                                              "sh:property": [
+                                                                                  {
+                                                                                      "@id": "#13",
+                                                                                      "@type": [
+                                                                                          "sh:PropertyShape",
+                                                                                          "sh:Shape",
+                                                                                          "raml-shapes:Shape",
+                                                                                          "doc:DomainElement"
+                                                                                      ],
+                                                                                      "raml-shapes:range": [
+                                                                                          {
+                                                                                              "@id": "#14",
+                                                                                              "@type": [
+                                                                                                  "raml-shapes:ScalarShape",
+                                                                                                  "raml-shapes:AnyShape",
+                                                                                                  "sh:Shape",
+                                                                                                  "raml-shapes:Shape",
+                                                                                                  "doc:DomainElement"
+                                                                                              ],
+                                                                                              "sh:datatype": [
+                                                                                                  {
+                                                                                                      "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                                                                  }
+                                                                                              ]
+                                                                                          }
+                                                                                      ],
+                                                                                      "raml-shapes:serializationOrder": [
+                                                                                          {
+                                                                                              "@value": 1
+                                                                                          }
+                                                                                      ],
+                                                                                      "sh:name": [
+                                                                                          {
+                                                                                              "@value": "url"
+                                                                                          }
+                                                                                      ]
+                                                                                  },
+                                                                                  {
+                                                                                      "@id": "#15",
+                                                                                      "@type": [
+                                                                                          "sh:PropertyShape",
+                                                                                          "sh:Shape",
+                                                                                          "raml-shapes:Shape",
+                                                                                          "doc:DomainElement"
+                                                                                      ],
+                                                                                      "raml-shapes:range": [
+                                                                                          {
+                                                                                              "@id": "#16",
+                                                                                              "@type": [
+                                                                                                  "raml-shapes:ScalarShape",
+                                                                                                  "raml-shapes:AnyShape",
+                                                                                                  "sh:Shape",
+                                                                                                  "raml-shapes:Shape",
+                                                                                                  "doc:DomainElement"
+                                                                                              ],
+                                                                                              "sh:datatype": [
+                                                                                                  {
+                                                                                                      "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                                                                  }
+                                                                                              ]
+                                                                                          }
+                                                                                      ],
+                                                                                      "raml-shapes:serializationOrder": [
+                                                                                          {
+                                                                                              "@value": 2
+                                                                                          }
+                                                                                      ],
+                                                                                      "sh:name": [
+                                                                                          {
+                                                                                              "@value": "title"
+                                                                                          }
+                                                                                      ]
+                                                                                  },
+                                                                                  {
+                                                                                      "@id": "#17",
+                                                                                      "@type": [
+                                                                                          "sh:PropertyShape",
+                                                                                          "sh:Shape",
+                                                                                          "raml-shapes:Shape",
+                                                                                          "doc:DomainElement"
+                                                                                      ],
+                                                                                      "raml-shapes:range": [
+                                                                                          {
+                                                                                              "@id": "#18",
+                                                                                              "@type": [
+                                                                                                  "raml-shapes:ArrayShape",
+                                                                                                  "raml-shapes:AnyShape",
+                                                                                                  "sh:Shape",
+                                                                                                  "raml-shapes:Shape",
+                                                                                                  "doc:DomainElement"
+                                                                                              ],
+                                                                                              "raml-shapes:items": [
+                                                                                                  {
+                                                                                                      "@id": "#19",
+                                                                                                      "@type": [
+                                                                                                          "raml-shapes:ScalarShape",
+                                                                                                          "raml-shapes:AnyShape",
+                                                                                                          "sh:Shape",
+                                                                                                          "raml-shapes:Shape",
+                                                                                                          "doc:DomainElement"
+                                                                                                      ],
+                                                                                                      "sh:datatype": [
+                                                                                                          {
+                                                                                                              "@id": "http://www.w3.org/2001/XMLSchema#string"
+                                                                                                          }
+                                                                                                      ]
+                                                                                                  }
+                                                                                              ]
+                                                                                          }
+                                                                                      ],
+                                                                                      "raml-shapes:serializationOrder": [
+                                                                                          {
+                                                                                              "@value": 3
+                                                                                          }
+                                                                                      ],
+                                                                                      "sh:name": [
+                                                                                          {
+                                                                                              "@value": "snippets"
+                                                                                          }
+                                                                                      ]
+                                                                                  }
+                                                                              ],
+                                                                              "sh:name": [
+                                                                                  {
+                                                                                      "@value": ".test_grpc_FF.Result"
+                                                                                  }
+                                                                              ],
+                                                                              "core:name": [
+                                                                                  {
+                                                                                      "@value": "Result"
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      ]
+                                                                  }
+                                                              ],
+                                                              "raml-shapes:serializationOrder": [
+                                                                  {
+                                                                      "@value": 1
+                                                                  }
+                                                              ],
+                                                              "sh:name": [
+                                                                  {
+                                                                      "@value": "results"
+                                                                  }
+                                                              ]
+                                                          }
+                                                      ],
+                                                      "sh:name": [
+                                                          {
+                                                              "@value": ".test_grpc_FF.SearchResponse"
+                                                          }
+                                                      ],
+                                                      "core:name": [
+                                                          {
+                                                              "@value": "SearchResponse"
+                                                          }
+                                                      ]
+                                                  }
+                                              ]
+                                          }
+                                      ]
+                                  }
+                              ],
+                              "apiContract:operationId": [
+                                  {
+                                      "@value": "Search"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ]
+          }
+      ],
+      "doc:root": [
+          {
+              "@value": true
+          }
+      ],
+      "doc:package": [
+          {
+              "@value": "test_grpc_FF"
+          }
+      ],
+      "doc:processingData": [
+          {
+              "@id": "#29",
+              "@type": [
+                  "doc:APIContractProcessingData"
+              ],
+              "apiContract:modelVersion": [
+                  {
+                      "@value": "3.11.0"
+                  }
+              ],
+              "doc:transformed": [
+                  {
+                      "@value": true
+                  }
+              ],
+              "doc:sourceSpec": [
+                  {
+                      "@value": "Grpc"
+                  }
+              ]
+          }
+      ],
+      "sourcemaps:sources": [
+          {
+              "@id": "#/source-map",
+              "@type": [
+                  "sourcemaps:SourceMap"
+              ],
+              "sourcemaps:grpc-raw-proto": [
+                  {
+                      "@id": "#/source-map/grpc-raw-proto/element_0",
+                      "sourcemaps:element": [
+                          {
+                              "@value": "amf://id"
+                          }
+                      ],
+                      "sourcemaps:value": [
+                          {
+                              "@value": "\nsyntax = \"proto3\";\n\npackage test_grpc_FF;\n\nmessage SearchRequest {\n  string query = 1;\n  int32 page_number = 2;\n  int32 results_per_page = 3;\n}\n\nmessage SearchResponse {\n  repeated Result results = 1;\n}\n\nmessage Result {\n  string url = 1;\n  string title = 2;\n  repeated string snippets = 3;\n}\n\nservice SearchService {\n  rpc Search(SearchRequest) returns (SearchResponse);\n}"
+                          }
+                      ]
+                  }
+              ]
+          }
+      ],
+      "@context": {
+          "@base": "amf://id",
+          "raml-shapes": "http://a.ml/vocabularies/shapes#",
+          "doc": "http://a.ml/vocabularies/document#",
+          "apiContract": "http://a.ml/vocabularies/apiContract#",
+          "core": "http://a.ml/vocabularies/core#",
+          "sourcemaps": "http://a.ml/vocabularies/document-source-maps#",
+          "sh": "http://www.w3.org/ns/shacl#"
+      }
+  }
+]

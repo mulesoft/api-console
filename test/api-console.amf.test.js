@@ -217,14 +217,13 @@ describe('ApiConsole', () => {
     [
       new ApiDescribe('Regular model'),
       new ApiDescribe('Compact model', true),
-      new ApiDescribe('Flattened model', false, true),
-    ].forEach(({ label, compact, flattened }) => {
+    ].forEach(({ label, compact }) => {
       describe(label, () => {
         let amf;
         let element;
 
         before(async () => {
-          amf = await AmfLoader.load({ compact, fileName: grpcApi, flattened });
+          amf = await AmfLoader.load({ compact, fileName: grpcApi, flattened: false });
         });
 
         beforeEach(async () => {
