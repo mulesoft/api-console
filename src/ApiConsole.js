@@ -463,7 +463,8 @@ export class ApiConsole extends AmfHelperMixin(LitElement) {
     const webApi = this._computeApi(amf);
     this.webApi = webApi;
     this.methodName = this._computeMethodName(this.selectedShape, webApi);
-    if (!this._isWebAPI(amf)) {
+    // Hide try-it panel for gRPC APIs or non-WebAPI models
+    if (!this._isWebAPI(amf) || this._isGrpcApi(amf)) {
       this._noTryItValue = true;
     }
   }

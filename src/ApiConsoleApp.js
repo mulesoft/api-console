@@ -268,6 +268,8 @@ export class ApiConsoleApp extends ApiConsole {
    */
   async _processModelChange() {
     super._processModelChange();
+    // Update try-it panel visibility based on API type (gRPC detection)
+    this._updateRenderInlineTyit();
     this.apiTitle = this._computeApiTitle(this.webApi);
     await this.updateComplete;
     if (window.history.state) {
