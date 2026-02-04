@@ -66,6 +66,7 @@ demo/models/flattened/*.json
 !demo/models/avro.json
 !demo/models/avro2.json
 !demo/models/grpc-test.json
+!demo/models/grpc-test-compact.json
 
 .idea/
 .sfdx

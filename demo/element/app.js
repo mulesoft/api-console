@@ -14,6 +14,7 @@ class ApicApplication extends DemoBase {
   constructor() {
     super();
     this.apis = [
+      ['grpc-test', 'gRPC API'],
       ['google-drive-api', 'Google Drive API'],
       ['httpbin', 'HTTPbin API'],
       ['data-type-fragment', 'RAML data type fragment'],

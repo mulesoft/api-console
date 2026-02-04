@@ -36,6 +36,7 @@ export const selectOperation = (element, endpointName, operationName) => {
 
 describe('ApiConsole', () => {
   const asyncApi = 'async-api';
+  const grpcApi = 'grpc-test';
   const multiServer = 'multi-server';
   const apic553 = 'APIC-553';
   const apic554 = 'APIC-554';
@@ -207,6 +208,55 @@ describe('ApiConsole', () => {
 
         it('should have _noTryItValue set to true', () => {
           assert.isTrue(element._noTryItValue);
+        });
+      });
+    });
+  });
+
+  describe('gRPC API', () => {
+    [
+      new ApiDescribe('Regular model'),
+      new ApiDescribe('Compact model', true),
+    ].forEach(({ label, compact }) => {
+      describe(label, () => {
+        let amf;
+        let element;
+
+        before(async () => {
+          amf = await AmfLoader.load({ compact, fileName: grpcApi, flattened: false });
+        });
+
+        beforeEach(async () => {
+          element = await amfFixture(amf);
+          await aTimeout(0);
+        });
+
+        it('should have _noTryItValue set to true for gRPC API', () => {
+          assert.isTrue(element._noTryItValue, '_noTryItValue should be true for gRPC API');
+        });
+
+        it('should detect gRPC API correctly', () => {
+          const isGrpc = element._isGrpcApi(amf);
+          assert.isTrue(isGrpc, 'Should detect gRPC API');
+        });
+
+        it('should hide try-it button when selecting a method', async () => {
+          const webApi = AmfLoader.lookupWebApi(amf);
+          const endpoints = element._computeEndpoints(webApi);
+          if (endpoints && endpoints.length > 0) {
+            const operations = element._computePropertyArray(
+              endpoints[0],
+              element.ns.aml.vocabularies.apiContract.supportedOperation
+            );
+            if (operations && operations.length > 0) {
+              element.selectedShape = operations[0]['@id'];
+              element.selectedShapeType = 'method';
+              await nextFrame();
+              await nextFrame();
+              
+              assert.isTrue(element._noTryItValue, 'Try-it button should be hidden for gRPC API method');
+            }
+          }
         });
       });
     });
