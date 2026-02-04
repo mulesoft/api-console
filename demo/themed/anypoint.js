@@ -14,12 +14,13 @@ class ApicApplication extends DemoBase {
     super();
     this.apis = [
       ['grpc-test', 'gRPC API'],
+      ['agents-api', 'Agents API'],
+      ['agents-api-compact', 'Agents API Compact'],
       ['google-drive-api', 'Google Drive API'],
       ['httpbin', 'HTTPbin API'],
       ['data-type-fragment', 'RAML data type fragment'],
       ['demo-api', 'Demo API'],
       ['APIC-538', 'APIC-538'],
-      ['agents-api', 'Agents API Compact'],
     ];
   }
 
