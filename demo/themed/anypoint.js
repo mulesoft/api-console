@@ -13,6 +13,7 @@ class ApicApplication extends DemoBase {
   constructor() {
     super();
     this.apis = [
+      ['nested-examples-oas3', 'Nested Examples'],
       ['grpc-test', 'gRPC API'],
       ['agents-api', 'Agents API'],
       ['agents-api-compact', 'Agents API Compact'],

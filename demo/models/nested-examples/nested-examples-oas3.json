@@ -1,0 +1,472 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "netsted-examples-oas3"
+  },
+  "paths": {
+    "/productOrderItems": {
+      "get": {
+        "summary": "List product order items",
+        "operationId": "listProductOrderItems",
+        "responses": {
+          "200": {
+            "description": "List of product order items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductOrderItem"
+                  }
+                },
+                "examples": {
+                  "default": {
+                    "summary": "Full productOrderItem example list (300+ lines)",
+                    "value": [
+                      {
+                        "state": "acknowledged",
+                        "@type": "productOrderItem",
+                        "productOrderItemRelationship": [
+                          {
+                            "id": "2",
+                            "relationshipType": "isParent",
+                            "@type": "OrderItemRelationship"
+                          }
+                        ],
+                        "product": {
+                          "@type": "product",
+                          "productCharacteristic": [
+                            {
+                              "valueType": "string",
+                              "value": "80/20",
+                              "name": "productSpeed",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "Restart",
+                              "name": "provisioningCommand",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "Standard",
+                              "name": "careLevel",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "Managed Standard",
+                              "name": "installationType",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "Jane-Kelly",
+                              "name": "installationContactNamePrimary",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "07449929291",
+                              "name": "installationContactNumberPrimary",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "Jane",
+                              "name": "installationContactNameSecondary",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "07449929292",
+                              "name": "installationContactNumberSecondary",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "cgiuk@tt.com",
+                              "name": "installationContactEmail",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "HD05091996",
+                              "name": "partnerOrderReference",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "Static IP - 4",
+                              "name": "ipBlockSize",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "abclub.net",
+                              "name": "domainName",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "CCF",
+                              "name": "retailerId",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "test test",
+                              "name": "otherUses",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "valueType": "string",
+                              "value": "test test",
+                              "name": "otherDescription",
+                              "@type": "StringCharacteristic"
+                            }
+                          ],
+                          "place": [
+                            {
+                              "@type": "place",
+                              "role": "installationAddress",
+                              "place": {
+                                "postcode": "M5 3BL",
+                                "@type": "PXCGeographicSubAddressUnit",
+                                "externalId": [
+                                  {
+                                    "@type": "ExternalIdentifier",
+                                    "externalIdentifierType": "galk",
+                                    "id": "A90000791299"
+                                  },
+                                  {
+                                    "@type": "ExternalIdentifier",
+                                    "externalIdentifierType": "districtCode",
+                                    "id": "LV"
+                                  }
+                                ]
+                              }
+                            }
+                          ],
+                          "name": "C-OR-SOGEA"
+                        },
+                        "appointment": {
+                          "date": "2024-09-30",
+                          "timeSlot": "AM",
+                          "id": "48160",
+                          "@type": "appointment"
+                        },
+                        "action": "add",
+                        "id": "0001"
+                      },
+                      {
+                        "appointment": {
+                          "date": "2024-09-30",
+                          "timeSlot": "AM",
+                          "id": "50795",
+                          "@type": "appointment"
+                        },
+                        "state": "acknowledged",
+                        "@type": "productOrderItem",
+                        "productOrderItemRelationship": [
+                          {
+                            "id": "1",
+                            "relationshipType": "isChild",
+                            "@type": "OrderItemRelationship"
+                          }
+                        ],
+                        "product": {
+                          "relatedParty": [
+                            {
+                              "title": "Mr",
+                              "otherName": "John",
+                              "familyName": "Smith",
+                              "role": "edb",
+                              "@type": "IndividualWithAddress",
+                              "place": {
+                                "buildingName": "PX Apartments",
+                                "subUnitNumber": "FLAT3",
+                                "streetNr": "150",
+                                "streetName": "Warburton Street",
+                                "subStreetName": "behind Queen Vic pub",
+                                "locality": "Manchester",
+                                "dependentLocality": "Salford",
+                                "doubleDependentLocality": "Ordsall",
+                                "postcode": "M5 3BL",
+                                "@type": "PXCGeographicSubAddressUnit"
+                              }
+                            },
+                            {
+                              "name": "Alphabeta",
+                              "otherName": "PlatformX Communications",
+                              "nameType": "Ltd",
+                              "role": "dq",
+                              "@type": "OrganizationWithAddress",
+                              "place": {
+                                "buildingName": "Alphabeta",
+                                "subUnitNumber": "FLAT6",
+                                "streetNr": "14-18",
+                                "streetName": "Finsbury Square",
+                                "subStreetName": "",
+                                "locality": "London",
+                                "dependentLocality": "Hackney",
+                                "doubleDependentLocality": "Shoreditch",
+                                "postcode": "EC2A 1BR",
+                                "@type": "PXCGeographicSubAddressUnit"
+                              },
+                              "partyCharacteristic": [
+                                {
+                                  "name": "directoryEntryLineUse",
+                                  "value": "NormalUse",
+                                  "valueType": "string",
+                                  "@type": "StringCharacteristic"
+                                },
+                                {
+                                  "name": "directoryEntryPreference",
+                                  "value": "Normal",
+                                  "valueType": "string",
+                                  "@type": "StringCharacteristic"
+                                },
+                                {
+                                  "name": "directoryEntryType",
+                                  "value": "NewDQ",
+                                  "valueType": "string",
+                                  "@type": "StringCharacteristic"
+                                },
+                                {
+                                  "name": "directoryEntryFilePlacement",
+                                  "value": "Residential",
+                                  "valueType": "string",
+                                  "@type": "StringCharacteristic"
+                                },
+                                {
+                                  "name": "directoryEntryPartialAddressIndicator",
+                                  "value": false,
+                                  "valueType": "boolean",
+                                  "@type": "BooleanCharacteristic"
+                                }
+                              ]
+                            }
+                          ],
+                          "productCharacteristic": [
+                            {
+                              "name": "requestedTelephoneNumber",
+                              "value": "01123456789",
+                              "valueType": "string",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "name": "lcpCupid",
+                              "value": "",
+                              "valueType": "string",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "name": "oldPostCode",
+                              "value": "",
+                              "valueType": "String",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "name": "newNumberOverrideAllowed",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "anonymousCallRejection",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "answerService1571RemoteAccess",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "answerService1571",
+                              "value": "Basic",
+                              "valueType": "string",
+                              "@type": "StringCharacteristic"
+                            },
+                            {
+                              "name": "callerDisplay",
+                              "value": true,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "chooseToRefuse",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "cliPresentationRestrictionPermanent",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "cliRetrieval",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "subscriberCallForward",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "subscriberCallForwardRemoteAccess",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "countrySpecificBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "directoryEnquiriesBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "highRiskInternationalBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "internationalBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "mobileBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "nationalBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "premiumRateLowBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "premiumRateHighBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "premiumRateAdultBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "servicesLowBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "servicesHighBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "servicesFreeBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "specialServicesBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            },
+                            {
+                              "name": "subscriberOutgoingCallBar",
+                              "value": false,
+                              "valueType": "boolean",
+                              "@type": "BooleanCharacteristic"
+                            }
+                          ],
+                          "productOffering": {
+                            "name": "Pay as you go",
+                            "id": "PAYG",
+                            "@type": "productOffering"
+                          },
+                          "name": "C-VOIP",
+                          "@type": "product"
+                        },
+                        "action": "add",
+                        "id": "0001"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProductOrderItem": {
+        "type": "object",
+        "description": "An identified part of the order (product order item).",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "@type": {
+            "type": "string"
+          },
+          "product": {
+            "type": "object"
+          },
+          "productOrderItemRelationship": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "appointment": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

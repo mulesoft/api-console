@@ -11,6 +11,7 @@ class ApicApplication extends DemoBase {
   constructor() {
     super();
     this.apis = [
+      ['nested-examples-oas3', 'Nested Examples'],
       ['grpc-test', 'gRPC API'],
       ['google-drive-api', 'Google Drive API'],
       ['httpbin', 'HTTPbin API'],
