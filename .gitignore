@@ -69,3 +69,45 @@ demo/models/flattened/*.json
 .idea/
 .sfdx
 .codegenie
+
+# Security — secrets & credentials (org-wide)
+# =============================================================================
+# Secrets & Credentials — Apply org-wide
+# =============================================================================
+
+# Environment files
+.env
+.env.*
+!.env.example.template
+
+# Private keys & certificates
+*.pem
+*.key
+
+# Credential / secret files (broad patterns)
+*credentials*
+*secret*
+
+# AWS-specific
+aws-credentials.env
+awsenv.local
+
+# Deployment configs containing secrets
+.env.deploy
+samconfig.toml
+
+# IDE workspace files (may contain tokens/keys)
+.idea/
+.idea/workspace.xml
+
+# Terraform state (contains sensitive outputs)
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Docker env overrides
+docker-compose.override.yml
+
+# OS artifacts
+.DS_Store
+Thumbs.db
