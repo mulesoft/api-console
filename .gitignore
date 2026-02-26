@@ -71,3 +71,6 @@ demo/models/flattened/*.json
 .idea/
 .sfdx
 .codegenie
+# Claude/Cursor working files
+.claude/
+.cursor/
