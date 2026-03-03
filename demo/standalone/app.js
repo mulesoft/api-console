@@ -11,7 +11,9 @@ class ApicApplication extends DemoBase {
   constructor() {
     super();
     this.apis = [
-      ['product-order-minimal', 'W-21368901 - Deep allOf'],
+      ['product-order-deep-allof', 'W-21368901 - Deep allOf'],
+      ['nullable', 'W-11650729 - Nullable union'],
+      ['product-order-minimal', 'Product Order Minimal'],
       ['nested-examples-oas3', 'Nested Examples'],
       ['grpc-test', 'gRPC API'],
       ['google-drive-api', 'Google Drive API'],
