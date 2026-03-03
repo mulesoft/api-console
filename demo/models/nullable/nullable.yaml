@@ -1,0 +1,1632 @@
+openapi: 3.0.0
+
+info:
+  title: Einstein Bots API (BETA)
+  version: 'v5'
+
+servers:
+  - url: https://runtime-api-na-west.prod.chatbots.sfdc.sh
+    description: Einstein Bots API - NA West
+  - url: https://runtime-api-na-east.prod.chatbots.sfdc.sh
+    description: Einstein Bots API - NA East
+  - url: https://runtime-api-eu-west.prod.chatbots.sfdc.sh
+    description: Einstein Bots API - EU West
+  - url: https://runtime-api-eu-east.prod.chatbots.sfdc.sh
+    description: Einstein Bots API - EU East
+  - url: https://runtime-api-ap-west.prod.chatbots.sfdc.sh
+    description: Einstein Bots API - AP West
+  - url: https://runtime-api-ap-east.prod.chatbots.sfdc.sh
+    description: Einstein Bots API - AP East
+
+paths:
+  /status:
+    get:
+      tags:
+        - 'health'
+      summary: 'Check the health status'
+      description: 'Returns whether the status of Einstein Bots API is up or down.'
+      operationId: 'getHealthStatus'
+      responses:
+        '200':
+          $ref: '#/components/responses/StatusResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /v5.0.0/bots/{bot-id}/sessions:
+    post:
+      tags:
+        - 'bot'
+      summary: 'Start a session'
+      description: 'Send a message to the bots API to start a new session.'
+      operationId: 'startSession'
+      security:
+        - chatbotAuth: ['chatbot_api']
+        - jwtBearer: []
+      parameters:
+        - in: 'path'
+          name: 'bot-id'
+          description: 'ID of the Einstein Bot that you want to interact with.'
+          required: true
+          schema:
+            type: 'string'
+        - in: 'header'
+          name: 'X-Org-Id'
+          description: '18-character org ID of the Salesforce org associated with the bot.'
+          example: '00Dx0000000ALskEAG'
+          required: true
+          schema:
+            type: 'string'
+          allowEmptyValue: false
+        - in: 'header'
+          name: 'X-Request-ID'
+          description: 'Request ID. A UUID in string format created by you to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          required: true
+          schema:
+            type: 'string'
+      requestBody:
+        description: 'Request payload to initiate a session.'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitMessageEnvelope'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessfulResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/RequestProcessingException'
+        '423':
+          $ref: '#/components/responses/ServerBusyError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /v5.0.0/sessions/{session-id}/messages:
+    post:
+      tags:
+        - 'bot'
+      summary: 'Continue an active session'
+      description: 'Send a message to the bots API on an active session.'
+      operationId: 'continueSession'
+      security:
+        - chatbotAuth: ['chatbot_api']
+        - jwtBearer: []
+      parameters:
+        - in: 'path'
+          name: 'session-id'
+          description: 'ID of an active session. This is the `sessionId` returned by the bot when you start a session.'
+          required: true
+          schema:
+            type: 'string'
+        - in: 'header'
+          name: 'X-Org-Id'
+          description: '18-character org ID of the Salesforce org associated with the bot.'
+          example: '00Dx0000000ALskEAG'
+          required: true
+          schema:
+            type: 'string'
+          # allowEmptyValue: false
+        - in: 'header'
+          name: 'X-Request-ID'
+          description: 'Request ID. A UUID in string format created by you to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          required: true
+          schema:
+            type: 'string'
+        - in: 'header'
+          name: 'X-Runtime-CRC'
+          description: 'Internal runtime CRC. This is the `X-Runtime-CRC` value from previous response.'
+          schema:
+            type: 'string'
+      requestBody:
+        description: 'Request payload to continue the chat.'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatMessageEnvelope'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessfulChatMessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/RequestProcessingException'
+        '423':
+          $ref: '#/components/responses/ServerBusyError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /v5.0.0/sessions/{session-id}:
+    delete:
+      tags:
+        - 'bot'
+      summary: 'End an active session'
+      description: 'Send a message to the bots API to end a session'
+      operationId: 'endSession'
+      security:
+        - chatbotAuth: ['chatbot_api']
+        - jwtBearer: []
+      parameters:
+        - in: 'path'
+          name: 'session-id'
+          description: 'ID of an active session. This is the `sessionId` returned by the bot when you start a session.'
+          required: true
+          schema:
+            type: 'string'
+        - in: 'header'
+          name: 'X-Org-Id'
+          description: '18-character org ID of the Salesforce org associated with the bot.'
+          example: '00Dx0000000ALskEAG'
+          required: true
+          schema:
+            type: 'string'
+          allowEmptyValue: false
+        - in: 'header'
+          name: 'X-Session-End-Reason'
+          description: 'Reason sesssion ended.'
+          example: 'Transfer'
+          required: true
+          schema:
+            $ref: '#/components/schemas/EndSessionReason'
+          allowEmptyValue: false
+        - in: 'header'
+          name: 'X-Request-ID'
+          description: 'Request ID. A UUID in string format created by you to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          required: true
+          schema:
+            type: 'string'
+        - in: 'header'
+          name: 'X-Runtime-CRC'
+          description: 'Internal runtime CRC. This is the `X-Runtime-CRC` value from previous response.'
+          schema:
+            type: 'string'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessfulChatMessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/RequestProcessingException'
+        '423':
+          $ref: '#/components/responses/ServerBusyError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+components:
+  securitySchemes:
+    chatbotAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://login.salesforce.com/services/oauth2/authorize
+          tokenUrl: https://login.salesforce.com/services/oauth2/token
+          scopes:
+            chatbot_api: 'Access Chatbot Apis'
+        implicit:
+          authorizationUrl: https://login.salesforce.com/services/oauth2/authorize
+          scopes:
+            chatbot_api: 'Access Chatbot Apis'
+    jwtBearer:
+      type: http
+      scheme: bearer
+      description: 'Salesforce OAuth access token obtained using the JWT Bearer flow. Use the `chatbot_api` scope with this flow to enable access to the Einstein Bots services.'
+
+  schemas:
+    ResponseSessionId:
+      description: 'Bot runtime session ID.'
+      type: 'string'
+      example: '57904eb6-5352-4c5e-adf6-5f100572cf5d'
+      nullable: false
+
+    ExternalSessionKey:
+      description: "UUID in string format for the conversation. You can use this parameter to trace the conversation in your bot's event logs."
+      type: 'string'
+      example: '57904eb6-5352-4c5e-adf6-5f100572cf5d'
+      nullable: false
+
+    BotVersion:
+      description: 'Bot configuration version.'
+      type: 'string'
+      example: '0X9RM0000004CD00AM'
+
+    InitMessageEnvelope:
+      type: 'object'
+      properties:
+        externalSessionKey:
+          $ref: '#/components/schemas/ExternalSessionKey'
+        message:
+          $ref: '#/components/schemas/TextInitMessage'
+        forceConfig:
+          $ref: '#/components/schemas/ForceConfig'
+        responseOptions:
+          $ref: '#/components/schemas/ResponseOptions'
+        tz:
+          description: 'Client timezone where the customer starts the chat.'
+          type: 'string'
+          nullable: true
+          example: 'America/Los_Angeles'
+        variables:
+          $ref: '#/components/schemas/Variables'
+        referrers:
+          description: 'Array of referrers of transferring the session to another bot.'
+          type: 'array'
+          items:
+            $ref: '#/components/schemas/Referrer'
+          nullable: true
+        richContentCapabilities:
+          $ref: '#/components/schemas/RichContentCapability'
+      required:
+        - 'forceConfig'
+        - 'externalSessionKey'
+      additionalProperties: false
+
+    RichContentCapability:
+      description: 'Rich content configuration supported by the client.'
+      type: 'object'
+      properties:
+        messageTypes:
+          description: 'Array of message types supporting rich content and their output formats.'
+          type: 'array'
+          minimum: 1
+          items:
+            $ref: '#/components/schemas/MessageTypeCapability'
+      required:
+        - messageTypes
+
+    MessageTypeCapability:
+      type: 'object'
+      properties:
+        messageType:
+          $ref: '#/components/schemas/MessageType'
+        formatTypes:
+          description: 'Array of output format types.'
+          type: 'array'
+          minimum: 1
+          items:
+            $ref: '#/components/schemas/FormatTypeCapability'
+      required:
+        - messageType
+        - formatTypes
+
+    FormatTypeCapability:
+      type: 'object'
+      properties:
+        formatType:
+          $ref: '#/components/schemas/FormatType'
+      required:
+        - formatType
+
+    FormatType:
+      description: |
+        Message format that is supported by the message type.
+
+        * `Attachments`—Shows the attachment as a downloadable file (rich content).
+        * `text`—Shows file as a URL link. Use this type if your client doesn’t support rich content.
+      type: 'string'
+      enum: ['Attachments', 'Text']
+      example: 'Attachments'
+
+    MessageType:
+      description: |
+        Message type that supports rich content output formats.
+
+        * `StaticContentMessage`—Represents static or non-interactive content, such as links and attachments.
+      type: 'string'
+      enum: ['StaticContentMessage']
+      example: 'StaticContentMessage'
+
+    ChatMessageEnvelope:
+      type: 'object'
+      properties:
+        message:
+          description: 'Message to the bot.'
+          oneOf:
+            - $ref: '#/components/schemas/ChoiceMessage'
+            - $ref: '#/components/schemas/TextMessage'
+            - $ref: '#/components/schemas/TransferSucceededRequestMessage'
+            - $ref: '#/components/schemas/TransferFailedRequestMessage'
+            - $ref: '#/components/schemas/RedirectMessage'
+        responseOptions:
+          $ref: '#/components/schemas/ResponseOptions'
+      required:
+        - 'message'
+      additionalProperties: false
+
+    ResponseEnvelope:
+      type: 'object'
+      properties:
+        sessionId:
+          $ref: '#/components/schemas/ResponseSessionId'
+        botVersion:
+          $ref: '#/components/schemas/BotVersion'
+        processedSequenceIds:
+          description: 'Sequence IDs of messages that the bot processed. Except for the initial request to start the session, all requests require a `sequenceId`.'
+          type: 'array'
+          items:
+            format: 'int64'
+            type: 'integer'
+            example: 1
+        messages:
+          description: 'Messages from the bot.'
+          type: 'array'
+          minimum: 0
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/TextResponseMessage'
+              - $ref: '#/components/schemas/ChoicesResponseMessage'
+              - $ref: '#/components/schemas/StaticContentMessage'
+              - $ref: '#/components/schemas/EscalateResponseMessage'
+              - $ref: '#/components/schemas/SessionEndedResponseMessage'
+        variables:
+          $ref: '#/components/schemas/Variables'
+        metrics:
+          description: 'Session metrics.'
+          type: 'object'
+          additionalProperties: true
+        intents:
+          $ref: '#/components/schemas/Intents'
+        entities:
+          $ref: '#/components/schemas/Entities'
+        _links:
+          $ref: '#/components/schemas/Links'
+      required:
+        - 'sessionId'
+        - 'botVersion'
+        - 'processedSequenceIds'
+        - 'messages'
+        - '_links'
+      additionalProperties: false
+
+    ChatMessageResponseEnvelope:
+      type: 'object'
+      properties:
+        botVersion:
+          $ref: '#/components/schemas/BotVersion'
+        processedSequenceIds:
+          description: 'Sequence IDs of processed messages.'
+          type: 'array'
+          items:
+            format: 'int64'
+            type: 'integer'
+            example: 1, 2
+        messages:
+          description: 'Messages from the bot.'
+          type: 'array'
+          minimum: 0
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/TextResponseMessage'
+              - $ref: '#/components/schemas/ChoicesResponseMessage'
+              - $ref: '#/components/schemas/StaticContentMessage'
+              - $ref: '#/components/schemas/EscalateResponseMessage'
+              - $ref: '#/components/schemas/SessionEndedResponseMessage'
+        variables:
+          $ref: '#/components/schemas/Variables'
+        metrics:
+          description: 'Session metrics.'
+          type: 'object'
+          additionalProperties: true
+        intents:
+          $ref: '#/components/schemas/Intents'
+        entities:
+          $ref: '#/components/schemas/Entities'
+        _links:
+          $ref: '#/components/schemas/Links'
+      required:
+        - 'botVersion'
+        - 'processedSequenceIds'
+        - 'messages'
+        - '_links'
+      additionalProperties: false
+
+    StaticContentMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type of message with static (non-interactive) content.'
+          type: 'string'
+          enum: ['messageDefinition']
+        id:
+          $ref: '#/components/schemas/MessageId'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        messageType:
+          $ref: '#/components/schemas/MessageType'
+        references:
+          type: 'array'
+          description: 'Array of Salesforce records.'
+          items:
+            $ref: '#/components/schemas/RecordReference'
+        staticContent:
+          description: 'Static content, such as files, delivered to the client.'
+          anyOf:
+            - $ref: '#/components/schemas/StaticContentAttachments'
+            - $ref: '#/components/schemas/StaticContentText'
+      required:
+        - 'id'
+        - 'type'
+        - 'messageType'
+        - 'staticContent'
+
+    StaticContentText:
+      type: 'object'
+      properties:
+        formatType:
+          type: 'string'
+          description: 'Format type of files that appear as a URL. The customer needs to go to the URL to access the file. This is in text format.'
+          example: 'Text'
+          enum: ['Text']
+        text:
+          $ref: '#/components/schemas/Text'
+      required:
+        - 'formatType'
+        - 'text'
+
+    StaticContentAttachments:
+      type: 'object'
+      properties:
+        formatType:
+          type: 'string'
+          description: 'Format type of files that appear as downloadable attachments. This is in rich content format.'
+          example: 'Attachments'
+          enum: ['Attachments']
+        attachments:
+          type: 'array'
+          description: 'Array of file attachments with a message.'
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Attachment'
+      required:
+        - 'formatType'
+        - 'attachments'
+
+    Attachment:
+      type: 'object'
+      properties:
+        id:
+          $ref: '#/components/schemas/AttachmentId'
+        name:
+          type: 'string'
+          description: 'Name of the file sent as an attachment.'
+        mimeType:
+          $ref: '#/components/schemas/MimeType'
+        url:
+          $ref: '#/components/schemas/Url'
+        referenceId:
+          $ref: '#/components/schemas/ReferenceId'
+      required:
+        - id
+        - name
+        - mimeType
+        - url
+      additionalProperties: false
+
+    Text:
+      description: 'URL where the customer can access the file.'
+      type: 'string'
+
+    MimeType:
+      description: 'Mime type of the attachment.'
+      type: 'string'
+
+    Url:
+      description: 'URL to the file.'
+      type: 'string'
+
+    RecordId:
+      type: 'string'
+      description: 'ID of an Salesforce record.'
+      example: '00P2S000005qKg1'
+
+    ReferenceId:
+      type: 'string'
+      description: 'ID of the reference to the static content record.'
+      example: 'cbd4e3fe-f210-43b8-a4b7-dd77e39ee5e1'
+
+    AttachmentId:
+      type: 'string'
+      description: 'ID of the attachment.'
+      example: 'cbd4e3fe-f210-43b8-a4b7-dd77e39ee5e1'
+
+    RecordReference:
+      type: 'object'
+      properties:
+        id:
+          $ref: '#/components/schemas/ReferenceId'
+        recordId:
+          $ref: '#/components/schemas/RecordId'
+      required:
+        - 'id'
+        - 'recordId'
+      additionalProperties: false
+
+    MessageId:
+      description: 'UUID that references this message.'
+      type: 'string'
+      example: 'a133c185-73a7-4adf-b6d9-b7fd62babb4e'
+
+    SequenceId:
+      description: 'Client generated sequence number of the message in a session. Increase this number for each subsequent message.'
+      format: 'int64'
+      type: 'integer'
+      example: 1
+
+    Intents:
+      description: |
+        Array of the intents detected by the bot when processing the request. For a bot, "intent" refers to the goal the customer 
+        (see [Use Intents to Understand Your Customers](https://help.salesforce.com/s/articleView?id=sf.bots_service_train_bot.htm&type=5&_ga=2.5901875.1281711304.1657558186-1967832163.1652719780)).
+      type: 'array'
+      minimum: 0
+      items:
+        $ref: '#/components/schemas/NormalizedIntent'
+
+    Entities:
+      description: 'Array of all entities detected by the bot when processing this request. For a bot, "Entities" refer to the modifiers the customer uses to describe their issue and intent is what they really mean.'
+      type: 'array'
+      minimum: 0
+      items:
+        $ref: '#/components/schemas/NormalizedEntity'
+
+    NormalizedIntent:
+      type: 'object'
+      properties:
+        label:
+          description: 'Name or ID of the intent.'
+          type: 'string'
+        confidenceScore:
+          description: 'Probability number that the AI assigns to this intent.'
+          type: 'number'
+        intentSource:
+          $ref: '#/components/schemas/IntentSource'
+      required:
+        - 'label'
+        - 'confidenceScore'
+        - 'intentSource'
+      additionalProperties: false
+
+    NormalizedEntity:
+      type: 'object'
+      properties:
+        confidenceScore:
+          description: 'Probability number that the AI assigns to this entity.'
+          type: 'number'
+        value:
+          description: 'Value of the entity that the customer enters.'
+          type: 'string'
+          example: 'TBD'
+        type:
+          $ref: '#/components/schemas/EntityType'
+        entitySource:
+          $ref: '#/components/schemas/EntitySource'
+      required:
+        - 'confidenceScore'
+        - 'value'
+        - 'type'
+      additionalProperties: false
+
+    EntityType:
+      description: 'System or custom entity Type ([What’s an Entity?](https://help.salesforce.com/s/articleView?id=sf.bots_service_whats_an_entity.htm&type=5)).'
+      type: 'string'
+      example: 'TBD'
+
+    IntentSource:
+      description: |
+        Prediction system that detects the intent. 
+
+        * `DIRECT`—Utterance search or an exact match
+        * `CORE_NLP`—Third-party Natural Language Processing (NLP)
+        * `EINSTEIN_NLP`—Einstein NLP
+      type: 'string'
+      enum:
+        - 'DIRECT'
+        - 'CORE_NLP'
+        - 'EINSTEIN_NLP'
+
+    EntitySource:
+      description: |
+        "Prediction system that detects the entity. The Bot API can call NLPs or it can figure out the entity by itself."
+
+        * `BOT_SERVICE`—Bot detects entity without Natural Language Processing (NLP) 
+        * `CORE_NLP`—Third-party NLP
+        * `EINSTEIN_NLP`—Einstein NLP
+      type: 'string'
+      enum:
+        - 'BOT_SERVICE'
+        - 'CORE_NLP'
+        - 'EINSTEIN_NLP'
+
+    Links:
+      description: 'List of Einstein Bots API endpoints for HATEOS compliancy.'
+      type: 'object'
+      properties:
+        self:
+          $ref: '#/components/schemas/SelfLink'
+        messages:
+          $ref: '#/components/schemas/MessageLink'
+        session:
+          $ref: '#/components/schemas/EndSessionLink'
+      required:
+        - 'self'
+      additionalProperties: false
+
+    SelfLink:
+      description: 'Endpoint of this request.'
+      type: 'object'
+      properties:
+        href:
+          description: 'URL of the endpoint.'
+          type: 'string'
+          example: 'https://runtime-api-ap-east.prod.chatbots.sfdc.sh/v5.0.0/bots/{bot-id}/sessions'
+
+    MessageLink:
+      description: 'Endpoint to continue an active session.'
+      type: 'object'
+      properties:
+        href:
+          description: 'URL of the endpoint.'
+          type: 'string'
+          example: 'https://runtime-api-ap-east.prod.chatbots.sfdc.sh/v5.0.0/sessions/{session-id}/messages'
+
+    EndSessionLink:
+      description: 'Endpoint to end a session.'
+      type: 'object'
+      properties:
+        href:
+          description: 'URL of the endpoint.'
+          type: 'string'
+          example: 'https://runtime-api-ap-east.prod.chatbots.sfdc.sh/v5.0.0/sessions/{session-id}'
+
+    InReplyToMessageId:
+      description: 'Message ID of the previous response you are replying to.'
+      type: 'string'
+      example: 'a133c185-73a7-4adf-b6d9-b7fd62babb4e'
+
+    BooleanVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'isShipped'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['boolean']
+          example: 'boolean'
+        value:
+          description: 'Variable value.'
+          type: 'boolean'
+          nullable: true
+          example: true
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    DateVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'orderDate'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['date']
+          example: 'date'
+        value:
+          description: "Variable value in format ISO_LOCAL_DATE 'YYYY-MM-DD'."
+          type: 'string'
+          nullable: true
+          example: '2021-09-21'
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    DateTimeVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'orderDateTime'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['dateTime']
+          example: 'dateTime'
+        value:
+          description: "Variable value in format ISO_LOCAL_DATE_TIME 'YYYY-MM-DDTHH:MM:SS'."
+          type: 'string'
+          nullable: true
+          example: '2018-09-21T14:30:00'
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    MoneyVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'orderAmount'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['money']
+          example: 'money'
+        value:
+          description: 'Variable value in format $3_letter_currency_code $amount.'
+          type: 'string'
+          nullable: true
+          example: 'USD 10.40'
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    NumberVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'qty'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['number']
+          example: 'number'
+        value:
+          description: 'Variable value.'
+          type: 'number'
+          nullable: true
+          example: 10
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    TextVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'note'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['text']
+          example: 'text'
+        value:
+          description: 'Variable value.'
+          type: 'string'
+          nullable: true
+          example: 'Thanks for your order!'
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    ObjectVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'contact'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['object']
+          example: 'object'
+        value:
+          description: 'Variable value.'
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Variables'
+          example: [{ 'name': 'fullName', 'type': 'text', 'value': 'Matt Smith' }]
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    RefVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'target'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['ref']
+          example: 'ref'
+        value:
+          description: 'Variable value.'
+          type: 'string'
+          nullable: true
+          example: '1M5xx000000000BCAQ'
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    ListVariable:
+      type: 'object'
+      properties:
+        name:
+          description: 'API name of a variable defined in the bot definition.'
+          type: 'string'
+          example: 'target'
+        type:
+          description: 'Variable type.'
+          type: 'string'
+          enum: ['list']
+          example: 'list'
+        value:
+          description: 'Array of objects with variable type and value.'
+          type: 'array'
+          nullable: true
+          example: [{ 'type': 'ref', 'value': '1M5xx000000000BCAQ' }]
+          items:
+            type: 'object'
+            properties:
+              type:
+                description: 'Variable type in bot definition.'
+                type: 'string'
+                example: 'ref'
+              value:
+                description: 'Variable value.'
+                type: 'string'
+                example: '1M5xx000000000BCAQ'
+      required:
+        - 'name'
+        - 'type'
+        - 'value'
+      additionalProperties: false
+
+    Variables:
+      type: 'array'
+      description: 'Array of custom and context variables passed to the bot when initiating a session (see [What’s a Variable?](https://help.salesforce.com/s/articleView?id=sf.bots_service_whats_a_variable.htm&type=5&_ga=2.50520745.1281711304.1657558186-1967832163.1652719780)).'
+      items:
+        anyOf:
+          - $ref: '#/components/schemas/BooleanVariable'
+          - $ref: '#/components/schemas/DateVariable'
+          - $ref: '#/components/schemas/DateTimeVariable'
+          - $ref: '#/components/schemas/MoneyVariable'
+          - $ref: '#/components/schemas/NumberVariable'
+          - $ref: '#/components/schemas/TextVariable'
+          - $ref: '#/components/schemas/ObjectVariable'
+          - $ref: '#/components/schemas/RefVariable'
+          - $ref: '#/components/schemas/ListVariable'
+      nullable: true
+
+    Referrer:
+      type: 'object'
+      properties:
+        type:
+          description: 'Referrer type.'
+          type: 'string'
+          enum: ['Salesforce:Core:Bot:Id', 'Salesforce:BotRuntime:Session:Id']
+          example: 'Salesforce:Core:Bot:Id'
+        value:
+          type: 'string'
+          description: 'ID of referrer.'
+          example: 'string'
+      required:
+        - 'type'
+        - 'value'
+
+    TransferFailedRequestMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type for the client to inform the bot that the client failed to transfer the session to another target.'
+          type: 'string'
+          enum: ['transferFailed']
+          example: 'transferFailed'
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        inReplyToMessageId:
+          $ref: '#/components/schemas/InReplyToMessageId'
+        reason:
+          description: 'Reason for the failed transfer.'
+          type: 'string'
+          enum: ['NoAgentAvailable', 'Error']
+          example: 'NoAgentAvailable'
+        description:
+          description: 'Description of why the transfer failed.'
+          type: 'string'
+          nullable: true
+      required:
+        - 'type'
+        - 'sequenceId'
+        - 'reason'
+      additionalProperties: false
+
+    TransferSucceededRequestMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type for the client to inform the bot that the client successfully transfered the session to another target.'
+          type: 'string'
+          enum: ['transferSucceeded']
+          example: 'transferSucceeded'
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        inReplyToMessageId:
+          $ref: '#/components/schemas/InReplyToMessageId'
+      required:
+        - 'type'
+        - 'sequenceId'
+      additionalProperties: false
+
+    TextInitMessage:
+      type: 'object'
+      properties:
+        text:
+          description: 'Initial message from the customer to the bot to begin a session.'
+          type: 'string'
+          example: 'Hello'
+      additionalProperties: false
+
+    # Used in private spec only
+    EndSessionMessage:
+      type: 'object'
+      description: 'Client request to end the session.'
+      properties:
+        type:
+          description: 'Message type for the client requesting the session to end.'
+          type: 'string'
+          enum: ['endSession']
+          example: 'endSession'
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        inReplyToMessageId:
+          $ref: '#/components/schemas/InReplyToMessageId'
+        reason:
+          $ref: '#/components/schemas/EndSessionReason'
+      required:
+        - 'type'
+        - 'sequenceId'
+        - 'reason'
+      additionalProperties: false
+
+    EndSessionReason:
+      type: 'string'
+      enum:
+        - 'UserRequest'
+        - 'Transfer'
+        - 'Expiration'
+        - 'Error'
+        - 'Other'
+      example: 'Transfer'
+      nullable: false
+
+    TextMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type for replying to the bot through text.'
+          type: 'string'
+          enum: ['text']
+          example: 'text'
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        inReplyToMessageId:
+          $ref: '#/components/schemas/InReplyToMessageId'
+        text:
+          description: 'Text reply to the bot. You can answer a question with choices by typing the `choiceLabel` in a text message, instead of clicking an answer in the widget.'
+          type: 'string'
+      required:
+        - 'type'
+        - 'sequenceId'
+        - 'text'
+      additionalProperties: false
+
+    ChoiceMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type for answering a question with choices from the bot.'
+          type: 'string'
+          enum: ['choice']
+          example: 'choice'
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        inReplyToMessageId:
+          $ref: '#/components/schemas/InReplyToMessageId'
+        choiceIndex:
+          description: 'Index or alias of the chosen answer. The index starts with 1. Either `choiceIndex` or `choiceId` is required.'
+          type: 'integer'
+          minimum: 1
+          example: 1
+          nullable: true
+        choiceId:
+          description: 'ID of the answer when you answer by clicking a choice button. Either `choiceIndex` or `choiceId` is required.'
+          type: 'string'
+          example: '8a9a745f-0c09-4b13-955c-1ab9e06c7ad7'
+          nullable: true
+      required:
+        - 'type'
+        - 'sequenceId'
+      additionalProperties: false
+
+    RedirectMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type for the redirecting the client to another bot flow.'
+          type: 'string'
+          enum: ['redirect']
+          example: 'redirect'
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        dialogId:
+          type: 'string'
+          description: 'Dialog ID to redirect to.'
+          example: '68f934fb-e022-37a7-612e-b74fc87191d9'
+      required:
+        - 'type'
+        - 'sequenceId'
+        - 'dialogId'
+      additionalProperties: false
+
+    Schedule:
+      type: 'object'
+      properties:
+        responseDelayMilliseconds:
+          description: "Delay in ms to display the bot's message to the user. This parameter is set by the bot admin when creating the bot."
+          type: 'integer'
+          format: 'int32'
+          example: 1200
+      required:
+        - 'responseDelayMilliseconds'
+      additionalProperties: false
+
+    SessionEndedResponseMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type informing that the session ended.'
+          type: 'string'
+          enum: ['sessionEnded']
+          example: 'sessionEnded'
+        id:
+          $ref: '#/components/schemas/MessageId'
+        reason:
+          description: 'Reason the session ended.'
+          type: 'string'
+          enum:
+            [
+              'ClientRequest',
+              'TransferFailedNotConfigured',
+              'Action',
+              'Error',
+              'InfiniteLoopDetected',
+            ]
+          example: 'ClientRequest'
+          nullable: false
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+      required:
+        - 'type'
+        - 'id'
+        - 'reason'
+      additionalProperties: false
+
+    TextResponseMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type of a text message to the customer.'
+          type: 'string'
+          enum: ['text']
+          example: 'text'
+        id:
+          $ref: '#/components/schemas/MessageId'
+        text:
+          description: 'Message from the bot.'
+          type: 'string'
+          example: 'Hello world!'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+      required:
+        - 'type'
+        - 'id'
+        - 'text'
+      additionalProperties: false
+
+    ChoicesResponseMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type of a question with choices.'
+          type: 'string'
+          enum: ['choices']
+          example: 'choices'
+        id:
+          $ref: '#/components/schemas/MessageId'
+        choices:
+          description: 'Array of answers to choose from.'
+          type: 'array'
+          minItems: 1
+          items:
+            type: 'object'
+            description: 'Choice'
+            properties:
+              label:
+                description: 'Choice label.'
+                type: 'string'
+                example: 'Order Status'
+              alias:
+                description: 'Choice alias, for example, a number to represent the choice.'
+                type: 'string'
+                example: '1'
+                nullable: true
+              id:
+                description: 'Choice ID.'
+                type: 'string'
+                example: '8a9a745f-0c09-4b13-955c-1ab9e06c7ad7'
+            required:
+              - 'label'
+              - 'id'
+        widget:
+          description: |
+            "Widget type of how answers appear in the client.
+
+            * `buttons`—Answers appear in clickable pill boxes.
+            * `menu`—Answers appear in clickable boxes vertically stacked."
+          type: 'string'
+          enum: ['buttons', 'menu']
+          example: 'buttons'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+      required:
+        - 'type'
+        - 'id'
+        - 'choices'
+        - 'widget'
+      additionalProperties: false
+
+    EscalateResponseMessage:
+      type: 'object'
+      properties:
+        type:
+          description: 'Message type of an escalation message.'
+          type: 'string'
+          enum: ['escalate']
+          example: 'escalate'
+        id:
+          $ref: '#/components/schemas/MessageId'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        targets:
+          type: 'array'
+          minimum: 0
+          description: 'Array of transfer targets.'
+          items:
+            type: 'object'
+            properties:
+              type:
+                type: 'string'
+                description: Type of the transfer target.
+                enum:
+                  [
+                    'Salesforce:Core:Bot:Id',
+                    'Salesforce:Core:Queue:Id',
+                    'Salesforce:Core:Skill:Id',
+                    'Salesforce:Core:Flow:Id',
+                  ]
+                example: 'Salesforce:Core:Bot:Id'
+              value:
+                type: 'string'
+                description: 'ID of the transfer target.'
+            required:
+              - 'value'
+              - 'type'
+            nullable: false
+            additionalProperties: false
+          nullable: false
+      required:
+        - 'type'
+        - 'id'
+        - 'targets'
+      additionalProperties: false
+
+    ForceConfig:
+      type: 'object'
+      description: 'API configuration parameters.'
+      properties:
+        endpoint:
+          description: 'Instance URL of your Salesforce org. You can find the value in the **ForceConfig Endpoint** field of the **Add Connection** dialog when you add the connected app to the bot (see [Get Started with Einstein Bot API](https://developer.salesforce.com/docs/service/einstein-bot-api/guide/prerequisites.html)).'
+          type: 'string'
+          example: 'https://d5e000009s7bceah-dev-ed.my.salesforce.com/'
+      required:
+        - 'endpoint'
+      additionalProperties: true
+
+    ResponseOptions:
+      type: 'object'
+      description: 'Configuration of additional information returned in the response payload.'
+      properties:
+        variables:
+          $ref: '#/components/schemas/ResponseOptionsVariables'
+        metrics:
+          type: 'boolean'
+          description: 'Indicates whether or not to include metrics in the response.'
+        intents:
+          type: 'boolean'
+          description: 'Indicates whether or not to include all intents detected when processing the current request.'
+        entities:
+          type: 'boolean'
+          description: 'Indicates whether or not to include all entities detected when processing the current request.'
+      additionalProperties: false
+
+    ResponseOptionsVariables:
+      type: 'object'
+      description: 'Variables returned in the response.'
+      properties:
+        include:
+          type: 'boolean'
+          example: true
+          description: 'Indicates whether or not to include variables in the response.'
+        filter:
+          type: 'array'
+          example: ['OrderQty', 'OrderType']
+          description: 'Array of variable names to limit the returned variables. If missing, null, or empty, no filtering is applied.'
+          items:
+            type: 'string'
+            description: 'Variable name to filter the returned variables on.'
+            example: 'OrderQty'
+          nullable: true
+        onlyChanged:
+          type: 'boolean'
+          example: true
+          description: 'Indicates whether or not the response contains only changed variables.'
+      required:
+        - 'include'
+        - 'onlyChanged'
+      additionalProperties: false
+
+    Status:
+      type: 'object'
+      properties:
+        status:
+          type: 'string'
+          description: 'Health status of Einstein Bots API.'
+          enum: ['UP', 'DOWN']
+          example: 'UP'
+      required:
+        - 'status'
+      additionalProperties: false
+
+    # Do not show examples here as this Error schema is used
+    # generically for all error codes.
+    # The examples specific to the error code are shown elsewhere.
+    Error:
+      type: 'object'
+      properties:
+        status:
+          description: 'HTTP status.'
+          type: 'integer'
+          format: 'int32'
+          # example: 500
+        path:
+          description: 'Request path.'
+          type: 'string'
+          # example: "/v1/00DRM00000067To/chatbots/HelloWorldBot/messages"
+        requestId:
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          type: 'string'
+          # example: "19c056ab-d909-49df-b976-65e56b6ab214"
+        error:
+          description: 'Error class name.'
+          type: 'string'
+          # example: "NullPointerException"
+        message:
+          description: 'Exception message.'
+          type: 'string'
+          # example: "Something went wrong"
+        timestamp:
+          description: 'Unix timestamp.'
+          type: 'integer'
+          format: 'int64'
+          # example: 1531245973799
+      required:
+        - 'status'
+        - 'path'
+        - 'requestId'
+        - 'error'
+        - 'message'
+        - 'timestamp'
+      additionalProperties: true
+
+  responses:
+    StatusResponse:
+      description: 'OK'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
+
+    ErrorResponse:
+      description: 'Something went wrong'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+
+    SuccessfulResponse:
+      description: 'OK'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseEnvelope'
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+        'X-Runtime-CRC':
+          description: 'Internal runtime CRC unique to the request.'
+          schema:
+            type: 'string'
+        'X-Bot-Mode':
+          description: 'Bot mode.'
+          example: 'default'
+          schema:
+            type: 'string'
+
+    SuccessfulChatMessageResponse:
+      description: 'OK'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChatMessageResponseEnvelope'
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+        'X-Runtime-CRC':
+          description: 'Internal runtime CRC.'
+          schema:
+            type: 'string'
+
+    BadRequestError:
+      description: 'Bad Request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 400
+            path: '/v1/00DRM00000067To/chatbots/HelloWorldBot/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'BadRequestError'
+            message: 'Bad Request'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+
+    UnauthorizedError:
+      description: 'Access bearer token is missing or invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 401
+            path: '/v1/00DRM00000067To/chatbots/HelloWorldBot/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'UnauthorizedError'
+            message: 'Access bearer token is missing or invalid'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+
+    ForbiddenError:
+      description: 'User forbidden from accessing the resource'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 403
+            path: '/v1/00DRM00000067To/chatbots/HelloWorldBot/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'ForbiddenError'
+            message: 'User forbidden from accessing the resource'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+
+    NotFoundError:
+      description: 'Resource not found'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 404
+            path: '/v1/00DRM00000067To/chatbots/HelloWorldBot/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'NotFoundError'
+            message: 'Resource not found'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
+          schema:
+            type: 'string'
+
+    NotAvailableError:
+      description: 'Resource not available at the time of the request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 410
+            path: '/v1/00DRM00000067To/chatbots/HelloWorldBot/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'NotAvailableError'
+            message: 'Resource not available at the time of the request'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+
+    RequestProcessingException:
+      description: 'Any exception that occurred during the request execution'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 422
+            path: 'v4.0.0/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'RequestProcessingException'
+            message: 'Cannot determine the active version for the bot'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+
+    ServerBusyError:
+      description: 'Server is busy and cannot process the request at this time'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 423
+            path: '/v1/00DRM00000067To/chatbots/HelloWorldBot/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'ServerBusyError'
+            message: 'Server is busy and cannot process the request at this time'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+
+    TooManyRequestsError:
+      description: 'Too many requests for the server to handle'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 429
+            path: '/v1/00DRM00000067To/chatbots/HelloWorldBot/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'TooManyRequestsError'
+            message: 'Too many requests for the server to handle'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'
+
+    ServiceUnavailable:
+      description: 'Service is unavailable possibly because Apex or Flow calls timed out'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 503
+            path: '/v1/00DRM00000067To/chatbots/HelloWorldBot/messages'
+            requestId: '19c056ab-d909-49df-b976-65e56b6ab214'
+            error: 'ServiceUnavailable'
+            message: 'Service is unavailable possibly because Apex/Flow calls timed out'
+            timestamp: 1531245973799
+      headers:
+        'X-Request-ID':
+          description: 'Request ID. A UUID in string format to help with request tracking.'
+          example: '36a73651-a46d-4d16-9a8a-fd436ed62e1a'
+          schema:
+            type: 'string'

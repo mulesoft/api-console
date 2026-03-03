@@ -13,6 +13,7 @@ class ApicApplication extends DemoBase {
   constructor() {
     super();
     this.apis = [
+      ['nullable', 'W-11650729 - Nullable union'],
       ['product-order-minimal-compact', 'Product Order Minimal'],
       ['nested-examples-oas3', 'Nested Examples'],
       ['grpc-test', 'gRPC API'],
