@@ -318,11 +318,15 @@ api-console/
 
 ## GPG Signing Requirements
 
-**CRITICAL**: This is a `mulesoft/*` repository and requires GPG signing with `alexperez@mulesoft.com`.
+**CRITICAL**: This is a `mulesoft/*` repository and requires GPG signing with @mulesoft.com email.
 
-**Before committing**, run:
+**Before committing**, configure Git:
 ```bash
-mulesoft-git
+# See docs/team/configs/git-gpg-setup.md for detailed setup
+
+# Quick config (manual)
+git config user.email "yourname@mulesoft.com"
+git config user.signingkey YOUR_GPG_KEY_ID
 ```
 
 **Verify signature**:
@@ -515,7 +519,7 @@ npm ls @api-components/api-type-document  # Verify component version
 - Use `AmfHelperMixin` utilities for AMF querying
 - Test in both chromium and firefox (visual differences exist)
 - Check for gRPC API type and hide try-it panel accordingly
-- Run `mulesoft-git` before committing
+- Configure GPG signing before committing (see docs/team/configs/git-gpg-setup.md)
 
 ### DON'T:
 - Don't attempt to parse API files directly (requires AMF parser)
@@ -523,7 +527,7 @@ npm ls @api-components/api-type-document  # Verify component version
 - Don't import CodeMirror/crypto libs as ES modules (use vendor.js)
 - Don't modify AMF model structure (it's an external standard)
 - Don't assume `amf` is always an array (can be single object)
-- Don't commit without GPG signature (`mulesoft-git` first)
+- Don't commit without GPG signature (configure first)
 
 ## Debugging Tips
 

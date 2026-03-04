@@ -7,7 +7,9 @@
 
 ## Git & Commit Rules
 - NEVER commit directly to master/main (ALWAYS create feature branch first)
-- ALWAYS run `mulesoft-git` before committing (GPG sign with alexperez@mulesoft.com)
+- ALWAYS configure GPG signing before committing (see docs/team/configs/git-gpg-setup.md)
+  - MuleSoft repos: Use @mulesoft.com email
+  - Commits must be GPG signed
 - Use Conventional Commits format: `<type>(<scope>): <subject>`
 - Valid types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
 

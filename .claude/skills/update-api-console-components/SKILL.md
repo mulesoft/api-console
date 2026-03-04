@@ -107,15 +107,22 @@ npm ls @api-components/<component-name>  # verify again
 
 ### 5. Configure GPG signing (CRITICAL - DO NOT SKIP)
 
-**BEFORE any commits**, run:
+**BEFORE any commits**, configure Git for MuleSoft repos:
 
 ```bash
+# Option 1: If you have the alias (see docs/team/configs/git-gpg-setup.md)
 mulesoft-git
+
+# Option 2: Manual configuration
+git config user.email "yourname@mulesoft.com"
+git config user.signingkey YOUR_GPG_KEY_ID
 ```
 
-This configures Git to sign commits with `alexperez@mulesoft.com`.
+This ensures commits are signed with your @mulesoft.com email.
 
 **⚠️ Skipping this step will result in rejected commits and broken git history.**
+
+**Setup guide**: See `docs/team/configs/git-gpg-setup.md` for GPG configuration options.
 
 ### 6. Bump package version
 
@@ -157,12 +164,16 @@ git log --show-signature -1
 ```
 
 **Must show**:
-- `Good signature from "alexp mule <alexperez@mulesoft.com>"`
-- Author: `Alex Perez <alexperez@mulesoft.com>`
+- `Good signature from "Your Name <yourname@mulesoft.com>"`
+- Author: `Your Name <yourname@mulesoft.com>`
 
 **If signature is wrong or missing**:
 ```bash
-mulesoft-git
+# Reconfigure (see docs/team/configs/git-gpg-setup.md)
+git config user.email "yourname@mulesoft.com"
+git config user.signingkey YOUR_GPG_KEY_ID
+
+# Amend commit
 git commit --amend --no-edit -S
 git log --show-signature -1  # verify again
 ```
@@ -222,13 +233,18 @@ git checkout master
 
 #### 2. Configure GPG signing (CRITICAL)
 
-**IMPORTANT**: This is a `mulesoft-emu/*` repo, NOT `mulesoft/*`.
+**IMPORTANT**: This is a `mulesoft-emu/*` repo (Salesforce EMU), NOT `mulesoft/*`.
 
 ```bash
-salesforce-git  # NOT mulesoft-git!
+# Option 1: If you have the alias (see docs/team/configs/git-gpg-setup.md)
+salesforce-git
+
+# Option 2: Manual configuration
+git config user.email "yourname@salesforce.com"
+git config user.signingkey YOUR_GPG_KEY_ID
 ```
 
-Signs commits with `alexperez@salesforce.com`.
+This ensures commits are signed with your @salesforce.com email (NOT @mulesoft.com).
 
 #### 3. Pull latest changes
 
@@ -328,11 +344,11 @@ git log --show-signature -1
 
 **Must show**:
 ```
-gpg: Good signature from "Alex Perez (Git signing key) <alexperez@salesforce.com>"
-Author: Alex Perez <alexperez@salesforce.com>
+gpg: Good signature from "Your Name <yourname@salesforce.com>"
+Author: Your Name <yourname@salesforce.com>
 ```
 
-**If wrong**: Re-run `salesforce-git` and amend commit.
+**If wrong**: Reconfigure and amend commit (see docs/team/configs/git-gpg-setup.md).
 
 #### 10. Push branch
 
@@ -391,13 +407,13 @@ Release Notes: https://github.com/mulesoft/api-console/releases/tag/v6.6.61
 Before pushing:
 
 - [ ] Correct repo: `~/mulesoft/context/products/api-console/wrapper`
-- [ ] GPG configured: `salesforce-git` run (NOT `mulesoft-git`)
+- [ ] GPG configured: @salesforce.com email (see docs/team/configs/git-gpg-setup.md)
 - [ ] Branch name: Direct number (e.g., `6.6.88`), no `build/` or `feat/` prefix
 - [ ] `builder/package.json` updated to new api-console version
 - [ ] Lock file deleted + reinstalled (NOT optional)
 - [ ] Component versions verified: `npm ls @api-components/...`
 - [ ] All components at expected versions (no old versions)
-- [ ] Commit signed with `alexperez@salesforce.com` GPG key
+- [ ] Commit signed with @salesforce.com GPG key
 - [ ] PR title: `@W-XXXXXXXX: Release X.X.X` (with `@` prefix)
 - [ ] GUS work item exists for wrapper release
 
@@ -406,8 +422,8 @@ Before pushing:
 | Aspect | api-console | anypoint-api-console |
 |--------|-------------|----------------------|
 | **Repo org** | `mulesoft/*` | `mulesoft-emu/*` |
-| **GPG command** | `mulesoft-git` | `salesforce-git` |
-| **GPG email** | alexperez@mulesoft.com | alexperez@salesforce.com |
+| **GPG email** | @mulesoft.com | @salesforce.com |
+| **GPG setup** | See docs/team/configs/git-gpg-setup.md | See docs/team/configs/git-gpg-setup.md |
 | **Branch naming** | `build/6.6.61` | `6.6.88` (no prefix) |
 | **Version bump** | Yes (`npm version patch`) | No (only update dependency) |
 | **gh pr create** | ❌ Fails (use web UI) | ✅ Works |
@@ -441,11 +457,15 @@ git status --porcelain  # Find untracked files
 
 ### Issue: Wrong GPG signature
 
-**Cause**: Forgot to run `mulesoft-git` before committing.
+**Cause**: Git not configured with correct email/GPG key for this repo.
 
 **Solution**:
 ```bash
-mulesoft-git
+# Reconfigure (see docs/team/configs/git-gpg-setup.md for setup)
+git config user.email "yourname@mulesoft.com"  # or @salesforce.com for EMU repos
+git config user.signingkey YOUR_GPG_KEY_ID
+
+# Amend commit
 git commit --amend --no-edit -S
 git log --show-signature -1
 ```
