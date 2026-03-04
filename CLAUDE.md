@@ -431,7 +431,7 @@ echo "fix(api-console): resolve issue" | npx commitlint
 
 **Branch Naming**:
 - Component fixes: feature branches (e.g., `feat/W-12345678-fix-auth`)
-- api-console releases: `build/<build-number>` (v6) or `feat/<release-ticket>/<version>` (v7)
+- api-console releases: `build/<build-number>`
 
 **Note**: Some components use older branches:
 - `advanced-rest-client/authorization` → use `support/0.1` branch (NOT master)
@@ -466,19 +466,6 @@ npm run prepare:api-console
 ```
 
 **Useful Tool**: Use `/update-api-console-components` skill for complete release workflow automation
-
-### v7 Release Process
-
-**Schedule**: Every 4 weeks on Tuesdays
-**Repository**: `api-console-lwc`
-
-**Steps**:
-1. Checkout `api-console-lwc` develop branch
-2. Create branch: `feat/<release-ticket>/<version>`
-3. Create PR to **both** `develop` and `master` → wait for approval → merge
-4. Auto-published to npm
-5. Create GitHub release (e.g., [v0.2.83](https://github.com/anypoint-web-components/api-console-lwc/releases))
-   - List all tickets (fixes + enhancements) in release notes
 
 ### Related Teams & Contacts
 
@@ -518,16 +505,6 @@ rm -rf package-lock.json node_modules/
 npm i
 npm ls @api-components/api-type-document  # Verify component version
 ```
-
-### LWC Migration Context
-
-**Why v7 exists**: Salesforce Lightning Locker Service (API v40+) blocks custom web components. v6 uses Aura wrapper forced to API v39 (Spring '17 release).
-
-**Problem**: API v39 passed 3-year support commitment (Spring '20). Uncertain how long it remains supported.
-
-**Solution**: Migrating to native LWC (`api-console-lwc`) to avoid Aura wrapper and API version constraints.
-
-**Status**: Not all components migrated yet, some tests missing. See [LWC migration docs](https://salesforce.quip.com/link-to-lwc-migration).
 
 ## Important Constraints
 
