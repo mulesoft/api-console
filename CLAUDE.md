@@ -356,6 +356,117 @@ git log --show-signature -1
 
 **npm Package**: [`api-console`](https://www.npmjs.com/package/api-console)
 
+## Release Management
+
+### Development Cycle (GUS Workflow)
+
+**Component Fix → Release Process**:
+1. PR with changes **must include version bump** in component's `package.json`
+2. Once merged → auto-published to npm
+3. Add comment to GUS ticket: `Fixed in @advanced-rest-client/authorization@0.1.8`
+4. Update ticket status: `Pending Release`
+5. After api-console release includes the component → Close ticket
+
+**Branch Naming**:
+- Component fixes: feature branches (e.g., `feat/W-12345678-fix-auth`)
+- api-console releases: `build/<build-number>` (v6) or `feat/<release-ticket>/<version>` (v7)
+
+**Note**: Some components use older branches:
+- `advanced-rest-client/authorization` → use `support/0.1` branch (NOT master)
+
+### v6 Release Process
+
+**Schedule**: Every 3 weeks on Fridays
+**Calendar**: [API Designer release calendar](https://salesforce.quip.com/link-to-calendar)
+
+**Steps**:
+1. Checkout `api-console` master branch
+2. Create branch: `build/<build-number>`
+3. Check GUS build version for tickets with component+version comments
+4. Update components: `npm update <component-name>` for each fix
+   - Find component updates: Search ticket number in `mulesoft/*` or `advanced-rest-client/*` orgs
+5. Bump api-console version: `npm version patch`
+6. Create PR → wait for approval → merge
+7. Auto-published to npm
+8. **Update anypoint-api-console wrapper**:
+   - Checkout `anypoint-api-console` master
+   - Update `builder/package.json` with new api-console version
+   - Verify component versions: `npm ls @api-components/api-type-document`
+   - **If component not updated**: Delete `package-lock.json` + `node_modules/` in `builder/`, run `npm i`, verify again
+   - Create PR → merge
+9. Announce in `#api-console-cloud-sync`
+10. Update [API Console releases list](https://salesforce.quip.com/link-to-releases)
+
+**Adopt in ACM** (downstream):
+```bash
+npm update api-console
+npm run prepare:api-console
+```
+
+**Useful Tool**: Use `/update-api-console-components` skill for complete release workflow automation
+
+### v7 Release Process
+
+**Schedule**: Every 4 weeks on Tuesdays
+**Repository**: `api-console-lwc`
+
+**Steps**:
+1. Checkout `api-console-lwc` develop branch
+2. Create branch: `feat/<release-ticket>/<version>`
+3. Create PR to **both** `develop` and `master` → wait for approval → merge
+4. Auto-published to npm
+5. Create GitHub release (e.g., [v0.2.83](https://github.com/anypoint-web-components/api-console-lwc/releases))
+   - List all tickets (fixes + enhancements) in release notes
+
+### Related Teams & Contacts
+
+API Console is embedded in multiple products. Escalate to these teams when needed:
+
+| Product | Developer | Manager | Notes |
+|---------|-----------|---------|-------|
+| **API Designer** | Leandro Bauret | Eduardo Cominguez | QA: Ignacio Americo |
+| **Exchange** | Nicolas Escalante | Mariano Campo | - |
+| **AMF** | Nicolas Schejtman | Martin Gutierrez | Parser/model issues |
+| **Mocking Service** | Roberto Ciccone | Diego Macias | - |
+| **APIkit** | - | Chakravarthy Parankusam | - |
+
+**Internal Slack**: `#api-console-cloud-sync` (release announcements, coordination)
+
+## Common Issues
+
+### NPM Registry Authentication
+
+**Error**: `Not Found - GET https://nexus3.build.msap.io/repository/npm-internal/@salesforce`
+
+**Solution**: Login to Salesforce Nexus registry:
+```bash
+npm login --registry=https://nexus3.build.msap.io/repository/npm-all/ --scope=@salesforce
+```
+
+**When this happens**: Installing dependencies in `acm-aeh-sfdx` or other Salesforce projects that depend on api-console-lwc
+
+### Component Version Mismatch
+
+**Problem**: After updating api-console, component is not updated to expected version
+
+**Solution**:
+```bash
+# In builder/ directory
+rm -rf package-lock.json node_modules/
+npm i
+npm ls @api-components/api-type-document  # Verify component version
+```
+
+### LWC Migration Context
+
+**Why v7 exists**: Salesforce Lightning Locker Service (API v40+) blocks custom web components. v6 uses Aura wrapper forced to API v39 (Spring '17 release).
+
+**Problem**: API v39 passed 3-year support commitment (Spring '20). Uncertain how long it remains supported.
+
+**Solution**: Migrating to native LWC (`api-console-lwc`) to avoid Aura wrapper and API version constraints.
+
+**Status**: Not all components migrated yet, some tests missing. See [LWC migration docs](https://salesforce.quip.com/link-to-lwc-migration).
+
 ## Important Constraints
 
 ### DO:
