@@ -17,6 +17,154 @@ Different branch naming patterns are used depending on the type of change and re
 
 ---
 
+## Commit Message Conventions (Enforced by commitlint)
+
+### Overview
+
+**This repository uses commitlint** with `@commitlint/config-conventional` to enforce standardized commit messages.
+
+**Configuration**: `commitlint.config.js`
+
+**What commitlint validates**:
+- ✅ Commit message **format** (type, scope, subject)
+- ❌ **NOT** branch names (branch names are flexible)
+
+### Conventional Commits Format
+
+```
+<type>(<scope>): <subject>
+
+[optional body]
+
+[optional footer]
+```
+
+**Example**:
+```
+fix(api-navigation): resolve deep allOf property collection
+
+Added recursive traversal for nested allOf chains.
+
+Related: W-21368901
+```
+
+### Valid Commit Types
+
+| Type | Use When | Example |
+|------|----------|---------|
+| `feat` | New feature | `feat(api-request): add OAuth2 PKCE support` |
+| `fix` | Bug fix | `fix(api-documentation): resolve markdown rendering issue` |
+| `docs` | Documentation only | `docs: update README with new examples` |
+| `style` | Code formatting (no logic change) | `style: fix indentation in ApiConsole.js` |
+| `refactor` | Code refactor (no bug fix or feature) | `refactor: extract AMF helper into separate file` |
+| `test` | Test changes | `test: add regression test for deep allOf` |
+| `chore` | Maintenance tasks | `chore: bump version to 6.6.62` |
+| `perf` | Performance improvement | `perf: optimize AMF model traversal` |
+| `ci` | CI/CD changes | `ci: update GitHub Actions workflow` |
+| `build` | Build system changes | `build: update rollup config` |
+| `revert` | Revert previous commit | `revert: revert "feat: add feature X"` |
+
+### Scope (Optional but Recommended)
+
+Scope indicates what part of the codebase is affected:
+
+**Examples**:
+- `fix(api-navigation):` - Navigation component
+- `feat(api-request):` - Request panel
+- `docs(README):` - README file
+- `chore(deps):` - Dependencies
+
+**When to omit scope**:
+- Changes affect entire codebase
+- Documentation updates at root level
+- Version bumps
+
+### Subject Line Rules
+
+✅ **DO**:
+- Use imperative mood ("add" not "added" or "adds")
+- Start with lowercase
+- No period at the end
+- Keep under 72 characters
+
+❌ **DON'T**:
+- Start with uppercase
+- End with period
+- Use past tense
+- Be vague ("fix stuff", "update things")
+
+### Examples: Good vs Bad
+
+#### ✅ Good Commits
+
+```bash
+fix(api-navigation): resolve deep allOf property collection
+feat(api-request): add OAuth2 PKCE support
+docs: add branch naming conventions pattern
+chore: bump version to 6.6.62
+test: add regression test for deep allOf schemas
+refactor(api-console): extract AMF helper utilities
+```
+
+#### ❌ Bad Commits (will fail commitlint)
+
+```bash
+Fixed bug                           # Missing type/scope, past tense
+Update code.                        # Vague, ends with period
+FEAT: Add feature                   # Uppercase type, uppercase subject
+fix stuff                           # Too vague
+Added new feature to navigation     # Past tense
+```
+
+### Body and Footer (Optional)
+
+**Body**: Detailed explanation of WHAT changed and WHY (not HOW - code shows that)
+
+**Footer**: Reference tickets, breaking changes, etc.
+
+**Example**:
+```
+fix(api-example-generator): add recursive property collection for deep allOf
+
+Single-pass iteration through allOf shapes didn't recursively expand
+nested shacl:and arrays beyond 3 levels. This caused properties in
+4+ level allOf chains to be missing from generated examples.
+
+Added _collectPropertiesRecursive() method with:
+- Depth limiting (max 10 levels)
+- Circular reference detection
+- Backward compatibility
+
+Related: W-21368901
+Closes: #123
+```
+
+### Validation
+
+**commitlint runs automatically**:
+- On `git commit` (via husky pre-commit hook, if configured)
+- In CI/CD pipeline
+
+**Test commit message locally**:
+```bash
+echo "fix(api-console): resolve issue" | npx commitlint
+```
+
+**If validation fails**:
+```bash
+⧗   input: update code
+✖   subject may not be empty [subject-empty]
+✖   type may not be empty [type-empty]
+✖   found 2 problems, 0 warnings
+```
+
+Fix the commit message:
+```bash
+git commit --amend -m "fix(api-console): resolve navigation issue"
+```
+
+---
+
 ## Branch Naming Patterns
 
 ### 1. `fix/W-XXXXX-description` - Component Bug Fixes
@@ -129,11 +277,13 @@ build/6.7.0  # Minor version bump
 
 ## Comparison Table
 
-| Scenario | Branch Pattern | Repo | Version Bump in Branch? | Example |
-|----------|----------------|------|-------------------------|---------|
-| Fix bug in component | `fix/W-XXXXX-desc` | `@api-components/*` | ❌ No | `fix/W-21368901-deep-allof` |
-| Release api-console | `build/X.X.X` | `mulesoft/api-console` | ✅ Yes (`npm version patch`) | `build/6.6.62` |
-| Update wrapper | `X.X.X` | `mulesoft-emu/anypoint-api-console` | ❌ No | `6.6.88` |
+| Scenario | Branch Pattern | Repo | Version Bump in Branch? | Commit Message Format | Example |
+|----------|----------------|------|-------------------------|-----------------------|---------|
+| Fix bug in component | `fix/W-XXXXX-desc` | `@api-components/*` | ❌ No | ✅ Conventional Commits | `fix/W-21368901-deep-allof` |
+| Release api-console | `build/X.X.X` | `mulesoft/api-console` | ✅ Yes (`npm version patch`) | ✅ Conventional Commits | `build/6.6.62` |
+| Update wrapper | `X.X.X` | `mulesoft-emu/anypoint-api-console` | ❌ No | ✅ Conventional Commits | `6.6.88` |
+
+**Note**: Commit messages are validated by commitlint in ALL repos, regardless of branch naming pattern.
 
 ---
 
@@ -149,6 +299,19 @@ If we used `fix/` branches in api-console and ran `npm version patch` in each:
 - **Components**: `fix/` branches focus on code changes, version bump happens after merge
 - **api-console**: `build/` branches bundle multiple components, explicit version in branch name prevents conflicts
 - **Wrapper**: Direct version number, independent versioning
+
+### Note on commitlint
+
+**commitlint validates commit messages, NOT branch names.**
+
+- ✅ Branch names: `fix/W-12345-bug`, `build/6.6.62`, `feat/my-feature` - **ALL valid**
+- ✅ Commit messages: **MUST** follow Conventional Commits format (enforced)
+
+**Why this matters**:
+- Branch names are flexible and team-specific
+- Commit messages are standardized across projects (tooling compatibility)
+- Git history benefits from consistent commit message format
+- Branch names are temporary (deleted after merge), commit messages are permanent
 
 ---
 
