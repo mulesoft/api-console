@@ -330,6 +330,68 @@ mulesoft-git
 git log --show-signature -1
 ```
 
+## Commit Message Format (commitlint)
+
+**This repository enforces Conventional Commits** via commitlint (`@commitlint/config-conventional`).
+
+**Configuration**: `commitlint.config.js`
+
+### Required Format
+
+```
+<type>(<scope>): <subject>
+
+[optional body]
+
+[optional footer]
+```
+
+### Valid Types
+
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation only
+- `style`: Code formatting (no logic change)
+- `refactor`: Code refactor
+- `test`: Test changes
+- `chore`: Maintenance (version bumps, deps)
+- `perf`: Performance improvement
+- `ci`: CI/CD changes
+- `build`: Build system changes
+- `revert`: Revert previous commit
+
+### Examples
+
+✅ **Good**:
+```bash
+fix(api-navigation): resolve deep allOf property collection
+feat(api-request): add OAuth2 PKCE support
+docs: update README with AMF examples
+chore: bump version to 6.6.62
+```
+
+❌ **Bad** (will fail validation):
+```bash
+Fixed bug                    # Missing type, past tense
+Update code.                 # Ends with period
+FEAT: Add feature            # Uppercase
+fix stuff                    # Too vague
+```
+
+### Subject Line Rules
+
+- ✅ Use imperative mood ("add" not "added")
+- ✅ Start with lowercase
+- ✅ No period at end
+- ✅ Keep under 72 characters
+
+**Test locally**:
+```bash
+echo "fix(api-console): resolve issue" | npx commitlint
+```
+
+**More details**: `docs/team/patterns/branch-naming-conventions.md#commit-message-conventions`
+
 ## CI/CD Pipeline
 
 **GitHub Actions**: `.github/workflows/deployment.yml`
