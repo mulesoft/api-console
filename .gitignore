@@ -72,5 +72,11 @@ demo/models/flattened/*.json
 .sfdx
 .codegenie
 # Claude/Cursor working files
-.claude/
+# Note: Skills are committed (team workflows), other .claude/ content is not
+.claude/analyses/
+.claude/plans/
+.claude/investigations/
+.claude/context/
+.claude/temp/
+.claude/README.md
 .cursor/
