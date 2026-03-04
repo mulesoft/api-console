@@ -55,11 +55,11 @@ For each ticket in "Pending Release":
 - Search in `mulesoft` org (console repo)
 - Search in `advanced-rest-client` org (individual components)
 
-### Step 2: Checkout Master and Create Branch
+### Step 2: Checkout Main Branch and Create Branch
 
 ```bash
 cd ~/mulesoft/context/products/api-console/v6/api-console
-git checkout master
+git checkout master  # Main branch (currently named 'master' in api-console repo)
 git pull
 ```
 
@@ -275,7 +275,7 @@ If not published yet, wait a few minutes and check GitHub Actions status.
 
 ```bash
 cd ~/mulesoft/context/products/api-console/v6/anypoint-api-console
-git checkout master
+git checkout master  # Main branch (currently named 'master' in wrapper repo)
 git pull
 ```
 
@@ -481,7 +481,7 @@ This entire workflow is automated via Claude Code skill:
 
 **What it does**:
 1. Prompts for component list + versions
-2. Checks out master + creates branch
+2. Checks out main branch + creates release branch
 3. Updates components + verifies
 4. Configures GPG signing
 5. Bumps version + commits

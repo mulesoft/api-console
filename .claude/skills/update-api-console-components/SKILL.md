@@ -49,12 +49,12 @@ Ask user for:
 
 ## Steps
 
-### 1. Verify location and checkout master
+### 1. Verify location and checkout main branch
 
 ```bash
 cd ~/mulesoft/context/products/api-console/v6/api-console
 git status  # Verify we're in correct repo
-git checkout master
+git checkout master  # Main branch (currently named 'master' in api-console repo)
 git pull
 ```
 
@@ -228,7 +228,7 @@ After api-console PR is merged and new version is published to npm (automatic vi
 ```bash
 cd ~/mulesoft/context/products/api-console/wrapper
 git status  # Verify we're in correct repo
-git checkout master
+git checkout master  # Main branch (currently named 'master' in wrapper repo)
 ```
 
 #### 2. Configure GPG signing (CRITICAL)
@@ -515,7 +515,7 @@ npm ls @api-components/<component>
 - **Build number**: Optional, use semantic version instead (X.X.X)
 - **Components are separate repos**: Under `advanced-rest-client` GitHub org, NOT `mulesoft`
 - **AMF models**: Not affected by component updates (unless AMF version changes)
-- **CI/CD**: GitHub Actions automatically publishes to npm after merge to master
+- **CI/CD**: GitHub Actions automatically publishes to npm after merge to main branch
 - **Downstream consumers**: ACM, Exchange, API Designer will pick up new version on their next update cycle
 
 ## Related Documentation

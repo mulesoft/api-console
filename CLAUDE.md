@@ -417,7 +417,7 @@ echo "fix(api-console): resolve issue" | npx commitlint
 1. Update `package.json` version
 2. Update `CHANGELOG.md`
 3. Commit with message: `chore: bump version to X.Y.Z`
-4. Push to `master` → triggers GitHub Action
+4. Push to main branch (master in api-console repo) → triggers GitHub Action
 5. GitHub Action publishes to npm if version changed
 
 **npm Package**: [`api-console`](https://www.npmjs.com/package/api-console)
@@ -438,7 +438,7 @@ echo "fix(api-console): resolve issue" | npx commitlint
 - api-console releases: `build/<build-number>`
 
 **Note**: Some components use older branches:
-- `advanced-rest-client/authorization` → use `support/0.1` branch (NOT master)
+- `advanced-rest-client/authorization` → use `support/0.1` branch (NOT main branch)
 
 ### v6 Release Process
 
@@ -446,7 +446,7 @@ echo "fix(api-console): resolve issue" | npx commitlint
 **Calendar**: [API Designer release calendar](https://salesforce.quip.com/link-to-calendar)
 
 **Steps**:
-1. Checkout `api-console` master branch
+1. Checkout `api-console` main branch (master in api-console repo)
 2. Create branch: `build/<build-number>`
 3. Check GUS build version for tickets with component+version comments
 4. Update components: `npm update <component-name>` for each fix
@@ -455,7 +455,7 @@ echo "fix(api-console): resolve issue" | npx commitlint
 6. Create PR → wait for approval → merge
 7. Auto-published to npm
 8. **Update anypoint-api-console wrapper**:
-   - Checkout `anypoint-api-console` master
+   - Checkout `anypoint-api-console` main branch (master in wrapper repo)
    - Update `builder/package.json` with new api-console version
    - Verify component versions: `npm ls @api-components/api-type-document`
    - **If component not updated**: Delete `package-lock.json` + `node_modules/` in `builder/`, run `npm i`, verify again
