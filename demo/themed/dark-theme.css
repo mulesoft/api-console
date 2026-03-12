@@ -120,13 +120,17 @@ html {
   --http-method-label-delete-background-color: var(--http-delete-color);
   --http-method-label-delete-color: #fff;
   --http-method-label-options-background-color: var(--http-options-color);
-  --http-method-label-options-background-color: #fff;
+  --http-method-label-options-color: #fff;
   --http-method-label-head-background-color: var(--http-head-color);
-  --http-method-label-head-background-color: #fff;
+  --http-method-label-head-color: #fff;
   --http-method-label-trace-background-color: var(--http-trace-color);
-  --http-method-label-trace-background-color: #fff;
+  --http-method-label-trace-color: #fff;
   --http-method-label-connect-background-color: var(--http-connect-color);
-  --http-method-label-connect-background-color: #fff;
+  --http-method-label-connect-color: #fff;
+  --http-method-label-publish-background-color: rgba(31, 157, 85, 0.74);
+  --http-method-label-publish-color: #fff;
+  --http-method-label-subscribe-background-color: rgba(52, 144, 220, 0.74);
+  --http-method-label-subscribe-color: #fff;
 }
 
 body {
