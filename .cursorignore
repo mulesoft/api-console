@@ -1,0 +1,47 @@
+# Cursor Ignore - Exclude from AI context for better performance
+
+# Build outputs
+dist/
+coverage/
+demo/vendor.js
+
+# Dependencies
+node_modules/
+
+# Generated AMF models (except specific test models)
+demo/models/*.json
+demo/models/flattened/*.json
+!demo/models/jldAsync26.json
+!demo/models/avro.json
+!demo/models/avro2.json
+!demo/models/grpc-test.json
+!demo/models/grpc-test-compact.json
+!demo/models/product-order-deep-allof.json
+
+# IDE configs (keep lightweight)
+.vscode/*
+!.vscode/settings.json
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.stackdump
+
+# Git internals
+.git/
+
+# Large log files
+*.log
+npm-debug.log*
+
+# Test screenshots (visual regression baselines - too many files)
+test/visual/screenshots/
+
+# Package lock files (too large, let Cursor use package.json)
+package-lock.json
+
+# Temporary files
+*.tmp
+*.swp
+*~

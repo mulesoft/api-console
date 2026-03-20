@@ -1,0 +1,871 @@
+syntax = "proto3";
+
+package ecommerce.v1;
+
+// ─── Enums ───────────────────────────────────────────
+
+enum OrderStatus {
+  ORDER_STATUS_UNSPECIFIED = 0;
+  ORDER_STATUS_PENDING = 1;
+  ORDER_STATUS_CONFIRMED = 2;
+  ORDER_STATUS_PROCESSING = 3;
+  ORDER_STATUS_SHIPPED = 4;
+  ORDER_STATUS_DELIVERED = 5;
+  ORDER_STATUS_CANCELLED = 6;
+  ORDER_STATUS_REFUNDED = 7;
+  ORDER_STATUS_RETURNED = 8;
+}
+
+enum Currency {
+  CURRENCY_UNSPECIFIED = 0;
+  CURRENCY_USD = 1;
+  CURRENCY_EUR = 2;
+  CURRENCY_GBP = 3;
+  CURRENCY_ARS = 4;
+  CURRENCY_BRL = 5;
+  CURRENCY_JPY = 6;
+}
+
+enum PaymentMethod {
+  PAYMENT_METHOD_UNSPECIFIED = 0;
+  PAYMENT_METHOD_CREDIT_CARD = 1;
+  PAYMENT_METHOD_DEBIT_CARD = 2;
+  PAYMENT_METHOD_PAYPAL = 3;
+  PAYMENT_METHOD_BANK_TRANSFER = 4;
+  PAYMENT_METHOD_CRYPTO = 5;
+  PAYMENT_METHOD_APPLE_PAY = 6;
+  PAYMENT_METHOD_GOOGLE_PAY = 7;
+}
+
+enum ProductCategory {
+  PRODUCT_CATEGORY_UNSPECIFIED = 0;
+  PRODUCT_CATEGORY_ELECTRONICS = 1;
+  PRODUCT_CATEGORY_CLOTHING = 2;
+  PRODUCT_CATEGORY_BOOKS = 3;
+  PRODUCT_CATEGORY_HOME = 4;
+  PRODUCT_CATEGORY_SPORTS = 5;
+  PRODUCT_CATEGORY_FOOD = 6;
+  PRODUCT_CATEGORY_TOYS = 7;
+  PRODUCT_CATEGORY_AUTOMOTIVE = 8;
+}
+
+enum ShipmentCarrier {
+  SHIPMENT_CARRIER_UNSPECIFIED = 0;
+  SHIPMENT_CARRIER_FEDEX = 1;
+  SHIPMENT_CARRIER_UPS = 2;
+  SHIPMENT_CARRIER_DHL = 3;
+  SHIPMENT_CARRIER_USPS = 4;
+  SHIPMENT_CARRIER_CUSTOM = 5;
+}
+
+enum NotificationType {
+  NOTIFICATION_TYPE_UNSPECIFIED = 0;
+  NOTIFICATION_TYPE_ORDER_UPDATE = 1;
+  NOTIFICATION_TYPE_PRICE_DROP = 2;
+  NOTIFICATION_TYPE_BACK_IN_STOCK = 3;
+  NOTIFICATION_TYPE_PROMOTION = 4;
+  NOTIFICATION_TYPE_SHIPMENT_UPDATE = 5;
+  NOTIFICATION_TYPE_REVIEW_REPLY = 6;
+}
+
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0;
+  SORT_DIRECTION_ASC = 1;
+  SORT_DIRECTION_DESC = 2;
+}
+
+// ─── Shared / Reusable Messages ──────────────────────
+
+message Money {
+  int64 units = 1;
+  int32 nanos = 2;
+  Currency currency = 3;
+}
+
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}
+
+message DateRange {
+  Timestamp start = 1;
+  Timestamp end = 2;
+}
+
+message GeoPoint {
+  double latitude = 1;
+  double longitude = 2;
+}
+
+message Address {
+  string street_line1 = 1;
+  string street_line2 = 2;
+  string city = 3;
+  string state = 4;
+  string zip_code = 5;
+  string country_code = 6;
+  GeoPoint coordinates = 7;
+
+  oneof address_label {
+    string custom_label = 8;
+    AddressType predefined_label = 9;
+  }
+
+  enum AddressType {
+    ADDRESS_TYPE_UNSPECIFIED = 0;
+    ADDRESS_TYPE_HOME = 1;
+    ADDRESS_TYPE_WORK = 2;
+    ADDRESS_TYPE_BILLING = 3;
+    ADDRESS_TYPE_SHIPPING = 4;
+    ADDRESS_TYPE_WAREHOUSE = 5;
+  }
+}
+
+message PaginationRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  SortDirection sort_direction = 3;
+}
+
+message PaginationResponse {
+  string next_page_token = 1;
+  int32 total_count = 2;
+  bool has_more = 3;
+}
+
+message Empty {}
+
+// ─── Product Domain ──────────────────────────────────
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string slug = 4;
+  Money price = 5;
+  Money compare_at_price = 6;
+  ProductCategory category = 7;
+  repeated string tags = 8;
+  repeated ProductVariant variants = 9;
+  map<string, string> metadata = 10;
+  map<string, string> localized_names = 11;
+  int32 stock_quantity = 12;
+  bool is_active = 13;
+  bool is_featured = 14;
+  float rating = 15;
+  int32 review_count = 16;
+  Timestamp created_at = 17;
+  Timestamp updated_at = 18;
+  repeated ProductImage images = 19;
+  ProductDimensions dimensions = 20;
+  repeated ProductAttribute attributes = 21;
+
+  oneof availability {
+    bool in_stock = 22;
+    Timestamp restock_date = 23;
+    string discontinued_reason = 24;
+  }
+
+  message ProductDimensions {
+    float weight_kg = 1;
+    float length_cm = 2;
+    float width_cm = 3;
+    float height_cm = 4;
+  }
+
+  message ProductAttribute {
+    string key = 1;
+    oneof value {
+      string string_value = 2;
+      int64 int_value = 3;
+      double double_value = 4;
+      bool bool_value = 5;
+      StringList list_value = 6;
+    }
+  }
+
+  message StringList {
+    repeated string values = 1;
+  }
+}
+
+message ProductVariant {
+  string id = 1;
+  string sku = 2;
+  Money price_override = 3;
+  int32 stock = 4;
+  map<string, string> options = 5;
+  repeated string image_ids = 6;
+
+  oneof variant_status {
+    bool active = 7;
+    string deactivation_reason = 8;
+  }
+}
+
+message ProductImage {
+  string id = 1;
+  string url = 2;
+  string alt_text = 3;
+  bool is_primary = 4;
+  int32 sort_order = 5;
+  ImageDimensions dimensions = 6;
+
+  message ImageDimensions {
+    int32 width = 1;
+    int32 height = 2;
+  }
+}
+
+// ─── Product Service Requests/Responses ──────────────
+
+message SearchProductsRequest {
+  string query = 1;
+  repeated ProductCategory categories = 2;
+  Money min_price = 3;
+  Money max_price = 4;
+  repeated string tags = 5;
+  bool in_stock_only = 6;
+  bool featured_only = 7;
+  float min_rating = 8;
+  PaginationRequest pagination = 9;
+  map<string, string> attribute_filters = 10;
+
+  oneof sort_by {
+    bool sort_by_price = 11;
+    bool sort_by_rating = 12;
+    bool sort_by_newest = 13;
+    bool sort_by_popularity = 14;
+    bool sort_by_relevance = 15;
+  }
+}
+
+message SearchProductsResponse {
+  repeated Product products = 1;
+  PaginationResponse pagination = 2;
+  int32 total_results = 3;
+  map<string, int32> category_facets = 4;
+  map<string, int32> tag_facets = 5;
+  PriceRange price_range = 6;
+  string search_id = 7;
+
+  message PriceRange {
+    Money min = 1;
+    Money max = 2;
+  }
+}
+
+message GetProductRequest {
+  string product_id = 1;
+
+  oneof lookup {
+    string slug = 2;
+    string sku = 3;
+  }
+
+  repeated ProductFieldMask fields = 4;
+
+  enum ProductFieldMask {
+    PRODUCT_FIELD_MASK_UNSPECIFIED = 0;
+    PRODUCT_FIELD_MASK_BASIC = 1;
+    PRODUCT_FIELD_MASK_VARIANTS = 2;
+    PRODUCT_FIELD_MASK_IMAGES = 3;
+    PRODUCT_FIELD_MASK_ATTRIBUTES = 4;
+    PRODUCT_FIELD_MASK_FULL = 5;
+  }
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string description = 2;
+  Money price = 3;
+  ProductCategory category = 4;
+  repeated string tags = 5;
+  repeated ProductVariant variants = 6;
+  map<string, string> metadata = 7;
+  map<string, string> localized_names = 8;
+  repeated Product.ProductAttribute attributes = 9;
+  bool is_featured = 10;
+}
+
+message UpdateProductRequest {
+  string product_id = 1;
+
+  oneof update {
+    ProductInfoUpdate info = 2;
+    ProductPriceUpdate price = 3;
+    ProductStockUpdate stock = 4;
+    ProductStatusUpdate status = 5;
+  }
+
+  message ProductInfoUpdate {
+    string name = 1;
+    string description = 2;
+    repeated string tags = 3;
+    map<string, string> metadata = 4;
+  }
+
+  message ProductPriceUpdate {
+    Money new_price = 1;
+    Money compare_at_price = 2;
+    map<string, Money> variant_prices = 3;
+  }
+
+  message ProductStockUpdate {
+    int32 quantity = 1;
+    string reason = 2;
+    map<string, int32> variant_stock = 3;
+  }
+
+  message ProductStatusUpdate {
+    bool is_active = 1;
+    bool is_featured = 2;
+    string status_reason = 3;
+  }
+}
+
+message DeleteProductRequest {
+  string product_id = 1;
+  bool hard_delete = 2;
+}
+
+message BatchGetProductsRequest {
+  repeated string product_ids = 1;
+  repeated GetProductRequest.ProductFieldMask fields = 2;
+}
+
+message BatchGetProductsResponse {
+  map<string, Product> products = 1;
+  repeated string not_found_ids = 2;
+}
+
+message ProductImportRecord {
+  string external_id = 1;
+  string name = 2;
+  string description = 3;
+  Money price = 4;
+  ProductCategory category = 5;
+  int32 stock = 6;
+  map<string, string> metadata = 7;
+
+  oneof source {
+    string csv_row = 8;
+    string json_payload = 9;
+    string xml_payload = 10;
+  }
+}
+
+message ProductImportResult {
+  string external_id = 1;
+  bool success = 2;
+  string product_id = 3;
+  string error_message = 4;
+  int32 row_number = 5;
+}
+
+message ProductImportSummary {
+  int32 total = 1;
+  int32 succeeded = 2;
+  int32 failed = 3;
+  int32 skipped = 4;
+  repeated ProductImportResult failures = 5;
+}
+
+// ─── Order Domain ────────────────────────────────────
+
+message Order {
+  string id = 1;
+  string customer_id = 2;
+  repeated OrderItem items = 3;
+  Money subtotal = 4;
+  Money tax = 5;
+  Money shipping_cost = 6;
+  Money discount = 7;
+  Money total = 8;
+  OrderStatus status = 9;
+  Address shipping_address = 10;
+  Address billing_address = 11;
+  PaymentInfo payment = 12;
+  ShipmentInfo shipment = 13;
+  Timestamp created_at = 14;
+  Timestamp updated_at = 15;
+  repeated OrderEvent history = 16;
+  map<string, string> notes = 17;
+  string coupon_code = 18;
+
+  oneof fulfillment {
+    ShipmentInfo delivery = 19;
+    PickupInfo store_pickup = 20;
+    DigitalDeliveryInfo digital_delivery = 21;
+  }
+}
+
+message OrderItem {
+  string product_id = 1;
+  string variant_id = 2;
+  string product_name = 3;
+  int32 quantity = 4;
+  Money unit_price = 5;
+  Money total_price = 6;
+  Money discount_amount = 7;
+  map<string, string> customizations = 8;
+
+  oneof item_status {
+    bool confirmed = 9;
+    string backorder_eta = 10;
+    string cancellation_reason = 11;
+  }
+}
+
+message PaymentInfo {
+  PaymentMethod method = 1;
+  string transaction_id = 2;
+  string gateway_response = 3;
+  Timestamp paid_at = 4;
+  Money amount_charged = 5;
+  Money amount_refunded = 6;
+
+  oneof payment_details {
+    CardDetails card = 7;
+    BankTransferDetails bank = 8;
+    CryptoDetails crypto = 9;
+    WalletDetails wallet = 10;
+  }
+
+  message CardDetails {
+    string last_four = 1;
+    string brand = 2;
+    int32 exp_month = 3;
+    int32 exp_year = 4;
+  }
+
+  message BankTransferDetails {
+    string bank_name = 1;
+    string reference_code = 2;
+  }
+
+  message CryptoDetails {
+    string wallet_address = 1;
+    string network = 2;
+    string tx_hash = 3;
+  }
+
+  message WalletDetails {
+    string provider = 1;
+    string account_email = 2;
+  }
+}
+
+message ShipmentInfo {
+  ShipmentCarrier carrier = 1;
+  string tracking_number = 2;
+  string tracking_url = 3;
+  Timestamp shipped_at = 4;
+  Timestamp estimated_delivery = 5;
+  float weight_kg = 6;
+  repeated ShipmentEvent events = 7;
+
+  message ShipmentEvent {
+    string status = 1;
+    string location = 2;
+    Timestamp occurred_at = 3;
+    string description = 4;
+  }
+}
+
+message PickupInfo {
+  string store_id = 1;
+  string store_name = 2;
+  Address store_address = 3;
+  Timestamp ready_at = 4;
+  Timestamp pickup_deadline = 5;
+  string confirmation_code = 6;
+}
+
+message DigitalDeliveryInfo {
+  repeated string download_urls = 1;
+  repeated string license_keys = 2;
+  Timestamp expires_at = 3;
+  int32 max_downloads = 4;
+}
+
+message OrderEvent {
+  OrderStatus from_status = 1;
+  OrderStatus to_status = 2;
+  string description = 3;
+  string actor = 4;
+  Timestamp occurred_at = 5;
+  map<string, string> context = 6;
+}
+
+message CreateOrderRequest {
+  string customer_id = 1;
+  repeated OrderItemInput items = 2;
+  Address shipping_address = 3;
+  Address billing_address = 4;
+  PaymentMethod payment_method = 5;
+  string coupon_code = 6;
+  map<string, string> notes = 7;
+
+  oneof delivery_preference {
+    ShippingPreference shipping = 8;
+    string pickup_store_id = 9;
+    bool digital_delivery = 10;
+  }
+
+  message ShippingPreference {
+    ShipmentCarrier preferred_carrier = 1;
+    bool express = 2;
+    bool signature_required = 3;
+    string delivery_instructions = 4;
+  }
+}
+
+message OrderItemInput {
+  string product_id = 1;
+  string variant_id = 2;
+  int32 quantity = 3;
+  map<string, string> customizations = 4;
+}
+
+message GetOrderRequest {
+  string order_id = 1;
+  bool include_history = 2;
+  bool include_shipment_events = 3;
+}
+
+message ListOrdersRequest {
+  string customer_id = 1;
+  repeated OrderStatus status_filter = 2;
+  DateRange date_range = 3;
+  PaginationRequest pagination = 4;
+  Money min_total = 5;
+  Money max_total = 6;
+
+  oneof sort_by {
+    bool sort_by_date = 7;
+    bool sort_by_total = 8;
+    bool sort_by_status = 9;
+  }
+}
+
+message ListOrdersResponse {
+  repeated Order orders = 1;
+  PaginationResponse pagination = 2;
+  map<string, int32> status_counts = 3;
+  Money total_revenue = 4;
+}
+
+message UpdateOrderStatusRequest {
+  string order_id = 1;
+  OrderStatus new_status = 2;
+  string reason = 3;
+  map<string, string> context = 4;
+}
+
+message CancelOrderRequest {
+  string order_id = 1;
+  string cancellation_reason = 2;
+  bool refund_immediately = 3;
+}
+
+// ─── Review Domain ───────────────────────────────────
+
+message Review {
+  string id = 1;
+  string product_id = 2;
+  string customer_id = 3;
+  string customer_display_name = 4;
+  int32 rating = 5;
+  string title = 6;
+  string body = 7;
+  repeated string image_urls = 8;
+  bool verified_purchase = 9;
+  int32 helpful_count = 10;
+  int32 report_count = 11;
+  Timestamp created_at = 12;
+  Timestamp updated_at = 13;
+  ReviewReply seller_reply = 14;
+  map<string, int32> aspect_ratings = 15;
+
+  oneof moderation_status {
+    bool approved = 16;
+    string rejection_reason = 17;
+    bool pending_review = 18;
+  }
+
+  message ReviewReply {
+    string body = 1;
+    Timestamp replied_at = 2;
+    string replied_by = 3;
+  }
+}
+
+message CreateReviewRequest {
+  string product_id = 1;
+  string customer_id = 2;
+  int32 rating = 3;
+  string title = 4;
+  string body = 5;
+  repeated string image_urls = 6;
+  map<string, int32> aspect_ratings = 7;
+}
+
+message ListReviewsRequest {
+  string product_id = 1;
+  PaginationRequest pagination = 2;
+  int32 min_rating = 3;
+  bool verified_only = 4;
+  bool with_images_only = 5;
+
+  oneof sort_by {
+    bool sort_by_date = 6;
+    bool sort_by_rating = 7;
+    bool sort_by_helpful = 8;
+  }
+}
+
+message ListReviewsResponse {
+  repeated Review reviews = 1;
+  PaginationResponse pagination = 2;
+  float average_rating = 3;
+  map<int32, int32> rating_distribution = 4;
+  map<string, float> aspect_averages = 5;
+}
+
+// ─── Inventory / Streaming Messages ──────────────────
+
+message InventoryUpdate {
+  string product_id = 1;
+  string variant_id = 2;
+  int32 previous_quantity = 3;
+  int32 new_quantity = 4;
+  int32 delta = 5;
+  Timestamp timestamp = 6;
+
+  oneof trigger {
+    string order_id = 7;
+    string import_batch_id = 8;
+    string manual_adjustment_by = 9;
+    string return_id = 10;
+  }
+}
+
+message WatchInventoryRequest {
+  repeated string product_ids = 1;
+  bool low_stock_only = 2;
+  int32 low_stock_threshold = 3;
+  bool include_variant_detail = 4;
+}
+
+message PriceWatchRequest {
+  repeated string product_ids = 1;
+  Money max_price = 2;
+  bool notify_on_any_change = 3;
+}
+
+message PriceChangeEvent {
+  string product_id = 1;
+  string variant_id = 2;
+  Money old_price = 3;
+  Money new_price = 4;
+  float change_percentage = 5;
+  Timestamp changed_at = 6;
+  string reason = 7;
+}
+
+message ChatMessage {
+  string session_id = 1;
+  string sender_id = 2;
+  Timestamp sent_at = 3;
+
+  oneof content {
+    string text = 4;
+    ImageAttachment image = 5;
+    OrderReference order_ref = 6;
+    ProductReference product_ref = 7;
+    QuickAction action = 8;
+  }
+
+  message ImageAttachment {
+    string url = 1;
+    string caption = 2;
+    int32 width = 3;
+    int32 height = 4;
+  }
+
+  message OrderReference {
+    string order_id = 1;
+    OrderStatus status = 2;
+    string summary = 3;
+  }
+
+  message ProductReference {
+    string product_id = 1;
+    string name = 2;
+    Money price = 3;
+    string image_url = 4;
+  }
+
+  message QuickAction {
+    string action_type = 1;
+    map<string, string> params = 2;
+    string display_text = 3;
+  }
+}
+
+message Notification {
+  string id = 1;
+  string user_id = 2;
+  NotificationType type = 3;
+  string title = 4;
+  string body = 5;
+  Timestamp created_at = 6;
+  bool read = 7;
+  map<string, string> data = 8;
+
+  oneof reference {
+    string order_id = 9;
+    string product_id = 10;
+    string review_id = 11;
+    string promotion_id = 12;
+  }
+}
+
+message SubscribeNotificationsRequest {
+  string user_id = 1;
+  repeated NotificationType types = 2;
+}
+
+message AnalyticsEvent {
+  string event_id = 1;
+  string session_id = 2;
+  string user_id = 3;
+  Timestamp timestamp = 4;
+  map<string, string> properties = 5;
+
+  oneof event {
+    PageView page_view = 6;
+    ProductView product_view = 7;
+    CartAction cart_action = 8;
+    SearchAction search_action = 9;
+    CheckoutStep checkout_step = 10;
+  }
+
+  message PageView {
+    string url = 1;
+    string referrer = 2;
+    int32 duration_ms = 3;
+  }
+
+  message ProductView {
+    string product_id = 1;
+    string source = 2;
+    int32 position_in_list = 3;
+  }
+
+  message CartAction {
+    string product_id = 1;
+    int32 quantity = 2;
+    string action = 3;
+  }
+
+  message SearchAction {
+    string query = 1;
+    int32 results_count = 2;
+    int32 page = 3;
+    repeated string filters_used = 4;
+  }
+
+  message CheckoutStep {
+    int32 step = 1;
+    string step_name = 2;
+    Money cart_total = 3;
+    int32 item_count = 4;
+  }
+}
+
+message AnalyticsAck {
+  string event_id = 1;
+  bool accepted = 2;
+}
+
+message HealthCheckRequest {
+  string service_name = 1;
+}
+
+message HealthCheckResponse {
+  string service_name = 1;
+  bool healthy = 2;
+  string version = 3;
+  int64 uptime_seconds = 4;
+  map<string, ComponentHealth> components = 5;
+
+  message ComponentHealth {
+    bool healthy = 1;
+    string message = 2;
+    int64 latency_ms = 3;
+  }
+}
+
+// ─── Services ────────────────────────────────────────
+
+// Unary + Server Streaming
+service ProductService {
+  // Unary
+  rpc GetProduct(GetProductRequest) returns (Product);
+  rpc CreateProduct(CreateProductRequest) returns (Product);
+  rpc DeleteProduct(DeleteProductRequest) returns (Empty);
+  rpc BatchGetProducts(BatchGetProductsRequest) returns (BatchGetProductsResponse);
+
+  // Unary (search)
+  rpc SearchProducts(SearchProductsRequest) returns (SearchProductsResponse);
+
+  // Unary (update with oneof)
+  rpc UpdateProduct(UpdateProductRequest) returns (Product);
+
+  // Server streaming: watch prices
+  rpc WatchPrices(PriceWatchRequest) returns (stream PriceChangeEvent);
+
+  // Client streaming: bulk import
+  rpc ImportProducts(stream ProductImportRecord) returns (ProductImportSummary);
+}
+
+// Unary + Server Streaming
+service OrderService {
+  // Unary
+  rpc CreateOrder(CreateOrderRequest) returns (Order);
+  rpc GetOrder(GetOrderRequest) returns (Order);
+  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+  rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns (Order);
+  rpc CancelOrder(CancelOrderRequest) returns (Order);
+
+  // Server streaming: live order tracking
+  rpc TrackOrder(GetOrderRequest) returns (stream OrderEvent);
+}
+
+// Unary
+service ReviewService {
+  rpc CreateReview(CreateReviewRequest) returns (Review);
+  rpc ListReviews(ListReviewsRequest) returns (ListReviewsResponse);
+}
+
+// All streaming patterns
+service RealtimeService {
+  // Server streaming: inventory changes
+  rpc WatchInventory(WatchInventoryRequest) returns (stream InventoryUpdate);
+
+  // Server streaming: push notifications
+  rpc SubscribeNotifications(SubscribeNotificationsRequest) returns (stream Notification);
+
+  // Bidirectional streaming: customer support chat
+  rpc CustomerSupportChat(stream ChatMessage) returns (stream ChatMessage);
+
+  // Client streaming: analytics event ingestion
+  rpc IngestAnalytics(stream AnalyticsEvent) returns (AnalyticsAck);
+}
+
+// Unary utility
+service HealthService {
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+}
