@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/alexperez/mulesoft/context/products/api-console/v6/api-summary/**)",
+      "Bash(cd ~/mulesoft/context/products/api-console/v6/api-console && npm ls @api-components/api-summary @api-components/api-type-document)"
+    ]
+  }
+}

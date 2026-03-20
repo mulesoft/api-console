@@ -1,38 +1,43 @@
-# API Console Team Shared Documentation
+# Team Documentation - api-console v6
 
-This directory contains **team-shared** documentation and configurations.
-These files ARE committed to Git and shared with all team members and community contributors.
+Console-specific runbooks, patterns, and configs for contributing to this open-source project.
 
-## Structure
+**General guidelines**: See [acm-dot-agents/docs/team-guide.md](https://github.com/mulesoft-labs-emu/acm-dot-agents/blob/main/docs/team-guide.md) for team-wide standards.
 
-- `patterns/` - Code patterns, architectural decisions (Web Components, LitElement)
-- `configs/` - Team configuration files (IDE settings, linters, etc.)
-- `runbooks/` - Operational guides (release process, debugging, common issues)
+---
 
-## Usage
+## What's Here
 
-### For AI Assistants (Claude/Cursor)
-When starting work on this repo, read:
-```
-Read docs/team/patterns/*.md
-Read docs/team/runbooks/*.md
-```
+### runbooks/
+Console-specific operational procedures:
+- **Release process**: api-console v6 release workflow, version bumping
+- **Debugging Shadow DOM**: Troubleshooting Web Component issues, custom events
+- **AMF model issues**: Parser errors, model generation, JSON-LD troubleshooting
+- **Visual regression**: Updating baselines, screenshot comparison
+- **Component updates**: Updating workspace dependencies, npm packages
 
-### For Team Members & Contributors
-1. Add new patterns when making architectural decisions
-2. Update runbooks when solving common issues
-3. Share configs that improve team productivity
+### patterns/
+Console-specific architectural decisions:
+- Web Component communication (custom events vs properties)
+- AmfHelperMixin usage patterns
+- Shadow DOM styling with CSS custom properties
+- Lazy loading strategies for large APIs
+- Multi-package workspace conventions
 
-## Difference vs `.claude/`
-- `.claude/` = Personal, local, NOT committed (your drafts)
-- `docs/team/` = Shared, committed, team knowledge base
+### configs/
+Local development configs:
+- Git GPG setup (MuleSoft repos require @mulesoft.com signature)
+- IDE settings for Web Components
+- ESLint/Prettier configs
+- @web/test-runner settings
 
-## Context
+### onboarding/
+New contributor guides specific to console v6 architecture
 
-**api-console** is an open-source project:
-- LitElement/Polymer Web Components
-- Distributed as separate npm packages
-- Used by MuleSoft, Salesforce, and external developers
-- Shadow DOM, custom events, AMF integration
+---
 
-Document patterns that help new contributors understand how to work with this codebase.
+## Quick Reference
+
+**Workflow**: Draft in `.claude/investigations/` → Promote to `docs/team/runbooks/` when resolved
+**Team guide**: [acm-dot-agents/docs/team-guide.md](https://github.com/mulesoft-labs-emu/acm-dot-agents/blob/main/docs/team-guide.md)
+**Questions?** Open issue on GitHub or ping @advanced-rest-client
