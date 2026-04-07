@@ -152,3 +152,16 @@ For the same reasons as for CodeMirror this dependencies are required for OAuth1
 <script src="node_modules/cryptojslib/rollups/hmac-sha1.js"></script>
 <script src="node_modules/jsrsasign/lib/jsrsasign-rsa-min.js"></script>
 ```
+
+---
+
+## For AI Assistants
+
+This repo includes AI context for tools like Claude Code, Cursor, and Copilot:
+
+- **[AGENTS.md](./AGENTS.md)**: Tech stack, architecture patterns, AMF model usage, testing strategy
+- **[docs/team/](./docs/team/)**: Runbooks (release process, debugging), patterns (Web Component communication), configs
+
+**For contributors**: See [docs/team/README.md](./docs/team/README.md) for how to use and contribute.
+
+---
