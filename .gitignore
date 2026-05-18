@@ -79,5 +79,6 @@ demo/models/flattened/*.json
 .claude/investigations/
 .claude/context/
 .claude/temp/
+.claude/runbooks/
 .claude/README.md
 .cursor/
