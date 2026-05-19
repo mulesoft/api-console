@@ -2,7 +2,7 @@
 
 AI context file for assistants (Claude Code, Cursor, Copilot) working with this open-source Web Components project.
 
-> **Full docs**: [README.md](./README.md) | **Team patterns**: [docs/team/](./docs/team/)
+> **Full docs**: [README.md](./README.md) | **Team patterns**: [acm-obsidian-vault](https://github.com/mulesoft-labs-emu/acm-obsidian-vault)
 
 ---
 
@@ -180,9 +180,9 @@ npm update @api-components/* # Update workspace components
 ## Links
 
 ### Team Documentation
-- **Runbooks**: [docs/team/runbooks/](./docs/team/runbooks/) - Release process, debugging
-- **Patterns**: [docs/team/patterns/](./docs/team/patterns/) - Web Component communication, architecture
-- **Configs**: [docs/team/configs/](./docs/team/configs/) - Git GPG setup, IDE settings
+- **Runbooks**: [acm-obsidian-vault/runbooks/console-v6](https://github.com/mulesoft-labs-emu/acm-obsidian-vault/tree/main/runbooks/console-v6)
+- **Patterns**: [acm-obsidian-vault/patterns/console-v6](https://github.com/mulesoft-labs-emu/acm-obsidian-vault/tree/main/patterns/console-v6)
+- **Onboarding**: [acm-obsidian-vault/onboarding/api-console-v6.md](https://github.com/mulesoft-labs-emu/acm-obsidian-vault/blob/main/onboarding/api-console-v6.md)
 
 ### External Resources
 - **Full docs**: https://docs.api-console.io
