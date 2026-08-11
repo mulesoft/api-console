@@ -5,31 +5,16 @@
   "models/oAuth2/oAuth2.raml": "RAML 1.0",
   "models/nexmo-sms-api/nexmo-sms-api.raml": "RAML 1.0",
   "models/google-drive-api/google-drive-api.raml": "RAML 1.0",
-  "models/httpbin/httpbin.json": [
-    "OAS 2.0",
-    "application/json"
-  ],
+  "models/httpbin/httpbin.json": ["OAS 2.0", "application/json"],
   "models/data-type-fragment/data-type-fragment.raml": "RAML 1.0",
-  "models/SE-12703/SE-12703.yaml": [
-    "OAS 2.0",
-    "application/yaml"
-  ],
-  "models/APIC-319/APIC-319.yaml": [
-    "OAS 2.0",
-    "application/yaml"
-  ],
+  "models/SE-12703/SE-12703.yaml": ["OAS 2.0", "application/yaml"],
+  "models/APIC-319/APIC-319.yaml": ["OAS 2.0", "application/yaml"],
   "models/APIC-262/APIC-262.raml": "RAML 1.0",
   "models/console-445/console-445.raml": "RAML 1.0",
   "models/apic-80/apic-80.raml": "RAML 1.0",
   "models/apic-83/apic-83.raml": "RAML 1.0",
-  "models/multi-server/multi-server.yaml": {
-    "type": "OAS 3.0",
-    "mime": "application/yaml"
-  },
-  "models/oas-3-api/oas-3-api.yaml": {
-    "type": "OAS 3.0",
-    "mime": "application/yaml"
-  },
+  "models/multi-server/multi-server.yaml": { "type": "OAS 3.0", "mime": "application/yaml" },
+  "models/oas-3-api/oas-3-api.yaml": { "type": "OAS 3.0", "mime": "application/yaml" },
   "models/async-api/async-api.yaml": "ASYNC 2.0",
   "models/APIC-553/APIC-553.raml": "RAML 1.0",
   "models/APIC-554/APIC-554.raml": "RAML 1.0",
@@ -55,12 +40,8 @@
   "models/agens-api/agents-api.yaml": "OAS 3.0",
   "models/nested-examples/nested-examples-oas3.json": "OAS 3.0",
   "models/nullable/nullable.yaml": "OAS 3.0",
-  "models/oas31.yaml": {
-    "type": "OAS 3.1",
-    "mime": "application/yaml"
-  },
-  "models/oas32.yaml": {
-    "type": "OAS 3.2",
-    "mime": "application/yaml"
-  }
+  "models/oas31.yaml": { "type": "OAS 3.1", "mime": "application/yaml" },
+  "models/oas32.yaml": { "type": "OAS 3.2", "mime": "application/yaml" },
+  "models/async30.yaml": { "type": "ASYNC 3.0", "mime": "application/yaml" },
+  "models/async31.yaml": { "type": "ASYNC 3.1", "mime": "application/yaml" }
 }
