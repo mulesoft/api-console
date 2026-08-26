@@ -18,7 +18,7 @@
     "MuleSoft"
   ],
   "contributors": [
-    "Paweł Psztyć",
+    "Pawe\u0142 Pszty\u0107",
     "Joaquin Stankus",
     "Francisco Di Giandomenico",
     "Leandro Bauret",
@@ -156,7 +156,8 @@
     "decode-uri-component": "0.4.1",
     "set-value": "4.1.0",
     "dompurify": "3.4.5",
-    "amf-client-js": "$amf-client-js"
+    "amf-client-js": "$amf-client-js",
+    "jsrsasign": "11.1.1"
   },
   "resolutions": {
     "dompurify": "3.4.5"
