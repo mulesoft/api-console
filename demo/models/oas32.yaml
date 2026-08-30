@@ -1,0 +1,63 @@
+# source: /Users/aloose/mulesoft/amf/amf-cli/shared/src/test/resources/validations/oas32/tag-cyclic-parent.yaml
+openapi: 3.2.0
+info:
+  title: OAS 3.2 Test API
+  version: 1.0.0
+
+paths:
+  /auth:
+    get:
+      summary: Get authenticated data
+      tags:
+        - authentication
+      responses:
+        '200':
+          description: Success
+
+  /resources/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get a resource
+      responses:
+        '200':
+          description: OK
+    query:
+      summary: Search resources
+      responses:
+        '200':
+          description: Results
+    additionalOperations:
+      COPY:
+        summary: Copy the resource
+        responses:
+          '200':
+            description: Copied
+      MOVE:
+        summary: Move the resource
+        responses:
+          '200':
+            description: Moved
+
+tags:
+  - name: data
+    summary: Data operations
+  - name: authentication
+    summary: All authentication-related operations
+    parent: data
+
+components:
+  securitySchemes:
+    oauth2Device:
+      type: oauth2
+      flows:
+        deviceAuthorization:
+          deviceAuthorizationUrl: https://example.com/oauth/device/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            read: Read access
+            write: Write access

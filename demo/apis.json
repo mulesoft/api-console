@@ -41,5 +41,9 @@
   "models/APIC-560/APIC-560.yaml": "ASYNC 2.0",
   "models/agens-api/agents-api.yaml": "OAS 3.0",
   "models/nested-examples/nested-examples-oas3.json": "OAS 3.0",
-  "models/nullable/nullable.yaml": "OAS 3.0"
+  "models/nullable/nullable.yaml": "OAS 3.0",
+  "models/oas31.yaml": { "type": "OAS 3.1", "mime": "application/yaml" },
+  "models/oas32.yaml": { "type": "OAS 3.2", "mime": "application/yaml" },
+  "models/async30.yaml": { "type": "ASYNC 3.0", "mime": "application/yaml" },
+  "models/async31.yaml": { "type": "ASYNC 3.1", "mime": "application/yaml" }
 }
