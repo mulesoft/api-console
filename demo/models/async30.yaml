@@ -1,0 +1,29 @@
+# source: /Users/aloose/mulesoft/amf/amf-cli/shared/src/test/resources/validations/async3/bindings-kafka.yaml
+asyncapi: '3.0.0'
+info:
+  title: AsyncAPI 3.0 Test
+  version: '1.0.0'
+
+channels:
+  userSignedUp:
+    address: user.signedup
+    description: Channel for user signup events
+    messages:
+      userSignedUpMessage:
+        name: userSignedUpMessage
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            userId:
+              type: string
+            email:
+              type: string
+
+operations:
+  sendUserSignedUp:
+    action: send
+    channel:
+      $ref: '#/channels/userSignedUp'
+    messages:
+      - $ref: '#/channels/userSignedUp/messages/userSignedUpMessage'

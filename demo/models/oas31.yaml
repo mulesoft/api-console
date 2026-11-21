@@ -1,0 +1,27 @@
+# source: /Users/aloose/mulesoft/amf/amf-cli/shared/src/test/resources/validations/oas31/items-property-array.yaml
+openapi: 3.1.0
+info:
+  title: OAS 3.1 Test API
+  version: 1.0.0
+  description: Minimal OAS 3.1 spec to test JSON Schema 2020-12 keywords
+
+paths:
+  /items:
+    get:
+      summary: Get items
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    prefixItems:
+                      - type: string
+                        description: First item is always a string
+                      - type: number
+                        description: Second item is always a number
+                    items: false

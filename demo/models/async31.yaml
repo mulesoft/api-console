@@ -1,0 +1,28 @@
+# source: /Users/aloose/mulesoft/amf/amf-cli/shared/src/test/resources/validations/async31/validations/ros2-operation-valid.yaml
+asyncapi: 3.1.0
+info:
+  title: AsyncAPI 3.1 Test
+  version: 1.0.0
+
+channels:
+  diagnostics:
+    address: /robot/diagnostics
+    messages:
+      diagnosticMessage:
+        name: diagnosticMessage
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            status:
+              type: string
+            timestamp:
+              type: number
+
+operations:
+  publishDiagnostics:
+    action: send
+    channel:
+      $ref: '#/channels/diagnostics'
+    messages:
+      - $ref: '#/channels/diagnostics/messages/diagnosticMessage'
